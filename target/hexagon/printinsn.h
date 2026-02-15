@@ -23,6 +23,5 @@
 
 void snprint_a_pkt_disas(GString *buf, Packet *pkt, uint32_t *words,
                          target_ulong pc, HexagonVersion hex_version);
-void snprint_a_pkt_debug(GString *buf, Packet *pkt);
 
 #endif
