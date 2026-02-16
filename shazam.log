@@ -1,0 +1,39 @@
+Grabbing thread from lore.kernel.org/all/20260216102951.150381-1-kkostiuk@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 61 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/5] qga/vss-win32: Fix ConvertStringToBSTR redefinition with newer MinGW
+    + Link: https://lore.kernel.org/qemu-devel/20260216102951.150381-2-kkostiuk@redhat.com
+  [32m✓[0m [PATCH 2/5] util: Move qemu_ftruncate64 from block/file-win32.c to oslib-win32.c
+    + Link: https://lore.kernel.org/qemu-devel/20260216102951.150381-3-kkostiuk@redhat.com
+  [32m✓[0m [PATCH 3/5] qga: implement guest-network-get-route for Windows
+    + Link: https://lore.kernel.org/qemu-devel/20260216102951.150381-4-kkostiuk@redhat.com
+  [32m✓[0m [PATCH 4/5] qga: Move CoInitialize/CoInitializeSecurity to main process thread
+    + Link: https://lore.kernel.org/qemu-devel/20260216102951.150381-5-kkostiuk@redhat.com
+  [32m✓[0m [PATCH 5/5] qga: Fix VSS provider GetSnapshotProperties return value
+    + Link: https://lore.kernel.org/qemu-devel/20260216102951.150381-6-kkostiuk@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 5
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Reviewed-by: Pierrick Bouvier <pierrick.bouvier@linaro.org>
+     Msg From: Philippe Mathieu-Daudé <philmd@linaro.org>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: qga/vss-win32: Fix ConvertStringToBSTR redefinition with newer MinGW
+Patch failed at 0001 qga/vss-win32: Fix ConvertStringToBSTR redefinition with newer MinGW
+error: patch failed: meson.build:3299
+error: meson.build: patch does not apply
+error: patch failed: qga/vss-win32/install.cpp:549
+error: qga/vss-win32/install.cpp: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
