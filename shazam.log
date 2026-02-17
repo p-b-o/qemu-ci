@@ -1,0 +1,41 @@
+Grabbing thread from lore.kernel.org/all/20260217052740.114117-1-heifetz@yandex-team.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/8] audio: add `audio` build option for meson and Kconfig
+    + Link: https://lore.kernel.org/qemu-devel/20260217052740.114117-2-heifetz@yandex-team.com
+  [32m✓[0m [PATCH 2/8] ui/vnc: disable audio feature when configured with --disable-audio
+    + Link: https://lore.kernel.org/qemu-devel/20260217052740.114117-3-heifetz@yandex-team.com
+  [32m✓[0m [PATCH 3/8] tests/qtest: remove -audio none when configured with --disable-audio
+    + Link: https://lore.kernel.org/qemu-devel/20260217052740.114117-4-heifetz@yandex-team.com
+  [32m✓[0m [PATCH 4/8] hw/audio/pcspk: change PCSPK behaviour with --disable-audio
+    + Link: https://lore.kernel.org/qemu-devel/20260217052740.114117-5-heifetz@yandex-team.com
+  [32m✓[0m [PATCH 5/8] Kconfig: add AUDIO dependency to audio-related devices
+    + Link: https://lore.kernel.org/qemu-devel/20260217052740.114117-6-heifetz@yandex-team.com
+  [32m✓[0m [PATCH 6/8] system/vl: remove audio and audiodev options when audio is disabled
+    + Link: https://lore.kernel.org/qemu-devel/20260217052740.114117-7-heifetz@yandex-team.com
+  [32m✓[0m [PATCH 7/8] audio: do not build audio-related sources with --disable-audio
+    + Link: https://lore.kernel.org/qemu-devel/20260217052740.114117-8-heifetz@yandex-team.com
+  [32m✓[0m [PATCH 8/8] meson.build: ignore audio drivers when configured with --disable-audio
+    + Link: https://lore.kernel.org/qemu-devel/20260217052740.114117-9-heifetz@yandex-team.com
+  ---
+  [32m✓[0m Signed: DKIM/yandex-team.com
+---
+Total patches: 8
+---
+Applying: audio: add `audio` build option for meson and Kconfig
+Applying: ui/vnc: disable audio feature when configured with --disable-audio
+Applying: tests/qtest: remove -audio none when configured with --disable-audio
+Applying: hw/audio/pcspk: change PCSPK behaviour with --disable-audio
+Patch failed at 0004 hw/audio/pcspk: change PCSPK behaviour with --disable-audio
+error: patch failed: hw/audio/pcspk.c:48
+error: hw/audio/pcspk.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
