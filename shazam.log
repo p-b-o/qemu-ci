@@ -1,0 +1,31 @@
+Grabbing thread from lore.kernel.org/all/20260217051112.446957-1-jsnow@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 5 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/4] python: add pinned 'wheel' version
+    + Link: https://lore.kernel.org/qemu-devel/20260217051112.446957-2-jsnow@redhat.com
+  [32m✓[0m [PATCH 2/4] python: replace avocado tests with pytest
+    + Link: https://lore.kernel.org/qemu-devel/20260217051112.446957-3-jsnow@redhat.com
+  [32m✓[0m [PATCH 3/4] python: drop avocado
+    + Link: https://lore.kernel.org/qemu-devel/20260217051112.446957-4-jsnow@redhat.com
+  [32m✓[0m [PATCH 4/4] python: add formal python3.14 support and testing
+    + Link: https://lore.kernel.org/qemu-devel/20260217051112.446957-5-jsnow@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 4
+---
+Applying: python: add pinned 'wheel' version
+Applying: python: replace avocado tests with pytest
+Patch failed at 0002 python: replace avocado tests with pytest
+error: patch failed: python/setup.cfg:43
+error: python/setup.cfg: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
