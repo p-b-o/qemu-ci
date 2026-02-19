@@ -64,6 +64,7 @@
 #include "hw/virtio/virtio-acpi.h"
 #include "target/arm/cpu.h"
 #include "target/arm/multiprocessing.h"
+#include "system/system.h"
 
 #define ARM_SPI_BASE 32
 
@@ -1295,7 +1296,7 @@ void virt_acpi_build(VirtMachineState *vms, AcpiBuildTables *tables)
 
     acpi_add_table(table_offsets, tables_blob);
 
-    if (ms->acpi_spcr_enabled) {
+    if (ms->acpi_spcr_enabled && serial_hd(0)) {
         spcr_setup(tables_blob, tables->linker, vms);
     }
 

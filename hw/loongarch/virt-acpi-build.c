@@ -545,7 +545,7 @@ static void acpi_build(AcpiBuildTables *tables, MachineState *machine)
     build_srat(tables_blob, tables->linker, machine);
     acpi_add_table(table_offsets, tables_blob);
 
-    if (machine->acpi_spcr_enabled)
+    if (machine->acpi_spcr_enabled && serial_hd(0))
         spcr_setup(tables_blob, tables->linker, machine);
 
     if (machine->numa_state->num_nodes) {
