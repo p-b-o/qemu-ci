@@ -1,0 +1,46 @@
+Grabbing thread from lore.kernel.org/all/20260219115530.2019498-1-vsementsov@yandex-team.ru/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 149 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v11 1/8] net/tap: move vhost-net open() calls to tap_parse_vhost_fds()
+    + Based-on: <20260218202829.1322088-1-vsementsov@yandex-team.ru> ([32m✓[0m DKIM/yandex-team.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260219115530.2019498-2-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH v11 2/8] net/tap: move vhost initialization to tap_setup_vhost()
+    + Based-on: <20260218202829.1322088-1-vsementsov@yandex-team.ru> ([32m✓[0m DKIM/yandex-team.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260219115530.2019498-3-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH v11 3/8] qapi: add local migration parameter
+    + Based-on: <20260218202829.1322088-1-vsementsov@yandex-team.ru> ([32m✓[0m DKIM/yandex-team.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260219115530.2019498-4-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH v11 4/8] net: introduce vmstate_net_peer_backend
+    + Based-on: <20260218202829.1322088-1-vsementsov@yandex-team.ru> ([32m✓[0m DKIM/yandex-team.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260219115530.2019498-5-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH v11 5/8] virtio-net: support local migration of backend
+    + Based-on: <20260218202829.1322088-1-vsementsov@yandex-team.ru> ([32m✓[0m DKIM/yandex-team.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260219115530.2019498-6-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH v11 6/8] net/tap: support local migration with virtio-net
+    + Based-on: <20260218202829.1322088-1-vsementsov@yandex-team.ru> ([32m✓[0m DKIM/yandex-team.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260219115530.2019498-7-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH v11 7/8] tests/functional: add skipWithoutSudo() decorator
+    + Based-on: <20260218202829.1322088-1-vsementsov@yandex-team.ru> ([32m✓[0m DKIM/yandex-team.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260219115530.2019498-8-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH v11 8/8] tests/functional: add test_tap_migration
+    + Based-on: <20260218202829.1322088-1-vsementsov@yandex-team.ru> ([32m✓[0m DKIM/yandex-team.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260219115530.2019498-9-vsementsov@yandex-team.ru
+  ---
+  [32m✓[0m Signed: DKIM/yandex-team.ru
+---
+Total patches: 8
+---
+Applying: net/tap: move vhost-net open() calls to tap_parse_vhost_fds()
+Patch failed at 0001 net/tap: move vhost-net open() calls to tap_parse_vhost_fds()
+error: patch failed: net/tap.c:736
+error: net/tap.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
