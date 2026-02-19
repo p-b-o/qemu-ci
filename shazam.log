@@ -1,0 +1,38 @@
+Grabbing thread from lore.kernel.org/all/20260219130334.787858-1-aesteve@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 188 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v13 1/7] vhost-user: Add VirtIO Shared Memory map request
+    + Link: https://lore.kernel.org/qemu-devel/20260219130334.787858-2-aesteve@redhat.com
+  [32m✓[0m [PATCH v13 2/7] vhost_user.rst: Align VhostUserMsg excerpt members
+    + Link: https://lore.kernel.org/qemu-devel/20260219130334.787858-3-aesteve@redhat.com
+  [32m✓[0m [PATCH v13 3/7] vhost_user.rst: Add SHMEM_MAP/_UNMAP to spec
+    + Link: https://lore.kernel.org/qemu-devel/20260219130334.787858-4-aesteve@redhat.com
+  [32m✓[0m [PATCH v13 4/7] vhost_user: Add frontend get_shmem_config command
+    + Link: https://lore.kernel.org/qemu-devel/20260219130334.787858-5-aesteve@redhat.com
+  [32m✓[0m [PATCH v13 5/7] vhost_user.rst: Add GET_SHMEM_CONFIG message
+    + Link: https://lore.kernel.org/qemu-devel/20260219130334.787858-6-aesteve@redhat.com
+  [32m✓[0m [PATCH v13 6/7] qmp: add shmem feature map
+    + Link: https://lore.kernel.org/qemu-devel/20260219130334.787858-7-aesteve@redhat.com
+  [32m✓[0m [PATCH v13 7/7] vhost-user-device: Add shared memory BAR
+    + Link: https://lore.kernel.org/qemu-devel/20260219130334.787858-8-aesteve@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 7
+---
+Applying: vhost-user: Add VirtIO Shared Memory map request
+Applying: vhost_user.rst: Align VhostUserMsg excerpt members
+Applying: vhost_user.rst: Add SHMEM_MAP/_UNMAP to spec
+Patch failed at 0003 vhost_user.rst: Add SHMEM_MAP/_UNMAP to spec
+error: patch failed: docs/interop/vhost-user.rst:1064
+error: docs/interop/vhost-user.rst: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
