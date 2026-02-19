@@ -1,0 +1,40 @@
+Grabbing thread from lore.kernel.org/all/20260219054207.471303-1-manali.shukla@amd.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v1 1/8] i386/kvm: Refactor APIC state functions to use generic register pointer
+    + Link: https://lore.kernel.org/qemu-devel/20260219054207.471303-2-manali.shukla@amd.com
+  [32m✓[0m [PATCH v1 2/8] i386/kvm: Pass APICCommonState directly to kvm_get_apic_state()
+    + Link: https://lore.kernel.org/qemu-devel/20260219054207.471303-3-manali.shukla@amd.com
+  [32m✓[0m [PATCH v1 3/8] i386/apic: Add extended APIC helper functions
+    + Link: https://lore.kernel.org/qemu-devel/20260219054207.471303-4-manali.shukla@amd.com
+  [32m✓[0m [PATCH v1 4/8] i386/kvm: Add extended APIC state to APICCommonState
+    + Link: https://lore.kernel.org/qemu-devel/20260219054207.471303-5-manali.shukla@amd.com
+  [32m✓[0m [PATCH v1 5/8] i386/kvm: Add extended LAPIC capability negotiation
+    + Link: https://lore.kernel.org/qemu-devel/20260219054207.471303-6-manali.shukla@amd.com
+  [32m✓[0m [PATCH v1 6/8] i386/kvm: Add KVM_GET/SET_LAPIC2 support for extended APIC state
+    + Link: https://lore.kernel.org/qemu-devel/20260219054207.471303-7-manali.shukla@amd.com
+  [32m✓[0m [PATCH v1 7/8] apic_common: migrate extended APIC fields
+    + Link: https://lore.kernel.org/qemu-devel/20260219054207.471303-8-manali.shukla@amd.com
+  [32m✓[0m [PATCH v1 8/8] DO NOT MERGE: Temporary EXTAPIC UAPI definitions
+    + Link: https://lore.kernel.org/qemu-devel/20260219054207.471303-9-manali.shukla@amd.com
+  ---
+  [32m✓[0m Signed: DKIM/amd.com
+---
+Total patches: 8
+---
+Applying: i386/kvm: Refactor APIC state functions to use generic register pointer
+Patch failed at 0001 i386/kvm: Refactor APIC state functions to use generic register pointer
+error: patch failed: hw/i386/kvm/apic.c:19
+error: hw/i386/kvm/apic.c: patch does not apply
+error: patch failed: target/i386/kvm/kvm_i386.h:56
+error: target/i386/kvm/kvm_i386.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
