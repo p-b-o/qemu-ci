@@ -1,0 +1,77 @@
+Grabbing thread from lore.kernel.org/all/20260220001634.3579257-1-dmitry.osipenko@collabora.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 21 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 325 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v19 1/20] ui/gdk: Restore original context after new context creation
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-2-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 2/20] ui/sdl2: Restore original context after new context creation
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-3-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 3/20] ui/sdl2: Don't disable scanout when display is refreshed
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-4-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 4/20] ui/gtk: Don't disable scanout when display is refreshed
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-5-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 5/20] ui/sdl2: Unbind context after GL operations
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-6-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 6/20] ui/gtk-egl: Unbind context after GL operations
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-7-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 7/20] ui/gdk: Unbind context after GL operations
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-8-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 8/20] virtio-gpu: Unbind context after GL operations
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-9-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 9/20] ui/sdl2: Implement dpy dmabuf functions
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-10-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 10/20] virtio-gpu: Handle virgl fence creation errors
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-11-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 11/20] virtio-gpu: Support asynchronous fencing
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-12-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 12/20] virtio-gpu: Support DRM native context
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-13-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 13/20] docs/system: virtio-gpu: Add link to Mesa VirGL doc
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-14-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 14/20] docs/system: virtio-gpu: Update Venus link
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-15-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 15/20] docs/system: virtio-gpu: Document host/guest requirements
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-16-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 16/20] virtio-gpu: Remove superfluous memory_region_set_enabled()
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-17-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 17/20] virtio-gpu: Validate hostmem mapping offset
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-18-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 18/20] virtio-gpu: Replace finish_unmapping with mapping_state
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-19-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 19/20] virtio-gpu: Destroy virgl resources on virtio-gpu reset
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-20-dmitry.osipenko@collabora.com
+  [32m✓[0m [PATCH v19 20/20] virtio-gpu: Support mapping hostmem blobs with map_fixed
+    + Link: https://lore.kernel.org/qemu-devel/20260220001634.3579257-21-dmitry.osipenko@collabora.com
+  ---
+  [32m✓[0m Signed: DKIM/collabora.com
+---
+Total patches: 20
+---
+Applying: ui/gdk: Restore original context after new context creation
+Applying: ui/sdl2: Restore original context after new context creation
+Applying: ui/sdl2: Don't disable scanout when display is refreshed
+Applying: ui/gtk: Don't disable scanout when display is refreshed
+Applying: ui/sdl2: Unbind context after GL operations
+Applying: ui/gtk-egl: Unbind context after GL operations
+Applying: ui/gdk: Unbind context after GL operations
+Applying: virtio-gpu: Unbind context after GL operations
+Applying: ui/sdl2: Implement dpy dmabuf functions
+Applying: virtio-gpu: Handle virgl fence creation errors
+Applying: virtio-gpu: Support asynchronous fencing
+Applying: virtio-gpu: Support DRM native context
+Applying: docs/system: virtio-gpu: Add link to Mesa VirGL doc
+Applying: docs/system: virtio-gpu: Update Venus link
+Applying: docs/system: virtio-gpu: Document host/guest requirements
+Applying: virtio-gpu: Remove superfluous memory_region_set_enabled()
+Patch failed at 0016 virtio-gpu: Remove superfluous memory_region_set_enabled()
+error: patch failed: hw/display/virtio-gpu-virgl.c:171
+error: hw/display/virtio-gpu-virgl.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
