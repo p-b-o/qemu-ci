@@ -1,0 +1,226 @@
+Grabbing thread from lore.kernel.org/all/20260223094649.2005118-1-marcandre.lureau@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 91 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 452 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/85] audio: remove obsolete/obscure functions
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-2-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 2/85] adlib: remove dead code
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-3-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 3/85] audio/adlib: drop ts_helper HWVoice field
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-4-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 4/85] audio/dbus: make "dbus" the default backend when using -display dbus
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-5-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 5/85] qemu-options.hx: clarify default audio backend selection
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-6-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 6/85] qemu-options.hx: document -audiodev dbus
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-7-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 7/85] audio: replace vm_running with runstate_is_running()
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-8-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 8/85] audio: list backends as modules
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-9-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 9/85] build-sys: create a libaudio
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-10-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 10/85] scripts/modinfo: add type annotations
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-11-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 11/85] scripts/modinfo: remove trailing ;
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-12-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 12/85] scripts/modinfo: use in instead of find()
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-13-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 13/85] scripts/modinfo: use f-strings
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-14-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 14/85] scripts/modinfo: use argparse
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-15-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 15/85] scripts/modinfo: make --devices optional
+    + Reviewed-by: Mark Cave-Ayland <mark.caveayland@nutanix.com> ([32m✓[0m DKIM/nutanix.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-16-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 16/85] scripts/modinfo: add --skip-missing-deps
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-17-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 17/85] util: add some extra stubs for qemu modules initialization
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-18-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 18/85] tests: start manual audio backend test
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-19-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 19/85] audio: constify audsettings argument
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-20-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 20/85] audio: introduce AudioMixengBackend
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-21-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 21/85] audio: use DEFINE_TYPES
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-22-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 22/85] audio: simplify audio_init()
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-23-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 23/85] audio: move object creation to audio_driver_init()
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-24-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 24/85] audio: add QOM module-objects for each backend
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-25-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 25/85] audio: remove set_dbus_server from audio_driver
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-26-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 26/85] audio: lookup "audio-" object types, and realize them
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-27-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 27/85] audio: drop audio driver registration
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-28-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 28/85] module: remove audio module support
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-29-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 29/85] audio: replace type_init() with DEFINE_TYPES
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-30-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 30/85] audio: keep a strong reference on the backend
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-31-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 31/85] audio: make list type declaration private
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-32-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 32/85] audio: make create_pdos() private
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-33-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 33/85] replay: remove dependency on audio/
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-34-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 34/85] audio: make all the backend-specific APIs take the be
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-35-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 35/85] audio: make AudioBackend truly abstract
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-36-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 36/85] audio: split AudioBackend
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-37-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 37/85] audio: AUD_ -> audio_be_
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-38-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 38/85] audio-be: add common pre-conditions
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-39-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 39/85] audio-be: add some state trace for debugging
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-40-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 40/85] audio: split AudioMixengBackend code in audio-mixeng-be.c
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-41-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 41/85] audio: make audio_driver init() & fini() optional
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-42-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 42/85] audio/dbus: convert to QOM lifecycle methods
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-43-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 43/85] audio/spice: convert to QOM lifecycle methods
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-44-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 44/85] audio/wav: convert to QOM lifecycle methods
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-45-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 45/85] audio/noaudio: convert to QOM lifecycle methods
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-46-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 46/85] audio/alsa: convert to QOM lifecycle methods
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-47-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 47/85] audio/oss: convert to QOM lifecycle methods
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-48-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 48/85] audio/pa: convert to QOM lifecycle methods
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-49-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 49/85] audio/sdl: convert to QOM lifecycle methods
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-50-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 50/85] audio/pw: convert to QOM lifecycle methods
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-51-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 51/85] audio/jack: convert to QOM lifecycle methods
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-52-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 52/85] audio/sndio: convert to QOM lifecycle methods
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-53-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 53/85] audio/coreaudio: convert to QOM lifecycle methods
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-54-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 54/85] audio/dsound: convert to QOM lifecycle methods
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-55-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 55/85] audio: remove audio_driver init/fini/next
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-56-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 56/85] audio: remove audio_driver
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-57-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 57/85] audio: move pcm_ops into AudioMixengBackendClass
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-58-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 58/85] audio: constify some add_capture() arguments
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-59-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 59/85] audio/alsa: replace custom logging with error_report and trace events
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-60-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 60/85] audio/coreaudio: replace custom logging with error_report
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-61-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 61/85] audio/dbus: remove unused AUDIO_CAP macro
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-62-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 62/85] audio/dsound: replace custom logging with error_report & trace
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-63-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 63/85] audio/jack: replace custom logging with report & trace
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-64-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 64/85] audio/noaudio: remove unused AUDIO_CAP macro
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-65-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 65/85] audio/oss: replace custom logging with report & trace
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-66-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 66/85] audio/pa: replace custom logging with report & trace
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-67-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 67/85] audio/pw: replace custom logging with error_report
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-68-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 68/85] audio/sdl: replace custom logging with error_report
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-69-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 69/85] audio/sndio: replace custom logging with error_report
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-70-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 70/85] audio/spice: remove unused AUDIO_CAP macro
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-71-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 71/85] audio/wav: replace custom logging with error_report
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-72-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 72/85] audio/mixeng: replace redundant pcm_info fields with AudioFormat
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-73-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 73/85] audio: replace int endianness with bool big_endian in audsettings
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-74-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 74/85] audio: replace ldebug with trace events
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-75-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 75/85] audio: rework DEBUG_POLL
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-76-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 76/85] audio: replace DEBUG_CAPTURE with traces
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-77-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 77/85] audio: replace DEBUG_OUT with traces
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-78-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 78/85] audio: replace DEBUG_AUDIO with trace
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-79-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 79/85] tests/audio: add an invalid settings test
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-80-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 80/85] audio: rework invalid audsettings error
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-81-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 81/85] audio: rework audio_bug()
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-82-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 82/85] audio: replace remaining dolog() and AUD_log
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-83-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 83/85] audio: remove AUD_log/ldebug
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-84-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 84/85] audio: remove AudioMixengBackendClass.name
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-85-marcandre.lureau@redhat.com
+  [32m✓[0m [PATCH v2 85/85] audio: fix leak of audio capture name
+    + Link: https://lore.kernel.org/qemu-devel/20260223094649.2005118-86-marcandre.lureau@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 85
+---
+Applying: audio: remove obsolete/obscure functions
+Applying: adlib: remove dead code
+Applying: audio/adlib: drop ts_helper HWVoice field
+Applying: audio/dbus: make "dbus" the default backend when using -display dbus
+Applying: qemu-options.hx: clarify default audio backend selection
+Applying: qemu-options.hx: document -audiodev dbus
+Applying: audio: replace vm_running with runstate_is_running()
+Applying: audio: list backends as modules
+Applying: build-sys: create a libaudio
+Applying: scripts/modinfo: add type annotations
+Applying: scripts/modinfo: remove trailing ;
+Applying: scripts/modinfo: use in instead of find()
+Applying: scripts/modinfo: use f-strings
+Applying: scripts/modinfo: use argparse
+Applying: scripts/modinfo: make --devices optional
+Applying: scripts/modinfo: add --skip-missing-deps
+Applying: util: add some extra stubs for qemu modules initialization
+Applying: tests: start manual audio backend test
+Applying: audio: constify audsettings argument
+Applying: audio: introduce AudioMixengBackend
+Applying: audio: use DEFINE_TYPES
+Applying: audio: simplify audio_init()
+Applying: audio: move object creation to audio_driver_init()
+Applying: audio: add QOM module-objects for each backend
+Applying: audio: remove set_dbus_server from audio_driver
+Applying: audio: lookup "audio-" object types, and realize them
+Applying: audio: drop audio driver registration
+Applying: module: remove audio module support
+Applying: audio: replace type_init() with DEFINE_TYPES
+Applying: audio: keep a strong reference on the backend
+Applying: audio: make list type declaration private
+Applying: audio: make create_pdos() private
+Applying: replay: remove dependency on audio/
+Applying: audio: make all the backend-specific APIs take the be
+Patch failed at 0034 audio: make all the backend-specific APIs take the be
+error: patch failed: hw/audio/virtio-snd.c:1258
+error: hw/audio/virtio-snd.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
