@@ -1,0 +1,61 @@
+Grabbing thread from lore.kernel.org/all/20260225102016.200654-1-djordje.todorovic@htecgroup.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 17 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/16] meson: Add BE RISCV targets
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-2-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 2/16] config/targets: Add BE RISCV softmmu targets
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-3-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 3/16] config/devices: Add BE riscv configs
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-4-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 4/16] target/riscv: Ensure LE instruction fetching
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-5-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 5/16] hw/riscv: Ensure bootrom has correct endianess
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-6-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 6/16] hw/riscv: Ensure proper ELF endian expectation
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-7-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 7/16] hw/riscv: Check endianness for fw_dynamic fields
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-8-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 8/16] config/targets: Add RISC-V userspace targets
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-9-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 9/16] arch/riscv: Set UBE bit on BE target
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-10-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 10/16] config/targets: Add missing fields to BE linux-user targets
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-11-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 11/16] linux-user/riscv: Disable vDSO for big-endian targets
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-12-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 12/16] target/riscv: Set SBE and MBE bits at CPU reset for BE targets
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-13-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 13/16] target/riscv: Fix PTE A/D atomic update endianness
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-14-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 14/16] target/riscv: Use MO_LE for instruction fetch
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-15-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 15/16] hw/virtio: Use DEVICE_LITTLE_ENDIAN for virtio-mmio legacy ops
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-16-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v2 16/16] qapi: Add riscv32be and riscv64be to SysEmuTarget
+    + Link: https://lore.kernel.org/qemu-devel/20260225102016.200654-17-djordje.todorovic@htecgroup.com
+  ---
+  [32m✓[0m Signed: DKIM/htecgroup.com
+---
+Total patches: 16
+---
+Applying: meson: Add BE RISCV targets
+Applying: config/targets: Add BE RISCV softmmu targets
+Applying: config/devices: Add BE riscv configs
+Applying: target/riscv: Ensure LE instruction fetching
+Patch failed at 0004 target/riscv: Ensure LE instruction fetching
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:23: trailing whitespace.
+    
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:32: trailing whitespace.
+    
+error: patch failed: target/riscv/translate.c:1253
+error: target/riscv/translate.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
