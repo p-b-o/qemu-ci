@@ -1,0 +1,28 @@
+Grabbing thread from lore.kernel.org/all/20260225142534.5471-1-mohamed@unpredictable.fr/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] whpx: i386: apic: bring closer to MSHV code path
+    + Link: https://lore.kernel.org/qemu-devel/20260225142534.5471-1-mohamed@unpredictable.fr
+  ---
+  [32m✓[0m Signed: DKIM/unpredictable.fr
+---
+Total patches: 1
+---
+Applying: whpx: i386: apic: bring closer to MSHV code path
+Patch failed at 0001 whpx: i386: apic: bring closer to MSHV code path
+error: patch failed: include/system/whpx-internal.h:4
+error: include/system/whpx-internal.h: patch does not apply
+error: patch failed: target/i386/whpx/whpx-all.c:619
+error: target/i386/whpx/whpx-all.c: patch does not apply
+error: patch failed: target/i386/whpx/whpx-apic.c:1
+error: target/i386/whpx/whpx-apic.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
