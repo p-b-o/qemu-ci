@@ -965,9 +965,8 @@ bool fw_cfg_add_file_from_generator(FWCfgState *s,
     return true;
 }
 
-static void fw_cfg_machine_reset(void *opaque)
+static void __fw_cfg_machine_reset(FWCfgState *s)
 {
-    FWCfgState *s = opaque;
     void *ptr;
     size_t len;
     char *buf;
@@ -979,6 +978,23 @@ static void fw_cfg_machine_reset(void *opaque)
     buf = get_boot_devices_lchs_list(&len);
     ptr = fw_cfg_modify_file(s, "bios-geometry", (uint8_t *)buf, len);
     g_free(ptr);
+}
+
+void fw_cfg_machine_reload(void)
+{
+    FWCfgState *s = fw_cfg_find();
+
+    if (!s) {
+        return;
+    }
+
+    __fw_cfg_machine_reset(s);
+}
+
+static void fw_cfg_machine_reset(void *opaque)
+{
+    FWCfgState *s = opaque;
+    __fw_cfg_machine_reset(s);
 }
 
 static void fw_cfg_machine_ready(struct Notifier *n, void *data)

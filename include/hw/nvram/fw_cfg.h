@@ -351,4 +351,6 @@ void load_image_to_fw_cfg(FWCfgState *fw_cfg, uint16_t size_key,
                           uint16_t data_key, const char *image_name,
                           bool try_decompress);
 
+void fw_cfg_machine_reload(void);
+
 #endif

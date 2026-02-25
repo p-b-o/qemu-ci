@@ -32,6 +32,7 @@
 #include "hw/mem/memory-device.h"
 #include "hw/intc/intc.h"
 #include "migration/misc.h"
+#include "hw/nvram/fw_cfg.h"
 
 NameInfo *qmp_query_name(Error **errp)
 {
@@ -112,6 +113,11 @@ void qmp_cont(Error **errp)
             error_propagate(errp, local_err);
             return;
         }
+
+        if (runstate_check(RUN_STATE_PRELAUNCH)) {
+            fw_cfg_machine_reload();
+        }
+
         vm_start();
     }
 }
