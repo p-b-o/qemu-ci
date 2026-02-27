@@ -1,0 +1,145 @@
+Grabbing thread from lore.kernel.org/all/20260227203627.932864-1-brian.cain@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 38 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 172 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/37] docs: Add hexagon sysemu docs
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-2-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 2/37] docs/system: Add hexagon CPU emulation
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-3-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 3/37] target/hexagon: Fix badva reference, delete CAUSE
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-4-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 4/37] target/hexagon: Add missing A_CALL attr, hintjumpr to multi_cof
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-5-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 5/37] target/hexagon: Handle system/guest registers in gen_analyze_funcs.py and hex_common.py
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-6-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 6/37] target/hexagon: Make gen_exception_end_tb non-static
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-7-brian.cain@oss.qualcomm.com
+  [31m✗[0m [PATCH v3 7/37] target/hexagon: Switch to tag_ignore(), generate via get_{user, sys}_tags()
+    [31m✗[0m BADSIG: DKIM/oss.qualcomm.com
+    [31m✗[0m BADSIG: DKIM/qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-8-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 8/37] target/hexagon: Add system event, cause codes
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-9-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 9/37] target/hexagon: Add privilege check, use tag_ignore()
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-10-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 10/37] target/hexagon: Add memory order definition
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-11-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 11/37] target/hexagon: Add a placeholder fp exception
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-12-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 12/37] target/hexagon: Add guest, system reg number defs
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-13-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 13/37] target/hexagon: Add guest, system reg number state
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-14-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 14/37] target/hexagon: Add TCG values for sreg, greg
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-15-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 15/37] target/hexagon: Add guest/sys reg writes to DisasContext
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-16-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 16/37] target/hexagon: Add imported macro, attr defs for sysemu
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-17-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 17/37] target/hexagon: Add new macro definitions for sysemu
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-18-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 18/37] target/hexagon: Add handlers for guest/sysreg r/w
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-19-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 19/37] target/hexagon: Add placeholder greg/sreg r/w helpers
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-20-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 20/37] target/hexagon: Add vmstate representation
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-21-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 21/37] target/hexagon: Make A_PRIV, "J2_trap*" insts need_env()
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-22-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 22/37] target/hexagon: Define register fields for system regs
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-23-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 23/37] target/hexagon: Implement do_raise_exception()
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-24-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 24/37] target/hexagon: Add system reg insns
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-25-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 25/37] target/hexagon: Add sysemu TCG overrides
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-26-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 26/37] target/hexagon: Add implicit attributes to sysemu macros
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-27-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 27/37] target/hexagon: Add TCG overrides for int handler insts
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-28-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 28/37] target/hexagon: Add TCG overrides for thread ctl
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-29-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 29/37] target/hexagon: Add TCG overrides for rte, nmi
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-30-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 30/37] target/hexagon: Add sreg_{read,write} helpers
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-31-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 31/37] target/hexagon: Add locks, id, next_PC to state
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-32-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 32/37] target/hexagon: Add a TLB count property
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-33-brian.cain@oss.qualcomm.com
+  [31m✗[0m [PATCH v3 33/37] target/hexagon: Add {TLB, k0}lock, cause code, wait_next_pc
+    [31m✗[0m BADSIG: DKIM/oss.qualcomm.com
+    [31m✗[0m BADSIG: DKIM/qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-34-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 34/37] target/hexagon: Add stubs for modify_ssr/get_exe_mode
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-35-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 35/37] target/hexagon: Add clear_wait_mode() definition
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-36-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 36/37] target/hexagon: Define f{S,G}ET_FIELD macros
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-37-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 37/37] target/hexagon: Add hex_interrupts support
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260227203627.932864-38-brian.cain@oss.qualcomm.com
+---
+Total patches: 37
+---
+Applying: docs: Add hexagon sysemu docs
+Applying: docs/system: Add hexagon CPU emulation
+Applying: target/hexagon: Fix badva reference, delete CAUSE
+Applying: target/hexagon: Add missing A_CALL attr, hintjumpr to multi_cof
+Applying: target/hexagon: Handle system/guest registers in gen_analyze_funcs.py and hex_common.py
+Applying: target/hexagon: Make gen_exception_end_tb non-static
+Applying: target/hexagon: Switch to tag_ignore(), generate via get_{user, sys}_tags()
+Applying: target/hexagon: Add system event, cause codes
+Applying: target/hexagon: Add privilege check, use tag_ignore()
+Applying: target/hexagon: Add memory order definition
+Patch failed at 0010 target/hexagon: Add memory order definition
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:282: new blank line at EOF.
++
+warning: 1 line adds whitespace errors.
+error: patch failed: target/hexagon/cpu-param.h:23
+error: target/hexagon/cpu-param.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
