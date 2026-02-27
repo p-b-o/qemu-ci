@@ -1,0 +1,34 @@
+Grabbing thread from lore.kernel.org/all/20260227190619.8867-1-mohamed@unpredictable.fr/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 5 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/4] whpx: i386: move whpx_vcpu_kick_out_of_hlt() invocation to interrupt raise time
+    + Link: https://lore.kernel.org/qemu-devel/20260227190619.8867-2-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH 2/4] whpx: i386: enable all supported host features
+    + Link: https://lore.kernel.org/qemu-devel/20260227190619.8867-3-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH 3/4] whpx: i386: enable synthetic processor features
+    + Link: https://lore.kernel.org/qemu-devel/20260227190619.8867-4-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH 4/4] whpx: i386: warn on unsupported MSR access instead of failing silently
+    + Link: https://lore.kernel.org/qemu-devel/20260227190619.8867-5-mohamed@unpredictable.fr
+  ---
+  [32m✓[0m Signed: DKIM/unpredictable.fr
+---
+Total patches: 4
+---
+Applying: whpx: i386: move whpx_vcpu_kick_out_of_hlt() invocation to interrupt raise time
+Patch failed at 0001 whpx: i386: move whpx_vcpu_kick_out_of_hlt() invocation to interrupt raise time
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:13: trailing whitespace.
+static void whpx_vcpu_kick_out_of_hlt(CPUState *cpu) 
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:30: trailing whitespace.
+            /* 
+error: patch failed: target/i386/whpx/whpx-all.c:1453
+error: target/i386/whpx/whpx-all.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
