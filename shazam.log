@@ -1,0 +1,28 @@
+Grabbing thread from lore.kernel.org/all/20260302032435.42698-1-mohamed@unpredictable.fr/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 4 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/3] whpx: i386: do not enable nested virt when kernel-irqchip=off
+    + Link: https://lore.kernel.org/qemu-devel/20260302032435.42698-2-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH 2/3] target/i386: emulate: LA57 fix
+    + Link: https://lore.kernel.org/qemu-devel/20260302032435.42698-3-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH 3/3] whpx: i386: enable some more enlightenments
+    + Link: https://lore.kernel.org/qemu-devel/20260302032435.42698-4-mohamed@unpredictable.fr
+  ---
+  [32m✓[0m Signed: DKIM/unpredictable.fr
+---
+Total patches: 3
+---
+Applying: whpx: i386: do not enable nested virt when kernel-irqchip=off
+Patch failed at 0001 whpx: i386: do not enable nested virt when kernel-irqchip=off
+error: patch failed: target/i386/whpx/whpx-all.c:2145
+error: target/i386/whpx/whpx-all.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
