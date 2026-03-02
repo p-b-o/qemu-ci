@@ -1,0 +1,36 @@
+Grabbing thread from lore.kernel.org/all/20260302103640.1362564-1-eric.auger@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 89 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v7 1/7] target/arm/machine: Fix detection of unknown incoming cpregs
+    + Link: https://lore.kernel.org/qemu-devel/20260302103640.1362564-2-eric.auger@redhat.com
+  [32m✓[0m [PATCH v7 2/7] target/arm/cpu: Introduce the infrastructure for cpreg migration tolerances
+    + Link: https://lore.kernel.org/qemu-devel/20260302103640.1362564-3-eric.auger@redhat.com
+  [32m✓[0m [PATCH v7 3/7] target/arm/machine: Take account cpreg mig tolerances in case of mismatch
+    + Link: https://lore.kernel.org/qemu-devel/20260302103640.1362564-4-eric.auger@redhat.com
+  [32m✓[0m [PATCH v7 4/7] target/arm/cpu64: Mitigate migration failures due to spurious TCR_EL1, PIRE0_EL1 and PIR_EL1
+    + Link: https://lore.kernel.org/qemu-devel/20260302103640.1362564-5-eric.auger@redhat.com
+  [32m✓[0m [PATCH v7 5/7] target/arm/cpu64: Define cpreg migration tolerance for KVM_REG_ARM_VENDOR_HYP_BMAP_2
+    + Link: https://lore.kernel.org/qemu-devel/20260302103640.1362564-6-eric.auger@redhat.com
+  [32m✓[0m [PATCH v7 6/7] target/arm/helper: Define cpreg migration tolerance for DGBDTR_EL0
+    + Link: https://lore.kernel.org/qemu-devel/20260302103640.1362564-7-eric.auger@redhat.com
+  [32m✓[0m [PATCH v7 7/7] Revert "target/arm: Reinstate bogus AArch32 DBGDTRTX register for migration compat"
+    + Link: https://lore.kernel.org/qemu-devel/20260302103640.1362564-8-eric.auger@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 7
+---
+Applying: target/arm/machine: Fix detection of unknown incoming cpregs
+Patch failed at 0001 target/arm/machine: Fix detection of unknown incoming cpregs
+error: patch failed: target/arm/machine.c:1107
+error: target/arm/machine.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
