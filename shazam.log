@@ -1,0 +1,24 @@
+Grabbing thread from lore.kernel.org/all/20260303210553.2044313-1-brian.cain@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/1] tests/docker: Update hexagon cross toolchain to 22.1.0
+    + Link: https://lore.kernel.org/qemu-devel/20260303210553.2044313-2-brian.cain@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 1
+---
+Applying: tests/docker: Update hexagon cross toolchain to 22.1.0
+Patch failed at 0001 tests/docker: Update hexagon cross toolchain to 22.1.0
+error: patch failed: tests/docker/dockerfiles/debian-hexagon-cross.docker:5
+error: tests/docker/dockerfiles/debian-hexagon-cross.docker: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
