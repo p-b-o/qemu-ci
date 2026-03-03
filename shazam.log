@@ -1,0 +1,46 @@
+Grabbing thread from lore.kernel.org/all/20260303063930.2878300-1-jamin_lin@aspeedtech.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 12 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 11 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/10] tests/functional/arm/test_aspeed_ast1030: Update test ASPEED Zephyr SDK v03.06
+    + Link: https://lore.kernel.org/qemu-devel/20260303063930.2878300-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 2/10] tests/functional/arm/test_aspeed_ast1060: Update test aspeed-zephyr-project v03.05
+    + Link: https://lore.kernel.org/qemu-devel/20260303063930.2878300-3-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 3/10] tests/functional/arm/test_aspeed_ast2500_sdk: Update test ASPEED OpenBMC SDK v11.01
+    + Link: https://lore.kernel.org/qemu-devel/20260303063930.2878300-4-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 4/10] tests/functional/arm/test_aspeed_ast2500_sdk_515: Update test ASPEED OpenBMC SDK v11.01
+    + Link: https://lore.kernel.org/qemu-devel/20260303063930.2878300-5-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 5/10] tests/functional/arm/test_aspeed_ast2600_sdk: Update test ASPEED OpenBMC SDK v11.01
+    + Link: https://lore.kernel.org/qemu-devel/20260303063930.2878300-6-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 6/10] tests/functional/arm/test_aspeed_ast2600_sdk_otp: Update test ASPEED OpenBMC SDK v11.01
+    + Link: https://lore.kernel.org/qemu-devel/20260303063930.2878300-7-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 7/10] tests/functional/arm/test_aspeed_ast2600_sdk_515: Update test ASPEED OpenBMC SDK v11.01
+    + Link: https://lore.kernel.org/qemu-devel/20260303063930.2878300-8-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 8/10] tests/functional/aarch64/test_aspeed_ast2700a1: Update test ASPEED OpenBMC SDK v11.01
+    + Link: https://lore.kernel.org/qemu-devel/20260303063930.2878300-9-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 9/10] tests/functional/aarch64/test_aspeed_ast2700a2: Update test ASPEED OpenBMC SDK v11.01
+    + Link: https://lore.kernel.org/qemu-devel/20260303063930.2878300-10-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 10/10] tests/functional/aarch64/test_aspeed_ast2700fc: Update test ASPEED OpenBMC SDK v11.01
+    + Link: https://lore.kernel.org/qemu-devel/20260303063930.2878300-11-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 10
+---
+Applying: tests/functional/arm/test_aspeed_ast1030: Update test ASPEED Zephyr SDK v03.06
+Applying: tests/functional/arm/test_aspeed_ast1060: Update test aspeed-zephyr-project v03.05
+Applying: tests/functional/arm/test_aspeed_ast2500_sdk: Update test ASPEED OpenBMC SDK v11.01
+Applying: tests/functional/arm/test_aspeed_ast2500_sdk_515: Update test ASPEED OpenBMC SDK v11.01
+Applying: tests/functional/arm/test_aspeed_ast2600_sdk: Update test ASPEED OpenBMC SDK v11.01
+Patch failed at 0005 tests/functional/arm/test_aspeed_ast2600_sdk: Update test ASPEED OpenBMC SDK v11.01
+error: patch failed: tests/functional/arm/test_aspeed_ast2600_sdk.py:55
+error: tests/functional/arm/test_aspeed_ast2600_sdk.py: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
