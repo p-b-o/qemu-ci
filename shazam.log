@@ -1,0 +1,30 @@
+Grabbing thread from lore.kernel.org/all/20260303013322.1297499-1-jamin_lin@aspeedtech.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 10 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/4] hw/i3c/dw-i3c: Use ROUND_UP() for RX buffer allocation alignment
+    + Link: https://lore.kernel.org/qemu-devel/20260303013322.1297499-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 2/4] hw/i3c/mock-i3c-target: Set num_sent in TX callback to fix trace reporting
+    + Reviewed-by: Jithu Joseph <jithu.joseph@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260303013322.1297499-3-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 3/4] hw/i3c/core: Initialize num_sent in i3c_send_byte()
+    + Link: https://lore.kernel.org/qemu-devel/20260303013322.1297499-4-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 4/4] hw/i3c/mock-i3c-target: Simplify GETMRL byte extraction logic
+    + Link: https://lore.kernel.org/qemu-devel/20260303013322.1297499-5-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 4
+---
+Applying: hw/i3c/dw-i3c: Use ROUND_UP() for RX buffer allocation alignment
+Patch failed at 0001 hw/i3c/dw-i3c: Use ROUND_UP() for RX buffer allocation alignment
+error: hw/i3c/dw-i3c.c: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
