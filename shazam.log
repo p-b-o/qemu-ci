@@ -1,0 +1,37 @@
+Grabbing thread from lore.kernel.org/all/20260304102249.1963784-1-eric.auger@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 97 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v8 1/6] target/arm/cpu: Introduce the infrastructure for cpreg migration tolerances
+    + Link: https://lore.kernel.org/qemu-devel/20260304102249.1963784-2-eric.auger@redhat.com
+  [32m✓[0m [PATCH v8 2/6] target/arm/machine: Take account cpreg mig tolerances in case of mismatch
+    + Link: https://lore.kernel.org/qemu-devel/20260304102249.1963784-3-eric.auger@redhat.com
+  [32m✓[0m [PATCH v8 3/6] target/arm/cpu64: Mitigate migration failures due to spurious TCR_EL1, PIRE0_EL1 and PIR_EL1
+    + Link: https://lore.kernel.org/qemu-devel/20260304102249.1963784-4-eric.auger@redhat.com
+  [32m✓[0m [PATCH v8 4/6] target/arm/cpu64: Define cpreg migration tolerance for KVM_REG_ARM_VENDOR_HYP_BMAP_2
+    + Link: https://lore.kernel.org/qemu-devel/20260304102249.1963784-5-eric.auger@redhat.com
+  [32m✓[0m [PATCH v8 5/6] target/arm/helper: Define cpreg migration tolerance for DGBDTR_EL0
+    + Link: https://lore.kernel.org/qemu-devel/20260304102249.1963784-6-eric.auger@redhat.com
+  [32m✓[0m [PATCH v8 6/6] Revert "target/arm: Reinstate bogus AArch32 DBGDTRTX register for migration compat"
+    + Link: https://lore.kernel.org/qemu-devel/20260304102249.1963784-7-eric.auger@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 6
+---
+Applying: target/arm/cpu: Introduce the infrastructure for cpreg migration tolerances
+Applying: target/arm/machine: Take account cpreg mig tolerances in case of mismatch
+Patch failed at 0002 target/arm/machine: Take account cpreg mig tolerances in case of mismatch
+error: patch failed: target/arm/machine.c:1065
+error: target/arm/machine.c: patch does not apply
+error: patch failed: target/arm/trace-events:29
+error: target/arm/trace-events: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
