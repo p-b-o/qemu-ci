@@ -1,0 +1,64 @@
+Grabbing thread from lore.kernel.org/all/20260306161509.79712-1-mohamed@unpredictable.fr/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 49 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 196 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v16 1/17] hvf/arm: handle FEAT_SME2 migration
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-2-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 2/17] hvf/arm: expose FEAT_SME2 to guest if available
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-3-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 3/17] hw/arm: virt: remove hvf_arm.h include
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-4-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 4/17] hvf: hvf-all: stop including hvf_arm.h
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-5-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 5/17] hw/intc: Add hvf vGIC interrupt controller support
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-6-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 6/17] hw/intc: arm_gicv3_hvf: save/restore Apple GIC state
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-7-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 7/17] accel, hw/arm, include/system/hvf: infrastructure changes for HVF vGIC
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-8-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 8/17] target/arm: hvf: instantiate GIC early
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-9-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 9/17] hw/arm, target/arm: nested virtualisation on HVF
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-10-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 10/17] hvf: only call hvf_sync_vtimer() when running without the platform vGIC
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-11-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 11/17] hvf: gate ARM_FEATURE_PMU register emulation behind not being at EL2
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-12-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 12/17] hvf: arm: allow exposing minimal PMU when running with nested virt on
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-13-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 13/17] target/arm: hvf: add asserts for code paths not leveraged when using the vGIC
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-14-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 14/17] hvf: sync registers used at EL2
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-15-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 15/17] target/arm: hvf: pass through CNTHCTL_EL2 and MDCCINT_EL1
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-16-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 16/17] hvf: arm: disable SME when nested virt is active
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-17-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH v16 17/17] hvf: enable nested virtualisation support
+    + Link: https://lore.kernel.org/qemu-devel/20260306161509.79712-18-mohamed@unpredictable.fr
+  ---
+  [32m✓[0m Signed: DKIM/unpredictable.fr
+---
+Total patches: 17
+---
+Applying: hvf/arm: handle FEAT_SME2 migration
+Patch failed at 0001 hvf/arm: handle FEAT_SME2 migration
+error: patch failed: target/arm/hvf/hvf.c:395
+error: target/arm/hvf/hvf.c: patch does not apply
+error: target/arm/hvf/hvf_sme_stubs.h: already exists in index
+error: patch failed: target/arm/hvf/sysreg.c.inc:145
+error: target/arm/hvf/sysreg.c.inc: patch does not apply
+error: patch failed: target/arm/hvf_arm.h:22
+error: target/arm/hvf_arm.h: patch does not apply
+error: patch failed: target/arm/machine.c:231
+error: target/arm/machine.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
