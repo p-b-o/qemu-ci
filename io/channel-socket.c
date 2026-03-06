@@ -895,6 +895,10 @@ static int qio_channel_socket_flush(QIOChannel *ioc,
     QIOChannelSocket *sioc = QIO_CHANNEL_SOCKET(ioc);
     int ret;
 
+    if (sioc->zero_copy_queued == sioc->zero_copy_sent) {
+        return 0;
+    }
+
     ret = qio_channel_socket_flush_internal(ioc, true, errp);
     if (ret < 0) {
         return ret;
