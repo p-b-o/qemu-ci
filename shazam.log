@@ -1,0 +1,36 @@
+Grabbing thread from lore.kernel.org/all/20260307154202.86309-1-philmd@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/6] hw/i386/pc: Remove deprecated pc-q35-4.0[.1] and pc-i440fx-4.0 machines
+    + Link: https://lore.kernel.org/qemu-devel/20260307154202.86309-2-philmd@linaro.org
+  [32m✓[0m [PATCH 2/6] system/hostmem: Remove HostMemoryBackend::use_canonical_path field
+    + Link: https://lore.kernel.org/qemu-devel/20260307154202.86309-3-philmd@linaro.org
+  [32m✓[0m [PATCH 3/6] hw/i386/pc: Remove pc_compat_4_0[] array
+    + Link: https://lore.kernel.org/qemu-devel/20260307154202.86309-4-philmd@linaro.org
+  [32m✓[0m [PATCH 4/6] hw/core/machine: Remove the hw_compat_4_0[] array
+    + Link: https://lore.kernel.org/qemu-devel/20260307154202.86309-5-philmd@linaro.org
+  [32m✓[0m [PATCH 5/6] hw/virtio: Remove VirtIOBalloon::qemu_4_0_config_size field
+    + Link: https://lore.kernel.org/qemu-devel/20260307154202.86309-6-philmd@linaro.org
+  [32m✓[0m [PATCH 6/6] hw/rtc/pl031: : Remove PL031State::migrate_tick_offset field
+    + Link: https://lore.kernel.org/qemu-devel/20260307154202.86309-7-philmd@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 6
+---
+Applying: hw/i386/pc: Remove deprecated pc-q35-4.0[.1] and pc-i440fx-4.0 machines
+Patch failed at 0001 hw/i386/pc: Remove deprecated pc-q35-4.0[.1] and pc-i440fx-4.0 machines
+error: patch failed: hw/i386/pc_piix.c:644
+error: hw/i386/pc_piix.c: patch does not apply
+error: patch failed: hw/i386/pc_q35.c:575
+error: hw/i386/pc_q35.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
