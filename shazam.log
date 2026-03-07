@@ -1,0 +1,35 @@
+Grabbing thread from lore.kernel.org/all/cover.1772924827.git.balaton@eik.bme.hu/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Nothing matching that query.
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 38 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH v4 1/6] memory: Add memory_region_new* functions
+    + Link: https://lore.kernel.org/qemu-devel/89fd648ce41452d5e69f4f74856f45be0fd91071.1772924827.git.balaton@eik.bme.hu
+  [PATCH v4 2/6] memory: Update documentation for memory_region_new*()
+    + Link: https://lore.kernel.org/qemu-devel/798bdd6d2b2ebc8967ad73ff6eef49f12b373a41.1772924827.git.balaton@eik.bme.hu
+  [PATCH v4 3/6] hw/ide/sii3112: Use memory_region_new to avoid leaking regions
+    + Link: https://lore.kernel.org/qemu-devel/bb0994f7222ab23b22c6ed6efb846a92d28ba310.1772924827.git.balaton@eik.bme.hu
+  [PATCH v4 4/6] hw/pci-host/articia: Map PCI memory windows in realize
+    + Link: https://lore.kernel.org/qemu-devel/71d49bf0c2aa29a49bae1ce0d30d1720da6af182.1772924827.git.balaton@eik.bme.hu
+  [PATCH v4 5/6] hw/pci-host/articia: Add variable for common type cast
+    + Link: https://lore.kernel.org/qemu-devel/28eeaf3ce8139b2e219f0353797f07bb62d4c58e.1772924827.git.balaton@eik.bme.hu
+  [PATCH v4 6/6] hw/xtensa/xtfpga: Fix leaking memory region
+    + Link: https://lore.kernel.org/qemu-devel/b3c9a27c0686aca26ee9fb7d8ea950e9cb5b4c54.1772924827.git.balaton@eik.bme.hu
+---
+Total patches: 6
+---
+Applying: memory: Add memory_region_new* functions
+Patch failed at 0001 memory: Add memory_region_new* functions
+error: patch failed: include/system/memory.h:1374
+error: include/system/memory.h: patch does not apply
+error: patch failed: system/memory.c:1576
+error: system/memory.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
