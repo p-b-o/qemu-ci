@@ -1,0 +1,44 @@
+Grabbing thread from lore.kernel.org/all/20260307152635.83893-1-philmd@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/10] hw/i386/pc: Remove deprecated pc-q35-3.1 and pc-i440fx-3.1 machines
+    + Link: https://lore.kernel.org/qemu-devel/20260307152635.83893-2-philmd@linaro.org
+  [32m✓[0m [PATCH 2/10] hw/i386/pc: Remove PCMachineClass::pvh_enabled field
+    + Link: https://lore.kernel.org/qemu-devel/20260307152635.83893-3-philmd@linaro.org
+  [32m✓[0m [PATCH 3/10] hw/i386/x86: Remove @pvh_enabled argument in x86_load_linux()
+    + Link: https://lore.kernel.org/qemu-devel/20260307152635.83893-4-philmd@linaro.org
+  [32m✓[0m [PATCH 4/10] hw/core/boards: Remove MachineClass::smbus_no_migration_support field
+    + Link: https://lore.kernel.org/qemu-devel/20260307152635.83893-5-philmd@linaro.org
+  [32m✓[0m [PATCH 5/10] hw/i386/pc: Remove pc_compat_3_1[] array
+    + Link: https://lore.kernel.org/qemu-devel/20260307152635.83893-6-philmd@linaro.org
+  [32m✓[0m [PATCH 6/10] hw/i386/iommu: Remove IntelIOMMUState::dma_drain field
+    + Link: https://lore.kernel.org/qemu-devel/20260307152635.83893-7-philmd@linaro.org
+  [32m✓[0m [PATCH 7/10] target/i386/cpu: Remove X86CPU::intel_pt_auto_level field
+    + Link: https://lore.kernel.org/qemu-devel/20260307152635.83893-8-philmd@linaro.org
+  [32m✓[0m [PATCH 8/10] hw/core/machine: Remove the hw_compat_3_1[] array
+    + Link: https://lore.kernel.org/qemu-devel/20260307152635.83893-9-philmd@linaro.org
+  [32m✓[0m [PATCH 9/10] hw/pci-bridge/pcie_rp: Remove PCIESlot::disable_acs field
+    + Link: https://lore.kernel.org/qemu-devel/20260307152635.83893-10-philmd@linaro.org
+  [32m✓[0m [PATCH 10/10] hw/tpm: Remove CRBState::ppi_enabled field
+    + Link: https://lore.kernel.org/qemu-devel/20260307152635.83893-11-philmd@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 10
+---
+Applying: hw/i386/pc: Remove deprecated pc-q35-3.1 and pc-i440fx-3.1 machines
+Patch failed at 0001 hw/i386/pc: Remove deprecated pc-q35-3.1 and pc-i440fx-3.1 machines
+error: patch failed: hw/i386/pc_piix.c:655
+error: hw/i386/pc_piix.c: patch does not apply
+error: patch failed: hw/i386/pc_q35.c:600
+error: hw/i386/pc_q35.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
