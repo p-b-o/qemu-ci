@@ -1,0 +1,82 @@
+Grabbing thread from lore.kernel.org/all/cover.1772936778.git.chao.liu.zevorn@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 29 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v1 1/28] target/riscv: track pending Debug Module halt requests
+    + Link: https://lore.kernel.org/qemu-devel/4baa12f9284a5a4fc543ae7c82cc26814a10c973.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 2/28] target/riscv: keep Debug Mode active when a DM ROM is present
+    + Link: https://lore.kernel.org/qemu-devel/50bb827520cc1fc9e913a6293e5fe30c355a5a69.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 3/28] target/riscv: enter Debug Mode from pending DM halt requests
+    + Link: https://lore.kernel.org/qemu-devel/d31a7f38a9b0d3fc54e9ce562a648717c8855b3e.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 4/28] target/riscv: route in-debug exceptions back to the DM ROM
+    + Link: https://lore.kernel.org/qemu-devel/fd669f903f8ded5b2c96023bf9a11bcbdfda400b.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 5/28] target/riscv: re-enter the DM ROM after single-step completion
+    + Link: https://lore.kernel.org/qemu-devel/6b320e8671c22dd26ad89df4fb8c90f3995514cb.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 6/28] target/riscv: let ebreak enter the DM ROM
+    + Link: https://lore.kernel.org/qemu-devel/fe29b3622f3db629078fdbd466829d7a777e3100.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 7/28] target/riscv: restart the DM ROM on debug-mode ebreak
+    + Link: https://lore.kernel.org/qemu-devel/bb02f01144f6afab42973f24961f9398386b92d9.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 8/28] target/riscv: track the exact breakpoint trigger hit
+    + Link: https://lore.kernel.org/qemu-devel/ac804c0bc3b0561e45c2e2a347bd3a7da339a6ce.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 9/28] target/riscv: track the exact watchpoint trigger hit
+    + Link: https://lore.kernel.org/qemu-devel/c36fc1572d3b7c947dae579f80c50e291594883f.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 10/28] target/riscv: send trigger debug-mode actions to the DM ROM
+    + Link: https://lore.kernel.org/qemu-devel/786eda45594a916e59d100c8edbeb141c5e8d79c.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 11/28] target/riscv: suppress itrigger TB state in Debug Mode
+    + Link: https://lore.kernel.org/qemu-devel/acba51005a230bea4ff25614026c79253ecf7e5f.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 12/28] target/riscv: tighten itrigger privilege and count checks
+    + Link: https://lore.kernel.org/qemu-devel/6adff7fe6b74b9f25918d8c64ca0c4a9ca3b0fa0.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 13/28] target/riscv: allow debug-mode actions for itrigger
+    + Link: https://lore.kernel.org/qemu-devel/c03f4751f2145f6817083fed32aee06dcf65584c.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 14/28] target/riscv: stop consuming itrigger counts in Debug Mode
+    + Link: https://lore.kernel.org/qemu-devel/378f3cac42ed118add63c496d52ea54b426ff284.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 15/28] hw/riscv: add an initial Debug Module device model
+    + Link: https://lore.kernel.org/qemu-devel/f18c91f226c78c1f866c83d5f167460a529c246a.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 16/28] hw/riscv/dm: track per-hart debug state
+    + Link: https://lore.kernel.org/qemu-devel/c175c14e6884da5c694a7cad96fe42c50ecd29f1.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 17/28] hw/riscv/dm: add hart run-control operations
+    + Link: https://lore.kernel.org/qemu-devel/c123323a4ec484face040c43333ee77c5399c36e.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 18/28] hw/riscv/dm: queue reset halts from the reset work item
+    + Link: https://lore.kernel.org/qemu-devel/dc14e7beecb596bac6ca657fe9d34933b826df21.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 19/28] hw/riscv/dm: add DMI register declarations and ROM entry program
+    + Link: https://lore.kernel.org/qemu-devel/bf02e096105896ca32e11de77ecf99705ff37ab7.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 20/28] hw/riscv/dm: add register handlers and update state management
+    + Link: https://lore.kernel.org/qemu-devel/339a2c9cfa0a7efb1ef1c630c5b738c55ab05323.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 21/28] hw/riscv/dm: add abstract command execution
+    + Link: https://lore.kernel.org/qemu-devel/07fdc457972b18350ba37019370fea56fba70019.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 22/28] hw/riscv/dm: add system bus access
+    + Link: https://lore.kernel.org/qemu-devel/37a88487caad84ae50b47cc190820ebfac5ecb3e.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 23/28] hw/riscv/virt: integrate the Debug Module
+    + Link: https://lore.kernel.org/qemu-devel/9d4f695c95229e5b28247c477f2278294f5b2cbb.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 24/28] tests/qtest: add initial RISC-V Debug Module tests
+    + Link: https://lore.kernel.org/qemu-devel/18d94d4d321cd011e7d61fffdff3218ad5a23cc7.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 25/28] tests/qtest: extend DM register semantics coverage
+    + Link: https://lore.kernel.org/qemu-devel/21d42ab8e77b205319a2b085371d62edecfdf983.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 26/28] tests/qtest: add DM abstract command and halt/resume tests
+    + Link: https://lore.kernel.org/qemu-devel/c728e790d60d1d066e1c4de935afe8ee53e47ec2.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 27/28] tests/qtest: add DM TCG halt and register access tests
+    + Link: https://lore.kernel.org/qemu-devel/e49545f7d00d9b4010ab4e5ad8fe0c3d05d6b501.1772936778.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v1 28/28] tests/qtest: add DM TCG single-step and trigger tests
+    + Link: https://lore.kernel.org/qemu-devel/815a1695c1a8f39d2d4e131612602c07244bf80e.1772936778.git.chao.liu.zevorn@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 28
+---
+Applying: target/riscv: track pending Debug Module halt requests
+Patch failed at 0001 target/riscv: track pending Debug Module halt requests
+error: patch failed: target/riscv/cpu.c:784
+error: target/riscv/cpu.c: patch does not apply
+error: patch failed: target/riscv/cpu.h:481
+error: target/riscv/cpu.h: patch does not apply
+error: patch failed: target/riscv/machine.c:263
+error: target/riscv/machine.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
