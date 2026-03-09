@@ -1,0 +1,29 @@
+Grabbing thread from lore.kernel.org/all/20260309214930.92616-1-lucaaamaral@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 4 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/3] include/standard-headers: add VIRTIO_GPU_F_BLOB_ALIGNMENT
+    + Link: https://lore.kernel.org/qemu-devel/20260309214930.92616-2-lucaaamaral@gmail.com
+  [32m✓[0m [PATCH 2/3] virtio-gpu: decouple Venus from CONFIG_OPENGL
+    + Link: https://lore.kernel.org/qemu-devel/20260309214930.92616-3-lucaaamaral@gmail.com
+  [32m✓[0m [PATCH 3/3] virtio-gpu: advertise and populate blob alignment
+    + Link: https://lore.kernel.org/qemu-devel/20260309214930.92616-4-lucaaamaral@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 3
+---
+Applying: include/standard-headers: add VIRTIO_GPU_F_BLOB_ALIGNMENT
+Applying: virtio-gpu: decouple Venus from CONFIG_OPENGL
+Patch failed at 0002 virtio-gpu: decouple Venus from CONFIG_OPENGL
+error: patch failed: hw/display/virtio-gpu-virgl.c:29
+error: hw/display/virtio-gpu-virgl.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
