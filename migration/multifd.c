@@ -593,7 +593,7 @@ void multifd_send_shutdown(void)
 
 static int multifd_zero_copy_flush(QIOChannel *c)
 {
-    int ret;
+    ssize_t ret;
     Error *err = NULL;
 
     ret = qio_channel_flush(c, &err);
@@ -601,8 +601,10 @@ static int multifd_zero_copy_flush(QIOChannel *c)
         error_report_err(err);
         return -1;
     }
-    if (ret == 1) {
-        qatomic_add(&mig_stats.dirty_sync_missed_zero_copy, 1);
+
+    if (qatomic_read(&mig_stats.dirty_sync_missed_zero_copy) != (uint64_t)ret) {
+        /* Update statistics if more fallback detected */
+        qatomic_set(&mig_stats.dirty_sync_missed_zero_copy, (uint64_t)ret);
     }
 
     return ret;

@@ -58,8 +58,7 @@
 #     (since 7.0).
 #
 # @dirty-sync-missed-zero-copy: Number of times dirty RAM
-#     synchronization could not avoid copying dirty pages.  This is
-#     between 0 and @dirty-sync-count * @multifd-channels.
+#     synchronization could not avoid copying dirty pages.
 #     (since 7.1)
 #
 # Since: 0.14

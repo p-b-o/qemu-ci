@@ -72,7 +72,7 @@ qio_channel_socket_new(void)
     sioc->zero_copy_queued = 0;
     sioc->zero_copy_sent = 0;
     sioc->blocking = false;
-    sioc->new_zero_copy_sent_success = false;
+    sioc->zero_copy_fallback = 0;
 
     ioc = QIO_CHANNEL(sioc);
     qio_channel_set_feature(ioc, QIO_CHANNEL_FEATURE_SHUTDOWN);
@@ -881,8 +881,8 @@ static int qio_channel_socket_flush_internal(QIOChannel *ioc,
         sioc->zero_copy_sent += serr->ee_data - serr->ee_info + 1;
 
         /* If any sendmsg() succeeded using zero copy, mark zerocopy success */
-        if (serr->ee_code != SO_EE_CODE_ZEROCOPY_COPIED) {
-            sioc->new_zero_copy_sent_success = true;
+        if (serr->ee_code == SO_EE_CODE_ZEROCOPY_COPIED) {
+            sioc->zero_copy_fallback++;
         }
     }
 
@@ -900,12 +900,7 @@ static int qio_channel_socket_flush(QIOChannel *ioc,
         return ret;
     }
 
-    if (sioc->new_zero_copy_sent_success) {
-        sioc->new_zero_copy_sent_success = false;
-        return 0;
-    }
-
-    return 1;
+    return sioc->zero_copy_fallback;
 }
 
 #endif /* QEMU_MSG_ZEROCOPY */
