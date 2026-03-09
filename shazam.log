@@ -1,0 +1,39 @@
+Grabbing thread from lore.kernel.org/all/cover.1773020351.git.balaton@eik.bme.hu/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 18 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 18 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH v12 1/9] ati-vga: Remove src and dst stride mutation in ati_2d_blt
+    + Link: https://lore.kernel.org/qemu-devel/7ab2227b96b73a63cb4fc61d0e6921e01900a4ee.1773020351.git.balaton@eik.bme.hu
+  [PATCH v12 2/9] ati-vga: Use local variables for register values in ati_2d_blt
+    + Link: https://lore.kernel.org/qemu-devel/2c7f8fdc527e8c5bad237933a1c8a7a8e5068a3d.1773020351.git.balaton@eik.bme.hu
+  [PATCH v12 3/9] ati-vga: Introduce ATI2DCtx struct for 2D blit context
+    + Link: https://lore.kernel.org/qemu-devel/b6279657ab59821c2714af643df427ab6e84374f.1773020351.git.balaton@eik.bme.hu
+  [PATCH v12 4/9] ati-vga: Extract setup_2d_blt_ctx from ati_2d_blt
+    + Link: https://lore.kernel.org/qemu-devel/6e2dccba65d9b369e0db633c0149a77351827222.1773020351.git.balaton@eik.bme.hu
+  [PATCH v12 5/9] ati-vga: Split ati_2d_do_blt from ati_2d_blt
+    + Link: https://lore.kernel.org/qemu-devel/367949c50ca140a2d18ae66234dafbbc586b553c.1773020351.git.balaton@eik.bme.hu
+  [PATCH v12 6/9] ati-vga: Remove ATIVGAState param from ati_2d_do_blt
+    + Link: https://lore.kernel.org/qemu-devel/6e3545dea9f4522e07e91f9db885a7d74dae781a.1773020351.git.balaton@eik.bme.hu
+  [PATCH v12 7/9] ati-vga: Implement scissor rectangle clipping for 2D operations
+    + Link: https://lore.kernel.org/qemu-devel/4752dfbe240102c2ffa1f2cdab4c9442d4f0dcfb.1773020351.git.balaton@eik.bme.hu
+  [PATCH v12 8/9] ati-vga: Implement HOST_DATA register writes
+    + Link: https://lore.kernel.org/qemu-devel/235adb69787c818afd023e7f32286166cc70744c.1773020351.git.balaton@eik.bme.hu
+  [PATCH v12 9/9] ati-vga: Implement HOST_DATA flush to VRAM
+    + Link: https://lore.kernel.org/qemu-devel/8d0d4b52a16f5564e37bbc88496d7ab8d41477ac.1773020351.git.balaton@eik.bme.hu
+---
+Total patches: 9
+---
+Applying: ati-vga: Remove src and dst stride mutation in ati_2d_blt
+Applying: ati-vga: Use local variables for register values in ati_2d_blt
+Patch failed at 0002 ati-vga: Use local variables for register values in ati_2d_blt
+error: patch failed: hw/display/ati_2d.c:65
+error: hw/display/ati_2d.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
