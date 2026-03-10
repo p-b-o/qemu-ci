@@ -854,7 +854,10 @@ int test_precopy_common(MigrateCommon *args)
             in_channels = qobject_from_json(args->connect_channels,
                                             &error_abort);
         }
-        migrate_incoming_qmp(to, args->listen_uri, in_channels, "{}");
+
+        migrate_incoming_qmp(to, args->listen_uri, in_channels,
+                             args->result == MIG_TEST_FAIL ?
+                             "{ 'exit-on-error': false }" : "{}");
     }
 
     /* Wait for the first serial output from the source */

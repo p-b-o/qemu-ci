@@ -525,7 +525,8 @@ static void test_precopy_tcp_tls_no_hostname(char *name, MigrateCommon *args)
     args->listen_uri = "tcp:127.0.0.1:0";
     args->start_hook = migrate_hook_start_tls_x509_no_host;
     args->end_hook = migrate_hook_end_tls_x509;
-    args->result = MIG_TEST_FAIL_DEST_QUIT_ERR;
+    args->result = MIG_TEST_FAIL;
+    args->start.incoming_defer = true;
 
     args->start.hide_stderr = true;
 
@@ -559,7 +560,8 @@ static void test_precopy_tcp_tls_x509_mismatch_host(char *name,
     args->listen_uri = "tcp:127.0.0.1:0";
     args->start_hook = migrate_hook_start_tls_x509_mismatch_host;
     args->end_hook = migrate_hook_end_tls_x509;
-    args->result = MIG_TEST_FAIL_DEST_QUIT_ERR;
+    args->result = MIG_TEST_FAIL;
+    args->start.incoming_defer = true;
 
     args->start.hide_stderr = true;
 
