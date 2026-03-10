@@ -116,9 +116,11 @@ static void test_colo_multifd_common(MigrateCommon *args,
                                      bool failover_during_checkpoint,
                                      bool primary_failover)
 {
-    args->listen_uri = "defer";
+    args->listen_uri = "tcp:127.0.0.1:0";
     args->start_hook = hook_start_multifd;
     args->start.caps[MIGRATION_CAPABILITY_MULTIFD] = true;
+    args->start.incoming_defer = true;
+
     test_colo_common(args, failover_during_checkpoint, primary_failover);
 }
 
