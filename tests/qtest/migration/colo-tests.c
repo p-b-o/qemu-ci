@@ -55,6 +55,10 @@ static int test_colo_common(MigrateCommon *args,
         data_hook = args->start_hook(from, to);
     }
 
+    if (args->start.incoming_defer) {
+        migrate_incoming_qmp(to, args->listen_uri, NULL, "{}");
+    }
+
     migrate_ensure_converge(from);
     wait_for_serial("src_serial");
 
