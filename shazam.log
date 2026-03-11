@@ -1,0 +1,41 @@
+Grabbing thread from lore.kernel.org/all/20260311113505.1177878-1-magnuskulke@linux.microsoft.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 27 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/9] accel/mshv: use mshv_create_partition_v2 payload
+    + Link: https://lore.kernel.org/qemu-devel/20260311113505.1177878-2-magnuskulke@linux.microsoft.com
+  [32m✓[0m [PATCH v2 2/9] target/i386/mshv: fix cpuid propagation bug
+    + Acked-by: Wei Liu (Microsoft) <wei.liu@kernel.org> ([32m✓[0m DKIM/kernel.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260311113505.1177878-3-magnuskulke@linux.microsoft.com
+  [32m✓[0m [PATCH v2 3/9] target/i386/mshv: fix various cpuid traversal bugs
+    + Link: https://lore.kernel.org/qemu-devel/20260311113505.1177878-4-magnuskulke@linux.microsoft.com
+  [32m✓[0m [PATCH v2 4/9] target/i386/mshv: change cpuid mask to UINT32_MAX
+    + Link: https://lore.kernel.org/qemu-devel/20260311113505.1177878-5-magnuskulke@linux.microsoft.com
+  [32m✓[0m [PATCH v2 5/9] target/i386/mshv: set cpu model name on -cpu host
+    + Link: https://lore.kernel.org/qemu-devel/20260311113505.1177878-6-magnuskulke@linux.microsoft.com
+  [32m✓[0m [PATCH v2 6/9] target/i386: query mshv accel for supported cpuids
+    + Link: https://lore.kernel.org/qemu-devel/20260311113505.1177878-7-magnuskulke@linux.microsoft.com
+  [32m✓[0m [PATCH v2 7/9] target/i386/mshv: populate xsave area offsets
+    + Link: https://lore.kernel.org/qemu-devel/20260311113505.1177878-8-magnuskulke@linux.microsoft.com
+  [32m✓[0m [PATCH v2 8/9] target/i386/mshv: filter out CET bits in cpuid
+    + Link: https://lore.kernel.org/qemu-devel/20260311113505.1177878-9-magnuskulke@linux.microsoft.com
+  [32m✓[0m [PATCH v2 9/9] accel/mshv: disable la57 (5lvl paging)
+    + Link: https://lore.kernel.org/qemu-devel/20260311113505.1177878-10-magnuskulke@linux.microsoft.com
+  ---
+  [32m✓[0m Signed: DKIM/linux.microsoft.com
+---
+Total patches: 9
+---
+Applying: accel/mshv: use mshv_create_partition_v2 payload
+Patch failed at 0001 accel/mshv: use mshv_create_partition_v2 payload
+error: patch failed: include/hw/hyperv/hvgdk_mini.h:456
+error: include/hw/hyperv/hvgdk_mini.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
