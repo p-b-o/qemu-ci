@@ -1,0 +1,116 @@
+Grabbing thread from lore.kernel.org/all/qemu-stable-10.1.5-20260311180252@cover.tls.msk.ru/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 47 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 1112 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/46] s390x/pci: Fix endianness for zPCI BAR values.
+    + Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com> ([32m✓[0m DKIM/ibm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-1-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 2/46] plugins: fix cross-build using LLVM for Windows targets
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-2-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 3/46] block/mirror: check range when setting zero bitmap for sync write
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-3-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 4/46] iotests: test active mirror with unaligned, small write zeroes op
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-4-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 5/46] python: drop uses of pkg_resources
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-5-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 6/46] contrib/plugins/hotblocks: Correctly free sorted counts list
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-6-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 7/46] contrib/plugins/hotblocks: Fix off by one error in iteration of sorted blocks
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-7-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 8/46] contrib/plugins/hotblocks: Print uint64_t with PRIu64 rather than PRId64
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-8-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 9/46] docs/about/emulation: Add documentation for hotblocks plugin arguments
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-9-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 10/46] hw/i2c/aspeed_i2c: Fix out-of-bounds read in I2C MMIO handlers
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-10-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 11/46] target/arm: Account for SME in aarch64_sve_narrow_vq() assertion
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-11-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 12/46] target/arm: Fix feature check in DO_SVE2_RRX, DO_SVE2_RRX_TB
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-12-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 13/46] target/arm/tcg: Allow SVE RAX1 in SME2p1 streaming mode
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-13-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 14/46] target/arm: Don't let 'sme=on' downgrade SME
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-14-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 15/46] virtio-gpu-virgl: Add virtio-gpu-virgl-hostmem-region type
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-15-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 16/46] virtio-snd: remove TODO comments
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-16-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 17/46] virtio-snd: handle 5.14.6.2 for PCM_INFO properly
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-17-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 18/46] virtio-snd: fix max_size bounds check in input cb
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-18-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 19/46] virtio-snd: tighten read amount in in_cb
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-19-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 20/46] hw/misc/virt_ctrl: Fix incorrect trace event in read operation
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-20-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 21/46] hw/ssi/xilinx_spips: Reset TX FIFO in reset
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-21-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 22/46] target/arm: set the correct TI bits for WFIT traps
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-22-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 23/46] hw/9pfs: fix data race in v9fs_mark_fids_unreclaim()
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-23-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 24/46] hw/9pfs: fix missing EOPNOTSUPP on Twstat and Trenameat for fs synth driver
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-24-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 25/46] hw/i386/vmmouse: Fix hypercall clobbers
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-25-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 26/46] target/i386/emulate/x86_decode: Fix compiler warning
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-26-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 27/46] target/i386/hvf/x86_mmu: Fix compiler warning
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-27-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 28/46] io: separate freeing of tasks from marking them as complete
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-28-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 29/46] io: fix cleanup for TLS I/O source data on cancellation
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-29-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 30/46] io: fix cleanup for websock I/O source data on cancellation
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-30-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 31/46] hw/net/smc91c111: Don't allow negative-length packets
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-31-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 32/46] block/vmdk: fix OOB read in vmdk_read_extent()
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-32-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 33/46] block/curl: fix concurrent completion handling
+    + Reviewed-by: Kevin Wolf <kwolf@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-33-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 34/46] mirror: Fix missed dirty bitmap writes during startup
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-34-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 35/46] block/throttle-groups: fix deadlock with iolimits and muliple iothreads
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-35-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 36/46] block: Never drop BLOCK_IO_ERROR with action=stop for rate limiting
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-36-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 37/46] block/nfs: Do not enter coroutine from CB
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-37-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 38/46] virtio-gpu: Ensure BHs are invoked only from main-loop thread
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-38-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 39/46] hw/net/xilinx_ethlite: Check for oversized TX packets
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-39-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 40/46] linux-user: Deal with mmap where start > reserved_va
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-40-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 41/46] bsd-user: Deal with mmap where start > reserved_va
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-41-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 42/46] tests/tcg/multiarch/test-mmap: Check mmaps beyond reserved_va
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-42-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 43/46] linux-user: fix TIOCGSID ioctl
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-43-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 44/46] hw/net/npcm_gmac: Catch accesses off the end of the register array
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-44-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 45/46] target/loongarch: Preserve PTE permission bits in LDPTE
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-45-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 46/46] fuse: Copy write buffer content before polling
+    + Link: https://lore.kernel.org/qemu-devel/20260311150327.1084669-46-mjt@tls.msk.ru
+  ---
+  [32m✓[0m Signed: DKIM/tls.msk.ru
+---
+Total patches: 46
+---
+Applying: s390x/pci: Fix endianness for zPCI BAR values.
+Patch failed at 0001 s390x/pci: Fix endianness for zPCI BAR values.
+error: patch failed: hw/s390x/s390-pci-inst.c:307
+error: hw/s390x/s390-pci-inst.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
