@@ -1,0 +1,50 @@
+Grabbing thread from lore.kernel.org/all/20260311025340.1335673-1-vivek.kasireddy@intel.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 199 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v11 1/10] virtio-gpu: Recreate the resource's dmabuf if new backing is attached
+    + Link: https://lore.kernel.org/qemu-devel/20260311025340.1335673-2-vivek.kasireddy@intel.com
+  [32m✓[0m [PATCH v11 2/10] virtio-gpu: Find hva for Guest's DMA addr associated with a ram device
+    + Link: https://lore.kernel.org/qemu-devel/20260311025340.1335673-3-vivek.kasireddy@intel.com
+  [32m✓[0m [PATCH v11 3/10] virtio-gpu: Rename udmabuf files and helpers to dmabuf
+    + Link: https://lore.kernel.org/qemu-devel/20260311025340.1335673-4-vivek.kasireddy@intel.com
+  [32m✓[0m [PATCH v11 4/10] virtio-gpu-dmabuf: Remove rcu_read_lock/unlock from virtio_gpu_create_udmabuf()
+    + Link: https://lore.kernel.org/qemu-devel/20260311025340.1335673-5-vivek.kasireddy@intel.com
+  [32m✓[0m [PATCH v11 5/10] virtio-gpu-dmabuf: Use g_autofree for the list pointer
+    + Link: https://lore.kernel.org/qemu-devel/20260311025340.1335673-6-vivek.kasireddy@intel.com
+  [32m✓[0m [PATCH v11 6/10] vfio/region: Add a helper to get region index from memory region
+    + Link: https://lore.kernel.org/qemu-devel/20260311025340.1335673-7-vivek.kasireddy@intel.com
+  [32m✓[0m [PATCH v11 7/10] vfio/device: Add support for creating dmabuf from multiple ranges
+    + Link: https://lore.kernel.org/qemu-devel/20260311025340.1335673-8-vivek.kasireddy@intel.com
+  [32m✓[0m [PATCH v11 8/10] vfio/device: Add a helper to mmap a dmabuf
+    + Link: https://lore.kernel.org/qemu-devel/20260311025340.1335673-9-vivek.kasireddy@intel.com
+  [32m✓[0m [PATCH v11 9/10] virtio-gpu-dmabuf: Improve error handling with 'Error **' and err enum
+    + Link: https://lore.kernel.org/qemu-devel/20260311025340.1335673-10-vivek.kasireddy@intel.com
+  [32m✓[0m [PATCH v11 10/10] virtio-gpu-dmabuf: Create dmabuf for blobs associated with VFIO devices
+    + Link: https://lore.kernel.org/qemu-devel/20260311025340.1335673-11-vivek.kasireddy@intel.com
+  ---
+  [32m✓[0m Signed: DKIM/intel.com
+---
+Total patches: 10
+---
+Applying: virtio-gpu: Recreate the resource's dmabuf if new backing is attached
+Applying: virtio-gpu: Find hva for Guest's DMA addr associated with a ram device
+Applying: virtio-gpu: Rename udmabuf files and helpers to dmabuf
+Patch failed at 0003 virtio-gpu: Rename udmabuf files and helpers to dmabuf
+error: patch failed: hw/display/virtio-gpu-udmabuf-stubs.c:7
+error: hw/display/virtio-gpu-udmabuf-stubs.c: patch does not apply
+error: patch failed: hw/display/virtio-gpu-udmabuf.c:151
+error: hw/display/virtio-gpu-udmabuf.c: patch does not apply
+error: patch failed: hw/display/virtio-gpu.c:917
+error: hw/display/virtio-gpu.c: patch does not apply
+error: patch failed: include/hw/virtio/virtio-gpu.h:354
+error: include/hw/virtio/virtio-gpu.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
