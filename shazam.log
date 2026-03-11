@@ -1,0 +1,86 @@
+Grabbing thread from lore.kernel.org/all/20260311040758.1068731-1-brian.cain@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 33 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 152 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/32] target/hexagon: Implement {c,}swi helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-2-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 2/32] target/hexagon: Implement iassign{r,w} helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-3-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 3/32] target/hexagon: Implement start/stop helpers, soft reset
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-4-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 4/32] target/hexagon: Implement modify SSR
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-5-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 5/32] target/hexagon: Implement {g,s}etimask helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-6-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 6/32] target/hexagon: Implement wait helper
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-7-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 7/32] target/hexagon: Implement get_exe_mode()
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-8-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 8/32] target/hexagon: Add representation to count cycles
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-9-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 9/32] target/hexagon: Add implementation of cycle counters
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-10-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 10/32] target/hexagon: Implement hex_tlb_entry_get_perm()
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-11-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 11/32] target/hexagon: Implement software interrupt
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-12-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 12/32] target/hexagon: Implement stack overflow exception
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-13-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 13/32] target/hexagon: Implement exec_interrupt, set_irq
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-14-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 14/32] target/hexagon: add simple cpu_exec_reset and pointer_wrap
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-15-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 15/32] target/hexagon: Implement hexagon_tlb_fill()
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-16-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 16/32] target/hexagon: Implement siad inst
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-17-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 17/32] target/hexagon: Implement hexagon_resume_threads()
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-18-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 18/32] target/hexagon: Implement setprio, resched
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-19-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 19/32] target/hexagon: Add sysemu_ops, cpu_get_phys_page_debug()
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-20-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 20/32] target/hexagon: extend hexagon_cpu_mmu_index() for sysemu
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-21-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 21/32] target/hexagon: Decode trap1, rte as COF
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-22-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 22/32] target/hexagon: Implement modify_ssr, resched, pending_interrupt
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-23-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 23/32] target/hexagon: Add pkt_ends_tb to translation
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-24-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 24/32] target/hexagon: Add next_PC, {s,g}reg writes
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-25-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 25/32] target/hexagon: Add implicit sysreg writes
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-26-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 26/32] target/hexagon: Define system, guest reg names
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-27-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 27/32] target/hexagon: Add TLB, k0 {un,}lock
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-28-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 28/32] target/hexagon: Add PC to raise_exception, use fTRAP() helper
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-29-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 29/32] target/hexagon: Add TCG overrides for transfer insts
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-30-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 30/32] target/hexagon: Add support for loadw_phys
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-31-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 31/32] target/hexagon: Add guest reg reading functionality
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-32-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 32/32] target/hexagon: Add pcycle setting functionality
+    + Link: https://lore.kernel.org/qemu-devel/20260311040758.1068731-33-brian.cain@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 32
+---
+Applying: target/hexagon: Implement {c,}swi helpers
+Patch failed at 0001 target/hexagon: Implement {c,}swi helpers
+error: patch failed: target/hexagon/op_helper.c:23
+error: target/hexagon/op_helper.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
