@@ -1,0 +1,48 @@
+Grabbing thread from lore.kernel.org/all/20260311115910.564481-1-djordje.todorovic@htecgroup.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/9] target/riscv: Define MSTATUS_SBE and MSTATUS_MBE bit masks
+    + Link: https://lore.kernel.org/qemu-devel/20260311115910.564481-2-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v3 2/9] target/riscv: Use MO_LE for instruction fetch
+    + Link: https://lore.kernel.org/qemu-devel/20260311115910.564481-3-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v3 3/9] target/riscv: Add big-endian CPU property
+    + Link: https://lore.kernel.org/qemu-devel/20260311115910.564481-4-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v3 4/9] target/riscv: Set endianness MSTATUS bits at CPU reset
+    + Link: https://lore.kernel.org/qemu-devel/20260311115910.564481-5-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v3 5/9] target/riscv: Implement runtime data endianness via MSTATUS bits
+    + Link: https://lore.kernel.org/qemu-devel/20260311115910.564481-6-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v3 6/9] hw/riscv: Make boot code endianness-aware at runtime
+    + Link: https://lore.kernel.org/qemu-devel/20260311115910.564481-7-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v3 7/9] target/riscv: Fix page table walk endianness for big-endian harts
+    + Link: https://lore.kernel.org/qemu-devel/20260311115910.564481-8-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v3 8/9] system/memory: Fix subpage endianness for big-endian targets
+    + Link: https://lore.kernel.org/qemu-devel/20260311115910.564481-9-djordje.todorovic@htecgroup.com
+  [32m✓[0m [PATCH v3 9/9] hw/virtio: Support runtime endianness in virtio access helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260311115910.564481-10-djordje.todorovic@htecgroup.com
+  ---
+  [32m✓[0m Signed: DKIM/htecgroup.com
+---
+Total patches: 9
+---
+Applying: target/riscv: Define MSTATUS_SBE and MSTATUS_MBE bit masks
+Applying: target/riscv: Use MO_LE for instruction fetch
+Applying: target/riscv: Add big-endian CPU property
+Applying: target/riscv: Set endianness MSTATUS bits at CPU reset
+Applying: target/riscv: Implement runtime data endianness via MSTATUS bits
+Applying: hw/riscv: Make boot code endianness-aware at runtime
+Applying: target/riscv: Fix page table walk endianness for big-endian harts
+Applying: system/memory: Fix subpage endianness for big-endian targets
+Applying: hw/virtio: Support runtime endianness in virtio access helpers
+Patch failed at 0009 hw/virtio: Support runtime endianness in virtio access helpers
+error: patch failed: include/hw/virtio/virtio-access.h:20
+error: include/hw/virtio/virtio-access.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
