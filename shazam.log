@@ -1,0 +1,47 @@
+Grabbing thread from lore.kernel.org/all/20260311042019.1085030-1-brian.cain@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 46 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/9] hw/hexagon: Add globalreg model
+    + Link: https://lore.kernel.org/qemu-devel/20260311042019.1085030-2-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 2/9] hw/hexagon: Add global register tracing
+    + Link: https://lore.kernel.org/qemu-devel/20260311042019.1085030-3-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 3/9] hw/hexagon: Add machine configs for sysemu
+    + Link: https://lore.kernel.org/qemu-devel/20260311042019.1085030-4-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 4/9] hw/hexagon: Add v68, sa8775-cdsp0 defs
+    + Link: https://lore.kernel.org/qemu-devel/20260311042019.1085030-5-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 5/9] hw/hexagon: Add support for cfgbase
+    + Link: https://lore.kernel.org/qemu-devel/20260311042019.1085030-6-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 6/9] hw/hexagon: Modify "Standalone" symbols
+    + Link: https://lore.kernel.org/qemu-devel/20260311042019.1085030-7-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 7/9] target/hexagon: add build config for softmmu
+    + Link: https://lore.kernel.org/qemu-devel/20260311042019.1085030-8-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 8/9] hw/hexagon: Define hexagon "virt" machine
+    + Link: https://lore.kernel.org/qemu-devel/20260311042019.1085030-9-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 9/9] tests/qtest: Add hexagon boot-serial-test
+    + Link: https://lore.kernel.org/qemu-devel/20260311042019.1085030-10-brian.cain@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 9
+---
+Applying: hw/hexagon: Add globalreg model
+Applying: hw/hexagon: Add global register tracing
+Applying: hw/hexagon: Add machine configs for sysemu
+Applying: hw/hexagon: Add v68, sa8775-cdsp0 defs
+Applying: hw/hexagon: Add support for cfgbase
+Patch failed at 0005 hw/hexagon: Add support for cfgbase
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:148: new blank line at EOF.
++
+warning: 1 line adds whitespace errors.
+error: patch failed: target/hexagon/cpu.c:413
+error: target/hexagon/cpu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
