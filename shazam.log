@@ -1,0 +1,41 @@
+Grabbing thread from lore.kernel.org/all/20260312071415.1836655-1-lulu@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC v2 1/9] net/filter: allow redirector on vhost TAP backends
+    + Link: https://lore.kernel.org/qemu-devel/20260312071415.1836655-2-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v2 2/9] net/filter-redirector: add role helpers for AF_PACKET paths
+    + Link: https://lore.kernel.org/qemu-devel/20260312071415.1836655-3-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v2 3/9] net/filter-redirector: add AF_PACKET socket setup and input handler
+    + Link: https://lore.kernel.org/qemu-devel/20260312071415.1836655-4-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v2 4/9] net/filter-redirector: add send helpers and netdev counters
+    + Link: https://lore.kernel.org/qemu-devel/20260312071415.1836655-5-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v2 5/9] net/filter-redirector: route chardev and AF_PACKET receive paths
+    + Link: https://lore.kernel.org/qemu-devel/20260312071415.1836655-6-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v2 6/9] net/filter: Add support for filter-buffer
+    + Link: https://lore.kernel.org/qemu-devel/20260312071415.1836655-7-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v2 7/9] virtio-net: keep tap read polling disabled while vhost owns RX
+    + Link: https://lore.kernel.org/qemu-devel/20260312071415.1836655-8-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v2 8/9] virtio-net: handle short vnet headers on replay RX
+    + Link: https://lore.kernel.org/qemu-devel/20260312071415.1836655-9-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v2 9/9] net/filter-redirector: check CAP_NET_RAW before creating AF_PACKET
+    + Link: https://lore.kernel.org/qemu-devel/20260312071415.1836655-10-lulu@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 9
+---
+Applying: net/filter: allow redirector on vhost TAP backends
+Applying: net/filter-redirector: add role helpers for AF_PACKET paths
+Patch failed at 0002 net/filter-redirector: add role helpers for AF_PACKET paths
+error: patch failed: net/filter-mirror.c:22
+error: net/filter-mirror.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
