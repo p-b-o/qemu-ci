@@ -1,0 +1,24 @@
+Grabbing thread from lore.kernel.org/all/69b6a3c2.630a0220.b45bc.5ab2@mx.google.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v1] disas/sparc: Fix integer overflow and convert to g_malloc
+    + Link: https://lore.kernel.org/qemu-devel/69b6a3c2.630a0220.b45bc.5ab2@mx.google.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 1
+---
+Applying: disas/sparc: Fix integer overflow and convert to g_malloc
+Patch failed at 0001 disas/sparc: Fix integer overflow and convert to g_malloc
+error: patch failed: disas/sparc.c:2623
+error: disas/sparc.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
