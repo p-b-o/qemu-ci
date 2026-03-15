@@ -1,0 +1,24 @@
+Grabbing thread from lore.kernel.org/all/CABHAK8MozZd5SkxsCQTxHR9xbGfWdJii7dAJEgCJS_yMVtN0%2BA@mail.gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 1 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3] hw/audio/fmopl: Convert malloc/free to g_malloc/g_free
+    + Link: https://lore.kernel.org/qemu-devel/CABHAK8MozZd5SkxsCQTxHR9xbGfWdJii7dAJEgCJS_yMVtN0+A@mail.gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/rvce-edu-in.20230601.gappssmtp.com (From: aadhyar.cs24@rvce.edu.in)
+---
+Total patches: 1
+---
+Applying: hw/audio/fmopl: Convert malloc/free to g_malloc/g_free
+Patch failed at 0001 hw/audio/fmopl: Convert malloc/free to g_malloc/g_free
+error: patch failed: hw/audio/fmopl.c:50
+error: hw/audio/fmopl.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
