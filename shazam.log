@@ -1,0 +1,44 @@
+Grabbing thread from lore.kernel.org/all/20260317232332.15209-1-peterx@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC 1/10] vmstate: Pass in struct itself for VMSTATE_ARRAY_OF_POINTER
+    + Link: https://lore.kernel.org/qemu-devel/20260317232332.15209-2-peterx@redhat.com
+  [32m✓[0m [PATCH RFC 2/10] vmstate: Pass in struct itself for VMSTATE_VARRAY_OF_POINTER_UINT32
+    + Link: https://lore.kernel.org/qemu-devel/20260317232332.15209-3-peterx@redhat.com
+  [32m✓[0m [PATCH RFC 3/10] vmstate: Do not set size for VMS_ARRAY_OF_POINTER
+    + Link: https://lore.kernel.org/qemu-devel/20260317232332.15209-4-peterx@redhat.com
+  [32m✓[0m [PATCH RFC 4/10] vmstate: Limit the vmdesc_loop dedup trick to compressable field
+    + Link: https://lore.kernel.org/qemu-devel/20260317232332.15209-5-peterx@redhat.com
+  [32m✓[0m [PATCH RFC 5/10] vmstate: Rename VMS_NULLPTR_MARKER to VMS_MARKER_PTR_NULL
+    + Link: https://lore.kernel.org/qemu-devel/20260317232332.15209-6-peterx@redhat.com
+  [32m✓[0m [PATCH RFC 6/10] vmstate: Introduce vmstate_save_field_with_vmdesc()
+    + Link: https://lore.kernel.org/qemu-devel/20260317232332.15209-7-peterx@redhat.com
+  [32m✓[0m [PATCH RFC 7/10] vmstate: Allow vmstate_info_nullptr to emit non-NULL markers
+    + Link: https://lore.kernel.org/qemu-devel/20260317232332.15209-8-peterx@redhat.com
+  [32m✓[0m [PATCH RFC 8/10] vmstate: Implement load of ptr marker in vmstate core
+    + Link: https://lore.kernel.org/qemu-devel/20260317232332.15209-9-peterx@redhat.com
+  [32m✓[0m [PATCH RFC 9/10] vmstate: Implement VMS_ARRAY_OF_POINTER_AUTO_ALLOC
+    + Link: https://lore.kernel.org/qemu-devel/20260317232332.15209-10-peterx@redhat.com
+  [32m✓[0m [PATCH RFC 10/10] tests/unit/test-vmstate: add tests for VMS_ARRAY_OF_POINTER_ALLOW_NULL
+    + Link: https://lore.kernel.org/qemu-devel/20260317232332.15209-11-peterx@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 10
+---
+Applying: vmstate: Pass in struct itself for VMSTATE_ARRAY_OF_POINTER
+Applying: vmstate: Pass in struct itself for VMSTATE_VARRAY_OF_POINTER_UINT32
+Applying: vmstate: Do not set size for VMS_ARRAY_OF_POINTER
+Patch failed at 0003 vmstate: Do not set size for VMS_ARRAY_OF_POINTER
+error: patch failed: include/migration/vmstate.h:183
+error: include/migration/vmstate.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
