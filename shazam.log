@@ -1,0 +1,40 @@
+Grabbing thread from lore.kernel.org/all/20260317102708.126725-1-alexander@mihalicyn.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 41 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v5 1/8] migration/vmstate: export vmstate_{load, save}_field helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260317102708.126725-2-alexander@mihalicyn.com
+  [32m✓[0m [PATCH v5 2/8] migration: add VMSTATE_VARRAY_OF_POINTER_TO_STRUCT_UINT{8, 32}_ALLOC
+    + Link: https://lore.kernel.org/qemu-devel/20260317102708.126725-3-alexander@mihalicyn.com
+  [32m✓[0m [PATCH v5 3/8] tests/unit/test-vmstate: add tests for VMS_ARRAY_OF_POINTER_ALLOW_NULL
+    + Link: https://lore.kernel.org/qemu-devel/20260317102708.126725-4-alexander@mihalicyn.com
+  [32m✓[0m [PATCH v5 4/8] tests/functional/migration: add VM launch/configure hooks
+    + Link: https://lore.kernel.org/qemu-devel/20260317102708.126725-5-alexander@mihalicyn.com
+  [32m✓[0m [PATCH v5 5/8] hw/nvme: add migration blockers for non-supported cases
+    + Link: https://lore.kernel.org/qemu-devel/20260317102708.126725-6-alexander@mihalicyn.com
+  [32m✓[0m [PATCH v5 6/8] hw/nvme: split nvme_init_sq/nvme_init_cq into helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260317102708.126725-7-alexander@mihalicyn.com
+  [32m✓[0m [PATCH v5 7/8] hw/nvme: add basic live migration support
+    + Link: https://lore.kernel.org/qemu-devel/20260317102708.126725-8-alexander@mihalicyn.com
+  [32m✓[0m [PATCH v5 8/8] tests/functional/x86_64: add migration test for NVMe device
+    + Link: https://lore.kernel.org/qemu-devel/20260317102708.126725-9-alexander@mihalicyn.com
+  ---
+  [32m✓[0m Signed: DKIM/mihalicyn.com
+---
+Total patches: 8
+---
+Applying: migration/vmstate: export vmstate_{load, save}_field helpers
+Patch failed at 0001 migration/vmstate: export vmstate_{load, save}_field helpers
+error: patch failed: include/migration/vmstate.h:1255
+error: include/migration/vmstate.h: patch does not apply
+error: patch failed: migration/vmstate.c:161
+error: migration/vmstate.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
