@@ -1,0 +1,41 @@
+Grabbing thread from lore.kernel.org/all/20260318104640.239752-1-ruslichenko.r@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC 1/9] target/arm: Add API for dynamic exception injection
+    + Link: https://lore.kernel.org/qemu-devel/20260318104640.239752-2-ruslichenko.r@gmail.com
+  [32m✓[0m [PATCH RFC 2/9] plugins/api: Expose virtual clock timers to plugins
+    + Link: https://lore.kernel.org/qemu-devel/20260318104640.239752-3-ruslichenko.r@gmail.com
+  [32m✓[0m [PATCH RFC 3/9] plugins: Expose Transaction Block cache flush API to plugins
+    + Link: https://lore.kernel.org/qemu-devel/20260318104640.239752-4-ruslichenko.r@gmail.com
+  [32m✓[0m [PATCH RFC 4/9] plugins: Introduce fault injection API and core subsystem
+    + Link: https://lore.kernel.org/qemu-devel/20260318104640.239752-5-ruslichenko.r@gmail.com
+  [32m✓[0m [PATCH RFC 5/9] system/memory: Add plugin callbacks to intercept MMIO accesses
+    + Link: https://lore.kernel.org/qemu-devel/20260318104640.239752-6-ruslichenko.r@gmail.com
+  [32m✓[0m [PATCH RFC 6/9] hw/intc/arm_gic: Register primary GIC for plugin IRQ injection
+    + Link: https://lore.kernel.org/qemu-devel/20260318104640.239752-7-ruslichenko.r@gmail.com
+  [32m✓[0m [PATCH RFC 7/9] hw/arm/smmuv3: Add plugin fault handler for CMDQ errors
+    + Link: https://lore.kernel.org/qemu-devel/20260318104640.239752-8-ruslichenko.r@gmail.com
+  [32m✓[0m [PATCH RFC 8/9] contrib/plugins: Add fault injection plugin
+    + Link: https://lore.kernel.org/qemu-devel/20260318104640.239752-9-ruslichenko.r@gmail.com
+  [32m✓[0m [PATCH RFC 9/9] docs: Add description of fault-injection plugin and subsystem
+    + Link: https://lore.kernel.org/qemu-devel/20260318104640.239752-10-ruslichenko.r@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 9
+---
+Applying: target/arm: Add API for dynamic exception injection
+Applying: plugins/api: Expose virtual clock timers to plugins
+Patch failed at 0002 plugins/api: Expose virtual clock timers to plugins
+error: patch failed: plugins/api.c:39
+error: plugins/api.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
