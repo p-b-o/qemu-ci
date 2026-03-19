@@ -1,0 +1,24 @@
+Grabbing thread from lore.kernel.org/all/20260319083339.3429776-1-ycliang@andestech.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Nothing matching that query.
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 2 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH 1/2] riscv: Add CSR detection support
+    + Link: https://lore.kernel.org/qemu-devel/20260319083339.3429776-1-ycliang@andestech.com
+  [PATCH 2/2] riscv: andes: Add Smstateen extension support
+    + Link: https://lore.kernel.org/qemu-devel/20260319083339.3429776-2-ycliang@andestech.com
+---
+Total patches: 2
+---
+Applying: riscv: Add CSR detection support
+Patch failed at 0001 riscv: Add CSR detection support
+error: arch/riscv/lib/Makefile: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
