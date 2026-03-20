@@ -1,0 +1,44 @@
+Grabbing thread from lore.kernel.org/all/20260320160811.28611-1-philmd@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/10] monitor: Extract completion declarations to 'monitor/hmp-completion.h'
+    + Link: https://lore.kernel.org/qemu-devel/20260320160811.28611-2-philmd@linaro.org
+  [32m✓[0m [PATCH 2/10] monitor: Forward-declare the MonitorDef type
+    + Link: https://lore.kernel.org/qemu-devel/20260320160811.28611-3-philmd@linaro.org
+  [32m✓[0m [PATCH 3/10] cpus: Introduce CPUClass::legacy_monitor_defs hook
+    + Link: https://lore.kernel.org/qemu-devel/20260320160811.28611-4-philmd@linaro.org
+  [32m✓[0m [PATCH 4/10] target/i386: Replace legacy target_monitor_defs -> legacy_monitor_defs
+    + Link: https://lore.kernel.org/qemu-devel/20260320160811.28611-5-philmd@linaro.org
+  [32m✓[0m [PATCH 5/10] target/m68k: Replace legacy target_monitor_defs -> legacy_monitor_defs
+    + Link: https://lore.kernel.org/qemu-devel/20260320160811.28611-6-philmd@linaro.org
+  [32m✓[0m [PATCH 6/10] target/sparc: Replace legacy target_monitor_defs -> legacy_monitor_defs
+    + Link: https://lore.kernel.org/qemu-devel/20260320160811.28611-7-philmd@linaro.org
+  [32m✓[0m [PATCH 7/10] monitor: Remove target_monitor_defs()
+    + Link: https://lore.kernel.org/qemu-devel/20260320160811.28611-8-philmd@linaro.org
+  [32m✓[0m [PATCH 8/10] cpus: Introduce CPUClass::legacy_monitor_get_register() hook
+    + Link: https://lore.kernel.org/qemu-devel/20260320160811.28611-9-philmd@linaro.org
+  [32m✓[0m [PATCH 9/10] target/riscv: Register target_get_monitor_def in CPUClass
+    + Link: https://lore.kernel.org/qemu-devel/20260320160811.28611-10-philmd@linaro.org
+  [32m✓[0m [PATCH 10/10] monitor: Remove target_get_monitor_def()
+    + Link: https://lore.kernel.org/qemu-devel/20260320160811.28611-11-philmd@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 10
+---
+Applying: monitor: Extract completion declarations to 'monitor/hmp-completion.h'
+Patch failed at 0001 monitor: Extract completion declarations to 'monitor/hmp-completion.h'
+error: patch failed: MAINTAINERS:3409
+error: MAINTAINERS: patch does not apply
+error: patch failed: monitor/hmp-target.c:28
+error: monitor/hmp-target.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
