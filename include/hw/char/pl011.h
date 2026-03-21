@@ -49,6 +49,7 @@ struct PL011State {
     int read_trigger;
     CharFrontend chr;
     qemu_irq irq[6];
+    qemu_irq dma_req_irq[4];
     Clock *clk;
     bool migrate_clk;
     bool logged_disabled_uart;

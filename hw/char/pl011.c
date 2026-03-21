@@ -16,6 +16,10 @@
  *  + sysbus IRQ 3: UARTRTINTR (receive timeout interrupt line)
  *  + sysbus IRQ 4: UARTMSINTR (momem status interrupt line)
  *  + sysbus IRQ 5: UARTEINTR (error interrupt line)
+ *  + sysbus IRQ 6: UARTTXDMASREQ (transmit DMA single request)
+ *  + sysbus IRQ 7: UARTRXDMASREQ (receive DMA single request)
+ *  + sysbus IRQ 8: UARTTXDMABREQ (transmit DMA burst request)
+ *  + sysbus IRQ 9: UARTRXDMABREQ (receive DMA burst request)
  */
 
 #include "qemu/osdep.h"
@@ -96,6 +100,12 @@ DeviceState *pl011_create(hwaddr addr, qemu_irq irq, Chardev *chr)
 /* Fractional Baud Rate Divider, UARTFBRD */
 #define FBRD_MASK 0x3f
 
+/* UART DMA interface*/
+#define DMA_TX_SREQ 0x0
+#define DMA_RX_SREQ 0x1
+#define DMA_TX_BREQ 0x2
+#define DMA_RX_BREQ 0x3
+
 static const unsigned char pl011_id_arm[8] =
   { 0x11, 0x10, 0x14, 0x00, 0x0d, 0xf0, 0x05, 0xb1 };
 static const unsigned char pl011_id_luminary[8] =
@@ -146,6 +156,25 @@ static void pl011_update(PL011State *s)
     trace_pl011_irq_state(flags != 0);
     for (i = 0; i < ARRAY_SIZE(s->irq); i++) {
         qemu_set_irq(s->irq[i], (flags & irqmask[i]) != 0);
+    }
+    if (s->dmacr & (1 << 1)) {
+        /*data in tx fifo is always lower than fifo level*/
+        qemu_set_irq(s->dma_req_irq[DMA_TX_SREQ], 1);
+        qemu_set_irq(s->dma_req_irq[DMA_TX_BREQ], 1);
+    } else {
+        qemu_set_irq(s->dma_req_irq[DMA_TX_SREQ], 0);
+        qemu_set_irq(s->dma_req_irq[DMA_TX_BREQ], 0);
+    }
+
+    if ((s->dmacr & 1) && s->read_count) {
+        qemu_set_irq(s->dma_req_irq[DMA_RX_SREQ], 1);
+    } else {
+        qemu_set_irq(s->dma_req_irq[DMA_RX_SREQ], 0);
+    }
+    if ((s->dmacr & 1) && s->read_count >= s->read_trigger) {
+        qemu_set_irq(s->dma_req_irq[DMA_RX_BREQ], 1);
+    } else {
+        qemu_set_irq(s->dma_req_irq[DMA_RX_BREQ], 0);
     }
 }
 
@@ -512,9 +541,7 @@ static void pl011_write(void *opaque, hwaddr offset,
         break;
     case 18: /* UARTDMACR */
         s->dmacr = value;
-        if (value & 3) {
-            qemu_log_mask(LOG_UNIMP, "pl011: DMA not implemented\n");
-        }
+        pl011_update(s);
         break;
     default:
         qemu_log_mask(LOG_GUEST_ERROR,
@@ -626,6 +653,16 @@ static int pl011_post_load(void *opaque, int version_id)
     return 0;
 }
 
+static void pl011_dma_clear_handler(void *opaque, int n, int level)
+{
+    if (!level) {
+        return;
+    }
+
+    PL011State *s = PL011(opaque);
+    pl011_update(s);
+}
+
 static const VMStateDescription vmstate_pl011 = {
     .name = "pl011",
     .version_id = 2,
@@ -672,6 +709,10 @@ static void pl011_init(Object *obj)
     for (i = 0; i < ARRAY_SIZE(s->irq); i++) {
         sysbus_init_irq(sbd, &s->irq[i]);
     }
+    for (i = 0; i < ARRAY_SIZE(s->dma_req_irq); i++) {
+        sysbus_init_irq(sbd, &s->dma_req_irq[i]);
+    }
+    qdev_init_gpio_in(DEVICE(obj), pl011_dma_clear_handler, 2);
 
     s->clk = qdev_init_clock_in(DEVICE(obj), "clk", pl011_clock_update, s,
                                 ClockUpdate);
