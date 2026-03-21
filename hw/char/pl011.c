@@ -129,6 +129,14 @@ static const uint32_t irqmask[] = {
     INT_E,
 };
 
+static const uint32_t fifo_level[] = {
+    PL011_FIFO_DEPTH / 8,
+    PL011_FIFO_DEPTH / 4,
+    PL011_FIFO_DEPTH / 2,
+    PL011_FIFO_DEPTH * 3 / 4,
+    PL011_FIFO_DEPTH * 7 / 8,
+};
+
 static void pl011_update(PL011State *s)
 {
     uint32_t flags;
@@ -344,17 +352,24 @@ static uint64_t pl011_read(void *opaque, hwaddr offset,
     return r;
 }
 
+static uint32_t pl011_decode_fifo_level(uint32_t val)
+{
+    if (val > 4) {
+        qemu_log_mask(LOG_GUEST_ERROR, "pl011: invalid fifo level field\n");
+        return 1;
+    }
+    return fifo_level[val];
+}
+
 static void pl011_set_read_trigger(PL011State *s)
 {
-#if 0
     /* The docs say the RX interrupt is triggered when the FIFO exceeds
        the threshold.  However linux only reads the FIFO in response to an
        interrupt.  Triggering the interrupt when the FIFO is non-empty seems
        to make things work.  */
     if (s->lcr & LCR_FEN)
-        s->read_trigger = (s->ifl >> 1) & 0x1c;
+        s->read_trigger = pl011_decode_fifo_level(extract32(s->ifl, 3, 3));
     else
-#endif
         s->read_trigger = 1;
 }
 
