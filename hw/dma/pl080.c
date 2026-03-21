@@ -88,6 +88,13 @@ static void pl080_update(PL080State *s)
     qemu_set_irq(s->irq, errlevel || tclevel);
 }
 
+static void pl080_clr_req(PL080State *s, int req_index)
+{
+    s->req_single &= ~(1 << req_index);
+    s->req_burst &= ~(1 << req_index);
+    qemu_set_irq(s->clear_req_irq[req_index], 1);
+}
+
 static void pl080_run(PL080State *s)
 {
     int c;
@@ -100,7 +107,7 @@ static void pl080_run(PL080State *s)
     int src_id;
     int dest_id;
     int size;
-    uint8_t buff[4];
+    uint8_t *buff;
     uint32_t req;
     uint32_t next_lli;
 
@@ -125,6 +132,7 @@ static void pl080_run(PL080State *s)
     while (s->running) {
         for (c = 0; c < s->nchannels; c++) {
             ch = &s->chan[c];
+            buff = ch->buff;
 again:
             /* Test if thiws channel has any pending DMA requests.  */
             if ((ch->conf & (PL080_CCONF_H | PL080_CCONF_E))
@@ -179,23 +187,64 @@ again:
                               c, extract32(ch->ctrl, 21, 3));
                 continue;
             }
-
-            for (n = 0; n < dwidth; n+= swidth) {
-                address_space_read(&s->downstream_as, ch->src,
-                                   MEMTXATTRS_UNSPECIFIED, buff + n, swidth);
-                if (ch->ctrl & PL080_CCTRL_SI)
-                    ch->src += swidth;
-            }
-            xsize = (dwidth < swidth) ? swidth : dwidth;
-            /* ??? This may pad the value incorrectly for dwidth < 32.  */
-            for (n = 0; n < xsize; n += dwidth) {
-                address_space_write(&s->downstream_as, ch->dest + n,
-                                    MEMTXATTRS_UNSPECIFIED, buff + n, dwidth);
-                if (ch->ctrl & PL080_CCTRL_DI)
-                    ch->dest += swidth;
+            xsize = MAX(swidth, dwidth);
+            if (ch->continue_write) {
+                goto continue_write;
             }
 
-            size--;
+            if (flow & (1 << 1)) { /*source is peripheral*/
+                if (s->req_single & (1 << src_id)) {
+                    address_space_read(&s->downstream_as, ch->src,
+                            MEMTXATTRS_UNSPECIFIED, buff + ch->buff_remain, swidth);
+                    if (ch->ctrl & PL080_CCTRL_SI) {
+                        ch->src += swidth;
+                    }
+                    ch->buff_remain += swidth;
+                    pl080_clr_req(s, src_id);
+                }
+            } else { /*source is memory*/
+                for (n = 0; n < xsize; n += swidth) {
+                    address_space_read(&s->downstream_as, ch->src,
+                            MEMTXATTRS_UNSPECIFIED, buff + n, swidth);
+                    if (ch->ctrl & PL080_CCTRL_SI) {
+                        ch->src += swidth;
+                    }
+                }
+                ch->buff_remain += xsize;
+            }
+            if (ch->buff_remain != xsize) {
+                continue;
+            }
+
+continue_write:
+            if (flow & 1) { /*destination is peripheral*/
+                if (s->req_single & (1 << dest_id)) {
+                    address_space_write(&s->downstream_as, ch->dest,
+                        MEMTXATTRS_UNSPECIFIED, buff + xsize - ch->buff_remain, dwidth);
+                    if (ch->ctrl & PL080_CCTRL_DI) {
+                        ch->dest += dwidth;
+                    }
+                    ch->buff_remain -= dwidth;
+                    pl080_clr_req(s, dest_id);
+                }
+            } else { /*destination is memory*/
+                for (n = 0; n < xsize; n += dwidth) {
+                    address_space_write(&s->downstream_as, ch->dest,
+                                        MEMTXATTRS_UNSPECIFIED, buff + n, dwidth);
+                    if (ch->ctrl & PL080_CCTRL_DI) {
+                        ch->dest += dwidth;
+                    }
+                }
+                ch->buff_remain -= xsize;
+            }
+            if (ch->buff_remain != 0) {
+                ch->continue_write = true;
+                continue;
+            } else {
+                ch->continue_write = false;
+            }
+
+            size -= xsize / swidth;
             ch->ctrl = (ch->ctrl & 0xfffff000) | size;
             if (size == 0) {
                 /* Transfer complete.  */
@@ -370,6 +419,27 @@ static void pl080_write(void *opaque, hwaddr offset,
     pl080_update(s);
 }
 
+static void pl080_dma_request_handler(void *opaque, int n, int level)
+{
+    PL080State *s = PL080(opaque);
+    if (level == 0) {
+        if (n < 16) {
+            s->req_single &= ~(1 << n);
+        } else {
+            s->req_burst &= ~(1 << (n - 16));
+        }
+    } else {
+        if (n < 16 && (s->req_single & (1 << n)) == 0) {
+            s->req_single |= (1 << n);
+            qemu_bh_schedule(s->bh);
+        }
+        if (n >= 16 && (s->req_burst & (1 << (n - 16)))) {
+            s->req_burst |= (1 << (n - 16));
+            qemu_bh_schedule(s->bh);
+        }
+    }
+}
+
 static const MemoryRegionOps pl080_ops = {
     .read = pl080_read,
     .write = pl080_write,
@@ -397,6 +467,8 @@ static void pl080_reset(DeviceState *dev)
         s->chan[i].lli = 0;
         s->chan[i].ctrl = 0;
         s->chan[i].conf = 0;
+        s->chan[i].buff_remain = 0;
+        s->chan[i].continue_write = false;
     }
 }
 
@@ -404,12 +476,17 @@ static void pl080_init(Object *obj)
 {
     SysBusDevice *sbd = SYS_BUS_DEVICE(obj);
     PL080State *s = PL080(obj);
+    int i;
 
     memory_region_init_io(&s->iomem, OBJECT(s), &pl080_ops, s, "pl080", 0x1000);
     sysbus_init_mmio(sbd, &s->iomem);
     sysbus_init_irq(sbd, &s->irq);
     sysbus_init_irq(sbd, &s->interr);
     sysbus_init_irq(sbd, &s->inttc);
+    for (i = 0; i < ARRAY_SIZE(s->clear_req_irq); i++) {
+        sysbus_init_irq(sbd, &s->clear_req_irq[i]);
+    }
+    qdev_init_gpio_in(DEVICE(obj), pl080_dma_request_handler, 32);
     s->nchannels = 8;
     s->bh = qemu_bh_new(pl080_run_cb, s);
 }

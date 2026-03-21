@@ -41,6 +41,9 @@ typedef struct {
     uint32_t lli;
     uint32_t ctrl;
     uint32_t conf;
+    uint32_t buff_remain;
+    bool continue_write;
+    uint8_t buff[4];
 } pl080_channel;
 
 #define TYPE_PL080 "pl080"
@@ -66,6 +69,7 @@ struct PL080State {
     qemu_irq irq;
     qemu_irq interr;
     qemu_irq inttc;
+    qemu_irq clear_req_irq[16];
 
     MemoryRegion *downstream;
     AddressSpace downstream_as;
