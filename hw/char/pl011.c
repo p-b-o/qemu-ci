@@ -200,6 +200,9 @@ static void pl011_fifo_rx_put(void *opaque, uint32_t value)
     }
     if (s->read_count == s->read_trigger) {
         s->int_level |= INT_RX;
+    }
+    if (s->read_count) {
+        s->int_level |= INT_RT;
         pl011_update(s);
     }
 }
@@ -281,6 +284,7 @@ static uint32_t pl011_read_rxdata(PL011State *s)
     }
     if (s->read_count == 0) {
         s->flags |= PL011_FLAG_RXFE;
+        s->int_level &= ~INT_RT;
     }
     if (s->read_count == s->read_trigger - 1) {
         s->int_level &= ~INT_RX;
