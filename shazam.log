@@ -1,0 +1,37 @@
+Looking up https://lore.kernel.org/all/20260321141345.599105-1-npiggin@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260321141345.599105-1-npiggin@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Nothing matching that query.
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/5] tests/tcg/riscv64: Add a user signal handling test
+    + Link: https://lore.kernel.org/qemu-devel/20260321141345.599105-2-npiggin@gmail.com
+  [32m✓[0m [PATCH v3 2/5] linux-user/riscv: Allow restore_sigcontext to return error
+    + Link: https://lore.kernel.org/qemu-devel/20260321141345.599105-3-npiggin@gmail.com
+  [32m✓[0m [PATCH v3 3/5] linux-user/riscv: Add extended state to sigcontext
+    + Link: https://lore.kernel.org/qemu-devel/20260321141345.599105-4-npiggin@gmail.com
+  [32m✓[0m [PATCH v3 4/5] linux-user/riscv: Add vector state to signal context
+    + Link: https://lore.kernel.org/qemu-devel/20260321141345.599105-5-npiggin@gmail.com
+  [32m✓[0m [PATCH v3 5/5] tests/tcg/riscv64: Add vector state to signal test
+    + Link: https://lore.kernel.org/qemu-devel/20260321141345.599105-6-npiggin@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 5
+---
+Applying: tests/tcg/riscv64: Add a user signal handling test
+Applying: linux-user/riscv: Allow restore_sigcontext to return error
+Applying: linux-user/riscv: Add extended state to sigcontext
+Applying: linux-user/riscv: Add vector state to signal context
+Patch failed at 0004 linux-user/riscv: Add vector state to signal context
+error: patch failed: linux-user/riscv/signal.c:152
+error: linux-user/riscv/signal.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
