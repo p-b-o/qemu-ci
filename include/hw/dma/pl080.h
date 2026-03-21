@@ -31,6 +31,7 @@
 
 #include "hw/core/sysbus.h"
 #include "qom/object.h"
+#include "qemu/main-loop.h"
 
 #define PL080_MAX_CHANNELS 8
 
@@ -68,6 +69,8 @@ struct PL080State {
 
     MemoryRegion *downstream;
     AddressSpace downstream_as;
+
+    QEMUBH *bh;
 };
 
 #endif

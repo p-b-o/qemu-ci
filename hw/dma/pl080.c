@@ -232,6 +232,12 @@ again:
     pl080_update(s);
 }
 
+static void pl080_run_cb(void *opaque)
+{
+    PL080State *s = PL080(opaque);
+    pl080_run(s);
+}
+
 static uint64_t pl080_read(void *opaque, hwaddr offset,
                            unsigned size)
 {
@@ -326,7 +332,7 @@ static void pl080_write(void *opaque, hwaddr offset,
             break;
         case 4: /* Configuration */
             s->chan[i].conf = value;
-            pl080_run(s);
+            qemu_bh_schedule(s->bh);
             break;
         }
         return;
@@ -351,7 +357,7 @@ static void pl080_write(void *opaque, hwaddr offset,
             qemu_log_mask(LOG_UNIMP,
                           "pl080_write: Big-endian DMA not implemented\n");
         }
-        pl080_run(s);
+        qemu_bh_schedule(s->bh);
         break;
     case 13: /* Sync */
         s->sync = value;
@@ -405,6 +411,7 @@ static void pl080_init(Object *obj)
     sysbus_init_irq(sbd, &s->interr);
     sysbus_init_irq(sbd, &s->inttc);
     s->nchannels = 8;
+    s->bh = qemu_bh_new(pl080_run_cb, s);
 }
 
 static void pl080_realize(DeviceState *dev, Error **errp)
