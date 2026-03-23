@@ -505,10 +505,12 @@ if host_os == 'windows'
 elif host_os == 'emscripten'
   supported_backends += ['wasm']
 else
+  # FIXME: This is a temporary workaround!
+  # SigAltStack is in higher priority to fix #3276
+  supported_backends += ['sigaltstack']
   if host_os != 'darwin' and cc.links(ucontext_probe)
     supported_backends += ['ucontext']
   endif
-  supported_backends += ['sigaltstack']
 endif
 
 if coroutine_backend == 'auto'
