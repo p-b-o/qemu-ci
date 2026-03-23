@@ -981,7 +981,7 @@ static void smmu_base_realize(DeviceState *dev, Error **errp)
         }
 
         if (s->smmu_per_bus) {
-            pci_setup_iommu_per_bus(pci_bus, s->iommu_ops, s);
+            pci_setup_iommu_per_bus(pci_bus, s->iommu_ops, s, errp);
         } else {
             pci_setup_iommu(pci_bus, s->iommu_ops, s);
         }
