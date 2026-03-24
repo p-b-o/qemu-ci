@@ -1,0 +1,57 @@
+Looking up https://lore.kernel.org/all/20260324194333.30004-1-farosas@suse.de/
+Grabbing thread from lore.kernel.org/all/20260324194333.30004-1-farosas@suse.de/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 18 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC v1 1/17] vmstate: fixup the use of AUTO_ALLOC flag
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-2-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 2/17] vmstate: Remove vmstate_use_marker_field
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-3-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 3/17] vmstate: Stop checking size for nullptr compression
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-4-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 4/17] vmstate: Set error inside of vmstate_save_field_with_vmdesc
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-5-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 5/17] vmstate: Remove vmdesc_loop
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-6-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 6/17] vmstate: Put array of pointers code together
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-7-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 7/17] vmstate: Create and save ptr marker in same function
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-8-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 8/17] vmstate: Don't recompute size and n_elems in vmstate_size
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-9-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 9/17] vmstate: Increase scope of vmstate_handle_alloc
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-10-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 10/17] vmstate: Remove curr_elem_p
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-11-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 11/17] vmstate: Introduce vmstate_first
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-12-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 12/17] vmstate: Introduce vmstate_next
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-13-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 13/17] vmstate: Drop VMS_ARRAY_OF_POINTER_AUTO_ALLOC
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-14-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 14/17] vmstate: Move VMS_MUST_EXIST check
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-15-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 15/17] vmstate: Invert exists check
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-16-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 16/17] vmstate: Declare variables at the top
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-17-farosas@suse.de
+  [32m✓[0m [PATCH RFC v1 17/17] vmstate: Reduce indentation levels
+    + Link: https://lore.kernel.org/qemu-devel/20260324194333.30004-18-farosas@suse.de
+  ---
+  [32m✓[0m Signed: DKIM/suse.de
+---
+Total patches: 17
+---
+Applying: vmstate: fixup the use of AUTO_ALLOC flag
+Patch failed at 0001 vmstate: fixup the use of AUTO_ALLOC flag
+error: patch failed: migration/savevm.c:869
+error: migration/savevm.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
