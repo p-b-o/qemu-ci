@@ -5239,9 +5239,9 @@ static int kvm_get_msrs(X86CPU *cpu)
              MSR_F15H_PERF_CTL0 + AMD64_NUM_COUNTERS_CORE * 2 - 1:
             index = index - MSR_F15H_PERF_CTL0;
             if (index & 0x1) {
-                env->msr_gp_counters[index] = msrs[i].data;
+                env->msr_gp_counters[index >> 1] = msrs[i].data;
             } else {
-                env->msr_gp_evtsel[index] = msrs[i].data;
+                env->msr_gp_evtsel[index >> 1] = msrs[i].data;
             }
             break;
         case HV_X64_MSR_HYPERCALL:
