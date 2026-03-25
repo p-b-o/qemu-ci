@@ -1,0 +1,68 @@
+Looking up https://lore.kernel.org/all/20260325164453.72127-1-pbonzini@redhat.com/
+Grabbing thread from lore.kernel.org/all/20260325164453.72127-1-pbonzini@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 21 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 56 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/19] tests/functional: preserve PYTHONPATH entries
+    + Reviewed-by: Thomas Huth <thuth@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-2-pbonzini@redhat.com
+  [32m✓[0m [PATCH 2/19] tdx: fix use-after-free in tdx_fetch_cpuid
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-3-pbonzini@redhat.com
+  [32m✓[0m [PATCH 3/19] treewide: replace qemu_hw_version() with QEMU_HW_VERSION
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-4-pbonzini@redhat.com
+  [32m✓[0m [PATCH 4/19] whpx: i386: workaround for Windows 10 support
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-5-pbonzini@redhat.com
+  [32m✓[0m [PATCH 5/19] whpx: i386: enable exceptions VM exit only when needed
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-6-pbonzini@redhat.com
+  [32m✓[0m [PATCH 6/19] whpx: i386: skip TSC read for MMIO exits
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-7-pbonzini@redhat.com
+  [32m✓[0m [PATCH 7/19] whpx: i386: skip XCRs read for MMIO exits
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-8-pbonzini@redhat.com
+  [32m✓[0m [PATCH 8/19] whpx: i386: don't restore segment registers after MMIO handling
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-9-pbonzini@redhat.com
+  [32m✓[0m [PATCH 9/19] target/i386: emulate: add new callbacks
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-10-pbonzini@redhat.com
+  [32m✓[0m [PATCH 10/19] whpx: i386: add implementation of new x86_emul_ops
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-11-pbonzini@redhat.com
+  [32m✓[0m [PATCH 11/19] target/i386: emulate: indirect access to CRs
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-12-pbonzini@redhat.com
+  [32m✓[0m [PATCH 12/19] whpx: i386: indirect access to CRs
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-13-pbonzini@redhat.com
+  [32m✓[0m [PATCH 13/19] target/i386: emulate: segmentation rework
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-14-pbonzini@redhat.com
+  [32m✓[0m [PATCH 14/19] whpx: i386: fetch segments on-demand
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-15-pbonzini@redhat.com
+  [32m✓[0m [PATCH 15/19] whpx: i386: fast runtime state reads
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-16-pbonzini@redhat.com
+  [32m✓[0m [PATCH 16/19] hw/audio/sb16: validate VMState fields in post_load
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-17-pbonzini@redhat.com
+  [32m✓[0m [PATCH 17/19] target/i386: expose AMD GMET feature
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-18-pbonzini@redhat.com
+  [32m✓[0m [PATCH 18/19] target/i386: emulate: set PG_ERROR_W_MASK as expected
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-19-pbonzini@redhat.com
+  [32m✓[0m [PATCH 19/19] target/i386: emulate: follow priv_check_exempt
+    + Link: https://lore.kernel.org/qemu-devel/20260325164453.72127-20-pbonzini@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 19
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Reviewed-by: Stefan Weil <sw@weilnetz.de>
+     Msg From: Stefan Weil via qemu development <qemu-devel@nongnu.org>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: tests/functional: preserve PYTHONPATH entries
+Patch failed at 0001 tests/functional: preserve PYTHONPATH entries
+error: patch failed: tests/functional/meson.build:76
+error: tests/functional/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
