@@ -1,0 +1,47 @@
+Looking up https://lore.kernel.org/all/20260325184259.366-1-alireza.sanaee@huawei.com/
+Grabbing thread from lore.kernel.org/all/20260325184259.366-1-alireza.sanaee@huawei.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Nothing matching that query.
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH 1/9] hw/mem: Add tag support to generic host memory backends
+    + Link: https://lore.kernel.org/qemu-devel/20260325184259.366-2-alireza.sanaee@huawei.com
+  [PATCH 2/9] hw/cxl: Allow initializing type3 device with no backing device
+    + Link: https://lore.kernel.org/qemu-devel/20260325184259.366-3-alireza.sanaee@huawei.com
+  [PATCH 3/9] hw/cxl: Hook up tagged host memory backends at runtime for DC extents
+    + Link: https://lore.kernel.org/qemu-devel/20260325184259.366-4-alireza.sanaee@huawei.com
+  [PATCH 4/9] hw/cxl: Carry backend metadata in DC extent records
+    + Link: https://lore.kernel.org/qemu-devel/20260325184259.366-5-alireza.sanaee@huawei.com
+  [PATCH 5/9] hw/cxl: Map lazy memory backend after host acceptance
+    + Link: https://lore.kernel.org/qemu-devel/20260325184259.366-6-alireza.sanaee@huawei.com
+  [PATCH 6/9] hw/cxl: Create direct fixed-window aliases for accepted extents
+    + Link: https://lore.kernel.org/qemu-devel/20260325184259.366-7-alireza.sanaee@huawei.com
+  [PATCH 7/9] hw/cxl: Add release-time teardown for direct-mapped extents
+    + Link: https://lore.kernel.org/qemu-devel/20260325184259.366-8-alireza.sanaee@huawei.com
+  [PATCH 8/9] hw/cxl: Add tag-based dynamic-capacity release support
+    + Link: https://lore.kernel.org/qemu-devel/20260325184259.366-9-alireza.sanaee@huawei.com
+  [PATCH 9/9] hw/cxl: Add QMP status query for dynamic-capacity extent release
+    + Link: https://lore.kernel.org/qemu-devel/20260325184259.366-10-alireza.sanaee@huawei.com
+---
+Total patches: 9
+---
+Applying: hw/mem: Add tag support to generic host memory backends
+Applying: hw/cxl: Allow initializing type3 device with no backing device
+Applying: hw/cxl: Hook up tagged host memory backends at runtime for DC extents
+Applying: hw/cxl: Carry backend metadata in DC extent records
+Applying: hw/cxl: Map lazy memory backend after host acceptance
+Applying: hw/cxl: Create direct fixed-window aliases for accepted extents
+Patch failed at 0006 hw/cxl: Create direct fixed-window aliases for accepted extents
+error: patch failed: hw/cxl/cxl-host.c:300
+error: hw/cxl/cxl-host.c: patch does not apply
+error: patch failed: include/hw/cxl/cxl_device.h:720
+error: include/hw/cxl/cxl_device.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
