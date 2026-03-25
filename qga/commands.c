@@ -43,7 +43,6 @@ int64_t qmp_guest_sync(int64_t id, Error **errp)
 
 void qmp_guest_ping(Error **errp)
 {
-    g_info("guest-ping called");
 }
 
 static void qmp_command_info(const QmpCommand *cmd, void *opaque)
@@ -136,7 +135,7 @@ GuestExecStatus *qmp_guest_exec_status(int64_t pid, Error **errp)
     GuestExecInfo *gei;
     GuestExecStatus *ges;
 
-    g_info("guest-exec-status called, pid: %u", (uint32_t)pid);
+    g_debug("guest-exec-status pid: %u", (uint32_t)pid);
 
     gei = guest_exec_info_find(pid);
     if (gei == NULL) {
@@ -238,7 +237,7 @@ static char **guest_exec_get_args(const strList *entry, bool log)
     args[i] = NULL;
 
     if (log) {
-        g_info("guest-exec called: \"%s\"", str);
+        g_debug("guest-exec called: \"%s\"", str);
     }
     g_free(str);
 

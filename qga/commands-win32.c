@@ -231,7 +231,7 @@ int64_t qmp_guest_file_open(const char *path, const char *mode, Error **errp)
     if (!mode) {
         mode = "r";
     }
-    g_info("guest-file-open called, filepath: %s, mode: %s", path, mode);
+    g_debug("guest-file-open filepath: %s, mode: %s", path, mode);
     guest_flags = find_open_flag(mode);
     if (guest_flags == NULL) {
         error_setg(errp, "invalid file open mode");
@@ -267,8 +267,7 @@ int64_t qmp_guest_file_open(const char *path, const char *mode, Error **errp)
         goto done;
     }
 
-    g_info("guest-file-open, handle: % " PRId64, fd);
-
+    g_debug("guest-file-open handle: %" PRId64, fd);
 done:
     g_free(w_path);
     return fd;
@@ -278,7 +277,7 @@ void qmp_guest_file_close(int64_t handle, Error **errp)
 {
     bool ret;
     GuestFileHandle *gfh = guest_file_handle_find(handle, errp);
-    g_info("guest-file-close called, handle: %" PRId64, handle);
+    g_debug("guest-file-close handle: %" PRId64, handle);
     if (gfh == NULL) {
         return;
     }
@@ -337,8 +336,7 @@ void qmp_guest_shutdown(const char *mode, Error **errp)
     Error *local_err = NULL;
     UINT shutdown_flag = EWX_FORCE;
 
-    g_info("guest-shutdown called, mode: %s", mode);
-
+    g_debug("guest-shutdown mode: %s", mode);
     if (!mode || strcmp(mode, "powerdown") == 0) {
         shutdown_flag |= EWX_POWEROFF;
     } else if (strcmp(mode, "halt") == 0) {
@@ -1255,8 +1253,6 @@ int64_t qmp_guest_fsfreeze_freeze_list(bool has_mountpoints,
         return 0;
     }
 
-    g_info("guest-fsfreeze called");
-
     /* cannot risk guest agent blocking itself on a write in this state */
     ga_set_frozen(ga_state);
 
@@ -1293,8 +1289,6 @@ int64_t qmp_guest_fsfreeze_thaw(Error **errp)
     qga_vss_fsfreeze(&i, false, NULL, errp);
 
     ga_unset_frozen(ga_state);
-
-    g_info("guest-fsthaw called");
 
     return i;
 }

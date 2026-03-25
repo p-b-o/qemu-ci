@@ -87,8 +87,10 @@ struct GAConfig {
 #endif
     gchar *bliststr; /* blockedrpcs may point to this string */
     gchar *aliststr; /* allowedrpcs may point to this string */
+    gchar *auditstr;
     GList *blockedrpcs;
     GList *allowedrpcs;
+    GList *audit_patterns;
     int daemonize;
     GLogLevelFlags log_level;
     int dumpconf;
@@ -116,6 +118,7 @@ struct GAState {
     bool frozen;
     GList *blockedrpcs;
     GList *allowedrpcs;
+    GList *audit_patterns;
     char *state_filepath_isfrozen;
     struct {
         const char *log_filepath;
@@ -288,6 +291,11 @@ QEMU_COPYRIGHT "\n"
 "                    only, default is %s)\n"
 "  -v, --verbose     enable verbose logging (info and above)\n"
 "  --debug           enable debug logging (all messages)\n"
+"  -A, --audit=LIST  comma-separated list of command patterns to log at\n"
+"                    info level (default: *, no spaces).\n"
+"                    Patterns prefixed with '!' are logged at debug level.\n"
+"                    Patterns are evaluated in order; the first match wins.\n"
+"                    Example: --audit=!guest-ping,*\n"
 "  -V, --version     print version information and exit\n"
 "  -d, --daemonize   become a daemon\n"
 #ifdef _WIN32
@@ -411,6 +419,33 @@ static void ga_log(const gchar *domain, GLogLevelFlags level,
                     0, 1, NULL, 1, 0, &msg, NULL);
 #endif
     }
+}
+
+static void ga_audit_log(GAState *s, const char *command)
+{
+    GList *l;
+
+    if (!command) {
+        return;
+    }
+
+    for (l = s->audit_patterns; l; l = l->next) {
+        const char *pattern = l->data;
+
+        if (pattern[0] == '!') {
+            if (g_pattern_match_simple(pattern + 1, command)) {
+                g_debug("%s called", command);
+                return;
+            }
+        } else {
+            if (g_pattern_match_simple(pattern, command)) {
+                g_info("%s called", command);
+                return;
+            }
+        }
+    }
+
+    g_debug("%s called", command);
 }
 
 void ga_set_response_delimited(GAState *s)
@@ -706,7 +741,27 @@ static void process_event(void *opaque, QObject *obj, Error *err)
     }
 
     g_debug("processing command");
-    rsp = qmp_dispatch(&ga_commands, obj, false, NULL);
+    {
+        QDict *dict = qobject_to(QDict, obj);
+        const char *command = dict ? qdict_get_try_str(dict, "execute") : NULL;
+        /*
+         * Remember if logging was enabled.
+         * fs-freeze disables logs, so when fs-thaw re-enables
+         * them we re-audit to make sure the thaw is logged.
+         */
+        bool logging_before = ga_logging_enabled(s);
+        bool audit = command && qmp_find_command(&ga_commands, command);
+
+        if (audit) {
+            ga_audit_log(s, command);
+        }
+
+        rsp = qmp_dispatch(&ga_commands, obj, false, NULL);
+
+        if (!logging_before && audit) {
+            ga_audit_log(s, command);
+        }
+    }
 
 end:
     ret = send_response(s, rsp);
@@ -1157,6 +1212,14 @@ static void config_load(GAConfig *config, const char *confpath, bool required)
         config->retry_path =
             g_key_file_get_boolean(keyfile, "general", "retry-path", &gerr);
     }
+    if (g_key_file_has_key(keyfile, "general", "audit", NULL)) {
+        config->auditstr =
+            g_key_file_get_string(keyfile, "general", "audit", &gerr);
+        config->audit_patterns = g_list_concat(config->audit_patterns,
+                                               g_list_reverse(
+                                                   split_list(config->auditstr,
+                                                              ",")));
+    }
 
     if (g_key_file_has_key(keyfile, "general", "block-rpcs", NULL)) {
         config->bliststr =
@@ -1229,6 +1292,9 @@ static void config_dump(GAConfig *config)
                            config->log_level & G_LOG_LEVEL_DEBUG);
     g_key_file_set_boolean(keyfile, "general", "retry-path",
                            config->retry_path);
+    tmp = list_join(config->audit_patterns, ',');
+    g_key_file_set_string(keyfile, "general", "audit", tmp);
+    g_free(tmp);
     tmp = list_join(config->blockedrpcs, ',');
     g_key_file_set_string(keyfile, "general", "block-rpcs", tmp);
     g_free(tmp);
@@ -1251,7 +1317,7 @@ static void config_dump(GAConfig *config)
 static void config_parse(GAConfig *config, int argc, char **argv)
 {
     enum { OPT_DEBUG = 256 };
-    const char *sopt = "hVvdc:m:p:l:f:F::b:a:s:t:Dr";
+    const char *sopt = "hVvdc:m:p:l:f:F::b:a:A:s:t:Dr";
     int opt_ind = 0, ch;
     const struct option lopt[] = {
         { "help", 0, NULL, 'h' },
@@ -1270,6 +1336,7 @@ static void config_parse(GAConfig *config, int argc, char **argv)
         { "daemonize", 0, NULL, 'd' },
         { "block-rpcs", 1, NULL, 'b' },
         { "allow-rpcs", 1, NULL, 'a' },
+        { "audit", 1, NULL, 'A' },
 #ifdef _WIN32
         { "service", 1, NULL, 's' },
 #endif
@@ -1362,6 +1429,10 @@ static void config_parse(GAConfig *config, int argc, char **argv)
                                                 split_list(optarg, ","));
             break;
         }
+        case 'A':
+            g_list_free_full(config->audit_patterns, g_free);
+            config->audit_patterns = g_list_reverse(split_list(optarg, ","));
+            break;
 #ifdef _WIN32
         case 's':
             config->service = optarg;
@@ -1416,6 +1487,8 @@ static void config_free(GAConfig *config)
 #endif
     g_list_free_full(config->blockedrpcs, g_free);
     g_list_free_full(config->allowedrpcs, g_free);
+    g_list_free_full(config->audit_patterns, g_free);
+    g_free(config->auditstr);
     g_free(config);
 }
 
@@ -1459,6 +1532,7 @@ static GAState *initialize_agent(GAConfig *config, int socket_activation)
     g_assert(ga_state == NULL);
 
     s->log_level = config->log_level;
+    s->audit_patterns = config->audit_patterns;
     s->log_file = stderr;
 #ifdef CONFIG_FSFREEZE
     s->fsfreeze_hook = config->fsfreeze_hook;
@@ -1697,6 +1771,10 @@ int main(int argc, char **argv)
 
     init_dfl_pathnames();
     config_parse(config, argc, argv);
+
+    if (config->audit_patterns == NULL) {
+        config->audit_patterns = g_list_append(NULL, g_strdup("*"));
+    }
 
     if (config->pid_filepath == NULL) {
         config->pid_filepath = g_strdup(dfl_pathnames.pidfile);

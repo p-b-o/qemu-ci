@@ -240,7 +240,7 @@ void qmp_guest_shutdown(const char *mode, Error **errp)
     const char *reboot_flag = "-r";
 #endif
 
-    g_info("guest-shutdown called, mode: %s", mode);
+    g_debug("guest-shutdown mode: %s", mode);
     if (!mode || strcmp(mode, "powerdown") == 0) {
         if (access(POWEROFF_CMD_PATH, X_OK) == 0) {
             shutdown_cmd = POWEROFF_CMD_PATH;
@@ -519,7 +519,7 @@ int64_t qmp_guest_file_open(const char *path, const char *mode,
     if (!mode) {
         mode = "r";
     }
-    g_info("guest-file-open called, filepath: %s, mode: %s", path, mode);
+    g_debug("guest-file-open filepath: %s, mode: %s", path, mode);
     fh = safe_open_or_create(path, mode, &local_err);
     if (local_err != NULL) {
         error_propagate(errp, local_err);
@@ -540,7 +540,7 @@ int64_t qmp_guest_file_open(const char *path, const char *mode,
         return -1;
     }
 
-    g_info("guest-file-open, handle: %" PRId64, handle);
+    g_debug("guest-file-open handle: %" PRId64, handle);
     return handle;
 }
 
@@ -549,7 +549,7 @@ void qmp_guest_file_close(int64_t handle, Error **errp)
     GuestFileHandle *gfh = guest_file_handle_find(handle, errp);
     int ret;
 
-    g_info("guest-file-close called, handle: %" PRId64, handle);
+    g_debug("guest-file-close handle: %" PRId64, handle);
     if (!gfh) {
         return;
     }
@@ -793,8 +793,6 @@ int64_t qmp_guest_fsfreeze_freeze_list(bool has_mountpoints,
     FsMountList mounts;
     Error *local_err = NULL;
 
-    g_info("guest-fsfreeze called");
-
     execute_fsfreeze_hook(FSFREEZE_HOOK_FREEZE, &local_err);
     if (local_err) {
         error_propagate(errp, local_err);
@@ -833,7 +831,6 @@ int64_t qmp_guest_fsfreeze_thaw(Error **errp)
 
     if (ret >= 0) {
         ga_unset_frozen(ga_state);
-        g_info("guest-fsthaw called");
         execute_fsfreeze_hook(FSFREEZE_HOOK_THAW, errp);
     } else {
         ret = 0;

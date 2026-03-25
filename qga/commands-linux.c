@@ -1158,8 +1158,6 @@ qmp_guest_fstrim(bool has_minimum, int64_t minimum, Error **errp)
     int fd;
     struct fstrim_range r;
 
-    g_info("guest-fstrim called");
-
     QTAILQ_INIT(&mounts);
     if (!build_fs_mount_list(&mounts, errp)) {
         return NULL;
