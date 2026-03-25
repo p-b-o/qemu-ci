@@ -30,19 +30,6 @@
  */
 #define GUEST_FILE_READ_COUNT_MAX (48 * MiB)
 
-/* Note: in some situations, like with the fsfreeze, logging may be
- * temporarily disabled. if it is necessary that a command be able
- * to log for accounting purposes, check ga_logging_enabled() beforehand.
- */
-void slog(const gchar *fmt, ...)
-{
-    va_list ap;
-
-    va_start(ap, fmt);
-    g_logv("syslog", G_LOG_LEVEL_INFO, fmt, ap);
-    va_end(ap);
-}
-
 int64_t qmp_guest_sync_delimited(int64_t id, Error **errp)
 {
     ga_set_response_delimited(ga_state);
@@ -56,7 +43,7 @@ int64_t qmp_guest_sync(int64_t id, Error **errp)
 
 void qmp_guest_ping(Error **errp)
 {
-    slog("guest-ping called");
+    g_info("guest-ping called");
 }
 
 static void qmp_command_info(const QmpCommand *cmd, void *opaque)
@@ -149,7 +136,7 @@ GuestExecStatus *qmp_guest_exec_status(int64_t pid, Error **errp)
     GuestExecInfo *gei;
     GuestExecStatus *ges;
 
-    slog("guest-exec-status called, pid: %u", (uint32_t)pid);
+    g_info("guest-exec-status called, pid: %u", (uint32_t)pid);
 
     gei = guest_exec_info_find(pid);
     if (gei == NULL) {
@@ -251,7 +238,7 @@ static char **guest_exec_get_args(const strList *entry, bool log)
     args[i] = NULL;
 
     if (log) {
-        slog("guest-exec called: \"%s\"", str);
+        g_info("guest-exec called: \"%s\"", str);
     }
     g_free(str);
 
@@ -285,8 +272,8 @@ static void guest_exec_task_setup(gpointer data)
          * inside the parent, not the child.
          */
         if (dup2(STDOUT_FILENO, STDERR_FILENO) != 0) {
-            slog("dup2() failed to merge stderr into stdout: %s",
-                 strerror(errno));
+            g_warning("dup2() failed to merge stderr into stdout: %s",
+                      strerror(errno));
         }
     }
 
@@ -295,8 +282,8 @@ static void guest_exec_task_setup(gpointer data)
     sigact.sa_handler = SIG_DFL;
 
     if (sigaction(SIGPIPE, &sigact, NULL) != 0) {
-        slog("sigaction() failed to reset child process's SIGPIPE: %s",
-             strerror(errno));
+        g_warning("sigaction() failed to reset child process's SIGPIPE: %s",
+                  strerror(errno));
     }
 #endif
 }
@@ -626,7 +613,7 @@ GuestFileRead *qmp_guest_file_read(int64_t handle, bool has_count,
 
     read_data = guest_file_read_unsafe(gfh, count, errp);
     if (!read_data) {
-        slog("guest-file-write failed, handle: %" PRId64, handle);
+        g_warning("guest-file-read failed, handle: %" PRId64, handle);
     }
 
     return read_data;

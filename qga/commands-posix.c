@@ -240,7 +240,7 @@ void qmp_guest_shutdown(const char *mode, Error **errp)
     const char *reboot_flag = "-r";
 #endif
 
-    slog("guest-shutdown called, mode: %s", mode);
+    g_info("guest-shutdown called, mode: %s", mode);
     if (!mode || strcmp(mode, "powerdown") == 0) {
         if (access(POWEROFF_CMD_PATH, X_OK) == 0) {
             shutdown_cmd = POWEROFF_CMD_PATH;
@@ -519,7 +519,7 @@ int64_t qmp_guest_file_open(const char *path, const char *mode,
     if (!mode) {
         mode = "r";
     }
-    slog("guest-file-open called, filepath: %s, mode: %s", path, mode);
+    g_info("guest-file-open called, filepath: %s, mode: %s", path, mode);
     fh = safe_open_or_create(path, mode, &local_err);
     if (local_err != NULL) {
         error_propagate(errp, local_err);
@@ -540,7 +540,7 @@ int64_t qmp_guest_file_open(const char *path, const char *mode,
         return -1;
     }
 
-    slog("guest-file-open, handle: %" PRId64, handle);
+    g_info("guest-file-open, handle: %" PRId64, handle);
     return handle;
 }
 
@@ -549,7 +549,7 @@ void qmp_guest_file_close(int64_t handle, Error **errp)
     GuestFileHandle *gfh = guest_file_handle_find(handle, errp);
     int ret;
 
-    slog("guest-file-close called, handle: %" PRId64, handle);
+    g_info("guest-file-close called, handle: %" PRId64, handle);
     if (!gfh) {
         return;
     }
@@ -645,7 +645,7 @@ GuestFileWrite *qmp_guest_file_write(int64_t handle, const char *buf_b64,
     write_count = fwrite(buf, 1, count, fh);
     if (ferror(fh)) {
         error_setg_errno(errp, errno, "failed to write to file");
-        slog("guest-file-write failed, handle: %" PRId64, handle);
+        g_warning("guest-file-write failed, handle: %" PRId64, handle);
     } else {
         write_data = g_new0(GuestFileWrite, 1);
         write_data->count = write_count;
@@ -760,7 +760,7 @@ static void execute_fsfreeze_hook(FsfreezeHookArg arg, Error **errp)
 
     const char *argv[] = {hook, arg_str, NULL};
 
-    slog("executing fsfreeze hook with arg '%s'", arg_str);
+    g_info("executing fsfreeze hook with arg '%s'", arg_str);
     ga_run_command(argv, NULL, "execute fsfreeze hook", &local_err);
     if (local_err) {
         error_propagate(errp, local_err);
@@ -793,7 +793,7 @@ int64_t qmp_guest_fsfreeze_freeze_list(bool has_mountpoints,
     FsMountList mounts;
     Error *local_err = NULL;
 
-    slog("guest-fsfreeze called");
+    g_info("guest-fsfreeze called");
 
     execute_fsfreeze_hook(FSFREEZE_HOOK_FREEZE, &local_err);
     if (local_err) {
@@ -833,7 +833,7 @@ int64_t qmp_guest_fsfreeze_thaw(Error **errp)
 
     if (ret >= 0) {
         ga_unset_frozen(ga_state);
-        slog("guest-fsthaw called");
+        g_info("guest-fsthaw called");
         execute_fsfreeze_hook(FSFREEZE_HOOK_THAW, errp);
     } else {
         ret = 0;
@@ -849,8 +849,8 @@ static void guest_fsfreeze_cleanup(void)
     if (ga_is_frozen(ga_state) == GUEST_FSFREEZE_STATUS_FROZEN) {
         qmp_guest_fsfreeze_thaw(&err);
         if (err) {
-            slog("failed to clean up frozen filesystems: %s",
-                 error_get_pretty(err));
+            g_warning("failed to clean up frozen filesystems: %s",
+                      error_get_pretty(err));
             error_free(err);
         }
     }
@@ -1282,19 +1282,19 @@ static GKeyFile *ga_parse_osrelease(const char *fname)
     const char *group = "[os-release]\n";
 
     if (!g_file_get_contents(fname, &content, NULL, &err)) {
-        slog("failed to read '%s', error: %s", fname, err->message);
+        g_warning("failed to read '%s', error: %s", fname, err->message);
         goto fail;
     }
 
     if (!g_utf8_validate(content, -1, NULL)) {
-        slog("file is not utf-8 encoded: %s", fname);
+        g_warning("file is not utf-8 encoded: %s", fname);
         goto fail;
     }
     content2 = g_strdup_printf("%s%s", group, content);
 
     if (!g_key_file_load_from_data(keys, content2, -1, G_KEY_FILE_NONE,
                                    &err)) {
-        slog("failed to parse file '%s', error: %s", fname, err->message);
+        g_warning("failed to parse file '%s', error: %s", fname, err->message);
         goto fail;
     }
 

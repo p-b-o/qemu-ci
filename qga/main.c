@@ -286,7 +286,8 @@ QEMU_COPYRIGHT "\n"
 #endif
 "  -t, --statedir    specify dir to store state information (absolute paths\n"
 "                    only, default is %s)\n"
-"  -v, --verbose     log extra debugging information\n"
+"  -v, --verbose     enable verbose logging (info and above)\n"
+"  --debug           enable debug logging (all messages)\n"
 "  -V, --version     print version information and exit\n"
 "  -d, --daemonize   become a daemon\n"
 #ifdef _WIN32
@@ -391,18 +392,24 @@ static void ga_log(const gchar *domain, GLogLevelFlags level,
     }
 
     level &= G_LOG_LEVEL_MASK;
-    if (g_strcmp0(domain, "syslog") == 0) {
+    if (!(level & s->log_level)) {
+        return;
+    }
+
+    if (s->log_file) {
+        g_autoptr(GDateTime) now = g_date_time_new_now_utc();
+        g_autofree char *nowstr = g_date_time_format(now, "%s.%f");
+        fprintf(s->log_file, "%s: %s: %s\n", nowstr, level_str, msg);
+        fflush(s->log_file);
+    }
+
+    if (level & ~G_LOG_LEVEL_DEBUG) {
 #ifndef _WIN32
         syslog(glib_log_level_to_system(level), "%s: %s", level_str, msg);
 #else
         ReportEvent(s->event_log, glib_log_level_to_system(level),
                     0, 1, NULL, 1, 0, &msg, NULL);
 #endif
-    } else if (level & s->log_level) {
-        g_autoptr(GDateTime) now = g_date_time_new_now_utc();
-        g_autofree char *nowstr = g_date_time_format(now, "%s.%f");
-        fprintf(s->log_file, "%s: %s: %s\n", nowstr, level_str, msg);
-        fflush(s->log_file);
     }
 }
 
@@ -1140,7 +1147,10 @@ static void config_load(GAConfig *config, const char *confpath, bool required)
     }
     if (g_key_file_has_key(keyfile, "general", "verbose", NULL) &&
         g_key_file_get_boolean(keyfile, "general", "verbose", &gerr)) {
-        /* enable all log levels */
+        config->log_level |= G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO;
+    }
+    if (g_key_file_has_key(keyfile, "general", "debug", NULL) &&
+        g_key_file_get_boolean(keyfile, "general", "debug", &gerr)) {
         config->log_level = G_LOG_LEVEL_MASK;
     }
     if (g_key_file_has_key(keyfile, "general", "retry-path", NULL)) {
@@ -1214,7 +1224,9 @@ static void config_dump(GAConfig *config)
 #endif
     g_key_file_set_string(keyfile, "general", "statedir", config->state_dir);
     g_key_file_set_boolean(keyfile, "general", "verbose",
-                           config->log_level == G_LOG_LEVEL_MASK);
+                           config->log_level & G_LOG_LEVEL_INFO);
+    g_key_file_set_boolean(keyfile, "general", "debug",
+                           config->log_level & G_LOG_LEVEL_DEBUG);
     g_key_file_set_boolean(keyfile, "general", "retry-path",
                            config->retry_path);
     tmp = list_join(config->blockedrpcs, ',');
@@ -1238,6 +1250,7 @@ static void config_dump(GAConfig *config)
 
 static void config_parse(GAConfig *config, int argc, char **argv)
 {
+    enum { OPT_DEBUG = 256 };
     const char *sopt = "hVvdc:m:p:l:f:F::b:a:s:t:Dr";
     int opt_ind = 0, ch;
     const struct option lopt[] = {
@@ -1251,6 +1264,7 @@ static void config_parse(GAConfig *config, int argc, char **argv)
         { "fsfreeze-hook", 2, NULL, 'F' },
 #endif
         { "verbose", 0, NULL, 'v' },
+        { "debug", 0, NULL, OPT_DEBUG },
         { "method", 1, NULL, 'm' },
         { "path", 1, NULL, 'p' },
         { "daemonize", 0, NULL, 'd' },
@@ -1313,7 +1327,9 @@ static void config_parse(GAConfig *config, int argc, char **argv)
             config->state_dir = g_strdup(optarg);
             break;
         case 'v':
-            /* enable all log levels */
+            config->log_level |= G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO;
+            break;
+        case OPT_DEBUG:
             config->log_level = G_LOG_LEVEL_MASK;
             break;
         case 'V':
@@ -1673,7 +1689,8 @@ int main(int argc, char **argv)
     GAConfig *config = g_new0(GAConfig, 1);
     int socket_activation;
 
-    config->log_level = G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL;
+    config->log_level = G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL
+                      | G_LOG_LEVEL_WARNING;
 
     qemu_init_exec_dir(argv[0]);
     qga_qmp_init_marshal(&ga_commands);

@@ -44,7 +44,7 @@ static int dev_major_minor(const char *devpath,
     *devminor = 0;
 
     if (stat(devpath, &st) < 0) {
-        slog("failed to stat device file '%s': %s", devpath, strerror(errno));
+        g_warning("failed to stat device file '%s': %s", devpath, strerror(errno));
         return -1;
     }
     if (S_ISDIR(st.st_mode)) {
@@ -1158,7 +1158,7 @@ qmp_guest_fstrim(bool has_minimum, int64_t minimum, Error **errp)
     int fd;
     struct fstrim_range r;
 
-    slog("guest-fstrim called");
+    g_info("guest-fstrim called");
 
     QTAILQ_INIT(&mounts);
     if (!build_fs_mount_list(&mounts, errp)) {
@@ -2072,7 +2072,7 @@ GuestCpuStatsList *qmp_guest_get_cpustats(Error **errp)
         }
 
         if (i < 5) {
-            slog("Parsing cpu stat from %s failed, see \"man proc\"", cpustats);
+            g_warning("Parsing cpu stat from %s failed, see \"man proc\"", cpustats);
             break;
         }
 
