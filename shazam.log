@@ -1,0 +1,34 @@
+Looking up https://lore.kernel.org/all/20260327025228.474257-1-zhenzhong.duan@intel.com/
+Grabbing thread from lore.kernel.org/all/20260327025228.474257-1-zhenzhong.duan@intel.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/5] backends/iommufd: Introduce iommufd_backend_alloc_faultq
+    + Link: https://lore.kernel.org/qemu-devel/20260327025228.474257-2-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH 2/5] backends/iommufd: Extend iommufd_backend_alloc_hwpt() with fault_id
+    + Link: https://lore.kernel.org/qemu-devel/20260327025228.474257-3-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH 3/5] intel_iommu_accel: Add PRQ injection for passthrough device
+    + Link: https://lore.kernel.org/qemu-devel/20260327025228.474257-4-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH 4/5] intel_iommu_accel: Accept PRQ response for passthrough device
+    + Link: https://lore.kernel.org/qemu-devel/20260327025228.474257-5-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH 5/5] intel_iommu_accel: teardown FAULTQ resources in bottom half
+    + Link: https://lore.kernel.org/qemu-devel/20260327025228.474257-6-zhenzhong.duan@intel.com
+  ---
+  [32m✓[0m Signed: DKIM/intel.com
+---
+Total patches: 5
+---
+Applying: backends/iommufd: Introduce iommufd_backend_alloc_faultq
+Applying: backends/iommufd: Extend iommufd_backend_alloc_hwpt() with fault_id
+Patch failed at 0002 backends/iommufd: Extend iommufd_backend_alloc_hwpt() with fault_id
+error: patch failed: hw/i386/intel_iommu_accel.c:115
+error: hw/i386/intel_iommu_accel.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
