@@ -1,0 +1,37 @@
+Looking up https://lore.kernel.org/all/20260330090944.1008027-1-lulu@redhat.com/
+Grabbing thread from lore.kernel.org/all/20260330090944.1008027-1-lulu@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 11 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC v3 1/7] net/filter-mirror: keep mirroring while stopped
+    + Link: https://lore.kernel.org/qemu-devel/20260330090944.1008027-2-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v3 2/7] virtio-net: keep tap read polling disabled while vhost owns RX
+    + Link: https://lore.kernel.org/qemu-devel/20260330090944.1008027-3-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v3 3/7] net/filter-redirector: add AF_PACKET netdev setup helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260330090944.1008027-4-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v3 4/7] net/filter-redirector: add AF_PACKET capture path
+    + Link: https://lore.kernel.org/qemu-devel/20260330090944.1008027-5-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v3 5/7] net/filter-redirector: add AF_PACKET inject path
+    + Link: https://lore.kernel.org/qemu-devel/20260330090944.1008027-6-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v3 6/7] net/filter: allow filters on vhost TAP backends
+    + Link: https://lore.kernel.org/qemu-devel/20260330090944.1008027-7-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v3 7/7] net/filter-redirector: check CAP_NET_RAW before creating AF_PACKET
+    + Link: https://lore.kernel.org/qemu-devel/20260330090944.1008027-8-lulu@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 7
+---
+Applying: net/filter-mirror: keep mirroring while stopped
+Patch failed at 0001 net/filter-mirror: keep mirroring while stopped
+error: patch failed: net/filter-mirror.c:267
+error: net/filter-mirror.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
