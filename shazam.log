@@ -1,0 +1,45 @@
+Looking up https://lore.kernel.org/all/20260401202844.673494-1-peterx@redhat.com/
+Grabbing thread from lore.kernel.org/all/20260401202844.673494-1-peterx@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 12 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 66 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/11] vmstate: Pass in struct itself for VMSTATE_ARRAY_OF_POINTER
+    + Link: https://lore.kernel.org/qemu-devel/20260401202844.673494-2-peterx@redhat.com
+  [32m✓[0m [PATCH 2/11] vmstate: Pass in struct itself for VMSTATE_VARRAY_OF_POINTER_UINT32
+    + Link: https://lore.kernel.org/qemu-devel/20260401202844.673494-3-peterx@redhat.com
+  [32m✓[0m [PATCH 3/11] vmstate: Do not set size for VMS_ARRAY_OF_POINTER
+    + Link: https://lore.kernel.org/qemu-devel/20260401202844.673494-4-peterx@redhat.com
+  [32m✓[0m [PATCH 4/11] vmstate: Update max_elems early and check field compressable once
+    + Link: https://lore.kernel.org/qemu-devel/20260401202844.673494-5-peterx@redhat.com
+  [32m✓[0m [PATCH 5/11] vmstate: Rename VMS_NULLPTR_MARKER to VMS_MARKER_PTR_NULL
+    + Link: https://lore.kernel.org/qemu-devel/20260401202844.673494-6-peterx@redhat.com
+  [32m✓[0m [PATCH 6/11] vmstate: Introduce vmstate_save_field_with_vmdesc()
+    + Link: https://lore.kernel.org/qemu-devel/20260401202844.673494-7-peterx@redhat.com
+  [32m✓[0m [PATCH 7/11] vmstate: Allow vmstate_info_nullptr to emit non-NULL markers
+    + Link: https://lore.kernel.org/qemu-devel/20260401202844.673494-8-peterx@redhat.com
+  [32m✓[0m [PATCH 8/11] vmstate: Implement load of ptr marker in vmstate core
+    + Link: https://lore.kernel.org/qemu-devel/20260401202844.673494-9-peterx@redhat.com
+  [32m✓[0m [PATCH 9/11] vmstate: Implement VMS_ARRAY_OF_POINTER_AUTO_ALLOC
+    + Link: https://lore.kernel.org/qemu-devel/20260401202844.673494-10-peterx@redhat.com
+  [32m✓[0m [PATCH 10/11] vmstate: Stop checking size for nullptr compression
+    + Link: https://lore.kernel.org/qemu-devel/20260401202844.673494-11-peterx@redhat.com
+  [32m✓[0m [PATCH 11/11] tests/unit/test-vmstate: add tests for VMS_ARRAY_OF_POINTER_AUTO_ALLOC
+    + Link: https://lore.kernel.org/qemu-devel/20260401202844.673494-12-peterx@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 11
+---
+Applying: vmstate: Pass in struct itself for VMSTATE_ARRAY_OF_POINTER
+Patch failed at 0001 vmstate: Pass in struct itself for VMSTATE_ARRAY_OF_POINTER
+error: patch failed: roms/seabios-hppa:1
+error: roms/seabios-hppa: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
