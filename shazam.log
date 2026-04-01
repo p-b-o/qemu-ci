@@ -1,0 +1,30 @@
+Looking up https://lore.kernel.org/all/20260401095024.1562621-1-kraxel@redhat.com/
+Grabbing thread from lore.kernel.org/all/20260401095024.1562621-1-kraxel@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 4 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 23 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/3] igvm: switch to PRIx64
+    + Link: https://lore.kernel.org/qemu-devel/20260401095024.1562621-2-kraxel@redhat.com
+  [32m✓[0m [PATCH 2/3] igvm: fix memory leak on failed memory region init
+    + Reviewed-by: Ani Sinha <anisinha@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260401095024.1562621-3-kraxel@redhat.com
+  [32m✓[0m [PATCH 3/3] igvm: fix parent object type in IgvmCfg struct
+    + Link: https://lore.kernel.org/qemu-devel/20260401095024.1562621-4-kraxel@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 3
+---
+Applying: igvm: switch to PRIx64
+Patch failed at 0001 igvm: switch to PRIx64
+error: patch failed: backends/igvm.c:187
+error: backends/igvm.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
