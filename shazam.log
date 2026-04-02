@@ -1,0 +1,59 @@
+Looking up https://lore.kernel.org/all/20260402-mshv_accel_arm64_supp-v2-0-754895c15e9e@linux.microsoft.com/
+Grabbing thread from lore.kernel.org/all/20260402-mshv_accel_arm64_supp-v2-0-754895c15e9e@linux.microsoft.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 15 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 36 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/14] accel/mshv: move msr.c to target/i386
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-1-754895c15e9e@linux.microsoft.com
+  [32m✓[0m [PATCH v2 2/14] accel/mshv: extract common CPU register helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-2-754895c15e9e@linux.microsoft.com
+  [32m✓[0m [PATCH v2 3/14] meson, target/arm/mshv: Enable arm64 build & add initial MSHV support
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-3-754895c15e9e@linux.microsoft.com
+  [32m✓[0m [PATCH v2 4/14] target/arm/mshv: implement vcpu state operations for ARM64
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-4-754895c15e9e@linux.microsoft.com
+  [32m✓[0m [PATCH v2 5/14] target/arm/mshv: implement -cpu host for MSHV
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-5-754895c15e9e@linux.microsoft.com
+  [32m✓[0m [PATCH v2 6/14] accel/mshv: add arch-specific accelerator init hook
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-6-754895c15e9e@linux.microsoft.com
+  [32m✓[0m [PATCH v2 7/14] accel/mshv: Add access_vp_regs synthetic proc features
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-7-754895c15e9e@linux.microsoft.com
+  [32m✓[0m [PATCH v2 8/14] target/arm: cpu: Mark MSHV supporting PSCI 1.3
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-8-754895c15e9e@linux.microsoft.com
+  [32m✓[0m [PATCH v2 9/14] accel/mshv: implement cpu_thread_is_idle() hook
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-9-754895c15e9e@linux.microsoft.com
+  [32m✓[0m [PATCH v2 10/14] target/arm: extract MMIO emulation logic for HVF & WHPX
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-10-754895c15e9e@linux.microsoft.com
+  [32m✓[0m [PATCH v2 11/14] target/arm/mshv: add vCPU run loop
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-11-754895c15e9e@linux.microsoft.com
+  [32m✓[0m [PATCH v2 12/14] include/hw/hyperv: adjust hv_interrupt_control structure for arm64
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-12-754895c15e9e@linux.microsoft.com
+  [32m✓[0m [PATCH v2 13/14] hw/intc,target/arm/mshv: add MSHV vGICv3 implementation
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-13-754895c15e9e@linux.microsoft.com
+  [32m✓[0m [PATCH v2 14/14] MAINTAINERS: updates for MSHV arm64 code
+    + Link: https://lore.kernel.org/qemu-devel/20260402-mshv_accel_arm64_supp-v2-14-754895c15e9e@linux.microsoft.com
+  ---
+  [32m✓[0m Signed: DKIM/linux.microsoft.com
+---
+Total patches: 14
+---
+Applying: accel/mshv: move msr.c to target/i386
+Applying: accel/mshv: extract common CPU register helpers
+Applying: meson, target/arm/mshv: Enable arm64 build & add initial MSHV support
+Applying: target/arm/mshv: implement vcpu state operations for ARM64
+Applying: target/arm/mshv: implement -cpu host for MSHV
+Patch failed at 0005 target/arm/mshv: implement -cpu host for MSHV
+error: patch failed: hw/arm/virt.c:3450
+error: hw/arm/virt.c: patch does not apply
+error: patch failed: include/hw/hyperv/hvhdk.h:18
+error: include/hw/hyperv/hvhdk.h: patch does not apply
+error: patch failed: target/arm/cpu.c:1629
+error: target/arm/cpu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
