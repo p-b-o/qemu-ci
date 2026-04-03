@@ -1,0 +1,51 @@
+Looking up https://lore.kernel.org/all/20260403035541.18355-1-zhenzhong.duan@intel.com/
+Grabbing thread from lore.kernel.org/all/20260403035541.18355-1-zhenzhong.duan@intel.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 15 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 170 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/14] vfio/iommufd: Extend attach/detach_hwpt callback implementations with pasid
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-2-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH v3 2/14] iommufd: Extend attach/detach_hwpt callbacks to support pasid
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-3-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH v3 3/14] vfio/iommufd: Create nesting parent hwpt with IOMMU_HWPT_ALLOC_PASID flag
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-4-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH v3 4/14] intel_iommu: Create the nested hwpt with IOMMU_HWPT_ALLOC_PASID flag
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-5-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH v3 5/14] intel_iommu: Change pasid property from bool to uint8
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-6-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH v3 6/14] intel_iommu: Export some functions
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-7-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH v3 7/14] intel_iommu: Use IOMMU_NO_PASID and delete PASID_0
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-8-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH v3 8/14] intel_iommu_accel: Handle PASID entry addition for pc_inv_dsc request
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-9-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH v3 9/14] intel_iommu_accel: Handle PASID entry removal for pc_inv_dsc request
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-10-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH v3 10/14] intel_iommu_accel: Bypass PASID entry addition for just deleted entry
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-11-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH v3 11/14] intel_iommu_accel: Handle PASID entry removal for system reset
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-12-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH v3 12/14] intel_iommu_accel: Switch to VTDAccelPASIDCacheEntry for PASID bind/unbind and PIOTLB invalidation
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-13-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH v3 13/14] intel_iommu_accel: Add pasid bits size check
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-14-zhenzhong.duan@intel.com
+  [32m✓[0m [PATCH v3 14/14] intel_iommu: Expose flag VIOMMU_FLAG_PASID_SUPPORTED when configured
+    + Link: https://lore.kernel.org/qemu-devel/20260403035541.18355-15-zhenzhong.duan@intel.com
+  ---
+  [32m✓[0m Signed: DKIM/intel.com
+---
+Total patches: 14
+---
+Applying: vfio/iommufd: Extend attach/detach_hwpt callback implementations with pasid
+Patch failed at 0001 vfio/iommufd: Extend attach/detach_hwpt callback implementations with pasid
+error: patch failed: hw/vfio/iommufd.c:922
+error: hw/vfio/iommufd.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
