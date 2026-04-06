@@ -1,0 +1,48 @@
+Looking up https://lore.kernel.org/all/20260406141735.25844-1-armenon@redhat.com/
+Grabbing thread from lore.kernel.org/all/20260406141735.25844-1-armenon@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 35 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/10] hw/tpm: Add TPM CRB chunking fields
+    + Link: https://lore.kernel.org/qemu-devel/20260406141735.25844-2-armenon@redhat.com
+  [32m✓[0m [PATCH v3 2/10] hw/tpm: Refactor CRB_CTRL_START register access
+    + Link: https://lore.kernel.org/qemu-devel/20260406141735.25844-3-armenon@redhat.com
+  [32m✓[0m [PATCH v3 3/10] hw/tpm: Add internal buffer state for chunking
+    + Link: https://lore.kernel.org/qemu-devel/20260406141735.25844-4-armenon@redhat.com
+  [32m✓[0m [PATCH v3 4/10] hw/tpm: Implement TPM CRB chunking logic
+    + Link: https://lore.kernel.org/qemu-devel/20260406141735.25844-5-armenon@redhat.com
+  [32m✓[0m [PATCH v3 5/10] test/qtest: Add test for tpm crb chunking
+    + Link: https://lore.kernel.org/qemu-devel/20260406141735.25844-6-armenon@redhat.com
+  [32m✓[0m [PATCH v3 6/10] hw/tpm: Add support for VM migration with TPM CRB chunking
+    + Link: https://lore.kernel.org/qemu-devel/20260406141735.25844-7-armenon@redhat.com
+  [32m✓[0m [PATCH v3 7/10] qtests: Enable starting swtpm with a given profile
+    + Link: https://lore.kernel.org/qemu-devel/20260406141735.25844-8-armenon@redhat.com
+  [32m✓[0m [PATCH v3 8/10] tests: Use ML-DSA-87 operations to caused large TPM transfers with CRB
+    + Link: https://lore.kernel.org/qemu-devel/20260406141735.25844-9-armenon@redhat.com
+  [32m✓[0m [PATCH v3 9/10] tpm: Extend TPM TIS buffer size to 8192 bytes
+    + Link: https://lore.kernel.org/qemu-devel/20260406141735.25844-10-armenon@redhat.com
+  [32m✓[0m [PATCH v3 10/10] tests: Use ML-DSA-87 operations to caused large TPM transfers with TIS
+    + Link: https://lore.kernel.org/qemu-devel/20260406141735.25844-11-armenon@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 10
+---
+Applying: hw/tpm: Add TPM CRB chunking fields
+Applying: hw/tpm: Refactor CRB_CTRL_START register access
+Applying: hw/tpm: Add internal buffer state for chunking
+Applying: hw/tpm: Implement TPM CRB chunking logic
+Applying: test/qtest: Add test for tpm crb chunking
+Applying: hw/tpm: Add support for VM migration with TPM CRB chunking
+Patch failed at 0006 hw/tpm: Add support for VM migration with TPM CRB chunking
+error: patch failed: hw/core/machine.c:38
+error: hw/core/machine.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
