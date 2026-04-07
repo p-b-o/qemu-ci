@@ -1,0 +1,35 @@
+Looking up https://lore.kernel.org/all/20260407050818.2249570-1-lulu@redhat.com/
+Grabbing thread from lore.kernel.org/all/20260407050818.2249570-1-lulu@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Nothing matching that query.
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC v4 1/5] net/filter: allow filters on vhost netdevs
+    + Link: https://lore.kernel.org/qemu-devel/20260407050818.2249570-2-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v4 2/5] chardev/socket: add AF_PACKET initialization
+    + Link: https://lore.kernel.org/qemu-devel/20260407050818.2249570-3-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v4 3/5] io/channel-socket: tolerate AF_PACKET getpeername
+    + Link: https://lore.kernel.org/qemu-devel/20260407050818.2249570-4-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v4 4/5] chardev/socket: add AF_PACKET inject path
+    + Link: https://lore.kernel.org/qemu-devel/20260407050818.2249570-5-lulu@redhat.com
+  [32m✓[0m [PATCH RFC v4 5/5] chardev/socket: add AF_PACKET capture path
+    + Link: https://lore.kernel.org/qemu-devel/20260407050818.2249570-6-lulu@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 5
+---
+Applying: net/filter: allow filters on vhost netdevs
+Applying: chardev/socket: add AF_PACKET initialization
+Patch failed at 0002 chardev/socket: add AF_PACKET initialization
+error: patch failed: chardev/char-socket.c:384
+error: chardev/char-socket.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
