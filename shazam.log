@@ -1,0 +1,79 @@
+Looking up https://lore.kernel.org/all/20260408041953.1899532-1-brian.cain@oss.qualcomm.com/
+Grabbing thread from lore.kernel.org/all/20260408041953.1899532-1-brian.cain@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 29 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 205 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/28] target/hexagon: Implement {c,}swi helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-2-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 2/28] target/hexagon: Implement iassign{r,w} helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-3-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 3/28] target/hexagon: Implement start/stop helpers, soft reset
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-4-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 4/28] target/hexagon: Implement {g,s}etimask helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-5-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 5/28] target/hexagon: Implement wait helper
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-6-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 6/28] target/hexagon: Implement get_exe_mode()
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-7-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 7/28] target/hexagon: Implement hex_tlb_entry_get_perm()
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-8-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 8/28] target/hexagon: Implement software interrupt
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-9-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 9/28] target/hexagon: Implement stack overflow exception
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-10-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 10/28] target/hexagon: Implement exec_interrupt, set_irq
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-11-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 11/28] target/hexagon: add simple cpu_exec_reset and pointer_wrap
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-12-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 12/28] target/hexagon: Implement hexagon_tlb_fill()
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-13-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 13/28] target/hexagon: Implement siad inst
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-14-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 14/28] target/hexagon: Implement hexagon_resume_threads()
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-15-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 15/28] target/hexagon: Implement setprio, resched
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-16-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 16/28] target/hexagon: Add sysemu_ops, cpu_get_phys_page_debug()
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-17-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 17/28] target/hexagon: extend hexagon_cpu_mmu_index() for sysemu
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-18-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 18/28] target/hexagon: Decode trap1, rte as COF
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-19-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 19/28] target/hexagon: Implement modify_ssr, resched, pending_interrupt
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-20-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 20/28] target/hexagon: Add pkt_ends_tb to translation
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-21-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 21/28] target/hexagon: Add next_PC, {s,g}reg writes
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-22-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 22/28] target/hexagon: Add implicit sysreg writes
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-23-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 23/28] target/hexagon: Define system, guest reg names
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-24-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 24/28] target/hexagon: Add k0 {un,}lock
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-25-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 25/28] target/hexagon: Add PC to raise_exception, use fTRAP() helper
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-26-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 26/28] target/hexagon: Add TCG overrides for transfer insts
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-27-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 27/28] target/hexagon: Add support for loadw_phys
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-28-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 28/28] target/hexagon: Add guest reg reading functionality
+    + Link: https://lore.kernel.org/qemu-devel/20260408041953.1899532-29-brian.cain@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 28
+---
+Applying: target/hexagon: Implement {c,}swi helpers
+Patch failed at 0001 target/hexagon: Implement {c,}swi helpers
+error: patch failed: target/hexagon/op_helper.c:23
+error: target/hexagon/op_helper.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
