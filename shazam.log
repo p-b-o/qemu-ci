@@ -1,0 +1,29 @@
+Looking up https://lore.kernel.org/all/20260408085941.3837334-1-zhangjian.3032@bytedance.com/
+Grabbing thread from lore.kernel.org/all/20260408085941.3837334-1-zhangjian.3032@bytedance.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v1 1/2] hw/misc: introduce mctp I2C responder and NCSI support
+    + Link: https://lore.kernel.org/qemu-devel/20260408085941.3837334-2-zhangjian.3032@bytedance.com
+  [32m✓[0m [PATCH v1 2/2] hw/arm/aspeed: add mctp responder device for test
+    + Link: https://lore.kernel.org/qemu-devel/20260408085941.3837334-3-zhangjian.3032@bytedance.com
+  ---
+  [32m✓[0m Signed: DKIM/bytedance.com
+---
+Total patches: 2
+---
+Applying: hw/misc: introduce mctp I2C responder and NCSI support
+Patch failed at 0001 hw/misc: introduce mctp I2C responder and NCSI support
+error: patch failed: MAINTAINERS:1225
+error: MAINTAINERS: patch does not apply
+error: patch failed: hw/misc/meson.build:150
+error: hw/misc/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
