@@ -1,0 +1,28 @@
+Looking up https://lore.kernel.org/all/20260409155344.2849233-1-bruno.vilaca.sa@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260409155344.2849233-1-bruno.vilaca.sa@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/2] target/riscv: preserve RV32 henvcfgh on henvcfg writes
+    + Link: https://lore.kernel.org/qemu-devel/20260409155344.2849233-2-bruno.vilaca.sa@gmail.com
+  [32m✓[0m [PATCH 2/2] target/riscv: fix RV32 stateen CSR handling
+    + Link: https://lore.kernel.org/qemu-devel/20260409155344.2849233-3-bruno.vilaca.sa@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 2
+---
+Applying: target/riscv: preserve RV32 henvcfgh on henvcfg writes
+Applying: target/riscv: fix RV32 stateen CSR handling
+Patch failed at 0002 target/riscv: fix RV32 stateen CSR handling
+error: patch failed: target/riscv/csr.c:3613
+error: target/riscv/csr.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
