@@ -414,6 +414,11 @@ static bool trans_ZCB(DisasContext *ctx, arg_zcb *a)
     return true;
 }
 
+static bool trans_ZCBT(DisasContext *ctx, arg_zcb *a)
+{
+    return trans_ZCB(ctx, a);
+}
+
 static void octeon_store_tc_field(ptrdiff_t offset, TCGv value)
 {
     tcg_gen_st_tl(value, tcg_env, offset);
@@ -504,4 +509,5 @@ TRANS(MTP1, trans_mtp, offsetof(CPUMIPSState, active_tc.P1),
 TRANS(MTP2, trans_mtp, offsetof(CPUMIPSState, active_tc.P2),
       offsetof(CPUMIPSState, active_tc.P5));
 TRANS(VMULU, trans_vmul, gen_helper_octeon_vmulu);
+TRANS(VMM0, trans_vmul, gen_helper_octeon_vmm0);
 TRANS(V3MULU, trans_vmul, gen_helper_octeon_v3mulu);

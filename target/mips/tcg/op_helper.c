@@ -181,6 +181,20 @@ target_ulong helper_octeon_vmulu(CPUMIPSState *env, target_ulong arg1,
     return res[0];
 }
 
+target_ulong helper_octeon_vmm0(CPUMIPSState *env, target_ulong arg1,
+                                target_ulong arg2)
+{
+    uint64_t lo;
+
+    /*
+     * VMM0 is the Montgomery-reduction companion to VMULU: it computes the
+     * low limb of MPL0 * arg1 + arg2 and writes that result back to M0.
+     */
+    lo = env->active_tc.MPL0 * (uint64_t)arg1 + (uint64_t)arg2;
+    env->active_tc.MPL0 = lo;
+    return lo;
+}
+
 target_ulong helper_octeon_v3mulu(CPUMIPSState *env, target_ulong arg1,
                                   target_ulong arg2)
 {
