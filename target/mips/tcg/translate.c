@@ -9138,6 +9138,8 @@ static bool octeon_cop2_is_supported_dmfc2(uint16_t sel)
     case OCTEON_COP2_SEL_3DES_RESULT_IN:
     case OCTEON_COP2_SEL_AES_RESULT0:
     case OCTEON_COP2_SEL_AES_RESULT1:
+    case OCTEON_COP2_SEL_AES_KEY0:
+    case OCTEON_COP2_SEL_AES_KEY1:
     case OCTEON_COP2_SEL_CRC_POLYNOMIAL:
     case OCTEON_COP2_SEL_AES_IV0:
     case OCTEON_COP2_SEL_AES_IV1:
@@ -9194,6 +9196,8 @@ static bool octeon_cop2_is_supported_dmtc2(uint16_t sel)
     case OCTEON_COP2_SEL_KAS_ENC:
     case OCTEON_COP2_SEL_3DES_DEC_CBC:
     case OCTEON_COP2_SEL_3DES_DEC:
+    case OCTEON_COP2_SEL_AES_RESULT0:
+    case OCTEON_COP2_SEL_AES_RESULT1:
     case OCTEON_COP2_SEL_AES_IV0:
     case OCTEON_COP2_SEL_AES_IV1:
     case OCTEON_COP2_SEL_AES_KEY0:
@@ -9277,6 +9281,10 @@ static bool octeon_cop2_is_supported_dmtc2(uint16_t sel)
     case OCTEON_COP2_SEL_AES_ENC1:
     case OCTEON_COP2_SEL_AES_DEC_CBC1:
     case OCTEON_COP2_SEL_AES_DEC1:
+    case OCTEON_COP2_SEL_SMS4_ENC_CBC1:
+    case OCTEON_COP2_SEL_SMS4_ENC1:
+    case OCTEON_COP2_SEL_SMS4_DEC_CBC1:
+    case OCTEON_COP2_SEL_SMS4_DEC1:
         return true;
     default:
         return false;
