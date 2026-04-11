@@ -144,6 +144,90 @@ target_ulong helper_rotx(target_ulong rs, uint32_t shift, uint32_t shiftx,
     return (int64_t)(int32_t)(uint32_t)tmp5;
 }
 
+static void octeon_addc(uint64_t *res, int count, uint64_t value, int index)
+{
+    while (index < count) {
+        uint64_t old = res[index];
+
+        res[index] += value;
+        if (res[index] >= old) {
+            break;
+        }
+        value = 1;
+        index++;
+    }
+}
+
+target_ulong helper_octeon_vmulu(CPUMIPSState *env, target_ulong arg1,
+                                 target_ulong arg2)
+{
+    uint64_t lo, hi;
+    uint64_t res[3] = {};
+
+    mulu64(&lo, &hi, env->active_tc.MPL0, arg1);
+    res[0] = lo;
+    res[1] = hi;
+
+    mulu64(&lo, &hi, env->active_tc.MPL1, arg1);
+    octeon_addc(res, 3, lo, 1);
+    octeon_addc(res, 3, hi, 2);
+
+    octeon_addc(res, 3, arg2, 0);
+    octeon_addc(res, 3, env->active_tc.P0, 0);
+    octeon_addc(res, 3, env->active_tc.P1, 1);
+
+    env->active_tc.P0 = res[1];
+    env->active_tc.P1 = res[2];
+    return res[0];
+}
+
+target_ulong helper_octeon_v3mulu(CPUMIPSState *env, target_ulong arg1,
+                                  target_ulong arg2)
+{
+    uint64_t lo, hi;
+    uint64_t res[7] = {};
+
+    mulu64(&lo, &hi, env->active_tc.MPL0, arg1);
+    res[0] = lo;
+    res[1] = hi;
+
+    mulu64(&lo, &hi, env->active_tc.MPL1, arg1);
+    octeon_addc(res, 7, lo, 1);
+    octeon_addc(res, 7, hi, 2);
+
+    mulu64(&lo, &hi, env->active_tc.MPL2, arg1);
+    octeon_addc(res, 7, lo, 2);
+    octeon_addc(res, 7, hi, 3);
+
+    mulu64(&lo, &hi, env->active_tc.MPL3, arg1);
+    octeon_addc(res, 7, lo, 3);
+    octeon_addc(res, 7, hi, 4);
+
+    mulu64(&lo, &hi, env->active_tc.MPL4, arg1);
+    octeon_addc(res, 7, lo, 4);
+    octeon_addc(res, 7, hi, 5);
+
+    mulu64(&lo, &hi, env->active_tc.MPL5, arg1);
+    octeon_addc(res, 7, lo, 5);
+    octeon_addc(res, 7, hi, 6);
+
+    octeon_addc(res, 7, arg2, 0);
+    octeon_addc(res, 7, env->active_tc.P0, 0);
+    octeon_addc(res, 7, env->active_tc.P1, 1);
+    octeon_addc(res, 7, env->active_tc.P2, 2);
+    octeon_addc(res, 7, env->active_tc.P3, 3);
+    octeon_addc(res, 7, env->active_tc.P4, 4);
+    octeon_addc(res, 7, env->active_tc.P5, 5);
+
+    env->active_tc.P0 = res[1];
+    env->active_tc.P1 = res[2];
+    env->active_tc.P2 = res[3];
+    env->active_tc.P3 = res[4];
+    env->active_tc.P4 = res[5];
+    env->active_tc.P5 = res[6];
+    return res[0];
+}
+
 /* these crc32 functions are based on target/loongarch/tcg/op_helper.c */
 target_ulong helper_crc32(target_ulong val, target_ulong m, uint32_t sz)
 {

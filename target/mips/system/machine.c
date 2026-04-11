@@ -118,6 +118,27 @@ static const VMStateDescription vmstate_inactive_tc = {
     .fields = vmstate_tc_fields
 };
 
+static const VMStateDescription vmstate_octeon_multiplier_tc = {
+    .name = "cpu/tc/octeon_multiplier",
+    .version_id = 1,
+    .minimum_version_id = 1,
+    .fields = (const VMStateField[]) {
+        VMSTATE_UINTTL(MPL0, TCState),
+        VMSTATE_UINTTL(MPL1, TCState),
+        VMSTATE_UINTTL(MPL2, TCState),
+        VMSTATE_UINTTL(MPL3, TCState),
+        VMSTATE_UINTTL(MPL4, TCState),
+        VMSTATE_UINTTL(MPL5, TCState),
+        VMSTATE_UINTTL(P0, TCState),
+        VMSTATE_UINTTL(P1, TCState),
+        VMSTATE_UINTTL(P2, TCState),
+        VMSTATE_UINTTL(P3, TCState),
+        VMSTATE_UINTTL(P4, TCState),
+        VMSTATE_UINTTL(P5, TCState),
+        VMSTATE_END_OF_LIST()
+    }
+};
+
 /* MVP state */
 
 static const VMStateDescription vmstate_mvp = {
@@ -233,6 +254,27 @@ static const VMStateDescription mips_vmstate_timer = {
     .needed = mips_timer_needed,
     .fields = (const VMStateField[]) {
         VMSTATE_TIMER_PTR(env.timer, MIPSCPU),
+        VMSTATE_END_OF_LIST()
+    }
+};
+
+static bool mips_octeon_multiplier_needed(void *opaque)
+{
+    MIPSCPU *cpu = opaque;
+
+    return cpu->env.insn_flags & INSN_OCTEON;
+}
+
+static const VMStateDescription mips_vmstate_octeon_multiplier = {
+    .name = "cpu/octeon_multiplier",
+    .version_id = 1,
+    .minimum_version_id = 1,
+    .needed = mips_octeon_multiplier_needed,
+    .fields = (const VMStateField[]) {
+        VMSTATE_STRUCT(env.active_tc, MIPSCPU, 1,
+                       vmstate_octeon_multiplier_tc, TCState),
+        VMSTATE_STRUCT_ARRAY(env.tcs, MIPSCPU, MIPS_SHADOW_SET_MAX, 1,
+                             vmstate_octeon_multiplier_tc, TCState),
         VMSTATE_END_OF_LIST()
     }
 };
@@ -353,6 +395,7 @@ const VMStateDescription vmstate_mips_cpu = {
     },
     .subsections = (const VMStateDescription * const []) {
         &mips_vmstate_timer,
+        &mips_vmstate_octeon_multiplier,
         NULL
     }
 };

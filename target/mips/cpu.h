@@ -497,6 +497,18 @@ struct TCState {
     target_ulong CP0_TCScheFBack;
     int32_t CP0_Debug_tcstatus;
     target_ulong CP0_UserLocal;
+    target_ulong MPL0;
+    target_ulong MPL1;
+    target_ulong MPL2;
+    target_ulong MPL3;
+    target_ulong MPL4;
+    target_ulong MPL5;
+    target_ulong P0;
+    target_ulong P1;
+    target_ulong P2;
+    target_ulong P3;
+    target_ulong P4;
+    target_ulong P5;
 
     int32_t msacsr;
 
