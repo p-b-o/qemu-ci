@@ -1,0 +1,46 @@
+Looking up https://lore.kernel.org/all/cover.1775959096.git.chao.liu.zevorn@gmail.com/
+Grabbing thread from lore.kernel.org/all/cover.1775959096.git.chao.liu.zevorn@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 63 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v6 1/7] target/riscv: deprecate 'debug' CPU property
+    + Link: https://lore.kernel.org/qemu-devel/99f0437cbb0169ffa318af4864ee48af22abeb17.1775959096.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v6 2/7] target/riscv: add sdext debug CSRs state
+    + Link: https://lore.kernel.org/qemu-devel/51360220ee90a76ca326a4205f1f62b34a4a8624.1775959096.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v6 3/7] target/riscv: add sdext Debug Mode helpers
+    + Link: https://lore.kernel.org/qemu-devel/99be0e0e0d43c77389dd076d079b195844817076.1775959096.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v6 4/7] target/riscv: add dret instruction
+    + Link: https://lore.kernel.org/qemu-devel/279d8e6c4bb55ae831f929c105a20c3372de636b.1775959096.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v6 5/7] target/riscv: add sdext enter Debug Mode on ebreak
+    + Link: https://lore.kernel.org/qemu-devel/f257db26a7123c201917bf657d1d147e7cc63965.1775959096.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v6 6/7] target/riscv: add sdext single-step support
+    + Link: https://lore.kernel.org/qemu-devel/cca288cd6fbd75ee1b84b6af8c3dad87a96c7357.1775959096.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v6 7/7] target/riscv: add sdtrig trigger action=debug mode
+    + Link: https://lore.kernel.org/qemu-devel/c2838d2c9fc0135bf346ee3754d5e519157bab9d.1775959096.git.chao.liu.zevorn@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 7
+---
+Applying: target/riscv: deprecate 'debug' CPU property
+Applying: target/riscv: add sdext debug CSRs state
+Applying: target/riscv: add sdext Debug Mode helpers
+Applying: target/riscv: add dret instruction
+Applying: target/riscv: add sdext enter Debug Mode on ebreak
+Applying: target/riscv: add sdext single-step support
+Patch failed at 0006 target/riscv: add sdext single-step support
+error: patch failed: include/exec/translation-block.h:64
+error: include/exec/translation-block.h: patch does not apply
+error: patch failed: target/riscv/cpu.h:712
+error: target/riscv/cpu.h: patch does not apply
+error: patch failed: target/riscv/tcg/tcg-cpu.c:193
+error: target/riscv/tcg/tcg-cpu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
