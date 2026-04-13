@@ -1,0 +1,61 @@
+Looking up https://lore.kernel.org/all/20260413073737.986219-1-gaurav.sharma_7@nxp.com/
+Grabbing thread from lore.kernel.org/all/20260413073737.986219-1-gaurav.sharma_7@nxp.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 16 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 87 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH v5 1/15] hw/arm: Add the i.MX 8MM EVK(Evaluation Kit) board
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-2-gaurav.sharma_7@nxp.com
+  [PATCH v5 2/15] hw/misc/imx8mp_analog: Add property to analog device
+    + Reviewed-by: Bernhard Beschow <shentey@gmail.com> ([31m✗[0m DKIM/gmail.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-3-gaurav.sharma_7@nxp.com
+  [PATCH v5 3/15] hw/arm/fsl-imx8mm: Add Analog device IP to iMX8MM SOC
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-4-gaurav.sharma_7@nxp.com
+  [PATCH v5 4/15] hw/arm/fsl-imx8mm: Add Clock Control Module IP to iMX8MM
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-5-gaurav.sharma_7@nxp.com
+  [PATCH v5 5/15] hw/arm/fsl-imx8mm: Implemented support for SNVS
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-6-gaurav.sharma_7@nxp.com
+  [PATCH v5 6/15] hw/arm/fsl-imx8mm: Adding support for USDHC storage controllers
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-7-gaurav.sharma_7@nxp.com
+  [PATCH v5 7/15] hw/arm/fsl-imx8mm: Add PCIe support
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-8-gaurav.sharma_7@nxp.com
+  [PATCH v5 8/15] hw/arm/fsl-imx8mm: Add GPIO controllers
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-9-gaurav.sharma_7@nxp.com
+  [PATCH v5 9/15] hw/arm/fsl-imx8mm: Adding support for I2C emulation
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-10-gaurav.sharma_7@nxp.com
+  [PATCH v5 10/15] hw/arm/fsl-imx8mm: Adding support for SPI controller
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-11-gaurav.sharma_7@nxp.com
+  [PATCH v5 11/15] hw/arm/fsl-imx8mm: Adding support for Watchdog Timers
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-12-gaurav.sharma_7@nxp.com
+  [PATCH v5 12/15] hw/arm/fsl-imx8mm: Adding support for General Purpose Timers
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-13-gaurav.sharma_7@nxp.com
+  [PATCH v5 13/15] hw/arm/fsl-imx8mm: Adding support for ENET ethernet controller
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-14-gaurav.sharma_7@nxp.com
+  [PATCH v5 14/15] hw/arm/fsl-imx8mm: Adding support for USB controller
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-15-gaurav.sharma_7@nxp.com
+  [PATCH v5 15/15] hw/arm/fsl-imx8mm: Adding functional testing of iMX8MM emulation
+    + Reviewed-by: Bernhard Beschow <shentey@gmail.com> ([31m✗[0m DKIM/gmail.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260413073737.986219-16-gaurav.sharma_7@nxp.com
+---
+Total patches: 15
+---
+Applying: hw/arm: Add the i.MX 8MM EVK(Evaluation Kit) board
+Patch failed at 0001 hw/arm: Add the i.MX 8MM EVK(Evaluation Kit) board
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:84: trailing whitespace.
+  
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:500: trailing whitespace.
+    
+error: patch failed: docs/system/arm/imx8mp-evk.rst:52
+error: docs/system/arm/imx8mp-evk.rst: patch does not apply
+error: patch failed: hw/arm/Kconfig:626
+error: hw/arm/Kconfig: patch does not apply
+error: patch failed: hw/arm/meson.build:84
+error: hw/arm/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
