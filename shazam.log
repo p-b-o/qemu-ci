@@ -1,0 +1,87 @@
+Looking up https://lore.kernel.org/all/20260414003001.97571-1-philmd@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260414003001.97571-1-philmd@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 33 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 56 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/27] stubs: Rename monitor* -> qmp* files
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-2-philmd@linaro.org
+  [32m✓[0m [PATCH v3 2/27] monitor/meson: Use SPICE with migration HMP commands
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-3-philmd@linaro.org
+  [32m✓[0m [PATCH v3 3/27] monitor: Restrict monitor_set_cpu() method scope
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-4-philmd@linaro.org
+  [32m✓[0m [PATCH v3 4/27] monitor: Make 'info via' a generic command
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-5-philmd@linaro.org
+  [32m✓[0m [PATCH v3 5/27] monitor: Make Xen emulation commands generic ones
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-6-philmd@linaro.org
+  [32m✓[0m [PATCH v3 6/27] system: Expose 'arch_init.h' as 'qemu/base-arch-defs.h'
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-7-philmd@linaro.org
+  [32m✓[0m [PATCH v3 7/27] monitor: Introduce HMPCommand::arch_bitmask field
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-8-philmd@linaro.org
+  [32m✓[0m [PATCH v3 8/27] hw/s390x: Reduce 'monitor/monitor.h' inclusions
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-9-philmd@linaro.org
+  [32m✓[0m [PATCH v3 9/27] monitor: Do not check TARGET_S390X to build s390x commands
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-10-philmd@linaro.org
+  [32m✓[0m [PATCH v3 10/27] monitor: Do not check TARGET_I386 to build target/i386/ commands
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-11-philmd@linaro.org
+  [32m✓[0m [PATCH v3 11/27] monitor: Do not check TARGET_I386 to build 'info sgx' command
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-12-philmd@linaro.org
+  [32m✓[0m [PATCH v3 12/27] monitor: Do not check TARGET_I386 to build 'info sev' command
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-13-philmd@linaro.org
+  [32m✓[0m [PATCH v3 13/27] monitor: Do not check TARGET_I386/RISCV to build 'info mem' command
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-14-philmd@linaro.org
+  [32m✓[0m [PATCH v3 14/27] monitor: Do not check multiple TARGET_* to build 'info tlb' command
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-15-philmd@linaro.org
+  [32m✓[0m [PATCH v3 15/27] cpus: Introduce SysemuCPUOps::monitor_get_register() hook
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-16-philmd@linaro.org
+  [32m✓[0m [PATCH v3 16/27] target/riscv: Register target_get_monitor_def in SysemuCPUOps
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-17-philmd@linaro.org
+  [32m✓[0m [PATCH v3 17/27] monitor: Remove target_get_monitor_def()
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-18-philmd@linaro.org
+  [32m✓[0m [PATCH v3 18/27] monitor: Have MonitorDef::get_value() always return int64_t type
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-19-philmd@linaro.org
+  [32m✓[0m [PATCH v3 19/27] monitor: Reduce target-specific methods further
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-20-philmd@linaro.org
+  [32m✓[0m [PATCH v3 20/27] monitor: Remove 'monitor/hmp-target.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-21-philmd@linaro.org
+  [32m✓[0m [PATCH v3 21/27] monitor: Forward-declare the MonitorDef type
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-22-philmd@linaro.org
+  [32m✓[0m [PATCH v3 22/27] cpus: Introduce SysemuCPUOps::monitor_defs hook
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-23-philmd@linaro.org
+  [32m✓[0m [PATCH v3 23/27] target/i386: Replace target_monitor_defs -> SysemuCPUOps::monitor_defs
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-24-philmd@linaro.org
+  [32m✓[0m [PATCH v3 24/27] target/m68k: Replace target_monitor_defs -> SysemuCPUOps::monitor_defs
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-25-philmd@linaro.org
+  [32m✓[0m [PATCH v3 25/27] target/sparc: Replace target_monitor_defs -> SysemuCPUOps::monitor_defs
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-26-philmd@linaro.org
+  [32m✓[0m [PATCH v3 26/27] monitor: Remove target_monitor_defs()
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-27-philmd@linaro.org
+  [32m✓[0m [PATCH v3 27/27] monitor: Merge hmp-target.c code within hmp-cmds.c
+    + Link: https://lore.kernel.org/qemu-devel/20260414003001.97571-28-philmd@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 27
+---
+Applying: stubs: Rename monitor* -> qmp* files
+Applying: monitor/meson: Use SPICE with migration HMP commands
+Applying: monitor: Restrict monitor_set_cpu() method scope
+Applying: monitor: Make 'info via' a generic command
+Applying: monitor: Make Xen emulation commands generic ones
+Applying: system: Expose 'arch_init.h' as 'qemu/base-arch-defs.h'
+Patch failed at 0006 system: Expose 'arch_init.h' as 'qemu/base-arch-defs.h'
+error: patch failed: system/qdev-monitor.c:23
+error: system/qdev-monitor.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
