@@ -1,0 +1,47 @@
+Looking up https://lore.kernel.org/all/20260414005348.4767-1-philmd@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260414005348.4767-1-philmd@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 20 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/9] target/arm: Ignore endianness when setting MTE tags
+    + Link: https://lore.kernel.org/qemu-devel/20260414005348.4767-2-philmd@linaro.org
+  [32m✓[0m [PATCH v2 2/9] target/arm: Explode MO_TExx -> MO_TE | MO_xx
+    + Link: https://lore.kernel.org/qemu-devel/20260414005348.4767-3-philmd@linaro.org
+  [32m✓[0m [PATCH v2 3/9] target/arm: Hoist MO_TE into mve_advance_vpt()
+    + Link: https://lore.kernel.org/qemu-devel/20260414005348.4767-4-philmd@linaro.org
+  [32m✓[0m [PATCH v2 4/9] target/arm: Hoist MO_TE into MVE DO_VSTR() macro
+    + Link: https://lore.kernel.org/qemu-devel/20260414005348.4767-5-philmd@linaro.org
+  [32m✓[0m [PATCH v2 5/9] target/arm: Introduce mo_endian() helper
+    + Link: https://lore.kernel.org/qemu-devel/20260414005348.4767-6-philmd@linaro.org
+  [32m✓[0m [PATCH v2 6/9] target/arm: Replace MO_TE -> mo_endian() for MVE helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260414005348.4767-7-philmd@linaro.org
+  [32m✓[0m [PATCH v2 7/9] target/arm: Compile mve_helper.c once
+    + Link: https://lore.kernel.org/qemu-devel/20260414005348.4767-8-philmd@linaro.org
+  [32m✓[0m [PATCH v2 8/9] target/arm: Replace MO_TE -> mo_endian() for Cortex-M helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260414005348.4767-9-philmd@linaro.org
+  [32m✓[0m [PATCH v2 9/9] target/arm: Compile m_helper.c once
+    + Link: https://lore.kernel.org/qemu-devel/20260414005348.4767-10-philmd@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 9
+---
+Applying: target/arm: Ignore endianness when setting MTE tags
+Applying: target/arm: Explode MO_TExx -> MO_TE | MO_xx
+Applying: target/arm: Hoist MO_TE into mve_advance_vpt()
+Applying: target/arm: Hoist MO_TE into MVE DO_VSTR() macro
+Applying: target/arm: Introduce mo_endian() helper
+Applying: target/arm: Replace MO_TE -> mo_endian() for MVE helpers
+Applying: target/arm: Compile mve_helper.c once
+Patch failed at 0007 target/arm: Compile mve_helper.c once
+error: patch failed: target/arm/tcg/meson.build:33
+error: target/arm/tcg/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
