@@ -1,0 +1,37 @@
+Looking up https://lore.kernel.org/all/20260414182231.18776-1-mohamed@unpredictable.fr/
+Grabbing thread from lore.kernel.org/all/20260414182231.18776-1-mohamed@unpredictable.fr/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/7] whpx: i386: set apicbase value only on success
+    + Link: https://lore.kernel.org/qemu-devel/20260414182231.18776-2-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH 2/7] whpx: i386: unknown MSR configurability
+    + Link: https://lore.kernel.org/qemu-devel/20260414182231.18776-3-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH 3/7] whpx: i386: enable GuestIdleReg enlightenment
+    + Link: https://lore.kernel.org/qemu-devel/20260414182231.18776-4-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH 4/7] whpx: i386: tighten APIC base validity check
+    + Link: https://lore.kernel.org/qemu-devel/20260414182231.18776-5-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH 5/7] whpx: i386: ignore vpassist when kernel-irqchip=off
+    + Link: https://lore.kernel.org/qemu-devel/20260414182231.18776-6-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH 6/7] target: i386: HLT type that ignores EFLAGS.IF
+    + Link: https://lore.kernel.org/qemu-devel/20260414182231.18776-7-mohamed@unpredictable.fr
+  [32m✓[0m [PATCH 7/7] whpx: i386: add HV_X64_MSR_GUEST_IDLE when !kernel-irqchip
+    + Link: https://lore.kernel.org/qemu-devel/20260414182231.18776-8-mohamed@unpredictable.fr
+  ---
+  [32m✓[0m Signed: DKIM/unpredictable.fr
+---
+Total patches: 7
+---
+Applying: whpx: i386: set apicbase value only on success
+Patch failed at 0001 whpx: i386: set apicbase value only on success
+error: patch failed: target/i386/whpx/whpx-all.c:2001
+error: target/i386/whpx/whpx-all.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
