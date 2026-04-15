@@ -1,0 +1,28 @@
+Looking up https://lore.kernel.org/all/20260415232906.212349-1-stefanha@redhat.com/
+Grabbing thread from lore.kernel.org/all/20260415232906.212349-1-stefanha@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/2] scsi: change buf_size to unsigned int in scsi_SG_IO()
+    + Link: https://lore.kernel.org/qemu-devel/20260415232906.212349-2-stefanha@redhat.com
+  [32m✓[0m [PATCH 2/2] scsi: handle reservation changes across migration
+    + Link: https://lore.kernel.org/qemu-devel/20260415232906.212349-3-stefanha@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 2
+---
+Applying: scsi: change buf_size to unsigned int in scsi_SG_IO()
+Applying: scsi: handle reservation changes across migration
+Patch failed at 0002 scsi: handle reservation changes across migration
+error: patch failed: hw/scsi/scsi-generic.c:493
+error: hw/scsi/scsi-generic.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
