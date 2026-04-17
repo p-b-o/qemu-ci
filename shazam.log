@@ -1,0 +1,37 @@
+Looking up https://lore.kernel.org/all/20260417110550.70068-1-philmd@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260417110550.70068-1-philmd@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/7] MAINTAINERS: Maintain MIPS Boston
+    + Link: https://lore.kernel.org/qemu-devel/20260417110550.70068-2-philmd@linaro.org
+  [32m✓[0m [PATCH 2/7] MAINTAINERS: Step up to maintain core machine code
+    + Link: https://lore.kernel.org/qemu-devel/20260417110550.70068-3-philmd@linaro.org
+  [32m✓[0m [PATCH 3/7] MAINTAINERS: Merge PCIe DOE section within SPDM
+    + Link: https://lore.kernel.org/qemu-devel/20260417110550.70068-4-philmd@linaro.org
+  [32m✓[0m [PATCH 4/7] MAINTAINERS: Cover hexloader tests under the Generic Loader section
+    + Link: https://lore.kernel.org/qemu-devel/20260417110550.70068-5-philmd@linaro.org
+  [32m✓[0m [PATCH 5/7] MAINTAINERS: Remove PhilMD from firmware sections
+    + Link: https://lore.kernel.org/qemu-devel/20260417110550.70068-6-philmd@linaro.org
+  [32m✓[0m [PATCH 6/7] MAINTAINERS: Remove PhilMD from NVMe Block Driver
+    + Link: https://lore.kernel.org/qemu-devel/20260417110550.70068-7-philmd@linaro.org
+  [32m✓[0m [PATCH 7/7] MAINTAINERS: Transfer CI maintenance to Pierrick
+    + Link: https://lore.kernel.org/qemu-devel/20260417110550.70068-8-philmd@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 7
+---
+Applying: MAINTAINERS: Maintain MIPS Boston
+Patch failed at 0001 MAINTAINERS: Maintain MIPS Boston
+error: patch failed: MAINTAINERS:1485
+error: MAINTAINERS: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
