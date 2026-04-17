@@ -1,0 +1,28 @@
+Looking up https://lore.kernel.org/all/cover.1776437127.git.chao.liu.zevorn@gmail.com/
+Grabbing thread from lore.kernel.org/all/cover.1776437127.git.chao.liu.zevorn@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 4 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v10 1/2] target/riscv: Use tcg nodes for strided vector ld/st generation
+    + Link: https://lore.kernel.org/qemu-devel/8ab885ce490cede31b8e9e7f6a67295c1aa353f7.1776437127.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v10 2/2] tests/tcg/riscv64: Add test for vlsseg8e32 instruction
+    + Link: https://lore.kernel.org/qemu-devel/fc0e1cb69ab0540a8e31a5f85522437e784c952e.1776437127.git.chao.liu.zevorn@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 2
+---
+Applying: target/riscv: Use tcg nodes for strided vector ld/st generation
+Applying: tests/tcg/riscv64: Add test for vlsseg8e32 instruction
+Patch failed at 0002 tests/tcg/riscv64: Add test for vlsseg8e32 instruction
+error: patch failed: tests/tcg/riscv64/Makefile.softmmu-target:41
+error: tests/tcg/riscv64/Makefile.softmmu-target: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
