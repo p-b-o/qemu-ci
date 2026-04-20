@@ -1,0 +1,25 @@
+Looking up https://lore.kernel.org/all/20260420144759.2970726-1-jhkim@linux.ibm.com/
+Grabbing thread from lore.kernel.org/all/20260420144759.2970726-1-jhkim@linux.ibm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/1] hw/s390x/ccw: Disable legacy virtio-pci by default (v11.1+)
+    + Link: https://lore.kernel.org/qemu-devel/20260420144759.2970726-2-jhkim@linux.ibm.com
+  ---
+  [32m✓[0m Signed: DKIM/ibm.com (From: jhkim@linux.ibm.com)
+---
+Total patches: 1
+---
+Applying: hw/s390x/ccw: Disable legacy virtio-pci by default (v11.1+)
+Patch failed at 0001 hw/s390x/ccw: Disable legacy virtio-pci by default (v11.1+)
+error: patch failed: hw/s390x/s390-virtio-ccw.c:923
+error: hw/s390x/s390-virtio-ccw.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
