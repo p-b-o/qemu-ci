@@ -1,0 +1,60 @@
+Looking up https://lore.kernel.org/all/20260421-mshv_accel_arm64_supp-v3-0-469f544778ba@linux.microsoft.com/
+Grabbing thread from lore.kernel.org/all/20260421-mshv_accel_arm64_supp-v3-0-469f544778ba@linux.microsoft.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 15 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 54 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/14] accel/mshv: move msr.c to target/i386
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-1-469f544778ba@linux.microsoft.com
+  [32m✓[0m [PATCH v3 2/14] accel/mshv: extract common CPU register helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-2-469f544778ba@linux.microsoft.com
+  [32m✓[0m [PATCH v3 3/14] meson, target/arm/mshv: Enable arm64 build & add initial MSHV support
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-3-469f544778ba@linux.microsoft.com
+  [32m✓[0m [PATCH v3 4/14] target/arm/mshv: implement vcpu state operations for ARM64
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-4-469f544778ba@linux.microsoft.com
+  [32m✓[0m [PATCH v3 5/14] target/arm/mshv: implement -cpu host for MSHV
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-5-469f544778ba@linux.microsoft.com
+  [32m✓[0m [PATCH v3 6/14] accel/mshv: add arch-specific accelerator init hook
+    + Reviewed-by: Mohamed Mediouni <mohamed@unpredictable.fr> ([32m✓[0m DKIM/unpredictable.fr)
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-6-469f544778ba@linux.microsoft.com
+  [32m✓[0m [PATCH v3 7/14] accel/mshv: Add access_vp_regs synthetic proc features
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-7-469f544778ba@linux.microsoft.com
+  [32m✓[0m [PATCH v3 8/14] target/arm: cpu: Mark MSHV supporting PSCI 1.3
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-8-469f544778ba@linux.microsoft.com
+  [32m✓[0m [PATCH v3 9/14] accel/mshv: implement cpu_thread_is_idle() hook
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-9-469f544778ba@linux.microsoft.com
+  [32m✓[0m [PATCH v3 10/14] target/arm: extract MMIO emulation logic for HVF & WHPX
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-10-469f544778ba@linux.microsoft.com
+  [32m✓[0m [PATCH v3 11/14] target/arm/mshv: add vCPU run loop
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-11-469f544778ba@linux.microsoft.com
+  [32m✓[0m [PATCH v3 12/14] include/hw/hyperv: adjust hv_interrupt_control structure for arm64
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-12-469f544778ba@linux.microsoft.com
+  [32m✓[0m [PATCH v3 13/14] hw/intc,target/arm/mshv: add MSHV vGICv3 implementation
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-13-469f544778ba@linux.microsoft.com
+  [32m✓[0m [PATCH v3 14/14] MAINTAINERS: updates for MSHV arm64 code
+    + Link: https://lore.kernel.org/qemu-devel/20260421-mshv_accel_arm64_supp-v3-14-469f544778ba@linux.microsoft.com
+  ---
+  [32m✓[0m Signed: DKIM/linux.microsoft.com
+---
+Total patches: 14
+---
+Applying: accel/mshv: move msr.c to target/i386
+Applying: accel/mshv: extract common CPU register helpers
+Applying: meson, target/arm/mshv: Enable arm64 build & add initial MSHV support
+Applying: target/arm/mshv: implement vcpu state operations for ARM64
+Applying: target/arm/mshv: implement -cpu host for MSHV
+Patch failed at 0005 target/arm/mshv: implement -cpu host for MSHV
+error: patch failed: hw/arm/virt.c:3450
+error: hw/arm/virt.c: patch does not apply
+error: patch failed: include/hw/hyperv/hvhdk.h:18
+error: include/hw/hyperv/hvhdk.h: patch does not apply
+error: patch failed: target/arm/cpu.c:1629
+error: target/arm/cpu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
