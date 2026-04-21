@@ -1,0 +1,59 @@
+Looking up https://lore.kernel.org/all/20260421053140.752059-1-joel@jms.id.au/
+Grabbing thread from lore.kernel.org/all/20260421053140.752059-1-joel@jms.id.au/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 23 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 42 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v3 1/13] hw/i2c: Add designware i2c controller
+    + Link: https://lore.kernel.org/qemu-devel/20260421053140.752059-2-joel@jms.id.au
+  [31m✗[0m [PATCH v3 2/13] hw/riscv/boot: Describe discontiguous memory in boot_info
+    + Link: https://lore.kernel.org/qemu-devel/20260421053140.752059-3-joel@jms.id.au
+  [31m✗[0m [PATCH v3 3/13] hw/riscv/boot: Account for discontiguous memory when loading firmware
+    + Link: https://lore.kernel.org/qemu-devel/20260421053140.752059-4-joel@jms.id.au
+  [31m✗[0m [PATCH v3 4/13] hw/riscv/boot: Provide a simple halting payload
+    + Link: https://lore.kernel.org/qemu-devel/20260421053140.752059-5-joel@jms.id.au
+  [31m✗[0m [PATCH v3 5/13] hw/riscv/virt: Move AIA initialisation to helper file
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260421053140.752059-6-joel@jms.id.au
+  [31m✗[0m [PATCH v3 6/13] hw/riscv/aia: Provide number of irq sources
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260421053140.752059-7-joel@jms.id.au
+  [31m✗[0m [PATCH v3 7/13] target/riscv: tt-ascalon: Enable Zkr extension
+    + Link: https://lore.kernel.org/qemu-devel/20260421053140.752059-8-joel@jms.id.au
+  [31m✗[0m [PATCH v3 8/13] target/riscv: tt-ascalon: Add Svadu extension
+    + Link: https://lore.kernel.org/qemu-devel/20260421053140.752059-9-joel@jms.id.au
+  [31m✗[0m [PATCH v3 9/13] hw/riscv: Add Tenstorrent Atlantis machine
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260421053140.752059-10-joel@jms.id.au
+  [31m✗[0m [PATCH v3 10/13] hw/riscv/atlantis: Add PCIe controller
+    + Link: https://lore.kernel.org/qemu-devel/20260421053140.752059-11-joel@jms.id.au
+  [31m✗[0m [PATCH v3 11/13] tests/functional/riscv64: Add tt-atlantis tests
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260421053140.752059-12-joel@jms.id.au
+  [31m✗[0m [PATCH v3 12/13] hw/riscv/atlantis: Integrate i2c buses
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260421053140.752059-13-joel@jms.id.au
+  [31m✗[0m [PATCH v3 13/13] hw/riscv/atlantis: Add some i2c peripherals
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260421053140.752059-14-joel@jms.id.au
+  ---
+  [31m✗[0m BADSIG: DKIM/gmail.com
+---
+Total patches: 13
+---
+Applying: hw/i2c: Add designware i2c controller
+Applying: hw/riscv/boot: Describe discontiguous memory in boot_info
+Applying: hw/riscv/boot: Account for discontiguous memory when loading firmware
+Applying: hw/riscv/boot: Provide a simple halting payload
+Applying: hw/riscv/virt: Move AIA initialisation to helper file
+Patch failed at 0005 hw/riscv/virt: Move AIA initialisation to helper file
+error: patch failed: hw/riscv/virt-acpi-build.c:42
+error: hw/riscv/virt-acpi-build.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
