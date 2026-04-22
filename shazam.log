@@ -1,0 +1,47 @@
+Looking up https://lore.kernel.org/all/20260422080406.62638-1-philmd@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260422080406.62638-1-philmd@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 13 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 16 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/10] MAINTAINERS: Remove my unused git tree locations
+    + Reviewed-by: Thomas Huth <thuth@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260422080406.62638-2-philmd@linaro.org
+  [32m✓[0m [PATCH v2 2/10] MAINTAINERS: Remove my disfunctional emails
+    + Reviewed-by: Thomas Huth <thuth@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260422080406.62638-3-philmd@linaro.org
+  [32m✓[0m [PATCH v2 3/10] MAINTAINERS: Maintain MIPS Boston
+    + Link: https://lore.kernel.org/qemu-devel/20260422080406.62638-4-philmd@linaro.org
+  [32m✓[0m [PATCH v2 4/10] MAINTAINERS: Step up to maintain core machine code
+    + Link: https://lore.kernel.org/qemu-devel/20260422080406.62638-5-philmd@linaro.org
+  [32m✓[0m [PATCH v2 5/10] MAINTAINERS: Merge PCIe DOE section within SPDM
+    + Link: https://lore.kernel.org/qemu-devel/20260422080406.62638-6-philmd@linaro.org
+  [32m✓[0m [PATCH v2 6/10] MAINTAINERS: Cover hexloader tests under the Generic Loader section
+    + Link: https://lore.kernel.org/qemu-devel/20260422080406.62638-7-philmd@linaro.org
+  [32m✓[0m [PATCH v2 7/10] MAINTAINERS: Remove PhilMD from NVMe Block Driver
+    + Link: https://lore.kernel.org/qemu-devel/20260422080406.62638-8-philmd@linaro.org
+  [32m✓[0m [PATCH v2 8/10] MAINTAINERS: Transfer FW schema specs section to Daniel
+    + Link: https://lore.kernel.org/qemu-devel/20260422080406.62638-9-philmd@linaro.org
+  [32m✓[0m [PATCH v2 9/10] MAINTAINERS: Remove PhilMD from firmware sections
+    + Link: https://lore.kernel.org/qemu-devel/20260422080406.62638-10-philmd@linaro.org
+  [32m✓[0m [PATCH v2 10/10] MAINTAINERS: Transfer CI maintenance to Pierrick
+    + Link: https://lore.kernel.org/qemu-devel/20260422080406.62638-11-philmd@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 10
+---
+Applying: MAINTAINERS: Remove my unused git tree locations
+Applying: MAINTAINERS: Remove my disfunctional emails
+Applying: MAINTAINERS: Maintain MIPS Boston
+Patch failed at 0003 MAINTAINERS: Maintain MIPS Boston
+error: patch failed: MAINTAINERS:1495
+error: MAINTAINERS: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
