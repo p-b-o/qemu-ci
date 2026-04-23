@@ -1,0 +1,25 @@
+Looking up https://lore.kernel.org/all/20260423141538.51583-1-philmd@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260423141538.51583-1-philmd@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2] target/s390x: Leverage 128-bit vector type in VLL / VSTL opcodes
+    + Link: https://lore.kernel.org/qemu-devel/20260423141538.51583-1-philmd@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 1
+---
+Applying: target/s390x: Leverage 128-bit vector type in VLL / VSTL opcodes
+Patch failed at 0001 target/s390x: Leverage 128-bit vector type in VLL / VSTL opcodes
+error: patch failed: target/s390x/tcg/vec_helper.c:48
+error: target/s390x/tcg/vec_helper.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
