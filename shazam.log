@@ -1,0 +1,40 @@
+Looking up https://lore.kernel.org/all/20260423135035.50126-1-philmd@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260423135035.50126-1-philmd@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 21 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/9] tcg: Include missing 'tcg/tcg-op-common.h' header in 'tcg-op-mem.h'
+    + Link: https://lore.kernel.org/qemu-devel/20260423135035.50126-2-philmd@linaro.org
+  [32m✓[0m [PATCH 2/9] target/s390x: Do not compile KVM stubs for linux-user binary
+    + Link: https://lore.kernel.org/qemu-devel/20260423135035.50126-3-philmd@linaro.org
+  [32m✓[0m [PATCH 3/9] target/s390x: Introduce common system/user meson source set
+    + Link: https://lore.kernel.org/qemu-devel/20260423135035.50126-4-philmd@linaro.org
+  [32m✓[0m [PATCH 4/9] target/s390x: Compile few files as common unit
+    + Link: https://lore.kernel.org/qemu-devel/20260423135035.50126-5-philmd@linaro.org
+  [32m✓[0m [PATCH 5/9] target/s390x: Compile translate.c as common unit
+    + Link: https://lore.kernel.org/qemu-devel/20260423135035.50126-6-philmd@linaro.org
+  [32m✓[0m [PATCH 6/9] target/s390x: Compile vec_helper.c as common unit
+    + Link: https://lore.kernel.org/qemu-devel/20260423135035.50126-7-philmd@linaro.org
+  [32m✓[0m [PATCH 7/9] target/s390x: Have MSA helper pass a mmu_idx argument
+    + Link: https://lore.kernel.org/qemu-devel/20260423135035.50126-8-philmd@linaro.org
+  [32m✓[0m [PATCH 8/9] target/s390x: Compile crypto_helper.c as common unit
+    + Link: https://lore.kernel.org/qemu-devel/20260423135035.50126-9-philmd@linaro.org
+  [32m✓[0m [PATCH 9/9] target/s390x: Replace cpu_stb_data_ra -> cpu_stb_mmu in STFLE opcode
+    + Link: https://lore.kernel.org/qemu-devel/20260423135035.50126-10-philmd@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 9
+---
+Applying: tcg: Include missing 'tcg/tcg-op-common.h' header in 'tcg-op-mem.h'
+Patch failed at 0001 tcg: Include missing 'tcg/tcg-op-common.h' header in 'tcg-op-mem.h'
+error: include/tcg/tcg-op-mem.h: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
