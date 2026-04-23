@@ -1,0 +1,26 @@
+Looking up https://lore.kernel.org/all/20260423151521.3969-1-deller@kernel.org/
+Grabbing thread from lore.kernel.org/all/20260423151521.3969-1-deller@kernel.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] MAINTAINERS: Add myself as maintainer for linux-user
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260423151521.3969-1-deller@kernel.org
+  ---
+  [32m✓[0m Signed: DKIM/kernel.org
+---
+Total patches: 1
+---
+Applying: MAINTAINERS: Add myself as maintainer for linux-user
+Patch failed at 0001 MAINTAINERS: Add myself as maintainer for linux-user
+error: patch failed: MAINTAINERS:4074
+error: MAINTAINERS: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
