@@ -238,8 +238,8 @@ struct target_timeval {
 };
 
 struct target__kernel_sock_timeval {
-    abi_llong tv_sec;
-    abi_llong tv_usec;
+    int64_t tv_sec;
+    int64_t tv_usec;
 };
 #endif
 
