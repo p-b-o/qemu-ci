@@ -1,0 +1,24 @@
+Looking up https://lore.kernel.org/all/sXJQOREScD4G6fYInirO2wbLtvZf6EK1yuTrP6U3GQBM5dIq7dhRnCm9uxSSiRRK0b4m7OEZRqEgjzHCTFoS0DruFvYUXh-UUXhkY0x786A%3D@proton.me/
+Grabbing thread from lore.kernel.org/all/sXJQOREScD4G6fYInirO2wbLtvZf6EK1yuTrP6U3GQBM5dIq7dhRnCm9uxSSiRRK0b4m7OEZRqEgjzHCTFoS0DruFvYUXh-UUXhkY0x786A%3D@proton.me/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] hw/usb/xhci: clamp interval exponent to avoid UB shift in xhci_init_epctx()
+    + Link: https://lore.kernel.org/qemu-devel/sXJQOREScD4G6fYInirO2wbLtvZf6EK1yuTrP6U3GQBM5dIq7dhRnCm9uxSSiRRK0b4m7OEZRqEgjzHCTFoS0DruFvYUXh-UUXhkY0x786A=@proton.me
+  ---
+  [32m✓[0m Signed: DKIM/proton.me
+---
+Total patches: 1
+---
+Applying: hw/usb/xhci: clamp interval exponent to avoid UB shift in xhci_init_epctx()
+Patch failed at 0001 hw/usb/xhci: clamp interval exponent to avoid UB shift in xhci_init_epctx()
+error: corrupt patch at line 10
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
