@@ -1582,6 +1582,7 @@ static void virtio_gpu_reset_bh(void *opaque)
 {
     VirtIOGPU *g = VIRTIO_GPU(opaque);
     VirtIOGPUClass *vgc = VIRTIO_GPU_GET_CLASS(g);
+    struct virtio_gpu_ctrl_command *cmd;
     struct virtio_gpu_simple_resource *res, *tmp;
     uint32_t resource_id;
     Error *local_err = NULL;
@@ -1601,29 +1602,6 @@ static void virtio_gpu_reset_bh(void *opaque)
         }
     }
 
-    for (i = 0; i < g->parent_obj.conf.max_outputs; i++) {
-        dpy_gfx_replace_surface(g->parent_obj.scanout[i].con, NULL);
-    }
-
-    g->reset_finished = true;
-    qemu_cond_signal(&g->reset_cond);
-}
-
-void virtio_gpu_reset(VirtIODevice *vdev)
-{
-    VirtIOGPU *g = VIRTIO_GPU(vdev);
-    struct virtio_gpu_ctrl_command *cmd;
-
-    if (qemu_in_vcpu_thread()) {
-        g->reset_finished = false;
-        qemu_bh_schedule(g->reset_bh);
-        while (!g->reset_finished) {
-            qemu_cond_wait_bql(&g->reset_cond);
-        }
-    } else {
-        aio_bh_call(g->reset_bh);
-    }
-
     while (!QTAILQ_EMPTY(&g->cmdq)) {
         cmd = QTAILQ_FIRST(&g->cmdq);
         QTAILQ_REMOVE(&g->cmdq, cmd, next);
@@ -1637,7 +1615,29 @@ void virtio_gpu_reset(VirtIODevice *vdev)
         g_free(cmd);
     }
 
-    virtio_gpu_base_reset(VIRTIO_GPU_BASE(vdev));
+    for (i = 0; i < g->parent_obj.conf.max_outputs; i++) {
+        dpy_gfx_replace_surface(g->parent_obj.scanout[i].con, NULL);
+    }
+
+    virtio_gpu_base_reset(VIRTIO_GPU_BASE(g));
+
+    g->reset_finished = true;
+    qemu_cond_signal(&g->reset_cond);
+}
+
+void virtio_gpu_reset(VirtIODevice *vdev)
+{
+    VirtIOGPU *g = VIRTIO_GPU(vdev);
+
+    if (qemu_in_vcpu_thread()) {
+        g->reset_finished = false;
+        qemu_bh_schedule(g->reset_bh);
+        while (!g->reset_finished) {
+            qemu_cond_wait_bql(&g->reset_cond);
+        }
+    } else {
+        aio_bh_call(g->reset_bh);
+    }
 }
 
 static void
