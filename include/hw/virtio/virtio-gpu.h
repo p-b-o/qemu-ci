@@ -195,9 +195,7 @@ struct VirtIOGPU {
 
     QEMUBH *ctrl_bh;
     QEMUBH *cursor_bh;
-    QEMUBH *reset_bh;
-    QemuCond reset_cond;
-    bool reset_finished;
+    bool reset_pending;
 
     QTAILQ_HEAD(, virtio_gpu_simple_resource) reslist;
     QTAILQ_HEAD(, virtio_gpu_ctrl_command) cmdq;

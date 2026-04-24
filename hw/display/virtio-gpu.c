@@ -40,7 +40,7 @@ virtio_gpu_find_check_resource(VirtIOGPU *g, uint32_t resource_id,
                                bool require_backing,
                                const char *caller, uint32_t *error);
 
-static void virtio_gpu_reset_bh(void *opaque);
+static void virtio_gpu_reset_bh(VirtIOGPU *g);
 
 void virtio_gpu_update_cursor_data(VirtIOGPU *g,
                                    struct virtio_gpu_scanout *s,
@@ -1138,6 +1138,7 @@ static void virtio_gpu_ctrl_bh(void *opaque)
     VirtIOGPU *g = opaque;
     VirtIOGPUClass *vgc = VIRTIO_GPU_GET_CLASS(g);
 
+    virtio_gpu_reset_bh(g);
     vgc->handle_ctrl(VIRTIO_DEVICE(g), g->ctrl_vq);
 }
 
@@ -1176,6 +1177,7 @@ static void virtio_gpu_handle_cursor(VirtIODevice *vdev, VirtQueue *vq)
 static void virtio_gpu_cursor_bh(void *opaque)
 {
     VirtIOGPU *g = opaque;
+    virtio_gpu_reset_bh(g);
     virtio_gpu_handle_cursor(&g->parent_obj.parent_obj, g->cursor_vq);
 }
 
@@ -1560,8 +1562,6 @@ void virtio_gpu_device_realize(DeviceState *qdev, Error **errp)
     g->cursor_vq = virtio_get_queue(vdev, 1);
     g->ctrl_bh = virtio_bh_io_new_guarded(qdev, virtio_gpu_ctrl_bh, g);
     g->cursor_bh = virtio_bh_io_new_guarded(qdev, virtio_gpu_cursor_bh, g);
-    g->reset_bh = virtio_bh_io_new_guarded(qdev, virtio_gpu_reset_bh, g);
-    qemu_cond_init(&g->reset_cond);
     QTAILQ_INIT(&g->reslist);
     QTAILQ_INIT(&g->cmdq);
     QTAILQ_INIT(&g->fenceq);
@@ -1573,20 +1573,21 @@ static void virtio_gpu_device_unrealize(DeviceState *qdev)
 
     g_clear_pointer(&g->ctrl_bh, qemu_bh_delete);
     g_clear_pointer(&g->cursor_bh, qemu_bh_delete);
-    g_clear_pointer(&g->reset_bh, qemu_bh_delete);
-    qemu_cond_destroy(&g->reset_cond);
     virtio_gpu_base_device_unrealize(qdev);
 }
 
-static void virtio_gpu_reset_bh(void *opaque)
+static void virtio_gpu_reset_bh(VirtIOGPU *g)
 {
-    VirtIOGPU *g = VIRTIO_GPU(opaque);
     VirtIOGPUClass *vgc = VIRTIO_GPU_GET_CLASS(g);
     struct virtio_gpu_ctrl_command *cmd;
     struct virtio_gpu_simple_resource *res, *tmp;
     uint32_t resource_id;
     Error *local_err = NULL;
     int i = 0;
+
+    if (!g->reset_pending) {
+        return;
+    }
 
     QTAILQ_FOREACH_SAFE(res, &g->reslist, next, tmp) {
         resource_id = res->resource_id;
@@ -1621,22 +1622,19 @@ static void virtio_gpu_reset_bh(void *opaque)
 
     virtio_gpu_base_reset(VIRTIO_GPU_BASE(g));
 
-    g->reset_finished = true;
-    qemu_cond_signal(&g->reset_cond);
+    g->reset_pending = false;
 }
 
 void virtio_gpu_reset(VirtIODevice *vdev)
 {
     VirtIOGPU *g = VIRTIO_GPU(vdev);
 
+    g->reset_pending = true;
+
     if (qemu_in_vcpu_thread()) {
-        g->reset_finished = false;
-        qemu_bh_schedule(g->reset_bh);
-        while (!g->reset_finished) {
-            qemu_cond_wait_bql(&g->reset_cond);
-        }
+        qemu_bh_schedule(g->ctrl_bh);
     } else {
-        aio_bh_call(g->reset_bh);
+        virtio_gpu_reset_bh(g);
     }
 }
 
