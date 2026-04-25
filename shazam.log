@@ -1,0 +1,52 @@
+Looking up https://lore.kernel.org/all/20260425155140.50186-1-deller@kernel.org/
+Grabbing thread from lore.kernel.org/all/20260425155140.50186-1-deller@kernel.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 15 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 44 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/14] MAINTAINERS: Add myself as maintainer for linux-user
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-2-deller@kernel.org
+  [32m✓[0m [PATCH 2/14] linux-user/ppc: Fix ppc64 rt_sigframe stack offset
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-3-deller@kernel.org
+  [32m✓[0m [PATCH 3/14] linux-user: fix off-by-one in host_to_target_for_each_rtattr()
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-4-deller@kernel.org
+  [32m✓[0m [PATCH 4/14] linux-user: Don't define target_stat64 struct for loongarch64
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-5-deller@kernel.org
+  [32m✓[0m [PATCH 5/14] linux-user/arm/nwfpe: Replace user_registers with current_cpu
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-6-deller@kernel.org
+  [32m✓[0m [PATCH 6/14] linux-user/arm/nwfpe: Use thread-local storage for qemufpa
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-7-deller@kernel.org
+  [32m✓[0m [PATCH 7/14] linux-user/strace: Use pointer type for read and write values
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-8-deller@kernel.org
+  [32m✓[0m [PATCH 8/14] linux-user/mips: sync k0 TLS for EF_MIPS_MACH_OCTEON userlands
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-9-deller@kernel.org
+  [32m✓[0m [PATCH 9/14] linux-user: Define SO_TIMESTAMP*_NEW and SO_RCVTIMEIO_NEW
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-10-deller@kernel.org
+  [32m✓[0m [PATCH 10/14] linux-user: Add setsockopt() for SO_RCVTIMEO_NEW and SO_SNDTIMEO_NEW
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-11-deller@kernel.org
+  [32m✓[0m [PATCH 11/14] linux-user: Add getsockopt() for SO_RCVTIMEO_NEW and SO_SNDTIMEO_NEW
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-12-deller@kernel.org
+  [32m✓[0m [PATCH 12/14] linux-user: Fix CLONE_PARENT_SETTID when using fork-like clone
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-13-deller@kernel.org
+  [32m✓[0m [PATCH 13/14] linux-user: Use abi_int for imr_ifindex in ip_mreqn struct
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-14-deller@kernel.org
+  [32m✓[0m [PATCH 14/14] linux-user: Flush errors by using exit() instead of _exit() in error path
+    + Reviewed-by: Warner Losh <imp@bsdimp.com> ([32m✓[0m DKIM/bsdimp-com.20251104.gappssmtp.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260425155140.50186-15-deller@kernel.org
+  ---
+  [32m✓[0m Signed: DKIM/kernel.org
+---
+Total patches: 14
+---
+Applying: MAINTAINERS: Add myself as maintainer for linux-user
+Patch failed at 0001 MAINTAINERS: Add myself as maintainer for linux-user
+error: patch failed: MAINTAINERS:4075
+error: MAINTAINERS: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
