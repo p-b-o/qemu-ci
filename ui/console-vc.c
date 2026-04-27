@@ -1081,6 +1081,7 @@ qemu_text_console_finalize(Object *obj)
 {
     QemuTextConsole *s = QEMU_TEXT_CONSOLE(obj);
 
+    fifo8_destroy(&s->out_fifo);
     QTAILQ_REMOVE(&vt100s, &s->vt, list);
 }
 
