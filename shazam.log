@@ -1,0 +1,32 @@
+Looking up https://lore.kernel.org/all/20260427200134.453022-1-armenon@redhat.com/
+Grabbing thread from lore.kernel.org/all/20260427200134.453022-1-armenon@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Nothing matching that query.
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] tpm: Dynamically allocate tpm-tis buffer
+    + Link: https://lore.kernel.org/qemu-devel/20260427200134.453022-1-armenon@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 1
+---
+Applying: tpm: Dynamically allocate tpm-tis buffer
+Patch failed at 0001 tpm: Dynamically allocate tpm-tis buffer
+error: patch failed: hw/tpm/tpm_tis_common.c:901
+error: hw/tpm/tpm_tis_common.c: patch does not apply
+error: patch failed: hw/tpm/tpm_tis_i2c.c:117
+error: hw/tpm/tpm_tis_i2c.c: patch does not apply
+error: patch failed: hw/tpm/tpm_tis_isa.c:49
+error: hw/tpm/tpm_tis_isa.c: patch does not apply
+error: patch failed: hw/tpm/tpm_tis_sysbus.c:49
+error: hw/tpm/tpm_tis_sysbus.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
