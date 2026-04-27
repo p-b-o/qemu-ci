@@ -1,0 +1,42 @@
+Looking up https://lore.kernel.org/all/20260427060928.2322570-1-max.chou@sifive.com/
+Grabbing thread from lore.kernel.org/all/20260427060928.2322570-1-max.chou@sifive.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 119 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v5 1/9] target/riscv: rvv: Fix NOP_UU_B vs2 width
+    + Link: https://lore.kernel.org/qemu-devel/20260427060928.2322570-2-max.chou@sifive.com
+  [32m✓[0m [PATCH v5 2/9] target/riscv: Add cfg property for Zvfofp8min extension
+    + Link: https://lore.kernel.org/qemu-devel/20260427060928.2322570-3-max.chou@sifive.com
+  [32m✓[0m [PATCH v5 3/9] target/riscv: Add implied rules for Zvfofp8min extension
+    + Link: https://lore.kernel.org/qemu-devel/20260427060928.2322570-4-max.chou@sifive.com
+  [32m✓[0m [PATCH v5 4/9] target/riscv: rvv: Make vfwcvtbf16.f.f.v support OFP8 to BF16 conversion for Zvfofp8min extension
+    + Link: https://lore.kernel.org/qemu-devel/20260427060928.2322570-5-max.chou@sifive.com
+  [32m✓[0m [PATCH v5 5/9] target/riscv: rvv: Make vfncvtbf16.f.f.w support BF16 to OFP8 conversion for Zvfofp8min extension
+    + Link: https://lore.kernel.org/qemu-devel/20260427060928.2322570-6-max.chou@sifive.com
+  [32m✓[0m [PATCH v5 6/9] target/riscv: rvv: Add vfncvtbf16.sat.f.f.w instruction for Zvfofp8min extension
+    + Link: https://lore.kernel.org/qemu-devel/20260427060928.2322570-7-max.chou@sifive.com
+  [32m✓[0m [PATCH v5 7/9] target/riscv: rvv: Add vfncvt.f.f.q and vfncvt.sat.f.f.q instructions for Zvfofp8min extension
+    + Link: https://lore.kernel.org/qemu-devel/20260427060928.2322570-8-max.chou@sifive.com
+  [32m✓[0m [PATCH v5 8/9] target/riscv: Expose Zvfofp8min property
+    + Link: https://lore.kernel.org/qemu-devel/20260427060928.2322570-9-max.chou@sifive.com
+  [32m✓[0m [PATCH v5 9/9] disas/riscv: Add support of Zvfofp8min extension
+    + Link: https://lore.kernel.org/qemu-devel/20260427060928.2322570-10-max.chou@sifive.com
+  ---
+  [32m✓[0m Signed: DKIM/sifive.com
+---
+Total patches: 9
+---
+Applying: target/riscv: rvv: Fix NOP_UU_B vs2 width
+Applying: target/riscv: Add cfg property for Zvfofp8min extension
+Patch failed at 0002 target/riscv: Add cfg property for Zvfofp8min extension
+error: patch failed: target/riscv/vector_helper.c:38
+error: target/riscv/vector_helper.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
