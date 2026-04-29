@@ -1,0 +1,43 @@
+Looking up https://lore.kernel.org/all/20260429135717.3048713-1-joshualant@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260429135717.3048713-1-joshualant@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC 1/10] docs: Add documentation for cxl-vcs-switch
+    + Link: https://lore.kernel.org/qemu-devel/20260429135717.3048713-2-joshualant@gmail.com
+  [32m✓[0m [PATCH RFC 2/10] qdev/qbus: Allow hidden devices to be busless on QEMU startup
+    + Link: https://lore.kernel.org/qemu-devel/20260429135717.3048713-3-joshualant@gmail.com
+  [32m✓[0m [PATCH RFC 3/10] cxl-type3: Properly unmap the memory-backend on device exit
+    + Link: https://lore.kernel.org/qemu-devel/20260429135717.3048713-4-joshualant@gmail.com
+  [32m✓[0m [PATCH RFC 4/10] cxl_downstream: enable power controller present capability.
+    + Link: https://lore.kernel.org/qemu-devel/20260429135717.3048713-5-joshualant@gmail.com
+  [32m✓[0m [PATCH RFC 5/10] cxl-vcs-switch: Initial support for CXL VCS.
+    + Link: https://lore.kernel.org/qemu-devel/20260429135717.3048713-6-joshualant@gmail.com
+  [32m✓[0m [PATCH RFC 6/10] cxl-upstream-port: Add support for targeting a VCS switch
+    + Link: https://lore.kernel.org/qemu-devel/20260429135717.3048713-7-joshualant@gmail.com
+  [32m✓[0m [PATCH RFC 7/10] cxl-downstream-port: Add support for VCS switching
+    + Link: https://lore.kernel.org/qemu-devel/20260429135717.3048713-8-joshualant@gmail.com
+  [32m✓[0m [PATCH RFC 8/10] cxl-cci-mailbox: Add support for targeting a VCS switch
+    + Link: https://lore.kernel.org/qemu-devel/20260429135717.3048713-9-joshualant@gmail.com
+  [32m✓[0m [PATCH RFC 9/10] cxl-mailbox-utils: Add support for VCS bind/unbind commands.
+    + Link: https://lore.kernel.org/qemu-devel/20260429135717.3048713-10-joshualant@gmail.com
+  [32m✓[0m [PATCH RFC 10/10] cxl-mailbox-utils: Add support for VCS Get Virtual CXL Switch Info command.
+    + Link: https://lore.kernel.org/qemu-devel/20260429135717.3048713-11-joshualant@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 10
+---
+Applying: docs: Add documentation for cxl-vcs-switch
+Patch failed at 0001 docs: Add documentation for cxl-vcs-switch
+error: patch failed: docs/system/devices/cxl.rst:467
+error: docs/system/devices/cxl.rst: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
