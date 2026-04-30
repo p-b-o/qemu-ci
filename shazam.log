@@ -1,0 +1,27 @@
+Looking up https://lore.kernel.org/all/20260430050103.3172190-1-physicalmtea@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260430050103.3172190-1-physicalmtea@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] hw/cxl: bound Set Feature cleanup to written extent
+    + Link: https://lore.kernel.org/qemu-devel/20260430050103.3172190-1-physicalmtea@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 1
+---
+Applying: hw/cxl: bound Set Feature cleanup to written extent
+Patch failed at 0001 hw/cxl: bound Set Feature cleanup to written extent
+error: patch failed: hw/cxl/cxl-mailbox-utils.c:1820
+error: hw/cxl/cxl-mailbox-utils.c: patch does not apply
+error: patch failed: tests/qtest/cxl-test.c:99
+error: tests/qtest/cxl-test.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
