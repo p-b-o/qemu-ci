@@ -1,0 +1,141 @@
+Looking up https://lore.kernel.org/all/20260430000524.56046-1-richard.henderson@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260430000524.56046-1-richard.henderson@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 41 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 140 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/40] fpu: Inline float8_e4m3_pack_raw to single caller
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 2/40] fpu: Inline float8_e5m2_pack_raw into single caller
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 3/40] fpu: Inline float16_pack_raw into callers
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 4/40] fpu: Inline bfloat16_pack_raw into callers
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 5/40] fpu: Inline float32_pack_raw into callers
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 6/40] fpu: Inline float64_pack_raw into callers
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-7-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 7/40] fpu: Mark unpack_raw64 QEMU_ALWAYS_INLINE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 8/40] fpu: Mark pack_raw64 QEMU_ALWAYS_INLINE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 9/40] fpu: Split FloatParts{64,128} to softfloat-parts.h
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 10/40] fpu: Export FloatFmt structures
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-11-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 11/40] fpu: Export unpack_canonical and round_pack_canonical routines
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-12-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 12/40] fpu: Return struct from parts{64,128}_default_nan
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-13-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 13/40] fpu: Return struct from parts{64,128}_silence_nan
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-14-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 14/40] fpu: Return struct from parts{64,128}_return_nan
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-15-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 15/40] fpu: Sink exp_bias adjustment in float64r32_pack_raw
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-16-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 16/40] fpu: Return struct from parts{64,128}_pick_nan
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-17-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 17/40] fpu: Return struct from parts{64,128}_div
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-18-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 18/40] fpu: Return struct from parts{64,128}_round_to_int
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-19-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 19/40] fpu: Use parts64_round_to_int in parts_s390_divide_to_integer
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-20-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 20/40] fpu: Export default_nan, pick_nan, return_nan routines
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-21-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 21/40] fpu: Introduce parts64_round_to_fmt
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-22-richard.henderson@linaro.org
+  [31m✗[0m [PATCH v2 22/40] fpu: Return struct from parts{64, 128}_pick_nan_muladd
+    [31m✗[0m BADSIG: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-23-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 23/40] fpu: Introduce record_denormals_used
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-24-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 24/40] fpu: Split scalbn from partsN(muladd_scalbn)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-25-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 25/40] fpu: Reorganize partsN(muladd)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-26-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 26/40] fpu: Return struct from parts{64,128}_muladd
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-27-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 27/40] fpu: Drop QEMU_FLATTEN from muladd routines
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-28-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 28/40] fpu: Export parts{64,128}_compare
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-29-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 29/40] fpu: Return struct from parts{64,128}_mul
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-30-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 30/40] fpu: Hoist nan check in partsN_addsub
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-31-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 31/40] fpu: Return struct from parts{64,128}_addsub
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-32-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 32/40] fpu: Simplify 0 +/- N case in parts_addsub
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-33-richard.henderson@linaro.org
+  [31m✗[0m [PATCH v2 33/40] target/s390x: Move float{32, 64}_s390_divide_to_integer
+    [31m✗[0m BADSIG: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-34-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 34/40] target/arm: Use FloatParts64 in bfdotadd_ebf
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-35-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 35/40] target/arm: Drop oddstatus from is_ebf and bfdotadd_ebf
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-36-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 36/40] target/arm: Use FloatParts64 in f16_dotadd
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-37-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 37/40] fpu: Return struct from parts{64,128}_scalbn
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-38-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 38/40] host-utils: Introduce signed saturation primitives
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-39-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 39/40] fpu: Saturate the exponent in uncanon_normal
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-40-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 40/40] fpu: Introduce exp_scalbn
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260430000524.56046-41-richard.henderson@linaro.org
+---
+Total patches: 40
+---
+Applying: fpu: Inline float8_e4m3_pack_raw to single caller
+Patch failed at 0001 fpu: Inline float8_e4m3_pack_raw to single caller
+error: patch failed: fpu/softfloat.c:1474
+error: fpu/softfloat.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
