@@ -3223,7 +3223,7 @@ sub process {
 				MemoryRegionOps|
 				MemoryRegionPortio|
 				QEMUFileOps|
-				SCSIBusInfo|
+				SCSIBusOps|
 				SCSIReqOps|
 				Spice[A-Z][a-zA-Z0-9]*Interface|
 				TypeInfo|
