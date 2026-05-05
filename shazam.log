@@ -1,0 +1,55 @@
+Looking up https://lore.kernel.org/all/20260505081423.28326-1-avihaih@nvidia.com/
+Grabbing thread from lore.kernel.org/all/20260505081423.28326-1-avihaih@nvidia.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 15 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 9 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/14] scripts/update-linux-headers: Add typelimits.h
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-2-avihaih@nvidia.com
+  [32m✓[0m [PATCH 2/14] linux-headers: Update to Linux v7.1-rc1
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-3-avihaih@nvidia.com
+  [32m✓[0m [PATCH 3/14] migration: Propagate errors in migration_completion_precopy()
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-4-avihaih@nvidia.com
+  [32m✓[0m [PATCH 4/14] migration: Log the approver in qemu_loadvm_approve_switchover()
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-5-avihaih@nvidia.com
+  [32m✓[0m [PATCH 5/14] migration: Replace switchover_ack_needed SaveVMHandler
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-6-avihaih@nvidia.com
+  [32m✓[0m [PATCH 6/14] migration: Rename switchover-ack code to legacy
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-7-avihaih@nvidia.com
+  [32m✓[0m [PATCH 7/14] migration: Make switchover-ack re-usable
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-8-avihaih@nvidia.com
+  [32m✓[0m [PATCH 8/14] migration: Check switchover-ack during switchover phase
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-9-avihaih@nvidia.com
+  [32m✓[0m [PATCH 9/14] vfio/migration: Re-query precopy size before sending VFIO_MIG_FLAG_DEV_INIT_DATA_SENT
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-10-avihaih@nvidia.com
+  [32m✓[0m [PATCH 10/14] vfio/migration: Add Error ** parameter to vfio_migration_init()
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-11-avihaih@nvidia.com
+  [32m✓[0m [PATCH 11/14] vfio/migration: Add new switchover-ack mechanism
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-12-avihaih@nvidia.com
+  [32m✓[0m [PATCH 12/14] vfio/migration: Implement VFIO_PRECOPY_INFO_REINIT feature
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-13-avihaih@nvidia.com
+  [32m✓[0m [PATCH 13/14] vfio/migration: Check VFIO_PRECOPY_INFO_REINIT during switchover
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-14-avihaih@nvidia.com
+  [32m✓[0m [PATCH 14/14] migration: Enable new switchover-ack
+    + Link: https://lore.kernel.org/qemu-devel/20260505081423.28326-15-avihaih@nvidia.com
+  ---
+  [32m✓[0m Signed: DKIM/nvidia.com
+---
+Total patches: 14
+---
+Applying: scripts/update-linux-headers: Add typelimits.h
+Applying: linux-headers: Update to Linux v7.1-rc1
+Applying: migration: Propagate errors in migration_completion_precopy()
+Applying: migration: Log the approver in qemu_loadvm_approve_switchover()
+Applying: migration: Replace switchover_ack_needed SaveVMHandler
+Patch failed at 0005 migration: Replace switchover_ack_needed SaveVMHandler
+error: patch failed: migration/trace-events:8
+error: migration/trace-events: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
