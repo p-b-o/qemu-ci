@@ -1,0 +1,29 @@
+Looking up https://lore.kernel.org/all/20260506032643.2510575-1-jamin_lin@aspeedtech.com/
+Grabbing thread from lore.kernel.org/all/20260506032643.2510575-1-jamin_lin@aspeedtech.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v1 1/2] hw/usb/hcd-ehci: Rename migration compatibility fetch address fields
+    + Link: https://lore.kernel.org/qemu-devel/20260506032643.2510575-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 2/2] hw/usb/hcd-ehci: Rename CTRLDSSEGMENT default property
+    + Link: https://lore.kernel.org/qemu-devel/20260506032643.2510575-3-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 2
+---
+Applying: hw/usb/hcd-ehci: Rename migration compatibility fetch address fields
+Patch failed at 0001 hw/usb/hcd-ehci: Rename migration compatibility fetch address fields
+error: patch failed: hw/usb/hcd-ehci.h:262
+error: hw/usb/hcd-ehci.h: patch does not apply
+error: patch failed: hw/usb/hcd-ehci.c:2482
+error: hw/usb/hcd-ehci.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
