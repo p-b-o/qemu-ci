@@ -1,0 +1,81 @@
+Looking up https://lore.kernel.org/all/20260507221717.486023-1-richard.henderson@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260507221717.486023-1-richard.henderson@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 19 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/18] target/alpha: Remove CONFIG_SOFTFLOAT_INLINE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 2/18] fpu: Introduce FloatExceptionFlags
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 3/18] target/alpha: Use FloatExceptionFlags
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 4/18] fpu: Introduce FloatSNaNRule
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 5/18] fpu: Use {get,set}_float_rounding_mode everywhere
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-6-richard.henderson@linaro.org
+  [31m✗[0m [PATCH 6/18] fpu: Use of {get, set}_floatx80_rounding_precision everywhere
+    [31m✗[0m BADSIG: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-7-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 7/18] fpu: Use get_floatx80_behaviour everywhere
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 8/18] fpu: Use get_float_2nan_prop_rule in partsN_pick_nan
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 9/18] fpu: Use get_float_3nan_prop_rule in partsN_pick_nan_muladd
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 10/18] fpu: Use get_float_infzeronan_rule in partsN_pick_nan_muladd
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-11-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 11/18] fpu: Use accessors for tininess_before_rounding
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-12-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 12/18] fpu: Use {get,set}_flush_to_zero everywhere
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-13-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 13/18] fpu: Use accessors for ftz_before_rounding
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-14-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 14/18] fpu: Use {get,set}_flush_inputs_to_zero everywhere
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-15-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 15/18] fpu: Use get_default_nan_mode everywhere
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-16-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 16/18] fpu: Use get_float_default_nan_pattern in partsN_default_nan
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-17-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 17/18] fpu: Add accessors for rebias_{underflow,overflow}
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-18-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 18/18] fpu: Reorg float_status
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507221717.486023-19-richard.henderson@linaro.org
+---
+Total patches: 18
+---
+Applying: target/alpha: Remove CONFIG_SOFTFLOAT_INLINE
+Applying: fpu: Introduce FloatExceptionFlags
+Applying: target/alpha: Use FloatExceptionFlags
+Applying: fpu: Introduce FloatSNaNRule
+Applying: fpu: Use {get,set}_float_rounding_mode everywhere
+Patch failed at 0005 fpu: Use {get,set}_float_rounding_mode everywhere
+error: patch failed: fpu/softfloat.c:2791
+error: fpu/softfloat.c: patch does not apply
+error: patch failed: fpu/softfloat-parts.c.inc:568
+error: fpu/softfloat-parts.c.inc: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
