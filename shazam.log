@@ -1,0 +1,54 @@
+Looking up https://lore.kernel.org/all/20260507160959.449170-1-richard.henderson@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260507160959.449170-1-richard.henderson@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 12 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 213 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/11] fpu: Reorganize partsN(muladd)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507160959.449170-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v3 2/11] fpu: Return struct from parts{64,128}_muladd
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507160959.449170-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v3 3/11] fpu: Hoist nan check in partsN_addsub
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507160959.449170-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v3 4/11] fpu: Simplify 0 +/- N case in parts_addsub
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507160959.449170-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v3 5/11] fpu: Use parts64_round_to_int in parts_s390_divide_to_integer
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507160959.449170-6-richard.henderson@linaro.org
+  [31m✗[0m [PATCH v3 6/11] target/s390x: Move float{32, 64}_s390_divide_to_integer
+    [31m✗[0m BADSIG: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507160959.449170-7-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v3 7/11] target/arm: Use FloatParts64 in bfdotadd_ebf
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507160959.449170-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v3 8/11] target/arm: Drop oddstatus from is_ebf and bfdotadd_ebf
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507160959.449170-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v3 9/11] target/arm: Use FloatParts64 in f16_dotadd
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507160959.449170-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v3 10/11] fpu: Saturate the exponent in uncanon_normal
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507160959.449170-11-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v3 11/11] fpu: Introduce exp_scalbn
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260507160959.449170-12-richard.henderson@linaro.org
+---
+Total patches: 11
+---
+Applying: fpu: Reorganize partsN(muladd)
+Patch failed at 0001 fpu: Reorganize partsN(muladd)
+error: patch failed: fpu/softfloat-parts.c.inc:681
+error: fpu/softfloat-parts.c.inc: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
