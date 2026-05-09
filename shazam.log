@@ -1,0 +1,86 @@
+Looking up https://lore.kernel.org/all/20260509-input-v1-0-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp/
+Grabbing thread from lore.kernel.org/all/20260509-input-v1-0-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 29 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH RFC 1/28] ui/input: Introduce QemuInputEvent typedef
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-1-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 2/28] ui/input: Remove QAPI wrappers from QemuInputEvent
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-2-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 3/28] ui/input: Store QKeyCode directly in QemuInputKeyEvent
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-3-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 4/28] ui/input: Use Linux key codes for internal key events
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-4-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 5/28] ui/console: Add qemu_text_console_put_linux()
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-5-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 6/28] ui/kbd-state: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-6-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 7/28] hw/arm/musicpal: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-7-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 8/28] hw/char/escc: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-8-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 9/28] hw/display/xenfb: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-9-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 10/28] hw/input/adb-kbd: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-10-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 11/28] hw/input/hid: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-11-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 12/28] hw/input/ps2: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-12-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 13/28] hw/input/virtio-input: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-13-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 14/28] hw/m68k/next-kbd: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-14-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 15/28] replay: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-15-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 16/28] ui/cocoa: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-16-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 17/28] ui/dbus: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-17-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 18/28] ui/gtk: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-18-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 19/28] ui/input-barrier: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-19-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 20/28] ui/input-legacy: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-20-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 21/28] ui/input-linux: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-21-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 22/28] ui/keymaps: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-22-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 23/28] ui/sdl2: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-23-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 24/28] ui/spice: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-24-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 25/28] ui/vnc: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-25-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 26/28] qemu-keymap: Use Linux key codes
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-26-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 27/28] ui/console: Remove qemu_text_console_put_qcode()
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-27-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH RFC 28/28] ui/input: Remove unused QKeyCode helpers and keymaps
+    + Link: https://lore.kernel.org/qemu-devel/20260509-input-v1-28-66f18d2edde6@rsg.ci.i.u-tokyo.ac.jp
+  ---
+  [31m✗[0m No key: openpgp/odaki@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m BADSIG: DKIM/rsg.ci.i.u-tokyo.ac.jp
+---
+Total patches: 28
+---
+Applying: ui/input: Introduce QemuInputEvent typedef
+Applying: ui/input: Remove QAPI wrappers from QemuInputEvent
+Applying: ui/input: Store QKeyCode directly in QemuInputKeyEvent
+Applying: ui/input: Use Linux key codes for internal key events
+Applying: ui/console: Add qemu_text_console_put_linux()
+Patch failed at 0005 ui/console: Add qemu_text_console_put_linux()
+error: patch failed: include/ui/console.h:109
+error: include/ui/console.h: patch does not apply
+error: patch failed: ui/console.c:23
+error: ui/console.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
