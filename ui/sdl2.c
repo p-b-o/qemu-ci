@@ -212,7 +212,19 @@ static void sdl_update_caption(struct sdl2_console *scon)
     }
 }
 
-static void sdl_hide_cursor(struct sdl2_console *scon)
+/*
+ * sdl_hide_cursor - hide cursor and optionally enable SDL relative mouse mode.
+ *
+ * NOTE: This function is intentionally NOT called from sdl_grab_start() or
+ * sdl_mouse_warp() because SDL_SetRelativeMouseMode(SDL_TRUE) switches SDL2
+ * on XI2-based X servers to consume only XI_RawMotion events. Pointer-
+ * injection servers (VNC via XTestFakeMotionEvent, nested X, some remote
+ * desktop setups) never produce XI_RawMotion, so mouse input would break
+ * under those servers. Those call sites set the cursor state inline
+ * instead. This function is retained as the counterpart of
+ * sdl_show_cursor() and for potential future use.
+ */
+static void G_GNUC_UNUSED sdl_hide_cursor(struct sdl2_console *scon)
 {
     if (scon->opts->has_show_cursor && scon->opts->show_cursor) {
         return;
@@ -267,7 +279,16 @@ static void sdl_grab_start(struct sdl2_console *scon)
             SDL_WarpMouseInWindow(scon->real_window, guest_x, guest_y);
         }
     } else {
-        sdl_hide_cursor(scon);
+        /*
+         * Directly set cursor state, avoid calling sdl_hide_cursor
+         * which would enable SDL_SetRelativeMouseMode(SDL_TRUE) and
+         * break mouse input under XI2-based pointer-injection X servers
+         * (see the note on sdl_hide_cursor).
+         */
+        if (!(scon->opts->has_show_cursor && scon->opts->show_cursor)) {
+            SDL_ShowCursor(SDL_DISABLE);
+            SDL_SetCursor(sdl_cursor_hidden);
+        }
     }
     SDL_SetWindowGrab(scon->real_window, SDL_TRUE);
     gui_grab = 1;
@@ -526,6 +547,34 @@ static void handle_mousemotion(SDL_Event *ev)
     dy = (int64_t)ev->motion.yrel * surf_h / scr_h;
     if (gui_grab || qemu_input_is_absolute(scon->dcl.con) || absolute_enabled) {
         sdl_send_mouse_event(scon, dx, dy, x, y, ev->motion.state);
+
+        /*
+         * For relative pointing devices in grab mode we do not enable
+         * SDL_SetRelativeMouseMode, because under XI2-based X servers
+         * that switches SDL to consume only XI_RawMotion events, which
+         * some pointer-injection servers (VNC via XTestFakeMotionEvent,
+         * nested X, ...) never produce.
+         *
+         * Without relative mode, SDL_SetWindowGrab clamps the host
+         * pointer at the window edge without wrapping, so xrel/yrel
+         * become zero once the pointer hits a side and the guest
+         * cursor gets stuck in that direction.
+         *
+         * Mirror the approach used by the GTK backend (ui/gtk.c):
+         * when the pointer reaches any window edge, warp it back to
+         * the window center so subsequent motion can generate deltas
+         * in every direction again. Edge detection uses window
+         * coordinates (ev->motion.x/y, scr_w/h) regardless of the
+         * window-to-surface scaling applied above.
+         */
+        if (!qemu_input_is_absolute(scon->dcl.con) && !absolute_enabled
+            && gui_grab) {
+            if (ev->motion.x <= 0 || ev->motion.x >= scr_w - 1 ||
+                ev->motion.y <= 0 || ev->motion.y >= scr_h - 1) {
+                SDL_WarpMouseInWindow(scon->real_window,
+                                      scr_w / 2, scr_h / 2);
+            }
+        }
     }
 }
 
@@ -748,7 +797,16 @@ static void sdl_mouse_warp(DisplayChangeListener *dcl,
             }
         }
     } else if (gui_grab) {
-        sdl_hide_cursor(scon);
+        /*
+         * Directly set cursor state, avoid calling sdl_hide_cursor
+         * which would enable SDL_SetRelativeMouseMode(SDL_TRUE) and
+         * break mouse input under XI2-based pointer-injection X servers
+         * (see the note on sdl_hide_cursor).
+         */
+        if (!(scon->opts->has_show_cursor && scon->opts->show_cursor)) {
+            SDL_ShowCursor(SDL_DISABLE);
+            SDL_SetCursor(sdl_cursor_hidden);
+        }
     }
     guest_cursor = on;
     guest_x = x, guest_y = y;
