@@ -1,0 +1,43 @@
+Looking up https://lore.kernel.org/all/20260511123937.32743-1-sarunkod@amd.com/
+Grabbing thread from lore.kernel.org/all/20260511123937.32743-1-sarunkod@amd.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/8] tests/acpi: x86: Allow IVRS acpi table changes
+    + Link: https://lore.kernel.org/qemu-devel/20260511123937.32743-2-sarunkod@amd.com
+  [32m✓[0m [PATCH 2/8] amd_iommu: update PA, GVA and VA size macros
+    + Link: https://lore.kernel.org/qemu-devel/20260511123937.32743-3-sarunkod@amd.com
+  [32m✓[0m [PATCH 3/8] amd_iommu: Return empty efr for stub call
+    + Link: https://lore.kernel.org/qemu-devel/20260511123937.32743-4-sarunkod@amd.com
+  [32m✓[0m [PATCH 4/8] acpi_build: Use IOMMU pci device to build IOMMU device ID
+    + Link: https://lore.kernel.org/qemu-devel/20260511123937.32743-5-sarunkod@amd.com
+  [32m✓[0m [PATCH 5/8] acpi_build: Introduce necessary macros and structs for AMD IOMMU IVRS
+    + Link: https://lore.kernel.org/qemu-devel/20260511123937.32743-6-sarunkod@amd.com
+  [32m✓[0m [PATCH 6/8] acpi_build: Build IVRS feature report using extended feature register
+    + Link: https://lore.kernel.org/qemu-devel/20260511123937.32743-7-sarunkod@amd.com
+  [32m✓[0m [PATCH 7/8] acpi_build: Cleanup AMD IOMMU IVRS building
+    + Link: https://lore.kernel.org/qemu-devel/20260511123937.32743-8-sarunkod@amd.com
+  [32m✓[0m [PATCH 8/8] tests/acpi: x86: update golden masters for IVRS
+    + Link: https://lore.kernel.org/qemu-devel/20260511123937.32743-9-sarunkod@amd.com
+  ---
+  [32m✓[0m Signed: DKIM/amd.com
+---
+Total patches: 8
+---
+Applying: tests/acpi: x86: Allow IVRS acpi table changes
+Applying: amd_iommu: update PA, GVA and VA size macros
+Applying: amd_iommu: Return empty efr for stub call
+Applying: acpi_build: Use IOMMU pci device to build IOMMU device ID
+Applying: acpi_build: Introduce necessary macros and structs for AMD IOMMU IVRS
+Patch failed at 0005 acpi_build: Introduce necessary macros and structs for AMD IOMMU IVRS
+error: patch failed: hw/i386/acpi-build.h:2
+error: hw/i386/acpi-build.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
