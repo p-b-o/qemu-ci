@@ -1,0 +1,35 @@
+Looking up https://lore.kernel.org/all/cover.1778516731.git.chao.liu.zevorn@gmail.com/
+Grabbing thread from lore.kernel.org/all/cover.1778516731.git.chao.liu.zevorn@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Nothing matching that query.
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 27 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v7 1/5] target/riscv: add thead-c908 cpu support
+    + Link: https://lore.kernel.org/qemu-devel/1c7319cd00a50bffeb41f9cc13339a8cd0c07350.1778516731.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v7 2/5] hw/riscv: add k230 board initial support
+    + Link: https://lore.kernel.org/qemu-devel/98d3e3f8d931712fd9148411595608b9bba81053.1778516731.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v7 3/5] hw/watchdog: add k230 watchdog initial support
+    + Link: https://lore.kernel.org/qemu-devel/084e01f04a6a966b04a66ac858436730be15b083.1778516731.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v7 4/5] tests/qtest: add test for K230 watchdog
+    + Link: https://lore.kernel.org/qemu-devel/69be8c8a8b47f4b6283a4a89850fff8cde300137.1778516731.git.chao.liu.zevorn@gmail.com
+  [32m✓[0m [PATCH v7 5/5] docs/system/riscv: add documentation for k230 machine
+    + Link: https://lore.kernel.org/qemu-devel/b3dc23332a8a6f02a15012308fe79f5a172a3837.1778516731.git.chao.liu.zevorn@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 5
+---
+Applying: target/riscv: add thead-c908 cpu support
+Applying: hw/riscv: add k230 board initial support
+Patch failed at 0002 hw/riscv: add k230 board initial support
+error: patch failed: hw/riscv/Kconfig:134
+error: hw/riscv/Kconfig: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
