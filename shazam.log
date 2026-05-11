@@ -1,0 +1,33 @@
+Looking up https://lore.kernel.org/all/20260511113558.3325004-1-dwmw2@infradead.org/
+Grabbing thread from lore.kernel.org/all/20260511113558.3325004-1-dwmw2@infradead.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 5 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/4] KVM: arm64: vgic: Allow userspace to set IIDR revision 1
+    + Link: https://lore.kernel.org/qemu-devel/20260511113558.3325004-2-dwmw2@infradead.org
+  [32m✓[0m [PATCH v3 2/4] KVM: arm64: selftests: Add vgic IIDR revision test
+    + Link: https://lore.kernel.org/qemu-devel/20260511113558.3325004-3-dwmw2@infradead.org
+  [32m✓[0m [PATCH v3 3/4] KVM: arm64: vgic: Remove v2_groups_user_writable and use IIDR revision directly
+    + Link: https://lore.kernel.org/qemu-devel/20260511113558.3325004-4-dwmw2@infradead.org
+  [32m✓[0m [PATCH v3 4/4] KVM: arm64: selftests: Add GICv2 IGROUPR writability test
+    + Link: https://lore.kernel.org/qemu-devel/20260511113558.3325004-5-dwmw2@infradead.org
+  ---
+  [32m✓[0m Signed: DKIM/infradead.org
+---
+Total patches: 4
+---
+Applying: KVM: arm64: vgic: Allow userspace to set IIDR revision 1
+Patch failed at 0001 KVM: arm64: vgic: Allow userspace to set IIDR revision 1
+error: arch/arm64/kvm/vgic/vgic-mmio-v2.c: does not exist in index
+error: arch/arm64/kvm/vgic/vgic-mmio-v3.c: does not exist in index
+error: arch/arm64/kvm/vgic/vgic-mmio.c: does not exist in index
+error: include/kvm/arm_vgic.h: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
