@@ -927,14 +927,39 @@ void *page_get_target_data(vaddr address, size_t size)
 
 /* The system-mode versions of these helpers are in cputlb.c.  */
 
+#if defined(TARGET_SPARC) || defined(TARGET_SPARC64)
+static bool sparc_user_solaris_unaligned_enabled(void)
+{
+    static int enabled = -1;
+
+    if (unlikely(enabled < 0)) {
+        const char *env = getenv("QEMU_SPARC_SOLARIS_UNALIGNED");
+        enabled = env && env[0] != '\0' && env[0] != '0';
+    }
+    return enabled;
+}
+#else
+static bool sparc_user_solaris_unaligned_enabled(void)
+{
+    return false;
+}
+#endif
+
 static void *cpu_mmu_lookup(CPUState *cpu, vaddr addr,
                             MemOp mop, uintptr_t ra, MMUAccessType type)
 {
     int a_bits = memop_alignment_bits(mop);
     void *ret;
 
-    /* Enforce guest required alignment.  */
-    if (unlikely(addr & ((1 << a_bits) - 1))) {
+    /*
+     * Enforce guest-required alignment by default.  Solaris/SPARC user-mode
+     * binaries may rely on the Solaris kernel emulating unaligned integer
+     * loads/stores, so allow an opt-in linux-user compatibility mode for that
+     * case.  This file is user-mode only; system-mode keeps using cputlb.c and
+     * the target do_unaligned_access hook.
+     */
+    if (!sparc_user_solaris_unaligned_enabled() &&
+        unlikely(addr & ((1 << a_bits) - 1))) {
         cpu_loop_exit_sigbus(cpu, addr, type, ra);
     }
 
