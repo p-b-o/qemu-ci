@@ -1,0 +1,58 @@
+Looking up https://lore.kernel.org/all/20260512032926.1978818-1-daniel.barboza@oss.qualcomm.com/
+Grabbing thread from lore.kernel.org/all/20260512032926.1978818-1-daniel.barboza@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 17 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 14 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/14] target/riscv/cpu.c: add xlrbr isa_edata_arr[] entry
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-2-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 2/14] target/riscv/cpu.c: fix smctr/ssctr isa_edata_arr[] order
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-3-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 3/14] target/riscv: make riscv-qmp-cmds use isa_data_arr[]
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-4-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 4/14] target/riscv/tcg: treat all exts equally in cpu_disable_priv_spec_isa_exts
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-5-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 5/14] target/riscv/tcg: use only isa_edata_arr[] in cpu_cfg_ext_get_name()
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-6-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 6/14] target/riscv/cpu.c: remove riscv_cpu_enable_named_feat()
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-7-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 7/14] target/riscv: remove riscv_cpu_named_features[]
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-8-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 8/14] target/riscv/tcg: use isa_edata_arr[] in riscv_cpu_update_misa_x()
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-9-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 9/14] target/riscv/kvm: use isa_edata_arr[] for unavailable props
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-10-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 10/14] target/riscv/tcg: use isa_edata_arr[] to enable max exts
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-11-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 11/14] target/riscv/tcg: use cfg_offset as cpu_set_multi_ext cb opaque
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-12-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 12/14] target/riscv: do not set defaults in cpu prop callback
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-13-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 13/14] target/riscv/tcg: use isa_edata_arr[] to create user props
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-14-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 14/14] target/riscv/cpu: remove riscv_cpu_* arrays
+    + Link: https://lore.kernel.org/qemu-devel/20260512032926.1978818-15-daniel.barboza@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 14
+---
+Applying: target/riscv/cpu.c: add xlrbr isa_edata_arr[] entry
+Applying: target/riscv/cpu.c: fix smctr/ssctr isa_edata_arr[] order
+Applying: target/riscv: make riscv-qmp-cmds use isa_data_arr[]
+Applying: target/riscv/tcg: treat all exts equally in cpu_disable_priv_spec_isa_exts
+Applying: target/riscv/tcg: use only isa_edata_arr[] in cpu_cfg_ext_get_name()
+Applying: target/riscv/cpu.c: remove riscv_cpu_enable_named_feat()
+Applying: target/riscv: remove riscv_cpu_named_features[]
+Applying: target/riscv/tcg: use isa_edata_arr[] in riscv_cpu_update_misa_x()
+Patch failed at 0008 target/riscv/tcg: use isa_edata_arr[] in riscv_cpu_update_misa_x()
+error: patch failed: target/riscv/tcg/tcg-cpu.c:1155
+error: target/riscv/tcg/tcg-cpu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
