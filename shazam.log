@@ -1,0 +1,43 @@
+Looking up https://lore.kernel.org/all/20260511190634.472174-1-richard.henderson@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260511190634.472174-1-richard.henderson@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 14 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/5] meson: Build target-info-qom.c with -fno-lto
+    + Link: https://lore.kernel.org/qemu-devel/20260511190634.472174-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 2/5] target-info: Expose target_info as const data
+    + Link: https://lore.kernel.org/qemu-devel/20260511190634.472174-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 3/5] target-info: Merge target-info-impl.h into target-info.h
+    + Reviewed-by: Pierrick Bouvier <pierrick.bouvier@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260511190634.472174-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 4/5] target-info: Merge target-info-qapi.h into target-info.h
+    + Reviewed-by: Pierrick Bouvier <pierrick.bouvier@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260511190634.472174-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 5/5] target-info: Inline accessors
+    + Link: https://lore.kernel.org/qemu-devel/20260511190634.472174-6-richard.henderson@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 5
+---
+Applying: meson: Build target-info-qom.c with -fno-lto
+Applying: target-info: Expose target_info as const data
+Patch failed at 0002 target-info: Expose target_info as const data
+error: include/qemu/target-info-init.h: does not exist in index
+error: patch failed: configs/targets/aarch64-softmmu.c:7
+error: configs/targets/aarch64-softmmu.c: patch does not apply
+error: patch failed: configs/targets/arm-softmmu.c:7
+error: configs/targets/arm-softmmu.c: patch does not apply
+error: patch failed: target-info-qom.c:6
+error: target-info-qom.c: patch does not apply
+error: patch failed: target-info-stub.c:7
+error: target-info-stub.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
