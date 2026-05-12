@@ -1,0 +1,20 @@
+Looking up https://lore.kernel.org/all/CAA4bVAFS4aRjW7On7C0Y5MQH94TmLfXMwcD%2B8dWzKBD4JZL3Fg@mail.gmail.com/
+Grabbing thread from lore.kernel.org/all/CAA4bVAFS4aRjW7On7C0Y5MQH94TmLfXMwcD%2B8dWzKBD4JZL3Fg@mail.gmail.com/t.mbox.gz
+Analyzing 2 messages in the thread
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] target/riscv: rdcycleh problem
+    + Link: https://lore.kernel.org/qemu-devel/CAA4bVAFS4aRjW7On7C0Y5MQH94TmLfXMwcD+8dWzKBD4JZL3Fg@mail.gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 1
+---
+Applying: target/riscv: rdcycleh problem
+Patch failed at 0001 target/riscv: rdcycleh problem
+error: corrupt patch at line 4
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
