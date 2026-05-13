@@ -1,0 +1,253 @@
+Looking up https://lore.kernel.org/all/qemu-stable-10.0.10-20260512103844@cover.tls.msk.ru/
+Grabbing thread from lore.kernel.org/all/qemu-stable-10.0.10-20260512103844@cover.tls.msk.ru/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 108 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 2327 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/107] hw/net/rtl8319: Work around GCC sanitizer / -Wstringop-overflow bug
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-1-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 2/107] linux-user: Fix zero_bss for RX PT_LOAD segments
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-2-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 3/107] linux-user: fix mremap with old_size=0 for shared mappings
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-3-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 4/107] hw/dma/pl080: Handle bogus swidth and dwidth in transfers
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-4-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 5/107] hw/dma/pl080: Update interrupts after pl080_run()
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-5-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 6/107] hw/dma/pl080: Ignore bottom 2 bits of LLI register
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-6-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 7/107] target/i386: fix NULL pointer dereference in legacy-cache=off handling
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-7-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 8/107] throttle-group: Fix race condition in throttle_group_restart_queue()
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-8-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 9/107] block/mirror: fix assertion failure upon duplicate complete for job using 'replaces'
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-9-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 10/107] ppc/pnv: fix dumpdtb option
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-10-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 11/107] ppc/pnv: generate dtb after machine initialization is complete
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-11-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 12/107] io: Fix TLS bye task leak
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-12-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 13/107] virtio-gpu: fix overflow check when allocating 2d image
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-13-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 14/107] block: Drop detach_subchain for bdrv_replace_node
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-14-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 15/107] Expand the probe_pages helper function to handle probe flags.
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-15-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 16/107] target/riscv: rvv: Fix missing flags merge in probe_pages for cross-page accesses
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-16-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 17/107] target/riscv: rvv: Fix page probe issues in vext_ldff
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-17-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 18/107] rust: suggest passing --locked to "cargo install"
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-18-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 19/107] hw/usb/hcd-ohci: check for MPS=0 to avoid infinite loop
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-19-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 20/107] hw/net/ftgmac100: Improve DMA error handling
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-20-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 21/107] hw/ssi/aspeed_smc: Convert mem ops to read/write_with_attrs for error handling
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-21-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 22/107] linux-user/i386/signal.c: Correct definition of target_fpstate_32
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-22-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 23/107] hw/dma/pl080: Fix transfer logic in PL080
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-23-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 24/107] linux-aio: Put all parameters into qemu_laiocb
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-24-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 25/107] linux-aio: Resubmit tails of short reads/writes
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-25-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 26/107] block/curl: free s->password in cleanup paths
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-26-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 27/107] hw/audio/sb16: validate VMState fields in post_load
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-27-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 28/107] tcg: Pass host-endian values to plugin_gen_mem_callbacks_*
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-28-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 29/107] hw/nvme: re-enable wzds bit in namespace dlfeat
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-29-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 30/107] hw/nvme: fix heap-buffer-overflow in nvme_abort
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-30-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 31/107] scripts/qemu-guest-agent/fsfreeze-hook: Avoid bash-isms
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-31-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 32/107] scripts/qemu-guest-agent/fsfreeze-hook: Avoid use of PIPESTATUS
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-32-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 33/107] scripts/qemu-guest-agent/fsfreeze-hook: Fix syslog-fallback logic
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-33-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 34/107] lsi53c895a: keep a reference to the device while SCRIPTS execute
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-34-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 35/107] lsi53c895a: do not do anything else if a reset is requested by writing ISTAT0
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-35-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 36/107] lsi53c895a: keep lsi_request and SCSIRequest in local variables
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-36-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 37/107] lsi53c895a: keep lsi_request alive as long as the SCSIRequest
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-37-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 38/107] lsi53c895a: keep SCSIRequest alive during DMA
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-38-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 39/107] hw/net/rocker: Avoid double-free of l2_flood.group_ids
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-39-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 40/107] ui/vnc-jobs: fix VncRectEntry leak on job cleanup
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-40-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 41/107] ide: Fix potential assertion failure on VM stop for PIO read error
+    + Reviewed-by: Hanna Czenczek <hreitz@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-41-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 42/107] scsi: Don't consider LOGICAL UNIT NOT SUPPORTED guest recoverable
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-42-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 43/107] monitor: Fix deadlock in monitor_cleanup
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-43-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 44/107] util: fix missing aio_wait sym in qemu guest agent only build
+    + Reviewed-by: Kevin Wolf <kwolf@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([31m✗[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-44-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 45/107] linux-user: fix name_to_handle_at when AT_HANDLE_MNT_ID_UNIQUE flag is set
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-45-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 46/107] linux-user: update select timeout writeback
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-46-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 47/107] linux-user: Make openat2() use -L for absolute paths
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-47-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 48/107] bsd-user, linux-user: signal: recursive signal delivery fix
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-48-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 49/107] target/arm: do_ats_write(): avoid assertion when ptw failed
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-49-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 50/107] target/arm: fix fault_s1ns for stage 2 faults
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-50-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 51/107] util/readline: Fix out-of-bounds access in readline_insert_char().
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-51-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 52/107] virtio-scsi: pass the same cdb_size to virtio_scsi_pop_req and virtio_scsi_handle_cmd_req_prepare
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-52-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 53/107] hw/uefi: fix heap overflow (CVE-2026-5744)
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-53-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 54/107] qemu-keymap: fix altgr modifier lookup for newer xkeyboard-config
+    + Reviewed-by: Michael Tokarev <mjt@tls.msk.ru> ([32m✓[0m DKIM/tls.msk.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-54-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 55/107] virtio-blk: fix zone report buffer out-of-memory (CVE-2026-5761)
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-55-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 56/107] util/cutils: Fix heap corruption under Windows
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-56-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 57/107] serial COM: windows serial COM PollingFunc don't sleep
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([31m✗[0m DKIM/gmail.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-57-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 58/107] ui/spice-app: detect runtime directory creation failures
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-58-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 59/107] ui/console-vc: fix off-by-one in CSI J 2 (clear entire screen)
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-59-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 60/107] target/arm/tcg/translate.c: remove MO_TE usage
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-60-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 61/107] target/i386: fix strList leak in x86_cpu_get_unavailable_features
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-61-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 62/107] target/i386: fix missing PF_INSTR in SIGSEGV context
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-62-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 63/107] target/i386/tcg: fix decoding of MOVBE and CRC32 in 16-bit mode
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-63-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 64/107] meson: add missing semicolon in pthread_condattr_setclock test
+    + Fixes: 657ac98b58 ("thread-posix: use monotonic clock for QemuCond and QemuSemaphore") ([32m✓[0m DKIM/redhat.com)
+    + Fixes: 657ac98b58c (thread-posix: use monotonic clock for QemuCond and QemuSemaphore) ([31m✗[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-64-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 65/107] hw/display: don't accidentally autofree existing virgl resources
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-65-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 66/107] migration: vmstate_save_state_v: fix double error_setg
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-66-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 67/107] hw/misc: Fix the valid access size to the avr-power device
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-67-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 68/107] hw/sh4/sh7750: Remove forgotten abort() in the MM_ITLB_DATA handler
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-68-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 69/107] linux-user/ppc: Fix ppc64 rt_sigframe stack offset
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-69-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 70/107] linux-user: fix off-by-one in host_to_target_for_each_rtattr()
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-70-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 71/107] linux-user: Don't define target_stat64 struct for loongarch64
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-71-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 72/107] linux-user/arm/nwfpe: Replace user_registers with current_cpu
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-72-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 73/107] linux-user/arm/nwfpe: Use thread-local storage for qemufpa
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-73-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 74/107] linux-user/strace: Use pointer type for read and write values
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-74-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 75/107] linux-user/mips: sync k0 TLS for EF_MIPS_MACH_OCTEON userlands
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-75-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 76/107] linux-user: Define SO_TIMESTAMP*_NEW and SO_RCVTIMEIO_NEW
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-76-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 77/107] linux-user: Add setsockopt() for SO_RCVTIMEO_NEW and SO_SNDTIMEO_NEW
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-77-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 78/107] linux-user: Add getsockopt() for SO_RCVTIMEO_NEW and SO_SNDTIMEO_NEW
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-78-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 79/107] linux-user: Fix CLONE_PARENT_SETTID when using fork-like clone
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-79-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 80/107] linux-user: Use abi_int for imr_ifindex in ip_mreqn struct
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-80-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 81/107] linux-user: Flush errors by using exit() instead of _exit() in error path
+    + Reviewed-by: Warner Losh <imp@bsdimp.com> ([31m✗[0m DKIM/bsdimp-com.20251104.gappssmtp.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-81-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 82/107] hw/riscv/virt-acpi-build.c: Use kvm timer frequency when kvm enabled
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-82-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 83/107] target/riscv: fix stale ptshift and base on page walk restart
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-83-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 84/107] hw/intc: fix heap OOB in ACLINT MTIMER multi-socket
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-84-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 85/107] riscv_htif: reject invalid signature ranges (end <= begin)
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-85-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 86/107] target/riscv: Generate access fault if sc comparison fails
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-86-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 87/107] target/riscv: Don't OR mip.SEIP when mvien is one
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-87-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 88/107] target/riscv: Use ELEN for Fractional LMUL check
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-88-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 89/107] linux-user: Add missing CDROM ioctls
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-89-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 90/107] linux-user: Flush errors by using exit() instead of _exit() in error path
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([31m✗[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-90-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 91/107] linux-user: Allow getsockopt() with NULL optval address
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-91-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 92/107] linux-user: Translate errno in IP_RECVERR and IPV6_RECVERR
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-92-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 93/107] hw/intc/xics: Add a check for an invalid server id
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-93-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 94/107] tests/rcutorture: Fix build error
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-94-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 95/107] hw/ppc/e500: Move clock and TB frequency to machine class
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-95-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 96/107] hw/ppc/e500: fix bus-frequency property hardcoded to zero in CPU FDT node
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-96-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 97/107] hw/net/allwinner-sun8i-emac: Flush queued packets when rx is enabled
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-97-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 98/107] hw/intc/arm_gicv3: Fix NS write to ICC_AP1Rn_EL1 when prebits < 7
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-98-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 99/107] target/microblaze: Fix endianness used to disassemble
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-99-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 100/107] target/arm: Report IL=0 for Thumb 16-bit BKPT insn
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-100-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 101/107] hw/misc/bcm2835_rng: Specify valid memory access sizes
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-101-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 102/107] hw/uefi: fix buffer overruns
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-102-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 103/107] hw/uefi: verify pio_xfer_offset before calculating buffer checksum
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-103-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 104/107] hw/uefi: fix ucs2 string helper functions
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-104-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 105/107] hw/uefi: add name_size check to uefi_vars_mm_lock_variable()
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-105-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 106/107] hw/uefi: verify data size before accessing it in wrap_pkcs7
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-106-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 107/107] hw/uefi: avoid possibly unaligned variable_auth_2 struct field access
+    + Link: https://lore.kernel.org/qemu-devel/20260512205437.360850-107-mjt@tls.msk.ru
+  ---
+  [32m✓[0m Signed: DKIM/tls.msk.ru
+---
+Total patches: 107
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Suggested-by: Kevin Wolf <kwolf@redhat.com>
+     Msg From: Markus Armbruster <armbru@redhat.com>
+    ! Trailer: Reviewed-by: Warner Losh <imp@bsdimp.com>
+     Msg From: Philippe Mathieu-Daudé <philmd@linaro.org>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: hw/net/rtl8319: Work around GCC sanitizer / -Wstringop-overflow bug
+Patch failed at 0001 hw/net/rtl8319: Work around GCC sanitizer / -Wstringop-overflow bug
+error: patch failed: hw/net/rtl8139.c:2131
+error: hw/net/rtl8139.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
