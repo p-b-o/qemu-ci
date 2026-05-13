@@ -3745,6 +3745,7 @@ F: hw/pci/pcie_doe.c
 F: docs/specs/spdm.rst
 
 Checkpatch
+R: Chao Liu <chao.liu.zevorn@gmail.com>
 S: Odd Fixes
 F: scripts/checkpatch.pl
 
