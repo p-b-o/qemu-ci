@@ -1,0 +1,211 @@
+Looking up https://lore.kernel.org/all/20260517003002.321430-1-richard.henderson@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260517003002.321430-1-richard.henderson@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 64 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 200 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v5 1/63] target/arm: Implement ID_AA64ISAR3
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 2/63] fpu: Export floatN_minmax
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 3/63] target/arm: Implement FEAT_FAMINMAX for AdvSIMD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 4/63] target/arm: Implement FEAT_FAMINMAX for SME
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 5/63] target/arm: Implement FEAT_FAMINMAX for SVE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 6/63] target/arm: Enable FEAT_FAMINMAX for -cpu max
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-7-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 7/63] target/arm: Update SCR bits for Arm ARM M.a.a
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 8/63] target/arm: Update HCRX bits for Arm ARM M.a.a
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 9/63] target/arm: Introduce FPMR
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 10/63] target/arm: Update SCTLR bits for FEAT_FPMR
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-11-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 11/63] target/arm: Enable EnFPM bits for FEAT_FPMR
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-12-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 12/63] target/arm: Clear FPMR on ResetSVEState
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-13-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 13/63] target/arm: Add FPMR_EL to TBFLAGS
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-14-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 14/63] target/arm: Trap direct acceses to FPMR
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-15-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 15/63] tests/functional/aarch64/rme: update images to support FEAT_FP8
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-16-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 16/63] target/arm: Enable FEAT_FPMR for -cpu max
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-17-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 17/63] target/arm: Implement ID_AA64FPFR0
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-18-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 18/63] target/arm: Add isar_feature_aa64_f8cvt
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-19-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 19/63] target/arm: Implement FSCALE for AdvSIMD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-20-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 20/63] target/arm: Implement FSCALE for SME
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-21-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 21/63] target/arm: Split vector-type.h from cpu.h
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-22-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 22/63] target/arm: Move vectors_overlap to vec_internal.h
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-23-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 23/63] target/arm: Implement BF1CVTL, BF1CVTL2, BF2CVTL, BF2CVTL2 for AdvSIMD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-24-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 24/63] target/arm: Implement BF1CVT, BF1CVTLT, BF2CVT, BF2CVTLT for SVE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-25-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 25/63] target/arm: Rename SME BFCVT patterns to BFCVT_hs
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-26-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 26/63] target/arm: Implement BF1CVT, BF1CVTL, BF2CVT, BF2CVTL for SME
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-27-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 27/63] target/arm: Implement F1CVTL, F1CVTL2, F2CVTL, F2CVTL2 for AdvSIMD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-28-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 28/63] target/arm: Implement F1CVT, F1CVTLT, F2CVT, F2CVTLT for SVE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-29-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 29/63] target/arm: Implement F1CVT, F1CVTL, F2CVT, F2CVTL for SME
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-30-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 30/63] target/arm: Implement BFCVTN for SVE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-31-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 31/63] target/arm: Implement FCVTN (16- to 8-bit fp) for AdvSIMD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-32-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 32/63] target/arm: Implement FCVTN, FCVTN2 (32- to 8-bit fp) for AdvSIMD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-33-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 33/63] target/arm: Implement FCVTN (16- to 8-bit fp) for SVE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-34-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 34/63] target/arm: Implement FCVTNB, FCVTNT for SVE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-35-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 35/63] target/arm: Implement FCVT (FP16 to FP8) for SME
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-36-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 36/63] target/arm: Implement FCVT, FCVTN (FP32 to FP8) for SME
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-37-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 37/63] target/arm: Implement LUTI2, LUTI4 for AdvSIMD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-38-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 38/63] target/arm: Implement LUTI2, LUTI4 for SVE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-39-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 39/63] target/arm: Enable FEAT_LUT for -cpu max
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-40-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 40/63] target/arm: Enable FEAT_FP8 for -cpu max
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-41-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 41/63] target/arm: Update ID_AA64SMFR0_EL1 fields to ARM M.b
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-42-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 42/63] target/arm: Implement MOVT (vector to table)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-43-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 43/63] target/arm: Implement LUTI4 (four registers, 8-bit)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-44-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 44/63] target/arm: Enable FEAT_SME_LUTv2 for -cpu max
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-45-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 45/63] target/arm: Implement FMLALB, FMLALT for AdvSIMD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-46-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 46/63] target/arm: Implement FMLALB, FMLALT (FP8 to FP16) for SVE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-47-richard.henderson@linaro.org
+  [31m✗[0m [PATCH v5 47/63] target/arm: Implement FMLALL{BB, BT, TB, TT} for AdvSIMD
+    [31m✗[0m BADSIG: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-48-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 48/63] target/arm: Implement FMLALL{BB,BT,TB,TT} for SVE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-49-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 49/63] target/arm: Enable FEAT_FP8FMA, FEAT_SSVE_FP8FMA for -cpu max
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-50-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 50/63] target/arm: Implement FDOT (FP8 to FP32) for AdvSIMD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-51-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 51/63] target/arm: Implement FDOT (FP8 to FP32) for SVE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-52-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 52/63] target/arm: Enable FEAT_FP8DOT4, FEAT_SSVE_FP8DOT4 for -cpu max
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-53-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 53/63] target/arm: Implement FDOT (FP8 to FP16) for AdvSIMD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-54-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 54/63] target/arm: Implement FDOT (FP8 to FP16) for SVE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-55-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 55/63] target/arm: Enable FEAT_FP8DOT2, FEAT_SSVE_FP8DOT2 for -cpu max
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-56-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 56/63] target/arm: Implement FMMLA (FP8 to FP32) for AdvSIMD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-57-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 57/63] target/arm: Implement FMMLA (FP8 to FP32) for SVE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-58-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 58/63] target/arm: Enable FEAT_F8F32MM for -cpu max
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-59-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 59/63] target/arm: Implement FMMLA (FP8 to FP16) for AdvSIMD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-60-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 60/63] target/arm: Implement FMMLA (FP8 to FP16) for SVE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-61-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 61/63] target/arm: Enable FEAT_F8F16MM for -cpu max
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-62-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 62/63] linux-user/aarch64: Implement hwcap bits for fp8 features
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-63-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v5 63/63] linux-user/aarch64: Implement FPMR signal frames
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260517003002.321430-64-richard.henderson@linaro.org
+---
+Total patches: 63
+---
+Applying: target/arm: Implement ID_AA64ISAR3
+Applying: fpu: Export floatN_minmax
+Patch failed at 0002 fpu: Export floatN_minmax
+error: patch failed: include/fpu/softfloat.h:1386
+error: include/fpu/softfloat.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
