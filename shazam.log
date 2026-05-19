@@ -1,0 +1,30 @@
+Looking up https://lore.kernel.org/all/20260519-add-anacapa-machine-v3-0-56c23993a20a@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260519-add-anacapa-machine-v3-0-56c23993a20a@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 9 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/3] tests/functional/aspeed: introduce FacebookAspeedTest
+    + Link: https://lore.kernel.org/qemu-devel/20260519-add-anacapa-machine-v3-1-56c23993a20a@gmail.com
+  [32m✓[0m [PATCH v3 2/3] hw/arm/aspeed: add anacapa-bmc machine
+    + Link: https://lore.kernel.org/qemu-devel/20260519-add-anacapa-machine-v3-2-56c23993a20a@gmail.com
+  [32m✓[0m [PATCH v3 3/3] hw/arm/aspeed: anacapa: add FRU EEPROM data
+    + Link: https://lore.kernel.org/qemu-devel/20260519-add-anacapa-machine-v3-3-56c23993a20a@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 3
+---
+Applying: tests/functional/aspeed: introduce FacebookAspeedTest
+Applying: hw/arm/aspeed: add anacapa-bmc machine
+Patch failed at 0002 hw/arm/aspeed: add anacapa-bmc machine
+error: patch failed: docs/system/arm/aspeed.rst:1
+error: docs/system/arm/aspeed.rst: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
