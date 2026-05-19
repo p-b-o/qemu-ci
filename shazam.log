@@ -1,0 +1,26 @@
+Looking up https://lore.kernel.org/all/90ffd339-28f0-46e4-bc3b-f7aa650df1c0@oss.tenstorrent.com/
+Grabbing thread from lore.kernel.org/all/90ffd339-28f0-46e4-bc3b-f7aa650df1c0@oss.tenstorrent.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v1] target/riscv: Make hpmcounterh return the upper 32-bits
+    + Fixes: cfc96df65e01 ("target/riscv: Remove upper_half from riscv_pmu_ctr_get_fixed_counters_val") ([32m✓[0m DKIM/gmail.com)
+    + Reviewed-by: Alistair Francis <alistair.francis@wdc.com> ([32m✓[0m DKIM/gmail.com)
+    + Link: https://lore.kernel.org/qemu-devel/90ffd339-28f0-46e4-bc3b-f7aa650df1c0@oss.tenstorrent.com
+  ---
+  [32m✓[0m Signed: DKIM/tenstorrent.com (From: portias@oss.tenstorrent.com)
+---
+Total patches: 1
+---
+Applying: target/riscv: Make hpmcounterh return the upper 32-bits
+Patch failed at 0001 target/riscv: Make hpmcounterh return the upper 32-bits
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:10
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
