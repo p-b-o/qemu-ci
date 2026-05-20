@@ -1,0 +1,53 @@
+Looking up https://lore.kernel.org/all/20260520-hw-riscv-cpu-int-v3-0-d1123ea63d9c@rev.ng/
+Grabbing thread from lore.kernel.org/all/20260520-hw-riscv-cpu-int-v3-0-d1123ea63d9c@rev.ng/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 15 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 51 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v3 1/14] hw/riscv: Register generic riscv[32|64] QOM interfaces
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-1-d1123ea63d9c@rev.ng
+  [31m✗[0m [PATCH v3 2/14] hw/riscv: Add macros and globals for simplifying machine definitions
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-2-d1123ea63d9c@rev.ng
+  [31m✗[0m [PATCH v3 3/14] hw/riscv: Filter machine types for qemu-system-riscv32/64 binaries
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-3-d1123ea63d9c@rev.ng
+  [31m✗[0m [PATCH v3 4/14] hw/core: Add riscv[32|64] to "none" machine
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-4-d1123ea63d9c@rev.ng
+  [31m✗[0m [PATCH v3 5/14] configs/target: Implement per-binary TargetInfo structure for riscv
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-5-d1123ea63d9c@rev.ng
+  [31m✗[0m [PATCH v3 6/14] target-info: Add target_riscv64()
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-6-d1123ea63d9c@rev.ng
+  [31m✗[0m [PATCH v3 7/14] target/riscv: Replace TYPE_RISCV_CPU_BASE
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-7-d1123ea63d9c@rev.ng
+  [31m✗[0m [PATCH v3 8/14] target/riscv: Remove ifdefs in cpu.h
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-8-d1123ea63d9c@rev.ng
+  [31m✗[0m [PATCH v3 9/14] target/riscv: Replace TARGET_LONG_BITS in header exposed to common code
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-9-d1123ea63d9c@rev.ng
+  [31m✗[0m [PATCH v3 10/14] target/riscv: Move riscv_pmu_read_ctr() to internal csr.h header
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-10-d1123ea63d9c@rev.ng
+  [31m✗[0m [PATCH v3 11/14] target/riscv: Stub out kvm functions
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-11-d1123ea63d9c@rev.ng
+  [31m✗[0m [PATCH v3 12/14] target/riscv: Move target_long.h inclusion away from cpu.h
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-12-d1123ea63d9c@rev.ng
+  [31m✗[0m [PATCH v3 13/14] hw/riscv: Define SiFive E/U CPUs using runtime conditions
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-13-d1123ea63d9c@rev.ng
+  [31m✗[0m [PATCH v3 14/14] hw/riscv: Compile once
+    + Link: https://lore.kernel.org/qemu-devel/20260520-hw-riscv-cpu-int-v3-14-d1123ea63d9c@rev.ng
+  ---
+  [31m✗[0m No key: ed25519/anjo@rev.ng
+  [31m✗[0m BADSIG: DKIM/rev.ng
+---
+Total patches: 14
+---
+Applying: hw/riscv: Register generic riscv[32|64] QOM interfaces
+Applying: hw/riscv: Add macros and globals for simplifying machine definitions
+Patch failed at 0002 hw/riscv: Add macros and globals for simplifying machine definitions
+error: patch failed: target/riscv/machine.c:23
+error: target/riscv/machine.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
