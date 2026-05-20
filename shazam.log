@@ -1,0 +1,198 @@
+Looking up https://lore.kernel.org/all/20260521-qemu-no-hmp-v1-0-d104f809e145@redhat.com/
+Grabbing thread from lore.kernel.org/all/20260521-qemu-no-hmp-v1-0-d104f809e145@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Nothing matching that query.
+Analyzing 41 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH 1/40] vl: fix -monitor none prefix matching
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-1-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 2/40] hmp: remove 'vcpu' argument from trace-event help
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-2-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 3/40] hmp: fix snapshot_blkdev argument type
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-3-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 4/40] target/i386: decouple cpu_x86_inject_mce() from Monitor
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-4-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 5/40] system: move gpa2hva() to system memory unit
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-5-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 6/40] s390x: prevent crash if given invalid CPU#
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-6-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 7/40] system: decouple qmp_inject_nmi() from Monitor
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-7-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 8/40] hmp: correct the nmi documentation
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-8-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 9/40] monitor: move HMP-only fields from Monitor to MonitorHMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-9-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 10/40] tests/functional: use query-version QMP command instead of HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-10-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 11/40] net/qapi: add x-query-usernet
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-11-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 12/40] tests: use x-query-usernet
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-12-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 13/40] RFC: qtest: add -qtest-no-ts option
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-13-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 14/40] qemu-io: propagate errors through Error API instead of printf
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-14-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 15/40] block: add x-qemu-io QMP command
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-15-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 16/40] tests/qemu-iotests/N: use x-qemu-io QMP command
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-16-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 17/40] tests/qemu-iotests/181, 192, 249: convert to QMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-17-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 18/40] tests/qemu-iotests/186: convert from HMP to QMP
+    [31m✗[0m BADSIG: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-18-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 19/40] tests/qemu-iotests/copy-before-write: convert to QMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-19-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 20/40] tests/qemu-iotests: skip some 172 & 267 that require HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-20-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 21/40] RFC: qtest: add qemu-io command to the qtest protocol
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-21-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 22/40] RFC: qtest/ide-test: convert to use qtest qemu-io command
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-22-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 23/40] tests/qtest/numa-test: replace HMP "info numa" with QMP query-cpus-fast
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-23-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 24/40] tests/qtest/pnv: drop unnecessary -serial mon:stdio
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-24-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 25/40] net: add x-query-network QMP command
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-25-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 26/40] tests/qtest/netdev-socket: replace HMP with x-query-network QMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-26-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 27/40] tests/qtest/cdrom-test: replace HMP "info block" with QMP query-block
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-27-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 28/40] tests/qtest/qmp-test: don't depend on human-monitor-command
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-28-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 29/40] build-sys: add 'hmp' option
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-29-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 30/40] tests/qtest/device-introspect-test: fix test without HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-30-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 31/40] tests/qtest/drive_del-test: guard HMP-dependent tests with CONFIG_HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-31-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 32/40] qapi: make HMP-specific schema entries conditional on CONFIG_HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-32-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 33/40] monitor: guard HMP-specific code with CONFIG_HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-33-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 34/40] util: guard monitor_vprintf callers with CONFIG_HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-34-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 35/40] system: guard HMP initialization paths with CONFIG_HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-35-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 36/40] hw: guard BusClass::print_dev with CONFIG_HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-36-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 37/40] target: guard MonitorDef tables with CONFIG_HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-37-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 38/40] Guard HMP command implementations with CONFIG_HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-38-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 39/40] build-sys: make HMP source files conditional on have_hmp
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-39-d104f809e145@redhat.com
+  [31m✗[0m [PATCH 40/40] gitlab-ci: add --disable-hmp to build-without-defaults
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260521-qemu-no-hmp-v1-40-d104f809e145@redhat.com
+---
+Total patches: 40
+---
+Applying: vl: fix -monitor none prefix matching
+Applying: hmp: remove 'vcpu' argument from trace-event help
+Applying: hmp: fix snapshot_blkdev argument type
+Applying: target/i386: decouple cpu_x86_inject_mce() from Monitor
+Applying: system: move gpa2hva() to system memory unit
+Applying: s390x: prevent crash if given invalid CPU#
+Applying: system: decouple qmp_inject_nmi() from Monitor
+Applying: hmp: correct the nmi documentation
+Applying: monitor: move HMP-only fields from Monitor to MonitorHMP
+Applying: tests/functional: use query-version QMP command instead of HMP
+Applying: net/qapi: add x-query-usernet
+Applying: tests: use x-query-usernet
+Applying: RFC: qtest: add -qtest-no-ts option
+Applying: qemu-io: propagate errors through Error API instead of printf
+Applying: block: add x-qemu-io QMP command
+Applying: tests/qemu-iotests/N: use x-qemu-io QMP command
+Applying: tests/qemu-iotests/181, 192, 249: convert to QMP
+Applying: tests/qemu-iotests/186: convert from HMP to QMP
+Patch failed at 0018 tests/qemu-iotests/186: convert from HMP to QMP
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:620
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
