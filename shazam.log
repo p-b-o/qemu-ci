@@ -1,0 +1,26 @@
+Looking up https://lore.kernel.org/all/cover.1779217494.git.maciej.szmigiero@oracle.com/
+Grabbing thread from lore.kernel.org/all/cover.1779217494.git.maciej.szmigiero@oracle.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH 1/2] system/runstate: Allow adjustment of priority for VM state change handlers
+    + Link: https://lore.kernel.org/qemu-devel/b8f3cf976ebe8221d70e0ebcb55da60bfe2a141f.1779217494.git.maciej.szmigiero@oracle.com
+  [PATCH 2/2] vfio/migration: Parallelize device state transitions
+    + Link: https://lore.kernel.org/qemu-devel/743f03758d2a30df4093db140ccdd0f91f69bd7e.1779217494.git.maciej.szmigiero@oracle.com
+---
+Total patches: 2
+---
+Applying: system/runstate: Allow adjustment of priority for VM state change handlers
+Applying: vfio/migration: Parallelize device state transitions
+Patch failed at 0002 vfio/migration: Parallelize device state transitions
+error: patch failed: hw/vfio/migration.c:1143
+error: hw/vfio/migration.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
