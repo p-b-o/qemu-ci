@@ -1,0 +1,53 @@
+Looking up https://lore.kernel.org/all/20260520072054.293306-1-freude@linux.ibm.com/
+Grabbing thread from lore.kernel.org/all/20260520072054.293306-1-freude@linux.ibm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 16 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 18 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v5 1/15] target/s390x: Rework s390 cpacf implementations
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-2-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 2/15] target/s390x: Move cpacf sha512 code into a new file
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-3-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 3/15] target/s390x: Support cpacf sha256
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-4-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 4/15] target/s390x: Support AES ECB for cpacf km instruction
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-5-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 5/15] target/s390x: Support AES CBC for cpacf kmc instruction
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-6-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 6/15] target/s390x: Support AES CTR for cpacf kmctr instruction
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-7-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 7/15] target/s390x: Minimal AES XTS support for cpacf pcc instruction
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-8-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 8/15] target/s390x: Support AES XTS for cpacf km instruction
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-9-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 9/15] target/s390x: Support pckmo encrypt AES subfunctions
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-10-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 10/15] target/s390x: Support protected key AES ECB for cpacf km instruction
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-11-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 11/15] target/s390x: Support protected key AES CBC for cpacf kmc instruction
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-12-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 12/15] target/s390x: Support protected key AES CTR for cpacf kmctr instruction
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-13-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 13/15] target/s390x: Minimal protected key AES XTS support for cpacf pcc instruction
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-14-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 14/15] target/s390x: Support protected key AES XTS for cpacf km instruction
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-15-freude@linux.ibm.com
+  [32m✓[0m [PATCH v5 15/15] docs/s390: Document CPACF instructions support
+    + Link: https://lore.kernel.org/qemu-devel/20260520072054.293306-16-freude@linux.ibm.com
+  ---
+  [32m✓[0m Signed: DKIM/ibm.com (From: freude@linux.ibm.com)
+---
+Total patches: 15
+---
+Applying: target/s390x: Rework s390 cpacf implementations
+Patch failed at 0001 target/s390x: Rework s390 cpacf implementations
+error: patch failed: target/s390x/tcg/crypto_helper.c:276
+error: target/s390x/tcg/crypto_helper.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
