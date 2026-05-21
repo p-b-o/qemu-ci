@@ -8669,6 +8669,8 @@ static int is_proc_myself(const char *filename, const char *entry)
     return 0;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-format-attribute"
 static void excp_dump_file(FILE *logfile, CPUArchState *env,
                       const char *fmt, int code)
 {
@@ -8695,6 +8697,7 @@ void target_exception_dump(CPUArchState *env, const char *fmt, int code)
         qemu_log_unlock(logfile);
     }
 }
+#pragma GCC diagnostic pop
 
 #include "target_proc.h"
 
