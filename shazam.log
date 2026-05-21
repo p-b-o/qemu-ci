@@ -1,0 +1,45 @@
+Looking up https://lore.kernel.org/all/20260521133315.work.845-kees@kernel.org/
+Grabbing thread from lore.kernel.org/all/20260521133315.work.845-kees@kernel.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 14 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH 1/11] params: bound array element output to the caller's page buffer
+    + Link: https://lore.kernel.org/qemu-devel/20260521133326.2465264-1-kees@kernel.org
+  [31m✗[0m [PATCH 2/11] panic: Replace panic_print_get() with generic helper
+    + Link: https://lore.kernel.org/qemu-devel/20260521133326.2465264-2-kees@kernel.org
+  [31m✗[0m [PATCH 3/11] moduleparam: Add DEFINE_KERNEL_PARAM_OPS macro family
+    + Link: https://lore.kernel.org/qemu-devel/20260521133326.2465264-3-kees@kernel.org
+  [31m✗[0m [PATCH 4/11] treewide: Convert struct kernel_param_ops initializers to DEFINE_KERNEL_PARAM_OPS
+    + Link: https://lore.kernel.org/qemu-devel/20260521133326.2465264-4-kees@kernel.org
+  [31m✗[0m [PATCH 5/11] moduleparam: Rename .get field to .get_str
+    + Link: https://lore.kernel.org/qemu-devel/20260521133326.2465264-5-kees@kernel.org
+  [31m✗[0m [PATCH 6/11] moduleparam: Add seq_buf-based .get callback alongside .get_str
+    + Link: https://lore.kernel.org/qemu-devel/20260521133326.2465264-6-kees@kernel.org
+  [31m✗[0m [PATCH 7/11] moduleparam: Route DEFINE_KERNEL_PARAM_OPS get pointer via _Generic
+    + Link: https://lore.kernel.org/qemu-devel/20260521133326.2465264-7-kees@kernel.org
+  [31m✗[0m [PATCH 8/11] params: Convert generic kernel_param_ops .get helpers to seq_buf
+    + Link: https://lore.kernel.org/qemu-devel/20260521133326.2465264-8-kees@kernel.org
+  [31m✗[0m [PATCH 9/11] treewide: Convert custom kernel_param_ops .get callbacks to seq_buf via cocci
+    + Link: https://lore.kernel.org/qemu-devel/20260521133326.2465264-9-kees@kernel.org
+  [31m✗[0m [PATCH 10/11] treewide: Manually convert custom kernel_param_ops .get callbacks
+    + Link: https://lore.kernel.org/qemu-devel/20260521133326.2465264-10-kees@kernel.org
+  [31m✗[0m [PATCH 11/11] moduleparam: Drop legacy kernel_param_ops .get_str field and dispatch logic
+    + Link: https://lore.kernel.org/qemu-devel/20260521133326.2465264-11-kees@kernel.org
+  ---
+  [31m✗[0m No key: openpgp/kees@kernel.org
+  [32m✓[0m Signed: DKIM/kernel.org
+---
+Total patches: 11
+---
+Applying: params: bound array element output to the caller's page buffer
+Patch failed at 0001 params: bound array element output to the caller's page buffer
+error: kernel/params.c: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
