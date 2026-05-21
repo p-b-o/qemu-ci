@@ -1,0 +1,68 @@
+Looking up https://lore.kernel.org/all/20260521-mips-octeon-missing-insns-v2-v13-0-5a4cb8ec9cd3@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260521-mips-octeon-missing-insns-v2-v13-0-5a4cb8ec9cd3@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 23 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 47 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v13 1/22] tcg: Optimize INDEX_op_mul[us]2 for 0 and 1
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-1-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 2/22] target/mips: add Octeon COP2 crypto state
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-2-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 3/22] target/mips: add Octeon COP2 crypto helper plumbing
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-3-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 4/22] target/mips: add Octeon CRC COP2 helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-4-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 5/22] target/mips: add Octeon GFM COP2 helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-5-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 6/22] target/mips: add Octeon SHA3 COP2 helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-6-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 7/22] target/mips: add Octeon ZUC COP2 helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-7-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 8/22] target/mips: add Octeon SNOW3G COP2 helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-8-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 9/22] target/mips: add Octeon AES COP2 helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-9-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 10/22] target/mips: add Octeon SMS4 COP2 helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-10-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 11/22] target/mips: add Octeon 3DES and KASUMI COP2 helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-11-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 12/22] target/mips: add Octeon Camellia COP2 helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-12-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 13/22] target/mips: add Octeon HSH COP2 helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-13-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 14/22] target/mips: add Octeon CHORD and LLM COP2 helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-14-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 15/22] target/mips: decode Octeon COP2 register selectors
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-15-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 16/22] target/mips: decode Octeon CRC and GFM COP2 selectors
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-16-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 17/22] target/mips: decode Octeon HSH and SHA3 COP2 selectors
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-17-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 18/22] target/mips: decode Octeon ZUC and SNOW3G COP2 selectors
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-18-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 19/22] target/mips: decode Octeon block-cipher COP2 selectors
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-19-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 20/22] target/mips: decode Octeon CHORD and LLM COP2 selectors
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-20-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 21/22] target/mips: add Octeon CvmCount RDHWR support
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-21-5a4cb8ec9cd3@gmail.com
+  [32m✓[0m [PATCH v13 22/22] tests/tcg/mips: cover Octeon QMAC instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260521-mips-octeon-missing-insns-v2-v13-22-5a4cb8ec9cd3@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 22
+---
+Applying: tcg: Optimize INDEX_op_mul[us]2 for 0 and 1
+Applying: target/mips: add Octeon COP2 crypto state
+Patch failed at 0002 target/mips: add Octeon COP2 crypto state
+error: patch failed: target/mips/system/machine.c:396
+error: target/mips/system/machine.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
