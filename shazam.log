@@ -1,0 +1,128 @@
+Looking up https://lore.kernel.org/all/20260522000324.23255-1-alistair.francis@wdc.com/
+Grabbing thread from lore.kernel.org/all/20260522000324.23255-1-alistair.francis@wdc.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 49 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 170 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/48] target/riscv: Remove spike as default machine
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-2-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 2/48] target/riscv: Deprecate the shakti_c machine
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-3-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 3/48] target/riscv: Update MISA.C for Zc* extensions
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-4-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 4/48] target/riscv: Update MISA.X for non-standard extensions
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-5-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 5/48] MAINTAINERS: Maintain OpenSBI Firmware
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-6-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 6/48] roms/opensbi: Update to v1.8.1
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-7-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 7/48] riscv: virt: avoid RISCVCPU copy in PMU FDT setup
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-8-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 8/48] target/riscv: Allow mseccfg access based on ext_zicfilp
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-9-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 9/48] hw/riscv/riscv-iommu: Fix Svnapot 64KB pages
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-10-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 10/48] target/riscv: rvv: Handle source overlap of vector widening reduction instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-11-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 11/48] hw/char: Check interrupt after txctrl register is written
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-12-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 12/48] target/riscv: Fix medeleg[11] read-only zero bit for M-mode ECALL
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-13-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 13/48] target/riscv: Fix tail handling for vmv.s.x and vfmv.s.f
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-14-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 14/48] target/riscv: add Zvknha as an implied extension for Zvknhb
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-15-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 15/48] target/riscv: Remove unconditional MENVCFG_CDE from mask
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-16-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 16/48] target/riscv: Fix missing CDE check for scountinhibit
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-17-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 17/48] target/riscv/pmp: Fix integer overflow in TOR and NA4 address computation
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-18-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 18/48] target/riscv: Add mseccfg to VMStateDescription
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-19-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 19/48] target/riscv: Update the local interrupt mask
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-20-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 20/48] target/riscv: clear mseccfg on reset for all dependent extensions
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-21-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 21/48] target/riscv/kvm: add KVM support for Zicbop extension
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-22-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 22/48] target/riscv/kvm: Add BFloat16 extensions support
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-23-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 23/48] hw/riscv/riscv-iommu: fix FSC SV32 capability check
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-24-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 24/48] hw/riscv/riscv-iommu: Avoid caching PCI device IDs
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-25-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 25/48] hw: misc: Implement Microchip mpfs ioscb PLLs and sysreg clock dividers
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-26-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 26/48] target/riscv/cpu.c: add xlrbr isa_edata_arr[] entry
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-27-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 27/48] target/riscv/cpu.c: fix smctr/ssctr isa_edata_arr[] order
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-28-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 28/48] target/riscv: make riscv-qmp-cmds use isa_data_arr[]
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-29-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 29/48] target/riscv/tcg: treat all exts equally in cpu_disable_priv_spec_isa_exts
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-30-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 30/48] target/riscv/tcg: use only isa_edata_arr[] in cpu_cfg_ext_get_name()
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-31-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 31/48] target/riscv/cpu.c: remove riscv_cpu_enable_named_feat()
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-32-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 32/48] target/riscv: remove riscv_cpu_named_features[]
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-33-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 33/48] target/riscv/tcg: use isa_edata_arr[] in riscv_cpu_update_misa_x()
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-34-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 34/48] target/riscv/kvm: use isa_edata_arr[] for unavailable props
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-35-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 35/48] target/riscv/tcg: use isa_edata_arr[] to enable max exts
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-36-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 36/48] target/riscv/tcg: use cfg_offset as cpu_set_multi_ext cb opaque
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-37-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 37/48] target/riscv: do not set defaults in cpu prop callback
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-38-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 38/48] target/riscv/tcg: use isa_edata_arr[] to create user props
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-39-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 39/48] target/riscv/cpu: remove riscv_cpu_* arrays
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-40-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 40/48] hw/riscv/riscv-iommu: Fix IOCOUNTINH.CY toggle detection
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-41-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 41/48] target/riscv/csr.c: fix read of pmpaddr(0-63) CSRs
+    + Reviewed-by: Alistair Francis <alistair.francis@wdc.com> ([32m✓[0m DKIM/gmail.com)
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-42-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 42/48] hw/riscv/virt-acpi-build: Fix off-by-one error in RIMT ID mapping
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-43-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 43/48] target/riscv: Make hpmcounterh return the upper 32-bits
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-44-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 44/48] hw/intc: riscv_aplic: Fix level trigger IRQ in direct delivery mode
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-45-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 45/48] hw/intc: riscv_aplic: Add reset API to APLIC
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-46-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 46/48] hw/intc: riscv_imsic: Add reset API to IMSIC
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-47-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 47/48] hw/intc: riscv_aplic: add trace events of APLIC read/write function
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-48-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 48/48] hw/riscv: riscv-iommu: Re-process command queue after clearing CMD_ILL
+    + Link: https://lore.kernel.org/qemu-devel/20260522000324.23255-49-alistair.francis@wdc.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 48
+---
+Applying: target/riscv: Remove spike as default machine
+Applying: target/riscv: Deprecate the shakti_c machine
+Applying: target/riscv: Update MISA.C for Zc* extensions
+Applying: target/riscv: Update MISA.X for non-standard extensions
+Applying: MAINTAINERS: Maintain OpenSBI Firmware
+Applying: roms/opensbi: Update to v1.8.1
+Patch failed at 0006 roms/opensbi: Update to v1.8.1
+error: cannot apply binary patch to 'pc-bios/opensbi-riscv32-generic-fw_dynamic.bin' without full index line
+error: pc-bios/opensbi-riscv32-generic-fw_dynamic.bin: patch does not apply
+error: cannot apply binary patch to 'pc-bios/opensbi-riscv64-generic-fw_dynamic.bin' without full index line
+error: pc-bios/opensbi-riscv64-generic-fw_dynamic.bin: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
