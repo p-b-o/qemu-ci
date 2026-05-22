@@ -1,0 +1,25 @@
+Looking up https://lore.kernel.org/all/20260522121549.81248-1-vsementsov@yandex-team.ru/
+Grabbing thread from lore.kernel.org/all/20260522121549.81248-1-vsementsov@yandex-team.ru/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v7] qapi: net: deprecate vhostforce option
+    + Link: https://lore.kernel.org/qemu-devel/20260522121549.81248-1-vsementsov@yandex-team.ru
+  ---
+  [32m✓[0m Signed: DKIM/yandex-team.ru
+---
+Total patches: 1
+---
+Applying: qapi: net: deprecate vhostforce option
+Patch failed at 0001 qapi: net: deprecate vhostforce option
+error: patch failed: qapi/net.json:432
+error: qapi/net.json: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
