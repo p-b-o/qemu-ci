@@ -1560,10 +1560,10 @@ MemTxResult memory_region_dispatch_write(MemoryRegion *mr,
     }
 }
 
-static void memory_region_set_ops(MemoryRegion *mr,
-                                  const MemoryRegionOps *ops,
-                                  void *opaque)
+void memory_region_set_ops(MemoryRegion *mr, const MemoryRegionOps *ops,
+                           void *opaque)
 {
+    g_assert(!ops || !(ops->impl.unaligned && !ops->valid.unaligned));
     mr->ops = ops ?: &unassigned_mem_ops;
     mr->opaque = opaque;
     mr->terminates = true;
@@ -1573,7 +1573,6 @@ void memory_region_init_io(MemoryRegion *mr, Object *owner,
                            const MemoryRegionOps *ops, void *opaque,
                            const char *name, uint64_t size)
 {
-    g_assert(!ops || !(ops->impl.unaligned && !ops->valid.unaligned));
     memory_region_init(mr, owner, name, size);
     memory_region_set_ops(mr, ops, opaque);
 }

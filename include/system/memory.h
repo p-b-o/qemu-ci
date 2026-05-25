@@ -1344,6 +1344,19 @@ void memory_region_ref(MemoryRegion *mr);
 void memory_region_unref(MemoryRegion *mr);
 
 /**
+ * memory_region_set_ops: Set ops of an I/O memory region.
+ *
+ * Accesses into the region will cause the callbacks in @ops to be called.
+ *
+ * @mr: the #MemoryRegion to be changed.
+ * @ops: a structure containing read and write callbacks to be used when
+ *       I/O is performed on the region.
+ * @opaque: passed to the read and write callbacks of the @ops structure.
+ */
+void memory_region_set_ops(MemoryRegion *mr, const MemoryRegionOps *ops,
+                           void *opaque);
+
+/**
  * memory_region_init_io: Initialize an I/O memory region.
  *
  * Accesses into the region will cause the callbacks in @ops to be called.
