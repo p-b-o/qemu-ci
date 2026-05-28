@@ -1,0 +1,24 @@
+Looking up https://lore.kernel.org/all/CAN3A0YpG0571%3DuNMsbKNs%2BXf%2Bi4WxVKnCTQQKCuyP7t3Zk4dgA@mail.gmail.com/
+Grabbing thread from lore.kernel.org/all/CAN3A0YpG0571%3DuNMsbKNs%2BXf%2Bi4WxVKnCTQQKCuyP7t3Zk4dgA@mail.gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] block/curl: fix Win32 socket handling in curl_sock_cb
+    + Link: https://lore.kernel.org/qemu-devel/CAN3A0YpG0571=uNMsbKNs+Xf+i4WxVKnCTQQKCuyP7t3Zk4dgA@mail.gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/canonical.com
+---
+Total patches: 1
+---
+Applying: block/curl: fix Win32 socket handling in curl_sock_cb
+Patch failed at 0001 block/curl: fix Win32 socket handling in curl_sock_cb
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:20
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
