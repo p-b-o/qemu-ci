@@ -1,0 +1,29 @@
+Looking up https://lore.kernel.org/all/20260528211210.74266-1-wafgo01@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260528211210.74266-1-wafgo01@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC v0 1/2] hw/arm: Add minimal TI K3 AM64x SoC model
+    + Link: https://lore.kernel.org/qemu-devel/20260528211210.74266-2-wafgo01@gmail.com
+  [32m✓[0m [PATCH RFC v0 2/2] hw/arm: Add AM64-virt machine
+    + Link: https://lore.kernel.org/qemu-devel/20260528211210.74266-3-wafgo01@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 2
+---
+Applying: hw/arm: Add minimal TI K3 AM64x SoC model
+Patch failed at 0001 hw/arm: Add minimal TI K3 AM64x SoC model
+error: patch failed: hw/arm/Kconfig:626
+error: hw/arm/Kconfig: patch does not apply
+error: patch failed: hw/arm/meson.build:84
+error: hw/arm/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
