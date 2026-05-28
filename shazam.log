@@ -1,0 +1,120 @@
+Looking up https://lore.kernel.org/all/20260528000416.8161-1-michael.roth@amd.com/
+Grabbing thread from lore.kernel.org/all/20260528000416.8161-1-michael.roth@amd.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 13 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC 1/12] accel/kvm: Decouple guest_memfd checks from memory attribute checks
+    + Link: https://lore.kernel.org/qemu-devel/20260528000416.8161-2-michael.roth@amd.com
+  [32m✓[0m [PATCH RFC 2/12] hostmem: Introduce dedicated memory backend for guest_memfd
+    + Link: https://lore.kernel.org/qemu-devel/20260528000416.8161-3-michael.roth@amd.com
+  [32m✓[0m [PATCH RFC 3/12] linux-headers: Update headers for v7 of in-place conversion kernel support
+    + Link: https://lore.kernel.org/qemu-devel/20260528000416.8161-4-michael.roth@amd.com
+  [32m✓[0m [PATCH RFC 4/12] accel/kvm: Add CGS option to control in-place conversion support
+    + Link: https://lore.kernel.org/qemu-devel/20260528000416.8161-5-michael.roth@amd.com
+  [32m✓[0m [PATCH RFC 5/12] system/memory: Re-use memory-backend-guest-memfd inode for private memory
+    + Link: https://lore.kernel.org/qemu-devel/20260528000416.8161-6-michael.roth@amd.com
+  [32m✓[0m [PATCH RFC 6/12] system/memory: Default to guest_memfd for RAM for in-place conversion
+    + Link: https://lore.kernel.org/qemu-devel/20260528000416.8161-7-michael.roth@amd.com
+  [32m✓[0m [PATCH RFC 7/12] accel/kvm: Move post-conversion updates to a separate helper
+    + Link: https://lore.kernel.org/qemu-devel/20260528000416.8161-8-michael.roth@amd.com
+  [32m✓[0m [PATCH RFC 8/12] accel/kvm: Re-order attribute notifications for in-place conversion
+    + Link: https://lore.kernel.org/qemu-devel/20260528000416.8161-9-michael.roth@amd.com
+  [32m✓[0m [PATCH RFC 9/12] accel/kvm: Support shared/private conversions via guest_memfd ioctls
+    + Link: https://lore.kernel.org/qemu-devel/20260528000416.8161-10-michael.roth@amd.com
+  [32m✓[0m [PATCH RFC 10/12] accel/kvm: Don't default to private attributes for in-place conversion
+    + Link: https://lore.kernel.org/qemu-devel/20260528000416.8161-11-michael.roth@amd.com
+  [32m✓[0m [PATCH RFC 11/12] i386/sev: Update SNP_LAUNCH_UPDATE for in-place conversion
+    + Link: https://lore.kernel.org/qemu-devel/20260528000416.8161-12-michael.roth@amd.com
+  [32m✓[0m [PATCH RFC 12/12] i386/sev: Allow in-place conversion for SEV-SNP guests
+    + Link: https://lore.kernel.org/qemu-devel/20260528000416.8161-13-michael.roth@amd.com
+  ---
+  [32m✓[0m Signed: DKIM/amd.com
+---
+Total patches: 12
+---
+Applying: accel/kvm: Decouple guest_memfd checks from memory attribute checks
+Applying: hostmem: Introduce dedicated memory backend for guest_memfd
+Applying: linux-headers: Update headers for v7 of in-place conversion kernel support
+Patch failed at 0003 linux-headers: Update headers for v7 of in-place conversion kernel support
+error: patch failed: include/standard-headers/drm/drm_fourcc.h:400
+error: include/standard-headers/drm/drm_fourcc.h: patch does not apply
+error: patch failed: include/standard-headers/linux/const.h:50
+error: include/standard-headers/linux/const.h: patch does not apply
+error: patch failed: include/standard-headers/linux/ethtool.h:17
+error: include/standard-headers/linux/ethtool.h: patch does not apply
+error: patch failed: include/standard-headers/linux/input-event-codes.h:643
+error: include/standard-headers/linux/input-event-codes.h: patch does not apply
+error: patch failed: include/standard-headers/linux/pci_regs.h:132
+error: include/standard-headers/linux/pci_regs.h: patch does not apply
+error: include/standard-headers/linux/typelimits.h: already exists in index
+error: patch failed: include/standard-headers/linux/virtio_ring.h:1
+error: include/standard-headers/linux/virtio_ring.h: patch does not apply
+error: include/standard-headers/linux/virtio_rtc.h: already exists in index
+error: patch failed: include/standard-headers/linux/vmclock-abi.h:115
+error: include/standard-headers/linux/vmclock-abi.h: patch does not apply
+error: patch failed: linux-headers/asm-arm64/kvm.h:416
+error: linux-headers/asm-arm64/kvm.h: patch does not apply
+error: patch failed: linux-headers/asm-arm64/unistd_64.h:327
+error: linux-headers/asm-arm64/unistd_64.h: patch does not apply
+error: patch failed: linux-headers/asm-generic/unistd.h:860
+error: linux-headers/asm-generic/unistd.h: patch does not apply
+error: patch failed: linux-headers/asm-loongarch/kvm.h:105
+error: linux-headers/asm-loongarch/kvm.h: patch does not apply
+error: patch failed: linux-headers/asm-loongarch/kvm_para.h:15
+error: linux-headers/asm-loongarch/kvm_para.h: patch does not apply
+error: patch failed: linux-headers/asm-loongarch/unistd_64.h:300
+error: linux-headers/asm-loongarch/unistd_64.h: patch does not apply
+error: patch failed: linux-headers/asm-mips/unistd_n32.h:399
+error: linux-headers/asm-mips/unistd_n32.h: patch does not apply
+error: patch failed: linux-headers/asm-mips/unistd_n64.h:375
+error: linux-headers/asm-mips/unistd_n64.h: patch does not apply
+error: patch failed: linux-headers/asm-mips/unistd_o32.h:445
+error: linux-headers/asm-mips/unistd_o32.h: patch does not apply
+error: patch failed: linux-headers/asm-powerpc/unistd_32.h:452
+error: linux-headers/asm-powerpc/unistd_32.h: patch does not apply
+error: patch failed: linux-headers/asm-powerpc/unistd_64.h:424
+error: linux-headers/asm-powerpc/unistd_64.h: patch does not apply
+error: patch failed: linux-headers/asm-riscv/kvm.h:110
+error: linux-headers/asm-riscv/kvm.h: patch does not apply
+error: patch failed: linux-headers/asm-riscv/ptrace.h:9
+error: linux-headers/asm-riscv/ptrace.h: patch does not apply
+error: patch failed: linux-headers/asm-riscv/unistd_32.h:318
+error: linux-headers/asm-riscv/unistd_32.h: patch does not apply
+error: patch failed: linux-headers/asm-riscv/unistd_64.h:328
+error: linux-headers/asm-riscv/unistd_64.h: patch does not apply
+error: linux-headers/asm-s390/unistd_32.h: does not exist in index
+error: patch failed: linux-headers/asm-s390/unistd_64.h:390
+error: linux-headers/asm-s390/unistd_64.h: patch does not apply
+error: patch failed: linux-headers/asm-x86/kvm.h:197
+error: linux-headers/asm-x86/kvm.h: patch does not apply
+error: patch failed: linux-headers/asm-x86/unistd_32.h:461
+error: linux-headers/asm-x86/unistd_32.h: patch does not apply
+error: patch failed: linux-headers/asm-x86/unistd_64.h:385
+error: linux-headers/asm-x86/unistd_64.h: patch does not apply
+error: patch failed: linux-headers/asm-x86/unistd_x32.h:338
+error: linux-headers/asm-x86/unistd_x32.h: patch does not apply
+error: patch failed: linux-headers/linux/const.h:50
+error: linux-headers/linux/const.h: patch does not apply
+error: patch failed: linux-headers/linux/iommufd.h:465
+error: linux-headers/linux/iommufd.h: patch does not apply
+error: patch failed: linux-headers/linux/kvm.h:11
+error: linux-headers/linux/kvm.h: patch does not apply
+error: patch failed: linux-headers/linux/mshv.h:27
+error: linux-headers/linux/mshv.h: patch does not apply
+error: patch failed: linux-headers/linux/psp-sev.h:277
+error: linux-headers/linux/psp-sev.h: patch does not apply
+error: patch failed: linux-headers/linux/stddef.h:69
+error: linux-headers/linux/stddef.h: patch does not apply
+error: patch failed: linux-headers/linux/vduse.h:10
+error: linux-headers/linux/vduse.h: patch does not apply
+error: patch failed: linux-headers/linux/vfio.h:141
+error: linux-headers/linux/vfio.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
