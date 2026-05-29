@@ -1,0 +1,73 @@
+Looking up https://lore.kernel.org/all/20260529142434.87880-1-philmd@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260529142434.87880-1-philmd@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 18 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/17] target/loongarch: Remove unused 'accel/accel-cpu-target.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-2-philmd@linaro.org
+  [32m✓[0m [PATCH 2/17] accel: Remove AccelCPUClass::cpu_class_init()
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-3-philmd@linaro.org
+  [32m✓[0m [PATCH 3/17] accel: Rename AccelOpsClass::cpu_target_realize() -> cpu_realize()
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-4-philmd@linaro.org
+  [32m✓[0m [PATCH 4/17] accel/hvf: Remove need for AccelCPUClass::cpu_target_realize
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-5-philmd@linaro.org
+  [32m✓[0m [PATCH 5/17] accel/kvm: Remove need for AccelCPUClass::cpu_target_realize
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-6-philmd@linaro.org
+  [32m✓[0m [PATCH 6/17] accel: Introduce AccelOpsClass::cpu_instance_init handler
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-7-philmd@linaro.org
+  [32m✓[0m [PATCH 7/17] accel/whpx: Convert AccelCPUClass -> AccelOpsClass::cpu_instance_init
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-8-philmd@linaro.org
+  [32m✓[0m [PATCH 8/17] accel/nvmm: Convert AccelCPUClass -> AccelOpsClass::cpu_instance_init
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-9-philmd@linaro.org
+  [32m✓[0m [PATCH 9/17] accel/hvf: Convert AccelCPUClass -> AccelOpsClass::cpu_instance_init
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-10-philmd@linaro.org
+  [32m✓[0m [PATCH 10/17] accel/kvm: Convert AccelCPUClass -> AccelOpsClass::cpu_instance_init
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-11-philmd@linaro.org
+  [32m✓[0m [PATCH 11/17] accel/tcg: Convert AccelCPUClass -> new TCGCPUOps::cpu_instance_init
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-12-philmd@linaro.org
+  [32m✓[0m [PATCH 12/17] accel: Remove AccelCPUClass::cpu_instance_init()
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-13-philmd@linaro.org
+  [32m✓[0m [PATCH 13/17] accel/tcg: Convert AccelCPUClass -> new TCGCPUOps::cpu_realize
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-14-philmd@linaro.org
+  [32m✓[0m [PATCH 14/17] accel/tcg: Convert X86 AccelCPUClass -> TCGCPUOps::cpu_realize
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-15-philmd@linaro.org
+  [32m✓[0m [PATCH 15/17] accel/tcg: Convert RISCV AccelCPUClass -> TCGCPUOps::cpu_realize
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-16-philmd@linaro.org
+  [32m✓[0m [PATCH 16/17] accel: Remove AccelCPUClass::cpu_target_realize()
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-17-philmd@linaro.org
+  [32m✓[0m [PATCH 17/17] accel: Remove AccelCPUClass and 'accel/accel-cpu-target.h'
+    + Link: https://lore.kernel.org/qemu-devel/20260529142434.87880-18-philmd@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 17
+---
+Applying: target/loongarch: Remove unused 'accel/accel-cpu-target.h' header
+Applying: accel: Remove AccelCPUClass::cpu_class_init()
+Applying: accel: Rename AccelOpsClass::cpu_target_realize() -> cpu_realize()
+Applying: accel/hvf: Remove need for AccelCPUClass::cpu_target_realize
+Applying: accel/kvm: Remove need for AccelCPUClass::cpu_target_realize
+Applying: accel: Introduce AccelOpsClass::cpu_instance_init handler
+Applying: accel/whpx: Convert AccelCPUClass -> AccelOpsClass::cpu_instance_init
+Applying: accel/nvmm: Convert AccelCPUClass -> AccelOpsClass::cpu_instance_init
+Applying: accel/hvf: Convert AccelCPUClass -> AccelOpsClass::cpu_instance_init
+Applying: accel/kvm: Convert AccelCPUClass -> AccelOpsClass::cpu_instance_init
+Applying: accel/tcg: Convert AccelCPUClass -> new TCGCPUOps::cpu_instance_init
+Applying: accel: Remove AccelCPUClass::cpu_instance_init()
+Applying: accel/tcg: Convert AccelCPUClass -> new TCGCPUOps::cpu_realize
+Applying: accel/tcg: Convert X86 AccelCPUClass -> TCGCPUOps::cpu_realize
+Applying: accel/tcg: Convert RISCV AccelCPUClass -> TCGCPUOps::cpu_realize
+Applying: accel: Remove AccelCPUClass::cpu_target_realize()
+Applying: accel: Remove AccelCPUClass and 'accel/accel-cpu-target.h'
+Patch failed at 0017 accel: Remove AccelCPUClass and 'accel/accel-cpu-target.h'
+error: patch failed: accel/accel-common.c:98
+error: accel/accel-common.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
