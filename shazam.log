@@ -1,0 +1,65 @@
+Looking up https://lore.kernel.org/all/20260529213321.96271-1-zhangckid@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260529213321.96271-1-zhangckid@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Nothing matching that query.
+Analyzing 16 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 129 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v8 1/15] qapi/misc: Fix missed query-iothreads items
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-2-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 2/15] iothread: introduce iothread_ref/unref to track attached devices
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-3-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 3/15] iothread: tracking iothread users with holder name
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-4-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 4/15] iothread: introduce iothread_unsafe_get_aio_context()
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-5-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 5/15] block/export: track IOThread reference in BlockExport
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-6-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 6/15] monitor: assign unique default ID to anonymous monitors
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-7-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 7/15] monitor: Update tracking iothread users with holder
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-8-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 8/15] virtio-vq-mapping: track iothread-vq-mapping references using device path
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-9-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 9/15] virtio: use iothread_get/put_aio_context for thread pinning
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-10-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 10/15] net/colo: track IOThread references using path-based holder
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-11-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 11/15] virtio-balloon: Update tracking iothread users with holder
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-12-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 12/15] vfio-user/proxy: Update tracking iothread users with holder name
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-13-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 13/15] xen-block: Update tracking iothread users with holder name
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-14-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 14/15] qapi: examine IOThread attachment status via query-iothreads
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-15-zhangckid@gmail.com
+  [32m✓[0m [PATCH v8 15/15] iothread: simplify API by merging iothread_get_aio_context variants
+    + Link: https://lore.kernel.org/qemu-devel/20260529213321.96271-16-zhangckid@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 15
+---
+Applying: qapi/misc: Fix missed query-iothreads items
+Applying: iothread: introduce iothread_ref/unref to track attached devices
+Applying: iothread: tracking iothread users with holder name
+Applying: iothread: introduce iothread_unsafe_get_aio_context()
+Applying: block/export: track IOThread reference in BlockExport
+Applying: monitor: assign unique default ID to anonymous monitors
+Applying: monitor: Update tracking iothread users with holder
+Applying: virtio-vq-mapping: track iothread-vq-mapping references using device path
+Applying: virtio: use iothread_get/put_aio_context for thread pinning
+Applying: net/colo: track IOThread references using path-based holder
+Applying: virtio-balloon: Update tracking iothread users with holder
+Applying: vfio-user/proxy: Update tracking iothread users with holder name
+Patch failed at 0012 vfio-user/proxy: Update tracking iothread users with holder name
+error: patch failed: hw/vfio-user/proxy.c:936
+error: hw/vfio-user/proxy.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
