@@ -1,0 +1,138 @@
+Looking up https://lore.kernel.org/all/20260529215554.606133-1-brian.cain@oss.qualcomm.com/
+Grabbing thread from lore.kernel.org/all/20260529215554.606133-1-brian.cain@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 39 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 354 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v7 1/38] docs: Add hexagon sysemu docs
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-2-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 2/38] docs/system: Add hexagon CPU emulation
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-3-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 3/38] target/hexagon: Fix badva reference, delete CAUSE
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-4-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 4/38] target/hexagon: Add missing A_CALL attr, hintjumpr to multi_cof
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-5-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 5/38] target/hexagon: Handle system/guest registers in gen_analyze_funcs.py and hex_common.py
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-6-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 6/38] target/hexagon: Suppress unused-variable warnings for sysemu source regs
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-7-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 7/38] target/hexagon: Make gen_exception_end_tb non-static
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-8-brian.cain@oss.qualcomm.com
+  [31m✗[0m [PATCH v7 8/38] target/hexagon: Switch to tag_ignore(), generate via get_{user, sys}_tags()
+    [31m✗[0m BADSIG: DKIM/oss.qualcomm.com
+    [31m✗[0m BADSIG: DKIM/qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-9-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 9/38] target/hexagon: Add privilege check, use tag_ignore()
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-10-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 10/38] target/hexagon: Add a placeholder fp exception
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-11-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 11/38] target/hexagon: Add guest, system reg number defs
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-12-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 12/38] target/hexagon: Add guest, system reg number state
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-13-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 13/38] target/hexagon: Add TCG values for sreg, greg
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-14-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 14/38] target/hexagon: Add guest/sys reg writes to DisasContext
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-15-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 15/38] target/hexagon: Add imported macro, attr defs for sysemu
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-16-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 16/38] target/hexagon: Add new macro definitions for sysemu
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-17-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 17/38] target/hexagon: Add handlers for guest/sysreg r/w
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-18-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 18/38] target/hexagon: Add placeholder greg/sreg r/w helpers
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-19-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 19/38] target/hexagon: Add vmstate representation
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-20-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 20/38] target/hexagon: Make A_PRIV, "J2_trap*" insts need_env()
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-21-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 21/38] target/hexagon: Define register fields for system regs
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-22-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 22/38] target/hexagon: Implement do_raise_exception()
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-23-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 23/38] target/hexagon: Add system reg insns
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-24-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 24/38] target/hexagon: Add sysemu TCG overrides
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-25-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 25/38] target/hexagon: Add implicit attributes to sysemu macros
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-26-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 26/38] target/hexagon: Add TCG overrides for int handler insts
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-27-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 27/38] target/hexagon: Add TCG overrides for thread ctl
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-28-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 28/38] target/hexagon: Add TCG overrides for rte, nmi
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-29-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 29/38] target/hexagon: Add sreg_{read,write} helpers
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-30-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 30/38] target/hexagon: Add representation to count cycles
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-31-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 31/38] target/hexagon: Add implementation of cycle counters
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-32-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 32/38] target/hexagon: Add pcycle setting functionality
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-33-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 33/38] target/hexagon: Add cpu modes, mmu indices, next_PC to state
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-34-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 34/38] hw/hexagon: Declare hexagon TLB device interface
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-35-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 35/38] target/hexagon: Define MMU_INDEX TB_FLAGS field
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-36-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 36/38] target/hexagon: Add stubs for modify_ssr/get_exe_mode
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-37-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 37/38] target/hexagon: Define f{S,G}ET_FIELD macros
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-38-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 38/38] target/hexagon: Add hex_interrupts support
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/20260529215554.606133-39-brian.cain@oss.qualcomm.com
+---
+Total patches: 38
+---
+Applying: docs: Add hexagon sysemu docs
+Patch failed at 0001 docs: Add hexagon sysemu docs
+error: patch failed: MAINTAINERS:259
+error: MAINTAINERS: patch does not apply
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:282: new blank line at EOF.
++
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
