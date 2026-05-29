@@ -1,0 +1,27 @@
+Looking up https://lore.kernel.org/all/20260529053519.1224019-1-antonb@tenstorrent.com/
+Grabbing thread from lore.kernel.org/all/20260529053519.1224019-1-antonb@tenstorrent.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/2] target/riscv: Print privilege level and ELP in riscv_cpu_dump_state
+    + Link: https://lore.kernel.org/qemu-devel/20260529053519.1224019-1-antonb@tenstorrent.com
+  [32m✓[0m [PATCH 2/2] target/riscv: Improve alignment in riscv_cpu_dump_state
+    + Link: https://lore.kernel.org/qemu-devel/20260529053519.1224019-2-antonb@tenstorrent.com
+  ---
+  [32m✓[0m Signed: DKIM/tenstorrent.com
+---
+Total patches: 2
+---
+Applying: target/riscv: Print privilege level and ELP in riscv_cpu_dump_state
+Patch failed at 0001 target/riscv: Print privilege level and ELP in riscv_cpu_dump_state
+error: patch failed: target/riscv/cpu.c:588
+error: target/riscv/cpu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
