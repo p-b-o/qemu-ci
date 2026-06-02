@@ -1,0 +1,43 @@
+Looking up https://lore.kernel.org/all/20260602052827.1535299-1-jamin_lin@aspeedtech.com/
+Grabbing thread from lore.kernel.org/all/20260602052827.1535299-1-jamin_lin@aspeedtech.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 26 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/10] hw/i2c/aspeed_i2c: Introduce dma_addr_lo_mask to unify DMA address handling
+    + Link: https://lore.kernel.org/qemu-devel/20260602052827.1535299-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 2/10] hw/i2c/aspeed_i2c: Increase AST2700 buffer mode size and adjust offset
+    + Link: https://lore.kernel.org/qemu-devel/20260602052827.1535299-3-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 3/10] hw/arm/aspeed_ast1040: Reuse AST2700 ADC model
+    + Link: https://lore.kernel.org/qemu-devel/20260602052827.1535299-4-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 4/10] hw/arm/aspeed_ast1040: Introduce PECI support
+    + Link: https://lore.kernel.org/qemu-devel/20260602052827.1535299-5-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 5/10] hw/arm/aspeed_ast1040: Reuse AST2700 GPIO controller model
+    + Link: https://lore.kernel.org/qemu-devel/20260602052827.1535299-6-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 6/10] hw/arm/aspeed_ast1040: Add SGPIO controller support
+    + Link: https://lore.kernel.org/qemu-devel/20260602052827.1535299-7-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 7/10] hw/i2c/aspeed_i2c: Introduce AST1040 I2C model
+    + Link: https://lore.kernel.org/qemu-devel/20260602052827.1535299-8-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 8/10] hw/arm/aspeed_ast1040: Introduce I2C support
+    + Link: https://lore.kernel.org/qemu-devel/20260602052827.1535299-9-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 9/10] hw/arm/aspeed_ast1040_evb: Introduce onboard I2C device
+    + Link: https://lore.kernel.org/qemu-devel/20260602052827.1535299-10-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 10/10] hw/arm/aspeed_ast1040: Reuse AST2700 watchdog models
+    + Link: https://lore.kernel.org/qemu-devel/20260602052827.1535299-11-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 10
+---
+Applying: hw/i2c/aspeed_i2c: Introduce dma_addr_lo_mask to unify DMA address handling
+Patch failed at 0001 hw/i2c/aspeed_i2c: Introduce dma_addr_lo_mask to unify DMA address handling
+error: patch failed: hw/i2c/aspeed_i2c.c:1608
+error: hw/i2c/aspeed_i2c.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
