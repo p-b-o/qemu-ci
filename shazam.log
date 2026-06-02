@@ -1,0 +1,42 @@
+Looking up https://lore.kernel.org/all/20260602071213.2084388-1-naveen@kernel.org/
+Grabbing thread from lore.kernel.org/all/20260602071213.2084388-1-naveen@kernel.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC] target/i386: SEV: Allow pflash devices with SEV-ES guests
+    + Link: https://lore.kernel.org/qemu-devel/20260602071213.2084388-1-naveen@kernel.org
+  ---
+  [32m✓[0m Signed: DKIM/kernel.org
+---
+Total patches: 1
+---
+ Deps: looking for dependencies matching 9 patch-ids
+Grabbing search results from lore.kernel.org
+ Deps: Applying prerequisite patch: [PATCH v4 1/9] target/i386: SEV: Generalize handling of SVM_SEV_FEAT_SNP_ACTIVE
+ Deps: Applying prerequisite patch: [PATCH v4 2/9] target/i386: SEV: Ensure SEV features are only set through qemu cli or IGVM
+ Deps: Applying prerequisite patch: [PATCH v3 3/9] target/i386: SEV: Consolidate SEV feature validation to common init path
+ Deps: Applying prerequisite patch: [PATCH v3 4/9] target/i386: SEV: Validate that SEV-ES is enabled when VMSA features are used
+ Deps: Applying prerequisite patch: [PATCH v3 5/9] target/i386: SEV: Enable use of KVM_SEV_INIT2 for SEV-ES guests
+ Deps: Applying prerequisite patch: [PATCH v4 6/9] target/i386: SEV: Add support for enabling debug-swap SEV feature
+ Deps: Applying prerequisite patch: [PATCH v4 7/9] target/i386: SEV: Add support for enabling Secure TSC SEV feature
+ Deps: Applying prerequisite patch: [PATCH v4 9/9] target/i386: SEV: Refactor check_sev_features()
+Applying: target/i386: SEV: Generalize handling of SVM_SEV_FEAT_SNP_ACTIVE
+Applying: target/i386: SEV: Ensure SEV features are only set through qemu cli or IGVM
+Applying: target/i386: SEV: Consolidate SEV feature validation to common init path
+Applying: target/i386: SEV: Validate that SEV-ES is enabled when VMSA features are used
+Applying: target/i386: SEV: Enable use of KVM_SEV_INIT2 for SEV-ES guests
+Applying: target/i386: SEV: Add support for enabling debug-swap SEV feature
+Applying: target/i386: SEV: Add support for enabling Secure TSC SEV feature
+Applying: target/i386: SEV: Refactor check_sev_features()
+Patch failed at 0008 target/i386: SEV: Refactor check_sev_features()
+error: patch failed: target/i386/sev.c:552
+error: target/i386/sev.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
