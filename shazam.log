@@ -1,0 +1,27 @@
+Looking up https://lore.kernel.org/all/20260602043029.2341246-1-dave@stgolabs.net/
+Grabbing thread from lore.kernel.org/all/20260602043029.2341246-1-dave@stgolabs.net/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] hw/cxl: Use host-only coherency for default CFMW restrictions
+    + Link: https://lore.kernel.org/qemu-devel/20260602043029.2341246-1-dave@stgolabs.net
+  ---
+  [32m✓[0m Signed: DKIM/stgolabs.net
+---
+Total patches: 1
+---
+Applying: hw/cxl: Use host-only coherency for default CFMW restrictions
+Patch failed at 0001 hw/cxl: Use host-only coherency for default CFMW restrictions
+error: patch failed: hw/cxl/cxl-host.c:64
+error: hw/cxl/cxl-host.c: patch does not apply
+error: patch failed: qapi/machine.json:558
+error: qapi/machine.json: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
