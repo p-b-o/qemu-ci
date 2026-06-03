@@ -62,6 +62,7 @@ void setup_rt_frame(int sig, struct target_sigaction *ka,
                     target_siginfo_t *info,
                     target_sigset_t *set, CPUArchState *env);
 
+void target_flush_windows(CPUArchState *env);
 void process_pending_signals(CPUArchState *cpu_env);
 void signal_init(const char *rtsig_map);
 void queue_signal(CPUArchState *env, int sig, int si_type,

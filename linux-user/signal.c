@@ -502,6 +502,14 @@ void target_to_host_siginfo(siginfo_t *info, const target_siginfo_t *tinfo)
     info->si_value.sival_ptr = (void *)(long)sival_ptr;
 }
 
+/*
+ * Weak arch hook: flush all register windows to the guest stack before
+ * writing a core dump.  Required on SPARC where the register file holds
+ * multiple call-frames that have not been spilled to memory yet.
+ * Architectures without register windows leave this as a no-op.
+ */
+void __attribute__((weak)) target_flush_windows(CPUArchState *env) {}
+
 /* returns 1 if given signal should dump core if not handled */
 static int core_dump_signal(int sig)
 {
@@ -828,6 +836,7 @@ void dump_core_and_abort(CPUArchState *env, int target_sig)
 
     /* dump core if supported by target binary format */
     if (core_dump_signal(target_sig) && (ts->bprm->core_dump != NULL)) {
+        target_flush_windows(env);
         stop_all_tasks();
         core_dumped =
             ((*ts->bprm->core_dump)(target_sig, env) == 0);

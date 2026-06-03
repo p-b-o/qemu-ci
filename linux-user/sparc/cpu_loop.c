@@ -149,6 +149,16 @@ static void flush_windows(CPUSPARCState *env)
 #endif
 }
 
+/* Override the weak hook in linux-user/signal.c to flush all SPARC register
+ * windows to the guest stack before a core dump is written.  Without this,
+ * only the active window (captured in NT_PRSTATUS) ends up in memory; all
+ * deeper call frames remain in the register file and are absent from the
+ * core's memory segments, breaking stack unwind beyond one frame. */
+void target_flush_windows(CPUArchState *env)
+{
+    flush_windows((CPUSPARCState *)env);
+}
+
 static void next_instruction(CPUSPARCState *env)
 {
     env->pc = env->npc;
