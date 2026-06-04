@@ -1,0 +1,40 @@
+Looking up https://lore.kernel.org/all/20260604095244.3313259-1-daniel.barboza@oss.qualcomm.com/
+Grabbing thread from lore.kernel.org/all/20260604095244.3313259-1-daniel.barboza@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 74 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v7 1/5] target/riscv/cpu.c: remove 'bare' condition for .profile
+    + Tested-by: Chao Liu <chao.liu.riscv@isrc.iscas.ac.cn>
+    + Reviewed-by: Andrew Jones <ajones@ventanamicro.com> ([31m✗[0m DKIM/ventanamicro.com)
+    + Reviewed-by: Chao Liu <chao.liu.zevorn@gmail.com> ([31m✗[0m DKIM/gmail.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260604095244.3313259-2-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 2/5] target/riscv: Add server platform reference cpu
+    + Reviewed-by: Chao Liu <chao.liu.zevorn@gmail.com> ([31m✗[0m DKIM/gmail.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260604095244.3313259-3-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 3/5] hw/riscv: server platform reference machine
+    + Link: https://lore.kernel.org/qemu-devel/20260604095244.3313259-4-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 4/5] tests/functional/riscv64: add riscv-server-ref tests
+    + Link: https://lore.kernel.org/qemu-devel/20260604095244.3313259-5-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 5/5] docs: add riscv-server-ref.rst
+    + Link: https://lore.kernel.org/qemu-devel/20260604095244.3313259-6-daniel.barboza@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 5
+---
+Applying: target/riscv/cpu.c: remove 'bare' condition for .profile
+Applying: target/riscv: Add server platform reference cpu
+Applying: hw/riscv: server platform reference machine
+Applying: tests/functional/riscv64: add riscv-server-ref tests
+Patch failed at 0004 tests/functional/riscv64: add riscv-server-ref tests
+error: patch failed: tests/functional/riscv64/meson.build:13
+error: tests/functional/riscv64/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
