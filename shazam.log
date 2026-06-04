@@ -1,0 +1,38 @@
+Looking up https://lore.kernel.org/all/20260604025546.19378-1-zide.chen@intel.com/
+Grabbing thread from lore.kernel.org/all/20260604025546.19378-1-zide.chen@intel.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 29 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/6] target/i386: Don't save/restore PERF_GLOBAL_OVF_CTRL MSRs
+    + Link: https://lore.kernel.org/qemu-devel/20260604025546.19378-2-zide.chen@intel.com
+  [32m✓[0m [PATCH v4 2/6] target/i386: Gate enable_pmu on kvm_enabled()
+    + Link: https://lore.kernel.org/qemu-devel/20260604025546.19378-3-zide.chen@intel.com
+  [32m✓[0m [PATCH v4 3/6] target/i386: Adjust maximum number of PMU counters
+    + Link: https://lore.kernel.org/qemu-devel/20260604025546.19378-4-zide.chen@intel.com
+  [32m✓[0m [PATCH v4 4/6] target/i386: Support full-width writes for perf counters
+    + Link: https://lore.kernel.org/qemu-devel/20260604025546.19378-5-zide.chen@intel.com
+  [32m✓[0m [PATCH v4 5/6] target/i386: Increase MSR_BUF_SIZE and split KVM_[GET/SET]_MSRS calls
+    + Link: https://lore.kernel.org/qemu-devel/20260604025546.19378-6-zide.chen@intel.com
+  [32m✓[0m [PATCH v4 6/6] target/i386: Add Topdown metrics feature support
+    + Link: https://lore.kernel.org/qemu-devel/20260604025546.19378-7-zide.chen@intel.com
+  ---
+  [32m✓[0m Signed: DKIM/intel.com
+---
+Total patches: 6
+---
+Applying: target/i386: Don't save/restore PERF_GLOBAL_OVF_CTRL MSRs
+Applying: target/i386: Gate enable_pmu on kvm_enabled()
+Applying: target/i386: Adjust maximum number of PMU counters
+Applying: target/i386: Support full-width writes for perf counters
+Patch failed at 0004 target/i386: Support full-width writes for perf counters
+error: patch failed: target/i386/cpu.h:421
+error: target/i386/cpu.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
