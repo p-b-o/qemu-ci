@@ -1,0 +1,84 @@
+Looking up https://lore.kernel.org/all/20260605083358.1320563-1-khushit.shah@nutanix.com/
+Grabbing thread from lore.kernel.org/all/20260605083358.1320563-1-khushit.shah@nutanix.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 30 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 36 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC v2 1/29] target/arm: named_cpu_model: define containers for ID registers and fields
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-2-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 2/29] target/arm: Add ID Register field descriptions in cpu-idregs.h.inc
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-3-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 3/29] target/arm: Add MIDR, REVIDR, AIDR and extra ID regs to cpu-sysregs
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-4-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 4/29] target/arm: Generate ARM64 ID registers and field tables
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-5-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 5/29] target/arm: Replace FIELD() macros with IDREG_FIELD expansion
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-6-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 6/29] target/arm: Introduce data-structures for the ARM property layer
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-7-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 7/29] target/arm: Define ARM properties
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-8-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 8/29] target/arm: Add ID register field helper functions
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-9-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 9/29] target/arm: Add all ARM64 properties to host model
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-10-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 10/29] target/arm: Add named cpu model infra + graviton3 named model
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-11-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 11/29] target/arm: Add Nvidia Grace named model
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-12-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 12/29] target/arm/kvm: Writeback modified ID registers to KVM
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-13-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 13/29] target/arm/kvm: enable writable implementation ID registers
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-14-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 14/29] target/arm: Validate cpu->isar.idregs[] before writeback
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-15-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 15/29] target/arm/kvm: handle DCZID_EL0 specially
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-16-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 16/29] target/arm: skip GIC, COPDBG and PMU fields during KVM writeback
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-17-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 17/29] target/arm: Add composite property type to model definitions
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-18-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 18/29] target/arm: define pauth composite property
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-19-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 19/29] target/arm: define sve composite property
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-20-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 20/29] target/arm: Introduce stub files required for qmp support
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-21-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 21/29] target/arm/qmp: add named models and properties to cpu-model-expansion
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-22-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 22/29] target/arm/kvm: introduce kvm_arm_get_host_isar helper
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-23-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 23/29] target/arm/qmp: add query-arm-cpu-props-info
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-24-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 24/29] target/arm: Report "off" for ID fields gated by vCPU init flags
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-25-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 25/29] target/arm/qmp: hook blockers in query-cpu-definitions
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-26-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 26/29] target/arm: Support exposing cache information for named cpu models
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-27-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 27/29] target/arm: Provide default cache hierarchy
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-28-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 28/29] target/arm: supported-values and blockers for CCSIDR cache properties
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-29-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v2 29/29] target/arm/kvm: fix host model writeback when kernel supports EL2
+    + Link: https://lore.kernel.org/qemu-devel/20260605083358.1320563-30-khushit.shah@nutanix.com
+  ---
+  [32m✓[0m Signed: DKIM/nutanix.com
+---
+Total patches: 29
+---
+Applying: target/arm: named_cpu_model: define containers for ID registers and fields
+Applying: target/arm: Add ID Register field descriptions in cpu-idregs.h.inc
+Applying: target/arm: Add MIDR, REVIDR, AIDR and extra ID regs to cpu-sysregs
+Applying: target/arm: Generate ARM64 ID registers and field tables
+Patch failed at 0004 target/arm: Generate ARM64 ID registers and field tables
+error: patch failed: target/arm/meson.build:10
+error: target/arm/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
