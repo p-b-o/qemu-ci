@@ -1,0 +1,118 @@
+Looking up https://lore.kernel.org/all/20260604234852.573178-1-richard.henderson@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260604234852.573178-1-richard.henderson@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 26 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/25] target/arm: Add feature predicates for SVE2.2 and SME2.2
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 2/25] target/arm: Rename sve unary predicated patterns
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 3/25] target/arm: Enable zeroing in DO_ZPZ macros in sve_helper.c
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 4/25] target/arm: Expand DO_ZPZ in translate-sve.c
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 5/25] target/arm: Implement SVE integer unary operations (predicated, zeroing)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 6/25] target/arm: Implement SVE bitwise unary operations (predicated, zeroing)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-7-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 7/25] target/arm: Implement SVE reverse within elements (zeroing)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 8/25] target/arm: Implement SVE reverse doublewords (zeroing)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 9/25] target/arm: Implement SVE2 integer unary operations (predicated, zeroing)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 10/25] target/arm: Add data argument to do_frint_mode
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-11-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 11/25] target/arm: Implement Floating-point round to integral value (predicated, zeroing)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-12-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 12/25] target/arm: Implement Floating-point convert (predicated, zeroing)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-13-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 13/25] target/arm: Implement Floating-point square root (predicated, zeroing)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-14-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 14/25] target/arm: Implement SCVTF, UCVTF (predicated, zeroing)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-15-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 15/25] target/arm: Implement FRINT{32,64}{X,Z}
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-16-richard.henderson@linaro.org
+  [31m✗[0m [PATCH 16/25] target/arm: Enable zeroing in DO_FCVT{N, L}T macros in sve_helper.c
+    [31m✗[0m BADSIG: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-17-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 17/25] target/arm: Implement SVE floating-point convert (top, predicated, zeroing)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-18-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 18/25] target/arm: Implement floating-point log and convert to integer (zeroing)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-19-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 19/25] target/arm: Implement EXPAND
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-20-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 20/25] target/arm: Generalize sve_compact_[sd]
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-21-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 21/25] target/arm: Implement COMPACT for byte/halfword
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-22-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 22/25] target/arm: Implement FIRSTP, LASTP
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-23-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 23/25] target/arm: Enable FEAT_SVE2p2 for -cpu max
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-24-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 24/25] target/arm: Implement FEAT_SSVE_AES
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-25-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 25/25] target/arm: Use expand_pred_N for helper_sve_not_zpz_N
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260604234852.573178-26-richard.henderson@linaro.org
+---
+Total patches: 25
+---
+Applying: target/arm: Add feature predicates for SVE2.2 and SME2.2
+Applying: target/arm: Rename sve unary predicated patterns
+Applying: target/arm: Enable zeroing in DO_ZPZ macros in sve_helper.c
+Applying: target/arm: Expand DO_ZPZ in translate-sve.c
+Applying: target/arm: Implement SVE integer unary operations (predicated, zeroing)
+Applying: target/arm: Implement SVE bitwise unary operations (predicated, zeroing)
+Applying: target/arm: Implement SVE reverse within elements (zeroing)
+Applying: target/arm: Implement SVE reverse doublewords (zeroing)
+Applying: target/arm: Implement SVE2 integer unary operations (predicated, zeroing)
+Applying: target/arm: Add data argument to do_frint_mode
+Applying: target/arm: Implement Floating-point round to integral value (predicated, zeroing)
+Applying: target/arm: Implement Floating-point convert (predicated, zeroing)
+Applying: target/arm: Implement Floating-point square root (predicated, zeroing)
+Applying: target/arm: Implement SCVTF, UCVTF (predicated, zeroing)
+Applying: target/arm: Implement FRINT{32,64}{X,Z}
+Applying: target/arm: Enable zeroing in DO_FCVT{N, L}T macros in sve_helper.c
+Applying: target/arm: Implement SVE floating-point convert (top, predicated, zeroing)
+Applying: target/arm: Implement floating-point log and convert to integer (zeroing)
+Applying: target/arm: Implement EXPAND
+Applying: target/arm: Generalize sve_compact_[sd]
+Applying: target/arm: Implement COMPACT for byte/halfword
+Applying: target/arm: Implement FIRSTP, LASTP
+Applying: target/arm: Enable FEAT_SVE2p2 for -cpu max
+Patch failed at 0023 target/arm: Enable FEAT_SVE2p2 for -cpu max
+error: patch failed: linux-user/aarch64/elfload.c:173
+error: linux-user/aarch64/elfload.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
