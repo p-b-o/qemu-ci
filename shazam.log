@@ -1,0 +1,66 @@
+Looking up https://lore.kernel.org/all/20260605021728.1125090-1-kshk@linux.ibm.com/
+Grabbing thread from lore.kernel.org/all/20260605021728.1125090-1-kshk@linux.ibm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 16 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 40 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/15] s390x/pci: implement IOMMU replay
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-2-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 2/15] s390x/pci: Create function to contain translation status check
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-3-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 3/15] s390x/pci: Move iommu_mr from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-4-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 4/15] s390x/pci: Move dm_mr from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-5-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 5/15] s390x/pci: Move iotlb from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-6-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 6/15] s390x/pci: Remove a ptr to S390PCIBusDevice from S390PCIIOMMU
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-7-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 7/15] s390x/pci: Move/rename enabled from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-8-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 8/15] s390x/pci: Move dma_limit from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-9-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 9/15] s390x/pci: Move g_iota from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-10-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 10/15] s390x/pci: Move pba from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-11-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 11/15] s390x/pci: Move pal from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-12-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 12/15] s390x/pci: Move max_dma_limit from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-13-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 13/15] s390x/pci: Add a comment explaining S390PCIIOMMU purpose
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-14-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 14/15] s390x/pci: Implement migration for emulated devices
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-15-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v3 15/15] s390x/pci: Create function to contain fmb_timer start
+    + Link: https://lore.kernel.org/qemu-devel/20260605021728.1125090-16-kshk@linux.ibm.com
+  ---
+  [32m✓[0m Signed: DKIM/ibm.com (From: kshk@linux.ibm.com)
+---
+Total patches: 15
+---
+Applying: s390x/pci: implement IOMMU replay
+Applying: s390x/pci: Create function to contain translation status check
+Applying: s390x/pci: Move iommu_mr from S390PCIIOMMU to S390PCIBusDevice
+Applying: s390x/pci: Move dm_mr from S390PCIIOMMU to S390PCIBusDevice
+Applying: s390x/pci: Move iotlb from S390PCIIOMMU to S390PCIBusDevice
+Applying: s390x/pci: Remove a ptr to S390PCIBusDevice from S390PCIIOMMU
+Applying: s390x/pci: Move/rename enabled from S390PCIIOMMU to S390PCIBusDevice
+Applying: s390x/pci: Move dma_limit from S390PCIIOMMU to S390PCIBusDevice
+Applying: s390x/pci: Move g_iota from S390PCIIOMMU to S390PCIBusDevice
+Applying: s390x/pci: Move pba from S390PCIIOMMU to S390PCIBusDevice
+Applying: s390x/pci: Move pal from S390PCIIOMMU to S390PCIBusDevice
+Applying: s390x/pci: Move max_dma_limit from S390PCIIOMMU to S390PCIBusDevice
+Applying: s390x/pci: Add a comment explaining S390PCIIOMMU purpose
+Applying: s390x/pci: Implement migration for emulated devices
+Patch failed at 0014 s390x/pci: Implement migration for emulated devices
+error: patch failed: hw/s390x/s390-virtio-ccw.c:923
+error: hw/s390x/s390-virtio-ccw.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
