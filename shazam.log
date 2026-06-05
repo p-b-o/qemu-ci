@@ -1,0 +1,48 @@
+Looking up https://lore.kernel.org/all/20260605001712.1823737-1-nathanc@nvidia.com/
+Grabbing thread from lore.kernel.org/all/20260605001712.1823737-1-nathanc@nvidia.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 22 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v5 1/9] hw/arm/smmuv3: Update ATC invalidation check
+    + Link: https://lore.kernel.org/qemu-devel/20260605001712.1823737-2-nathanc@nvidia.com
+  [32m✓[0m [PATCH v5 2/9] hw/arm/smmuv3: Improve accel SMMUv3 usage documentation
+    + Link: https://lore.kernel.org/qemu-devel/20260605001712.1823737-3-nathanc@nvidia.com
+  [32m✓[0m [PATCH v5 3/9] hw/arm/smmuv3-accel: Add helper for resolving auto parameters
+    + Link: https://lore.kernel.org/qemu-devel/20260605001712.1823737-4-nathanc@nvidia.com
+  [32m✓[0m [PATCH v5 4/9] hw/arm/smmuv3-accel: Implement "auto" value for "ats"
+    + Link: https://lore.kernel.org/qemu-devel/20260605001712.1823737-5-nathanc@nvidia.com
+  [32m✓[0m [PATCH v5 5/9] hw/arm/smmuv3-accel: Implement "auto" value for "ril"
+    + Link: https://lore.kernel.org/qemu-devel/20260605001712.1823737-6-nathanc@nvidia.com
+  [32m✓[0m [PATCH v5 6/9] hw/arm/smmuv3-accel: Implement "auto" value for "ssidsize"
+    + Link: https://lore.kernel.org/qemu-devel/20260605001712.1823737-7-nathanc@nvidia.com
+  [32m✓[0m [PATCH v5 7/9] hw/arm/smmuv3-accel: Implement "auto" value for "oas"
+    + Link: https://lore.kernel.org/qemu-devel/20260605001712.1823737-8-nathanc@nvidia.com
+  [32m✓[0m [PATCH v5 8/9] hw/arm/smmuv3: Set default ats, ril, ssidsize, oas to auto
+    + Link: https://lore.kernel.org/qemu-devel/20260605001712.1823737-9-nathanc@nvidia.com
+  [32m✓[0m [PATCH v5 9/9] qemu-options.hx: Support "auto" for accel SMMUv3 properties
+    + Link: https://lore.kernel.org/qemu-devel/20260605001712.1823737-10-nathanc@nvidia.com
+  ---
+  [32m✓[0m Signed: DKIM/nvidia.com
+---
+Total patches: 9
+---
+Applying: hw/arm/smmuv3: Update ATC invalidation check
+Applying: hw/arm/smmuv3: Improve accel SMMUv3 usage documentation
+Applying: hw/arm/smmuv3-accel: Add helper for resolving auto parameters
+Applying: hw/arm/smmuv3-accel: Implement "auto" value for "ats"
+Applying: hw/arm/smmuv3-accel: Implement "auto" value for "ril"
+Applying: hw/arm/smmuv3-accel: Implement "auto" value for "ssidsize"
+Applying: hw/arm/smmuv3-accel: Implement "auto" value for "oas"
+Applying: hw/arm/smmuv3: Set default ats, ril, ssidsize, oas to auto
+Patch failed at 0008 hw/arm/smmuv3: Set default ats, ril, ssidsize, oas to auto
+error: patch failed: hw/core/machine.c:38
+error: hw/core/machine.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
