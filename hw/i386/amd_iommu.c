@@ -220,18 +220,53 @@ static void amdvi_assign_andq(AMDVIState *s, hwaddr addr, uint64_t val)
    amdvi_writeq_raw(s, addr, amdvi_readq(s, addr) & val);
 }
 
-static void amdvi_generate_msi_interrupt(AMDVIState *s)
+static void amdvi_send_msi_message(AMDVIState *s, MSIMessage msg)
 {
-    MSIMessage msg = {};
     MemTxAttrs attrs = {
         .requester_id = pci_requester_id(&s->pci->dev)
     };
 
+    address_space_stl_le(&address_space_memory, msg.address, msg.data,
+                         attrs, NULL);
+}
+
+static void amdvi_generate_msi_interrupt(AMDVIState *s)
+{
+    MSIMessage msg;
+
     if (msi_enabled(&s->pci->dev)) {
         msg = msi_get_message(&s->pci->dev, 0);
-        address_space_stl_le(&address_space_memory, msg.address, msg.data,
-                             attrs, NULL);
+        amdvi_send_msi_message(s, msg);
     }
+}
+
+static void amdvi_generate_event_interrupt(AMDVIState *s)
+{
+    uint64_t intcapxt;
+    uint64_t control;
+    MSIMessage msg;
+
+    control = amdvi_readq(s, AMDVI_MMIO_CONTROL);
+    if (!s->xtsup || !(control & AMDVI_MMIO_CONTROL_INTCAPXTEN)) {
+        amdvi_generate_msi_interrupt(s);
+        return;
+    }
+
+    intcapxt = amdvi_readq(s, AMDVI_MMIO_INTCAPXT_EVT);
+    if (!intcapxt) {
+        return;
+    }
+
+    X86IOMMUIrq irq = {
+        .delivery_mode = AMDVI_IOAPIC_INT_TYPE_FIXED,
+        .vector = extract64(intcapxt, 32, 8),
+        .dest = extract64(intcapxt, 8, 24) |
+                (extract64(intcapxt, 56, 8) << 24),
+        .dest_mode = extract64(intcapxt, 2, 1),
+    };
+
+    x86_iommu_irq_to_msi_message(&irq, &msg);
+    apic_get_class(NULL)->send_msi(&msg);
 }
 
 static uint32_t get_next_eventlog_entry(AMDVIState *s)
@@ -257,7 +292,7 @@ static void amdvi_log_event(AMDVIState *s, uint64_t *evt)
         /* generate overflow interrupt */
         if (s->evtlog_intr) {
             amdvi_assign_orq(s, AMDVI_MMIO_STATUS, AMDVI_MMIO_STATUS_EVT_OVF);
-            amdvi_generate_msi_interrupt(s);
+            amdvi_generate_event_interrupt(s);
         }
         return;
     }
@@ -272,7 +307,7 @@ static void amdvi_log_event(AMDVIState *s, uint64_t *evt)
 
     if (s->evtlog_intr) {
         amdvi_assign_orq(s, AMDVI_MMIO_STATUS, AMDVI_MMIO_STATUS_EVENT_INT);
-        amdvi_generate_msi_interrupt(s);
+        amdvi_generate_event_interrupt(s);
     }
 }
 
@@ -1739,6 +1774,9 @@ static void amdvi_mmio_write(void *opaque, hwaddr addr, uint64_t val,
     case AMDVI_MMIO_EXCL_LIMIT:
         amdvi_mmio_reg_write(s, size, val, addr);
         amdvi_handle_excllim_write(s);
+        break;
+    case AMDVI_MMIO_INTCAPXT_EVT:
+        amdvi_mmio_reg_write(s, size, val, addr);
         break;
         /* PPR log base - unused for now */
     case AMDVI_MMIO_PPR_BASE:
