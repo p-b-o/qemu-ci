@@ -113,6 +113,8 @@
 #define AMDVI_MMIO_STATUS_COMP_INT    (1 << 2)
 #define AMDVI_MMIO_STATUS_EVENT_INT   (1 << 1)
 #define AMDVI_MMIO_STATUS_EVT_OVF     (1 << 0)
+#define AMDVI_MMIO_STATUS_GALOG_OVF   (1 << 9)
+#define AMDVI_MMIO_STATUS_GALOG_INT   (1 << 10)
 
 #define AMDVI_CMDBUF_ID_BYTE              0x07
 #define AMDVI_CMDBUF_ID_RSHIFT            4

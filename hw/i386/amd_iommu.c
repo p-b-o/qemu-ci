@@ -2414,7 +2414,9 @@ static void amdvi_init(AMDVIState *s)
     amdvi_set_quad(s, AMDVI_MMIO_EXT_FEATURES,
                    amdvi_extended_feature_register(s),
                    0xffffffffffffffef, 0);
-    amdvi_set_quad(s, AMDVI_MMIO_STATUS, 0, 0x98, 0x67);
+    amdvi_set_quad(s, AMDVI_MMIO_STATUS, 0, 0x98,
+                   0x67 | AMDVI_MMIO_STATUS_GALOG_OVF |
+                   AMDVI_MMIO_STATUS_GALOG_INT);
 }
 
 static void amdvi_pci_realize(PCIDevice *pdev, Error **errp)
