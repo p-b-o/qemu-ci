@@ -1,0 +1,90 @@
+Looking up https://lore.kernel.org/all/20260609112552.378999-1-skolothumtho@nvidia.com/
+Grabbing thread from lore.kernel.org/all/20260609112552.378999-1-skolothumtho@nvidia.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 32 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 332 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v7 1/31] backends/iommufd: Update iommufd_backend_get_device_info
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-2-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 2/31] backends/iommufd: Update iommufd_backend_alloc_viommu to allow user ptr
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-3-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 3/31] backends/iommufd: Introduce iommufd_backend_alloc_hw_queue
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-4-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 4/31] backends/iommufd: Introduce iommufd_backend_viommu_mmap
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-5-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 5/31] system/iommufd: Remove unused viommu pointer from IOMMUFDVeventq
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-6-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 6/31] hw/arm/smmuv3-accel: Introduce CMDQV ops interface
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-7-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 7/31] hw/arm/tegra241-cmdqv: Add Tegra241 CMDQV ops backend stub
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-8-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 8/31] hw/arm/smmuv3-accel: Wire CMDQV ops into accel lifecycle
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-9-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 9/31] hw/arm/virt: Use stored SMMUv3 device list for IORT build
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-10-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 10/31] hw/arm/tegra241-cmdqv: Probe host Tegra241 CMDQV support
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-11-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 11/31] hw/arm/tegra241-cmdqv: Implement CMDQV init
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-12-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 12/31] hw/arm/virt: Link SMMUv3 CMDQV resources to platform bus
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-13-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 13/31] hw/arm/tegra241-cmdqv: Implement CMDQV vIOMMU alloc/free
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-14-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 14/31] hw/arm/tegra241-cmdqv: mmap host VINTF Page0 for CMDQV
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-15-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 15/31] hw/arm/tegra241-cmdqv: Emulate CMDQ-V Config region
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-16-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 16/31] hw/arm/tegra241-cmdqv: Emulate VCMDQ register reads
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-17-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 17/31] hw/arm/tegra241-cmdqv: Emulate VCMDQ register writes
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-18-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 18/31] hw/arm/tegra241-cmdqv: Allocate HW VCMDQs once configured
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-19-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 19/31] hw/arm/tegra241-cmdqv: Route allocated VCMDQ Page0 accesses to the mmap'd host VINTF page0
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-20-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 20/31] memory: Allow RAM device regions to skip IOMMU mapping
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-21-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 21/31] hw/arm/tegra241-cmdqv: Use mmap'd host VINTF page0 for virtual VINTF page0
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-22-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 22/31] hw/arm/smmuv3-accel: Introduce common helper for veventq read
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-23-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 23/31] hw/arm/tegra241-cmdqv: Read and propagate Tegra241 CMDQV errors
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-24-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 24/31] hw/arm/tegra241-cmdqv: Initialize register state on reset
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-25-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 25/31] hw/arm/tegra241-cmdqv: Limit queue size based on backend page size
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-26-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 26/31] hw/arm/smmuv3: Add per-device identifier property
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-27-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 27/31] hw/arm/smmuv3-accel: Introduce helper to query CMDQV type
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-28-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 28/31] hw/arm/virt-acpi: Advertise Tegra241 CMDQV nodes in DSDT
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-29-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 29/31] hw/arm/smmuv3-accel: Enforce viommu association when CMDQV is active
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-30-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 30/31] hw/arm/tegra241-cmdqv: Document the CMDQV design and lifecycle
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-31-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH v7 31/31] hw/arm/smmuv3: Add cmdqv property for SMMUv3 device
+    + Link: https://lore.kernel.org/qemu-devel/20260609112552.378999-32-skolothumtho@nvidia.com
+  ---
+  [32m✓[0m Signed: DKIM/nvidia.com
+---
+Total patches: 31
+---
+Applying: backends/iommufd: Update iommufd_backend_get_device_info
+Applying: backends/iommufd: Update iommufd_backend_alloc_viommu to allow user ptr
+Applying: backends/iommufd: Introduce iommufd_backend_alloc_hw_queue
+Applying: backends/iommufd: Introduce iommufd_backend_viommu_mmap
+Applying: system/iommufd: Remove unused viommu pointer from IOMMUFDVeventq
+Applying: hw/arm/smmuv3-accel: Introduce CMDQV ops interface
+Patch failed at 0006 hw/arm/smmuv3-accel: Introduce CMDQV ops interface
+error: patch failed: hw/arm/smmuv3-accel.h:27
+error: hw/arm/smmuv3-accel.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
