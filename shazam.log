@@ -1,0 +1,43 @@
+Looking up https://lore.kernel.org/all/20260610214133.1882563-1-daniel.barboza@oss.qualcomm.com/
+Grabbing thread from lore.kernel.org/all/20260610214133.1882563-1-daniel.barboza@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 94 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v8 1/7] target/riscv/cpu.c: remove 'bare' condition for .profile
+    + Reviewed-by: Andrew Jones <ajones@ventanamicro.com> ([31m✗[0m DKIM/ventanamicro.com)
+    + Tested-by: Chao Liu <chao.liu.riscv@isrc.iscas.ac.cn>
+    + Reviewed-by: Chao Liu <chao.liu.zevorn@gmail.com> ([31m✗[0m DKIM/gmail.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260610214133.1882563-2-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v8 2/7] target/riscv: add riscv-server-ref CPU
+    + Link: https://lore.kernel.org/qemu-devel/20260610214133.1882563-3-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v8 3/7] hw/riscv: server platform reference machine
+    + Link: https://lore.kernel.org/qemu-devel/20260610214133.1882563-4-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v8 4/7] tests/functional/riscv64: add riscv-server-ref tests
+    + Link: https://lore.kernel.org/qemu-devel/20260610214133.1882563-5-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v8 5/7] hw/riscv/server_platform_ref.c: add platform bus and TPM support
+    + Link: https://lore.kernel.org/qemu-devel/20260610214133.1882563-6-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v8 6/7] tests/functional/riscv64: add riscv-server-ref TPM selftest
+    + Link: https://lore.kernel.org/qemu-devel/20260610214133.1882563-7-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v8 7/7] docs: add riscv-server-ref.rst
+    + Link: https://lore.kernel.org/qemu-devel/20260610214133.1882563-8-daniel.barboza@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 7
+---
+Applying: target/riscv/cpu.c: remove 'bare' condition for .profile
+Applying: target/riscv: add riscv-server-ref CPU
+Applying: hw/riscv: server platform reference machine
+Applying: tests/functional/riscv64: add riscv-server-ref tests
+Patch failed at 0004 tests/functional/riscv64: add riscv-server-ref tests
+error: patch failed: tests/functional/riscv64/meson.build:13
+error: tests/functional/riscv64/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
