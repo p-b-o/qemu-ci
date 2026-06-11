@@ -1,0 +1,89 @@
+Looking up https://lore.kernel.org/all/20260611053249.3918491-1-brian.cain@oss.qualcomm.com/
+Grabbing thread from lore.kernel.org/all/20260611053249.3918491-1-brian.cain@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 29 messages in the thread
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Implement hexagon_resume_threads()
+   Subject 2: target/hexagon: Define system, guest reg names
+  2 is not a reply... assume additional patch
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Implement get_exe_mode()
+   Subject 2: target/hexagon: Implement hexagon_resume_threads()
+  2 is not a reply... assume additional patch
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Implement start/stop helpers, soft reset
+   Subject 2: target/hexagon: Implement get_exe_mode()
+  2 is not a reply... assume additional patch
+Assuming new revision: v2 ([PATCH v6] target/hexagon: Add implicit sysreg writes)
+Assuming new revision: v3 ([PATCH v6] target/hexagon: Add PC to raise_exception, use fTRAP() helper)
+Assuming new revision: v4 ([PATCH v6] target/hexagon: Add TCG overrides for transfer insts)
+Assuming new revision: v5 ([PATCH v6] target/hexagon: Implement {g,s}etimask helpers)
+Assuming new revision: v6 ([PATCH v6] target/hexagon: Implement siad inst)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Implement hexagon_tlb_fill()
+   Subject 2: target/hexagon: Implement siad inst
+  2 is not a reply... assume additional patch
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Implement software interrupt
+   Subject 2: target/hexagon: Implement hexagon_tlb_fill()
+  2 is not a reply... assume additional patch
+Assuming new revision: v6 ([PATCH v6] target/hexagon: Add next_PC, {s,g}reg writes)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Add pkt_ends_tb to translation
+   Subject 2: target/hexagon: Add next_PC, {s,g}reg writes
+  2 is not a reply... assume additional patch
+Assuming new revision: v6 ([PATCH v6] target/hexagon: Add k0 {un,}lock)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Implement hex_tlb_entry_get_perm()
+   Subject 2: target/hexagon: Add k0 {un,}lock
+  2 is not a reply... assume additional patch
+Assuming new revision: v6 ([PATCH v6] target/hexagon: Implement setprio, resched)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Implement iassign{r,w} helpers
+   Subject 2: target/hexagon: Implement setprio, resched
+  2 is not a reply... assume additional patch
+Assuming new revision: v6 ([PATCH v6] target/hexagon: add simple cpu_exec_reset and pointer_wrap)
+Assuming new revision: v6 ([PATCH v6] target/hexagon: Add support for loadw_phys)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: extend hexagon_cpu_mmu_index() for sysemu
+   Subject 2: target/hexagon: Add support for loadw_phys
+  2 is not a reply... assume additional patch
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Implement {c,}swi helpers
+   Subject 2: target/hexagon: extend hexagon_cpu_mmu_index() for sysemu
+  2 is not a reply... assume additional patch
+Assuming new revision: v6 ([PATCH v6] target/hexagon: Implement wait helper)
+Assuming new revision: v6 ([PATCH v6] target/hexagon: Decode trap1, rte as COF)
+Assuming new revision: v6 ([PATCH v6] target/hexagon: Add guest reg reading functionality)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Implement stack overflow exception
+   Subject 2: target/hexagon: Add guest reg reading functionality
+  2 is not a reply... assume additional patch
+Assuming new revision: v6 ([PATCH v6] target/hexagon: Implement modify_ssr, resched, pending_interrupt)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Implement exec_interrupt, set_irq
+   Subject 2: target/hexagon: Implement modify_ssr, resched, pending_interrupt
+  2 is not a reply... assume additional patch
+Assuming new revision: v6 ([PATCH v6] target/hexagon: Add sysemu_ops, cpu_get_phys_page_debug())
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 273 code-review messages
+Will use the latest revision: v4
+You can pick other revisions using the -vN flag
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4] target/hexagon: Add TCG overrides for transfer insts
+    + Link: https://lore.kernel.org/qemu-devel/20260611053249.3918491-27-brian.cain@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 1
+---
+Applying: target/hexagon: Add TCG overrides for transfer insts
+Patch failed at 0001 target/hexagon: Add TCG overrides for transfer insts
+error: target/hexagon/gen_tcg_sys.h: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
