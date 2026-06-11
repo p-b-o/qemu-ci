@@ -1,0 +1,29 @@
+Looking up https://lore.kernel.org/all/20260611105037.157773-1-max.chou@sifive.com/
+Grabbing thread from lore.kernel.org/all/20260611105037.157773-1-max.chou@sifive.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/2] target/riscv: Set mstatus.FS dirty when scalar FP raises exceptions
+    + Link: https://lore.kernel.org/qemu-devel/20260611105037.157773-2-max.chou@sifive.com
+  [32m✓[0m [PATCH 2/2] target/riscv: rvv: Set mstatus.FS dirty when vector FP raises exceptions
+    + Link: https://lore.kernel.org/qemu-devel/20260611105037.157773-3-max.chou@sifive.com
+  ---
+  [32m✓[0m Signed: DKIM/sifive.com
+---
+Total patches: 2
+---
+Applying: target/riscv: Set mstatus.FS dirty when scalar FP raises exceptions
+Patch failed at 0001 target/riscv: Set mstatus.FS dirty when scalar FP raises exceptions
+error: patch failed: target/riscv/cpu.h:675
+error: target/riscv/cpu.h: patch does not apply
+error: patch failed: target/riscv/fpu_helper.c:50
+error: target/riscv/fpu_helper.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
