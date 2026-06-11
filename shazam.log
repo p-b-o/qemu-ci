@@ -1,0 +1,112 @@
+Looking up https://lore.kernel.org/all/20260611052857.3911981-1-brian.cain@oss.qualcomm.com/
+Grabbing thread from lore.kernel.org/all/20260611052857.3911981-1-brian.cain@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 37 messages in the thread
+Assuming new revision: v2 ([PATCH v8] target/hexagon: Add sreg_{read,write} helpers)
+Assuming new revision: v3 ([PATCH v8] target/hexagon: Define f{S,G}ET_FIELD macros)
+Assuming new revision: v4 ([PATCH v8] target/hexagon: Add TCG overrides for thread ctl)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Suppress unused-variable warnings for sysemu source regs
+   Subject 2: target/hexagon: Add guest, system reg number defs
+  2 is not a reply... assume additional patch
+Assuming new revision: v5 ([PATCH v8] target/hexagon: Add hex_interrupts support)
+Assuming new revision: v6 ([PATCH v8] target/hexagon: Add implicit attributes to sysemu macros)
+WARNING: duplicate messages found at index 1
+   Subject 1: docs: Add hexagon sysemu docs
+   Subject 2: target/hexagon: Suppress unused-variable warnings for sysemu source regs
+  2 is not a reply... assume additional patch
+Assuming new revision: v7 ([PATCH v8] target/hexagon: Add handlers for guest/sysreg r/w)
+Assuming new revision: v8 ([PATCH v8] target/hexagon: Add TCG overrides for rte, nmi)
+Assuming new revision: v8 ([PATCH v8] target/hexagon: Add representation to count cycles)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Add TCG overrides for int handler insts
+   Subject 2: target/hexagon: Add representation to count cycles
+  2 is not a reply... assume additional patch
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Add new macro definitions for sysemu
+   Subject 2: target/hexagon: Add TCG overrides for int handler insts
+  2 is not a reply... assume additional patch
+Assuming new revision: v8 ([PATCH v8] target/hexagon: Make A_PRIV, "J2_trap*" insts need_env())
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Add missing A_CALL attr, hintjumpr to multi_cof
+   Subject 2: target/hexagon: Make A_PRIV, "J2_trap*" insts need_env()
+  2 is not a reply... assume additional patch
+Assuming new revision: v8 ([PATCH v8] target/hexagon: Add TCG values for sreg, greg)
+Assuming new revision: v8 ([PATCH v8] target/hexagon: Add placeholder greg/sreg r/w helpers)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Fix badva reference, delete CAUSE
+   Subject 2: target/hexagon: Add placeholder greg/sreg r/w helpers
+  2 is not a reply... assume additional patch
+Assuming new revision: v8 ([PATCH v8] target/hexagon: Add pcycle setting functionality)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Define register fields for system regs
+   Subject 2: target/hexagon: Add pcycle setting functionality
+  2 is not a reply... assume additional patch
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Switch to tag_ignore(), generate via get_{user, sys}_tags()
+   Subject 2: target/hexagon: Define register fields for system regs
+  2 is not a reply... assume additional patch
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Implement do_raise_exception()
+   Subject 2: target/hexagon: Switch to tag_ignore(), generate via get_{user, sys}_tags()
+  2 is not a reply... assume additional patch
+WARNING: duplicate messages found at index 1
+   Subject 1: docs/system: Add hexagon CPU emulation
+   Subject 2: target/hexagon: Implement do_raise_exception()
+  2 is not a reply... assume additional patch
+Assuming new revision: v8 ([PATCH v8] target/hexagon: Add guest/sys reg writes to DisasContext)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Add a placeholder fp exception
+   Subject 2: target/hexagon: Add guest/sys reg writes to DisasContext
+  2 is not a reply... assume additional patch
+Assuming new revision: v8 ([PATCH v8] target/hexagon: Add implementation of cycle counters)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Add sysemu TCG overrides
+   Subject 2: target/hexagon: Add implementation of cycle counters
+  2 is not a reply... assume additional patch
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Add imported macro, attr defs for sysemu
+   Subject 2: target/hexagon: Add sysemu TCG overrides
+  2 is not a reply... assume additional patch
+Assuming new revision: v8 ([PATCH v8] target/hexagon: Add cpu modes, mmu indices, next_PC to state)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Add privilege check, use tag_ignore()
+   Subject 2: target/hexagon: Add cpu modes, mmu indices, next_PC to state
+  2 is not a reply... assume additional patch
+Assuming new revision: v8 ([PATCH v8] target/hexagon: Add vmstate representation)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Add guest, system reg number state
+   Subject 2: target/hexagon: Add vmstate representation
+  2 is not a reply... assume additional patch
+Assuming new revision: v8 ([PATCH v8] target/hexagon: Add system reg insns)
+Assuming new revision: v8 ([PATCH v8] hw/hexagon: Declare hexagon TLB device interface)
+Assuming new revision: v8 ([PATCH v8] target/hexagon: Update TARGET_PAGE_BITS, stubs for modify_ssr/get_exe_mode)
+WARNING: duplicate messages found at index 1
+   Subject 1: target/hexagon: Handle system/guest registers in gen_analyze_funcs.py and hex_common.py
+   Subject 2: target/hexagon: Update TARGET_PAGE_BITS, stubs for modify_ssr/get_exe_mode
+  2 is not a reply... assume additional patch
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 408 code-review messages
+Will use the latest revision: v5
+You can pick other revisions using the -vN flag
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v5] target/hexagon: Add hex_interrupts support
+    + Link: https://lore.kernel.org/qemu-devel/20260611052857.3911981-37-brian.cain@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 1
+---
+Applying: target/hexagon: Add hex_interrupts support
+Patch failed at 0001 target/hexagon: Add hex_interrupts support
+error: patch failed: target/hexagon/cpu.h:197
+error: target/hexagon/cpu.h: patch does not apply
+error: patch failed: target/hexagon/cpu.c:54
+error: target/hexagon/cpu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
