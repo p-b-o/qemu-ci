@@ -1,0 +1,33 @@
+Looking up https://lore.kernel.org/all/cover.1781246408.git.chao.liu@processmission.com/
+Grabbing thread from lore.kernel.org/all/cover.1781246408.git.chao.liu@processmission.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 11 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v8 1/5] target/riscv: add thead-c908 cpu support
+    + Link: https://lore.kernel.org/qemu-devel/a3e232ace12afd93adb60aed198cac3284daa56c.1781246408.git.chao.liu@processmission.com
+  [32m✓[0m [PATCH v8 2/5] hw/riscv: add k230 board initial support
+    + Link: https://lore.kernel.org/qemu-devel/a161697a249b896e44e2748435f6c0caec12c9f4.1781246408.git.chao.liu@processmission.com
+  [32m✓[0m [PATCH v8 3/5] hw/watchdog: add k230 watchdog initial support
+    + Link: https://lore.kernel.org/qemu-devel/805a04d9467556ee6a5f4742c9eb4bbb6fc7898c.1781246408.git.chao.liu@processmission.com
+  [32m✓[0m [PATCH v8 4/5] tests/qtest: add test for K230 watchdog
+    + Link: https://lore.kernel.org/qemu-devel/791beb1d8db07e4d1011cbeb4a8ac3add5b24f09.1781246408.git.chao.liu@processmission.com
+  [32m✓[0m [PATCH v8 5/5] docs/system/riscv: add documentation for k230 machine
+    + Link: https://lore.kernel.org/qemu-devel/81d2e2fa42ecabf638f841321cf36cee8f10af01.1781246408.git.chao.liu@processmission.com
+  ---
+  [32m✓[0m Signed: DKIM/processmission.com
+---
+Total patches: 5
+---
+Applying: target/riscv: add thead-c908 cpu support
+Patch failed at 0001 target/riscv: add thead-c908 cpu support
+error: patch failed: target/riscv/th_csr.c:21
+error: target/riscv/th_csr.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
