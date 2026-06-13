@@ -1,0 +1,182 @@
+Looking up https://lore.kernel.org/all/qemu-stable-11.0.2-20260613224644@cover.tls.msk.ru/
+Grabbing thread from lore.kernel.org/all/qemu-stable-11.0.2-20260613224644@cover.tls.msk.ru/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 73 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 1228 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/72] crypto: fix client side anonymous TLS credentials
+    + Tested-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-1-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 2/72] target/riscv: Update MISA.C for Zc* extensions
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-2-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 3/72] target/riscv: Update MISA.X for non-standard extensions
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-3-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 4/72] hw/riscv/riscv-iommu: Fix Svnapot 64KB pages
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-4-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 5/72] target/riscv: Allow mseccfg access based on ext_zicfilp
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-5-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 6/72] target/riscv: rvv: Handle source overlap of vector widening reduction instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-6-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 7/72] hw/char: Check interrupt after txctrl register is written
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-7-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 8/72] target/riscv: Fix medeleg[11] read-only zero bit for M-mode ECALL
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-8-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 9/72] target/riscv/pmp: Fix integer overflow in TOR and NA4 address computation
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-9-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 10/72] target/riscv: Add mseccfg to VMStateDescription
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-10-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 11/72] target/riscv: Update the local interrupt mask
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-11-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 12/72] target/riscv: clear mseccfg on reset for all dependent extensions
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-12-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 13/72] target/riscv/csr.c: fix read of pmpaddr(0-63) CSRs
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([31m✗[0m DKIM/linaro.org)
+    + Reviewed-by: Alistair Francis <alistair.francis@wdc.com> ([31m✗[0m DKIM/gmail.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-13-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 14/72] target/riscv: Make hpmcounterh return the upper 32-bits
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-14-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 15/72] linux-user/mips64: fix elf_core_copy_regs register layout in core files
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-15-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 16/72] linux-user/mips64: fix mipsn32 elf_core_copy_regs entry width
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-16-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 17/72] ui/vnc: fix OOB read access in VNC SASL mechname array
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-17-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 18/72] ui/vnc: fix OOB write in VNC stats array
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-18-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 19/72] ui/vnc: fix OOB write in lossy rect worker code
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-19-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 20/72] ui/vnc: fix OOB read updating VNC update frequency stats
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-20-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 21/72] ui: fix validation of VNC extended clipboard data length
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-21-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 22/72] lsi53c895a: fix use-after-free of cancelled request
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-22-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 23/72] lsi53c895a: clear tag byte when processing messages
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-23-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 24/72] apic: fix delivery bitmask with modified xAPIC ids
+    + Reviewed-by: Igor Mammedov <imammedo@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-24-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 25/72] mc146818rtc: Fix get_guest_rtc_ns() overflow bug
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-25-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 26/72] block/linux-aio: bound ioq_submit() recursion depth
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-26-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 27/72] target/arm: SVE2 FMAXP, FMINP must honour AH=1
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-27-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 28/72] target/arm: Use FPST_A64_F16 for SVE FCVTLT_hs
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-28-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 29/72] target/arm: Set correct fp flags for FLOGB when FPCR.AH = 1
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-29-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 30/72] vfio-user: reject zero DMA page size capability
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-30-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 31/72] vfio-user: reject zero migration page size capability
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-31-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 32/72] vfio/container: Restrict dma_map_file() to shared RAM or RAM devices
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-32-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 33/72] target/arm: Enable REVD for SVE2.1
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-33-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 34/72] target/arm: Don't assert if 64-bit EL2 AT insn sees a Domain fault
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-34-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 35/72] target/arm: SME BFCVT, BFCVTN have "Alternate BFloat16 behaviors"
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-35-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 36/72] hw/net/rocker_of_dpa: Check group ID pointers are not NULL
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-36-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 37/72] hw/net/rocker_of_dpa: Avoid unaligned accesses in _of_dpa_flow_match()
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-37-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 38/72] linux-user/ppc: restore fp_status from FPSCR on sigreturn
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-38-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 39/72] linux-user/mips: save/restore FCSR across signal delivery
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-39-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 40/72] linux-user/sh4: preserve T/M/Q bits across signal delivery
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-40-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 41/72] linux-user/sh4: restore FP rounding mode on sigreturn
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-41-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 42/72] linux-user/s390x: restore fpu_status rounding mode from FPC on sigreturn
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-42-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 43/72] hw/9pfs: add NULL check in v9fs_path_is_ancestor()
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-43-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 44/72] hw/9pfs: change V9fsPath.size to size_t and v9fs_path_sprintf() return type
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-44-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 45/72] hw/9pfs: add error handling to v9fs_fix_path()
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-45-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 46/72] hw/9pfs: let callers of v9fs_path_sprintf() and v9fs_fix_path() handle errors
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-46-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 47/72] tests/qtest/libqos: add qvirtqueue_reset_pool() for descriptor pool reset
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-47-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 48/72] tests/9pfs: add deep absolute path test
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-48-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 49/72] 9pfs: fix missing rename lock in v9fs_co_readdir_many (CVE-2026-48004)
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-49-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 50/72] util/envlist: fix prefix-match in envlist_unsetenv() name lookup
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-50-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 51/72] tests/unit: add test-envlist covering setenv/unsetenv name matching
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-51-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 52/72] ci: drop cirrus MacOS build
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-52-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 53/72] gitlab: add initial MacOS 15 on gitlab runner
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-53-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 54/72] gitlab: remove x64-freebsd-14-build Cirrus job
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-54-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 55/72] lcitool: remove Cirrus CI support
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-55-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 56/72] target/s390x: Make container ids in SysIB_15x 1-based
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-56-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 57/72] s390x/pci: Fix interrupt forwarding disable for interpreted devices
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-57-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 58/72] hw/i3c: fix CMD/data FIFO depth reset values to match real silicon
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-58-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 59/72] block/io: fallback to bounce buffer if BLKZEROOUT is not supported because of alignment
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-59-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 60/72] virtio-blk: add missing VIRTIO_BLK_T_SCSI_CMD size check (CVE-2026-48914)
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-60-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 61/72] qemu-io: Add 'aio_discard' command
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-61-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 62/72] qcow2: Fix corruption on discard during write with COW
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-62-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 63/72] iotests/046: Test that discard/write_zeroes wait for dependencies
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-63-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 64/72] qcow2: Fix data loss on zero write with detect-zeroes=unmap
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-64-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 65/72] block/export/fuse: use struct fuse_init_in
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-65-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 66/72] block/export/fuse: set FUSE_DIRECT_IO_ALLOW_MMAP flag to fix regression
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-66-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 67/72] iotests: test shared mmap for fuse export
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-67-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 68/72] qed: Don't try to flush during incoming migration
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-68-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 69/72] hw/usb/hcd-ohci: Clean up USBPacket before freeing ISO TD packet
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-69-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 70/72] fpu: Handle all rounding modes in partsN_uncanon_normal
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-70-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 71/72] linux-user: implement fsmount(2) series of syscalls
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-71-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 72/72] linux-user/strace: add fsmount series of syscalls
+    + Link: https://lore.kernel.org/qemu-devel/20260613203542.1809153-72-mjt@tls.msk.ru
+  ---
+  [32m✓[0m Signed: DKIM/tls.msk.ru
+---
+Total patches: 72
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Signed-off-by: sin99xx sin99xx@proton.me
+     Msg From: sin99xx <sin99xx@proton.me>
+    ! Trailer: Signed-off-by: sin99xx <sinxx198@gmail.com>
+     Msg From: Christian Schoenebeck <qemu_oss@crudebyte.com>
+    ! Trailer: Signed-off-by: sin99xx sin99xx@proton.me
+     Msg From: sin99xx <sinxx198@gmail.com>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: crypto: fix client side anonymous TLS credentials
+Patch failed at 0001 crypto: fix client side anonymous TLS credentials
+error: patch failed: crypto/tlscredsanon.c:73
+error: crypto/tlscredsanon.c: patch does not apply
+error: patch failed: tests/unit/test-crypto-tlssession.c:24
+error: tests/unit/test-crypto-tlssession.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
