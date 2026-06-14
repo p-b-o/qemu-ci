@@ -1,0 +1,256 @@
+Looking up https://lore.kernel.org/all/cover.1781463125.git.mst@redhat.com/
+Grabbing thread from lore.kernel.org/all/cover.1781463125.git.mst@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 107 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 1062 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/106] amd_iommu: restrict command buffer head/tail ranges to ring size
+    + Acked-by: Michael S. Tsirkin <mst@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/3097d54016ea9f8f0436f0b20e1b4d78a02b6aeb.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 2/106] amd_iommu: Update command buffer head ptr in MMIO region after wraparound
+    + Link: https://lore.kernel.org/qemu-devel/3c98e446af825b5806c1e5cd1244b2431b15e884.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 3/106] tests/qtest: Add amd-iommu command buffer head wrap test
+    + Link: https://lore.kernel.org/qemu-devel/8a1c09cbd3fe776a467398700c610cd126ee8a59.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 4/106] intel_iommu: Remove 'x-' prefix from 'x-scalable-mode' and 'x-flts' properties
+    + Link: https://lore.kernel.org/qemu-devel/08dc347e523005cf1e365c3c350a1721b36516e9.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 5/106] intel_iommu: Change 'flts' property naming to 'fsts'
+    + Link: https://lore.kernel.org/qemu-devel/c068e00cff16a7560d974c957f1f1bde158573af.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 6/106] vfio/iommufd: Extend attach/detach_hwpt callback implementations with pasid
+    + Link: https://lore.kernel.org/qemu-devel/1179c4dfc04915b13fe5c9158a07dce3470c8b3c.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 7/106] iommufd: Extend attach/detach_hwpt callbacks to support pasid
+    + Link: https://lore.kernel.org/qemu-devel/20fb2f6961f847392bdbc26f85017a73570af0b5.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 8/106] vfio/iommufd: Create nesting parent hwpt with IOMMU_HWPT_ALLOC_PASID flag
+    + Link: https://lore.kernel.org/qemu-devel/8c12118f7bad41cd544803f23da323d2cb61dae7.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 9/106] intel_iommu: Create the nested hwpt with IOMMU_HWPT_ALLOC_PASID flag
+    + Link: https://lore.kernel.org/qemu-devel/76330797b0eab06ebe2cbf5c8a21953da71ba4ba.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 10/106] intel_iommu: Rename pasid property to "pasid-bits" and define it as type uint8
+    + Link: https://lore.kernel.org/qemu-devel/312f3ef8adcf008d3992012bcdc91ce26b6d9186.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 11/106] intel_iommu: make vtd_dev_get_pe_from_pasid() more generic
+    + Link: https://lore.kernel.org/qemu-devel/db2bc1f3353c32e011bb6dbec675228cb1410fbe.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 12/106] intel_iommu: Export some functions
+    + Link: https://lore.kernel.org/qemu-devel/0d0f3f962eab4342b5d6314e28e7e87434ca9eff.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 13/106] intel_iommu: Fix PASID validity check in fault reporting
+    + Link: https://lore.kernel.org/qemu-devel/dde3f966f0fe57fa29af664d9c9cab290f3c00bb.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 14/106] intel_iommu: Use IOMMU_NO_PASID and delete PASID_0
+    + Link: https://lore.kernel.org/qemu-devel/6c4467745c27676e8bda6d9eb0bb2a70d2a7bca6.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 15/106] intel_iommu: Refactor PASID processing to use IOMMU_NO_PASID internally
+    + Link: https://lore.kernel.org/qemu-devel/c579197d6be77be90607d5d59e8e7f68696dfa26.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 16/106] intel_iommu_accel: Handle PASID entry addition for pc_inv_dsc request
+    + Link: https://lore.kernel.org/qemu-devel/c93b82e7dde2e9c26ab743e80d19050bde988fdf.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 17/106] intel_iommu_accel: Handle PASID entry removal for pc_inv_dsc request
+    + Link: https://lore.kernel.org/qemu-devel/8f3301bde02620fcbd4ad337bb2cb9505fa2060f.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 18/106] intel_iommu_accel: Bypass PASID entry addition for just deleted entry
+    + Link: https://lore.kernel.org/qemu-devel/6afd98cef5f040754ff20fb512fcf92068d114cf.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 19/106] intel_iommu_accel: Handle PASID entry removal for system reset
+    + Link: https://lore.kernel.org/qemu-devel/b583cdbb0ebd62d9e2fe678f4620a2827d159038.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 20/106] intel_iommu_accel: Switch to VTDAccelPASIDCacheEntry for PASID bind/unbind and PIOTLB invalidation
+    + Link: https://lore.kernel.org/qemu-devel/4101df1201fa60eb3a0932485881453661a2edbf.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 21/106] intel_iommu_accel: Add pasid bits size check
+    + Link: https://lore.kernel.org/qemu-devel/fa1ce94ea83d857bd541818ff7bdbb0f95eed998.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 22/106] intel_iommu: Expose flag VIOMMU_FLAG_PASID_SUPPORTED and VIOMMU_FLAG_WANT_PASID_ATTACH
+    + Link: https://lore.kernel.org/qemu-devel/2b0d91ed44e5e0dc77d151cbdc0dba40c6101490.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 23/106] hw/acpi/aml-build.c: add aml_irq() representing the 3-byte IRQ descriptor
+    + Link: https://lore.kernel.org/qemu-devel/a50499350010ec0d238185f3c835f3fb39e58032.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 24/106] tests/acpi: allow DSDT acpi table changes
+    + Link: https://lore.kernel.org/qemu-devel/6d40788bfd8f8b7b39d489bda1a61fa0a2ae9951.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 25/106] hw/char/serial-isa.c: declare IRQ as shared in ACPI IRQ descriptor
+    + Link: https://lore.kernel.org/qemu-devel/d616781f2d63fa602b12020cedbb274d15797e41.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 26/106] tests: data: update x86 ACPI tables
+    + Link: https://lore.kernel.org/qemu-devel/c549dca2f27e163b7bf7284e34d5b945a8ed47a6.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 27/106] vhost-user: rework enabling vrings
+    + Link: https://lore.kernel.org/qemu-devel/44c8f42d5824ab652ddeedb79851fa72d2af7be1.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 28/106] vhost: drop backend_features field
+    + Link: https://lore.kernel.org/qemu-devel/1ee0bc0c9bf006a1ea9afeae67b6b7a0b57a4783.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 29/106] vhost-user: introduce vhost_user_has_protocol_feature() helper
+    + Link: https://lore.kernel.org/qemu-devel/be9ecc9df07d8daef364f43798e78be6282c6b5f.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 30/106] vhost: move protocol_features to vhost_user
+    + Link: https://lore.kernel.org/qemu-devel/f9a8f5812607b6076c0412439f1d569391131e33.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 31/106] vhost-user-gpu: drop code duplication
+    + Link: https://lore.kernel.org/qemu-devel/0641dfdac00ba76ffbe41c59291e5ad23c62c219.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 32/106] vhost: make vhost_dev.features private
+    + Link: https://lore.kernel.org/qemu-devel/ddbae214b1874ef97bda6cd7bf3a3cfbf9ceb82b.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 33/106] virtio: move common part of _set_guest_notifier to generic code
+    + Link: https://lore.kernel.org/qemu-devel/a8f6b13f068b753d16588630654dfd51d7009436.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 34/106] virtio: drop *_set_guest_notifier_fd_handler() helpers
+    + Link: https://lore.kernel.org/qemu-devel/a443f8a671ed7ac8441d3739c42ca7b74433d843.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 35/106] vhost-user: keep QIOChannelSocket for backend channel
+    + Link: https://lore.kernel.org/qemu-devel/a00d6e75179fba5b6b4ad296ccdc251b02a1b535.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 36/106] vhost: vhost_virtqueue_start(): fix failure path
+    + Link: https://lore.kernel.org/qemu-devel/c85f42703df6249452ca249bddbfb0eaa5a11c5c.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 37/106] vhost: make vhost_memory_unmap() null-safe
+    + Link: https://lore.kernel.org/qemu-devel/558084367e9059dbe9f851699cc90be3499ed0fa.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 38/106] vhost: simplify calls to vhost_memory_unmap()
+    + Link: https://lore.kernel.org/qemu-devel/060ef8cac1153e3c84ca3d43254c03de3c75b593.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 39/106] vhost: move vrings mapping to the top of vhost_virtqueue_start()
+    + Link: https://lore.kernel.org/qemu-devel/60abdf60d505748a729b05de2864813f20f4b8f4.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 40/106] vhost: vhost_virtqueue_start(): drop extra local variables
+    + Link: https://lore.kernel.org/qemu-devel/4801e50cf1af17ffdd80b4b01b3f57581c9b91cc.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 41/106] vhost: final refactoring of vhost vrings map/unmap
+    + Link: https://lore.kernel.org/qemu-devel/4e61c89262aa7fad36df39daf5d7ab759079bd9a.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 42/106] vhost: simplify vhost_dev_init() error-path
+    + Link: https://lore.kernel.org/qemu-devel/ef817ddfd90f158b9769baaadbdb9fb2a52d3018.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 43/106] vhost: move busyloop timeout initialization to vhost_virtqueue_init()
+    + Link: https://lore.kernel.org/qemu-devel/2c943949d76b9b273de1e4b0f42d3671b8240a37.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 44/106] vhost: vhost_dev_init(): simplify features initialization
+    + Link: https://lore.kernel.org/qemu-devel/3aedf875edd5fd2d595b4f1755a8ef2830963612.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 45/106] hw/virtio/virtio-bus: refactor virtio_bus_set_host_notifier()
+    + Link: https://lore.kernel.org/qemu-devel/658660c838935836cb904d6c29f15767d952b256.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 46/106] vhost-user: make trace events more readable
+    + Link: https://lore.kernel.org/qemu-devel/6fdb2219f46e39df9f4182e53e0f7f3e277e92f1.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 47/106] vhost-user-blk: add some useful trace-points
+    + Link: https://lore.kernel.org/qemu-devel/587c9d91cd9cb2ee09813afa60e952a1d47a9932.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 48/106] vhost: add some useful trace-points
+    + Link: https://lore.kernel.org/qemu-devel/2d5e87062b6fc283c1effe58ae81d902a57097b8.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 49/106] vhost: move IOTLB functions from vhost-backend.c to vhost.c
+    + Link: https://lore.kernel.org/qemu-devel/e86a41c24adb0391b6d3de8d3f58d9fc044ff9b7.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 50/106] vhost: use consistent naming for backend handlers
+    + Link: https://lore.kernel.org/qemu-devel/83a2e2ecc108b44e2a49ec44d2ff0150dac984a2.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 51/106] vhost: rename vhost-backend.c to vhost-kernel.c
+    + Link: https://lore.kernel.org/qemu-devel/78bdeadfe60b051871f1ca3fffbce9ce1304bd4f.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 52/106] vhost: replace .vhost_vq_get_addr() with .vhost_phys_vring_addr()
+    + Link: https://lore.kernel.org/qemu-devel/a471e5b50c212d4584b5c742be8a865dfe8bd68c.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 53/106] vhost: simplify vhost_memory_map() and vhost_memory_unmap()
+    + Link: https://lore.kernel.org/qemu-devel/846a29de2bd2a299acf54af2169c14b52fba6706.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 54/106] qapi: remove user addresses from x-query-virtio-vhost-queue-status
+    + Link: https://lore.kernel.org/qemu-devel/ad865ad765feb322a3f414c480dc57efaf78a529.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 55/106] vhost: stop reusing vq->desc (and friends) to store physical address
+    + Link: https://lore.kernel.org/qemu-devel/15bbdc0a7bc96933fbe2a913346ab03dbd4584e1.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 56/106] vhost: rename vring pointer fields to reflect user addresses
+    + Link: https://lore.kernel.org/qemu-devel/3fbef0689a3cde55efce72a3f6333031a3149f69.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 57/106] vhost: add .vhost_phys_iotlb_msg() handler
+    + Link: https://lore.kernel.org/qemu-devel/04f0d0a69eb93c3da135068afd081871ab4f6bd5.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 58/106] vhost-user: add VHOST_USER_PROTOCOL_F_GPA_ADDRESSES
+    + Link: https://lore.kernel.org/qemu-devel/be51b7177c9c7c6f1e2ff1b4cd250649e1d6dcaf.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 59/106] libvhost-user: fix buffer overflow in virtqueue_read_indirect_desc()
+    + Link: https://lore.kernel.org/qemu-devel/85805ee887be4adddb1f1a34f526968adc95e582.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 60/106] libvduse: fix buffer overflow in vduse_queue_read_indirect_desc()
+    + Link: https://lore.kernel.org/qemu-devel/9f1b6d013d42b112680b435af9a9dff331b3fbaf.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 61/106] MAINTAINERS: Update CXL maintainers entry including adding linux-cxl list
+    + Link: https://lore.kernel.org/qemu-devel/7f79ee47951bd263b1447ab0281d92b69e2b70ee.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 62/106] vhost-user.rst: Explicitly allow front-end to write to kick FDs
+    + Link: https://lore.kernel.org/qemu-devel/08c2415217b53ee66a8b7f705a21beeef19ffc6d.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 63/106] amd_iommu: Follow root pointer before page walk and use 1-based levels
+    + Link: https://lore.kernel.org/qemu-devel/786550e2d38a92e90c13eb9d57e3a72d7ab38d51.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 64/106] amd_iommu: Reject non-decreasing NextLevel in fetch_pte()
+    + Link: https://lore.kernel.org/qemu-devel/291aa70ad254b6c48012dbfd16a4af0978ea1b84.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 65/106] vhost-user-blk-server: do not advertise VIRTIO_BLK_F_SIZE_MAX with size_max=0
+    + Link: https://lore.kernel.org/qemu-devel/e777ba135f2a1a171cdcd468cfb29e89f1b27fd5.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 66/106] vhost-user-blk: do not force VIRTIO_BLK_F_SIZE_MAX
+    + Link: https://lore.kernel.org/qemu-devel/639dcd58707951cb88a0dddcb5027780c53d49dd.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 67/106] ppc/pnv_phb3: Error out on invalid config access
+    + Link: https://lore.kernel.org/qemu-devel/218109781209f9d77242b2cdf743acac8bc3b893.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 68/106] hw/pci: Replace assert with bounds check and return
+    + Link: https://lore.kernel.org/qemu-devel/c7209c56718107fefd5deae140a450954d31ff2b.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 69/106] vhost-user: Fix stale error logs and return values in teardown paths
+    + Link: https://lore.kernel.org/qemu-devel/eef8552c474f9ed3a82cf37cf2c5b227521a5f4b.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 70/106] q35: Fix incorrect values for PCIEXBAR masks
+    + Acked-by: Michael S. Tsirkin <mst@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/412c48d054b484a0f88d858dc554c24e07e94358.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 71/106] net/vhost-vdpa: enable vqs before DRIVER_OK if no cvq
+    + Link: https://lore.kernel.org/qemu-devel/66232095a1c71880a3fecc5ecaae47ec9a403134.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 72/106] virtio: Allow to fill a whole virtqueue in order
+    + Link: https://lore.kernel.org/qemu-devel/eceff0982f97cc79a26883b93f8eac05cd126dd8.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 73/106] vhost: move svq next desc array to descs state struct
+    + Link: https://lore.kernel.org/qemu-devel/927d0beaad0ac6db96865a96fdad0c1a93b3477d.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 74/106] vhost: factor out the descriptor next fetching
+    + Link: https://lore.kernel.org/qemu-devel/00373aa05e683e4d4f72f534a8b9179cd4065149.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 75/106] vhost: factor out the get of last used desc in SVQ
+    + Link: https://lore.kernel.org/qemu-devel/90369a1165c4ffc5a22c9e0fb1743bc0ff896861.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 76/106] vhost: factor out the detach buf logic in SVQ
+    + Link: https://lore.kernel.org/qemu-devel/7291b1a5f8b0c2dfa95e544dd59fa8144dde72fc.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 77/106] vhost: add in_order feature to shadow virtqueue
+    + Link: https://lore.kernel.org/qemu-devel/485c9e69ef6e9030ac368745886f07dfb56602a6.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 78/106] vhost: accept in order feature flag
+    + Link: https://lore.kernel.org/qemu-devel/942a1a32300859576f2917b920c25bb949faa1e8.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 79/106] amd_iommu: Use switch case to determine mmio register name
+    + Link: https://lore.kernel.org/qemu-devel/25e92816c8d1e4c4f35a1c076d9d5f3a90e17a93.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 80/106] amd_iommu: Turn on XT support only when guest has enabled it
+    + Link: https://lore.kernel.org/qemu-devel/ced009256e6ed6ae93785d00699fdfb956584f5b.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 81/106] amd_iommu: Generate XT interrupts when xt support is enabled
+    + Link: https://lore.kernel.org/qemu-devel/cf0210df65aa4f582e444b910c950e2b4a80b194.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 82/106] standard-headers: Add virtio_rtc.h from Linux 7.0-rc1
+    + Link: https://lore.kernel.org/qemu-devel/5341284a7cbadb19fa61dadb643475d3aef2f5a3.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 83/106] virtio-rtc: Add basic virtio-rtc support
+    + Link: https://lore.kernel.org/qemu-devel/ae5f259a5c77b501b951d487030e617e546facc3.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 84/106] hw/i386/pc: Add a proper owner for the ioport memory regions
+    + Link: https://lore.kernel.org/qemu-devel/653f3b5a15bbc3db564639f7ee50c547f61a002c.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 85/106] acpi: add API to build WDAT instructions
+    + Link: https://lore.kernel.org/qemu-devel/f793df3dcabab71e794639a794bba1ae1380943c.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 86/106] x86: q35: add 'wdat' property
+    + Link: https://lore.kernel.org/qemu-devel/d30189cce17038ecaeaaacbfee9ab2c1a07c80fa.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 87/106] x86: q35: generate WDAT ACPI table
+    + Link: https://lore.kernel.org/qemu-devel/f7060ac4e7dda3edc6153356c6d665f27847368c.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 88/106] tests: acpi: x86/q35: whitelist new WDAT table
+    + Link: https://lore.kernel.org/qemu-devel/c42b3b6ed699148b5b245f23408d2c6277d8941e.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 89/106] tests: acpi: x86/q35: add WDAT table test case
+    + Link: https://lore.kernel.org/qemu-devel/d7d7c6902362f4f9b1d597abb75e54d27677f08b.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 90/106] tests: acpi: x86/q35: update expected WDAT blob
+    + Link: https://lore.kernel.org/qemu-devel/cbb13f70170e66870fa37a195e6c8a3049b8869f.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 91/106] vhost-user: Add VirtIO Shared Memory map request
+    + Link: https://lore.kernel.org/qemu-devel/b52e1896e76437ef7f4c73c834902a829af92f28.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 92/106] vhost_user.rst: Align VhostUserMsg excerpt members
+    + Link: https://lore.kernel.org/qemu-devel/8d0e94927a80f02562e843cca61cf65cef32db5a.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 93/106] vhost_user.rst: Add SHMEM_MAP/_UNMAP to spec
+    + Link: https://lore.kernel.org/qemu-devel/588acb45c29f8c30f98b5cbafb9fd09cb932bd88.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 94/106] vhost_user: Add frontend get_shmem_config command
+    + Link: https://lore.kernel.org/qemu-devel/458f80f661e51d09936efb53eaba7c0d81ba323c.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 95/106] vhost_user.rst: Add GET_SHMEM_CONFIG message
+    + Link: https://lore.kernel.org/qemu-devel/060ed6a4bb4d50e3de257a29137e84843f069312.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 96/106] qmp: add shmem feature map
+    + Link: https://lore.kernel.org/qemu-devel/0578926e3a6ddaf011f00e41ee7e490b446518eb.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 97/106] vhost-user-device: Add shared memory BAR
+    + Link: https://lore.kernel.org/qemu-devel/6608dca74ecfc3e59cdf876cb5490750f37d3706.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 98/106] vhost-user.rst: fix typo
+    + Link: https://lore.kernel.org/qemu-devel/480be4f43b208e585e68c300dcab924adf6765f4.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 99/106] hw/cxl: Fix handling of component ID to not assume it is a string
+    + Link: https://lore.kernel.org/qemu-devel/91beb27a4851fe47fe68a5f715af5db456b9d37d.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 100/106] hw/cxl: Add fixes in Post Package Repair (PPR)
+    + Link: https://lore.kernel.org/qemu-devel/37185e2cf15adfb36ddcee20c444ecccbe26be4d.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 101/106] hw/cxl/events: Fix handling of component ID in event records generation to not assume it is a string
+    + Link: https://lore.kernel.org/qemu-devel/bae67e770aab251a9604ef8b81c67e6fe877baa3.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 102/106] hw/cxl: Allow cxl_cfmws_find_device() to filter on whether interleaved paths are accepted
+    + Link: https://lore.kernel.org/qemu-devel/57d96c7b8527d60bca37c742ebe418040dbb2fcd.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 103/106] hw/cxl: Add a performant (and correct) path for the non interleaved cases
+    + Link: https://lore.kernel.org/qemu-devel/c7f16b110a833482eb99a153cfb5c0c630338f65.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 104/106] intel_iommu: fix guest-triggerable abort on oversized MMIO access
+    + Link: https://lore.kernel.org/qemu-devel/1d741b375300ad14066c74f7f2d3430114a5cf7f.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 105/106] tests/qtest: add 8-byte MMIO access sweep for intel-iommu
+    + Link: https://lore.kernel.org/qemu-devel/ddc0a856d2955677bfda5358ce216ea34e115495.1781463125.git.mst@redhat.com
+  [32m✓[0m [PATCH 106/106] hw/scsi/vhost-scsi: fix build with older kernel headers
+    + Link: https://lore.kernel.org/qemu-devel/31dbba011d0f3a21432d0629fae0b4885f2eed25.1781463125.git.mst@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 106
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
+     Msg From: Stefano Garzarella <sgarzare@redhat.com>
+    ! Trailer: Signed-off-by: Chai Wen <chaiwen@baidu.com>
+     Msg From: Stefano Garzarella <sgarzare@redhat.com>
+    ! Trailer: Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+     Msg From: Jonathan Cameron via qemu development <qemu-devel@nongnu.org>
+    ! Trailer: Signed-off-by: Ni Xun <nixun@baidu.com>
+     Msg From: Stefano Garzarella <sgarzare@redhat.com>
+    ! Trailer: Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+     Msg From: Stefano Garzarella <sgarzare@redhat.com>
+    ! Trailer: Reviewed-by: Michael S. Tsirkin <mst@redhat.com>
+     Msg From: Stefano Garzarella <sgarzare@redhat.com>
+    ! Trailer: Signed-off-by: Yongji Xie <xieyongji@baidu.com>
+     Msg From: Stefano Garzarella <sgarzare@redhat.com>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: amd_iommu: restrict command buffer head/tail ranges to ring size
+Applying: amd_iommu: Update command buffer head ptr in MMIO region after wraparound
+Applying: tests/qtest: Add amd-iommu command buffer head wrap test
+Patch failed at 0003 tests/qtest: Add amd-iommu command buffer head wrap test
+error: patch failed: MAINTAINERS:4053
+error: MAINTAINERS: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
