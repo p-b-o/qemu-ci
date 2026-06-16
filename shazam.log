@@ -1,0 +1,27 @@
+Looking up https://lore.kernel.org/all/20260616021654.22892-1-philmd@oss.qualcomm.com/
+Grabbing thread from lore.kernel.org/all/20260616021654.22892-1-philmd@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2] hw/s390x/ipl: Remove TCG dependency in handle_diag_308()
+    + Link: https://lore.kernel.org/qemu-devel/20260616021654.22892-1-philmd@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 1
+---
+Applying: hw/s390x/ipl: Remove TCG dependency in handle_diag_308()
+Patch failed at 0001 hw/s390x/ipl: Remove TCG dependency in handle_diag_308()
+error: patch failed: hw/s390x/ipl.c:18
+error: hw/s390x/ipl.c: patch does not apply
+error: patch failed: target/s390x/diag.c:95
+error: target/s390x/diag.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
