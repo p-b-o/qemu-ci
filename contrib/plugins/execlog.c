@@ -388,7 +388,28 @@ static void vcpu_init(qemu_plugin_id_t id, unsigned int vcpu_index)
 }
 
 /**
- * On plugin exit, print last instruction in cache
+ * On vCPU exit, flush the last cached instruction for this vCPU.
+ *
+ * The one-instruction-delay pattern stores each instruction in last_exec and
+ * only prints it when the *next* callback fires. When a thread exits via
+ * syscall (e.g. ecall/exit), no subsequent callback fires for that vCPU and
+ * the final instruction is silently dropped. Flushing here guarantees it is
+ * written before the vCPU is torn down.
+ */
+static void vcpu_exit(qemu_plugin_id_t id, unsigned int vcpu_index)
+{
+    CPU *c = qemu_plugin_scoreboard_find(cpus, vcpu_index);
+    if (c->last_exec && c->last_exec->len) {
+        g_mutex_lock(&execlog_output_mutex);
+        qemu_plugin_outs(c->last_exec->str);
+        qemu_plugin_outs("\n");
+        g_mutex_unlock(&execlog_output_mutex);
+        g_string_truncate(c->last_exec, 0);
+    }
+}
+
+/**
+ * On plugin exit, flush any remaining cached instructions and free state.
  */
 static void plugin_exit(qemu_plugin_id_t id, void *p)
 {
@@ -396,8 +417,10 @@ static void plugin_exit(qemu_plugin_id_t id, void *p)
     for (int i = 0; i < n; i++) {
         CPU *c = qemu_plugin_scoreboard_find(cpus, i);
         if (c->last_exec && c->last_exec->len) {
+            g_mutex_lock(&execlog_output_mutex);
             qemu_plugin_outs(c->last_exec->str);
             qemu_plugin_outs("\n");
+            g_mutex_unlock(&execlog_output_mutex);
         }
     }
     qemu_plugin_scoreboard_free(cpus);
@@ -467,6 +490,7 @@ QEMU_PLUGIN_EXPORT int qemu_plugin_install(qemu_plugin_id_t id,
 
     /* Register init, translation block and exit callbacks */
     qemu_plugin_register_vcpu_init_cb(id, vcpu_init);
+    qemu_plugin_register_vcpu_exit_cb(id, vcpu_exit);
     qemu_plugin_register_vcpu_tb_trans_cb(id, vcpu_tb_trans);
     qemu_plugin_register_atexit_cb(id, plugin_exit, NULL);
 
