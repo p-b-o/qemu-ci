@@ -1,0 +1,31 @@
+Looking up https://lore.kernel.org/all/20260616135904.44930-1-xpahos@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260616135904.44930-1-xpahos@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 5 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 4 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/3] hw/i386/pc: Introduce 11.2 machine type for SMBIOS type 8 base migration
+    + Link: https://lore.kernel.org/qemu-devel/20260616135904.44930-2-xpahos@gmail.com
+  [32m✓[0m [PATCH v2 2/3] hw/smbios: Add dedicated handle range for Type 8 tables
+    + Link: https://lore.kernel.org/qemu-devel/20260616135904.44930-3-xpahos@gmail.com
+  [32m✓[0m [PATCH v2 3/3] tests/qtest: Add SMBIOS Type 8 handle base tests
+    + Link: https://lore.kernel.org/qemu-devel/20260616135904.44930-4-xpahos@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 3
+---
+Applying: hw/i386/pc: Introduce 11.2 machine type for SMBIOS type 8 base migration
+Patch failed at 0001 hw/i386/pc: Introduce 11.2 machine type for SMBIOS type 8 base migration
+error: patch failed: hw/core/machine.c:39
+error: hw/core/machine.c: patch does not apply
+error: patch failed: hw/i386/pc_q35.c:345
+error: hw/i386/pc_q35.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
