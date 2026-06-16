@@ -1,0 +1,157 @@
+Looking up https://lore.kernel.org/all/20260616190639.3462006-1-peter.maydell@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260616190639.3462006-1-peter.maydell@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 62 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 488 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/61] hw/arm/smmuv3: Update ATC invalidation check
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-2-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 2/61] hw/arm/smmuv3: Improve accel SMMUv3 usage documentation
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-3-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 3/61] hw/arm/smmuv3-accel: Add helper for resolving auto parameters
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-4-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 4/61] hw/arm/smmuv3-accel: Implement "auto" value for "ats"
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-5-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 5/61] hw/arm/smmuv3-accel: Implement "auto" value for "ril"
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-6-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 6/61] hw/arm/smmuv3-accel: Implement "auto" value for "ssidsize"
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-7-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 7/61] hw/arm/smmuv3-accel: Implement "auto" value for "oas"
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-8-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 8/61] hw/arm/smmuv3: Set default ats, ril, ssidsize, oas to auto
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-9-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 9/61] qemu-options.hx: Support "auto" for accel SMMUv3 properties
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-10-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 10/61] hw/pci/pci: Enforce pci_setup_iommu_per_bus() is called only once per bus
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-11-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 11/61] backends/iommufd: Update iommufd_backend_get_device_info
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-12-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 12/61] backends/iommufd: Update iommufd_backend_alloc_viommu to allow user ptr
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-13-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 13/61] backends/iommufd: Introduce iommufd_backend_alloc_hw_queue
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-14-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 14/61] backends/iommufd: Introduce iommufd_backend_viommu_mmap
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-15-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 15/61] system/iommufd: Remove unused viommu pointer from IOMMUFDVeventq
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-16-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 16/61] hw/arm/smmuv3-accel: Introduce CMDQV ops interface
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-17-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 17/61] hw/arm/tegra241-cmdqv: Add Tegra241 CMDQV ops backend stub
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-18-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 18/61] hw/arm/smmuv3-accel: Wire CMDQV ops into accel lifecycle
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-19-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 19/61] hw/arm/virt: Use stored SMMUv3 device list for IORT build
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-20-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 20/61] hw/arm/tegra241-cmdqv: Probe host Tegra241 CMDQV support
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-21-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 21/61] hw/arm/tegra241-cmdqv: Implement CMDQV init
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-22-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 22/61] hw/arm/virt: Link SMMUv3 CMDQV resources to platform bus
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-23-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 23/61] hw/arm/tegra241-cmdqv: Implement CMDQV vIOMMU alloc/free
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-24-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 24/61] hw/arm/tegra241-cmdqv: mmap host VINTF Page0 for CMDQV
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-25-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 25/61] hw/arm/tegra241-cmdqv: Emulate CMDQ-V Config region
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-26-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 26/61] hw/arm/tegra241-cmdqv: Emulate VCMDQ register reads
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-27-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 27/61] hw/arm/tegra241-cmdqv: Emulate VCMDQ register writes
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-28-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 28/61] hw/arm/tegra241-cmdqv: Allocate HW VCMDQs once configured
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-29-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 29/61] hw/arm/tegra241-cmdqv: Route allocated VCMDQ Page0 accesses to the mmap'd host VINTF page0
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-30-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 30/61] memory: Allow RAM device regions to skip IOMMU mapping
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-31-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 31/61] hw/arm/tegra241-cmdqv: Use mmap'd host VINTF page0 for virtual VINTF page0
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-32-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 32/61] hw/arm/smmuv3-accel: Introduce common helper for veventq read
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-33-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 33/61] hw/arm/tegra241-cmdqv: Read and propagate Tegra241 CMDQV errors
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-34-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 34/61] hw/arm/tegra241-cmdqv: Initialize register state on reset
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-35-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 35/61] hw/arm/tegra241-cmdqv: Limit queue size based on backend page size
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-36-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 36/61] hw/arm/smmuv3: Add per-device identifier property
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-37-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 37/61] hw/arm/smmuv3-accel: Introduce helper to query CMDQV type
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-38-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 38/61] hw/arm/virt-acpi: Advertise Tegra241 CMDQV nodes in DSDT
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-39-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 39/61] hw/arm/smmuv3-accel: Enforce viommu association when CMDQV is active
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-40-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 40/61] hw/arm/tegra241-cmdqv: Document the CMDQV design and lifecycle
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-41-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 41/61] hw/arm/smmuv3: Add cmdqv property for SMMUv3 device
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-42-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 42/61] target/arm: honour CCR.BFHFNMIGN for probed data BusFaults
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-43-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 43/61] hw/arm/bcm2838: Route I2C interrupts to GIC
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-44-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 44/61] target/arm: Add feature predicates for SVE2.2 and SME2.2
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-45-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 45/61] target/arm: Rename sve unary predicated patterns
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-46-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 46/61] target/arm: Enable zeroing in DO_ZPZ macros in sve_helper.c
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-47-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 47/61] target/arm: Expand DO_ZPZ in translate-sve.c
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-48-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 48/61] target/arm: Implement SVE integer unary operations (predicated, zeroing)
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-49-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 49/61] target/arm: Implement SVE bitwise unary operations (predicated, zeroing)
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-50-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 50/61] target/arm: Implement SVE reverse within elements (zeroing)
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-51-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 51/61] target/arm: Implement SVE reverse doublewords (zeroing)
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-52-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 52/61] target/arm: Implement SVE2 integer unary operations (predicated, zeroing)
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-53-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 53/61] target/arm: Add data argument to do_frint_mode
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-54-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 54/61] target/arm: Implement Floating-point round to integral value (predicated, zeroing)
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-55-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 55/61] target/arm: Implement Floating-point convert (predicated, zeroing)
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-56-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 56/61] target/arm: Implement Floating-point square root (predicated, zeroing)
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-57-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 57/61] target/arm: Implement SCVTF, UCVTF (predicated, zeroing)
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-58-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 58/61] target/arm: Implement FRINT{32,64}{X,Z}
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-59-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 59/61] target/arm: Enable zeroing in DO_FCVT{N, L}T macros in sve_helper.c
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-60-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 60/61] target/arm: Implement SVE floating-point convert (top, predicated, zeroing)
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-61-peter.maydell@linaro.org
+  [32m✓[0m [PATCH 61/61] target/arm: Implement floating-point log and convert to integer (zeroing)
+    + Link: https://lore.kernel.org/qemu-devel/20260616190639.3462006-62-peter.maydell@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 61
+---
+Applying: hw/arm/smmuv3: Update ATC invalidation check
+Applying: hw/arm/smmuv3: Improve accel SMMUv3 usage documentation
+Applying: hw/arm/smmuv3-accel: Add helper for resolving auto parameters
+Applying: hw/arm/smmuv3-accel: Implement "auto" value for "ats"
+Applying: hw/arm/smmuv3-accel: Implement "auto" value for "ril"
+Applying: hw/arm/smmuv3-accel: Implement "auto" value for "ssidsize"
+Applying: hw/arm/smmuv3-accel: Implement "auto" value for "oas"
+Applying: hw/arm/smmuv3: Set default ats, ril, ssidsize, oas to auto
+Applying: qemu-options.hx: Support "auto" for accel SMMUv3 properties
+Applying: hw/pci/pci: Enforce pci_setup_iommu_per_bus() is called only once per bus
+Applying: backends/iommufd: Update iommufd_backend_get_device_info
+Applying: backends/iommufd: Update iommufd_backend_alloc_viommu to allow user ptr
+Applying: backends/iommufd: Introduce iommufd_backend_alloc_hw_queue
+Patch failed at 0013 backends/iommufd: Introduce iommufd_backend_alloc_hw_queue
+error: patch failed: backends/iommufd.c:549
+error: backends/iommufd.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
