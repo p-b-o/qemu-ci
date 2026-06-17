@@ -1,0 +1,49 @@
+Looking up https://lore.kernel.org/all/20260617171438.75914-1-philmd@oss.qualcomm.com/
+Grabbing thread from lore.kernel.org/all/20260617171438.75914-1-philmd@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 14 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 25 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/11] target/arm: Restrict TCG specific headers
+    + Link: https://lore.kernel.org/qemu-devel/20260617171438.75914-2-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 2/11] hw/s390x/ipl: Remove TCG dependency in handle_diag_308()
+    + Link: https://lore.kernel.org/qemu-devel/20260617171438.75914-3-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 3/11] accel/tcg: Remove cpu_loop_exit() stub
+    + Link: https://lore.kernel.org/qemu-devel/20260617171438.75914-4-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 4/11] accel/tcg: Move cpu_exec() out of 'exec/cpu-common.h'
+    + Link: https://lore.kernel.org/qemu-devel/20260617171438.75914-5-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 5/11] accel/tcg: Move cpu_exec_step_atomic() out of 'exec/cpu-common.h'
+    + Link: https://lore.kernel.org/qemu-devel/20260617171438.75914-6-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 6/11] accel/tcg: Move cpu_unwind_state_data() out of 'exec/cpu-common.h'
+    + Link: https://lore.kernel.org/qemu-devel/20260617171438.75914-7-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 7/11] accel/tcg: Move cpu_restore_state() out of 'exec/cpu-common.h'
+    + Link: https://lore.kernel.org/qemu-devel/20260617171438.75914-8-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 8/11] accel/tcg: Have cpu_loop_exit_requested() take const @cpu argument
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260617171438.75914-9-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 9/11] accel/tcg: Move cpu_loop_exit_requested() out of 'exec/cpu-common.h'
+    + Link: https://lore.kernel.org/qemu-devel/20260617171438.75914-10-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 10/11] accel/tcg: Move cpu_loop_exit_*() out of 'exec/cpu-common.h'
+    + Link: https://lore.kernel.org/qemu-devel/20260617171438.75914-11-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 11/11] accel/tcg: Restrict headers being TCG specific
+    + Link: https://lore.kernel.org/qemu-devel/20260617171438.75914-12-philmd@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 11
+---
+Applying: target/arm: Restrict TCG specific headers
+Applying: hw/s390x/ipl: Remove TCG dependency in handle_diag_308()
+Patch failed at 0002 hw/s390x/ipl: Remove TCG dependency in handle_diag_308()
+error: patch failed: hw/s390x/ipl.c:18
+error: hw/s390x/ipl.c: patch does not apply
+error: patch failed: target/s390x/diag.c:95
+error: target/s390x/diag.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
