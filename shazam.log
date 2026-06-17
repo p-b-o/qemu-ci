@@ -1,0 +1,38 @@
+Looking up https://lore.kernel.org/all/20260617115442.91715-1-163wangjack@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260617115442.91715-1-163wangjack@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+WARNING: duplicate messages found at index 1
+   Subject 1: Signed-off-by: jw_mac <163wangjack@gamil.com>
+   Subject 2: git format-patch -1 --subject-prefix="PATCH trivial"Signed-off-by: jw_mac <163wangjack@gamil.com>
+  2 is not a reply... assume additional patch
+Analyzing 4 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] Signed-off-by: jw_mac <163wangjack@gamil.com>
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260617115442.91715-1-163wangjack@gmail.com
+  [32m✓[0m [PATCH] git format-patch -1 --subject-prefix="PATCH trivial"Signed-off-by: jw_mac <163wangjack@gamil.com>
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260617115442.91715-2-163wangjack@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 2
+---
+Applying: Signed-off-by: jw_mac <163wangjack@gamil.com>
+Applying: git format-patch -1 --subject-prefix="PATCH trivial"Signed-off-by: jw_mac <163wangjack@gamil.com>
+Patch failed at 0002 git format-patch -1 --subject-prefix="PATCH trivial"Signed-off-by: jw_mac <163wangjack@gamil.com>
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:91: new blank line at EOF.
++
+warning: 1 line adds whitespace errors.
+error: patch failed: hw/timer/imx_epit.c:20
+error: hw/timer/imx_epit.c: patch does not apply
+error: patch failed: hw/timer/trace-events:122
+error: hw/timer/trace-events: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
