@@ -1,0 +1,34 @@
+Looking up https://lore.kernel.org/all/20260617160426.64461-1-philmd@oss.qualcomm.com/
+Grabbing thread from lore.kernel.org/all/20260617160426.64461-1-philmd@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/5] target/sparc: Include missing 'accel/tcg/cpu-ops.h' header in cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20260617160426.64461-2-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 2/5] exec/cpu-common.h: Include missing 'qemu/thread.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260617160426.64461-3-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 3/5] exec/cpu-common.h: Avoid including unused 'exec/vaddr.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260617160426.64461-4-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 4/5] exec/cpu-common.h: Avoid including unused 'tcg/debug-assert.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260617160426.64461-5-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 5/5] exec/cpu-common.h: Avoid including unused exec/page-protection.h header
+    + Link: https://lore.kernel.org/qemu-devel/20260617160426.64461-6-philmd@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 5
+---
+Applying: target/sparc: Include missing 'accel/tcg/cpu-ops.h' header in cpu.c
+Applying: exec/cpu-common.h: Include missing 'qemu/thread.h' header
+Patch failed at 0002 exec/cpu-common.h: Include missing 'qemu/thread.h' header
+error: patch failed: include/exec/cpu-common.h:8
+error: include/exec/cpu-common.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
