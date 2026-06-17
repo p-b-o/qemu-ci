@@ -2732,7 +2732,9 @@ static RISCVException rmw_xireg_aia(CPURISCVState *env, int csrno,
                                     AIA_MAKE_IREG(isel, priv, virt, vgein,
                                                   riscv_cpu_mxl_bits(env)),
                                     &wide_val, new_val, wr_mask);
-            *val = wide_val;
+            if (val) {
+                *val = wide_val;
+            }
         }
     } else {
         isel_reserved = true;
@@ -3008,7 +3010,9 @@ static RISCVException rmw_xtopei(CPURISCVState *env, int csrno,
                     AIA_MAKE_IREG(ISELECT_IMSIC_TOPEI, priv, virt, vgein,
                                   riscv_cpu_mxl_bits(env)),
                     &wide_val, new_val, wr_mask);
-    *val = wide_val;
+    if (val) {
+        *val = wide_val;
+    }
 
 done:
     if (ret) {
