@@ -1,0 +1,60 @@
+Looking up https://lore.kernel.org/all/20260618041517.573469-1-richard.henderson@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260618041517.573469-1-richard.henderson@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH 1/10] target/arm: Move tile_vslice_{index, offset} to vec_internal.h
+    [31m✗[0m BADSIG: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260618041517.573469-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 2/10] target/arm: Implement FMOPA (widening, 4-way fp8 to fp32)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260618041517.573469-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 3/10] target/arm: Implement FMLALL (multiple and single vector)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260618041517.573469-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 4/10] target/arm: Implement FMLALL (multiple vector)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260618041517.573469-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 5/10] target/arm: Implement FMLALL (multiple and indexed vector)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260618041517.573469-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 6/10] target/arm: Implement FDOT (multiple and single vector)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260618041517.573469-7-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 7/10] target/arm: Implement FDOT (multiple vector)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260618041517.573469-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 8/10] target/arm: Implement FDOT (multiple and indexed vector)
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260618041517.573469-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 9/10] target/arm: Implement FVDOTB, FVDOTT
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260618041517.573469-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 10/10] target/arm: Enable FEAT_SME_F8F32 for -cpu max
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260618041517.573469-11-richard.henderson@linaro.org
+---
+Total patches: 10
+---
+Applying: target/arm: Move tile_vslice_{index, offset} to vec_internal.h
+Applying: target/arm: Implement FMOPA (widening, 4-way fp8 to fp32)
+Applying: target/arm: Implement FMLALL (multiple and single vector)
+Applying: target/arm: Implement FMLALL (multiple vector)
+Applying: target/arm: Implement FMLALL (multiple and indexed vector)
+Applying: target/arm: Implement FDOT (multiple and single vector)
+Applying: target/arm: Implement FDOT (multiple vector)
+Applying: target/arm: Implement FDOT (multiple and indexed vector)
+Applying: target/arm: Implement FVDOTB, FVDOTT
+Applying: target/arm: Enable FEAT_SME_F8F32 for -cpu max
+Patch failed at 0010 target/arm: Enable FEAT_SME_F8F32 for -cpu max
+error: patch failed: docs/system/arm/emulation.rst:169
+error: docs/system/arm/emulation.rst: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
