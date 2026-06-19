@@ -1,0 +1,39 @@
+Looking up https://lore.kernel.org/all/20260619101834.228432-1-den@openvz.org/
+Grabbing thread from lore.kernel.org/all/20260619101834.228432-1-den@openvz.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v5 1/7] migration: add migration_guest_ram_loading() helper
+    + Link: https://lore.kernel.org/qemu-devel/20260619101834.228432-2-den@openvz.org
+  [31m✗[0m [PATCH v5 2/7] dump: refuse dump-guest-memory while guest RAM is being migrated
+    + Link: https://lore.kernel.org/qemu-devel/20260619101834.228432-3-den@openvz.org
+  [31m✗[0m [PATCH v5 3/7] system/cpus: refuse memsave/pmemsave while guest RAM is being migrated
+    + Link: https://lore.kernel.org/qemu-devel/20260619101834.228432-4-den@openvz.org
+  [31m✗[0m [PATCH v5 4/7] dump: make win_dump_available() check vmcoreinfo for a Windows dump header
+    + Link: https://lore.kernel.org/qemu-devel/20260619101834.228432-5-den@openvz.org
+  [31m✗[0m [PATCH v5 5/7] tests/qtest: add dump-guest-memory test
+    + Link: https://lore.kernel.org/qemu-devel/20260619101834.228432-6-den@openvz.org
+  [31m✗[0m [PATCH v5 6/7] tests/qtest/dump: reject win-dmp without vmcoreinfo
+    + Link: https://lore.kernel.org/qemu-devel/20260619101834.228432-7-den@openvz.org
+  [31m✗[0m [PATCH v5 7/7] tests/qtest/dump: cover win-dmp availability via vmcoreinfo
+    + Link: https://lore.kernel.org/qemu-devel/20260619101834.228432-8-den@openvz.org
+  ---
+  [31m✗[0m BADSIG: DKIM/virtuozzo.com
+---
+Total patches: 7
+---
+Applying: migration: add migration_guest_ram_loading() helper
+Applying: dump: refuse dump-guest-memory while guest RAM is being migrated
+Applying: system/cpus: refuse memsave/pmemsave while guest RAM is being migrated
+Patch failed at 0003 system/cpus: refuse memsave/pmemsave while guest RAM is being migrated
+error: patch failed: system/cpus.c:42
+error: system/cpus.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
