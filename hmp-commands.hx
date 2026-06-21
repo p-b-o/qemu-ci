@@ -928,16 +928,17 @@ ERST
 
     {
         .name       = "migrate",
-        .args_type  = "detach:-d,resume:-r,uri:s",
-        .params     = "[-d] [-r] uri",
+        .args_type  = "detach:-d,resume:-r,uri:s,uri-cpr:s?",
+        .params     = "[-d] [-r] uri [uri-cpr]",
         .help       = "migrate to URI (using -d to not wait for completion)"
-		      "\n\t\t\t -r to resume a paused postcopy migration",
+		      "\n\t\t\t -r to resume a paused postcopy migration"
+		      "\n\t\t\t uri-cpr specifies CPR URI for cpr-transfer mode",
         .cmd        = hmp_migrate,
     },
 
 
 SRST
-``migrate [-d] [-r]`` *uri*
+``migrate [-d] [-r]`` *uri* [*uri-cpr*]
   Migrate the VM to *uri*.
 
   ``-d``
@@ -945,6 +946,8 @@ SRST
     query an ongoing migration process, use "info migrate".
   ``-r``
     Resume a paused postcopy migration.
+  ``uri-cpr``
+    Specify CPR URI for cpr-transfer mode. It must be a UNIX domain socket.
 ERST
 
     {
