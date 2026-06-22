@@ -1,0 +1,81 @@
+Looking up https://lore.kernel.org/all/20260622193141.1449724-1-daniel.barboza@oss.qualcomm.com/
+Grabbing thread from lore.kernel.org/all/20260622193141.1449724-1-daniel.barboza@oss.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 25 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 8 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/24] target/riscv: Remove unused tcg/tcg.h include
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-2-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 2/24] target/riscv: move TCG only files to tcg subdir
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-3-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 3/24] target/riscv/machine.c: do not migrate pmp state with kvm
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-4-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 4/24] target/riscv: move pmp files to tcg subdir
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-5-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 5/24] target/riscv: make some riscv_sysemu_ops TCG only
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-6-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 6/24] target/riscv: move pmu.h to tcg subdir
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-7-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 7/24] target/riscv: move debug.h to tcg subdir
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-8-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 8/24] target/riscv: remove csr.h from kvm-cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-9-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 9/24] target/riscv: move csr.h to tcg subdir
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-10-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 10/24] target/riscv: move custom_csrs logic to tcg-cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-11-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 11/24] target/riscv: move riscv_cpu_set_nmi() to tcg-cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-12-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 12/24] target/riscv: move valid_vm_* satp arrays to cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-13-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 13/24] target/riscv: move some irq helpers to cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-14-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 14/24] target/riscv: move riscv_cpu_claim_interrupts to cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-15-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 15/24] target/riscv/cpu.c: handle TCG bits of riscv_cpu_dump_state
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-16-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 16/24] target/riscv: gate riscv_cpu_update_mip with tcg_enabled()
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-17-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 17/24] target/riscv/cpu.c: filter TCG only bits in riscv_cpu_reset_hold()
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-18-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 18/24] hw/riscv/riscv_hart.c isolate tcg only bits
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-19-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 19/24] target/riscv/gdbstub.c: isolate TCG only checks
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-20-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 20/24] target/riscv: move riscv_cpu_set_rdtime_fn to riscv_aclint
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-21-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 21/24] target/riscv/tcg: remove unused riscv_cpu_get_geilen()
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-22-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 22/24] target/riscv: move riscv_cpu_set_geilen() to riscv-imsic
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-23-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 23/24] target/riscv: move riscv_cpu_set_aia_ireg_rmw_cb() to riscv_imsic
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-24-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 24/24] gitlab-ci.d/crossbuilds: add riscv64 KVM-only build job
+    + Link: https://lore.kernel.org/qemu-devel/20260622193141.1449724-25-daniel.barboza@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 24
+---
+Applying: target/riscv: Remove unused tcg/tcg.h include
+Applying: target/riscv: move TCG only files to tcg subdir
+Applying: target/riscv/machine.c: do not migrate pmp state with kvm
+Applying: target/riscv: move pmp files to tcg subdir
+Applying: target/riscv: make some riscv_sysemu_ops TCG only
+Applying: target/riscv: move pmu.h to tcg subdir
+Patch failed at 0006 target/riscv: move pmu.h to tcg subdir
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:317: new blank line at EOF.
++
+warning: 1 line adds whitespace errors.
+error: patch failed: hw/riscv/fdt-common.c:230
+error: hw/riscv/fdt-common.c: patch does not apply
+error: patch failed: include/hw/riscv/fdt-common.h:35
+error: include/hw/riscv/fdt-common.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
