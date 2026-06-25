@@ -1,0 +1,43 @@
+Looking up https://lore.kernel.org/all/20260625015159.719300-1-richard.henderson@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260625015159.719300-1-richard.henderson@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/10] target/arm: Enable FADD/FSUB (half-precision) with FEAT_SME_F8F16
+    + Link: https://lore.kernel.org/qemu-devel/20260625015159.719300-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 2/10] target/arm: Rename SME FMLAL/FMLSL patterns
+    + Link: https://lore.kernel.org/qemu-devel/20260625015159.719300-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 3/10] target/arm: Implement FMLAL (multiple, multiple and single, FP8 to FP16)
+    + Link: https://lore.kernel.org/qemu-devel/20260625015159.719300-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 4/10] target/arm: Implement FMLAL (multiple and indexed, FP8 to FP16)
+    + Link: https://lore.kernel.org/qemu-devel/20260625015159.719300-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 5/10] target/arm: Implement FDOT (multiple, multiple and single, FP8 to FP16)
+    + Link: https://lore.kernel.org/qemu-devel/20260625015159.719300-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 6/10] target/arm: Implement DOT (multiple and indexed, FP8 to FP16)
+    + Link: https://lore.kernel.org/qemu-devel/20260625015159.719300-7-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 7/10] target/arm: Implement FMOPA (widening, 2-way, FP8 to FP16)
+    + Link: https://lore.kernel.org/qemu-devel/20260625015159.719300-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 8/10] target/arm: Rename FVDOT pattern
+    + Link: https://lore.kernel.org/qemu-devel/20260625015159.719300-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 9/10] target/arm: Implement FVDOT (FP8 to FP16)
+    + Link: https://lore.kernel.org/qemu-devel/20260625015159.719300-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 10/10] target/arm: Enable FEAT_SME_F8F16 for -cpu max
+    + Link: https://lore.kernel.org/qemu-devel/20260625015159.719300-11-richard.henderson@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 10
+---
+Applying: target/arm: Enable FADD/FSUB (half-precision) with FEAT_SME_F8F16
+Patch failed at 0001 target/arm: Enable FADD/FSUB (half-precision) with FEAT_SME_F8F16
+error: patch failed: target/arm/cpu-features.h:1605
+error: target/arm/cpu-features.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
