@@ -1,0 +1,68 @@
+Looking up https://lore.kernel.org/all/20260625223200.763198-1-richard.henderson@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260625223200.763198-1-richard.henderson@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 31 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/15] target/arm: Implement FMOP4 (non-widening) for float32
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 2/15] target/arm: Implement FMOP4 (non-widening) for float16
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 3/15] target/arm: Implement FMOP4 (non-widening) for float64
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 4/15] target/arm: Implement BFMOP4 (non-widening)
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 5/15] target/arm: Implement BFMOP4 (widening)
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 6/15] target/arm: Implement FMOP4 (widening, 2-way fp16 to fp32)
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-7-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 7/15] target/arm: Implement FMOP4 (widening, 4-way fp8 to fp32)
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 8/15] target/arm: Implement FMOP4A (widening, 2-way, FP8 to FP16)
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 9/15] target/arm: Implement SMOP4[AS] (2-way)
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 10/15] target/arm: Implement SMOP4[AS] (4-way)
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-11-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 11/15] target/arm: Implement SUMOP4[AS]
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-12-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 12/15] target/arm: Implement UMOP4[AS] (2-way)
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-13-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 13/15] target/arm: Implement UMOP4[AS] (4-way)
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-14-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 14/15] target/arm: Implement USMOP4[AS]
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-15-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 15/15] target/arm: Enable FEAT_SME_MOP4 for -cpu max
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260625223200.763198-16-richard.henderson@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 15
+---
+Applying: target/arm: Implement FMOP4 (non-widening) for float32
+Patch failed at 0001 target/arm: Implement FMOP4 (non-widening) for float32
+error: patch failed: target/arm/cpu-features.h:1575
+error: target/arm/cpu-features.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
