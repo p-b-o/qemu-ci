@@ -287,6 +287,8 @@ static void vub_device_realize(DeviceState *dev, Error **errp)
     VirtIODevice *vdev = VIRTIO_DEVICE(dev);
     VHostUserBase *vub = VHOST_USER_BASE(dev);
     uint64_t memory_sizes[VIRTIO_MAX_SHMEM_REGIONS];
+    struct vhost_virtqueue *vhost_vqs = NULL;
+    bool vhost_dev_initialized = false;
     int i, ret, nregions, regions_processed = 0;
 
     if (!vub->chardev.chr) {
@@ -338,6 +340,7 @@ static void vub_device_realize(DeviceState *dev, Error **errp)
 
     vub->vhost_dev.nvqs = vub->num_vqs;
     vub->vhost_dev.vqs = g_new0(struct vhost_virtqueue, vub->vhost_dev.nvqs);
+    vhost_vqs = vub->vhost_dev.vqs;
 
     /* connect to backend */
     ret = vhost_dev_init(&vub->vhost_dev, &vub->vhost_user,
@@ -346,6 +349,7 @@ static void vub_device_realize(DeviceState *dev, Error **errp)
     if (ret < 0) {
         goto err;
     }
+    vhost_dev_initialized = true;
 
     ret = vub->vhost_dev.vhost_ops->vhost_get_shmem_config(&vub->vhost_dev,
                                                            &nregions,
@@ -386,6 +390,10 @@ static void vub_device_realize(DeviceState *dev, Error **errp)
                              dev, NULL, true);
     return;
 err:
+    if (vhost_dev_initialized) {
+        vhost_dev_cleanup(&vub->vhost_dev);
+    }
+    g_free(vhost_vqs);
     do_vhost_user_cleanup(vdev, vub);
 }
 
