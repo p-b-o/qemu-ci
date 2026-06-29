@@ -1,0 +1,24 @@
+Looking up https://lore.kernel.org/all/tencent_3105EC28797360A155078F53@qq.com/
+Grabbing thread from lore.kernel.org/all/tencent_3105EC28797360A155078F53@qq.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] hw/misc/ivshmem: clear chardev handlers before freeing peers
+    + Link: https://lore.kernel.org/qemu-devel/tencent_3105EC28797360A155078F53@qq.com
+  ---
+  [32m✓[0m Signed: DKIM/tencent.com
+---
+Total patches: 1
+---
+Applying: hw/misc/ivshmem: clear chardev handlers before freeing peers
+Patch failed at 0001 hw/misc/ivshmem: clear chardev handlers before freeing peers
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:11
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
