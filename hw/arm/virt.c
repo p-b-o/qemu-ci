@@ -4074,8 +4074,12 @@ static bool get_kernel_irqchip_default(const MachineState *ms)
 
 static const char *virt_get_default_cpu_type(const MachineState *ms)
 {
-    return tcg_enabled() ? ARM_CPU_TYPE_NAME("cortex-a15")
-                         : ARM_CPU_TYPE_NAME("max");
+    if (tcg_enabled()) {
+        return target_aarch64() ? ARM_CPU_TYPE_NAME("neoverse-v1")
+                                : ARM_CPU_TYPE_NAME("cortex-a15");
+    } else {
+        return ARM_CPU_TYPE_NAME("max");
+    }
 }
 
 static GPtrArray *virt_get_valid_cpu_types(const MachineState *ms)
