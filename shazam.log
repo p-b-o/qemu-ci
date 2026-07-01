@@ -1,0 +1,47 @@
+Looking up https://lore.kernel.org/all/20260701-i2c-adc128d818-anacapa-v5-0-fe8292d86b38@free.fr/
+Grabbing thread from lore.kernel.org/all/20260701-i2c-adc128d818-anacapa-v5-0-fe8292d86b38@free.fr/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v5 1/8] hw/sensor: adc128d818: add 12-bit 8-channel ADC device
+    + Link: https://lore.kernel.org/qemu-devel/20260701-i2c-adc128d818-anacapa-v5-1-fe8292d86b38@free.fr
+  [31m✗[0m [PATCH v5 2/8] tests/qtest: adc128d818: add test harness and register access
+    + Link: https://lore.kernel.org/qemu-devel/20260701-i2c-adc128d818-anacapa-v5-2-fe8292d86b38@free.fr
+  [31m✗[0m [PATCH v5 3/8] tests/qtest: adc128d818: test voltage and temperature conversion
+    + Link: https://lore.kernel.org/qemu-devel/20260701-i2c-adc128d818-anacapa-v5-3-fe8292d86b38@free.fr
+  [31m✗[0m [PATCH v5 4/8] tests/qtest: adc128d818: test limit interrupts
+    + Link: https://lore.kernel.org/qemu-devel/20260701-i2c-adc128d818-anacapa-v5-4-fe8292d86b38@free.fr
+  [31m✗[0m [PATCH v5 5/8] tests/qtest: adc128d818: test operating modes and power control
+    + Link: https://lore.kernel.org/qemu-devel/20260701-i2c-adc128d818-anacapa-v5-5-fe8292d86b38@free.fr
+  [31m✗[0m [PATCH v5 6/8] hw/i2c: parent slaves created with i2c_slave_create_simple
+    + Link: https://lore.kernel.org/qemu-devel/20260701-i2c-adc128d818-anacapa-v5-6-fe8292d86b38@free.fr
+  [31m✗[0m [PATCH v5 7/8] hw/arm: anacapa: add ADC128D818 devices
+    + Link: https://lore.kernel.org/qemu-devel/20260701-i2c-adc128d818-anacapa-v5-7-fe8292d86b38@free.fr
+  [31m✗[0m [PATCH v5 8/8] test/functional: anacapa: test ADC128D818
+    + Link: https://lore.kernel.org/qemu-devel/20260701-i2c-adc128d818-anacapa-v5-8-fe8292d86b38@free.fr
+  ---
+  [31m✗[0m No key: ed25519/emmanuel.blot@free.fr
+  [32m✓[0m Signed: DKIM/free.fr
+---
+Total patches: 8
+---
+Applying: hw/sensor: adc128d818: add 12-bit 8-channel ADC device
+Applying: tests/qtest: adc128d818: add test harness and register access
+Applying: tests/qtest: adc128d818: test voltage and temperature conversion
+Applying: tests/qtest: adc128d818: test limit interrupts
+Applying: tests/qtest: adc128d818: test operating modes and power control
+Applying: hw/i2c: parent slaves created with i2c_slave_create_simple
+Applying: hw/arm: anacapa: add ADC128D818 devices
+Applying: test/functional: anacapa: test ADC128D818
+Patch failed at 0008 test/functional: anacapa: test ADC128D818
+error: patch failed: tests/functional/arm/test_aspeed_anacapa.py:2
+error: tests/functional/arm/test_aspeed_anacapa.py: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
