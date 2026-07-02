@@ -2666,6 +2666,17 @@ static bool trans_ixtlbxf(DisasContext *ctx, arg_ixtlbxf *a)
      *    return gen_illegal(ctx);
      */
 
+    /*
+     * The HP-UX 9 kernel uses two undocumented instructions 0x05315440 and
+     * 0x05385400, which seem to be wrongly encoded fast TLB instructions,
+     * similiar to idtlba r17,(r9) and idtlbp r24,(r9).
+     * To support HP-UX 9, check b against 0 (documented) and 9 (to allow the
+     * r9 case), and genenerate an illegal instruction trap otherwise.
+     */
+    if (a->b != 0 && a->b != 9) {
+        return gen_illegal(ctx);
+    }
+
     atl = tcg_temp_new_i64();
     stl = tcg_temp_new_i64();
     addr = tcg_temp_new_i64();
