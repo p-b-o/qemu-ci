@@ -94,6 +94,7 @@ typedef struct DisasContext {
     int max_svl;     /* maximum implemented streaming vector length */
     int max_any_vl;  /* maximum implemented vector length */
     bool vfp_enabled; /* FP enabled via FPSCR.EN */
+    bool d32dis; /* VFP D16-D31 disabled via CPACR.D32DIS */
     int vec_len;
     int vec_stride;
     bool v7m_handler_mode;

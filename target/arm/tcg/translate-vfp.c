@@ -210,12 +210,12 @@ static void gen_update_fp_context(DisasContext *s)
 /*
  * Return true if a VFP insn is OK to access D16..D31, false if
  * it should UNDEF. This checks whether the D16-D31 regs are
- * implemented by the CPU. Eventually we will also check CPACR.D32DIS.
+ * implemented by the CPU, and whether CPACR.D32DIS permits access.
  * Note that Neon insns accessing D16..D31 do not need to check D32DIS.
  */
 static bool vfp_d16_d31_ok(DisasContext *s)
 {
-    return dc_isar_feature(aa32_simd_r32, s);
+    return dc_isar_feature(aa32_simd_r32, s) && !s->d32dis;
 }
 
 /*
