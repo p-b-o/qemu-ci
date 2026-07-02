@@ -1,0 +1,26 @@
+Looking up https://lore.kernel.org/all/20260702-fix-heap-uaf-ctrl-reset-v2-1-ace38ad63a2e@samsung.com/
+Grabbing thread from lore.kernel.org/all/20260702-fix-heap-uaf-ctrl-reset-v2-1-ace38ad63a2e@samsung.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v2] hw/nvme: fix potential use-after-free doing controller reset
+    + Link: https://lore.kernel.org/qemu-devel/20260702-fix-heap-uaf-ctrl-reset-v2-1-ace38ad63a2e@samsung.com
+  ---
+  [31m✗[0m No key: openpgp/k.jensen@samsung.com
+  [32m✓[0m Signed: DKIM/irrelevant.dk
+---
+Total patches: 1
+---
+Applying: hw/nvme: fix potential use-after-free doing controller reset
+Patch failed at 0001 hw/nvme: fix potential use-after-free doing controller reset
+error: patch failed: hw/nvme/ctrl.c:8022
+error: hw/nvme/ctrl.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
