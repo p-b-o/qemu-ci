@@ -1,0 +1,28 @@
+Looking up https://lore.kernel.org/all/20260702131632.1180309-1-kdutta@redhat.com/
+Grabbing thread from lore.kernel.org/all/20260702131632.1180309-1-kdutta@redhat.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 5 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v9 1/2] Introduce virtio_net_handle_tx_dispatch() to unify TX path handling. This dispatcher dynamically selects between timer-based and BH-based TX processing based on configuration.
+    + Link: https://lore.kernel.org/qemu-devel/20260702131632.1180309-2-kdutta@redhat.com
+  [32m✓[0m [PATCH v9 2/2] Implement VirtIO Network Notification Coalescing (VIRTIO_NET_F_NOTF_COAL). This allows guests to reduce interrupt overhead by configuring coalescing parameters via ethtool -C for both RX and TX paths.
+    + Link: https://lore.kernel.org/qemu-devel/20260702131632.1180309-3-kdutta@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 2
+---
+Applying: Introduce virtio_net_handle_tx_dispatch() to unify TX path handling. This dispatcher dynamically selects between timer-based and BH-based TX processing based on configuration.
+Applying: Implement VirtIO Network Notification Coalescing (VIRTIO_NET_F_NOTF_COAL). This allows guests to reduce interrupt overhead by configuring coalescing parameters via ethtool -C for both RX and TX paths.
+Patch failed at 0002 Implement VirtIO Network Notification Coalescing (VIRTIO_NET_F_NOTF_COAL). This allows guests to reduce interrupt overhead by configuring coalescing parameters via ethtool -C for both RX and TX paths.
+error: patch failed: hw/core/machine.c:43
+error: hw/core/machine.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
