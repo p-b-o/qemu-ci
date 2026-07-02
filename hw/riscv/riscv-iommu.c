@@ -650,6 +650,7 @@ static MemTxResult riscv_iommu_msi_write(RISCVIOMMUState *s,
     case RISCV_IOMMU_MSI_PTE_M_BASIC:
         /* MSI Pass-through mode */
         addr = PPN_PHYS(get_field(pte[0], RISCV_IOMMU_MSI_PTE_PPN));
+        addr |= (gpa & RISCV_IOMMU_MSI_BASIC_PAGE_OFFSET);
 
         trace_riscv_iommu_msi(s->parent_obj.id, PCI_BUS_NUM(ctx->devid),
                               PCI_SLOT(ctx->devid), PCI_FUNC(ctx->devid),
