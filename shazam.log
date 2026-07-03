@@ -1,0 +1,42 @@
+Looking up https://lore.kernel.org/all/20260703085955.2318600-1-adityag@linux.ibm.com/
+Grabbing thread from lore.kernel.org/all/20260703085955.2318600-1-adityag@linux.ibm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 98 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/8] tests/functional: Add remote interrupts test for PowerNV
+    + Reviewed-by: Cédric Le Goater <clg@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260703085955.2318600-2-adityag@linux.ibm.com
+  [32m✓[0m [PATCH v4 2/8] tests/qtest/pnv_spi: Test Power11 PNV_SPI
+    + Link: https://lore.kernel.org/qemu-devel/20260703085955.2318600-3-adityag@linux.ibm.com
+  [32m✓[0m [PATCH v4 3/8] tests/qtest: Add Power11 chip & machine to qtests
+    + Link: https://lore.kernel.org/qemu-devel/20260703085955.2318600-4-adityag@linux.ibm.com
+  [32m✓[0m [PATCH v4 4/8] tests/functional: Use default powernv machine instead of power10
+    + Link: https://lore.kernel.org/qemu-devel/20260703085955.2318600-5-adityag@linux.ibm.com
+  [32m✓[0m [PATCH v4 5/8] ppc/pnv: Replace Power8E with Power11 for 'none' machine test
+    + Link: https://lore.kernel.org/qemu-devel/20260703085955.2318600-6-adityag@linux.ibm.com
+  [32m✓[0m [PATCH v4 6/8] ppc/pnv: Remove Power8E and Power8NVL pnv chips
+    + Link: https://lore.kernel.org/qemu-devel/20260703085955.2318600-7-adityag@linux.ibm.com
+  [32m✓[0m [PATCH v4 7/8] ppc/pnv: Remove Power8E and Power8NVL CPUs
+    + Link: https://lore.kernel.org/qemu-devel/20260703085955.2318600-8-adityag@linux.ibm.com
+  [32m✓[0m [PATCH v4 8/8] MAINTAINERS: Add self as maintainer for PowerNV
+    + Reviewed-by: Harsh Prateek Bora <harshpb@linux.ibm.com> ([32m✓[0m DKIM/ibm.com)
+    + Tested-by: Misbah Anjum N <misanjum@linux.ibm.com> ([32m✓[0m DKIM/ibm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260703085955.2318600-9-adityag@linux.ibm.com
+  ---
+  [32m✓[0m Signed: DKIM/ibm.com (From: adityag@linux.ibm.com)
+---
+Total patches: 8
+---
+Applying: tests/functional: Add remote interrupts test for PowerNV
+Patch failed at 0001 tests/functional: Add remote interrupts test for PowerNV
+error: patch failed: tests/functional/ppc64/test_powernv.py:32
+error: tests/functional/ppc64/test_powernv.py: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
