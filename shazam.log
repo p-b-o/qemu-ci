@@ -1,0 +1,24 @@
+Looking up https://lore.kernel.org/all/CABoArmZgZN%2Bs6Mha7Y%3D8WPcWmwwj9f4Yq-tU3zwPJZGA1mq8eA@mail.gmail.com/
+Grabbing thread from lore.kernel.org/all/CABoArmZgZN%2Bs6Mha7Y%3D8WPcWmwwj9f4Yq-tU3zwPJZGA1mq8eA@mail.gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] target/riscv: fix amocas with rd = x0 followed by beq involving x0 is not taken when it should be
+    + Link: https://lore.kernel.org/qemu-devel/CABoArmZgZN+s6Mha7Y=8WPcWmwwj9f4Yq-tU3zwPJZGA1mq8eA@mail.gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/g.hmc.edu
+---
+Total patches: 1
+---
+Applying: target/riscv: fix amocas with rd = x0 followed by beq involving x0 is not taken when it should be
+Patch failed at 0001 target/riscv: fix amocas with rd = x0 followed by beq involving x0 is not taken when it should be
+error: git diff header lacks filename information when removing 1 leading pathname component at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:7
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
