@@ -1,0 +1,47 @@
+Looking up https://lore.kernel.org/all/20260703-run-v5-0-4521ac5a149e@rsg.ci.i.u-tokyo.ac.jp/
+Grabbing thread from lore.kernel.org/all/20260703-run-v5-0-4521ac5a149e@rsg.ci.i.u-tokyo.ac.jp/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 60 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v5 1/8] util: Introduce qemu_get_runtime_dir()
+    + Link: https://lore.kernel.org/qemu-devel/20260703-run-v5-1-4521ac5a149e@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH v5 2/8] ivshmem-server: Use qemu_get_runtime_dir()
+    + Link: https://lore.kernel.org/qemu-devel/20260703-run-v5-2-4521ac5a149e@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH v5 3/8] qga: Use qemu_get_runtime_dir()
+    + Link: https://lore.kernel.org/qemu-devel/20260703-run-v5-3-4521ac5a149e@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH v5 4/8] scsi: Use qemu_get_runtime_dir()
+    + Link: https://lore.kernel.org/qemu-devel/20260703-run-v5-4-4521ac5a149e@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH v5 5/8] i386/vmsr: Stop using qemu_get_local_state_dir()
+    + Link: https://lore.kernel.org/qemu-devel/20260703-run-v5-5-4521ac5a149e@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH v5 6/8] module: Use qemu_get_runtime_dir()
+    + Link: https://lore.kernel.org/qemu-devel/20260703-run-v5-6-4521ac5a149e@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH v5 7/8] util: Remove qemu_get_local_state_dir()
+    + Link: https://lore.kernel.org/qemu-devel/20260703-run-v5-7-4521ac5a149e@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH v5 8/8] spice-app: Use qemu_get_runtime_dir()
+    + Link: https://lore.kernel.org/qemu-devel/20260703-run-v5-8-4521ac5a149e@rsg.ci.i.u-tokyo.ac.jp
+  ---
+  [31m✗[0m No key: openpgp/odaki@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m BADSIG: DKIM/rsg.ci.i.u-tokyo.ac.jp
+---
+Total patches: 8
+---
+Applying: util: Introduce qemu_get_runtime_dir()
+Applying: ivshmem-server: Use qemu_get_runtime_dir()
+Applying: qga: Use qemu_get_runtime_dir()
+Applying: scsi: Use qemu_get_runtime_dir()
+Applying: i386/vmsr: Stop using qemu_get_local_state_dir()
+Applying: module: Use qemu_get_runtime_dir()
+Applying: util: Remove qemu_get_local_state_dir()
+Applying: spice-app: Use qemu_get_runtime_dir()
+Patch failed at 0008 spice-app: Use qemu_get_runtime_dir()
+error: patch failed: ui/spice-app.c:149
+error: ui/spice-app.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
