@@ -1,0 +1,27 @@
+Looking up https://lore.kernel.org/all/3cb937dc-db7e-4e87-ab46-3a7ba754ef55@0in.de/
+Grabbing thread from lore.kernel.org/all/3cb937dc-db7e-4e87-ab46-3a7ba754ef55@0in.de/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4] input-linux: Add option to not grab a device upon guest startup
+    + Link: https://lore.kernel.org/qemu-devel/3cb937dc-db7e-4e87-ab46-3a7ba754ef55@0in.de
+  ---
+  [32m✓[0m Signed: DKIM/0in.de
+---
+Total patches: 1
+---
+Applying: input-linux: Add option to not grab a device upon guest startup
+Patch failed at 0001 input-linux: Add option to not grab a device upon guest startup
+error: patch failed: qapi/qom.json:558
+error: qapi/qom.json: patch does not apply
+error: patch failed: ui/input-linux.c:43
+error: ui/input-linux.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
