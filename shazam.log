@@ -1,0 +1,38 @@
+Looking up https://lore.kernel.org/all/20260706084540.1988785-1-jamin_lin@aspeedtech.com/
+Grabbing thread from lore.kernel.org/all/20260706084540.1988785-1-jamin_lin@aspeedtech.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v1 1/4] hw/misc/aspeed_scu: Introduce Aspeed2700SCUState
+    + Link: https://lore.kernel.org/qemu-devel/20260706084540.1988785-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 2/4] hw/arm/aspeed: Use Aspeed2700SCUState for AST2700 users
+    + Link: https://lore.kernel.org/qemu-devel/20260706084540.1988785-3-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 3/4] hw/arm/aspeed_ast27x0: Move SCU link into AST27x0 coprocessors
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260706084540.1988785-4-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 4/4] hw/misc/aspeed_scu: Add separate reset handler for AST2700 SCUIO
+    + Link: https://lore.kernel.org/qemu-devel/20260706084540.1988785-5-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 4
+---
+Applying: hw/misc/aspeed_scu: Introduce Aspeed2700SCUState
+Applying: hw/arm/aspeed: Use Aspeed2700SCUState for AST2700 users
+Applying: hw/arm/aspeed_ast27x0: Move SCU link into AST27x0 coprocessors
+Patch failed at 0003 hw/arm/aspeed_ast27x0: Move SCU link into AST27x0 coprocessors
+error: patch failed: include/hw/arm/aspeed_coprocessor.h:52
+error: include/hw/arm/aspeed_coprocessor.h: patch does not apply
+error: patch failed: hw/arm/aspeed_ast27x0-ssp.c:275
+error: hw/arm/aspeed_ast27x0-ssp.c: patch does not apply
+error: patch failed: hw/arm/aspeed_ast27x0-tsp.c:275
+error: hw/arm/aspeed_ast27x0-tsp.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
