@@ -4,3 +4,14 @@ Trying to remove persistent bitmap from r-o base node, should fail:
 Remove persistent bitmap from base node reopened to RW:
 {"execute": "block-dirty-bitmap-remove", "arguments": {"name": "bitmap0", "node": "base"}}
 {"return": {}}
+Adding a persistent bitmap live to the r-o base node:
+{"execute": "block-dirty-bitmap-add", "arguments": {"name": "bitmap1", "node": "base", "persistent": true}}
+{"return": {}}
+Inactivating all nodes must not fail flushing bitmap1:
+{"execute": "blockdev-set-active", "arguments": {"active": false}}
+{"return": {}}
+{"execute": "blockdev-set-active", "arguments": {"active": true}}
+{"return": {}}
+Trying to remove the live-added bitmap, should fail same as bitmap0:
+{"execute": "block-dirty-bitmap-remove", "arguments": {"name": "bitmap1", "node": "base"}}
+{"error": {"class": "GenericError", "desc": "Bitmap 'bitmap1' is readonly and cannot be modified"}}

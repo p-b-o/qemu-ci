@@ -141,6 +141,15 @@ void qmp_block_dirty_bitmap_add(const char *node, const char *name,
     }
 
     bdrv_dirty_bitmap_set_persistence(bitmap, persistent);
+
+    /*
+     * A persistent bitmap on a node that can't be written must not be
+     * writable either, same as one loaded from or reopened onto it.
+     */
+    if (persistent &&
+        (bdrv_is_read_only(bs) || (bdrv_get_flags(bs) & BDRV_O_INACTIVE))) {
+        bdrv_dirty_bitmap_set_readonly(bitmap, true);
+    }
 }
 
 BdrvDirtyBitmap *block_dirty_bitmap_remove(const char *node, const char *name,

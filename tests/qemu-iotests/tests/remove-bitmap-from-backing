@@ -66,6 +66,22 @@ result = vm.qmp('blockdev-reopen', **new_base_opts)
 if result != {'return': {}}:
     log('Failed to reopen: ' + str(result))
 
+# A bitmap added live (not loaded from disk) must be protected the same
+# way as bitmap0 above once its node is read-only.
+log('Adding a persistent bitmap live to the r-o base node:')
+vm.qmp_log('block-dirty-bitmap-add', node='base', name='bitmap1',
+          persistent=True)
+
+# Inactivate globally, like migration completion/save/qemu-update do;
+# inactivating "base" directly would hit an unrelated guard, since it is
+# a backing child of the still-active "top".
+log('Inactivating all nodes must not fail flushing bitmap1:')
+vm.qmp_log('blockdev-set-active', active=False)
+vm.qmp_log('blockdev-set-active', active=True)
+
+log('Trying to remove the live-added bitmap, should fail same as bitmap0:')
+vm.qmp_log('block-dirty-bitmap-remove', node='base', name='bitmap1')
+
 vm.shutdown()
 
 if 'bitmaps' in qemu_img_info(base)['format-specific']['data']:
