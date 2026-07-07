@@ -258,8 +258,6 @@ virtio_gpu_base_device_realize(DeviceState *qdev,
         virtio_add_queue(vdev, 16, cursor_cb);
     }
 
-    g->enabled_output_bitmask = 1;
-
     g->req_state[0].width = g->conf.xres;
     g->req_state[0].height = g->conf.yres;
 
@@ -271,13 +269,19 @@ virtio_gpu_base_device_realize(DeviceState *qdev,
             g->req_state[output_idx].height_mm = node->value->heightmm;
         }
         if (node->value->has_xres && node->value->has_yres) {
-            g->enabled_output_bitmask |= (1 << output_idx);
+            if (node->value->xres != 0 && node->value->yres != 0) {
+                g->enabled_output_bitmask |= (1 << output_idx);
+            }
             g->req_state[output_idx].width = node->value->xres;
             g->req_state[output_idx].height = node->value->yres;
         }
         if (node->value->has_refreshrate) {
             g->req_state[output_idx].refresh_rate = node->value->refreshrate;
         }
+    }
+
+    if (!g->enabled_output_bitmask) {
+        g->enabled_output_bitmask = 1;
     }
 
     g->hw_ops = &virtio_gpu_ops;
