@@ -392,6 +392,7 @@ void qemu_edid_generate(uint8_t *edid, size_t size,
     uint32_t large_screen = 0;
 
     /* =============== set defaults  =============== */
+    /* Note: keep the defaults in sync with qapi/virtio.json */
 
     if (!info->vendor || strlen(info->vendor) != 3) {
         info->vendor = "RHT";
