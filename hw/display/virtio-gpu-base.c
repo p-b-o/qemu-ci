@@ -92,15 +92,28 @@ virtio_gpu_base_generate_edid(VirtIOGPUBase *g, int scanout,
         // The provided resolution will be used only once after it has been set.
         // After that, the viewer has precedence over these settings
         // and decides about the resolution.
+        bool resolution_set = false;
         if (node->value->has_xres) {
             info.prefx = node->value->xres;
             g->req_state[scanout].width = node->value->xres;
             node->value->has_xres = 0;
+            resolution_set = true;
         }
         if (node->value->has_yres) {
             info.prefy = node->value->yres;
             g->req_state[scanout].height = node->value->yres;
             node->value->has_yres = 0;
+            resolution_set = true;
+        }
+        if (resolution_set) {
+            // Enable/disable the display if needed
+            if (info.prefx && info.prefy) {
+                g->enabled_output_bitmask |= (1 << scanout);
+            } else {
+                g->enabled_output_bitmask &= ~(1 << scanout);
+                dpy_gfx_replace_surface(g->scanout[scanout].con, NULL);
+                /* NEED HELP: dpy_gfx_replace_surface(g->scanout[scanout].con, NULL); only works after the qom-set is issued again */
+            }
         }
         if (node->value->has_xmax) {
             info.maxx = node->value->xmax;
@@ -152,12 +165,10 @@ static void virtio_gpu_ui_info(void *opaque, uint32_t idx, QemuUIInfo *info)
     g->req_state[idx].width_mm = info->width_mm;
     g->req_state[idx].height_mm = info->height_mm;
 
-    if (info->width && info->height) {
-        g->enabled_output_bitmask |= (1 << idx);
-    } else {
-        g->enabled_output_bitmask &= ~(1 << idx);
+    if (!(g->enabled_output_bitmask & (1 << idx))) {
+        /* NEED HELP: This only shows that the display is not active, when the viewer is resized */
+        dpy_gfx_replace_surface(g->scanout[idx].con, NULL);
     }
-
     /* send event to guest */
     virtio_gpu_notify_event(g, VIRTIO_GPU_EVENT_DISPLAY);
 }
