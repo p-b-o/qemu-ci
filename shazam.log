@@ -1,0 +1,45 @@
+Looking up https://lore.kernel.org/all/20260707060919.350637-1-jamin_lin@aspeedtech.com/
+Grabbing thread from lore.kernel.org/all/20260707060919.350637-1-jamin_lin@aspeedtech.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 5 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/8] hw/misc/aspeed_scu: Introduce Aspeed2700SCUState
+    + Link: https://lore.kernel.org/qemu-devel/20260707060919.350637-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 2/8] hw/arm/aspeed: Use Aspeed2700SCUState for AST2700 users
+    + Link: https://lore.kernel.org/qemu-devel/20260707060919.350637-3-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 3/8] hw/arm/aspeed_ast27x0: Move SCU link into AST27x0 coprocessors
+    + Link: https://lore.kernel.org/qemu-devel/20260707060919.350637-4-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 4/8] hw/misc/aspeed_scu: Add separate reset handler for AST2700 SCUIO
+    + Link: https://lore.kernel.org/qemu-devel/20260707060919.350637-5-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 5/8] hw/arm/aspeed_ast27x0: Pass realized PSP SoC to SSP/TSP initialization
+    + Link: https://lore.kernel.org/qemu-devel/20260707060919.350637-6-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 6/8] hw/arm/ast27x0: Share single SCUIO instance across PSP, SSP, and TSP
+    + Link: https://lore.kernel.org/qemu-devel/20260707060919.350637-7-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 7/8] hw/arm/ast27x0: Share FMC controller with SSP and TSP
+    + Link: https://lore.kernel.org/qemu-devel/20260707060919.350637-8-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v2 8/8] hw/ssi/aspeed_smc: Add Data FIFO-based flash access support for AST2700
+    + Link: https://lore.kernel.org/qemu-devel/20260707060919.350637-9-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 8
+---
+Applying: hw/misc/aspeed_scu: Introduce Aspeed2700SCUState
+Applying: hw/arm/aspeed: Use Aspeed2700SCUState for AST2700 users
+Applying: hw/arm/aspeed_ast27x0: Move SCU link into AST27x0 coprocessors
+Patch failed at 0003 hw/arm/aspeed_ast27x0: Move SCU link into AST27x0 coprocessors
+error: patch failed: include/hw/arm/aspeed_coprocessor.h:52
+error: include/hw/arm/aspeed_coprocessor.h: patch does not apply
+error: patch failed: hw/arm/aspeed_ast27x0-ssp.c:275
+error: hw/arm/aspeed_ast27x0-ssp.c: patch does not apply
+error: patch failed: hw/arm/aspeed_ast27x0-tsp.c:275
+error: hw/arm/aspeed_ast27x0-tsp.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
