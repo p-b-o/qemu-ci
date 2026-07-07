@@ -37,6 +37,8 @@
 #include "hw/pci/pci.h"
 #include "hw/pci/pcie.h"
 #include "hw/i386/x86.h"
+#include "hw/virtio/virtio-gpu.h"
+#include "standard-headers/linux/virtio_gpu.h"
 #include "util/block-helpers.h"
 
 static bool check_prop_still_unset(Object *obj, const char *name,
@@ -1413,6 +1415,10 @@ static void set_virtio_gpu_output_list(Object *obj, Visitor *v,
 
     qapi_free_VirtIOGPUOutputList(*prop_ptr);
     *prop_ptr = list;
+
+    VirtIOGPUBase *g = VIRTIO_GPU_BASE(obj);
+    g->virtio_config.events_read |= VIRTIO_GPU_EVENT_DISPLAY;
+    virtio_notify_config(&g->parent_obj);
 }
 
 static void release_virtio_gpu_output_list(Object *obj,
@@ -1428,6 +1434,7 @@ static void release_virtio_gpu_output_list(Object *obj,
 const PropertyInfo qdev_prop_virtio_gpu_output_list = {
     .type = "VirtIOGPUOutputList",
     .description = "VirtIO GPU output list [{\"name\":\"<name>\"},...]",
+    .realized_set_allowed = true,
     .get = get_virtio_gpu_output_list,
     .set = set_virtio_gpu_output_list,
     .release = release_virtio_gpu_output_list,

@@ -26,6 +26,7 @@ system_ss.add(when: 'CONFIG_SPLIT_IRQ', if_true: files('split-irq.c'))
 system_ss.add(when: 'CONFIG_XILINX_AXI', if_true: files('stream.c'))
 system_ss.add(when: 'CONFIG_PLATFORM_BUS', if_true: files('sysbus-fdt.c'))
 system_ss.add(when: 'CONFIG_EIF', if_true: [files('eif.c'), zlib, libcbor, gnutls])
+system_ss.add(when: 'CONFIG_VIRTIO_GPU', if_false: files('virtio-gpu-stubs.c'))
 
 system_ss.add(files(
   'cpu-system.c',
