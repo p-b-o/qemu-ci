@@ -1,0 +1,37 @@
+Looking up https://lore.kernel.org/all/20260707082531.178539-1-dblanzeanu@linux.microsoft.com/
+Grabbing thread from lore.kernel.org/all/20260707082531.178539-1-dblanzeanu@linux.microsoft.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/5] include/hw/hyperv: move hv_vp_register_page struct definition
+    + Link: https://lore.kernel.org/qemu-devel/20260707082531.178539-2-dblanzeanu@linux.microsoft.com
+  [32m✓[0m [PATCH 2/5] target/i386/mshv: abort when hv_vp_register_page setup fails
+    + Link: https://lore.kernel.org/qemu-devel/20260707082531.178539-3-dblanzeanu@linux.microsoft.com
+  [32m✓[0m [PATCH 3/5] target/i386/mshv: remove fallback for register page get registers
+    + Link: https://lore.kernel.org/qemu-devel/20260707082531.178539-4-dblanzeanu@linux.microsoft.com
+  [32m✓[0m [PATCH 4/5] target/i386/mshv: remove fallback for register page set registers
+    + Link: https://lore.kernel.org/qemu-devel/20260707082531.178539-5-dblanzeanu@linux.microsoft.com
+  [32m✓[0m [PATCH 5/5] target/i386/mshv: fix pio handlers clobbering device-modified registers
+    + Link: https://lore.kernel.org/qemu-devel/20260707082531.178539-6-dblanzeanu@linux.microsoft.com
+  ---
+  [32m✓[0m Signed: DKIM/linux.microsoft.com
+---
+Total patches: 5
+---
+Applying: include/hw/hyperv: move hv_vp_register_page struct definition
+Applying: target/i386/mshv: abort when hv_vp_register_page setup fails
+Applying: target/i386/mshv: remove fallback for register page get registers
+Applying: target/i386/mshv: remove fallback for register page set registers
+Applying: target/i386/mshv: fix pio handlers clobbering device-modified registers
+Patch failed at 0005 target/i386/mshv: fix pio handlers clobbering device-modified registers
+error: patch failed: target/i386/mshv/mshv-cpu.c:1637
+error: target/i386/mshv/mshv-cpu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
