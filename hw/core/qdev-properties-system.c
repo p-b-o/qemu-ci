@@ -33,6 +33,7 @@
 #include "system/block-backend.h"
 #include "system/blockdev.h"
 #include "net/net.h"
+#include "hw/display/edid.h"
 #include "hw/pci/pci.h"
 #include "hw/pci/pcie.h"
 #include "hw/i386/x86.h"
@@ -1346,6 +1347,68 @@ static void set_virtio_gpu_output_list(Object *obj, Visitor *v,
 
     if (!visit_type_VirtIOGPUOutputList(v, name, &list, errp)) {
         return;
+    }
+
+    if (*prop_ptr) {
+        size_t length_current = QAPI_LIST_LENGTH(*prop_ptr);
+        size_t length_new = QAPI_LIST_LENGTH(list);
+        if (length_current != length_new) {
+            error_setg(errp, "new list contains different number of outputs: %zd, old: %zd", length_new, length_current);
+            return;
+        }
+    }
+
+    size_t output_idx;
+    VirtIOGPUOutputList *node;
+    for (output_idx = 0, node = list;
+         node; output_idx++, node = node->next) {
+        if (!node->value) {
+            continue;
+        }
+        if (node->value->vendor) {
+            if (strlen(node->value->vendor) != 3) {
+                error_setg(errp, "invalid vendor length '%s' in outputs[%zd].vendor",
+                           node->value->vendor, output_idx);
+                return;
+            }
+            for (size_t i = 0; i < 3; ++i) {
+                if (node->value->vendor[i] < 'A' || node->value->vendor[i] > 'Z') {
+                    error_setg(errp, "invalid character '%c' in outputs[%zd].vendor '%s'",
+                               node->value->vendor[i], output_idx, node->value->vendor);
+                    return;
+                }
+            }
+        }
+        if (node->value->name &&
+            strlen(node->value->name) > EDID_NAME_MAX_LENGTH) {
+            error_setg(errp, "invalid output name '%s' > %d in outputs[%zd].name",
+                       node->value->name, EDID_NAME_MAX_LENGTH, output_idx);
+            return;
+        }
+        if (node->value->serial &&
+            strlen(node->value->serial) > EDID_NAME_MAX_LENGTH) {
+            error_setg(errp, "too long serial number '%s' > %d in outputs[%zd].serial",
+                       node->value->serial, EDID_NAME_MAX_LENGTH, output_idx);
+            return;
+        }
+        if (node->value->has_widthmm != node->value->has_heightmm) {
+            error_setg(errp,
+                       "must set both outputs[%zd].widthmm and outputs[%zd].heightmm",
+                       output_idx, output_idx);
+            return;
+        }
+        if (node->value->has_xres != node->value->has_yres) {
+            error_setg(errp,
+                       "must set both outputs[%zd].xres and outputs[%zd].yres",
+                       output_idx, output_idx);
+            return;
+        }
+        if (node->value->has_xmax != node->value->has_ymax) {
+            error_setg(errp,
+                       "must set both outputs[%zd].xmax and outputs[%zd].ymax",
+                       output_idx, output_idx);
+            return;
+        }
     }
 
     qapi_free_VirtIOGPUOutputList(*prop_ptr);

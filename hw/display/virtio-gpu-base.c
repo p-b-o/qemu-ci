@@ -226,25 +226,16 @@ virtio_gpu_base_device_realize(DeviceState *qdev,
     VirtIOGPUOutputList *node;
     VirtIODevice *vdev = VIRTIO_DEVICE(qdev);
     VirtIOGPUBase *g = VIRTIO_GPU_BASE(qdev);
+    size_t outputlist_length = QAPI_LIST_LENGTH(g->conf.outputs);
     int i;
 
     if (g->conf.max_outputs > VIRTIO_GPU_MAX_SCANOUTS) {
         error_setg(errp, "invalid max_outputs > %d", VIRTIO_GPU_MAX_SCANOUTS);
         return false;
     }
-
-    for (output_idx = 0, node = g->conf.outputs;
-         node; output_idx++, node = node->next) {
-        if (output_idx == g->conf.max_outputs) {
-            error_setg(errp, "invalid outputs > %d", g->conf.max_outputs);
-            return false;
-        }
-        if (node->value && node->value->name &&
-            strlen(node->value->name) > EDID_NAME_MAX_LENGTH) {
-            error_setg(errp, "invalid output name '%s' > %d",
-                       node->value->name, EDID_NAME_MAX_LENGTH);
-            return false;
-        }
+    if (outputlist_length != 0 && outputlist_length != g->conf.max_outputs) {
+        error_setg(errp, "invalid number of outputs are defined, expected: %d, given: %zd", g->conf.max_outputs, outputlist_length);
+        return false;
     }
 
     if (virtio_gpu_virgl_enabled(g->conf)) {
@@ -278,12 +269,6 @@ virtio_gpu_base_device_realize(DeviceState *qdev,
         if (node->value->has_widthmm && node->value->has_heightmm) {
             g->req_state[output_idx].width_mm = node->value->widthmm;
             g->req_state[output_idx].height_mm = node->value->heightmm;
-        }
-        if (node->value->has_xres != node->value->has_yres) {
-            error_setg(errp,
-                       "must set both outputs[%zd].xres and outputs[%zd].yres",
-                       output_idx, output_idx);
-            return false;
         }
         if (node->value->has_xres && node->value->has_yres) {
             g->enabled_output_bitmask |= (1 << output_idx);
