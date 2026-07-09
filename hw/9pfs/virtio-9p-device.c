@@ -273,6 +273,7 @@ static void virtio_9p_class_init(ObjectClass *klass, const void *data)
 
     device_class_set_props(dc, virtio_9p_properties);
     dc->vmsd = &vmstate_virtio_9p;
+    dc->hotpluggable = false;
     set_bit(DEVICE_CATEGORY_STORAGE, dc->categories);
     vdc->realize = virtio_9p_device_realize;
     vdc->unrealize = virtio_9p_device_unrealize;
