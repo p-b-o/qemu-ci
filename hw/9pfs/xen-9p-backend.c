@@ -368,9 +368,13 @@ static void xen_9pfs_evtchn_event(void *opaque)
 static void xen_9pfs_disconnect(struct XenLegacyDevice *xendev)
 {
     Xen9pfsDev *xen_9pdev = container_of(xendev, Xen9pfsDev, xendev);
+    V9fsState *s = &xen_9pdev->state;
     int i;
 
     trace_xen_9pfs_disconnect(xendev->name);
+
+    v9fs_reset(s);
+    v9fs_device_unrealize_common(s);
 
     for (i = 0; i < xen_9pdev->num_rings; i++) {
         if (xen_9pdev->rings[i].evtchndev != NULL) {
