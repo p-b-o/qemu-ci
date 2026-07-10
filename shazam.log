@@ -1,0 +1,61 @@
+Looking up https://lore.kernel.org/all/cover.1783660209.git.subrahmanya.lingappa@qti.qualcomm.com/
+Grabbing thread from lore.kernel.org/all/cover.1783660209.git.subrahmanya.lingappa@qti.qualcomm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+  Added from v2: 11 patches
+Analyzing 22 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Will use the latest revision: v2
+You can pick other revisions using the -vN flag
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/10] build: add optional librpmi dependency
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/1f2732b7220280efc1b5f69ae022b318dbbc3827.1783660209.git.subrahmanya.lingappa@oss.qualcomm.com
+  [31m✗[0m [PATCH v2 2/10] hw/misc: add RISC-V RPMI transport and Base support
+    [31m✗[0m BADSIG: DKIM/oss.qualcomm.com
+    [31m✗[0m BADSIG: DKIM/qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/37eeb3754b10d5310c62169e72211c65114e21bc.1783660209.git.subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 3/10] hw/riscv: add RPMI FDT helpers
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/0028254f03ea55c578dc6e79b7a8d9cbabaa201d.1783660209.git.subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 4/10] hw/riscv/virt: add opt-in RPMI base support
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/b60250b3a051614dc0d135fbee879afde3f171ef.1783660209.git.subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 5/10] riscv: add RPMI system reset service
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/febceb0b735f4db2e9d5348c864f51ebedc30ee5.1783660209.git.subrahmanya.lingappa@oss.qualcomm.com
+  [31m✗[0m [PATCH v2 6/10] riscv: add RPMI HSM service
+    [31m✗[0m BADSIG: DKIM/oss.qualcomm.com
+    [31m✗[0m BADSIG: DKIM/qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/21b8264726d7d4a2dfc2c4446e980ffc18f9829e.1783660209.git.subrahmanya.lingappa@oss.qualcomm.com
+  [31m✗[0m [PATCH v2 7/10] riscv: add RPMI system suspend service
+    [31m✗[0m BADSIG: DKIM/oss.qualcomm.com
+    [31m✗[0m BADSIG: DKIM/qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/1362f2b24fc65169cf916bd3be4ef107f8d0c000.1783660209.git.subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 8/10] docs/system/riscv: document initial virt RPMI support
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/10f13dfad6528556a3bb4aa077aca8c38e34bc24.1783660209.git.subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 9/10] tests/qtest: cover initial RISC-V RPMI services
+    [32m✓[0m Signed: DKIM/oss.qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/3ce559db08a853001115da730be724f76f95b802.1783660209.git.subrahmanya.lingappa@oss.qualcomm.com
+  [31m✗[0m [PATCH v2 10/10] tests/functional: add initial RPMI virt guest smoke
+    [31m✗[0m BADSIG: DKIM/oss.qualcomm.com
+    [31m✗[0m BADSIG: DKIM/qualcomm.com
+    + Link: https://lore.kernel.org/qemu-devel/f2138f531f42071613f2c71ccb34fe0548677924.1783660209.git.subrahmanya.lingappa@oss.qualcomm.com
+---
+Total patches: 10
+---
+Applying: build: add optional librpmi dependency
+Applying: hw/misc: add RISC-V RPMI transport and Base support
+Applying: hw/riscv: add RPMI FDT helpers
+Applying: hw/riscv/virt: add opt-in RPMI base support
+Patch failed at 0004 hw/riscv/virt: add opt-in RPMI base support
+error: patch failed: hw/riscv/virt.c:1636
+error: hw/riscv/virt.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
