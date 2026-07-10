@@ -1,0 +1,151 @@
+Looking up https://lore.kernel.org/all/20260710025525.1704417-1-alistair.francis@wdc.com/
+Grabbing thread from lore.kernel.org/all/20260710025525.1704417-1-alistair.francis@wdc.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 41 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 287 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/40] hw/riscv/riscv-iommu.c: fix fault type for spa_fetch() faults
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-2-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 2/40] hw/riscv/riscv-iommu.c: check for reserved PTE bits
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-3-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 3/40] hw/riscv/riscv-iommu.c: fault when !PTE_U and no priv access
+    + Reviewed-by: Tao Tang <tangtao1634@phytium.com.cn>
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-4-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 4/40] hw/riscv/riscv-iommu.c: fault for non-user PTE in G_STAGE
+    + Acked-by: Alistair Francis <alistair.francis@wdc.com> ([32m✓[0m DKIM/gmail.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-5-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 5/40] hw/riscv/riscv-iommu.c: check reserved MSI PTE basic bits
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-6-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 6/40] hw/riscv/riscv-iommu-sys.c: record fault on IOMMU-generated MSI write
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-7-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 7/40] target/riscv: Remove unused tcg/tcg.h include
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-8-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 8/40] target/riscv: move valid_vm_* satp arrays to cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-9-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 9/40] hw/riscv, target/riscv: move pmu fdt function to fdt-common.c
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-10-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 10/40] target/riscv: move TCG only files to tcg subdir
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-11-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 11/40] target/riscv/machine.c: do not migrate pmp state with kvm
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-12-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 12/40] target/riscv: move pmp files to tcg subdir
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-13-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 13/40] target/riscv: tidy up riscv_sysemu_ops
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-14-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 14/40] target/riscv: move debug.h to tcg subdir
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-15-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 15/40] target/riscv: remove csr.h from kvm-cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-16-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 16/40] target/riscv: move csr.h to tcg subdir
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-17-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 17/40] target/riscv: move custom_csrs logic to tcg-cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-18-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 18/40] target/riscv: move riscv_cpu_set_nmi() to tcg-cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-19-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 19/40] target/riscv: move some irq helpers to cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-20-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 20/40] target/riscv: move riscv_cpu_claim_interrupts to cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-21-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 21/40] target/riscv/cpu.c: handle TCG bits of riscv_cpu_dump_state
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-22-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 22/40] target/riscv: gate riscv_cpu_update_mip with tcg_enabled()
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-23-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 23/40] target/riscv/cpu.c: filter TCG only bits in riscv_cpu_reset_hold()
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-24-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 24/40] hw/riscv/riscv_hart.c isolate tcg only bits
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-25-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 25/40] target/riscv/gdbstub.c: isolate TCG only checks
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-26-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 26/40] target/riscv: move riscv_cpu_set_rdtime_fn to riscv_aclint
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-27-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 27/40] target/riscv/tcg: remove unused riscv_cpu_get_geilen()
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-28-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 28/40] target/riscv: move riscv_cpu_set_geilen() to riscv-imsic
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-29-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 29/40] target/riscv: move riscv_cpu_set_aia_ireg_rmw_cb() to riscv_imsic
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-30-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 30/40] gitlab-ci.d/crossbuilds: add riscv64 KVM-only build job
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-31-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 31/40] hw/riscv/riscv-iommu.c: check for misaligned IOHGATP_PPN
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-32-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 32/40] hw/riscv/riscv-iommu.c: update ioval2 when faulting in spa_fetch()
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-33-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 33/40] hw/riscv/riscv-iommu: forbid GATE/SADE if caps.AMO_HWADD is zero
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-34-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 34/40] hw/riscv/riscv-iommu.c: set ftype and iova in riscv_iommu_ctx()
+    + Acked-by: Alistair Francis <alistair.francis@wdc.com> ([32m✓[0m DKIM/gmail.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-35-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 35/40] hw/pci/pcie_doe: Check mailbox length for overflows
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-36-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 36/40] target/riscv/kvm: add extensions after v7.1-rc4 update
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-37-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 37/40] gitlab-ci: Remove job building OpenSBI firmware binaries
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-38-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 38/40] tests: allow differences in SPCR
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-39-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 39/40] hw/acpi: correct field sequence in SPCR table
+    + Reviewed-by: Igor Mammedov <imammedo@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-40-alistair.francis@wdc.com
+  [32m✓[0m [PATCH 40/40] tests: update SPCR loongarch64 and riscv64 test data
+    + Link: https://lore.kernel.org/qemu-devel/20260710025525.1704417-41-alistair.francis@wdc.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 40
+---
+Applying: hw/riscv/riscv-iommu.c: fix fault type for spa_fetch() faults
+Applying: hw/riscv/riscv-iommu.c: check for reserved PTE bits
+Applying: hw/riscv/riscv-iommu.c: fault when !PTE_U and no priv access
+Applying: hw/riscv/riscv-iommu.c: fault for non-user PTE in G_STAGE
+Applying: hw/riscv/riscv-iommu.c: check reserved MSI PTE basic bits
+Applying: hw/riscv/riscv-iommu-sys.c: record fault on IOMMU-generated MSI write
+Applying: target/riscv: Remove unused tcg/tcg.h include
+Applying: target/riscv: move valid_vm_* satp arrays to cpu.c
+Applying: hw/riscv, target/riscv: move pmu fdt function to fdt-common.c
+Applying: target/riscv: move TCG only files to tcg subdir
+Applying: target/riscv/machine.c: do not migrate pmp state with kvm
+Applying: target/riscv: move pmp files to tcg subdir
+Applying: target/riscv: tidy up riscv_sysemu_ops
+Applying: target/riscv: move debug.h to tcg subdir
+Applying: target/riscv: remove csr.h from kvm-cpu.c
+Applying: target/riscv: move csr.h to tcg subdir
+Applying: target/riscv: move custom_csrs logic to tcg-cpu.c
+Applying: target/riscv: move riscv_cpu_set_nmi() to tcg-cpu.c
+Applying: target/riscv: move some irq helpers to cpu.c
+Applying: target/riscv: move riscv_cpu_claim_interrupts to cpu.c
+Applying: target/riscv/cpu.c: handle TCG bits of riscv_cpu_dump_state
+Applying: target/riscv: gate riscv_cpu_update_mip with tcg_enabled()
+Applying: target/riscv/cpu.c: filter TCG only bits in riscv_cpu_reset_hold()
+Applying: hw/riscv/riscv_hart.c isolate tcg only bits
+Applying: target/riscv/gdbstub.c: isolate TCG only checks
+Applying: target/riscv: move riscv_cpu_set_rdtime_fn to riscv_aclint
+Applying: target/riscv/tcg: remove unused riscv_cpu_get_geilen()
+Applying: target/riscv: move riscv_cpu_set_geilen() to riscv-imsic
+Applying: target/riscv: move riscv_cpu_set_aia_ireg_rmw_cb() to riscv_imsic
+Applying: gitlab-ci.d/crossbuilds: add riscv64 KVM-only build job
+Applying: hw/riscv/riscv-iommu.c: check for misaligned IOHGATP_PPN
+Applying: hw/riscv/riscv-iommu.c: update ioval2 when faulting in spa_fetch()
+Applying: hw/riscv/riscv-iommu: forbid GATE/SADE if caps.AMO_HWADD is zero
+Applying: hw/riscv/riscv-iommu.c: set ftype and iova in riscv_iommu_ctx()
+Applying: hw/pci/pcie_doe: Check mailbox length for overflows
+Applying: target/riscv/kvm: add extensions after v7.1-rc4 update
+Applying: gitlab-ci: Remove job building OpenSBI firmware binaries
+Applying: tests: allow differences in SPCR
+Applying: hw/acpi: correct field sequence in SPCR table
+Applying: tests: update SPCR loongarch64 and riscv64 test data
+Patch failed at 0040 tests: update SPCR loongarch64 and riscv64 test data
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:363: new blank line at EOF.
++
+warning: 1 line adds whitespace errors.
+error: cannot apply binary patch to 'tests/data/acpi/loongarch64/virt/SPCR' without full index line
+error: tests/data/acpi/loongarch64/virt/SPCR: patch does not apply
+error: cannot apply binary patch to 'tests/data/acpi/riscv64/virt/SPCR' without full index line
+error: tests/data/acpi/riscv64/virt/SPCR: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
