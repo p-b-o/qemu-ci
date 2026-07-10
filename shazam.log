@@ -1,0 +1,37 @@
+Looking up https://lore.kernel.org/all/20260710060914.1227027-1-frank.chang@sifive.com/
+Grabbing thread from lore.kernel.org/all/20260710060914.1227027-1-frank.chang@sifive.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 17 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v5 1/7] target/riscv: Add Zicclsm CPU option
+    + Link: https://lore.kernel.org/qemu-devel/20260710060914.1227027-2-frank.chang@sifive.com
+  [32m✓[0m [PATCH v5 2/7] target/riscv: Support raising misaligned exceptions for scalar loads/stores
+    + Link: https://lore.kernel.org/qemu-devel/20260710060914.1227027-3-frank.chang@sifive.com
+  [32m✓[0m [PATCH v5 3/7] target/riscv: Support raising misaligned exceptions for vector loads/stores
+    + Link: https://lore.kernel.org/qemu-devel/20260710060914.1227027-4-frank.chang@sifive.com
+  [32m✓[0m [PATCH v5 4/7] target/riscv: Enable Zicclsm for the compatible CPUs
+    + Link: https://lore.kernel.org/qemu-devel/20260710060914.1227027-5-frank.chang@sifive.com
+  [32m✓[0m [PATCH v5 5/7] hw/riscv: sifive_u: Align ROM reset vector data
+    + Link: https://lore.kernel.org/qemu-devel/20260710060914.1227027-6-frank.chang@sifive.com
+  [32m✓[0m [PATCH v5 6/7] target/riscv: Update Zicclsm ISA string and expose it as a CPU property
+    + Link: https://lore.kernel.org/qemu-devel/20260710060914.1227027-7-frank.chang@sifive.com
+  [32m✓[0m [PATCH v5 7/7] target/riscv: Enable Zicclsm for RVA22U64 profile
+    + Link: https://lore.kernel.org/qemu-devel/20260710060914.1227027-8-frank.chang@sifive.com
+  ---
+  [32m✓[0m Signed: DKIM/sifive.com
+---
+Total patches: 7
+---
+Applying: target/riscv: Add Zicclsm CPU option
+Applying: target/riscv: Support raising misaligned exceptions for scalar loads/stores
+Patch failed at 0002 target/riscv: Support raising misaligned exceptions for scalar loads/stores
+error: target/riscv/tcg/insn_trans/trans_rvi.c.inc: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
