@@ -1,0 +1,186 @@
+Looking up https://lore.kernel.org/all/qemu-stable-10.0.12-20260712071526@cover.tls.msk.ru/
+Grabbing thread from lore.kernel.org/all/qemu-stable-10.0.12-20260712071526@cover.tls.msk.ru/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 76 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 1308 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/75] ui/gtk: fix bad widget realize on non-GFX VC
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-1-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 2/75] s390x/kvm: clamp stsi 3.2.2 size
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-2-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 3/75] 9pfs: Don't use file descriptors in core code
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-3-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 4/75] 9pfs: local : Introduce local_fid_fd() helper
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-4-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 5/75] hw/9pfs: add msize_limit transport callback
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-5-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 6/75] 9pfs/virtio: implement msize_limit callback
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-6-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 7/75] 9pfs/xen: implement msize_limit callback
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-7-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 8/75] hw/9pfs: cap negotiated msize to transport limit
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-8-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 9/75] hw/9pfs: add response_buffer_size transport callback
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-9-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 10/75] 9pfs/virtio: implement response_buffer_size callback
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-10-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 11/75] 9pfs/xen: implement response_buffer_size callback
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-11-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 12/75] hw/9pfs: cap Treaddir allocation (CVE-2026-9238)
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-12-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 13/75] hw/9pfs: add xattr FID limit to prevent memory exhaustion
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-13-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 14/75] hw/9pfs: add max_xattr option
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-14-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 15/75] qemu-options: document 9pfs max_xattr option
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-15-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 16/75] tests/9p: add Tread / Rread test client functions
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-16-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 17/75] tests/9p: add Tclunk / Rclunk test client functions
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-17-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 18/75] tests/9p: add Txattrcreate / Rxattrcreate test client functions
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-18-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 19/75] hw/9pfs: enable xattr (mockup) support for synth fs driver
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-19-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 20/75] hw/9pfs: add xattr count query interface to fs synth driver
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-20-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 21/75] tests/9p: increase P9_MAX_SIZE for test client
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-21-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 22/75] tests/9p: add virtio_9p_add_synth_driver_args() test client function
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-22-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 23/75] tests/9p: add 3 xattr FID limit test cases (synth fs driver)
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-23-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 24/75] tests/9p: add 3 xattr FID limit test cases (local fs driver)
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-24-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 25/75] hw/9pfs: fix invalid union access by v9fs_co_fsync()
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-25-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 26/75] hw/9pfs: fix invalid union access by v9fs_co_fstat()
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-26-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 27/75] hw/9pfs/local: harden local_fid_fd() on FID types
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-27-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 28/75] target/riscv: Check PMP before updating PTE
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-28-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 29/75] hw/riscv/virt-acpi-build: Fix RINTC PLIC context ID for KVM
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-29-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 30/75] target/riscv: avoid abort when reading vtype before env->xl is set
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-30-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 31/75] target/riscv: Apply UXL WARL handling to vsstatus
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-31-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 32/75] hw/riscv/riscv-iommu.c: always fault with SADE=0 and A=0
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-32-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 33/75] hw/char/virtio-serial-bus: fix guest-triggerable OOM in control_out()
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-33-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 34/75] virtio-net: validate RSS indirections_len in post_load
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-34-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 35/75] hw/net/fsl_etsec: validate FCB offsets in process_tx_fcb()
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-35-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 36/75] hw/arm: use cortex-a9 mpcore base for CBAR on npcm7xx machines
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-36-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 37/75] hw/nvme: fix FDP set FDP events
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-37-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 38/75] hw/nvme: ensure sgl forward progress
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-38-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 39/75] s390x/sclp: reject invalid write event data headers
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-39-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 40/75] s390x/pci: Tighten region detection for BAR read/write
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-40-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 41/75] s390x/pci: Shrink RPCIT ranges to registered window
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-41-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 42/75] s390x/ioinst: Require strict length and format for SEI CHSC handler
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-42-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 43/75] s390x/css: limit number of CHPIDs in description
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-43-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 44/75] hw/misc/edu: restrict dma access to dma buffer
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-44-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 45/75] hw/ide/ahci: cancel in-flight buffered reads on command engine restart
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-45-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 46/75] tests/qtest/ahci: test ATAPI read completing after engine restart
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-46-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 47/75] hw/dma/i8257: Return zeroes for read_memory in verify mode
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-47-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 48/75] hw/scsi/mptsas: Reset doorbell state on reset
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-48-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 49/75] hw/display/qxl: Fix mono cursor validation that can read past a cursor chunk
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-49-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 50/75] vdpa: fix use-after-free of vqs in vhost_vdpa_device_unrealize
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-50-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 51/75] hw/core/qdev-clock: Fix potential null pointer dereference
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-51-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 52/75] hw/net: fix e1000e/igb ip_len inflation by Ethernet minimum-frame padding
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-52-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 53/75] accel/tcg: Use TLB_FORCE_SLOW not TLB_MMIO for user-only plugins
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-53-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 54/75] accel/tcg: Make PageFlagsNodes' start and last immutable
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-54-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 55/75] tcg/loongarch64: Fix vec_val computation in tcg_target_const_match
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-55-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 56/75] tcg/loongarch64: Improve constraints for TCG_CT_CONST_VCMP
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-56-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 57/75] tcg/loongarch64: Fix cmp_vec with TCG_COND_NE
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-57-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 58/75] target/sh4: fixup tcg for sh4 fipr/ftrv instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-58-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 59/75] hw/ufs: avoid double unref of wrapped scsi-hd
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-59-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 60/75] hw/riscv/riscv-iommu.c: fix fault type for spa_fetch() faults
+    + Fixes: or Resolves: tag should be picked up for the current qemu stable ([32m✓[0m DKIM/tls.msk.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-60-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 61/75] hw/riscv/riscv-iommu.c: check for reserved PTE bits
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-61-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 62/75] hw/riscv/riscv-iommu.c: fault for non-user PTE in G_STAGE
+    + Acked-by: Alistair Francis <alistair.francis@wdc.com> ([31m✗[0m DKIM/gmail.com)
+    + Fixes: or Resolves: tag should be picked up for the current qemu stable ([32m✓[0m DKIM/tls.msk.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-62-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 63/75] hw/riscv/riscv-iommu.c: check reserved MSI PTE basic bits
+    + Fixes: or Resolves: tag should be picked up for the current qemu stable ([32m✓[0m DKIM/tls.msk.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-63-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 64/75] hw/riscv/riscv-iommu-sys.c: record fault on IOMMU-generated MSI write
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-64-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 65/75] hw/riscv/riscv-iommu.c: check for misaligned IOHGATP_PPN
+    + Fixes: or Resolves: tag should be picked up for the current qemu stable ([32m✓[0m DKIM/tls.msk.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-65-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 66/75] hw/riscv/riscv-iommu.c: update ioval2 when faulting in spa_fetch()
+    + Fixes: or Resolves: tag should be picked up for the current qemu stable ([32m✓[0m DKIM/tls.msk.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-66-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 67/75] hw/riscv/riscv-iommu: forbid GATE/SADE if caps.AMO_HWADD is zero
+    + Fixes: or Resolves: tag should be picked up for the current qemu stable ([32m✓[0m DKIM/tls.msk.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-67-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 68/75] hw/riscv/riscv-iommu: Avoid caching PCI device IDs
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-68-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 69/75] hw/riscv: riscv-iommu: Don't look up DDT cache in Off and Bare modes
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-69-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 70/75] hw/riscv/riscv-iommu.c: set ftype and iova in riscv_iommu_ctx()
+    + Acked-by: Alistair Francis <alistair.francis@wdc.com> ([32m✓[0m DKIM/gmail.com)
+    + Fixes: or Resolves: tag should be picked up for the current qemu stable ([32m✓[0m DKIM/tls.msk.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-70-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 71/75] hw/riscv/riscv-iommu: Fix MemoryRegion owner
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-71-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 72/75] hw/pci/pcie_doe: Check mailbox length for overflows
+    + Fixes: or Resolves: tag should be picked up for the current qemu stable ([32m✓[0m DKIM/tls.msk.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-72-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 73/75] tests: allow differences in SPCR
+    + Fixes: or Resolves: tag should be picked up for the current qemu stable ([32m✓[0m DKIM/tls.msk.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-73-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 74/75] hw/acpi: correct field sequence in SPCR table
+    + Reviewed-by: Igor Mammedov <imammedo@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Fixes: or Resolves: tag should be picked up for the current qemu stable ([32m✓[0m DKIM/tls.msk.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-74-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 75/75] tests: update SPCR loongarch64 and riscv64 test data
+    + Link: https://lore.kernel.org/qemu-devel/20260712041539.108341-75-mjt@tls.msk.ru
+  ---
+  [32m✓[0m Signed: DKIM/tls.msk.ru
+---
+Total patches: 75
+---
+Applying: ui/gtk: fix bad widget realize on non-GFX VC
+Patch failed at 0001 ui/gtk: fix bad widget realize on non-GFX VC
+error: patch failed: ui/gtk.c:2552
+error: ui/gtk.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
