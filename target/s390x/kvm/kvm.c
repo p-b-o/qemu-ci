@@ -298,13 +298,13 @@ void kvm_s390_set_max_pagesize(uint64_t pagesize, Error **errp)
         return;
     }
 
-    if (pagesize != 1 * MiB) {
+    if ((pagesize == 2 * GiB) &&
+        kvm_vm_enable_cap(kvm_state, KVM_CAP_S390_HPAGE_2G, 0)) {
         error_setg(errp, "Memory backing with 2G pages was specified, "
                    "but KVM does not support this memory backing");
         return;
-    }
-
-    if (kvm_vm_enable_cap(kvm_state, KVM_CAP_S390_HPAGE_1M, 0)) {
+    } else if ((pagesize == MiB) &&
+               kvm_vm_enable_cap(kvm_state, KVM_CAP_S390_HPAGE_1M, 0)) {
         error_setg(errp, "Memory backing with 1M pages was specified, "
                    "but KVM does not support this memory backing");
         return;
