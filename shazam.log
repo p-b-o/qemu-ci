@@ -1,0 +1,24 @@
+Looking up https://lore.kernel.org/all/05e99ebc-5108-b2f1-4b1f-14e8715d0bf4@0in.de/
+Grabbing thread from lore.kernel.org/all/05e99ebc-5108-b2f1-4b1f-14e8715d0bf4@0in.de/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v5] input-linux: Add option to not grab a device upon guest startup
+    + Link: https://lore.kernel.org/qemu-devel/05e99ebc-5108-b2f1-4b1f-14e8715d0bf4@0in.de
+  ---
+  [32m✓[0m Signed: DKIM/0in.de
+---
+Total patches: 1
+---
+Applying: input-linux: Add option to not grab a device upon guest startup
+Patch failed at 0001 input-linux: Add option to not grab a device upon guest startup
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:69
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
