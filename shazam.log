@@ -1,0 +1,24 @@
+Looking up https://lore.kernel.org/all/KL1PR0601MB4874F12178F49F9BB8BEA7DF8DF92@KL1PR0601MB4874.apcprd06.prod.outlook.com/
+Grabbing thread from lore.kernel.org/all/KL1PR0601MB4874F12178F49F9BB8BEA7DF8DF92@KL1PR0601MB4874.apcprd06.prod.outlook.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH] hw/riscv/riscv-iommu.c: always send MRIF notice MSI
+    + Link: https://lore.kernel.org/qemu-devel/KL1PR0601MB4874F12178F49F9BB8BEA7DF8DF92@KL1PR0601MB4874.apcprd06.prod.outlook.com
+  ---
+  [31m✗[0m BADSIG: DKIM/nus.edu.sg
+---
+Total patches: 1
+---
+Applying: hw/riscv/riscv-iommu.c: always send MRIF notice MSI
+Patch failed at 0001 hw/riscv/riscv-iommu.c: always send MRIF notice MSI
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:37
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
