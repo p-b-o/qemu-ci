@@ -812,6 +812,12 @@ static void vfio_msix_enable(VFIOPCIDevice *vdev)
     PCIDevice *pdev = PCI_DEVICE(vdev);
     int ret;
 
+    /* pin reads back as 0xff if the device is unresponsive */
+    if (pin > PCI_NUM_PINS) {
+        error_setg(errp, "Invalid PCI interrupt pin %d", pin);
+        return -EINVAL;
+    }
+
     vfio_disable_interrupts(vdev);
 
     vdev->msi_vectors = g_new0(VFIOMSIVector, vdev->msix->entries);
