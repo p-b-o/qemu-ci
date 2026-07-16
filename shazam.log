@@ -1,0 +1,61 @@
+Looking up https://lore.kernel.org/all/20260716213858.609699-1-khushit.shah@nutanix.com/
+Grabbing thread from lore.kernel.org/all/20260716213858.609699-1-khushit.shah@nutanix.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 20 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 78 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC v3 1/19] target/arm/sysreg: regenerate cpu-sysregs.h.inc
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-2-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 2/19] scripts: bug fixes in update-aarch64-cpu-sysreg-properties
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-3-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 3/19] target/arm: regenerate cpu-idregs.h.inc
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-4-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 4/19] target/arm: expose all ID regs fields as properties
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-5-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 5/19] target/arm/kvm: enable writable implementation ID registers
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-6-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 6/19] target/arm/kvm: Read all ID registers from KVM
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-7-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 7/19] target/arm/kvm: handle special ID registers cases when reading from KVM
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-8-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 8/19] target/arm/kvm: Handle writeback for special ID register fields
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-9-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 9/19] target/arm: Add named cpu model infra + graviton3 named model
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-10-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 10/19] target/arm: Add Nvidia Grace named model
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-11-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 11/19] target/arm: fix sve and pauth finalize for named cpu models
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-12-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 12/19] target/arm: Introduce stub files required for qmp support
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-13-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 13/19] target/arm/qmp: add named models and properties to cpu-model-expansion
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-14-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 14/19] target/arm/kvm: compute supported values for ID register fields
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-15-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 15/19] target/arm/kvm: introduce kvm_arm_get_host_isar helper
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-16-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 16/19] qmp: add query-cpu-props-info command
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-17-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 17/19] target/arm: Report 0 as supported for ID fields gated by vCPU init flags
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-18-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 18/19] target/arm/qmp: hook blockers in query-cpu-definitions
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-19-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v3 19/19] target/arm/kvm: fix host model writeback when kernel supports EL2
+    + Link: https://lore.kernel.org/qemu-devel/20260716213858.609699-20-khushit.shah@nutanix.com
+  ---
+  [32m✓[0m Signed: DKIM/nutanix.com
+---
+Total patches: 19
+---
+Applying: target/arm/sysreg: regenerate cpu-sysregs.h.inc
+Patch failed at 0001 target/arm/sysreg: regenerate cpu-sysregs.h.inc
+error: patch failed: target/arm/cpu-sysregs.h.inc:19
+error: target/arm/cpu-sysregs.h.inc: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
