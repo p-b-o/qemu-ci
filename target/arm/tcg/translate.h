@@ -197,14 +197,14 @@ typedef struct DisasContext {
      *  < 0, set by the current instruction.
      */
     int8_t btype;
-    /* A copy of DCZID_EL0.BS. */
-    uint8_t dcz_blocksize;
     /* A copy of cpu->gm_blocksize. */
     uint8_t gm_blocksize;
     /* True if the current insn_start has been updated. */
     bool insn_start_updated;
     /* FPMR access exception EL or 0 if enabled. */
     uint8_t fpmr_el;
+    /* An expansion of DCZID_EL0.BS. */
+    int dcz_blocksize;
     /* Offset from VNCR_EL2 when FEAT_NV2 redirects this reg to memory */
     uint32_t nv2_redirect_offset;
 } DisasContext;

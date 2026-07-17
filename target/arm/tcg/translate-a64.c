@@ -4752,7 +4752,6 @@ static bool trans_LD_single_repl(DisasContext *s, arg_LD_single_repl *a)
 static bool trans_STZGM(DisasContext *s, arg_ldst_tag *a)
 {
     TCGv_i64 addr, clean_addr, tcg_rt;
-    int size = 4 << s->dcz_blocksize;
 
     if (!dc_isar_feature(aa64_mte, s)) {
         return false;
@@ -4777,7 +4776,7 @@ static bool trans_STZGM(DisasContext *s, arg_ldst_tag *a)
      * except the alignment happens before the access.
      */
     clean_addr = clean_data_tbi(s, addr);
-    tcg_gen_andi_i64(clean_addr, clean_addr, -size);
+    tcg_gen_andi_i64(clean_addr, clean_addr, -s->dcz_blocksize);
     gen_helper_dc_zva(tcg_env, clean_addr);
     return true;
 }
@@ -11055,7 +11054,7 @@ static void aarch64_tr_init_disas_context(DisasContextBase *dcbase,
     dc->vec_stride = 0;
     dc->cp_regs = arm_cpu->cp_regs;
     dc->features = env->features;
-    dc->dcz_blocksize = get_dczid_bs(arm_cpu);
+    dc->dcz_blocksize = 4 << get_dczid_bs(arm_cpu);
     dc->gm_blocksize = arm_cpu->gm_blocksize;
 
 #ifdef CONFIG_USER_ONLY
