@@ -1,0 +1,24 @@
+Looking up https://lore.kernel.org/all/CAFMepcnmdskwDZ6dN2wEEK%3Dve5B8hzghfrbUcGkQxCHGCDXVVA@mail.gmail.com/
+Grabbing thread from lore.kernel.org/all/CAFMepcnmdskwDZ6dN2wEEK%3Dve5B8hzghfrbUcGkQxCHGCDXVVA@mail.gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH] hw/9pfs: add support ORCLOSE flag to create and open request
+    + Link: https://lore.kernel.org/qemu-devel/CAFMepcnmdskwDZ6dN2wEEK=ve5B8hzghfrbUcGkQxCHGCDXVVA@mail.gmail.com
+  ---
+  [31m✗[0m BADSIG: DKIM/lufia-org.20251104.gappssmtp.com
+---
+Total patches: 1
+---
+Applying: hw/9pfs: add support ORCLOSE flag to create and open request
+Patch failed at 0001 hw/9pfs: add support ORCLOSE flag to create and open request
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:11
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
