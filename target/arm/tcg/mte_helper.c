@@ -129,6 +129,13 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
             g_assert_not_reached();
         }
     }
+    if (atm_kind == ATM_NORMAL) {
+        int in_page = -(ptr | TARGET_PAGE_MASK);
+        if (unlikely(ptr_size > in_page)) {
+            probe_access(env, ptr + in_page, ptr_size - in_page,
+                         ptr_access, MMU_USER_IDX, ra);
+        }
+    }
 
     /* Require both MAP_ANON and PROT_MTE for the page. */
     if ((flags & PAGE_ANON) && (flags & PAGE_MTE)) {
@@ -147,6 +154,7 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
     MemoryRegion *mr;
     ARMASIdx tag_asi;
     AddressSpace *tag_as;
+    uint8_t pte_attrs;
 
     /*
      * Probe the first byte of the virtual address.  This raises an
@@ -160,9 +168,32 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
         assert(atm_kind == ATM_PROBE_PAGES);
         goto fini;
     }
+
+    /*
+     * Remember these across the second lookup below,
+     * which may invalidate this pointer via tlb resize.
+     */
+    ptr_paddr = full->phys_addr | (ptr & ~TARGET_PAGE_MASK);
+    pte_attrs = full->extra.arm.pte_attrs;
     ret.attrs = full->attrs;
 
-    switch (full->extra.arm.pte_attrs) {
+    /*
+     * The Normal memory access can extend to the next page.  E.g. a single
+     * 8-byte access to the last byte of a page will check only the last
+     * tag on the first page.
+     * Any page access exception has priority over tag check exception.
+     */
+    if (atm_kind == ATM_NORMAL) {
+        int in_page = -(ptr | TARGET_PAGE_MASK);
+        if (unlikely(ptr_size > in_page)) {
+            void *discard_mem;
+            ret.flags |= probe_access_full(env, ptr + in_page, 0, ptr_access,
+                                           ptr_mmu_idx, false,
+                                           &discard_mem, &full, ra);
+        }
+    }
+
+    switch (pte_attrs) {
     case 0xf0: /* Tagged */
         break;
 
@@ -181,33 +212,10 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
         goto fini;
     }
 
-    /*
-     * Remember this across the second lookup below,
-     * which may invalidate this pointer via tlb resize.
-     */
-    ptr_paddr = full->phys_addr | (ptr & ~TARGET_PAGE_MASK);
-
-    /*
-     * The Normal memory access can extend to the next page.  E.g. a single
-     * 8-byte access to the last byte of a page will check only the last
-     * tag on the first page.
-     * Any page access exception has priority over tag check exception.
-     */
-    if (atm_kind == ATM_NORMAL) {
-        int in_page = -(ptr | TARGET_PAGE_MASK);
-        if (unlikely(ptr_size > in_page)) {
-            void *discard_mem;
-            ret.flags |= probe_access_full(env, ptr + in_page, 0, ptr_access,
-                                           ptr_mmu_idx, false,
-                                           &discard_mem, &full, ra);
-        }
-
-        /* Any debug exception has priority over a tag check exception. */
-        if (unlikely(ret.flags & TLB_WATCHPOINT)) {
-            int wp = ptr_access == MMU_DATA_LOAD ? BP_MEM_READ : BP_MEM_WRITE;
-            cpu_check_watchpoint(env_cpu(env), ptr, ptr_size,
-                                 ret.attrs, wp, ra);
-        }
+    /* Any debug exception has priority over a tag check exception. */
+    if (unlikely(ret.flags & TLB_WATCHPOINT) && atm_kind == ATM_NORMAL) {
+        int wp = ptr_access == MMU_DATA_LOAD ? BP_MEM_READ : BP_MEM_WRITE;
+        cpu_check_watchpoint(env_cpu(env), ptr, ptr_size, ret.attrs, wp, ra);
     }
 
     /* Convert to the physical address in tag space.  */
