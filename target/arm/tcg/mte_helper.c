@@ -27,6 +27,7 @@
 #ifdef CONFIG_USER_ONLY
 #include "user/cpu_loop.h"
 #include "user/page-protection.h"
+#include "user/guest-host.h"
 #else
 #include "system/physmem.h"
 #endif
@@ -80,46 +81,53 @@ static void mte_perm_check_fail(CPUARMState *env, uint64_t dirty_ptr,
 }
 #endif
 
-static uint8_t *
+typedef struct AllocationTagMem {
+    uint8_t *tag_mem;
+    void *ptr_mem;
+    int flags;
+    MemTxAttrs attrs;
+} AllocationTagMem;
+
+static AllocationTagMem
 allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
-                            uint64_t ptr, MMUAccessType ptr_access,
+                            vaddr ptr, MMUAccessType ptr_access,
                             int ptr_size, MMUAccessType tag_access,
                             bool probe, uintptr_t ra)
 {
-#ifdef CONFIG_USER_ONLY
-    const size_t page_data_size = TARGET_PAGE_SIZE >> (LOG2_TAG_GRANULE + 1);
-    uint64_t clean_ptr = useronly_clean_ptr(ptr);
-    int flags = page_get_flags(clean_ptr);
-    uint8_t *tags;
-    uintptr_t index;
+    AllocationTagMem ret = { };
 
-    if (!(flags & (ptr_access == MMU_DATA_STORE ? PAGE_WRITE_ORG : PAGE_READ))) {
+#ifdef CONFIG_USER_ONLY
+    vaddr clean_ptr = useronly_clean_ptr(ptr);
+    int flags = page_get_flags(clean_ptr);
+    int req_flags = ptr_access == MMU_DATA_STORE ? PAGE_WRITE_ORG : PAGE_READ;
+
+    if (unlikely(!(flags & req_flags))) {
         if (probe) {
-            return NULL;
+            ret.flags = TLB_INVALID_MASK;
+            goto fini;
         }
         cpu_loop_exit_sigsegv(env_cpu(env), ptr, ptr_access,
                               !(flags & PAGE_VALID), ra);
     }
 
     /* Require both MAP_ANON and PROT_MTE for the page. */
-    if (!(flags & PAGE_ANON) || !(flags & PAGE_MTE)) {
-        return NULL;
+    if ((flags & PAGE_ANON) && (flags & PAGE_MTE)) {
+        size_t page_data_size = TARGET_PAGE_SIZE >> (LOG2_TAG_GRANULE + 1);
+        uint8_t *tags = page_get_target_data(clean_ptr, page_data_size);
+        uintptr_t index = extract64(ptr, LOG2_TAG_GRANULE + 1,
+                                    TARGET_PAGE_BITS - LOG2_TAG_GRANULE - 1);
+        ret.tag_mem = tags + index;
     }
 
-    tags = page_get_target_data(clean_ptr, page_data_size);
-
-    index = extract32(ptr, LOG2_TAG_GRANULE + 1,
-                      TARGET_PAGE_BITS - LOG2_TAG_GRANULE - 1);
-    return tags + index;
+    ret.ptr_mem = g2h_untagged_vaddr(clean_ptr);
+    ret.attrs = MEMTXATTRS_UNSPECIFIED;
 #else
     CPUTLBEntryFull *full;
-    MemTxAttrs attrs;
-    int in_page, flags;
+    int in_page;
     hwaddr ptr_paddr, tag_paddr, xlat;
     MemoryRegion *mr;
     ARMASIdx tag_asi;
     AddressSpace *tag_as;
-    void *host;
 
     /*
      * Probe the first byte of the virtual address.  This raises an
@@ -131,12 +139,13 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
      * for the pure probe, or assert that we received a valid page for the
      * no-fault-expected probe.
      */
-    flags = probe_access_full(env, ptr, 0, ptr_access, ptr_mmu_idx,
-                              ra == 0, &host, &full, ra);
-    if (unlikely(flags & TLB_INVALID_MASK)) {
+    ret.flags = probe_access_full(env, ptr, 0, ptr_access, ptr_mmu_idx,
+                                  ra == 0, &ret.ptr_mem, &full, ra);
+    if (unlikely(ret.flags & TLB_INVALID_MASK)) {
         assert(probe);
-        return NULL;
+        goto fini;
     }
+    ret.attrs = full->attrs;
 
     switch (full->extra.arm.pte_attrs) {
     case 0xf0: /* Tagged */
@@ -145,7 +154,9 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
     case 0xe0: /* NoTagAccess */
         if (cpu_isar_feature(aa64_mteperm, env_archcpu(env))) {
             if (probe) {
-                return NULL;
+                ret.ptr_mem = NULL;
+                ret.flags = TLB_INVALID_MASK;
+                goto fini;
             }
             assert(ra);
             mte_perm_check_fail(env, ptr, ra, tag_access == MMU_DATA_STORE);
@@ -153,27 +164,25 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
         /* fall through */
 
     default: /* Not Tagged */
-        return NULL;
+        goto fini;
     }
 
     /*
      * If not backed by host ram, there is no tag storage: access unchecked.
      * This is probably a guest os bug though, so log it.
      */
-    if (unlikely(flags & TLB_MMIO)) {
+    if (unlikely(ret.flags & TLB_MMIO)) {
         qemu_log_mask(LOG_GUEST_ERROR,
                       "Page @ 0x%" PRIx64 " indicates Tagged Normal memory "
                       "but is not backed by host ram\n", ptr);
-        return NULL;
+        goto fini;
     }
 
     /*
-     * Remember these values across the second lookup below,
+     * Remember this across the second lookup below,
      * which may invalidate this pointer via tlb resize.
      */
     ptr_paddr = full->phys_addr | (ptr & ~TARGET_PAGE_MASK);
-    attrs = full->attrs;
-    full = NULL;
 
     /*
      * The Normal memory access can extend to the next page.  E.g. a single
@@ -183,26 +192,30 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
      */
     in_page = -(ptr | TARGET_PAGE_MASK);
     if (unlikely(ptr_size > in_page)) {
-        flags |= probe_access_full(env, ptr + in_page, 0, ptr_access,
-                                   ptr_mmu_idx, ra == 0, &host, &full, ra);
-        assert(!(flags & TLB_INVALID_MASK));
+        void *discard_mem;
+        int flags2 = probe_access_full(env, ptr + in_page, 0, ptr_access,
+                                       ptr_mmu_idx, ra == 0,
+                                       &discard_mem, &full, ra);
+
+        assert(!(flags2 & TLB_INVALID_MASK));
+        ret.flags |= flags2;
     }
 
     /* Any debug exception has priority over a tag check exception. */
-    if (!probe && unlikely(flags & TLB_WATCHPOINT)) {
+    if (!probe && unlikely(ret.flags & TLB_WATCHPOINT)) {
         int wp = ptr_access == MMU_DATA_LOAD ? BP_MEM_READ : BP_MEM_WRITE;
         assert(ra != 0);
-        cpu_check_watchpoint(env_cpu(env), ptr, ptr_size, attrs, wp, ra);
+        cpu_check_watchpoint(env_cpu(env), ptr, ptr_size, ret.attrs, wp, ra);
     }
 
     /* Convert to the physical address in tag space.  */
     tag_paddr = ptr_paddr >> (LOG2_TAG_GRANULE + 1);
 
     /* Look up the address in tag space. */
-    tag_asi = attrs.secure ? ARMASIdx_TagS : ARMASIdx_TagNS;
+    tag_asi = ret.attrs.secure ? ARMASIdx_TagS : ARMASIdx_TagNS;
     tag_as = cpu_get_address_space(env_cpu(env), tag_asi);
     mr = address_space_translate(tag_as, tag_paddr, &xlat, NULL,
-                                 tag_access == MMU_DATA_STORE, attrs);
+                                 tag_access == MMU_DATA_STORE, ret.attrs);
 
     /*
      * Note that @mr will never be NULL.  If there is nothing in the address
@@ -215,7 +228,7 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
                       "Tag Memory @ 0x%" HWADDR_PRIx " not found for "
                       "Normal Memory @ 0x%" HWADDR_PRIx "\n",
                       tag_paddr, ptr_paddr);
-        return NULL;
+        goto fini;
     }
 
     /*
@@ -227,8 +240,11 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
         physical_memory_set_dirty_flag(tag_ra, DIRTY_MEMORY_MIGRATION);
     }
 
-    return memory_region_get_ram_ptr(mr) + xlat;
+    ret.tag_mem = memory_region_get_ram_ptr(mr) + xlat;
 #endif
+
+ fini:
+    return ret;
 }
 
 static G_NORETURN void canonical_tag_write_fail(CPUARMState *env,
@@ -250,7 +266,8 @@ static uint8_t *allocation_tag_mem(CPUARMState *env, int ptr_mmu_idx,
                                    uintptr_t ra)
 {
     return allocation_tag_mem_internal(env, ptr_mmu_idx, ptr, ptr_access,
-                                       ptr_size, tag_access, false, ra);
+                                       ptr_size, tag_access, false, ra)
+           .tag_mem;
 }
 
 uint8_t *allocation_tag_mem_probe(CPUARMState *env, int ptr_mmu_idx,
@@ -258,7 +275,8 @@ uint8_t *allocation_tag_mem_probe(CPUARMState *env, int ptr_mmu_idx,
                                   int ptr_size, MMUAccessType tag_access)
 {
     return allocation_tag_mem_internal(env, ptr_mmu_idx, ptr, ptr_access,
-                                       ptr_size, tag_access, true, 0);
+                                       ptr_size, tag_access, true, 0)
+           .tag_mem;
 }
 
 uint64_t HELPER(irg)(CPUARMState *env, uint64_t rn, uint64_t rm)
