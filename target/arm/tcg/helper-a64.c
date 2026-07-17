@@ -786,56 +786,6 @@ illegal_return:
 }
 #endif /* !CONFIG_USER_ONLY */
 
-void HELPER(dc_zva)(CPUARMState *env, uint64_t vaddr_in)
-{
-    uintptr_t ra = GETPC();
-
-    /*
-     * Implement DC ZVA, which zeroes a fixed-length block of memory.
-     * Note that we do not implement the (architecturally mandated)
-     * alignment fault for attempts to use this on Device memory
-     * (which matches the usual QEMU behaviour of not implementing either
-     * alignment faults or any memory attribute handling).
-     */
-    int blocklen = 4 << get_dczid_bs(env_archcpu(env));
-    uint64_t vaddr = vaddr_in & ~(blocklen - 1);
-    int mmu_idx = arm_env_mmu_index(env);
-    void *mem;
-
-    /*
-     * Trapless lookup.  In addition to actual invalid page, may
-     * return NULL for I/O, watchpoints, clean pages, etc.
-     */
-    mem = tlb_vaddr_to_host(env, vaddr, MMU_DATA_STORE, mmu_idx);
-
-#ifndef CONFIG_USER_ONLY
-    if (unlikely(!mem)) {
-        /*
-         * Trap if accessing an invalid page.  DC_ZVA requires that we supply
-         * the original pointer for an invalid page.  But watchpoints require
-         * that we probe the actual space.  So do both.
-         */
-        (void) probe_write(env, vaddr_in, 1, mmu_idx, ra);
-        mem = probe_write(env, vaddr, blocklen, mmu_idx, ra);
-
-        if (unlikely(!mem)) {
-            /*
-             * The only remaining reason for mem == NULL is I/O.
-             * Just do a series of byte writes as the architecture demands.
-             */
-            for (int i = 0; i < blocklen; i++) {
-                cpu_stb_mmuidx_ra(env, vaddr + i, 0, mmu_idx, ra);
-            }
-            return;
-        }
-    }
-#endif
-
-    set_helper_retaddr(ra);
-    memset(mem, 0, blocklen);
-    clear_helper_retaddr();
-}
-
 void HELPER(arm_unaligned_access)(CPUARMState *env, uint64_t addr,
                                   uint32_t access_type, uint32_t mmu_idx)
 {
