@@ -3137,14 +3137,16 @@ static void handle_sys(DisasContext *s, bool isread,
     }
     case ARM_CP_DC_ZVA:
         /* Writes clear the aligned block of memory which rt points into. */
-        if (s->mte_active[0]) {
-            tcg_rt = tcg_temp_new_i64();
-            gen_helper_mte_check_zva(tcg_rt, tcg_env, gen_mtedesc_zva(s),
-                                     cpu_reg(s, rt));
-        } else {
-            tcg_rt = cpu_reg(s, rt);
+        {
+            TCGv_i32 desc = gen_mtedesc_zva(s);
+            if (s->mte_active[0]) {
+                tcg_rt = tcg_temp_new_i64();
+                gen_helper_mte_check_zva(tcg_rt, tcg_env, desc, cpu_reg(s, rt));
+            } else {
+                tcg_rt = cpu_reg(s, rt);
+            }
+            gen_helper_dc_zva(tcg_env, tcg_rt, desc);
         }
-        gen_helper_dc_zva(tcg_env, tcg_rt);
         return;
     case ARM_CP_DC_GVA:
         {
@@ -3170,11 +3172,12 @@ static void handle_sys(DisasContext *s, bool isread,
     case ARM_CP_DC_GZVA:
         {
             TCGv_i64 clean_addr, tag;
+            TCGv_i32 desc = gen_mtedesc_zva(s);
 
             /* For DC_GZVA, we can rely on DC_ZVA for the proper fault. */
             tcg_rt = cpu_reg(s, rt);
             clean_addr = clean_data_tbi(s, tcg_rt);
-            gen_helper_dc_zva(tcg_env, clean_addr);
+            gen_helper_dc_zva(tcg_env, clean_addr, desc);
 
             if (s->ata[0]) {
                 /* Extract the tag from the register to match STZGM.  */
@@ -4788,7 +4791,7 @@ static bool trans_STZGM(DisasContext *s, arg_ldst_tag *a)
      * except the alignment happens before the access.
      */
     tcg_gen_andi_i64(addr, addr, -s->dcz_blocksize);
-    gen_helper_dc_zva(tcg_env, addr);
+    gen_helper_dc_zva(tcg_env, addr, gen_mtedesc_zva(s));
     return true;
 }
 

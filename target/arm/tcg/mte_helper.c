@@ -1117,11 +1117,11 @@ static void do_dczva_0(CPUARMState *env, vaddr addr, size_t len, void *mem,
     clear_helper_retaddr();
 }
 
-void HELPER(dc_zva)(CPUARMState *env, uint64_t addr)
+void HELPER(dc_zva)(CPUARMState *env, uint64_t addr, uint32_t desc)
 {
     uintptr_t ra = GETPC();
-    size_t len = (size_t)4 << get_dczid_bs(env_archcpu(env));
-    int mmu_idx = arm_env_mmu_index(env);
+    size_t len = FIELD_EX32(desc, MTEDESC, SIZEM1) + 1;
+    int mmu_idx = FIELD_EX32(desc, MTEDESC, MIDX);
     MemTxAttrs attrs = MEMTXATTRS_UNSPECIFIED;
     int flags;
     void *mem;
