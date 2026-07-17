@@ -1,0 +1,23 @@
+# Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# Hexagon system tests
+#
+
+HEX_SYS_SRC = $(SRC_PATH)/tests/tcg/hexagon/system
+VPATH += $(HEX_SYS_SRC)
+
+LINK_SCRIPT = $(HEX_SYS_SRC)/system.ld
+
+HEX_SYS_FLAGS = --no-default-config -target hexagon-unknown-none-elf \
+                -mv73 -O0 -g -static -nostdlib \
+                -Wl,--build-id=none -Wl,-T,$(LINK_SCRIPT)
+
+QEMU_OPTS = -M V66G_1024 -kernel
+
+swi_ciad: swi_ciad.S $(LINK_SCRIPT)
+	$(CC) $(HEX_SYS_FLAGS) $< -o $@
+
+HEX_SYS_TESTS = swi_ciad
+
+TESTS += $(HEX_SYS_TESTS)
