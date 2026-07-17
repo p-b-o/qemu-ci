@@ -3142,7 +3142,7 @@ static void handle_sys(DisasContext *s, bool isread,
             gen_helper_mte_check_zva(tcg_rt, tcg_env, gen_mtedesc_zva(s),
                                      cpu_reg(s, rt));
         } else {
-            tcg_rt = clean_data_tbi(s, cpu_reg(s, rt));
+            tcg_rt = cpu_reg(s, rt);
         }
         gen_helper_dc_zva(tcg_env, tcg_rt);
         return;
@@ -4763,7 +4763,7 @@ static bool trans_LD_single_repl(DisasContext *s, arg_LD_single_repl *a)
 
 static bool trans_STZGM(DisasContext *s, arg_ldst_tag *a)
 {
-    TCGv_i64 addr, clean_addr, tcg_rt;
+    TCGv_i64 addr, tcg_rt;
 
     if (!dc_isar_feature(aa64_mte, s)) {
         return false;
@@ -4787,9 +4787,8 @@ static bool trans_STZGM(DisasContext *s, arg_ldst_tag *a)
      * The non-tags portion of STZGM is mostly like DC_ZVA,
      * except the alignment happens before the access.
      */
-    clean_addr = clean_data_tbi(s, addr);
-    tcg_gen_andi_i64(clean_addr, clean_addr, -s->dcz_blocksize);
-    gen_helper_dc_zva(tcg_env, clean_addr);
+    tcg_gen_andi_i64(addr, addr, -s->dcz_blocksize);
+    gen_helper_dc_zva(tcg_env, addr);
     return true;
 }
 
