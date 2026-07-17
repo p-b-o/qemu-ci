@@ -1557,7 +1557,24 @@ void HELPER(raise_stack_overflow)(CPUHexagonState *env, uint32_t slot,
 
 void HELPER(ciad)(CPUHexagonState *env, uint32_t mask)
 {
-    g_assert_not_reached();
+    uint32_t ipendad;
+    uint32_t iad;
+    HexagonCPU *cpu;
+
+    BQL_LOCK_GUARD();
+    cpu = env_archcpu(env);
+    ipendad = hexagon_globalreg_read(cpu->globalregs, HEX_SREG_IPENDAD,
+                                     env->threadId);
+    iad = fGET_FIELD(ipendad, IPENDAD_IAD);
+    fSET_FIELD(ipendad, IPENDAD_IAD, iad & ~mask);
+    hexagon_globalreg_write(cpu->globalregs, HEX_SREG_IPENDAD,
+                            ipendad, env->threadId);
+
+    qemu_log_mask(LOG_UNIMP,
+                  "%s: l2vic clear-interrupt effect not implemented "
+                  "(mask=0x%" PRIx32 ")\n", __func__, mask);
+
+    hex_interrupt_update(env);
 }
 
 void HELPER(siad)(CPUHexagonState *env, uint32_t mask)
