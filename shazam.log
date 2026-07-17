@@ -1,0 +1,53 @@
+Looking up https://lore.kernel.org/all/20260717084559.3477061-1-jamin_lin@aspeedtech.com/
+Grabbing thread from lore.kernel.org/all/20260717084559.3477061-1-jamin_lin@aspeedtech.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 12 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 45 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/9] hw/misc/aspeed_scu: Introduce Aspeed2700SCUState
+    + Link: https://lore.kernel.org/qemu-devel/20260717084559.3477061-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 2/9] hw/arm/aspeed: Use Aspeed2700SCUState for AST2700 users
+    + Link: https://lore.kernel.org/qemu-devel/20260717084559.3477061-3-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 3/9] hw/arm/aspeed_ast27x0: Move SCU link into AST27x0 coprocessors
+    + Link: https://lore.kernel.org/qemu-devel/20260717084559.3477061-4-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 4/9] hw/misc/aspeed_scu: Add separate reset handler for AST2700 SCUIO
+    + Link: https://lore.kernel.org/qemu-devel/20260717084559.3477061-5-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 5/9] hw/arm/aspeed_ast27x0: Pass realized PSP SoC to SSP/TSP initialization
+    + Link: https://lore.kernel.org/qemu-devel/20260717084559.3477061-6-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 6/9] hw/arm/ast27x0: Share single SCUIO instance across PSP, SSP, and TSP
+    + Link: https://lore.kernel.org/qemu-devel/20260717084559.3477061-7-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 7/9] hw/arm/ast27x0: Share FMC controller with SSP and TSP
+    + Link: https://lore.kernel.org/qemu-devel/20260717084559.3477061-8-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 8/9] hw/ssi/aspeed_smc: Add Data FIFO-based flash access support for AST2700
+    + Link: https://lore.kernel.org/qemu-devel/20260717084559.3477061-9-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 9/9] tests/qtest/ast2700-smc-test: Add Data FIFO mode test
+    + Link: https://lore.kernel.org/qemu-devel/20260717084559.3477061-10-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 9
+---
+Applying: hw/misc/aspeed_scu: Introduce Aspeed2700SCUState
+Applying: hw/arm/aspeed: Use Aspeed2700SCUState for AST2700 users
+Applying: hw/arm/aspeed_ast27x0: Move SCU link into AST27x0 coprocessors
+Applying: hw/misc/aspeed_scu: Add separate reset handler for AST2700 SCUIO
+Applying: hw/arm/aspeed_ast27x0: Pass realized PSP SoC to SSP/TSP initialization
+Applying: hw/arm/ast27x0: Share single SCUIO instance across PSP, SSP, and TSP
+Applying: hw/arm/ast27x0: Share FMC controller with SSP and TSP
+Applying: hw/ssi/aspeed_smc: Add Data FIFO-based flash access support for AST2700
+Applying: tests/qtest/ast2700-smc-test: Add Data FIFO mode test
+Patch failed at 0009 tests/qtest/ast2700-smc-test: Add Data FIFO mode test
+error: patch failed: tests/qtest/aspeed-smc-utils.h:33
+error: tests/qtest/aspeed-smc-utils.h: patch does not apply
+error: patch failed: tests/qtest/aspeed-smc-utils.c:826
+error: tests/qtest/aspeed-smc-utils.c: patch does not apply
+error: patch failed: tests/qtest/ast2700-smc-test.c:64
+error: tests/qtest/ast2700-smc-test.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
