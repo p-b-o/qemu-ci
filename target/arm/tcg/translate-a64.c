@@ -3139,13 +3139,13 @@ static void handle_sys(DisasContext *s, bool isread,
         /* Writes clear the aligned block of memory which rt points into. */
         {
             TCGv_i32 desc = gen_mtedesc_zva(s);
+
+            tcg_rt = cpu_reg(s, rt);
             if (s->mte_active[0]) {
-                tcg_rt = tcg_temp_new_i64();
-                gen_helper_mte_check_zva(tcg_rt, tcg_env, desc, cpu_reg(s, rt));
+                gen_helper_dc_zva_mte(tcg_env, tcg_rt, desc);
             } else {
-                tcg_rt = cpu_reg(s, rt);
+                gen_helper_dc_zva(tcg_env, tcg_rt, desc);
             }
-            gen_helper_dc_zva(tcg_env, tcg_rt, desc);
         }
         return;
     case ARM_CP_DC_GVA:

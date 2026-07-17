@@ -91,6 +91,12 @@ typedef struct AllocationTagMem {
 typedef enum {
     /* Trap on missing pages, invalid tag access, or watchpoints. */
     ATM_NORMAL,
+    /*
+     * Trap on missing pages, invalid tag access.
+     * Align the pointer after initial DATA_ACCESS faults.
+     * Do not check for watchpoints.
+     */
+    ATM_ZVA,
     /* Gracefully return no tag memory for invalid pages. */
     ATM_PROBE_PAGES,
     /*
@@ -104,7 +110,7 @@ typedef enum {
 
 static AllocationTagMem
 allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
-                            vaddr ptr, MMUAccessType ptr_access,
+                            vaddr ptr_orig, MMUAccessType ptr_access,
                             int ptr_size, MMUAccessType tag_access,
                             uintptr_t ra, AllocationTagMemKind atm_kind)
 {
@@ -113,7 +119,7 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
     assert((atm_kind >= ATM_PROBE_PAGES) == (ra == 0));
 
 #ifdef CONFIG_USER_ONLY
-    vaddr clean_ptr = useronly_clean_ptr(ptr);
+    vaddr clean_ptr = useronly_clean_ptr(ptr_orig);
     int flags = page_get_flags(clean_ptr);
     int req_flags = ptr_access == MMU_DATA_STORE ? PAGE_WRITE_ORG : PAGE_READ;
 
@@ -123,25 +129,29 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
             ret.flags = TLB_INVALID_MASK;
             goto fini;
         case ATM_NORMAL:
-            cpu_loop_exit_sigsegv(env_cpu(env), ptr, ptr_access,
+        case ATM_ZVA:
+            cpu_loop_exit_sigsegv(env_cpu(env), ptr_orig, ptr_access,
                                   !(flags & PAGE_VALID), ra);
         default:
             g_assert_not_reached();
         }
     }
+
     if (atm_kind == ATM_NORMAL) {
-        int in_page = -(ptr | TARGET_PAGE_MASK);
+        int in_page = -(ptr_orig | TARGET_PAGE_MASK);
         if (unlikely(ptr_size > in_page)) {
-            probe_access(env, ptr + in_page, ptr_size - in_page,
+            probe_access(env, ptr_orig + in_page, ptr_size - in_page,
                          ptr_access, MMU_USER_IDX, ra);
         }
+    } else if (atm_kind == ATM_ZVA) {
+        clean_ptr &= -ptr_size;
     }
 
     /* Require both MAP_ANON and PROT_MTE for the page. */
     if ((flags & PAGE_ANON) && (flags & PAGE_MTE)) {
         size_t page_data_size = TARGET_PAGE_SIZE >> (LOG2_TAG_GRANULE + 1);
         uint8_t *tags = page_get_target_data(clean_ptr, page_data_size);
-        uintptr_t index = extract64(ptr, LOG2_TAG_GRANULE + 1,
+        uintptr_t index = extract64(clean_ptr, LOG2_TAG_GRANULE + 1,
                                     TARGET_PAGE_BITS - LOG2_TAG_GRANULE - 1);
         ret.tag_mem = tags + index;
     }
@@ -149,6 +159,7 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
     ret.ptr_mem = g2h_untagged_vaddr(clean_ptr);
     ret.attrs = MEMTXATTRS_UNSPECIFIED;
 #else
+    uint64_t ptr = ptr_orig;
     CPUTLBEntryFull *full;
     hwaddr ptr_paddr, tag_paddr, xlat;
     MemoryRegion *mr;
@@ -167,6 +178,15 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
     if (unlikely(ret.flags & TLB_INVALID_MASK)) {
         assert(atm_kind == ATM_PROBE_PAGES);
         goto fini;
+    }
+
+    /*
+     * For DC_ZVA and friends, the initial page lookup and trap is performed
+     * with the original address, but we need to align the further results.
+     */
+    if (atm_kind == ATM_ZVA) {
+        ptr &= -ptr_size;
+        ret.ptr_mem = (void *)((uintptr_t)ret.ptr_mem & -ptr_size);
     }
 
     /*
@@ -204,7 +224,8 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
                 ret.flags = TLB_INVALID_MASK;
                 goto fini;
             }
-            mte_perm_check_fail(env, ptr, ra, tag_access == MMU_DATA_STORE);
+            mte_perm_check_fail(env, ptr_orig, ra,
+                                tag_access == MMU_DATA_STORE);
         }
         /* fall through */
 
@@ -1146,118 +1167,103 @@ void HELPER(dc_zva)(CPUARMState *env, uint64_t addr, uint32_t desc)
     do_dczva_0(env, addr, len, mem, mmu_idx, flags, ra);
 }
 
-/*
- * Perform an MTE checked access for DC_ZVA.
- */
-uint64_t HELPER(mte_check_zva)(CPUARMState *env, uint32_t desc, uint64_t ptr)
+void HELPER(dc_zva_mte)(CPUARMState *env, uintptr_t ptr_orig, uint32_t desc)
 {
+    int dcz_bytes = FIELD_EX32(desc, MTEDESC, SIZEM1) + 1;
+    int mmu_idx = FIELD_EX32(desc, MTEDESC, MIDX);
     uintptr_t ra = GETPC();
-    int log2_dcz_bytes, log2_tag_bytes;
-    int mmu_idx, bit55;
-    intptr_t dcz_bytes, tag_bytes, i;
-    void *mem;
-    uint64_t ptr_tag, mem_tag, align_ptr;
+    uint64_t ptr = ptr_orig, ptr_tag, mem_tag;
+    int bit55;
+
+    AllocationTagMem r =
+        allocation_tag_mem_internal(env, mmu_idx, ptr, MMU_DATA_STORE,
+                                    dcz_bytes, MMU_DATA_LOAD, ra, ATM_ZVA);
+
+    r.flags = do_dcxva_traps(env, ptr, dcz_bytes, mmu_idx,
+                             r.flags, r.attrs, ra);
 
     bit55 = extract64(ptr, 55, 1);
-
-    /* If TBI is disabled, the access is unchecked, and ptr is not dirty. */
-    if (unlikely(!tbi_or_mtx_check(desc, bit55))) {
-        return ptr;
-    }
-
     ptr_tag = allocation_tag_from_addr(ptr);
+    ptr &= -dcz_bytes;
 
-    if (tcma_check(desc, bit55, ptr_tag)) {
-        goto done;
-    }
+    if (unlikely(!tbi_or_mtx_check(desc, bit55)) ||
+        tcma_check(desc, bit55, ptr_tag)) {
+        /* If TBI is disabled, or TCMA disabled, the access is unchecked. */
+    } else if (r.tag_mem) {
+        /*
+         * In arm_cpu_realizefn, we asserted that dcz > LOG2_TAG_GRANULE+1,
+         * i.e. 32 bytes, which is an unreasonably small dcz anyway, to make
+         * sure that we can access one complete tag byte here.
+         */
+        int tag_bytes = dcz_bytes / (TAG_GRANULE * 2);
 
-    /*
-     * In arm_cpu_realizefn, we asserted that dcz > LOG2_TAG_GRANULE+1,
-     * i.e. 32 bytes, which is an unreasonably small dcz anyway, to make
-     * sure that we can access one complete tag byte here.
-     */
-    log2_dcz_bytes = get_dczid_bs(env_archcpu(env)) + 2;
-    log2_tag_bytes = log2_dcz_bytes - (LOG2_TAG_GRANULE + 1);
-    dcz_bytes = (intptr_t)1 << log2_dcz_bytes;
-    tag_bytes = (intptr_t)1 << log2_tag_bytes;
-    align_ptr = ptr & -dcz_bytes;
+        /*
+         * Unlike the reasoning for checkN, DC_ZVA is always aligned, and thus
+         * it is quite easy to perform all of the comparisons at once without
+         * any extra masking.
+         *
+         * The most common zva block size is 64; some of the thunderx cpus use
+         * a block size of 128.  For user-only, aarch64_max_initfn will set the
+         * block size to 512.  Fill out the other cases for future-proofing.
+         *
+         * In order to be able to find the first miscompare later, we want the
+         * tag bytes to be in little-endian order.
+         */
+        switch (tag_bytes) {
+        case 1: /* zva_blocksize 32 */
+            mem_tag = *(uint8_t *)r.tag_mem;
+            ptr_tag *= 0x11u;
+            goto cmp_tag;
+        case 2: /* zva_blocksize 64 */
+            mem_tag = cpu_to_le16(*(uint16_t *)r.tag_mem);
+            ptr_tag *= 0x1111u;
+            goto cmp_tag;
+        case 4: /* zva_blocksize 128 */
+            mem_tag = cpu_to_le32(*(uint32_t *)r.tag_mem);
+            ptr_tag *= 0x11111111u;
+            goto cmp_tag;
+        case 8: /* zva_blocksize 256 */
+            mem_tag = cpu_to_le64(*(uint64_t *)r.tag_mem);
+            ptr_tag *= 0x1111111111111111ull;
+        cmp_tag:
+            if (unlikely(mem_tag != ptr_tag)) {
+                goto fail;
+            }
+            break;
 
-    /*
-     * Trap if accessing an invalid page.  DC_ZVA requires that we supply
-     * the original pointer for an invalid page.  But watchpoints require
-     * that we probe the actual space.  So do both.
-     */
-    mmu_idx = FIELD_EX32(desc, MTEDESC, MIDX);
-    (void) probe_write(env, ptr, 1, mmu_idx, ra);
-    mem = allocation_tag_mem(env, mmu_idx, align_ptr, MMU_DATA_STORE,
-                             dcz_bytes, MMU_DATA_LOAD, ra);
-    if (!mem) {
+        case 16: /* zva_blocksize 512 */
+        case 32: /* zva_blocksize 1024 */
+        case 64: /* zva_blocksize 2048 */
+            ptr_tag *= 0x1111111111111111ull;
+            for (int i = 0; i < tag_bytes; i += 8, ptr += 16 * TAG_GRANULE) {
+                mem_tag = cpu_to_le64(*(uint64_t *)(r.tag_mem + i));
+                if (unlikely(mem_tag != ptr_tag)) {
+                    goto fail;
+                }
+            }
+            break;
+
+        default:
+            /* Values above 2KiB are architecturally invalid. */
+            g_assert_not_reached();
+
+        fail:
+            /* Locate the first nibble that differs. */
+            ptr += (ctz64(mem_tag ^ ptr_tag) >> 4) * TAG_GRANULE;
+            mte_check_fail(env, desc, ptr, ra);
+        }
+    } else {
         /*
          * If mtx is enabled, then the access is MemTag_CanonicallyTagged,
          * otherwise it is Untagged. See AArch64.S1DecodeMemAttrs and
          * AArch64.S1DisabledOutput.
          */
         if (mtx_check(desc, bit55) && !tag_is_canonical(ptr_tag, bit55)) {
-            mte_check_fail(env, desc, ptr, ra);
+            mte_check_fail(env, desc, ptr_orig, ra);
         }
-        goto done;
     }
 
-    /*
-     * Unlike the reasoning for checkN, DC_ZVA is always aligned, and thus
-     * it is quite easy to perform all of the comparisons at once without
-     * any extra masking.
-     *
-     * The most common zva block size is 64; some of the thunderx cpus use
-     * a block size of 128.  For user-only, aarch64_max_initfn will set the
-     * block size to 512.  Fill out the other cases for future-proofing.
-     *
-     * In order to be able to find the first miscompare later, we want the
-     * tag bytes to be in little-endian order.
-     */
-    switch (log2_tag_bytes) {
-    case 0: /* zva_blocksize 32 */
-        mem_tag = *(uint8_t *)mem;
-        ptr_tag *= 0x11u;
-        break;
-    case 1: /* zva_blocksize 64 */
-        mem_tag = cpu_to_le16(*(uint16_t *)mem);
-        ptr_tag *= 0x1111u;
-        break;
-    case 2: /* zva_blocksize 128 */
-        mem_tag = cpu_to_le32(*(uint32_t *)mem);
-        ptr_tag *= 0x11111111u;
-        break;
-    case 3: /* zva_blocksize 256 */
-        mem_tag = cpu_to_le64(*(uint64_t *)mem);
-        ptr_tag *= 0x1111111111111111ull;
-        break;
-
-    default: /* zva_blocksize 512, 1024, 2048 */
-        ptr_tag *= 0x1111111111111111ull;
-        i = 0;
-        do {
-            mem_tag = cpu_to_le64(*(uint64_t *)(mem + i));
-            if (unlikely(mem_tag != ptr_tag)) {
-                goto fail;
-            }
-            i += 8;
-            align_ptr += 16 * TAG_GRANULE;
-        } while (i < tag_bytes);
-        goto done;
-    }
-
-    if (likely(mem_tag == ptr_tag)) {
-        goto done;
-    }
-
- fail:
-    /* Locate the first nibble that differs. */
-    i = ctz64(mem_tag ^ ptr_tag) >> 4;
-    mte_check_fail(env, desc, align_ptr + i * TAG_GRANULE, ra);
-
- done:
-    return useronly_clean_ptr(ptr);
+    do_dczva_0(env, ptr, dcz_bytes, r.ptr_mem, mmu_idx, r.flags, ra);
 }
 
 uint64_t mte_mops_probe(CPUARMState *env, uint64_t ptr, uint64_t size,
