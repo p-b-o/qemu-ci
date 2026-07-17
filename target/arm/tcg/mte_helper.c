@@ -671,36 +671,6 @@ void HELPER(stgm)(CPUARMState *env, uint64_t ptr, uint64_t val, uint32_t mtx)
     }
 }
 
-void HELPER(stzgm_tags)(CPUARMState *env, uint64_t ptr, uint64_t val,
-                        uint32_t mtx)
-{
-    uintptr_t ra = GETPC();
-    int mmu_idx = arm_env_mmu_index(env);
-    int log2_dcz_bytes, log2_tag_bytes;
-    intptr_t dcz_bytes, tag_bytes;
-    uint8_t *mem;
-
-    /*
-     * In arm_cpu_realizefn, we assert that dcz > LOG2_TAG_GRANULE+1,
-     * i.e. 32 bytes, which is an unreasonably small dcz anyway,
-     * to make sure that we can access one complete tag byte here.
-     */
-    log2_dcz_bytes = get_dczid_bs(env_archcpu(env)) + 2;
-    log2_tag_bytes = log2_dcz_bytes - (LOG2_TAG_GRANULE + 1);
-    dcz_bytes = (intptr_t)1 << log2_dcz_bytes;
-    tag_bytes = (intptr_t)1 << log2_tag_bytes;
-    ptr &= -dcz_bytes;
-
-    mem = allocation_tag_mem(env, mmu_idx, ptr, MMU_DATA_STORE, dcz_bytes,
-                             MMU_DATA_STORE, ra);
-    if (mem) {
-        int tag_pair = (val & 0xf) * 0x11;
-        memset(mem, tag_pair, tag_bytes);
-    } else if (raw_mtx_check(mtx, extract64(ptr, 55, 1))) {
-        canonical_tag_write_fail(env, ptr, ra);
-    }
-}
-
 static void mte_sync_check_fail(CPUARMState *env, uint32_t desc,
                                 uint64_t dirty_ptr, uintptr_t ra)
 {
@@ -1092,8 +1062,9 @@ bool mte_probe(CPUARMState *env, uint32_t desc, uint64_t ptr)
 }
 
 /* Traps for DC_ZVA, DC_GVA, and friends, after successful page lookup. */
-static int do_dcxva_traps(CPUARMState *env, vaddr addr, size_t len, int mmu_idx,
-                          int flags, MemTxAttrs attrs, uintptr_t ra)
+static int do_dcxva_traps(CPUARMState *env, vaddr addr, size_t len,
+                          int mmu_idx, int flags, MemTxAttrs attrs,
+                          uint32_t mtx_write, uintptr_t ra)
 {
 #ifndef CONFIG_USER_ONLY
     /*
@@ -1106,7 +1077,17 @@ static int do_dcxva_traps(CPUARMState *env, vaddr addr, size_t len, int mmu_idx,
         arm_cpu_do_unaligned_access(env_cpu(env), addr, MMU_DATA_STORE,
                                     mmu_idx, ra);
     }
+#endif
 
+    /*
+     * MTX write fault is via AArch64_S1CheckPermissions, which happens
+     * after AArch64_S1HasAlignmentFaultDueToMemType.
+     */
+    if (mtx_check(mtx_write, extract64(addr, 55, 1))) {
+        canonical_tag_write_fail(env, addr, ra);
+    }
+
+#ifndef CONFIG_USER_ONLY
     /* Watchpoints have lower priority than alignment faults. */
     if (unlikely(flags & TLB_WATCHPOINT)) {
         cpu_check_watchpoint(env_cpu(env), addr & -len, len,
@@ -1158,7 +1139,7 @@ void HELPER(dc_zva)(CPUARMState *env, uint64_t addr, uint32_t desc)
     attrs = full->attrs;
 #endif
 
-    flags = do_dcxva_traps(env, addr, len, mmu_idx, flags, attrs, ra);
+    flags = do_dcxva_traps(env, addr, len, mmu_idx, flags, attrs, 0, ra);
 
     /* After traps, treat as aligned blocks. */
     addr = addr & -len;
@@ -1180,7 +1161,7 @@ void HELPER(dc_zva_mte)(CPUARMState *env, uintptr_t ptr_orig, uint32_t desc)
                                     dcz_bytes, MMU_DATA_LOAD, ra, ATM_ZVA);
 
     r.flags = do_dcxva_traps(env, ptr, dcz_bytes, mmu_idx,
-                             r.flags, r.attrs, ra);
+                             r.flags, r.attrs, 0, ra);
 
     bit55 = extract64(ptr, 55, 1);
     ptr_tag = allocation_tag_from_addr(ptr);
@@ -1264,6 +1245,84 @@ void HELPER(dc_zva_mte)(CPUARMState *env, uintptr_t ptr_orig, uint32_t desc)
     }
 
     do_dczva_0(env, ptr, dcz_bytes, r.ptr_mem, mmu_idx, r.flags, ra);
+}
+
+static void do_stzgm_tags(void *mem, int dcz_bytes, int tag)
+{
+    /*
+     * In arm_cpu_realizefn, we asserted that dcz > LOG2_TAG_GRANULE+1,
+     * i.e. 32 bytes, which is an unreasonably small dcz anyway, to make
+     * sure that we can access one complete tag byte here.
+     */
+    int tag_bytes = dcz_bytes / (TAG_GRANULE * 2);
+    int tag_pair = (tag & 0xf) * 0x11;
+    memset(mem, tag_pair, tag_bytes);
+}
+
+void HELPER(dc_gva)(CPUARMState *env, uint64_t ptr, uint32_t desc)
+{
+    int dcz_bytes = FIELD_EX32(desc, MTEDESC, SIZEM1) + 1;
+    int mmu_idx = FIELD_EX32(desc, MTEDESC, MIDX);
+    uintptr_t ra = GETPC();
+
+    AllocationTagMem r =
+        allocation_tag_mem_internal(env, mmu_idx, ptr, MMU_DATA_STORE,
+                                    dcz_bytes, MMU_DATA_STORE, ra, ATM_ZVA);
+
+    do_dcxva_traps(env, ptr, dcz_bytes, mmu_idx, r.flags, r.attrs,
+                   r.tag_mem ? 0 : desc, ra);
+
+    if (r.tag_mem) {
+        do_stzgm_tags(r.tag_mem, dcz_bytes, allocation_tag_from_addr(ptr));
+    }
+}
+
+/* DC GVA when tag access is disabled -- we still want all of the traps. */
+void HELPER(dc_gva_stub)(CPUARMState *env, uint64_t ptr, uint32_t desc)
+{
+    uintptr_t ra = GETPC();
+    int mmu_idx = FIELD_EX32(desc, MTEDESC, MIDX);
+
+#ifdef CONFIG_USER_ONLY
+    probe_write(env, ptr, 0, mmu_idx, ra);
+#else
+    int len = FIELD_EX32(desc, MTEDESC, SIZEM1) + 1;
+    void *mem;
+    CPUTLBEntryFull *full;
+    int flags = probe_access_full(env, ptr, 0, MMU_DATA_STORE, mmu_idx,
+                                  false, &mem, &full, ra);
+    do_dcxva_traps(env, ptr, len, mmu_idx, flags, full->attrs, 0, ra);
+#endif
+}
+
+static void do_gzva_stzgm(CPUARMState *env, uint64_t ptr, uint64_t tag,
+                          uint32_t desc, uintptr_t ra)
+{
+    int dcz_bytes = FIELD_EX32(desc, MTEDESC, SIZEM1) + 1;
+    int mmu_idx = FIELD_EX32(desc, MTEDESC, MIDX);
+
+    AllocationTagMem r =
+        allocation_tag_mem_internal(env, mmu_idx, ptr, MMU_DATA_STORE,
+                                    dcz_bytes, MMU_DATA_STORE, ra, ATM_ZVA);
+
+    r.flags = do_dcxva_traps(env, ptr, dcz_bytes, mmu_idx, r.flags, r.attrs,
+                             r.tag_mem ? 0 : desc, ra);
+
+    if (r.tag_mem) {
+        do_stzgm_tags(r.tag_mem, dcz_bytes, tag);
+    }
+    do_dczva_0(env, ptr, dcz_bytes, r.ptr_mem, mmu_idx, r.flags, ra);
+}
+
+void HELPER(dc_gzva)(CPUARMState *env, uint64_t ptr, uint32_t desc)
+{
+    do_gzva_stzgm(env, ptr, allocation_tag_from_addr(ptr), desc, GETPC());
+}
+
+void HELPER(stzgm)(CPUARMState *env, uint64_t ptr, uint64_t tag, uint32_t desc)
+{
+    int dcz_bytes = FIELD_EX32(desc, MTEDESC, SIZEM1) + 1;
+    do_gzva_stzgm(env, ptr & -dcz_bytes, tag, desc, GETPC());
 }
 
 uint64_t mte_mops_probe(CPUARMState *env, uint64_t ptr, uint64_t size,

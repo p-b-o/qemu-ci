@@ -3150,41 +3150,25 @@ static void handle_sys(DisasContext *s, bool isread,
         return;
     case ARM_CP_DC_GVA:
         {
-            TCGv_i64 clean_addr, tag;
+            TCGv_i32 desc = gen_mtedesc_zva(s);
 
-            /*
-             * DC_GVA, like DC_ZVA, requires that we supply the original
-             * pointer for an invalid page.  Probe that address first.
-             */
             tcg_rt = cpu_reg(s, rt);
-            clean_addr = clean_data_tbi(s, tcg_rt);
-            gen_probe_access(s, clean_addr, MMU_DATA_STORE, MO_8);
-
             if (s->ata[0]) {
-                /* Extract the tag from the register to match STZGM.  */
-                tag = tcg_temp_new_i64();
-                tcg_gen_shri_i64(tag, tcg_rt, 56);
-                gen_helper_stzgm_tags(tcg_env, clean_addr, tag,
-                                      tcg_constant_i32(s->mtx));
+                gen_helper_dc_gva(tcg_env, tcg_rt, desc);
+            } else {
+                gen_helper_dc_gva_stub(tcg_env, tcg_rt, desc);
             }
         }
         return;
     case ARM_CP_DC_GZVA:
         {
-            TCGv_i64 clean_addr, tag;
             TCGv_i32 desc = gen_mtedesc_zva(s);
 
-            /* For DC_GZVA, we can rely on DC_ZVA for the proper fault. */
             tcg_rt = cpu_reg(s, rt);
-            clean_addr = clean_data_tbi(s, tcg_rt);
-            gen_helper_dc_zva(tcg_env, clean_addr, desc);
-
             if (s->ata[0]) {
-                /* Extract the tag from the register to match STZGM.  */
-                tag = tcg_temp_new_i64();
-                tcg_gen_shri_i64(tag, tcg_rt, 56);
-                gen_helper_stzgm_tags(tcg_env, clean_addr, tag,
-                                      tcg_constant_i32(s->mtx));
+                gen_helper_dc_gzva(tcg_env, tcg_rt, desc);
+            } else {
+                gen_helper_dc_zva(tcg_env, tcg_rt, desc);
             }
         }
         return;
@@ -4767,6 +4751,7 @@ static bool trans_LD_single_repl(DisasContext *s, arg_LD_single_repl *a)
 static bool trans_STZGM(DisasContext *s, arg_ldst_tag *a)
 {
     TCGv_i64 addr, tcg_rt;
+    TCGv_i32 desc;
 
     if (!dc_isar_feature(aa64_mte, s)) {
         return false;
@@ -4781,17 +4766,19 @@ static bool trans_STZGM(DisasContext *s, arg_ldst_tag *a)
 
     addr = read_cpu_reg_sp(s, a->rn, true);
     tcg_gen_addi_i64(addr, addr, a->imm);
-    tcg_rt = cpu_reg(s, a->rt);
 
+    desc = gen_mtedesc_zva(s);
     if (s->ata[0]) {
-        gen_helper_stzgm_tags(tcg_env, addr, tcg_rt, tcg_constant_i32(s->mtx));
+        tcg_rt = cpu_reg(s, a->rt);
+        gen_helper_stzgm(tcg_env, addr, tcg_rt, desc);
+    } else {
+        /*
+         * The non-tags portion of STZGM is mostly like DC_ZVA,
+         * except the alignment happens before the access.
+         */
+        tcg_gen_andi_i64(addr, addr, -s->dcz_blocksize);
+        gen_helper_dc_zva(tcg_env, addr, desc);
     }
-    /*
-     * The non-tags portion of STZGM is mostly like DC_ZVA,
-     * except the alignment happens before the access.
-     */
-    tcg_gen_andi_i64(addr, addr, -s->dcz_blocksize);
-    gen_helper_dc_zva(tcg_env, addr, gen_mtedesc_zva(s));
     return true;
 }
 
