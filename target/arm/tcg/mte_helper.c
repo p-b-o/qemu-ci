@@ -182,17 +182,6 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
     }
 
     /*
-     * If not backed by host ram, there is no tag storage: access unchecked.
-     * This is probably a guest os bug though, so log it.
-     */
-    if (unlikely(ret.flags & TLB_MMIO)) {
-        qemu_log_mask(LOG_GUEST_ERROR,
-                      "Page @ 0x%" PRIx64 " indicates Tagged Normal memory "
-                      "but is not backed by host ram\n", ptr);
-        goto fini;
-    }
-
-    /*
      * Remember this across the second lookup below,
      * which may invalidate this pointer via tlb resize.
      */
