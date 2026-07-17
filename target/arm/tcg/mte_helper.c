@@ -88,13 +88,29 @@ typedef struct AllocationTagMem {
     MemTxAttrs attrs;
 } AllocationTagMem;
 
+typedef enum {
+    /* Trap on missing pages, invalid tag access, or watchpoints. */
+    ATM_NORMAL,
+    /* Gracefully return no tag memory for invalid pages. */
+    ATM_PROBE_PAGES,
+    /*
+     * Basic page access has already been checked,
+     * so a missing tlb entry is some sort of bug.
+     * Assert the tlb entry is present, but gracefully fail if tag
+     * access is not permitted to the page.
+     */
+    ATM_ASSERT_PAGES,
+} AllocationTagMemKind;
+
 static AllocationTagMem
 allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
                             vaddr ptr, MMUAccessType ptr_access,
                             int ptr_size, MMUAccessType tag_access,
-                            bool probe, uintptr_t ra)
+                            uintptr_t ra, AllocationTagMemKind atm_kind)
 {
     AllocationTagMem ret = { };
+
+    assert((atm_kind >= ATM_PROBE_PAGES) == (ra == 0));
 
 #ifdef CONFIG_USER_ONLY
     vaddr clean_ptr = useronly_clean_ptr(ptr);
@@ -102,12 +118,16 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
     int req_flags = ptr_access == MMU_DATA_STORE ? PAGE_WRITE_ORG : PAGE_READ;
 
     if (unlikely(!(flags & req_flags))) {
-        if (probe) {
+        switch (atm_kind) {
+        case ATM_PROBE_PAGES:
             ret.flags = TLB_INVALID_MASK;
             goto fini;
+        case ATM_NORMAL:
+            cpu_loop_exit_sigsegv(env_cpu(env), ptr, ptr_access,
+                                  !(flags & PAGE_VALID), ra);
+        default:
+            g_assert_not_reached();
         }
-        cpu_loop_exit_sigsegv(env_cpu(env), ptr, ptr_access,
-                              !(flags & PAGE_VALID), ra);
     }
 
     /* Require both MAP_ANON and PROT_MTE for the page. */
@@ -123,7 +143,6 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
     ret.attrs = MEMTXATTRS_UNSPECIFIED;
 #else
     CPUTLBEntryFull *full;
-    int in_page;
     hwaddr ptr_paddr, tag_paddr, xlat;
     MemoryRegion *mr;
     ARMASIdx tag_asi;
@@ -133,16 +152,12 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
      * Probe the first byte of the virtual address.  This raises an
      * exception for inaccessible pages, and resolves the virtual address
      * into the softmmu tlb.
-     *
-     * When RA == 0, this is either a pure probe or a no-fault-expected probe.
-     * Indicate to probe_access_flags no-fault, then either return NULL
-     * for the pure probe, or assert that we received a valid page for the
-     * no-fault-expected probe.
      */
     ret.flags = probe_access_full(env, ptr, 0, ptr_access, ptr_mmu_idx,
-                                  ra == 0, &ret.ptr_mem, &full, ra);
+                                  atm_kind >= ATM_PROBE_PAGES,
+                                  &ret.ptr_mem, &full, ra);
     if (unlikely(ret.flags & TLB_INVALID_MASK)) {
-        assert(probe);
+        assert(atm_kind == ATM_PROBE_PAGES);
         goto fini;
     }
     ret.attrs = full->attrs;
@@ -153,12 +168,11 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
 
     case 0xe0: /* NoTagAccess */
         if (cpu_isar_feature(aa64_mteperm, env_archcpu(env))) {
-            if (probe) {
+            if (atm_kind >= ATM_PROBE_PAGES) {
                 ret.ptr_mem = NULL;
                 ret.flags = TLB_INVALID_MASK;
                 goto fini;
             }
-            assert(ra);
             mte_perm_check_fail(env, ptr, ra, tag_access == MMU_DATA_STORE);
         }
         /* fall through */
@@ -190,22 +204,21 @@ allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
      * tag on the first page.
      * Any page access exception has priority over tag check exception.
      */
-    in_page = -(ptr | TARGET_PAGE_MASK);
-    if (unlikely(ptr_size > in_page)) {
-        void *discard_mem;
-        int flags2 = probe_access_full(env, ptr + in_page, 0, ptr_access,
-                                       ptr_mmu_idx, ra == 0,
-                                       &discard_mem, &full, ra);
+    if (atm_kind == ATM_NORMAL) {
+        int in_page = -(ptr | TARGET_PAGE_MASK);
+        if (unlikely(ptr_size > in_page)) {
+            void *discard_mem;
+            ret.flags |= probe_access_full(env, ptr + in_page, 0, ptr_access,
+                                           ptr_mmu_idx, false,
+                                           &discard_mem, &full, ra);
+        }
 
-        assert(!(flags2 & TLB_INVALID_MASK));
-        ret.flags |= flags2;
-    }
-
-    /* Any debug exception has priority over a tag check exception. */
-    if (!probe && unlikely(ret.flags & TLB_WATCHPOINT)) {
-        int wp = ptr_access == MMU_DATA_LOAD ? BP_MEM_READ : BP_MEM_WRITE;
-        assert(ra != 0);
-        cpu_check_watchpoint(env_cpu(env), ptr, ptr_size, ret.attrs, wp, ra);
+        /* Any debug exception has priority over a tag check exception. */
+        if (unlikely(ret.flags & TLB_WATCHPOINT)) {
+            int wp = ptr_access == MMU_DATA_LOAD ? BP_MEM_READ : BP_MEM_WRITE;
+            cpu_check_watchpoint(env_cpu(env), ptr, ptr_size,
+                                 ret.attrs, wp, ra);
+        }
     }
 
     /* Convert to the physical address in tag space.  */
@@ -266,8 +279,8 @@ static uint8_t *allocation_tag_mem(CPUARMState *env, int ptr_mmu_idx,
                                    uintptr_t ra)
 {
     return allocation_tag_mem_internal(env, ptr_mmu_idx, ptr, ptr_access,
-                                       ptr_size, tag_access, false, ra)
-           .tag_mem;
+                                       ptr_size, tag_access,
+                                       ra, ATM_NORMAL).tag_mem;
 }
 
 uint8_t *allocation_tag_mem_probe(CPUARMState *env, int ptr_mmu_idx,
@@ -275,8 +288,8 @@ uint8_t *allocation_tag_mem_probe(CPUARMState *env, int ptr_mmu_idx,
                                   int ptr_size, MMUAccessType tag_access)
 {
     return allocation_tag_mem_internal(env, ptr_mmu_idx, ptr, ptr_access,
-                                       ptr_size, tag_access, true, 0)
-           .tag_mem;
+                                       ptr_size, tag_access,
+                                       0, ATM_PROBE_PAGES).tag_mem;
 }
 
 uint64_t HELPER(irg)(CPUARMState *env, uint64_t rn, uint64_t rm)
@@ -880,6 +893,7 @@ static int checkNrev(uint8_t *mem, int odd, int cmp, int count)
  * @desc: MTEDESC descriptor
  * @ptr: virtual address of the base of the access
  * @fault: return virtual address of the first check failure
+ * @kind: per allocation_tag_mem_internal
  *
  * Internal routine for both mte_probe and mte_check.
  * Return zero on failure, filling in *fault.
@@ -887,13 +901,14 @@ static int checkNrev(uint8_t *mem, int odd, int cmp, int count)
  * Return positive on success with tbi enabled.
  */
 static int mte_probe_int(CPUARMState *env, uint32_t desc, uint64_t ptr,
-                         uintptr_t ra, uint64_t *fault)
+                         uintptr_t ra, uint64_t *fault,
+                         AllocationTagMemKind atm_kind)
 {
     int mmu_idx, ptr_tag, bit55;
     uint64_t ptr_last, prev_page, next_page;
     uint64_t tag_first, tag_last;
     uint32_t sizem1, tag_count, n, c;
-    uint8_t *mem1, *mem2;
+    AllocationTagMem r1, r2;
     MMUAccessType type;
 
     bit55 = extract64(ptr, 55, 1);
@@ -931,9 +946,14 @@ static int mte_probe_int(CPUARMState *env, uint32_t desc, uint64_t ptr,
 
     if (likely(tag_last - prev_page < TARGET_PAGE_SIZE)) {
         /* Memory access stays on one page. */
-        mem1 = allocation_tag_mem(env, mmu_idx, ptr, type, sizem1 + 1,
-                                  MMU_DATA_LOAD, ra);
-        if (!mem1) {
+        r1 = allocation_tag_mem_internal(env, mmu_idx, ptr, type, sizem1 + 1,
+                                           MMU_DATA_LOAD, ra, atm_kind);
+        if (unlikely(r1.flags & TLB_INVALID_MASK)) {
+            /* Tag access disabled on an otherwise accessible page. */
+            assert(atm_kind == ATM_ASSERT_PAGES);
+            return 0;
+        }
+        if (r1.tag_mem == NULL) {
             /*
              * If mtx is enabled, then the access is MemTag_CanonicallyTagged,
              * otherwise it is Untagged. See AArch64.S1DecodeMemAttrs and
@@ -945,15 +965,22 @@ static int mte_probe_int(CPUARMState *env, uint32_t desc, uint64_t ptr,
             return 1;
         }
         /* Perform all of the comparisons. */
-        n = checkN(mem1, ptr & TAG_GRANULE, ptr_tag, tag_count);
+        n = checkN(r1.tag_mem, ptr & TAG_GRANULE, ptr_tag, tag_count);
     } else {
         /* Memory access crosses to next page. */
-        mem1 = allocation_tag_mem(env, mmu_idx, ptr, type, next_page - ptr,
-                                  MMU_DATA_LOAD, ra);
+        r1 = allocation_tag_mem_internal(env, mmu_idx, ptr, type,
+                                         next_page - ptr, MMU_DATA_LOAD,
+                                         ra, atm_kind);
 
-        mem2 = allocation_tag_mem(env, mmu_idx, next_page, type,
-                                  ptr_last - next_page + 1,
-                                  MMU_DATA_LOAD, ra);
+        if (r1.flags & TLB_INVALID_MASK) {
+            /* Tag access disabled on an otherwise accessible page. */
+            assert(atm_kind == ATM_ASSERT_PAGES);
+            return 0;
+        }
+
+        r2 = allocation_tag_mem_internal(env, mmu_idx, next_page, type,
+                                         ptr_last - next_page + 1,
+                                         MMU_DATA_LOAD, ra, atm_kind);
 
         /*
          * Perform all of the comparisons.
@@ -962,15 +989,18 @@ static int mte_probe_int(CPUARMState *env, uint32_t desc, uint64_t ptr,
          * happen with or without mtx (canonical tagging) enabled.
          */
         n = c = (next_page - tag_first) / TAG_GRANULE;
-        if (mem1) {
-            n = checkN(mem1, ptr & TAG_GRANULE, ptr_tag, c);
+        if (r1.tag_mem) {
+            n = checkN(r1.tag_mem, ptr & TAG_GRANULE, ptr_tag, c);
         } else if (mtx_check(desc, bit55) &&
                    !tag_is_canonical(ptr_tag, bit55)) {
             return 0;
         }
         if (n == c) {
-            if (mem2) {
-                n += checkN(mem2, 0, ptr_tag, tag_count - c);
+            if (r2.flags & TLB_INVALID_MASK) {
+                /* Tag access disabled on an otherwise accessible page. */
+                assert(atm_kind == ATM_ASSERT_PAGES);
+            } else if (r2.tag_mem) {
+                n += checkN(r2.tag_mem, 0, ptr_tag, tag_count - c);
             } else if (!mtx_check(desc, bit55) ||
                        tag_is_canonical(ptr_tag, bit55)) {
                 return 1;
@@ -996,7 +1026,7 @@ static int mte_probe_int(CPUARMState *env, uint32_t desc, uint64_t ptr,
 uint64_t mte_check(CPUARMState *env, uint32_t desc, uint64_t ptr, uintptr_t ra)
 {
     uint64_t fault;
-    int ret = mte_probe_int(env, desc, ptr, ra, &fault);
+    int ret = mte_probe_int(env, desc, ptr, ra, &fault, ATM_NORMAL);
 
     if (unlikely(ret == 0)) {
         mte_check_fail(env, desc, fault, ra);
@@ -1038,7 +1068,7 @@ uint64_t HELPER(mte_check)(CPUARMState *env, uint32_t desc, uint64_t ptr)
 bool mte_probe(CPUARMState *env, uint32_t desc, uint64_t ptr)
 {
     uint64_t fault;
-    int ret = mte_probe_int(env, desc, ptr, 0, &fault);
+    int ret = mte_probe_int(env, desc, ptr, 0, &fault, ATM_ASSERT_PAGES);
 
     return ret != 0;
 }
