@@ -752,6 +752,7 @@ static int probe_access_internal(CPUArchState *env, vaddr addr,
                                  int fault_size, MMUAccessType access_type,
                                  bool nonfault, uintptr_t ra)
 {
+    vaddr clean_addr = cpu_untagged_addr_vaddr(env_cpu(env), addr);
     int acc_flag;
     bool maperr;
 
@@ -769,8 +770,8 @@ static int probe_access_internal(CPUArchState *env, vaddr addr,
         g_assert_not_reached();
     }
 
-    if (guest_addr_valid_untagged_vaddr(addr)) {
-        int page_flags = page_get_flags(addr);
+    if (guest_addr_valid_untagged_vaddr(clean_addr)) {
+        int page_flags = page_get_flags(clean_addr);
         if (page_flags & acc_flag) {
             if (access_type != MMU_INST_FETCH
                 && cpu_plugin_mem_cbs_enabled(env_cpu(env))) {
@@ -823,11 +824,10 @@ void *tlb_vaddr_to_host(CPUArchState *env, vaddr addr,
 tb_page_addr_t get_page_addr_code_hostp(CPUArchState *env, vaddr addr,
                                         void **hostp)
 {
-    int flags;
-
-    flags = probe_access_internal(env, addr, 1, MMU_INST_FETCH, false, 0);
+    int flags = probe_access_internal(env, addr, 1, MMU_INST_FETCH, false, 0);
     g_assert(flags == 0);
 
+    addr = cpu_untagged_addr_vaddr(env_cpu(env), addr);
     *hostp = g2h_untagged_vaddr(addr);
     return addr;
 }
