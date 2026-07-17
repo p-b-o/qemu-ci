@@ -1018,54 +1018,80 @@ bool mte_probe(CPUARMState *env, uint32_t desc, uint64_t ptr)
     return ret != 0;
 }
 
-void HELPER(dc_zva)(CPUARMState *env, uint64_t vaddr_in)
+/* Traps for DC_ZVA, DC_GVA, and friends, after successful page lookup. */
+static int do_dcxva_traps(CPUARMState *env, vaddr addr, size_t len, int mmu_idx,
+                          int flags, MemTxAttrs attrs, uintptr_t ra)
 {
-    uintptr_t ra = GETPC();
-
-    /*
-     * Implement DC ZVA, which zeroes a fixed-length block of memory.
-     * Note that we do not implement the (architecturally mandated)
-     * alignment fault for attempts to use this on Device memory
-     * (which matches the usual QEMU behaviour of not implementing either
-     * alignment faults or any memory attribute handling).
-     */
-    int blocklen = 4 << get_dczid_bs(env_archcpu(env));
-    uint64_t vaddr = vaddr_in & ~(blocklen - 1);
-    int mmu_idx = arm_env_mmu_index(env);
-    void *mem;
-
-    /*
-     * Trapless lookup.  In addition to actual invalid page, may
-     * return NULL for I/O, watchpoints, clean pages, etc.
-     */
-    mem = tlb_vaddr_to_host(env, vaddr, MMU_DATA_STORE, mmu_idx);
-
 #ifndef CONFIG_USER_ONLY
-    if (unlikely(!mem)) {
-        /*
-         * Trap if accessing an invalid page.  DC_ZVA requires that we supply
-         * the original pointer for an invalid page.  But watchpoints require
-         * that we probe the actual space.  So do both.
-         */
-        (void) probe_write(env, vaddr_in, 1, mmu_idx, ra);
-        mem = probe_write(env, vaddr, blocklen, mmu_idx, ra);
+    /*
+     * DC_ZVA traps on pages without caching enabled.  This can be either
+     * pages mapped as Device, or when the mmu is disabled entirely.
+     * We have already detected such pages and have set TLB_CHECK_ALIGNED
+     * so that unaligned accesses are trapped under the same conditions.
+     */
+    if (unlikely(flags & TLB_CHECK_ALIGNED)) {
+        arm_cpu_do_unaligned_access(env_cpu(env), addr, MMU_DATA_STORE,
+                                    mmu_idx, ra);
+    }
 
-        if (unlikely(!mem)) {
-            /*
-             * The only remaining reason for mem == NULL is I/O.
-             * Just do a series of byte writes as the architecture demands.
-             */
-            for (int i = 0; i < blocklen; i++) {
-                cpu_stb_mmuidx_ra(env, vaddr + i, 0, mmu_idx, ra);
-            }
-            return;
+    /* Watchpoints have lower priority than alignment faults. */
+    if (unlikely(flags & TLB_WATCHPOINT)) {
+        cpu_check_watchpoint(env_cpu(env), addr & -len, len,
+                             attrs, BP_MEM_WRITE, ra);
+        flags &= ~TLB_WATCHPOINT;
+    }
+#endif
+    return flags;
+}
+
+static void do_dczva_0(CPUARMState *env, vaddr addr, size_t len, void *mem,
+                       int mmu_idx, int flags, uintptr_t ra)
+{
+#ifndef CONFIG_USER_ONLY
+    /*
+     * There are a couple of cases where QEMU wants the slow path;
+     * just do a series of byte writes as the architecture demands.
+     */
+    if (unlikely(flags)) {
+        for (size_t i = 0; i < len; i++) {
+            cpu_stb_mmuidx_ra(env, addr + i, 0, mmu_idx, ra);
         }
+        return;
     }
 #endif
 
     set_helper_retaddr(ra);
-    memset(mem, 0, blocklen);
+    memset(mem, 0, len);
     clear_helper_retaddr();
+}
+
+void HELPER(dc_zva)(CPUARMState *env, uint64_t addr)
+{
+    uintptr_t ra = GETPC();
+    size_t len = (size_t)4 << get_dczid_bs(env_archcpu(env));
+    int mmu_idx = arm_env_mmu_index(env);
+    MemTxAttrs attrs = MEMTXATTRS_UNSPECIFIED;
+    int flags;
+    void *mem;
+
+    /* DC_ZVA requires that we supply the original pointer for traps. */
+#ifdef CONFIG_USER_ONLY
+    flags = probe_access_flags(env, addr, 0, MMU_DATA_STORE, mmu_idx,
+                               false, &mem, ra);
+#else
+    CPUTLBEntryFull *full;
+    flags = probe_access_full(env, addr, 0, MMU_DATA_STORE, mmu_idx,
+                              false, &mem, &full, ra);
+    attrs = full->attrs;
+#endif
+
+    flags = do_dcxva_traps(env, addr, len, mmu_idx, flags, attrs, ra);
+
+    /* After traps, treat as aligned blocks. */
+    addr = addr & -len;
+    mem = (void *)((uintptr_t)mem & -len);
+
+    do_dczva_0(env, addr, len, mem, mmu_idx, flags, ra);
 }
 
 /*
