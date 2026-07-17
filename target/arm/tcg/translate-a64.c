@@ -292,6 +292,43 @@ static void gen_probe_access(DisasContext *s, TCGv_i64 ptr,
                             tcg_constant_i32(1 << log2_size));
 }
 
+static TCGv_i32 gen_mtedesc_xas(DisasContext *s, bool write, int idx,
+                                unsigned align, unsigned size)
+{
+    int desc = 0;
+
+    desc = FIELD_DP32(desc, MTEDESC, MIDX, idx);
+    desc = FIELD_DP32(desc, MTEDESC, TBI, s->tbid);
+    desc = FIELD_DP32(desc, MTEDESC, TCMA, s->tcma);
+    desc = FIELD_DP32(desc, MTEDESC, WRITE, write);
+    desc = FIELD_DP32(desc, MTEDESC, ALIGN, align);
+    desc = FIELD_DP32(desc, MTEDESC, MTX, s->mtx);
+    desc = FIELD_DP32(desc, MTEDESC, SIZEM1, size - 1);
+
+    assert(FIELD_EX32(desc, MTEDESC, ALIGN) == align);
+    assert(FIELD_EX32(desc, MTEDESC, SIZEM1) == size - 1);
+
+    return tcg_constant_i32(desc);
+}
+
+static TCGv_i32 gen_mtedesc_xmop(DisasContext *s, bool write,
+                                 int idx, MemOp memop)
+{
+    return gen_mtedesc_xas(s, write, idx, memop_alignment_bits(memop),
+                           memop_size(memop));
+}
+
+static TCGv_i32 gen_mtedesc_as(DisasContext *s, bool write,
+                               unsigned align, unsigned size)
+{
+    return gen_mtedesc_xas(s, write, get_mem_index(s), align, size);
+}
+
+static TCGv_i32 gen_mtedesc_zva(DisasContext *s)
+{
+    return gen_mtedesc_as(s, true, 0, s->dcz_blocksize);
+}
+
 /*
  * For MTE, check a single logical or atomic access.  This probes a single
  * address, the exact one specified.  The size and alignment of the access
@@ -305,20 +342,10 @@ static TCGv_i64 gen_mte_check1_mmuidx(DisasContext *s, TCGv_i64 addr,
 {
     if (tag_checked && s->mte_active[is_unpriv] &&
         (is_write || !s->mte_store_only[is_unpriv])) {
-        TCGv_i64 ret;
-        int desc = 0;
+        TCGv_i64 ret = tcg_temp_new_i64();
+        TCGv_i32 desc = gen_mtedesc_xmop(s, is_write, core_idx, memop);
 
-        desc = FIELD_DP32(desc, MTEDESC, MIDX, core_idx);
-        desc = FIELD_DP32(desc, MTEDESC, TBI, s->tbid);
-        desc = FIELD_DP32(desc, MTEDESC, TCMA, s->tcma);
-        desc = FIELD_DP32(desc, MTEDESC, WRITE, is_write);
-        desc = FIELD_DP32(desc, MTEDESC, ALIGN, memop_alignment_bits(memop));
-        desc = FIELD_DP32(desc, MTEDESC, MTX, s->mtx);
-        desc = FIELD_DP32(desc, MTEDESC, SIZEM1, memop_size(memop) - 1);
-
-        ret = tcg_temp_new_i64();
-        gen_helper_mte_check(ret, tcg_env, tcg_constant_i32(desc), addr);
-
+        gen_helper_mte_check(ret, tcg_env, desc, addr);
         return ret;
     }
     return clean_data_tbi(s, addr);
@@ -339,20 +366,12 @@ TCGv_i64 gen_mte_checkN(DisasContext *s, TCGv_i64 addr, bool is_write,
 {
     if (tag_checked && s->mte_active[0] &&
         (is_write || !s->mte_store_only[0])) {
-        TCGv_i64 ret;
-        int desc = 0;
+        TCGv_i64 ret = tcg_temp_new_i64();
+        TCGv_i32 desc = gen_mtedesc_as(s, is_write,
+                                       memop_alignment_bits(single_mop),
+                                       total_size);
 
-        desc = FIELD_DP32(desc, MTEDESC, MIDX, get_mem_index(s));
-        desc = FIELD_DP32(desc, MTEDESC, TBI, s->tbid);
-        desc = FIELD_DP32(desc, MTEDESC, TCMA, s->tcma);
-        desc = FIELD_DP32(desc, MTEDESC, WRITE, is_write);
-        desc = FIELD_DP32(desc, MTEDESC, ALIGN, memop_alignment_bits(single_mop));
-        desc = FIELD_DP32(desc, MTEDESC, MTX, s->mtx);
-        desc = FIELD_DP32(desc, MTEDESC, SIZEM1, total_size - 1);
-
-        ret = tcg_temp_new_i64();
-        gen_helper_mte_check(ret, tcg_env, tcg_constant_i32(desc), addr);
-
+        gen_helper_mte_check(ret, tcg_env, desc, addr);
         return ret;
     }
     return clean_data_tbi(s, addr);
@@ -3119,16 +3138,9 @@ static void handle_sys(DisasContext *s, bool isread,
     case ARM_CP_DC_ZVA:
         /* Writes clear the aligned block of memory which rt points into. */
         if (s->mte_active[0]) {
-            int desc = 0;
-
-            desc = FIELD_DP32(desc, MTEDESC, MIDX, get_mem_index(s));
-            desc = FIELD_DP32(desc, MTEDESC, TBI, s->tbid);
-            desc = FIELD_DP32(desc, MTEDESC, TCMA, s->tcma);
-            desc = FIELD_DP32(desc, MTEDESC, MTX, s->mtx);
-
             tcg_rt = tcg_temp_new_i64();
-            gen_helper_mte_check_zva(tcg_rt, tcg_env,
-                                     tcg_constant_i32(desc), cpu_reg(s, rt));
+            gen_helper_mte_check_zva(tcg_rt, tcg_env, gen_mtedesc_zva(s),
+                                     cpu_reg(s, rt));
         } else {
             tcg_rt = clean_data_tbi(s, cpu_reg(s, rt));
         }
@@ -4967,7 +4979,8 @@ static bool do_SET(DisasContext *s, arg_set *a, bool is_epilogue,
                    bool is_setg, SetFn fn)
 {
     int memidx;
-    uint32_t syndrome, desc = 0;
+    uint32_t syndrome;
+    TCGv_i32 desc;
 
     if (is_setg && !dc_isar_feature(aa64_mte, s)) {
         return false;
@@ -4992,23 +5005,15 @@ static bool do_SET(DisasContext *s, arg_set *a, bool is_epilogue,
     syndrome = syn_mop(true, is_setg, (a->nontemp << 1) | a->unpriv,
                        is_epilogue, false, true, a->rd, a->rs, a->rn);
 
-    if (is_setg ? s->ata[a->unpriv] : s->mte_active[a->unpriv]) {
-        /* We may need to do MTE tag checking, so assemble the descriptor */
-        desc = FIELD_DP32(desc, MTEDESC, TBI, s->tbid);
-        desc = FIELD_DP32(desc, MTEDESC, TCMA, s->tcma);
-        desc = FIELD_DP32(desc, MTEDESC, WRITE, true);
-        desc = FIELD_DP32(desc, MTEDESC, MTX, s->mtx);
-        /* SIZEM1 and ALIGN we leave 0 (byte write) */
-    }
-    /* The helper function always needs the memidx even with MTE disabled */
-    desc = FIELD_DP32(desc, MTEDESC, MIDX, memidx);
+    /* Construct the descriptor whether MTE is enabled or not. */
+    desc = gen_mtedesc_xmop(s, true, memidx, MO_UB);
 
     /*
      * The helper needs the register numbers, but since they're in
      * the syndrome anyway, we let it extract them from there rather
      * than passing in an extra three integer arguments.
      */
-    fn(tcg_env, tcg_constant_i32(syndrome), tcg_constant_i32(desc));
+    fn(tcg_env, tcg_constant_i32(syndrome), desc);
     return true;
 }
 
@@ -5024,7 +5029,8 @@ typedef void CpyFn(TCGv_env, TCGv_i32, TCGv_i32, TCGv_i32);
 static bool do_CPY(DisasContext *s, arg_cpy *a, bool is_epilogue, CpyFn fn)
 {
     int rmemidx, wmemidx;
-    uint32_t syndrome, rdesc = 0, wdesc = 0;
+    uint32_t syndrome;
+    TCGv_i32 rdesc, wdesc;
     bool wunpriv = extract32(a->options, 0, 1);
     bool runpriv = extract32(a->options, 1, 1);
 
@@ -5048,29 +5054,16 @@ static bool do_CPY(DisasContext *s, arg_cpy *a, bool is_epilogue, CpyFn fn)
     syndrome = syn_mop(false, false, a->options, is_epilogue,
                        false, true, a->rd, a->rs, a->rn);
 
-    /* If we need to do MTE tag checking, assemble the descriptors */
-    if (s->mte_active[runpriv]) {
-        rdesc = FIELD_DP32(rdesc, MTEDESC, TBI, s->tbid);
-        rdesc = FIELD_DP32(rdesc, MTEDESC, TCMA, s->tcma);
-        rdesc = FIELD_DP32(rdesc, MTEDESC, MTX, s->mtx);
-    }
-    if (s->mte_active[wunpriv]) {
-        wdesc = FIELD_DP32(wdesc, MTEDESC, TBI, s->tbid);
-        wdesc = FIELD_DP32(wdesc, MTEDESC, TCMA, s->tcma);
-        wdesc = FIELD_DP32(wdesc, MTEDESC, WRITE, true);
-        wdesc = FIELD_DP32(wdesc, MTEDESC, MTX, s->mtx);
-    }
-    /* The helper function needs these parts of the descriptor regardless */
-    rdesc = FIELD_DP32(rdesc, MTEDESC, MIDX, rmemidx);
-    wdesc = FIELD_DP32(wdesc, MTEDESC, MIDX, wmemidx);
+    /* Assemble the descriptors regardless of MTE enabled. */
+    rdesc = gen_mtedesc_xmop(s, false, rmemidx, MO_UB);
+    wdesc = gen_mtedesc_xmop(s, true, wmemidx, MO_UB);
 
     /*
      * The helper needs the register numbers, but since they're in
      * the syndrome anyway, we let it extract them from there rather
      * than passing in an extra three integer arguments.
      */
-    fn(tcg_env, tcg_constant_i32(syndrome), tcg_constant_i32(wdesc),
-       tcg_constant_i32(rdesc));
+    fn(tcg_env, tcg_constant_i32(syndrome), wdesc, rdesc);
     return true;
 }
 
