@@ -80,10 +80,11 @@ static void mte_perm_check_fail(CPUARMState *env, uint64_t dirty_ptr,
 }
 #endif
 
-uint8_t *allocation_tag_mem_probe(CPUARMState *env, int ptr_mmu_idx,
-                                  uint64_t ptr, MMUAccessType ptr_access,
-                                  int ptr_size, MMUAccessType tag_access,
-                                  bool probe, uintptr_t ra)
+static uint8_t *
+allocation_tag_mem_internal(CPUARMState *env, int ptr_mmu_idx,
+                            uint64_t ptr, MMUAccessType ptr_access,
+                            int ptr_size, MMUAccessType tag_access,
+                            bool probe, uintptr_t ra)
 {
 #ifdef CONFIG_USER_ONLY
     const size_t page_data_size = TARGET_PAGE_SIZE >> (LOG2_TAG_GRANULE + 1);
@@ -91,8 +92,6 @@ uint8_t *allocation_tag_mem_probe(CPUARMState *env, int ptr_mmu_idx,
     int flags = page_get_flags(clean_ptr);
     uint8_t *tags;
     uintptr_t index;
-
-    assert(!(probe && ra));
 
     if (!(flags & (ptr_access == MMU_DATA_STORE ? PAGE_WRITE_ORG : PAGE_READ))) {
         if (probe) {
@@ -250,8 +249,16 @@ static uint8_t *allocation_tag_mem(CPUARMState *env, int ptr_mmu_idx,
                                    int ptr_size, MMUAccessType tag_access,
                                    uintptr_t ra)
 {
-    return allocation_tag_mem_probe(env, ptr_mmu_idx, ptr, ptr_access,
-                                    ptr_size, tag_access, false, ra);
+    return allocation_tag_mem_internal(env, ptr_mmu_idx, ptr, ptr_access,
+                                       ptr_size, tag_access, false, ra);
+}
+
+uint8_t *allocation_tag_mem_probe(CPUARMState *env, int ptr_mmu_idx,
+                                  uint64_t ptr, MMUAccessType ptr_access,
+                                  int ptr_size, MMUAccessType tag_access)
+{
+    return allocation_tag_mem_internal(env, ptr_mmu_idx, ptr, ptr_access,
+                                       ptr_size, tag_access, true, 0);
 }
 
 uint64_t HELPER(irg)(CPUARMState *env, uint64_t rn, uint64_t rm)
@@ -1221,7 +1228,7 @@ uint64_t mte_mops_probe(CPUARMState *env, uint64_t ptr, uint64_t size,
     /* True probe; this will never fault */
     mem = allocation_tag_mem_probe(env, mmu_idx, ptr,
                                    w ? MMU_DATA_STORE : MMU_DATA_LOAD,
-                                   size, MMU_DATA_LOAD, true, 0);
+                                   size, MMU_DATA_LOAD);
     if (!mem) {
         return size;
     }
@@ -1279,7 +1286,7 @@ uint64_t mte_mops_probe_rev(CPUARMState *env, uint64_t ptr, uint64_t size,
      */
     mem = allocation_tag_mem_probe(env, mmu_idx, ptr,
                                    w ? MMU_DATA_STORE : MMU_DATA_LOAD,
-                                   1, MMU_DATA_LOAD, true, 0);
+                                   1, MMU_DATA_LOAD);
     if (!mem) {
         return size;
     }
@@ -1331,7 +1338,7 @@ void mte_mops_set_tags(CPUARMState *env, uint64_t ptr, uint64_t size,
     mmu_idx = FIELD_EX32(desc, MTEDESC, MIDX);
     /* True probe: this will never fault */
     mem = allocation_tag_mem_probe(env, mmu_idx, ptr, MMU_DATA_STORE, size,
-                                   MMU_DATA_STORE, true, 0);
+                                   MMU_DATA_STORE);
     if (!mem) {
         return;
     }

@@ -725,8 +725,8 @@ static void handle_q_memtag(GArray *params, void *user_ctx)
     /* Find out the current translation regime for probe. */
     mmu_index = cpu_mmu_index(env_cpu(env), false);
     /* Note that tags are packed here (2 tags packed in one byte). */
-    tags = allocation_tag_mem_probe(env, mmu_index, addr, MMU_DATA_LOAD, 1,
-                                    MMU_DATA_LOAD, true, 0);
+    tags = allocation_tag_mem_probe(env, mmu_index, addr, MMU_DATA_LOAD,
+                                    1, MMU_DATA_LOAD);
     if (!tags) {
         /* Address is not in a tagged region. */
         gdb_put_packet("E04");
@@ -753,8 +753,8 @@ static void handle_q_isaddresstagged(GArray *params, void *user_ctx)
 
     /* Find out the current translation regime for probe. */
     mmu_index = cpu_mmu_index(env_cpu(env), false);
-    tags = allocation_tag_mem_probe(env, mmu_index, addr, MMU_DATA_LOAD, 1,
-                                    MMU_DATA_LOAD, true, 0);
+    tags = allocation_tag_mem_probe(env, mmu_index, addr, MMU_DATA_LOAD,
+                                    1, MMU_DATA_LOAD);
     reply = tags ? "01" : "00";
 
     gdb_put_packet(reply);
@@ -800,7 +800,7 @@ static void handle_Q_memtag(GArray *params, void *user_ctx)
     /* Find out the current translation regime for probe. */
     mmu_index = cpu_mmu_index(env_cpu(env), false);
     tags = allocation_tag_mem_probe(env, mmu_index, start_addr, MMU_DATA_STORE,
-                                    1, MMU_DATA_STORE, true, 0);
+                                    1, MMU_DATA_STORE);
     if (!tags) {
         /* Address is not in a tagged region. */
         gdb_put_packet("E04");
