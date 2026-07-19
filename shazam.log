@@ -1,0 +1,40 @@
+Looking up https://lore.kernel.org/all/20260719174905.420725-1-richard.henderson@linaro.org/
+Grabbing thread from lore.kernel.org/all/20260719174905.420725-1-richard.henderson@linaro.org/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/6] target/arm: Split zdn in do_z2z_n1 and do_z2z_n1_fpst
+    + Link: https://lore.kernel.org/qemu-devel/20260719174905.420725-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 2/6] target/arm: Split zdn in do_z2z_nn and do_z2z_nn_fpst
+    + Link: https://lore.kernel.org/qemu-devel/20260719174905.420725-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 3/6] target/arm: Fix b16b16 feature test for SME2 BFCLAMP, BFMAX, BFMIN
+    + Link: https://lore.kernel.org/qemu-devel/20260719174905.420725-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 4/6] target/arm: Split decode of BFloat SME FMAX/FMIN
+    + Link: https://lore.kernel.org/qemu-devel/20260719174905.420725-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 5/6] target/arm: Implement FMUL (multiple/multiple and single vectors)
+    + Link: https://lore.kernel.org/qemu-devel/20260719174905.420725-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH 6/6] target/arm: Enable FEAT_SVE2p2 and FEAT_SME2p2 for -cpu max
+    + Link: https://lore.kernel.org/qemu-devel/20260719174905.420725-7-richard.henderson@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 6
+---
+Applying: target/arm: Split zdn in do_z2z_n1 and do_z2z_n1_fpst
+Applying: target/arm: Split zdn in do_z2z_nn and do_z2z_nn_fpst
+Applying: target/arm: Fix b16b16 feature test for SME2 BFCLAMP, BFMAX, BFMIN
+Applying: target/arm: Split decode of BFloat SME FMAX/FMIN
+Applying: target/arm: Implement FMUL (multiple/multiple and single vectors)
+Applying: target/arm: Enable FEAT_SVE2p2 and FEAT_SME2p2 for -cpu max
+Patch failed at 0006 target/arm: Enable FEAT_SVE2p2 and FEAT_SME2p2 for -cpu max
+error: patch failed: linux-user/aarch64/elfload.c:178
+error: linux-user/aarch64/elfload.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
