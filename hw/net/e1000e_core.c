@@ -3557,5 +3557,7 @@ e1000e_core_post_load(E1000ECore *core)
     e1000e_intrmgr_resume(core);
     e1000e_autoneg_resume(core);
 
+    e1000e_calc_rxdesclen(core);
+
     return 0;
 }
