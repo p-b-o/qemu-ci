@@ -1,0 +1,32 @@
+Looking up https://lore.kernel.org/all/20260720141040.181946-1-r4o5m6e8o@163.com/
+Grabbing thread from lore.kernel.org/all/20260720141040.181946-1-r4o5m6e8o@163.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 5 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC 1/4] common: add UAPI for SQ/CQ doorbell polling
+    + Link: https://lore.kernel.org/qemu-devel/20260720141040.181946-2-r4o5m6e8o@163.com
+  [32m✓[0m [PATCH RFC 2/4] vhost: host kernel support for SQ/CQ polling
+    + Link: https://lore.kernel.org/qemu-devel/20260720141040.181946-3-r4o5m6e8o@163.com
+  [32m✓[0m [PATCH RFC 3/4] virtio: guest driver support for SQ/CQ polling
+    + Link: https://lore.kernel.org/qemu-devel/20260720141040.181946-4-r4o5m6e8o@163.com
+  [32m✓[0m [PATCH RFC 4/4] virtio: add SQ/CQ polling mode support for vhost-scsi
+    + Link: https://lore.kernel.org/qemu-devel/20260720141040.181946-5-r4o5m6e8o@163.com
+  ---
+  [32m✓[0m Signed: DKIM/163.com
+---
+Total patches: 4
+---
+Applying: common: add UAPI for SQ/CQ doorbell polling
+Patch failed at 0001 common: add UAPI for SQ/CQ doorbell polling
+error: include/uapi/linux/virtio_config.h: does not exist in index
+error: include/uapi/linux/virtio_pci.h: does not exist in index
+error: include/uapi/linux/virtio_ring.h: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
