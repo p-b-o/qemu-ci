@@ -338,7 +338,7 @@ static bool fill_header(WinDumpHeader64 *hdr, struct pa_space *ps,
  * A dump may still contain valuable information even if it lacks contexts of
  * some CPUs due to dump corruption or a failure before starting CPUs.
  */
-static void fill_context(KDDEBUGGER_DATA64 *kdbg,
+static void fill_context(WinDumpHeader64 *hdr, KDDEBUGGER_DATA64 *kdbg,
                          struct va_space *vs, QEMU_Elf *qe)
 {
     int i;
@@ -372,6 +372,10 @@ static void fill_context(KDDEBUGGER_DATA64 *kdbg,
         if (!va_space_rw(vs, Context, &ctx, sizeof(ctx), 1)) {
             eprintf("Failed to fill CPU #%d context\n", i);
             continue;
+        }
+
+        if (s->version > 1 && s->is_crash_occurred_cpu) {
+            memcpy(hdr->ContextBuffer, &ctx, sizeof(ctx));
         }
     }
 }
@@ -512,6 +516,7 @@ int main(int argc, char *argv[])
     uint64_t KdVersionBlock;
     bool kernel_found = false;
     OMFSignatureRSDS rsds;
+    uint64_t KiBugCheckData;
 
     if (argc != 3) {
         eprintf("usage:\n\t%s elf_file dmp_file\n", argv[0]);
@@ -611,7 +616,30 @@ int main(int argc, char *argv[])
         goto out_kdbg;
     }
 
-    fill_context(kdbg, &vs, &qemu_elf);
+    if (!SYM_RESOLVE(KernBase, &pdb, KiBugCheckData)) {
+        eprintf("Failed to get KiBugCheckData.\n");
+    } else {
+        KIBUGCHECK_INFO data = { 0 };
+        if (va_space_rw(&vs, KiBugCheckData, &data, sizeof(data), 0)) {
+            header.BugcheckCode = data.BugcheckCode;
+            header.BugcheckParameter1 = data.BugcheckParameter1;
+            header.BugcheckParameter2 = data.BugcheckParameter2;
+            header.BugcheckParameter3 = data.BugcheckParameter3;
+            header.BugcheckParameter4 = data.BugcheckParameter4;
+
+            printf("KiBugCheckData: 0x%016" PRIx64
+                   ", BugcheckCode: 0x%08x, Args:"
+                   " 0x%016" PRIx64 " 0x%016" PRIx64
+                   " 0x%016" PRIx64 " 0x%016" PRIx64 "\n",
+                    KiBugCheckData, header.BugcheckCode,
+                    data.BugcheckParameter1, data.BugcheckParameter2,
+                    data.BugcheckParameter3, data.BugcheckParameter4);
+        } else {
+            eprintf("Failed to va_space_rw KiBugCheckData.\n");
+        }
+    }
+
+    fill_context(&header, kdbg, &vs, &qemu_elf);
 
     if (!write_dump(&ps, &header, argv[2])) {
         eprintf("Failed to save dump\n");
