@@ -1,0 +1,45 @@
+Looking up https://lore.kernel.org/all/20260723022300.4174471-1-jamin_lin@aspeedtech.com/
+Grabbing thread from lore.kernel.org/all/20260723022300.4174471-1-jamin_lin@aspeedtech.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 12 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 181 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v6 1/11] hw/arm/aspeed_ast1700: Correct AST2700 SCU to SCUIO
+    + Link: https://lore.kernel.org/qemu-devel/20260723022300.4174471-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v6 2/11] hw/arm/ast27x0: Start SSP in powered-off state to match hardware behavior
+    + Link: https://lore.kernel.org/qemu-devel/20260723022300.4174471-3-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v6 3/11] hw/arm/ast27x0: Start TSP in powered-off state to match hardware behavior
+    + Link: https://lore.kernel.org/qemu-devel/20260723022300.4174471-4-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v6 4/11] hw/arm/ast27x0: Add DRAM alias for SSP SDRAM remap
+    + Link: https://lore.kernel.org/qemu-devel/20260723022300.4174471-5-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v6 5/11] hw/arm/ast27x0: Add DRAM alias for TSP SDRAM remap
+    + Link: https://lore.kernel.org/qemu-devel/20260723022300.4174471-6-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v6 6/11] hw/misc/aspeed_scu: Implement SSP reset and power-on control via SCU registers
+    + Link: https://lore.kernel.org/qemu-devel/20260723022300.4174471-7-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v6 7/11] hw/misc/aspeed_scu: Implement TSP reset and power-on control via SCU registers
+    + Link: https://lore.kernel.org/qemu-devel/20260723022300.4174471-8-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v6 8/11] hw/misc/aspeed_scu: Add SCU support for SSP SDRAM remap
+    + Link: https://lore.kernel.org/qemu-devel/20260723022300.4174471-9-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v6 9/11] hw/misc/aspeed_scu: Add SCU support for TSP SDRAM remap
+    + Link: https://lore.kernel.org/qemu-devel/20260723022300.4174471-10-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v6 10/11] tests/functional/aarch64/test_aspeed_ast2700fc: Boot SSP/TSP via PSP and load binaries from DRAM
+    + Link: https://lore.kernel.org/qemu-devel/20260723022300.4174471-11-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v6 11/11] docs: Add support vbootrom and update Manual boot for ast2700fc
+    + Link: https://lore.kernel.org/qemu-devel/20260723022300.4174471-12-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 11
+---
+Applying: hw/arm/aspeed_ast1700: Correct AST2700 SCU to SCUIO
+Patch failed at 0001 hw/arm/aspeed_ast1700: Correct AST2700 SCU to SCUIO
+error: patch failed: include/hw/arm/aspeed_ast1700.h:41
+error: include/hw/arm/aspeed_ast1700.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
