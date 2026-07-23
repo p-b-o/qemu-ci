@@ -1,0 +1,81 @@
+Looking up https://lore.kernel.org/all/20260723151853.2143177-1-bin.meng@processmission.com/
+Grabbing thread from lore.kernel.org/all/20260723151853.2143177-1-bin.meng@processmission.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 28 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/26] hw/riscv: pfsoc: Correct the L2LIM maximum mapped size
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-2-bin.meng@processmission.com
+  [32m✓[0m [PATCH 2/26] hw/riscv: pfsoc: Map the L2 zero device window
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-3-bin.meng@processmission.com
+  [32m✓[0m [PATCH 3/26] hw/misc: pfsoc: Support PolarFire SoC DDR training with newer version HSS
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-4-bin.meng@processmission.com
+  [32m✓[0m [PATCH 4/26] hw/misc: pfsoc: Model L2 cache controller registers
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-5-bin.meng@processmission.com
+  [32m✓[0m [PATCH 5/26] hw/riscv: pfsoc: Couple L2CC to L2-LIM
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-6-bin.meng@processmission.com
+  [32m✓[0m [PATCH 6/26] tests/qtest: Add PolarFire SoC L2CC coverage
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-7-bin.meng@processmission.com
+  [32m✓[0m [PATCH 7/26] hw/sd: sdhci: Migrate the Host Control 2 register
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-8-bin.meng@processmission.com
+  [32m✓[0m [PATCH 8/26] hw/sd: sdhci: Accept version 4 enable without UHS-I
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-9-bin.meng@processmission.com
+  [32m✓[0m [PATCH 9/26] hw/sd: sdhci: Use version 4 system address for SDMA
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-10-bin.meng@processmission.com
+  [32m✓[0m [PATCH 10/26] hw/sd: sdhci: Support version 4 ADMA 64-bit addressing
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-11-bin.meng@processmission.com
+  [32m✓[0m [PATCH 11/26] hw/sd: sdhci: Resume version 4 SDMA at buffer boundaries
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-12-bin.meng@processmission.com
+  [32m✓[0m [PATCH 12/26] hw/sd: sdhci: Run ADMA independently of MMIO
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-13-bin.meng@processmission.com
+  [32m✓[0m [PATCH 13/26] hw/sd: sd: Keep high-capacity memory blocks at 512 bytes
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-14-bin.meng@processmission.com
+  [32m✓[0m [PATCH 14/26] hw/sd: cadence: Advertise 64-bit system bus support
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-15-bin.meng@processmission.com
+  [32m✓[0m [PATCH 15/26] hw/misc: pfsoc: Model PolarFire SoC serial number service
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-16-bin.meng@processmission.com
+  [32m✓[0m [PATCH 16/26] hw/rtc: Add PolarFire SoC RTC model
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-17-bin.meng@processmission.com
+  [32m✓[0m [PATCH 17/26] hw/riscv: pfsoc: Add PolarFire SoC RTC to Icicle Kit
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-18-bin.meng@processmission.com
+  [32m✓[0m [PATCH 18/26] tests/qtest: Add PolarFire SoC RTC coverage
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-19-bin.meng@processmission.com
+  [32m✓[0m [PATCH 19/26] hw/misc: pfsoc: Honor PolarFire service notification requests
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-20-bin.meng@processmission.com
+  [32m✓[0m [PATCH 20/26] hw/riscv: pfsoc: Correct PolarFire SoC DDR aliases
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-21-bin.meng@processmission.com
+  [32m✓[0m [PATCH 21/26] hw/riscv: pfsoc: Fix Icicle Kit RAM size at 2 GiB
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-22-bin.meng@processmission.com
+  [32m✓[0m [PATCH 22/26] hw/riscv: pfsoc: Fix Icicle Kit hart count at five
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-23-bin.meng@processmission.com
+  [32m✓[0m [PATCH 23/26] docs/system/riscv: Document Icicle Kit HSS boot
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-24-bin.meng@processmission.com
+  [32m✓[0m [PATCH 24/26] docs/system/riscv: pfsoc: Document CLINT topology for direct Linux boot
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-25-bin.meng@processmission.com
+  [32m✓[0m [PATCH 25/26] tests/functional/riscv64: Add Icicle Kit firmware boot test
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-26-bin.meng@processmission.com
+  [32m✓[0m [PATCH 26/26] MAINTAINERS: Add PolarFire SoC Icicle Kit maintainer
+    + Link: https://lore.kernel.org/qemu-devel/20260723151853.2143177-27-bin.meng@processmission.com
+  ---
+  [32m✓[0m Signed: DKIM/processmission.com
+---
+Total patches: 26
+---
+Applying: hw/riscv: pfsoc: Correct the L2LIM maximum mapped size
+Applying: hw/riscv: pfsoc: Map the L2 zero device window
+Applying: hw/misc: pfsoc: Support PolarFire SoC DDR training with newer version HSS
+Applying: hw/misc: pfsoc: Model L2 cache controller registers
+Applying: hw/riscv: pfsoc: Couple L2CC to L2-LIM
+Applying: tests/qtest: Add PolarFire SoC L2CC coverage
+Applying: hw/sd: sdhci: Migrate the Host Control 2 register
+Patch failed at 0007 hw/sd: sdhci: Migrate the Host Control 2 register
+error: patch failed: hw/sd/sdhci.c:1488
+error: hw/sd/sdhci.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
