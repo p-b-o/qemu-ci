@@ -2563,8 +2563,9 @@ static void amdvi_init(AMDVIState *s)
     memset(s->mmior, 0, AMDVI_MMIO_SIZE);
     amdvi_set_quad(s, AMDVI_MMIO_EXT_FEATURES,
                    amdvi_extended_feature_register(s),
-                   0xffffffffffffffef, 0);
-    amdvi_set_quad(s, AMDVI_MMIO_STATUS, 0, 0x98, 0x67);
+                   AMDVI_MMIO_EXT_FEATURE_RO_MASK, 0);
+    amdvi_set_quad(s, AMDVI_MMIO_STATUS, 0, AMDVI_MMIO_STATUS_RO_MASK,
+                   AMDVI_MMIO_STATUS_W1C_MASK);
 }
 
 static void amdvi_pci_realize(PCIDevice *pdev, Error **errp)
