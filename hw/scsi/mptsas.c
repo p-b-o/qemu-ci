@@ -260,8 +260,7 @@ static int mptsas_build_sgl(MPTSASState *s, MPTSASRequest *req, hwaddr req_addr)
 static void mptsas_free_request(MPTSASRequest *req)
 {
     if (req->sreq != NULL) {
-        req->sreq->hba_private = NULL;
-        scsi_req_unref(req->sreq);
+        scsi_req_unref_detach_hba(req->sreq);
         req->sreq = NULL;
     }
     qemu_sglist_destroy(&req->qsg);

@@ -184,8 +184,7 @@ static void ufs_scsi_command_complete(SCSIRequest *scsi_req, size_t resid)
 
     ufs_complete_req(req, UFS_REQUEST_SUCCESS);
 
-    scsi_req->hba_private = NULL;
-    scsi_req_unref(scsi_req);
+    scsi_req_unref_detach_hba(scsi_req);
 }
 
 static QEMUSGList *ufs_get_sg_list(SCSIRequest *scsi_req)

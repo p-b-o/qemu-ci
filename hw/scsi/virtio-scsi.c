@@ -123,8 +123,7 @@ static void virtio_scsi_complete_req(VirtIOSCSIReq *req, QemuMutex *vq_lock)
     }
 
     if (req->sreq) {
-        req->sreq->hba_private = NULL;
-        scsi_req_unref(req->sreq);
+        scsi_req_unref_detach_hba(req->sreq);
     }
     virtio_scsi_free_req(req);
 }
