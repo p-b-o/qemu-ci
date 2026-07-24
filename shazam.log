@@ -1,0 +1,24 @@
+Looking up https://lore.kernel.org/all/20260724093809.810220-1-xiongwm2026@163.com/
+Grabbing thread from lore.kernel.org/all/20260724093809.810220-1-xiongwm2026@163.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] net/tap-solaris: Fix resource leaks on error paths
+    + Link: https://lore.kernel.org/qemu-devel/20260724093809.810220-1-xiongwm2026@163.com
+  ---
+  [32m✓[0m Signed: DKIM/163.com
+---
+Total patches: 1
+---
+Applying: net/tap-solaris: Fix resource leaks on error paths
+Patch failed at 0001 net/tap-solaris: Fix resource leaks on error paths
+error: patch fragment without header at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:97: @@ -147,21 +172,37 @@ static int tap_alloc(char *dev, size_t dev_size, Error **errp)
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
