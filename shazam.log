@@ -1,0 +1,28 @@
+Looking up https://lore.kernel.org/all/20260725231142.61663-1-marcelomanzo@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260725231142.61663-1-marcelomanzo@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/2] hw/misc/bcm2835_powermgt: implement a real watchdog timer
+    + Link: https://lore.kernel.org/qemu-devel/20260725231142.61663-2-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH 2/2] hw/net/bcm2838_genet: fix per-ring DMA status and RX ring selection
+    + Link: https://lore.kernel.org/qemu-devel/20260725231142.61663-3-marcelomanzo@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 2
+---
+Applying: hw/misc/bcm2835_powermgt: implement a real watchdog timer
+Applying: hw/net/bcm2838_genet: fix per-ring DMA status and RX ring selection
+Patch failed at 0002 hw/net/bcm2838_genet: fix per-ring DMA status and RX ring selection
+error: hw/net/bcm2838_genet.c: does not exist in index
+error: include/hw/net/bcm2838_genet.h: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
