@@ -1,0 +1,32 @@
+Looking up https://lore.kernel.org/all/20260725124231.86233-1-marcelomanzo@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260725124231.86233-1-marcelomanzo@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/2] hw/arm/bcm2838_pcie: make PCI device enumeration actually work
+    + Link: https://lore.kernel.org/qemu-devel/20260725124231.86233-2-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH 2/2] tests/functional/aarch64: add raspi4b PCIe enumeration test
+    + Link: https://lore.kernel.org/qemu-devel/20260725124231.86233-3-marcelomanzo@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 2
+---
+Applying: hw/arm/bcm2838_pcie: make PCI device enumeration actually work
+Patch failed at 0001 hw/arm/bcm2838_pcie: make PCI device enumeration actually work
+error: patch failed: docs/system/arm/raspi.rst:43
+error: docs/system/arm/raspi.rst: patch does not apply
+error: hw/arm/bcm2838_pcie.c: does not exist in index
+error: patch failed: hw/arm/bcm2838_peripherals.c:204
+error: hw/arm/bcm2838_peripherals.c: patch does not apply
+error: patch failed: include/hw/arm/bcm2838_peripherals.h:70
+error: include/hw/arm/bcm2838_peripherals.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
