@@ -1,0 +1,38 @@
+Looking up https://lore.kernel.org/all/20260725012635.4925-1-marcelomanzo@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260725012635.4925-1-marcelomanzo@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/5] hw/misc/bcm2838_rng200: add BCM2838 RNG200
+    + Link: https://lore.kernel.org/qemu-devel/20260725012635.4925-2-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH 2/5] hw/arm/bcm2838: enable BCM2838 RNG200
+    + Link: https://lore.kernel.org/qemu-devel/20260725012635.4925-3-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH 3/5] hw/misc/bcm2838_thermal: add BCM2838 thermal sensor
+    + Link: https://lore.kernel.org/qemu-devel/20260725012635.4925-4-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH 4/5] hw/arm/bcm2838: enable BCM2838 thermal sensor
+    + Link: https://lore.kernel.org/qemu-devel/20260725012635.4925-5-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH 5/5] tests/functional/aarch64: add raspi4b RNG200/thermal test
+    + Link: https://lore.kernel.org/qemu-devel/20260725012635.4925-6-marcelomanzo@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 5
+---
+Applying: hw/misc/bcm2838_rng200: add BCM2838 RNG200
+Applying: hw/arm/bcm2838: enable BCM2838 RNG200
+Patch failed at 0002 hw/arm/bcm2838: enable BCM2838 RNG200
+error: patch failed: hw/arm/bcm2838_peripherals.c:40
+error: hw/arm/bcm2838_peripherals.c: patch does not apply
+error: patch failed: hw/arm/raspi4b.c:64
+error: hw/arm/raspi4b.c: patch does not apply
+error: patch failed: include/hw/arm/bcm2838_peripherals.h:10
+error: include/hw/arm/bcm2838_peripherals.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
