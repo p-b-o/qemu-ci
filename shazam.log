@@ -1,0 +1,41 @@
+Looking up https://lore.kernel.org/all/20260726145119.19881-1-163wangjack@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260726145119.19881-1-163wangjack@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC v1 1/5] hw/gpio: add stm32f1xx GPIO device model (Rust)
+    + Link: https://lore.kernel.org/qemu-devel/20260726145119.19881-2-163wangjack@gmail.com
+  [32m✓[0m [PATCH RFC v1 2/5] rust: add hw/gpio crate to the workspace
+    + Link: https://lore.kernel.org/qemu-devel/20260726145119.19881-3-163wangjack@gmail.com
+  [32m✓[0m [PATCH RFC v1 3/5] hw/arm/stm32f103: instantiate and map GPIO ports
+    + Link: https://lore.kernel.org/qemu-devel/20260726145119.19881-4-163wangjack@gmail.com
+  [32m✓[0m [PATCH RFC v1 4/5] tests/qtest: add stm32f103 GPIO test
+    + Link: https://lore.kernel.org/qemu-devel/20260726145119.19881-5-163wangjack@gmail.com
+  [32m✓[0m [PATCH RFC v1 5/5] rust/hw/gpio: add native unit tests
+    + Link: https://lore.kernel.org/qemu-devel/20260726145119.19881-6-163wangjack@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 5
+---
+Applying: hw/gpio: add stm32f1xx GPIO device model (Rust)
+Applying: rust: add hw/gpio crate to the workspace
+Applying: hw/arm/stm32f103: instantiate and map GPIO ports
+Patch failed at 0003 hw/arm/stm32f103: instantiate and map GPIO ports
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:188: new blank line at EOF.
++
+warning: 1 line adds whitespace errors.
+error: patch failed: hw/arm/Kconfig:410
+error: hw/arm/Kconfig: patch does not apply
+error: hw/arm/stm32f103_board.c: does not exist in index
+error: hw/arm/stm32f103_soc.c: does not exist in index
+error: include/hw/arm/stm32f103_soc.h: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
