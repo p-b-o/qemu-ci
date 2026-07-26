@@ -1,0 +1,28 @@
+Looking up https://lore.kernel.org/all/CANVUYGtOgMnNRkfU%3Dzs%3Djvtg7yKOHXZVb8k5oVnp%2BD2%3DU4xeWA@mail.gmail.com/
+Grabbing thread from lore.kernel.org/all/CANVUYGtOgMnNRkfU%3Dzs%3Djvtg7yKOHXZVb8k5oVnp%2BD2%3DU4xeWA@mail.gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 4 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/3] hw/misc/iommu-testdev: support PCI MSI test writes
+    + Link: https://lore.kernel.org/qemu-devel/CANVUYGtm19xCpqACSv2FYb7=BP05Av9oOxU5q-WiP4D-T6fA0w@mail.gmail.com
+  [32m✓[0m [PATCH v2 2/3] hw/riscv/riscv-iommu.c: always send MRIF notice MSI
+    + Link: https://lore.kernel.org/qemu-devel/CANVUYGvfGv=C4qEcANeiLO6bFF1xChn49z9ONdcJfnuh0-Wc1A@mail.gmail.com
+  [32m✓[0m [PATCH v2 3/3] tests/qtest: add RISC-V IOMMU MRIF notice tests
+    + Link: https://lore.kernel.org/qemu-devel/CANVUYGs1Poa1i53Xwg=Us=UJejDbCmch2jGGmYw_Z0dE=Q-Utg@mail.gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 3
+---
+Applying: hw/misc/iommu-testdev: support PCI MSI test writes
+Patch failed at 0001 hw/misc/iommu-testdev: support PCI MSI test writes
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:27
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
