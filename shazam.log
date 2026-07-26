@@ -1,0 +1,28 @@
+Looking up https://lore.kernel.org/all/20260726144112.56321-1-marcelomanzo@gmail.com/
+Grabbing thread from lore.kernel.org/all/20260726144112.56321-1-marcelomanzo@gmail.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/2] hw/arm/raspi4b: fix guest never seeing more than ~1 GiB of RAM
+    + Link: https://lore.kernel.org/qemu-devel/20260726144112.56321-2-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH 2/2] tests/functional/aarch64: add raspi4b full-RAM regression test
+    + Link: https://lore.kernel.org/qemu-devel/20260726144112.56321-3-marcelomanzo@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 2
+---
+Applying: hw/arm/raspi4b: fix guest never seeing more than ~1 GiB of RAM
+Applying: tests/functional/aarch64: add raspi4b full-RAM regression test
+Patch failed at 0002 tests/functional/aarch64: add raspi4b full-RAM regression test
+error: patch failed: tests/functional/aarch64/test_raspi4.py:154
+error: tests/functional/aarch64/test_raspi4.py: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
