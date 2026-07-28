@@ -1,0 +1,25 @@
+Looking up https://lore.kernel.org/all/20260728192644.2879028-1-farman@linux.ibm.com/
+Grabbing thread from lore.kernel.org/all/20260728192644.2879028-1-farman@linux.ibm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/1] iotests/108: skip test if cannot access /dev/fuse
+    + Link: https://lore.kernel.org/qemu-devel/20260728192644.2879028-2-farman@linux.ibm.com
+  ---
+  [32m✓[0m Signed: DKIM/ibm.com (From: farman@linux.ibm.com)
+---
+Total patches: 1
+---
+Applying: iotests/108: skip test if cannot access /dev/fuse
+Patch failed at 0001 iotests/108: skip test if cannot access /dev/fuse
+error: patch failed: tests/qemu-iotests/common.rc:986
+error: tests/qemu-iotests/common.rc: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
