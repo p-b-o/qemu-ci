@@ -1,0 +1,26 @@
+Looking up https://lore.kernel.org/all/tencent_E2269E77D2CCF40AAE3E69F67780397B0A0A@qq.com/
+Grabbing thread from lore.kernel.org/all/tencent_E2269E77D2CCF40AAE3E69F67780397B0A0A@qq.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC 1/2] tcg/mips64: Fix variable shift operand order - [DORA-B]
+    + Link: https://lore.kernel.org/qemu-devel/tencent_59B16645478B73A6A0E779128D406FE96A06@qq.com
+  [32m✓[0m [PATCH RFC 2/2] tcg/mips64: Preserve the base of unaligned loads - [DORA-B]
+    + Link: https://lore.kernel.org/qemu-devel/tencent_8D773439C708369D6BD2ACF71EACE26B020A@qq.com
+  ---
+  [32m✓[0m Signed: DKIM/qq.com
+---
+Total patches: 2
+---
+Applying: tcg/mips64: Fix variable shift operand order - [DORA-B]
+Patch failed at 0001 tcg/mips64: Fix variable shift operand order - [DORA-B]
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:11
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
