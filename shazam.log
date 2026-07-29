@@ -1,0 +1,97 @@
+Looking up https://lore.kernel.org/all/20260729-sanmiguel-bmc-locator-v1-0-c8f9a8d101f6@free.fr/
+Grabbing thread from lore.kernel.org/all/20260729-sanmiguel-bmc-locator-v1-0-c8f9a8d101f6@free.fr/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 26 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 39 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH 1/25] hw/sensor: tmp105: make device state private to the implementation
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-1-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 2/25] hw/sensor: tmp105: name the parent object field parent_obj
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-2-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 3/25] hw/sensor: tmp105: implement Resettable reset
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-3-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 4/25] hw/sensor: tmp105: enforce the configurable fault queue
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-4-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 5/25] hw/sensor: tmp105: describe the temperature property
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-5-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 6/25] hw/arm: aspeed: guard board-local temperature-sensor aliases
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-6-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 7/25] hw/sensor: tmp105: add TMP75, TMP175 and LM75B variants
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-7-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 8/25] tests/qtest: tmp105: cover the ALERT fault queue
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-8-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 9/25] tests/qtest: tmp105: cover the TMP75, TMP175 and LM75B variants
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-9-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 10/25] tests/qtest: tmp105: cover one-shot and fault-queue write immunity
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-10-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 11/25] tests/qtest: tmp105: cover shutdown clearing the ALERT across variants
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-11-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 12/25] hw/arm: sanmiguel: add Facebook SanMiguel BMC machine
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-12-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 13/25] hw/arm: sanmiguel: populate EEPROM data
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-13-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 14/25] hw/arm: catalina: use the real TMP75 model
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-14-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 15/25] hw/arm: fuji: use the real TMP75 and LM75B temperature sensors
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-15-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 16/25] tests/functional: aspeed: optionally check the device tree model on boot
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-16-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 17/25] tests/functional: give the set_machine probe VM the test workdir
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-17-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 18/25] tests/functional: add a pure-Python device-locator resolver
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-18-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 19/25] tests/functional: add a device-locator self-check
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-19-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 20/25] tests/functional: aspeed: add hwmon sensor read helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-20-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 21/25] tests/functional/arm: sanmiguel: add BMC boot test
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-21-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 22/25] tests/functional/arm: catalina: test TMP75
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-22-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 23/25] tests/functional/arm: catalina: test PCA9555 IO expander via QOM
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-23-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 24/25] hw/arm: catalina: drive pca9554 io expander input pins externally
+    + Reviewed-by: Cédric Le Goater <clg@redhat.com> ([32m✓[0m DKIM/kaod.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-24-c8f9a8d101f6@free.fr
+  [31m✗[0m [PATCH 25/25] tests/functional/arm: catalina: test PCA9554 IO expander via QOM
+    + Link: https://lore.kernel.org/qemu-devel/20260729-sanmiguel-bmc-locator-v1-25-c8f9a8d101f6@free.fr
+  ---
+  [31m✗[0m No key: ed25519/emmanuel.blot@free.fr
+---
+Total patches: 25
+---
+Applying: hw/sensor: tmp105: make device state private to the implementation
+Applying: hw/sensor: tmp105: name the parent object field parent_obj
+Applying: hw/sensor: tmp105: implement Resettable reset
+Applying: hw/sensor: tmp105: enforce the configurable fault queue
+Applying: hw/sensor: tmp105: describe the temperature property
+Applying: hw/arm: aspeed: guard board-local temperature-sensor aliases
+Applying: hw/sensor: tmp105: add TMP75, TMP175 and LM75B variants
+Applying: tests/qtest: tmp105: cover the ALERT fault queue
+Applying: tests/qtest: tmp105: cover the TMP75, TMP175 and LM75B variants
+Applying: tests/qtest: tmp105: cover one-shot and fault-queue write immunity
+Applying: tests/qtest: tmp105: cover shutdown clearing the ALERT across variants
+Applying: hw/arm: sanmiguel: add Facebook SanMiguel BMC machine
+Applying: hw/arm: sanmiguel: populate EEPROM data
+Applying: hw/arm: catalina: use the real TMP75 model
+Applying: hw/arm: fuji: use the real TMP75 and LM75B temperature sensors
+Applying: tests/functional: aspeed: optionally check the device tree model on boot
+Applying: tests/functional: give the set_machine probe VM the test workdir
+Applying: tests/functional: add a pure-Python device-locator resolver
+Applying: tests/functional: add a device-locator self-check
+Applying: tests/functional: aspeed: add hwmon sensor read helpers
+Applying: tests/functional/arm: sanmiguel: add BMC boot test
+Applying: tests/functional/arm: catalina: test TMP75
+Applying: tests/functional/arm: catalina: test PCA9555 IO expander via QOM
+Applying: hw/arm: catalina: drive pca9554 io expander input pins externally
+Patch failed at 0024 hw/arm: catalina: drive pca9554 io expander input pins externally
+error: patch failed: hw/arm/aspeed_ast2600_catalina.c:545
+error: hw/arm/aspeed_ast2600_catalina.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
