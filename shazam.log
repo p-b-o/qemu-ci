@@ -1,0 +1,91 @@
+Looking up https://lore.kernel.org/all/20260730214624.2328883-1-zycai@linux.ibm.com/
+Grabbing thread from lore.kernel.org/all/20260730214624.2328883-1-zycai@linux.ibm.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 35 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 584 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v17 1/34] Add boot-certs to s390-ccw-virtio machine type option
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-2-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 2/34] crypto/x509-utils: Refactor with GNUTLS fallback
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-3-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 3/34] crypto/x509-utils: Add helper functions for certificate store
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-4-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 4/34] hw/s390x/ipl: Create certificate store
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-5-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 5/34] s390x/diag: Introduce DIAG 320 for Certificate Store Facility
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-6-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 6/34] s390x/diag: Refactor address validation check from diag308_parm_check
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-7-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 7/34] s390x/diag: Implement DIAG 320 subcode 1
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-8-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 8/34] crypto/x509-utils: Add helper functions for DIAG 320 subcode 2
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-9-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 9/34] s390x/diag: Implement DIAG 320 subcode 2
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-10-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 10/34] hw/s390x: Define finite size for single entry VCEntry
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-11-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 11/34] s390x/diag: Introduce DIAG 508 for secure IPL operations
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-12-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 12/34] crypto/x509-utils: Add helper functions for DIAG 508 subcode 1
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-13-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 13/34] s390x/diag: Generalize s390_ipl_read/write to accept void *
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-14-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 14/34] s390x/diag: Implement DIAG 508 subcode 1 for signature verification
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-15-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 15/34] s390x/ipl: Introduce IPL Information Report Block (IIRB)
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-16-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 16/34] pc-bios/s390-ccw: Define memory for IPLB and convert IPLB to pointers
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-17-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 17/34] hw/s390x/ipl: Add IPIB flags to IPL Parameter Block
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-18-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 18/34] hw/s390x/ipl: Rework s390_ipl_map_iplb_chain for certificate storage
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-19-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 19/34] s390x: Guest support for Secure-IPL Facility
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-20-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 20/34] pc-bios/s390-ccw: Refactor zipl_run()
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-21-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 21/34] pc-bios/s390-ccw: Rework zipl_load_segment function
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-22-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 22/34] pc-bios/s390-ccw: Introduce ZiplBootMode enum for IPL mode selection
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-23-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 23/34] pc-bios/s390-ccw: Add signature verification for secure IPL in audit mode
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-24-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 24/34] pc-bios/s390-ccw: Add signed component address overlap checks
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-25-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 25/34] s390x: Guest support for Secure-IPL Code Loading Attributes Facility (SCLAF)
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-26-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 26/34] pc-bios/s390-ccw: Add additional security checks for secure boot
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-27-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 27/34] Add secure-boot to s390-ccw-virtio machine type option
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-28-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 28/34] hw/s390x/ipl: Set IPIB flags for secure IPL
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-29-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 29/34] pc-bios/s390-ccw: Handle true secure IPL mode
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-30-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 30/34] hw/s390x/ipl: Handle secure boot with multiple boot devices
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-31-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 31/34] tests/functional/s390x: Add secure IPL functional test
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-32-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 32/34] docs/specs: Add secure IPL documentation
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-33-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 33/34] docs/system/s390x: Add secure IPL documentation
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-34-zycai@linux.ibm.com
+  [32m✓[0m [PATCH v17 34/34] MAINTAINERS: Add secure IPL files to S390-ccw boot group
+    + Link: https://lore.kernel.org/qemu-devel/20260730214624.2328883-35-zycai@linux.ibm.com
+  ---
+  [32m✓[0m Signed: DKIM/ibm.com (From: zycai@linux.ibm.com)
+---
+Total patches: 34
+---
+Applying: Add boot-certs to s390-ccw-virtio machine type option
+Patch failed at 0001 Add boot-certs to s390-ccw-virtio machine type option
+error: patch failed: hw/s390x/s390-virtio-ccw.c:941
+error: hw/s390x/s390-virtio-ccw.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
