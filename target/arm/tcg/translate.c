@@ -4811,7 +4811,7 @@ static bool trans_RBIT(DisasContext *s, arg_rr *a)
     if (!ENABLE_ARCH_6T2) {
         return false;
     }
-    return op_rr(s, a, gen_helper_rbit);
+    return op_rr(s, a, tcg_gen_revbit32_i32);
 }
 
 /*
