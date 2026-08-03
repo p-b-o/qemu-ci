@@ -1,0 +1,36 @@
+Looking up https://lore.kernel.org/all/20260803072853.2920007-1-dtalexundeer@yandex-team.ru/
+Grabbing thread from lore.kernel.org/all/20260803072853.2920007-1-dtalexundeer@yandex-team.ru/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 32 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v6 1/6] vhost-user: add skip_drain param to do_vhost_virtqueue_stop
+    + Link: https://lore.kernel.org/qemu-devel/20260803072853.2920007-2-dtalexundeer@yandex-team.ru
+  [32m✓[0m [PATCH v6 2/6] vhost-user: add GET_VRING_BASE_SKIP_DRAIN message
+    + Link: https://lore.kernel.org/qemu-devel/20260803072853.2920007-3-dtalexundeer@yandex-team.ru
+  [32m✓[0m [PATCH v6 3/6] vhost-user: use skip_drain with GET_VRING_BASE_SKIP_DRAIN message
+    + Link: https://lore.kernel.org/qemu-devel/20260803072853.2920007-4-dtalexundeer@yandex-team.ru
+  [32m✓[0m [PATCH v6 4/6] vhost-user-blk: make inflight-migration prop mutable on running vm
+    + Link: https://lore.kernel.org/qemu-devel/20260803072853.2920007-5-dtalexundeer@yandex-team.ru
+  [32m✓[0m [PATCH v6 5/6] vhost-user-blk: move inflight_needed higher
+    + Link: https://lore.kernel.org/qemu-devel/20260803072853.2920007-6-dtalexundeer@yandex-team.ru
+  [32m✓[0m [PATCH v6 6/6] vhost-user-blk: use GET_VRING_BASE_SKIP_DRAIN when inflight-migration is on
+    + Link: https://lore.kernel.org/qemu-devel/20260803072853.2920007-7-dtalexundeer@yandex-team.ru
+  ---
+  [32m✓[0m Signed: DKIM/yandex-team.ru
+---
+Total patches: 6
+---
+Applying: vhost-user: add skip_drain param to do_vhost_virtqueue_stop
+Applying: vhost-user: add GET_VRING_BASE_SKIP_DRAIN message
+Patch failed at 0002 vhost-user: add GET_VRING_BASE_SKIP_DRAIN message
+error: patch failed: docs/interop/vhost-user.rst:523
+error: docs/interop/vhost-user.rst: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
