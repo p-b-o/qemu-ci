@@ -1530,6 +1530,42 @@ static gboolean gd_win_grab(void *opaque)
     return TRUE;
 }
 
+static void gd_win_fullscreen(void *opaque)
+{
+    VirtualConsole *vc = opaque;
+    GtkDisplayState *s = vc->s;
+    GdkWindow *window;
+    GdkWindowState state;
+
+    if (!vc->window || !gtk_widget_get_realized(vc->window)) {
+        return;
+    }
+
+    window = gtk_widget_get_window(vc->window);
+    if (!window) {
+        return;
+    }
+
+    state = gdk_window_get_state(window);
+
+    if (state & GDK_WINDOW_STATE_FULLSCREEN) {
+        gtk_window_unfullscreen(GTK_WINDOW(vc->window));
+
+        if (vc->type == GD_VC_GFX) {
+            if (!s->free_scale) {
+                vc->gfx.scale_x = 1.0;
+                vc->gfx.scale_y = 1.0;
+            }
+            gd_update_windowsize(vc);
+        }
+    } else {
+        if (vc->type == GD_VC_GFX) {
+            gtk_widget_set_size_request(vc->gfx.drawing_area, -1, -1);
+        }
+        gtk_window_fullscreen(GTK_WINDOW(vc->window));
+    }
+}
+
 static void gd_menu_untabify(GtkMenuItem *item, void *opaque)
 {
     GtkDisplayState *s = opaque;
@@ -1562,9 +1598,13 @@ static void gd_menu_untabify(GtkMenuItem *item, void *opaque)
             GtkAccelGroup *ag = gtk_accel_group_new();
             gtk_window_add_accel_group(GTK_WINDOW(vc->window), ag);
 
-            GClosure *cb = g_cclosure_new_swap(G_CALLBACK(gd_win_grab),
-                                               vc, NULL);
-            gtk_accel_group_connect(ag, GDK_KEY_g, HOTKEY_MODIFIERS, 0, cb);
+            GClosure *cb_grab = g_cclosure_new_swap(G_CALLBACK(gd_win_grab),
+                                                    vc, NULL);
+            gtk_accel_group_connect(ag, GDK_KEY_g, HOTKEY_MODIFIERS, 0, cb_grab);
+            GClosure *cb_fullscreen = g_cclosure_new_swap(
+                                             G_CALLBACK(gd_win_fullscreen),
+                                             vc, NULL);
+            gtk_accel_group_connect(ag, GDK_KEY_f, HOTKEY_MODIFIERS, 0, cb_fullscreen);
         }
 
         gd_rebuild_vc_menu(s);
