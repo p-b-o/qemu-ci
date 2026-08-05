@@ -2,7 +2,7 @@
 #define QEMU_HW_XEN_NATIVE_H
 
 #ifdef __XEN_INTERFACE_VERSION__
-#error In Xen native files, include xen_native.h before other Xen headers
+#warning In Xen native files, include xen_native.h before other Xen headers
 #endif
 
 /*
