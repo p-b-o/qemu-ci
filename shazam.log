@@ -1,0 +1,35 @@
+Looking up https://lore.kernel.org/all/20260805110432.25167-1-snambakam@linux.microsoft.com/
+Grabbing thread from lore.kernel.org/all/20260805110432.25167-1-snambakam@linux.microsoft.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC v1 1/5] kvm: add userspace handlers for VM planes and VBS VTL calls
+    + Link: https://lore.kernel.org/qemu-devel/20260805110432.25167-2-snambakam@linux.microsoft.com
+  [32m✓[0m [PATCH RFC v1 2/5] vm_planes: Add VBS VTL call handling and plane memory sealing
+    + Link: https://lore.kernel.org/qemu-devel/20260805110432.25167-3-snambakam@linux.microsoft.com
+  [32m✓[0m [PATCH RFC v1 3/5] linux-headers: sync kvm_para.h VBS VTL hypercalls
+    + Link: https://lore.kernel.org/qemu-devel/20260805110432.25167-4-snambakam@linux.microsoft.com
+  [32m✓[0m [PATCH RFC v1 4/5] target/i386/kvm: run the secure plane in-kernel (Option B)
+    + Link: https://lore.kernel.org/qemu-devel/20260805110432.25167-5-snambakam@linux.microsoft.com
+  [32m✓[0m [PATCH RFC v1 5/5] target/i386/kvm: read plane config via address_space API
+    + Link: https://lore.kernel.org/qemu-devel/20260805110432.25167-6-snambakam@linux.microsoft.com
+  ---
+  [32m✓[0m Signed: DKIM/linux.microsoft.com
+---
+Total patches: 5
+---
+Applying: kvm: add userspace handlers for VM planes and VBS VTL calls
+Patch failed at 0001 kvm: add userspace handlers for VM planes and VBS VTL calls
+error: patch failed: accel/kvm/kvm-all.c:822
+error: accel/kvm/kvm-all.c: patch does not apply
+error: patch failed: include/system/kvm_int.h:109
+error: include/system/kvm_int.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
