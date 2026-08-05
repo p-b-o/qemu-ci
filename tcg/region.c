@@ -393,7 +393,20 @@ bool tcg_region_alloc(TCGContext *s)
 static void tcg_region_initial_alloc__locked(TCGContext *s)
 {
     bool err = tcg_region_alloc__locked(s);
-    g_assert(!err);
+
+    /*
+     * The region pool can be momentarily exhausted when many busy vCPUs have
+     * each grabbed several regions during translation. A newly started vCPU
+     * thread that cannot get its initial region must not abort QEMU: instead
+     * flag a deferred tb_flush. The thread's first tcg_tb_alloc() will force a
+     * flush + retry (tcg_region_reset_all() resets region.current and
+     * re-packs the live contexts), which reclaims that slack and assigns this
+     * context a region. This mirrors the graceful runtime path in
+     * tcg_tb_alloc()/tcg_region_alloc().
+     */
+    if (err) {
+        s->tb_flush_pending = true;
+    }
 }
 
 void tcg_region_initial_alloc(TCGContext *s)

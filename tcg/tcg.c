@@ -1830,6 +1830,18 @@ TranslationBlock *tcg_tb_alloc(TCGContext *s)
     TranslationBlock *tb;
     void *next;
 
+    /*
+     * A newly started vCPU thread that could not obtain its initial region
+     * (region pool momentarily exhausted) deferred a flush. Trigger it now:
+     * returning NULL makes the caller queue a tb_flush and retry, which
+     * resets the region pool and gives this context a valid region. Do this
+     * before touching code_gen_ptr, which is not yet valid for this context.
+     */
+    if (unlikely(s->tb_flush_pending)) {
+        s->tb_flush_pending = false;
+        return NULL;
+    }
+
  retry:
     tb = (void *)ROUND_UP((uintptr_t)s->code_gen_ptr, align);
     next = (void *)ROUND_UP((uintptr_t)(tb + 1), align);

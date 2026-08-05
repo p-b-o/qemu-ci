@@ -381,6 +381,15 @@ struct TCGContext {
     /* Threshold to flush the translated code buffer.  */
     void *code_gen_highwater;
 
+    /*
+     * Set when this context (a newly registered vCPU thread) could not be
+     * given an initial code-gen region because the region pool was
+     * momentarily exhausted by other busy vCPUs. Rather than aborting, the
+     * thread defers a tb_flush: the next tcg_tb_alloc() forces a flush +
+     * retry, which resets the region pool and reclaims slack for this thread.
+     */
+    bool tb_flush_pending;
+
     /* Track which vCPU triggers events */
     CPUState *cpu;                      /* *_trans */
 
