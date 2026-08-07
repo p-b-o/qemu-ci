@@ -1,0 +1,39 @@
+Looking up 20260806172709.333300-1-richard.henderson@linaro.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 16 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/6] target/arm: Add FGWTE3_EL3
+    + Link: https://lore.kernel.org/qemu-devel/20260806172709.333300-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 2/6] target/arm: Add FGWTE3_EL3 bit definitions
+    + Link: https://lore.kernel.org/qemu-devel/20260806172709.333300-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 3/6] target/arm: Add FGWTE3 FGT bit definitions
+    + Link: https://lore.kernel.org/qemu-devel/20260806172709.333300-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 4/6] target/arm: Implement FGWTE3 traps
+    + Link: https://lore.kernel.org/qemu-devel/20260806172709.333300-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 5/6] target/arm: Set fgt in cpregs for FGWTE3
+    + Link: https://lore.kernel.org/qemu-devel/20260806172709.333300-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 6/6] target/arm: Enable FEAT_FGWTE3 for -cpu max
+    + Link: https://lore.kernel.org/qemu-devel/20260806172709.333300-7-richard.henderson@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 6
+---
+Applying: target/arm: Add FGWTE3_EL3
+Applying: target/arm: Add FGWTE3_EL3 bit definitions
+Applying: target/arm: Add FGWTE3 FGT bit definitions
+Applying: target/arm: Implement FGWTE3 traps
+Applying: target/arm: Set fgt in cpregs for FGWTE3
+Applying: target/arm: Enable FEAT_FGWTE3 for -cpu max
+Patch failed at 0006 target/arm: Enable FEAT_FGWTE3 for -cpu max
+error: patch failed: target/arm/tcg/cpu64.c:1462
+error: target/arm/tcg/cpu64.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
