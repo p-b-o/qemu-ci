@@ -1,0 +1,30 @@
+Looking up 20260809-feat-k230-cmu-v1-0-8792982c446c@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 5 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/4] hw/misc: model K230 CMU registers
+    + Link: https://lore.kernel.org/qemu-devel/20260809-feat-k230-cmu-v1-1-8792982c446c@gmail.com
+  [32m✓[0m [PATCH 2/4] hw/riscv: connect the K230 CMU
+    + Link: https://lore.kernel.org/qemu-devel/20260809-feat-k230-cmu-v1-2-8792982c446c@gmail.com
+  [32m✓[0m [PATCH 3/4] tests/qtest: add K230 CMU coverage
+    + Link: https://lore.kernel.org/qemu-devel/20260809-feat-k230-cmu-v1-3-8792982c446c@gmail.com
+  [32m✓[0m [PATCH 4/4] docs/system/riscv: document K230 CMU support
+    + Link: https://lore.kernel.org/qemu-devel/20260809-feat-k230-cmu-v1-4-8792982c446c@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 4
+---
+Applying: hw/misc: model K230 CMU registers
+Patch failed at 0001 hw/misc: model K230 CMU registers
+error: patch failed: MAINTAINERS:1820
+error: MAINTAINERS: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
