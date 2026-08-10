@@ -1396,6 +1396,8 @@ static void gen_BOUND(DisasContext *s, X86DecodedInsn *decode)
 static void gen_BSF(DisasContext *s, X86DecodedInsn *decode)
 {
     MemOp ot = decode->op[0].ot;
+    int reg = decode->op[0].n;
+    TCGv dest, result;
 
     /* Only the Z bit is defined and it is related to the input.  */
     decode->cc_dst = tcg_temp_new();
@@ -1403,18 +1405,27 @@ static void gen_BSF(DisasContext *s, X86DecodedInsn *decode)
     tcg_gen_mov_tl(decode->cc_dst, s->T0);
 
     /*
-     * The manual says that the output is undefined when the
-     * input is zero, but real hardware leaves it unchanged, and
-     * real programs appear to depend on that.  Accomplish this
-     * by passing the output as the value to return upon zero.
+     * The manual says that the output is undefined when the input is zero,
+     * but real hardware leaves the whole destination register unchanged --
+     * it is not even zero-extended for a 32-bit operation -- and real
+     * programs appear to depend on that.  Compute the result for a nonzero
+     * input, then use a conditional move so that a zero input leaves the
+     * destination register untouched.
      */
-    tcg_gen_ctz_tl(s->T0, s->T0, s->T1);
+    result = tcg_temp_new();
+    tcg_gen_ctz_tl(result, s->T0, s->T0);
+    dest = gen_op_deposit_reg_v(s, ot, reg, result, result);
+    tcg_gen_movcond_tl(TCG_COND_EQ, dest, decode->cc_dst,
+                       tcg_constant_tl(0), dest, result);
+    decode->op[0].unit = X86_OP_SKIP;
 }
 
 /* Non-standard convention - on entry T0 is zero-extended input, T1 is the output.  */
 static void gen_BSR(DisasContext *s, X86DecodedInsn *decode)
 {
     MemOp ot = decode->op[0].ot;
+    int reg = decode->op[0].n;
+    TCGv dest, result;
 
     /* Only the Z bit is defined and it is related to the input.  */
     decode->cc_dst = tcg_temp_new();
@@ -1422,15 +1433,20 @@ static void gen_BSR(DisasContext *s, X86DecodedInsn *decode)
     tcg_gen_mov_tl(decode->cc_dst, s->T0);
 
     /*
-     * The manual says that the output is undefined when the
-     * input is zero, but real hardware leaves it unchanged, and
-     * real programs appear to depend on that.  Accomplish this
-     * by passing the output as the value to return upon zero.
-     * Plus, return the bit index of the first 1 bit.
+     * The manual says that the output is undefined when the input is zero,
+     * but real hardware leaves the whole destination register unchanged --
+     * it is not even zero-extended for a 32-bit operation -- and real
+     * programs appear to depend on that.  Compute the bit index of the most
+     * significant one bit for a nonzero input, then use a conditional move
+     * so that a zero input leaves the destination register untouched.
      */
-    tcg_gen_xori_tl(s->T1, s->T1, TARGET_LONG_BITS - 1);
-    tcg_gen_clz_tl(s->T0, s->T0, s->T1);
-    tcg_gen_xori_tl(s->T0, s->T0, TARGET_LONG_BITS - 1);
+    result = tcg_temp_new();
+    tcg_gen_clz_tl(result, s->T0, tcg_constant_tl(TARGET_LONG_BITS));
+    tcg_gen_xori_tl(result, result, TARGET_LONG_BITS - 1);
+    dest = gen_op_deposit_reg_v(s, ot, reg, result, result);
+    tcg_gen_movcond_tl(TCG_COND_EQ, dest, decode->cc_dst,
+                       tcg_constant_tl(0), dest, result);
+    decode->op[0].unit = X86_OP_SKIP;
 }
 
 static void gen_BSWAP(DisasContext *s, X86DecodedInsn *decode)
