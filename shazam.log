@@ -1,0 +1,43 @@
+Looking up 20260810185748.1253-1-mikail.sadic@ibm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 12 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/8] fsi/cfam: Add common CFAM base class
+    + Link: https://lore.kernel.org/qemu-devel/20260810185748.1253-2-mikail.sadic@ibm.com
+  [32m✓[0m [PATCH v3 2/8] fsi/cfam: Add CFAM-S model
+    + Link: https://lore.kernel.org/qemu-devel/20260810185748.1253-3-mikail.sadic@ibm.com
+  [32m✓[0m [PATCH v3 3/8] arm/aspeed: Wire AST2700 FSI controllers to APB-to-OPB bridges
+    + Link: https://lore.kernel.org/qemu-devel/20260810185748.1253-4-mikail.sadic@ibm.com
+  [32m✓[0m [PATCH v3 4/8] i2c/aspeed: Fix DMA receive first-byte handling for block reads
+    + Link: https://lore.kernel.org/qemu-devel/20260810185748.1253-5-mikail.sadic@ibm.com
+  [32m✓[0m [PATCH v3 5/8] hw/sensor: Add UCD90320 model
+    + Link: https://lore.kernel.org/qemu-devel/20260810185748.1253-6-mikail.sadic@ibm.com
+  [32m✓[0m [PATCH v3 6/8] ufs: Make the logical block size configurable and answer absent LUNs
+    + Link: https://lore.kernel.org/qemu-devel/20260810185748.1253-7-mikail.sadic@ibm.com
+  [32m✓[0m [PATCH v3 7/8] ufs/aspeed: Add AST2700 UFS host controller
+    + Link: https://lore.kernel.org/qemu-devel/20260810185748.1253-8-mikail.sadic@ibm.com
+  [32m✓[0m [PATCH v3 8/8] arm/aspeed: Add AST2700 Huygens machine
+    + Link: https://lore.kernel.org/qemu-devel/20260810185748.1253-9-mikail.sadic@ibm.com
+  ---
+  [32m✓[0m Signed: DKIM/ibm.com
+---
+Total patches: 8
+---
+Applying: fsi/cfam: Add common CFAM base class
+Applying: fsi/cfam: Add CFAM-S model
+Applying: arm/aspeed: Wire AST2700 FSI controllers to APB-to-OPB bridges
+Applying: i2c/aspeed: Fix DMA receive first-byte handling for block reads
+Applying: hw/sensor: Add UCD90320 model
+Applying: ufs: Make the logical block size configurable and answer absent LUNs
+Patch failed at 0006 ufs: Make the logical block size configurable and answer absent LUNs
+error: patch failed: hw/ufs/ufs.h:303
+error: hw/ufs/ufs.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
