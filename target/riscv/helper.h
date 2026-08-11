@@ -1358,3 +1358,6 @@ DEF_HELPER_1(ssamoswap_disabled, void, env)
 
 /* Zalrsc SC write probe */
 DEF_HELPER_FLAGS_3(sc_probe_write, TCG_CALL_NO_WG, void, env, tl, tl)
+
+/* Invalidate other harts' reservations after a successful AMO store. */
+DEF_HELPER_3(amo_invalidate_reservations, void, env, tl, tl)

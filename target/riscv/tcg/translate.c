@@ -1159,6 +1159,8 @@ static bool gen_amo(DisasContext *ctx, arg_atomic *a,
     decode_save_opc(ctx, RISCV_UW2_ALWAYS_STORE_AMO);
     src1 = get_address(ctx, a->rs1, 0);
     func(dest, src1, src2, ctx->mem_idx, mop);
+    gen_helper_amo_invalidate_reservations(tcg_env, src1,
+                                           tcg_constant_tl(memop_size(mop)));
 
     gen_set_gpr(ctx, a->rd, dest);
     return true;

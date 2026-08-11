@@ -19,6 +19,7 @@
  */
 
 #include "qemu/osdep.h"
+#include "qemu/rcu.h"
 #include "cpu.h"
 #include "target/riscv/tcg/csr.h"
 #include "internals.h"
@@ -281,6 +282,30 @@ void helper_sc_probe_write(CPURISCVState *env, target_ulong addr,
     }
 
     probe_write(env, addr, size, mmu_idx, ra);
+}
+
+void helper_amo_invalidate_reservations(CPURISCVState *env,
+                                        target_ulong addr,
+                                        target_ulong size)
+{
+    CPUState *cpu;
+
+    WITH_RCU_READ_LOCK_GUARD() {
+        CPU_FOREACH(cpu) {
+            CPURISCVState *other_env = cpu_env(cpu);
+            target_ulong reservation;
+
+            if (other_env == env) {
+                continue;
+            }
+
+            reservation = qatomic_read(&other_env->load_res);
+            if (reservation != (target_ulong)-1 &&
+                reservation >= addr && reservation - addr < size) {
+                qatomic_set(&other_env->load_res, (target_ulong)-1);
+            }
+        }
+    }
 }
 
 #ifndef CONFIG_USER_ONLY
