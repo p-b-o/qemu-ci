@@ -84,6 +84,13 @@ void cpu_loop(CPURISCVState *env)
             do_common_semihosting(cs);
             env->pc += 4;
             break;
+        case RISCV_EXCP_STORE_AMO_ADDR_MIS:
+            force_sig_fault(TARGET_SIGSEGV, TARGET_SEGV_ACCERR,
+                            env->badaddr);
+            break;
+        case RISCV_EXCP_INST_ADDR_MIS:
+            force_sig_fault(TARGET_SIGBUS, TARGET_BUS_ADRALN, env->pc);
+            break;
         default:
             EXCP_DUMP(env, "\nqemu: unhandled CPU exception %#x - aborting\n",
                      trapnr);
