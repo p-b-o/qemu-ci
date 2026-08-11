@@ -1192,7 +1192,13 @@ static bool ldst_whole_trans(uint32_t vd, uint32_t rs1, uint32_t nf,
      * - vstart is not 0.
      */
 
-    bool use_helper_fn = !s->vstart_eq_zero;
+    /*
+     * The inline path groups bytes into host-sized accesses.  A fault in
+     * the middle of such an access cannot be represented by the resulting
+     * element-index vstart, so use the element-sized helper path whenever
+     * precise restart state can be observed.
+     */
+    bool use_helper_fn = true;
 
     if (!use_helper_fn) {
         uint32_t size = s->cfg_ptr->vlenb * nf;
