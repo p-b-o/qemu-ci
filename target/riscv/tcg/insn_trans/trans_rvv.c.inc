@@ -1598,9 +1598,7 @@ static bool opivv_overwrite_widen_check(DisasContext *s, arg_rmrr *a)
 {
     return require_rvv(s) &&
            vext_check_isa_ill(s) &&
-           vext_check_dss(s, a->rd, a->rs1, a->rs2, a->vm) &&
-           vext_check_input_eew(s, a->rd, s->sew + 1, a->rs1, s->sew, a->vm) &&
-           vext_check_input_eew(s, a->rd, s->sew + 1, a->rs2, s->sew, a->vm);
+           vext_check_dss(s, a->rd, a->rs1, a->rs2, a->vm);
 }
 
 static bool do_opivv_widen(DisasContext *s, arg_rmrr *a,
@@ -1654,8 +1652,7 @@ static bool opivx_overwrite_widen_check(DisasContext *s, arg_rmrr *a)
 {
     return require_rvv(s) &&
            vext_check_isa_ill(s) &&
-           vext_check_ds(s, a->rd, a->rs2, a->vm) &&
-           vext_check_input_eew(s, a->rd, s->sew + 1, a->rs2, s->sew, a->vm);
+           vext_check_ds(s, a->rd, a->rs2, a->vm);
 }
 
 #define GEN_OPIVX_WIDEN_TRANS(NAME, CHECK) \
@@ -2554,9 +2551,7 @@ static bool opfvv_widen_check(DisasContext *s, arg_rmrr *a,
 static bool opfvv_overwrite_widen_check(DisasContext *s, arg_rmrr *a,
                                         int8_t valid_bfa_vsew)
 {
-    return opfvv_widen_check(s, a, valid_bfa_vsew) &&
-           vext_check_input_eew(s, a->rd, s->sew + 1, a->rs1, s->sew, a->vm) &&
-           vext_check_input_eew(s, a->rd, s->sew + 1, a->rs2, s->sew, a->vm);
+    return opfvv_widen_check(s, a, valid_bfa_vsew);
 }
 
 /* OPFVV with WIDEN */
@@ -2631,8 +2626,7 @@ static bool opfvf_widen_check(DisasContext *s, arg_rmrr *a,
 static bool opfvf_overwrite_widen_check(DisasContext *s, arg_rmrr *a,
                                         int8_t valid_bfa_vsew)
 {
-    return opfvf_widen_check(s, a, valid_bfa_vsew) &&
-           vext_check_input_eew(s, a->rd, s->sew + 1, a->rs2, s->sew, a->vm);
+    return opfvf_widen_check(s, a, valid_bfa_vsew);
 }
 
 /* OPFVF with WIDEN */
