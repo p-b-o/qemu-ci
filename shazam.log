@@ -1,0 +1,181 @@
+Looking up 20260812223142.349142-1-richard.henderson@linaro.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 53 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 119 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/52] disas/riscv: Move operand extractors earlier in file
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 2/52] disas/riscv: Reduce rv_insn to uint32_t
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 3/52] disas/riscv: Tidy dec initialization in disasm_inst
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 4/52] disas/riscv: Pass rv_opcode_data pointer to decode_inst_operands
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 5/52] disas/riscv: Pass rv_opcode_data pointer to/from decode_inst_decompress
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 6/52] disas/riscv: Pass rv_opcode_data pointer to/from decode_inst_lift_pseudo
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-7-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 7/52] disas/riscv: Pass rv_opcode_data pointer to format_inst
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 8/52] disas/riscv: Tidy disasm_inst main loop
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 9/52] disas/riscv: Set dec->opcode_data in decode function
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 10/52] disas/riscv: Drop explicit zero of rv_opcode_data fields
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-11-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 11/52] disas/riscv: Drop useless const in structures
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-12-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 12/52] disas/riscv: Drop codec from rv_decode
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-13-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 13/52] disas/riscv: Handle c.addi4spn imm != 0 during decode
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-14-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 14/52] disas/riscv: Simplify c.addi
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-15-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 15/52] disas/riscv: Handle c.lui imm != 0 during decode
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-16-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 16/52] disas/riscv: Handle c.{srli,srai} imm during decode
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-17-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 17/52] disas/riscv: Handle c.slli imm != 0 during decode
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-18-richard.henderson@linaro.org
+  [31m✗[0m [PATCH v2 18/52] disas/riscv: Do not recognize c.{addw, subw} with rv32
+    [31m✗[0m BADSIG: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-19-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 19/52] disas/riscv: Remove rvcd_imm_nz
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-20-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 20/52] disas/riscv: Unify decomp_rv{32,64,128}
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-21-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 21/52] disas/riscv: Drop always true branch pseudos
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-22-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 22/52] disas/riscv: Handle aliases of csrrw during decode
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-23-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 23/52] disas/riscv: Handle aliases of csrrs during decode
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-24-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 24/52] disas/riscv: Handle aliases of csrrwi during decode
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-25-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 25/52] disas/riscv: Break pseudo loop for jal and jalr
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-26-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 26/52] disas/riscv: Allow decode_inst_lift_pseudo to loop
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-27-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 27/52] disas/riscv: Handle decompression via decode_inst_lift_pseudo
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-28-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 28/52] disas/riscv: Drop format from DECOMP insns
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-29-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 29/52] disas/riscv: Tidy rv_comp_data terminators
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-30-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 30/52] disas/riscv: Chain "ret" pseudo off "jr" pseudo
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-31-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 31/52] disas/riscv: Chain "nop" pseudo off "mv" pseudo
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-32-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 32/52] disas/riscv: Use rv_codec_illegal for pseudos
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-33-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 33/52] disas/riscv: Simplify some insn decompressions
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-34-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 34/52] disas/riscv: Store op pointer in rv_comp_data
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-35-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 35/52] disas/riscv: Return rv_opcode_data pointer from decoders
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-36-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 36/52] disas/riscv: Skip post-processing of illegal insns
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-37-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 37/52] disas/riscv: Reject all of OP-32 and OP-IMM-32 for RV32
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-38-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 38/52] disas/riscv: Fix rv32 encoding of zext.h
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-39-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 39/52] disas/riscv: Fix isa decoding of rev8
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-40-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 40/52] disas/riscv: Fix typo in th.lbib format
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-41-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 41/52] disas/riscv: Split ventana_opcode_data
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-42-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 42/52] disas/riscv: Split xlrbr_opcode_data
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-43-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 43/52] disas/riscv: Split xthead_opcode_data
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-44-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 44/52] disas/riscv: Move rv_op_illegal to riscv.c
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-45-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 45/52] disas/riscv: Split out riscv-op.c.inc
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-46-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 46/52] disas/riscv: Merge all mop.r.n to one pattern
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-47-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 47/52] disas/riscv: Merge all mop.rr.n to one pattern
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-48-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 48/52] disas/riscv: Merge all c.mop.n to one pattern
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-49-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 49/52] disas/riscv: Tidy decode of c.mop.n
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-50-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 50/52] disas/riscv: Tidy decode of mop.r.n and mop.rr.n
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-51-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 51/52] disas/riscv: Split rvi_opcode_data
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-52-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 52/52] disas/riscv: Sort riscv-op.c.inc
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260812223142.349142-53-richard.henderson@linaro.org
+---
+Total patches: 52
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+     Msg From: Alistair <alistair@alistair23.me>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: disas/riscv: Move operand extractors earlier in file
+Patch failed at 0001 disas/riscv: Move operand extractors earlier in file
+error: patch failed: disas/riscv.c:4198
+error: disas/riscv.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
