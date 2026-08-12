@@ -1,0 +1,82 @@
+Looking up 20260812211708.92824-1-philmd@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 43 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 32 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/23] hexagon: Remove unnecessary 'monitor/monitor.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-2-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 2/23] net/vhost-vdpa: Include missing 'qemu/iov.h' header
+    + Acked-by: Michael S. Tsirkin <mst@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-3-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 3/23] tests/unit: Include 'qemu/main-loop.h' header in test-util-sockets.c
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-4-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 4/23] qapi/qmp-dispatch: Include 'qemu/aio-wait.h' and 'monitor/monitor.h'
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-5-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 5/23] qapi/qmp-registry: Remove unnecessary 'monitor/monitor.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-6-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 6/23] migration/hmp-cmds: Include 'block/block-global-state.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-7-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 7/23] monitor: Include missing 'qemu/aio-wait.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-8-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 8/23] monitor: Include missing 'qemu/lockable.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-9-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 9/23] monitor: Include missing 'qemu/coroutine-core.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-10-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 10/23] monitor: Reduce inclusion of 'qapi/qapi-emit-events.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-11-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 11/23] monitor: Remove unnecessary 'block/block.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-12-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 12/23] system: Remove unnecessary 'monitor/monitor.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-13-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 13/23] system/dirtylimit: Extract HMP code to dirtylimit-hmp-cmds.c
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-14-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 14/23] system: Move qmp_inject_nmi() to hw/core/machine-qmp-cmds.c
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-15-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 15/23] system: Extract QMP memsave/pmemsave commands to physmem-qmp-cmds.c
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-16-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 16/23] system: Move runstate-related code from cpus.c to runstate.c
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-17-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 17/23] monitor: Rename MonitorQMP @mon -> @qmon
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-18-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 18/23] monitor: Rename MonitorHMP @mon -> @hmon
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-19-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 19/23] monitor: Better express monitor_read()'s opaque arg is of Monitor type
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-20-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 20/23] monitor: Use QOM MONITOR() macro to access MonitorQMP->parent_obj
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-21-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 21/23] monitor: Use QOM MONITOR() macro to access MonitorHMP->parent_obj
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-22-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 22/23] monitor: Replace container_of(MonitorHMP, parent_obj) -> MONITOR_HMP()
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-23-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 23/23] monitor/hmp: Remove unnecessary 'monitor/monitor.h' header
+    + Link: https://lore.kernel.org/qemu-devel/20260812211708.92824-24-philmd@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 23
+---
+Applying: hexagon: Remove unnecessary 'monitor/monitor.h' header
+Applying: net/vhost-vdpa: Include missing 'qemu/iov.h' header
+Applying: tests/unit: Include 'qemu/main-loop.h' header in test-util-sockets.c
+Applying: qapi/qmp-dispatch: Include 'qemu/aio-wait.h' and 'monitor/monitor.h'
+Applying: qapi/qmp-registry: Remove unnecessary 'monitor/monitor.h' header
+Applying: migration/hmp-cmds: Include 'block/block-global-state.h' header
+Applying: monitor: Include missing 'qemu/aio-wait.h' header
+Applying: monitor: Include missing 'qemu/lockable.h' header
+Applying: monitor: Include missing 'qemu/coroutine-core.h' header
+Applying: monitor: Reduce inclusion of 'qapi/qapi-emit-events.h' header
+Applying: monitor: Remove unnecessary 'block/block.h' header
+Applying: system: Remove unnecessary 'monitor/monitor.h' header
+Applying: system/dirtylimit: Extract HMP code to dirtylimit-hmp-cmds.c
+Applying: system: Move qmp_inject_nmi() to hw/core/machine-qmp-cmds.c
+Patch failed at 0014 system: Move qmp_inject_nmi() to hw/core/machine-qmp-cmds.c
+error: patch failed: system/cpus.c:922
+error: system/cpus.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
