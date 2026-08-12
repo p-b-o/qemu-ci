@@ -1,0 +1,243 @@
+Looking up qemu-stable-10.0.13-20260812152851@cover.tls.msk.ru
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 103 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 608 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/102] hw/uefi: add sanity check
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-1-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 2/102] hw/uefi: remove debug function
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-2-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 3/102] hw/uefi: check lower limit for signature list size
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-3-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 4/102] hw/uefi: account variable policy entries against storage size
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-4-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 5/102] hw/uefi: add post_load checks
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-5-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 6/102] hw/uefi: make SetupMode read-only
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-6-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 7/102] vfio/pci: Initialize rom_read_failed in vfio_pci_load_rom()
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-7-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 8/102] vfio/igd: Clear saved BDSM in legacy VBIOS ROM at load time
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-8-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 9/102] vfio/pci: don't narrow a failed config read to a plausible value
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-9-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 10/102] vfio/pci: reject invalid PCI_INTERRUPT_PIN values
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-10-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 11/102] target/i386: helper_sysret(): Check that RCX contains a canonical address when emulating an Intel CPU
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-11-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 12/102] scsi-disk: protect against guest sending truncated data for MODE SELECT commands
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-12-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 13/102] scsi-disk: fix off by one in assertion
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-13-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 14/102] hw/ide: replace assert with proper error handling
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-14-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 15/102] hw/display/vmware_vga: Don't allow guest to trigger long running loop in host
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-15-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 16/102] hw/9pfs: fix O_TRUNC bypass on read-only export
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-16-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 17/102] hw/9pfs/virtio: drain in-flight PDUs before virtio-9p unrealize
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-17-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 18/102] hw/9pfs/xen: drain in-flight PDUs before xen-9p disconnect
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-18-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 19/102] hw/usb/dev-uas: Fix guest-triggerable heap OOB access
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-19-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 20/102] hw/ide/core: Fix possible crash via NULL pointer in ide_cancel_dma_sync()
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-20-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 21/102] hw/usb/core: Avoid possible assert() in do_parameter() --> usb_packet_copy()
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-21-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 22/102] hw/usb/hcd-xhci: Check return value of xhci_xfer_create_sgl() for errors
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-22-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 23/102] hw/display/virtio-gpu: validate stride against width on scanout
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-23-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 24/102] hw/display/virtio-gpu: reject strides exceeding INT_MAX
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-24-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 25/102] hw/display/virtio-gpu: Remove the bytes_pp field
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-25-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 26/102] hw/display/vhost-user-gpu: validate message payload sizes
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-26-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 27/102] ui/vnc: remove redundant rows computation
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-27-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 28/102] hw/display/qxl: unregister vm_change_state handler and BHs
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-28-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 29/102] net/colo: fix g_hash_table_destroy assertion on uninitialized filter
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-29-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 30/102] target/i386/sev: fix MemoryRegion reference leaks in gpa2hva callers
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-30-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 31/102] virtio-gpu: fix NULL deref in rutabaga set_scanout
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-31-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 32/102] hw/display/virtio-gpu: Fix empty blob discrimination
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-32-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 33/102] hw/display/virtio-gpu: Initialize blob mapping for ATTACH_BACKING
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-33-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 34/102] rutabaga: improve error handling, fix potential crash during init
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([31m✗[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-34-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 35/102] hw/display/virtio-gpu: Block Rutabaga migration
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-35-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 36/102] virtio-net: fix OOB read in RSC receive path
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-36-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 37/102] virtio-net: fix short frame OOB read in receive_filter()
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-37-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 38/102] libvhost-user: protect against OOB writes in vu_set_inflight_fd
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-38-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 39/102] libvhost-user: protect against OOB vring queue access
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-39-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 40/102] hw/virtio: reject zero-length packed indirect descriptor table
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-40-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 41/102] vhost: do not crash on ring map failure
+    + Reviewed-by: Stefano Garzarella <sgarzare@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-41-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 42/102] virtio-scsi: fix SCSIRequest leak on a bad request
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-42-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 43/102] virtio: fail early on bad config_len in migration
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-43-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 44/102] vhost-user: assert nregions within limit
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-44-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 45/102] virtio-pmem: wait for flush requests on unrealize
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-45-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 46/102] libvhost-user: validate last_batch_head in vu_check_queue_inflights
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-46-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 47/102] libvhost-user: fix heap overflow in vu_check_queue_inflights
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-47-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 48/102] libvduse: validate vq size
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-48-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 49/102] virtio-iommu: fix OOM due to unbounded call_rcu
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-49-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 50/102] hw/pci-host/q35.c: Always initialize smram-region even if SMM disabled
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-50-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 51/102] hw/pci-host/q35.c: Factor out creation of SMRAM MRs
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-51-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 52/102] hw/pci-host/q35.c: Avoid early return in mch_write_config()
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-52-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 53/102] hw/virtio/vdpa-dev: pass set_config buffer to vhost backend
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-53-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 54/102] hw/cxl: fix OOB access in cxl_doe_cdat_rsp via entry_handle
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-54-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 55/102] intel_iommu: Check address mask before using it in pasid-based iotlb invalidation
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-55-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 56/102] hw/net/virtio-net: Protect from DMA re-entrancy bugs
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-56-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 57/102] hw/virtio-rng: Fix host use-after-free (CVE-2026-50624)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-57-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 58/102] backends/rng: cap request size to avoid oversized allocation
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-58-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 59/102] virtio: avoid packed vring virtio_queue_empty() infinite loops (CVE-2026-16457)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-59-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 60/102] linux-user: Guard local FUTEX_CMD_MASK definition
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-60-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 61/102] hw/net/xilinx_axienet: Don't write checksums off end of packet
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-61-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 62/102] linux-user: fix guards for the fsmount(2) syscall series
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-62-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 63/102] hw/net/e1000e: recalculate rx_desc_len on migration load
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-63-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 64/102] hw/net/igb: recalculate rx_desc_len on migration load
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-64-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 65/102] target/sparc: set reg window data structures currently after vmstate load
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-65-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 66/102] linux-user/sh4: allow full 32-bit address space
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-66-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 67/102] hw/i2c/bcm2835_i2c: Correct CLKT register offset
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-67-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 68/102] hw/display/exynos4210_fimd: Factor out finding screen width/height
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-68-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 69/102] hw/display/exynos4210_fimd: Pass width to draw_line functions
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-69-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 70/102] hw/display/exynos4210_fimd: Clamp windows to screen size
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-70-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 71/102] virtio-mmio: fix QUEUE_NUM_MAX
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-71-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 72/102] hw/nvme: fix cross-namespace copy dif buffer overflow
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-72-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 73/102] hw/nvme: fix unintentional integer overflow in shift
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-73-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 74/102] hw/nvme: fix assertion failure on subregion removal
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-74-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 75/102] linux-user: Fix msqid_ds struct wrt 32-bit big endian architectures
+    + Fixes: 9e3df3019d21 ("linux-user: Fix msqid_ds struct wrt 32-bit big endian architectures") ([32m✓[0m DKIM/kernel.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-75-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 76/102] linux-user: fix incorrect msg_l[sr]pid members of target_msqid_ds
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-76-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 77/102] block/cloop: fix integer overflow in total_sectors calculation
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-77-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 78/102] block: Fix crash after setting latency historygram with single bin
+    + Reviewed-by: Hanna Czenczek <hreitz@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org> ([31m✗[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-78-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 79/102] block/accounting: take stats->lock in latency histogram setters
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-79-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 80/102] block/qapi: take stats->lock when reading BlockAcctStats for query-blockstats
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-80-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 81/102] tests/unit: add reproducer for BlockAcctStats histogram locking race
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-81-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 82/102] dmg: fix out-of-bounds load in search_chunk() (CVE-2026-65929)
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-82-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 83/102] dmg: refuse to open files with no chunks
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-83-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 84/102] dmg: reject inconsistent UDRW chunk sector count and length (CVE-2026-65928)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-84-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 85/102] qcow2: do not try to clear the dirty bit on a read-only node
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-85-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 86/102] iotests: run the test pool with the 'fork' start method
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-86-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 87/102] coroutine: fix lost wakeup in qemu_co_sleep_wake()
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-87-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 88/102] hw/display/virtio-gpu: validate blob iov size
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-88-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 89/102] hw/display/vga: fix panning_buf OOB after text/graphics switch
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-89-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 90/102] vhost-user-gpu: fix integer overflow in buffer allocation
+    + Signed-off-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-90-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 91/102] hw/display/virtio-gpu: fix offset wraparound in scanout_blob_to_fb
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-91-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 92/102] virtio-gpu: reject requests with short/truncated control headers
+    + Signed-off-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-92-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 93/102] hw/display/virtio-gpu: Always reject invalid scanout bounds
+    + Signed-off-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-93-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 94/102] hw/display/virtio-gpu: Unmap DMA regions on reset
+    + Signed-off-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-94-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 95/102] hw/nvme: drop AER requests without aiocb in nvme_del_sq()
+    + Reviewed-by: Klaus Jensen <k.jensen@samsung.com> ([31m✗[0m DKIM/irrelevant.dk)
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-95-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 96/102] hw/nvme: factor out nvme_sq_cancel_inflight()
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-96-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 97/102] hw/nvme: cancel inflight requests on controller reset
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-97-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 98/102] hw/nvme: fix leak on copy ranges
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-98-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 99/102] gitlab: disable provenance attestations to work around CI bug
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-99-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 100/102] linux-user/sh4: Deliver SIGILL on invalid instruction
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-100-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 101/102] linux-user/sh4: Initialize the FPSCR register on signal
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-101-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 102/102] linux-user/sh4: Fix crashes on signal delivery in conditional delay slot
+    + Link: https://lore.kernel.org/qemu-devel/20260812130233.621965-102-mjt@tls.msk.ru
+  ---
+  [32m✓[0m Signed: DKIM/tls.msk.ru
+---
+Total patches: 102
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Noticed-by: Peter Maydell <peter.maydell@linaro.org>
+     Msg From: Helge Deller <deller@kernel.org>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: hw/uefi: add sanity check
+Patch failed at 0001 hw/uefi: add sanity check
+error: patch failed: hw/uefi/var-service-policy.c:276
+error: hw/uefi/var-service-policy.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
