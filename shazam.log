@@ -1,0 +1,23 @@
+Looking up 20260812083645.3830831-1-alex.bennee@linaro.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] _posts: fix 11.1 release announcement
+    + Link: https://lore.kernel.org/qemu-devel/20260812083645.3830831-1-alex.bennee@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 1
+---
+Applying: _posts: fix 11.1 release announcement
+Patch failed at 0001 _posts: fix 11.1 release announcement
+error: _posts/2026-08-11-qemu-11-1-0.md: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
