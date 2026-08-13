@@ -273,6 +273,10 @@ static bool trans_cm_mva01s(DisasContext *ctx, arg_cm_mva01s *a)
 {
     REQUIRE_ZCMP(ctx);
 
+    if (has_ext(ctx, RVE) && (a->rs1 > 9 || a->rs2 > 9)) {
+        return false;
+    }
+
     TCGv src1 = get_gpr(ctx, a->rs1, EXT_NONE);
     TCGv src2 = get_gpr(ctx, a->rs2, EXT_NONE);
 
@@ -285,6 +289,10 @@ static bool trans_cm_mva01s(DisasContext *ctx, arg_cm_mva01s *a)
 static bool trans_cm_mvsa01(DisasContext *ctx, arg_cm_mvsa01 *a)
 {
     REQUIRE_ZCMP(ctx);
+
+    if (has_ext(ctx, RVE) && (a->rs1 > 9 || a->rs2 > 9)) {
+        return false;
+    }
 
     if (a->rs1 == a->rs2) {
         return false;
