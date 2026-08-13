@@ -1,0 +1,56 @@
+Looking up 20260813181640.6537-1-philmd@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 17 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/16] accel: Label outer / inner vCPU execution loops
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-2-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 2/16] cpus: Improve qemu_cpu_kick_self() docstring
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-3-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 3/16] cpus: Rename cpu_stop_current() -> qemu_cpu_stop_self()
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-4-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 4/16] cpus: Rename qemu_cpu_stop() to qemu_cpu_ack_stop_request()
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-5-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 5/16] cpus: Improve cpu_pause() docstring
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-6-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 6/16] cpus: Improve cpu_exit() docstring
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-7-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 7/16] cpus: Document process_queued_cpu_work*() runs on current vCPU
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-8-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 8/16] cpus: Slightly improve *run_on_cpu() docstrings
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-9-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 9/16] accel/tcg: Use RUN_ON_CPU_NULL for tcg_commit() callbacks
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-10-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 10/16] accel/kvm: Clarify use of @r variable in vcpu thread loop
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-11-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 11/16] accel/kvm: Consistently return CPU halt state from process_async_events
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-12-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 12/16] target/arm/hvf: Move flush_cpu_state() into the inner vCPU loop
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-13-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 13/16] target/arm/hvf: Lock BQL outside of the vCPU inner execution loop
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-14-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 14/16] target/i386/hvf: Lock BQL outside of the vCPU inner execution loop
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-15-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 15/16] target/arm/powerctl: Move BQL assertions to async work context
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-16-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 16/16] target/arm/whpx: Fix argument order typo in memory access error message
+    + Link: https://lore.kernel.org/qemu-devel/20260813181640.6537-17-philmd@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 16
+---
+Applying: accel: Label outer / inner vCPU execution loops
+Applying: cpus: Improve qemu_cpu_kick_self() docstring
+Applying: cpus: Rename cpu_stop_current() -> qemu_cpu_stop_self()
+Patch failed at 0003 cpus: Rename cpu_stop_current() -> qemu_cpu_stop_self()
+error: patch failed: system/runstate.c:472
+error: system/runstate.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
