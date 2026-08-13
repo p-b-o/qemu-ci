@@ -1,0 +1,40 @@
+Looking up 20260813193040.669533-1-mikail.sadic@ibm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 26 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/7] fsi/cfam: Add common CFAM base class
+    + Link: https://lore.kernel.org/qemu-devel/20260813193040.669533-2-mikail.sadic@ibm.com
+  [32m✓[0m [PATCH v4 2/7] fsi/cfam: Add CFAM-S model
+    + Link: https://lore.kernel.org/qemu-devel/20260813193040.669533-3-mikail.sadic@ibm.com
+  [32m✓[0m [PATCH v4 3/7] arm/aspeed: Wire AST2700 FSI controllers to APB-to-OPB bridges
+    + Link: https://lore.kernel.org/qemu-devel/20260813193040.669533-4-mikail.sadic@ibm.com
+  [32m✓[0m [PATCH v4 4/7] hw/sensor: Add UCD90320 model
+    + Link: https://lore.kernel.org/qemu-devel/20260813193040.669533-5-mikail.sadic@ibm.com
+  [32m✓[0m [PATCH v4 5/7] ufs: Make the logical block size configurable and answer absent LUNs
+    + Link: https://lore.kernel.org/qemu-devel/20260813193040.669533-6-mikail.sadic@ibm.com
+  [32m✓[0m [PATCH v4 6/7] ufs/aspeed: Add AST2700 UFS host controller
+    + Link: https://lore.kernel.org/qemu-devel/20260813193040.669533-7-mikail.sadic@ibm.com
+  [32m✓[0m [PATCH v4 7/7] arm/aspeed: Add AST2700 Huygens machine
+    + Link: https://lore.kernel.org/qemu-devel/20260813193040.669533-8-mikail.sadic@ibm.com
+  ---
+  [32m✓[0m Signed: DKIM/ibm.com
+---
+Total patches: 7
+---
+Applying: fsi/cfam: Add common CFAM base class
+Applying: fsi/cfam: Add CFAM-S model
+Applying: arm/aspeed: Wire AST2700 FSI controllers to APB-to-OPB bridges
+Applying: hw/sensor: Add UCD90320 model
+Applying: ufs: Make the logical block size configurable and answer absent LUNs
+Patch failed at 0005 ufs: Make the logical block size configurable and answer absent LUNs
+error: patch failed: hw/ufs/ufs.h:303
+error: hw/ufs/ufs.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
