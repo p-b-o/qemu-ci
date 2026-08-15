@@ -1,0 +1,65 @@
+Looking up 20260815203730.1468365-1-richard.henderson@linaro.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 19 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 34 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC 1/18] target/arm: Imply probe from allocation_tag_mem_probe
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 2/18] target/arm: Simplify invalid page test in allocation_tag_mem_internal
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 3/18] target/arm: Return struct from allocation_tag_mem_internal
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 4/18] target/arm: Generalize probe argument to allocation_tag_mem_internal
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 5/18] target/arm: Probe second page earlier in allocation_tag_mem_internal
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 6/18] accel/tcg: Drop fault_size from user-only probe_access_internal
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-7-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 7/18] accel/tcg: Replace size with first/last in probe_access_full
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 8/18] accel/tcg: Replace size with first/last in probe_access_flags
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 9/18] accel/tcg: Allow phost to be NULL in probe_access_flags
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 10/18] accel/tcg: Replace size with first/last in probe_access_internal
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-11-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 11/18] accel/tcg: Replace size with first/last in tlb_fill_align
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-12-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 12/18] accel/tcg: Replace size with first/last in TCGCPUOps.tlb_fill*
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-13-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 13/18] target/riscv: Move PMP_AMATCH_OFF check in pmp_hart_has_privs
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-14-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 14/18] target/riscv: Return bool from pmp_is_in_range
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-15-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 15/18] target/riscv: Use boolean logic in pmp_hart_has_privs
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-16-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 16/18] target/riscv: Recognize watchpoints with first/last
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-17-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 17/18] target/riscv: Pass first/last to get_physical_address_pmp
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-18-richard.henderson@linaro.org
+  [32m✓[0m [PATCH RFC 18/18] target/riscv: Pass first/last to pmp_hart_has_privs
+    + Link: https://lore.kernel.org/qemu-devel/20260815203730.1468365-19-richard.henderson@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 18
+---
+Applying: target/arm: Imply probe from allocation_tag_mem_probe
+Applying: target/arm: Simplify invalid page test in allocation_tag_mem_internal
+Applying: target/arm: Return struct from allocation_tag_mem_internal
+Applying: target/arm: Generalize probe argument to allocation_tag_mem_internal
+Applying: target/arm: Probe second page earlier in allocation_tag_mem_internal
+Applying: accel/tcg: Drop fault_size from user-only probe_access_internal
+Applying: accel/tcg: Replace size with first/last in probe_access_full
+Applying: accel/tcg: Replace size with first/last in probe_access_flags
+Patch failed at 0008 accel/tcg: Replace size with first/last in probe_access_flags
+error: patch failed: target/riscv/tcg/vector_helper.c:704
+error: target/riscv/tcg/vector_helper.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
