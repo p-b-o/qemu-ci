@@ -1243,6 +1243,8 @@ void spapr_vscsi_create(SpaprVioBus *bus)
 
 static int spapr_vscsi_devnode(SpaprVioDevice *dev, void *fdt, int node_off)
 {
+    VSCSIState *s = VIO_SPAPR_VSCSI_DEVICE(dev);
+    BusChild *kid;
     int ret;
 
     ret = fdt_setprop_cell(fdt, node_off, "#address-cells", 2);
@@ -1253,6 +1255,44 @@ static int spapr_vscsi_devnode(SpaprVioDevice *dev, void *fdt, int node_off)
     ret = fdt_setprop_cell(fdt, node_off, "#size-cells", 0);
     if (ret < 0) {
         return ret;
+    }
+
+    /*
+     * In VOF mode, add a child FDT node for each attached SCSI disk so that OF
+     * clients (e.g. GRUB via VOF) can open a fully-qualified path like
+     * /vdevice/v-scsi@.../disk@<srp-lun>.
+     */
+    SpaprMachineState *spapr = SPAPR_MACHINE(qdev_get_machine());
+    if (spapr->vof) {
+        QTAILQ_FOREACH(kid, &s->bus.qbus.children, sibling) {
+            SCSIDevice *sdev = SCSI_DEVICE(kid->child);
+            char disk_name[32];
+            uint64_t srp_lun;
+            uint32_t reg[2];
+            int disk_off;
+
+            srp_lun = ((uint64_t)(0x8000 | (sdev->id << 8) |
+                                   (sdev->channel << 5) | sdev->lun)) << 48;
+
+            snprintf(disk_name, sizeof(disk_name), "disk@%"PRIx64, srp_lun);
+
+            disk_off = fdt_add_subnode(fdt, node_off, disk_name);
+            if (disk_off < 0) {
+                return disk_off;
+            }
+
+            reg[0] = cpu_to_be32((uint32_t)(srp_lun >> 32));
+            reg[1] = cpu_to_be32((uint32_t)(srp_lun & 0xFFFFFFFF));
+            ret = fdt_setprop(fdt, disk_off, "reg", reg, sizeof(reg));
+            if (ret < 0) {
+                return ret;
+            }
+
+            ret = fdt_setprop_string(fdt, disk_off, "device_type", "block");
+            if (ret < 0) {
+                return ret;
+            }
+        }
     }
 
     return 0;
