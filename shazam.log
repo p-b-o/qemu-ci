@@ -1,0 +1,26 @@
+Looking up 20260817141559.940844-1-pbonzini@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/2] rust: pl011: switch from bilge to bitfield-struct
+    + Link: https://lore.kernel.org/qemu-devel/20260817141559.940844-2-pbonzini@redhat.com
+  [32m✓[0m [PATCH 2/2] rust: remove bilge crate
+    + Link: https://lore.kernel.org/qemu-devel/20260817141559.940844-3-pbonzini@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 2
+---
+Applying: rust: pl011: switch from bilge to bitfield-struct
+Patch failed at 0001 rust: pl011: switch from bilge to bitfield-struct
+error: Cargo.lock: does not exist in index
+error: Cargo.toml: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
