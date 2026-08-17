@@ -142,6 +142,8 @@ static int path_offset(const void *fdt, const char *path)
 {
     g_autofree char *p = NULL;
     char *at;
+    char *last_slash;
+    char *colon;
 
     /*
      * https://www.devicetree.org/open-firmware/bindings/ppc/release/ppc-2_1.html#HDR16
@@ -151,6 +153,20 @@ static int path_offset(const void *fdt, const char *path)
      * suppressing leading zeros".
      */
     p = g_strdup(path);
+
+    /*
+     * Strip any ":argument" suffix from the last path component (e.g.
+     * "disk@8000000000000000:0") — it is an OF path argument, not part of
+     * the FDT node name.
+     */
+    last_slash = strrchr(p, '/');
+    if (last_slash) {
+        colon = strchr(last_slash, ':');
+        if (colon) {
+            *colon = '\0';
+        }
+    }
+
     for (at = strchr(p, '@'); at && *at; ) {
             if (*at == '/') {
                 at = strchr(at, '@');
