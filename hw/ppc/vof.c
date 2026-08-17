@@ -991,6 +991,198 @@ static void vof_instantiate_rtas(Error **errp)
     error_setg(errp, "The firmware should have instantiated RTAS");
 }
 
+#ifdef CONFIG_PSERIES
+/* Combined (channel<<6)|id index space, matches SLOF dev-max-target. */
+#define VSCSI_MAX_TARGETS 512
+
+/*
+ * Build the vscsi-report-luns response in guest memory.
+ *
+ * Returns catch_result (0 = success).  On success, *nentries_out and
+ * *table_addr_out describe the result table written into the VOF firmware
+ * region (0..fw_size), which GRUB never claims.
+ *
+ * Table layout (big-endian, 8 bytes per entry):
+ *   [table_addr + 8*i + 0..3] : 0x00000000
+ *   [table_addr + 8*i + 4..7] : guest pointer to null-terminated SRP LUN list
+ *
+ * GRUB reads each pointer as: *(uint32_t *)(table + 4 + 8 * i)
+ *
+ * SRP LUN encoding (SLOF dev-generate-srplun):
+ *   srplun = (0x8000 | bus | target | lun) << 48
+ *   where bus    = (combined_target >> 1) & 0x70
+ *         target = (combined_target & 0x3f) << 8
+ *         combined_target = (channel << 6) | id
+ */
+static uint32_t vof_vscsi_report_luns(Vof *vof,
+                                       SCSIBus *sbus,
+                                       uint32_t *nentries_out,
+                                       uint32_t *table_addr_out)
+{
+    uint64_t *lun_lists[VSCSI_MAX_TARGETS];
+    int lun_counts[VSCSI_MAX_TARGETS];
+    uint32_t ptr_table_size;
+    uint32_t lun_data_size;
+    uint32_t total_size;
+    uint32_t base_addr;
+    uint32_t lun_data_base;
+    uint32_t lun_data_off;
+    uint32_t table_idx;
+    uint32_t table_addr;
+    BusChild *kid;
+    int nentries = 0;
+    int t;
+
+    memset(lun_lists, 0, sizeof(lun_lists));
+    memset(lun_counts, 0, sizeof(lun_counts));
+
+    QTAILQ_FOREACH(kid, &sbus->qbus.children, sibling) {
+        SCSIDevice *dev = SCSI_DEVICE(kid->child);
+        int combined_target;
+        uint64_t bus_field;
+        uint64_t target_field;
+        uint64_t lun_field;
+        uint64_t srplun;
+        int cnt;
+
+        /* combined_target = (channel << 6) | id, matching SLOF bus+target */
+        combined_target = ((dev->channel & 0x7) << 6) | (dev->id & 0x3f);
+        if (combined_target >= VSCSI_MAX_TARGETS) {
+            continue;
+        }
+
+        bus_field    = ((uint64_t)combined_target >> 1) & 0x70ULL;
+        target_field = ((uint64_t)combined_target & 0x3fULL) << 8;
+        lun_field    = (uint64_t)(dev->lun & 0x1f);
+        srplun = (0x8000ULL | bus_field | target_field | lun_field) << 48;
+
+        cnt = lun_counts[combined_target];
+        lun_lists[combined_target] = g_realloc(lun_lists[combined_target],
+                                               (cnt + 2) * sizeof(uint64_t));
+        lun_lists[combined_target][cnt]     = cpu_to_be64(srplun);
+        lun_lists[combined_target][cnt + 1] = 0;
+        lun_counts[combined_target]++;
+        if (cnt == 0) {
+            nentries++;
+        }
+    }
+
+    if (nentries == 0) {
+        *nentries_out   = 0;
+        *table_addr_out = 0;
+        return 0;
+    }
+
+    ptr_table_size = nentries * sizeof(uint64_t);
+    lun_data_size  = 0;
+    for (t = 0; t < VSCSI_MAX_TARGETS; t++) {
+        if (lun_lists[t]) {
+            lun_data_size += (lun_counts[t] + 1) * sizeof(uint64_t);
+        }
+    }
+    total_size = ptr_table_size + lun_data_size;
+
+    /*
+     * Place the table in the VOF firmware region (0..fw_size), which GRUB
+     * never claims.  Fit into the top of the first 4 KB page, 8-byte aligned.
+     */
+    if (total_size <= 0x1000 - (uint32_t)vof->fw_size) {
+        base_addr = (0x1000 - total_size) & ~7U;
+    } else {
+        base_addr = 0x800;
+    }
+
+    table_addr    = base_addr;
+    lun_data_base = base_addr + ptr_table_size;
+    lun_data_off  = 0;
+    table_idx     = 0;
+
+    for (t = 0; t < VSCSI_MAX_TARGETS; t++) {
+        uint32_t lun_buf_size;
+        uint32_t lun_buf_addr;
+        uint64_t cell_be64;
+
+        if (!lun_lists[t]) {
+            continue;
+        }
+
+        lun_buf_size = (lun_counts[t] + 1) * sizeof(uint64_t);
+        lun_buf_addr = lun_data_base + lun_data_off;
+
+        if (VOF_MEM_WRITE(lun_buf_addr, lun_lists[t], lun_buf_size)
+                != MEMTX_OK) {
+            goto write_err;
+        }
+
+        cell_be64 = cpu_to_be64((uint64_t)lun_buf_addr);
+        if (VOF_MEM_WRITE(table_addr + table_idx * sizeof(uint64_t),
+                          &cell_be64, sizeof(cell_be64)) != MEMTX_OK) {
+            goto write_err;
+        }
+
+        lun_data_off += lun_buf_size;
+        table_idx++;
+    }
+
+    *nentries_out   = table_idx;
+    *table_addr_out = table_addr;
+
+    for (t = 0; t < VSCSI_MAX_TARGETS; t++) {
+        g_free(lun_lists[t]);
+    }
+    return 0;
+
+write_err:
+    for (t = 0; t < VSCSI_MAX_TARGETS; t++) {
+        g_free(lun_lists[t]);
+    }
+    return PROM_ERROR;
+}
+
+/*
+ * Return the SCSIBus for a v-scsi@<reg> path, or NULL if not found.
+ * Handles both "/vdevice/v-scsi@<reg>" and ".../v-scsi@<reg>/disk@..." paths.
+ */
+static SCSIBus *vof_find_vscsi_bus(MachineState *ms, const char *path)
+{
+    SpaprMachineState *spapr = SPAPR_MACHINE(ms);
+    const char *at;
+    const char *endptr;
+    unsigned long reg;
+    SpaprVioDevice *vdev;
+    BusState *bus;
+
+    if (!spapr || !spapr->vio_bus) {
+        return NULL;
+    }
+
+    at = strstr(path, "v-scsi@");
+    if (!at) {
+        return NULL;
+    }
+    at = strchr(at, '@');
+    if (!at) {
+        return NULL;
+    }
+
+    if (qemu_strtoul(at + 1, &endptr, 16, &reg) || endptr == at + 1) {
+        return NULL;
+    }
+
+    vdev = spapr_vio_find_by_reg(spapr->vio_bus, (uint32_t)reg);
+    if (!vdev) {
+        return NULL;
+    }
+
+    QLIST_FOREACH(bus, &vdev->qdev.child_bus, sibling) {
+        if (object_dynamic_cast(OBJECT(bus), TYPE_SCSI_BUS)) {
+            return SCSI_BUS(bus);
+        }
+    }
+    return NULL;
+}
+#endif /* CONFIG_PSERIES */
+
 static uint32_t vof_call_method(MachineState *ms, Vof *vof, uint32_t methodaddr,
                                 uint32_t ihandle, uint32_t param1,
                                 uint32_t param2, uint32_t param3,
@@ -1013,6 +1205,26 @@ static uint32_t vof_call_method(MachineState *ms, Vof *vof, uint32_t methodaddr,
     if (readstr(methodaddr, method, sizeof(method))) {
         goto trace_exit;
     }
+
+#ifdef CONFIG_PSERIES
+    /* vscsi-report-luns: enumerate LUNs for GRUB */
+    if (strcmp(method, "vscsi-report-luns") == 0) {
+        SCSIBus *sbus = vof_find_vscsi_bus(ms, inst->path);
+
+        if (sbus) {
+            uint32_t nentries = 0, table_addr = 0;
+            ret = vof_vscsi_report_luns(vof, sbus, &nentries, &table_addr);
+            ret2[0] = nentries;
+            ret2[1] = table_addr;
+        } else {
+            ret = 1;
+            ret2[0] = 0;
+            ret2[1] = 0;
+        }
+        trace_vof_method(ihandle, method, param1, ret, ret2[0]);
+        goto trace_exit;
+    }
+#endif /* CONFIG_PSERIES */
 
     if (strcmp(inst->path, "/") == 0) {
         if (strcmp(method, "ibm,client-architecture-support") == 0) {
