@@ -1,0 +1,38 @@
+Looking up 20260817190038.580257-1-mattst88@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC 1/8] accel/tcg: cache the result of curr_cflags()
+    + Link: https://lore.kernel.org/qemu-devel/20260817190038.580257-2-mattst88@gmail.com
+  [32m✓[0m [PATCH RFC 2/8] accel/tcg: enlarge the TB jump cache to 64K entries
+    + Link: https://lore.kernel.org/qemu-devel/20260817190038.580257-3-mattst88@gmail.com
+  [32m✓[0m [PATCH RFC 3/8] accel/tcg: skip the can_do_io stores in user-only builds
+    + Link: https://lore.kernel.org/qemu-devel/20260817190038.580257-4-mattst88@gmail.com
+  [32m✓[0m [PATCH RFC 4/8] RFC: tcg: probe the TB jump cache inline instead of calling a helper
+    + Link: https://lore.kernel.org/qemu-devel/20260817190038.580257-5-mattst88@gmail.com
+  [32m✓[0m [PATCH RFC 5/8] RFC: accel/tcg: allow cross-page goto_tb chaining in user-only builds
+    + Link: https://lore.kernel.org/qemu-devel/20260817190038.580257-6-mattst88@gmail.com
+  [32m✓[0m [PATCH RFC 6/8] RFC: accel/tcg: only poll for interrupts in blocks that can close a cycle
+    + Link: https://lore.kernel.org/qemu-devel/20260817190038.580257-7-mattst88@gmail.com
+  [32m✓[0m [PATCH RFC 7/8] RFC: accel/tcg: poison the jump cache instead of polling for indirect exits
+    + Link: https://lore.kernel.org/qemu-devel/20260817190038.580257-8-mattst88@gmail.com
+  [32m✓[0m [PATCH RFC 8/8] RFC: tcg: fold a guest displacement into the host addressing mode
+    + Link: https://lore.kernel.org/qemu-devel/20260817190038.580257-9-mattst88@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 8
+---
+Applying: accel/tcg: cache the result of curr_cflags()
+Patch failed at 0001 accel/tcg: cache the result of curr_cflags()
+error: patch failed: target/alpha/cpu.c:114
+error: target/alpha/cpu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
