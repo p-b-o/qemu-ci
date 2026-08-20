@@ -1,0 +1,45 @@
+Looking up 20260820144309.835173-1-den@openvz.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 12 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/11] hw/ide: reject an out-of-range PIO transfer window on load
+    + Link: https://lore.kernel.org/qemu-devel/20260820144309.835173-2-den@openvz.org
+  [32m✓[0m [PATCH 2/11] tests/qtest/ide-test: cover the migrated PIO transfer window
+    + Link: https://lore.kernel.org/qemu-devel/20260820144309.835173-3-den@openvz.org
+  [32m✓[0m [PATCH 3/11] hw/ide/ahci: refuse a PIO transfer with no command header
+    + Link: https://lore.kernel.org/qemu-devel/20260820144309.835173-4-den@openvz.org
+  [32m✓[0m [PATCH 4/11] hw/ide/ahci: clear cur_cmd when the command list is unmapped
+    + Link: https://lore.kernel.org/qemu-devel/20260820144309.835173-5-den@openvz.org
+  [32m✓[0m [PATCH 5/11] tests/qtest/ahci: regression test for a PIO write vs. engine stop
+    + Link: https://lore.kernel.org/qemu-devel/20260820144309.835173-6-den@openvz.org
+  [32m✓[0m [PATCH 6/11] hw/ide/ahci: treat a failed PRDT walk as a PIO transfer failure
+    + Link: https://lore.kernel.org/qemu-devel/20260820144309.835173-7-den@openvz.org
+  [32m✓[0m [PATCH 7/11] hw/ide/ahci: reject a command header with an invalid FIS length
+    + Link: https://lore.kernel.org/qemu-devel/20260820144309.835173-8-den@openvz.org
+  [32m✓[0m [PATCH 8/11] hw/ide/ahci: drain the ports on teardown
+    + Link: https://lore.kernel.org/qemu-devel/20260820144309.835173-9-den@openvz.org
+  [32m✓[0m [PATCH 9/11] tests/qtest/ahci: regression test for a request outliving an unplug
+    + Link: https://lore.kernel.org/qemu-devel/20260820144309.835173-10-den@openvz.org
+  [32m✓[0m [PATCH 10/11] hw/ide: report ATAPI UDMA5 with a matching standard and cable
+    + Link: https://lore.kernel.org/qemu-devel/20260820144309.835173-11-den@openvz.org
+  [32m✓[0m [PATCH 11/11] tests/qtest/ide-test: cover the UDMA5 identify words
+    + Link: https://lore.kernel.org/qemu-devel/20260820144309.835173-12-den@openvz.org
+  ---
+  [32m✓[0m Signed: DKIM/openvz.org
+---
+Total patches: 11
+---
+Applying: hw/ide: reject an out-of-range PIO transfer window on load
+Applying: tests/qtest/ide-test: cover the migrated PIO transfer window
+Patch failed at 0002 tests/qtest/ide-test: cover the migrated PIO transfer window
+error: patch failed: tests/qtest/ide-test.c:1571
+error: tests/qtest/ide-test.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
