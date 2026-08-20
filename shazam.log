@@ -1,0 +1,37 @@
+Looking up 20260820142717.337686-1-rathc@linux.ibm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 22 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/7] target/ppc: Replace PPC2_VSX207 flag with PPC2_ISA207
+    + Link: https://lore.kernel.org/qemu-devel/20260820142717.337686-2-rathc@linux.ibm.com
+  [32m✓[0m [PATCH v2 2/7] target/ppc: Use PPC2_ISA207 instead of PPC2_BCTAR_ISA207
+    + Link: https://lore.kernel.org/qemu-devel/20260820142717.337686-3-rathc@linux.ibm.com
+  [32m✓[0m [PATCH v2 3/7] target/ppc: Use PPC2_ISA207 instead of PPC2_LSQ_ISA207
+    + Link: https://lore.kernel.org/qemu-devel/20260820142717.337686-4-rathc@linux.ibm.com
+  [32m✓[0m [PATCH v2 4/7] target/ppc: Use PPC2_ISA207 instead of PPC2_ALTIVEC_207
+    + Link: https://lore.kernel.org/qemu-devel/20260820142717.337686-5-rathc@linux.ibm.com
+  [32m✓[0m [PATCH v2 5/7] target/ppc: Use PPC2_ISA207 instead of PPC2_ISA207S
+    + Link: https://lore.kernel.org/qemu-devel/20260820142717.337686-6-rathc@linux.ibm.com
+  [32m✓[0m [PATCH v2 6/7] target/ppc: Reorder PPC2 flags
+    + Link: https://lore.kernel.org/qemu-devel/20260820142717.337686-7-rathc@linux.ibm.com
+  [32m✓[0m [PATCH v2 7/7] target/ppc: Add ICBT support for ISA version 2.07
+    + Link: https://lore.kernel.org/qemu-devel/20260820142717.337686-8-rathc@linux.ibm.com
+  ---
+  [32m✓[0m Signed: DKIM/ibm.com (From: rathc@linux.ibm.com)
+---
+Total patches: 7
+---
+Applying: target/ppc: Replace PPC2_VSX207 flag with PPC2_ISA207
+Applying: target/ppc: Use PPC2_ISA207 instead of PPC2_BCTAR_ISA207
+Patch failed at 0002 target/ppc: Use PPC2_ISA207 instead of PPC2_BCTAR_ISA207
+error: patch failed: target/ppc/translate/branch-impl.c.inc:210
+error: target/ppc/translate/branch-impl.c.inc: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
