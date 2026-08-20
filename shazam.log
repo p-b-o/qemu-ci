@@ -1,0 +1,23 @@
+Looking up 20260820094611.1767100-1-xiangwencheng@lanxincomputing.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] virtio: Add aligned ld/st accessors for vring
+    + Link: https://lore.kernel.org/qemu-devel/20260820094611.1767100-1-xiangwencheng@lanxincomputing.com
+  ---
+  [32m✓[0m Signed: DKIM/lanxincomputing-com.20200927.dkim.feishu.cn (From: xiangwencheng@lanxincomputing.com)
+---
+Total patches: 1
+---
+Applying: virtio: Add aligned ld/st accessors for vring
+Patch failed at 0001 virtio: Add aligned ld/st accessors for vring
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:55
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
