@@ -1,0 +1,93 @@
+Looking up 20260821040404.268123-1-richard.henderson@linaro.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 24 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 31 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/23] target/riscv: Split out vext_set_nf_elems_1s
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 2/23] target/riscv: Split out vext_ldst_nf_tlb
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 3/23] target/riscv: Split out vext_ldst_nf_host
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 4/23] target/riscv: Drop is_load parameter from vext_continuous_ldst_tlb
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 5/23] target/riscv: Remove vext_continuous_ldst_tlb
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 6/23] target/riscv: Move misalignment check out of vext_page_ldst_us
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-7-richard.henderson@linaro.org
+  [31m✗[0m [PATCH v2 7/23] target/riscv: Split out vext_page_ldst_us_{host, tlb}
+    [31m✗[0m BADSIG: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 8/23] target/riscv: Rewrite vext_ldst_us
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 9/23] target/riscv: Rewrite vext_ldff
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 10/23] target/riscv: Split out vext_ldst_us_notail
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-11-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 11/23] target/riscv: Use vext_ldst_us_notail in vext_ldst_whole
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-12-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 12/23] target/riscv: Mark VSTART_CHECK_EARLY_EXIT unlikely
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-13-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 13/23] target/riscv: Remove unused VDATA,WD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-14-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 14/23] target/riscv: Add MEM_IDX, BSWAP, ALIGN to VDATA
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-15-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 15/23] target/riscv: Pass MemOpIdx to vext_ldst_us
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-16-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 16/23] target/riscv: Build MemOpIdx to vext_ldff
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-17-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 17/23] target/riscv: Pass MemOpIdx to vext_ldst_elem_fn_tlb
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-18-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 18/23] target/riscv: Use FLATTEN rather than ALWAYS_INLINE for vector ldst
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-19-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 19/23] target/riscv: Drop v0 argument from gen_helper_ldst_us
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-20-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 20/23] target/riscv: Drop v0 argument from gen_helper_ldst_stride
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-21-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 21/23] target/riscv: Drop v0 argument from gen_helper_ldst_index
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-22-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 22/23] tests/tcg/riscv64: Vector load test
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-23-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 23/23] tests/tcg/riscv64: Add intrinsics version of test-rvv-ldst
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260821040404.268123-24-richard.henderson@linaro.org
+---
+Total patches: 23
+---
+Applying: target/riscv: Split out vext_set_nf_elems_1s
+Applying: target/riscv: Split out vext_ldst_nf_tlb
+Applying: target/riscv: Split out vext_ldst_nf_host
+Applying: target/riscv: Drop is_load parameter from vext_continuous_ldst_tlb
+Applying: target/riscv: Remove vext_continuous_ldst_tlb
+Patch failed at 0005 target/riscv: Remove vext_continuous_ldst_tlb
+error: patch failed: target/riscv/tcg/vector_helper.c:272
+error: target/riscv/tcg/vector_helper.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
