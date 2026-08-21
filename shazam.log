@@ -1,0 +1,59 @@
+Looking up 20260821104950.32108-1-philmd@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 20 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 55 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/15] linux-user: Uncast void pointer argument as Object in target_cpu_free()
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-2-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 2/15] cpus: Add const-qualified CPU environment accessors
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-3-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 3/15] linux-user: Replace env_cpu_const() by generic env_cpu() equivalent
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-4-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 4/15] system/cpus: Constify various CPUState arguments
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-5-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 5/15] target/avr: Constify CPUAVRState for some cpu_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-6-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 6/15] target/hexagon: Constify CPUHexagonState in hexagon_thread_is_enabled()
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-7-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 7/15] target/i386: Constify CPU*State for cpu_*_interrupt() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-8-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 8/15] target/loongarch: Constify CPULoongArchState for various cpu_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-9-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 9/15] target/mips: Constify CPUMIPSState for various cpu_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-10-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 10/15] target/s390x: Constify S390CPU for cpu_has_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-11-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 11/15] target/riscv: Constify @iprio argument in riscv_cpu_pending_to_irq()
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-12-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 12/15] target/riscv: Constify CPURISCVState for various cpu_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-13-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 13/15] target/sparc: Constify CPUSPARCState for various cpu_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-14-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 14/15] target/tricore: Document architectural interrupts as not implemented
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-15-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v3 15/15] cpus: Constify @cpu in SysemuCPUOps::has_work() handler
+    + Link: https://lore.kernel.org/qemu-devel/20260821104950.32108-16-philmd@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 15
+---
+Applying: linux-user: Uncast void pointer argument as Object in target_cpu_free()
+Applying: cpus: Add const-qualified CPU environment accessors
+Applying: linux-user: Replace env_cpu_const() by generic env_cpu() equivalent
+Applying: system/cpus: Constify various CPUState arguments
+Applying: target/avr: Constify CPUAVRState for some cpu_*() getters
+Applying: target/hexagon: Constify CPUHexagonState in hexagon_thread_is_enabled()
+Applying: target/i386: Constify CPU*State for cpu_*_interrupt() getters
+Applying: target/loongarch: Constify CPULoongArchState for various cpu_*() getters
+Patch failed at 0008 target/loongarch: Constify CPULoongArchState for various cpu_*() getters
+error: patch failed: target/loongarch/internals.h:38
+error: target/loongarch/internals.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
