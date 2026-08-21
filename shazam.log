@@ -1,0 +1,41 @@
+Looking up 20260821083925.2008135-1-pbonzini@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/9] scripts: print build.rs diff
+    + Link: https://lore.kernel.org/qemu-devel/20260821083925.2008135-2-pbonzini@redhat.com
+  [32m✓[0m [PATCH 2/9] scripts: rename variable in scripts/get-wraps-from-cargo-registry.py
+    + Link: https://lore.kernel.org/qemu-devel/20260821083925.2008135-3-pbonzini@redhat.com
+  [32m✓[0m [PATCH 3/9] scripts: do not assume the new version of the crate is present
+    + Link: https://lore.kernel.org/qemu-devel/20260821083925.2008135-4-pbonzini@redhat.com
+  [32m✓[0m [PATCH 4/9] scripts: prepare for introduction of CrateSource class
+    + Link: https://lore.kernel.org/qemu-devel/20260821083925.2008135-5-pbonzini@redhat.com
+  [32m✓[0m [PATCH 5/9] scripts: introduce CrateSource abstract class
+    + Link: https://lore.kernel.org/qemu-devel/20260821083925.2008135-6-pbonzini@redhat.com
+  [32m✓[0m [PATCH 6/9] scripts: add functionality to update wrap files from Cargo.lock
+    + Link: https://lore.kernel.org/qemu-devel/20260821083925.2008135-7-pbonzini@redhat.com
+  [32m✓[0m [PATCH 7/9] scripts: add the possibility of a quick update of the pacakge
+    + Link: https://lore.kernel.org/qemu-devel/20260821083925.2008135-8-pbonzini@redhat.com
+  [32m✓[0m [PATCH 8/9] scripts: rename get-wraps-from-cargo-registry.py
+    + Link: https://lore.kernel.org/qemu-devel/20260821083925.2008135-9-pbonzini@redhat.com
+  [32m✓[0m [PATCH 9/9] rust: update crates
+    + Link: https://lore.kernel.org/qemu-devel/20260821083925.2008135-10-pbonzini@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 9
+---
+Applying: scripts: print build.rs diff
+Applying: scripts: rename variable in scripts/get-wraps-from-cargo-registry.py
+Patch failed at 0002 scripts: rename variable in scripts/get-wraps-from-cargo-registry.py
+error: patch failed: scripts/get-wraps-from-cargo-registry.py:111
+error: scripts/get-wraps-from-cargo-registry.py: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
