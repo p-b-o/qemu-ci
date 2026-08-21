@@ -1,0 +1,32 @@
+Looking up 20260821102729.997150-1-frederic.petrot@univ-grenoble-alpes.fr
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] tests/tcg/riscv64: Add tests for rv128 [ms]status
+    + Link: https://lore.kernel.org/qemu-devel/20260821102729.997150-1-frederic.petrot@univ-grenoble-alpes.fr
+  ---
+  [32m✓[0m Signed: DKIM/univ-grenoble-alpes.fr
+---
+Total patches: 1
+---
+Applying: tests/tcg/riscv64: Add tests for rv128 [ms]status
+Patch failed at 0001 tests/tcg/riscv64: Add tests for rv128 [ms]status
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:81: trailing whitespace.
+fail:      
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:83: trailing whitespace.
+_exit:     
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:195: trailing whitespace.
+fail:      
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:197: trailing whitespace.
+_exit:     
+error: patch failed: tests/tcg/riscv64/Makefile.softmmu-target:67
+error: tests/tcg/riscv64/Makefile.softmmu-target: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
