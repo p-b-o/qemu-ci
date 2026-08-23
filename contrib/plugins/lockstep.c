@@ -7,6 +7,12 @@
  * introduced a subtle and hard to find bug.
  *
  * Caveats:
+ *   - qemu_plugin_outs() output (including "No divergence :-)" and any
+ *     divergence reports) is routed through the plugin log mask, so it is
+ *     silent unless QEMU's own logging is enabled, e.g.:
+ *         -d plugin -D /path/to/logfile
+ *     Without -d plugin, the plugin runs and compares correctly but
+ *     produces no visible output at all.
  *   - single-threaded linux-user apps only with non-deterministic syscalls
  *   - no MTTCG enabled system emulation (icount may help)
  *
