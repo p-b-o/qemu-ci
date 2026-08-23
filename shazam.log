@@ -1,0 +1,47 @@
+Looking up 20260823150731.896-1-luoyonggang@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 13 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/12] accel: use a shared TYPE_ACCEL_CPU parent
+    + Link: https://lore.kernel.org/qemu-devel/20260823150731.896-2-luoyonggang@gmail.com
+  [32m✓[0m [PATCH 2/12] hw/riscv/virt: use unique QOM name and target filter
+    + Link: https://lore.kernel.org/qemu-devel/20260823150731.896-3-luoyonggang@gmail.com
+  [32m✓[0m [PATCH 3/12] hw/arm/virt: use unique QOM name and target filter
+    + Link: https://lore.kernel.org/qemu-devel/20260823150731.896-4-luoyonggang@gmail.com
+  [32m✓[0m [PATCH 4/12] hw/arm/virt: prefix ACPI helpers with arm_virt_
+    + Link: https://lore.kernel.org/qemu-devel/20260823150731.896-5-luoyonggang@gmail.com
+  [32m✓[0m [PATCH 5/12] hw/riscv/virt: prefix ACPI helpers with riscv_virt_
+    + Link: https://lore.kernel.org/qemu-devel/20260823150731.896-6-luoyonggang@gmail.com
+  [32m✓[0m [PATCH 6/12] hw/loongarch/virt: prefix ACPI helper with loongarch_virt_
+    + Link: https://lore.kernel.org/qemu-devel/20260823150731.896-7-luoyonggang@gmail.com
+  [32m✓[0m [PATCH 7/12] target/riscv: uniquify TCG crc32, crc32c, and wfi helper names
+    + Link: https://lore.kernel.org/qemu-devel/20260823150731.896-8-luoyonggang@gmail.com
+  [32m✓[0m [PATCH 8/12] target/riscv: seed cfg.big_endian from TargetInfo
+    + Link: https://lore.kernel.org/qemu-devel/20260823150731.896-9-luoyonggang@gmail.com
+  [32m✓[0m [PATCH 9/12] target-info: register le and be TargetInfo variants
+    + Link: https://lore.kernel.org/qemu-devel/20260823150731.896-10-luoyonggang@gmail.com
+  [32m✓[0m [PATCH 10/12] target-info: add -target and program-name selection
+    + Link: https://lore.kernel.org/qemu-devel/20260823150731.896-11-luoyonggang@gmail.com
+  [32m✓[0m [PATCH 11/12] target-info: dispatch CPU QMP, dump, and Angel semihosting
+    + Link: https://lore.kernel.org/qemu-devel/20260823150731.896-12-luoyonggang@gmail.com
+  [32m✓[0m [PATCH 12/12] meson: link ARM and RISC-V into qemu-system
+    + Link: https://lore.kernel.org/qemu-devel/20260823150731.896-13-luoyonggang@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 12
+---
+Applying: accel: use a shared TYPE_ACCEL_CPU parent
+Applying: hw/riscv/virt: use unique QOM name and target filter
+Patch failed at 0002 hw/riscv/virt: use unique QOM name and target filter
+error: patch failed: hw/riscv/virt.c:1790
+error: hw/riscv/virt.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
