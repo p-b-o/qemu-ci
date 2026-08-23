@@ -1,0 +1,34 @@
+Looking up 20260823021657.2824542-1-yanfei.xu@bytedance.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 4 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 113 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/3] migration/rdma: Fix write-side shutdown
+    + Reviewed-by: Li Zhijian <lizhijian@fujitsu.com> ([32m✓[0m DKIM/fujitsu.com)
+    + Tested-by: Lukas Straub <lukasstraub2@web.de> ([31m✗[0m DKIM/web.de)
+    + Link: https://lore.kernel.org/qemu-devel/20260823021657.2824542-2-yanfei.xu@bytedance.com
+  [32m✓[0m [PATCH v3 2/3] migration/rdma: Post initial receive before accepting
+    + Link: https://lore.kernel.org/qemu-devel/20260823021657.2824542-3-yanfei.xu@bytedance.com
+  [32m✓[0m [PATCH v3 3/3] migration/rdma: Retry control sends on full queue
+    + Link: https://lore.kernel.org/qemu-devel/20260823021657.2824542-4-yanfei.xu@bytedance.com
+  ---
+  [32m✓[0m Signed: DKIM/bytedance.com
+---
+Total patches: 3
+---
+Applying: migration/rdma: Fix write-side shutdown
+Applying: migration/rdma: Post initial receive before accepting
+Applying: migration/rdma: Retry control sends on full queue
+Patch failed at 0003 migration/rdma: Retry control sends on full queue
+error: patch failed: migration/rdma.c:1859
+error: migration/rdma.c: patch does not apply
+error: patch failed: migration/trace-events:250
+error: migration/trace-events: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
