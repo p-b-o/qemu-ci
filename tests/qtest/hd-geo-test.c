@@ -25,9 +25,69 @@
 
 #define ARGV_SIZE 256
 
+#define MBR_SIZE 512
+
+static const char *imgfmt = "raw";
+
+static bool mkqcow2_with_mbr(const char *path, const uint8_t *mbr,
+                             uint64_t size)
+{
+    g_autoptr(GError) error = NULL;
+    g_autofree char *raw_path = NULL;
+    char cmd[100 + 2 * PATH_MAX];
+    char *qemu_img_path;
+    char *qemu_img_abs_path = NULL;
+    bool ok = false;
+    int fd, ret;
+
+    fd = g_file_open_tmp("qtest.XXXXXX", &raw_path, &error);
+    if (fd < 0) {
+        g_test_message("Could not create a temporary file: %s",
+                       error->message);
+        return false;
+    }
+    ret = write(fd, mbr, MBR_SIZE);
+    g_assert(ret == MBR_SIZE);
+    close(fd);
+
+    qemu_img_path = getenv("QTEST_QEMU_IMG");
+    g_assert(qemu_img_path);
+    qemu_img_abs_path = realpath(qemu_img_path, NULL);
+    g_assert(qemu_img_abs_path);
+
+    ret = snprintf(cmd, sizeof(cmd),
+                   "%s convert -f raw -O qcow2 %s %s > /dev/null",
+                   qemu_img_abs_path,
+                   raw_path, path);
+    g_assert((0 < ret) && (ret <= sizeof(cmd)));
+    if (system(cmd) != 0) {
+        g_test_message("Could not create %s with qemu-img", path);
+        goto out;
+    }
+
+    ret = snprintf(cmd, sizeof(cmd),
+                   "%s resize %s %" PRIu64 " > /dev/null",
+                   qemu_img_abs_path,
+                   path, size);
+    g_assert((0 < ret) && (ret <= sizeof(cmd)));
+    if (system(cmd) != 0) {
+        g_test_message("Could not size %s with qemu-img", path);
+        goto out;
+    }
+
+    ok = true;
+
+out:
+    free(qemu_img_abs_path);
+    unlink(raw_path);
+
+    return ok;
+}
+
 static char *create_test_img(int secs)
 {
     g_autoptr(GError) error = NULL;
+    uint8_t blank_mbr[MBR_SIZE] = {};
     char *template;
     int fd, ret, err;
 
@@ -36,6 +96,16 @@ static char *create_test_img(int secs)
         g_test_message("Could not create a temporary file: %s",
                        error->message);
         return NULL;
+    }
+
+    if (!strcmp(imgfmt, "qcow2")) {
+        close(fd);
+        if (!mkqcow2_with_mbr(template, blank_mbr, (uint64_t)secs * 512)) {
+            unlink(template);
+            g_free(template);
+            return NULL;
+        }
+        return template;
     }
 
     ret = ftruncate(fd, (off_t)secs * 512);
@@ -207,7 +277,7 @@ static void setup_mbr(int img_idx, MBRcontents mbr)
         /* chs 0,1,1 (lba 63) to chs 7,15,63 (8001 sectors) */
         0x80, 1, 1, 0, 6,  15, 63, 7, 63, 0, 0, 0, 0x41, 0x1F, 0, 0,
     };
-    uint8_t buf[512];
+    uint8_t buf[MBR_SIZE];
     int fd, ret;
 
     memset(buf, 0, sizeof(buf));
@@ -216,6 +286,12 @@ static void setup_mbr(int img_idx, MBRcontents mbr)
         buf[0x1fe] = 0x55;
         buf[0x1ff] = 0xAA;
         memcpy(buf + 0x1BE, mbr == mbr_lba ? part_lba : part_chs, 16);
+    }
+
+    if (!strcmp(imgfmt, "qcow2")) {
+        g_assert_true(mkqcow2_with_mbr(img_file_name[img_idx], buf,
+                                       (uint64_t)img_secs[img_idx] * 512));
+        return;
     }
 
     fd = open(img_file_name[img_idx], O_WRONLY);
@@ -237,7 +313,8 @@ static int setup_ide(int argc, char *argv[], int argv_sz,
 
     if (img_secs[img_idx] >= 0) {
         setup_mbr(img_idx, mbr);
-        s3 = g_strdup_printf(",format=raw,file=%s", img_file_name[img_idx]);
+        s3 = g_strdup_printf(",format=%s,file=%s", imgfmt,
+                             img_file_name[img_idx]);
     } else {
         s3 = g_strdup(",media=cdrom");
     }
@@ -431,15 +508,10 @@ static MBRpartitions empty_mbr = { {false, 0, 0, 0, 0, 0, 0, 0, 0},
 
 static char *create_qcow2_with_mbr(MBRpartitions mbr, uint64_t sectors)
 {
-    g_autofree char *raw_path = NULL;
     char *qcow2_path;
-    char cmd[100 + 2 * PATH_MAX];
-    uint8_t buf[512] = {};
-    int i, ret, fd, offset;
-    uint64_t qcow2_size = sectors * 512;
+    uint8_t buf[MBR_SIZE] = {};
+    int i, fd, offset;
     uint8_t status, parttype, head, sector, cyl;
-    char *qemu_img_path;
-    char *qemu_img_abs_path;
 
     offset = 0xbe;
 
@@ -476,44 +548,11 @@ static char *create_qcow2_with_mbr(MBRpartitions mbr, uint64_t sectors)
         offset += 0x10;
     }
 
-    fd = g_file_open_tmp("qtest.XXXXXX", &raw_path, NULL);
-    g_assert(fd >= 0);
-    close(fd);
-
-    fd = open(raw_path, O_WRONLY);
-    g_assert(fd >= 0);
-    ret = write(fd, buf, sizeof(buf));
-    g_assert(ret == sizeof(buf));
-    close(fd);
-
     fd = g_file_open_tmp("qtest.XXXXXX", &qcow2_path, NULL);
     g_assert(fd >= 0);
     close(fd);
 
-    qemu_img_path = getenv("QTEST_QEMU_IMG");
-    g_assert(qemu_img_path);
-    qemu_img_abs_path = realpath(qemu_img_path, NULL);
-    g_assert(qemu_img_abs_path);
-
-    ret = snprintf(cmd, sizeof(cmd),
-                   "%s convert -f raw -O qcow2 %s %s > /dev/null",
-                   qemu_img_abs_path,
-                   raw_path, qcow2_path);
-    g_assert((0 < ret) && (ret <= sizeof(cmd)));
-    ret = system(cmd);
-    g_assert(ret == 0);
-
-    ret = snprintf(cmd, sizeof(cmd),
-                   "%s resize %s %" PRIu64 " > /dev/null",
-                   qemu_img_abs_path,
-                   qcow2_path, qcow2_size);
-    g_assert((0 < ret) && (ret <= sizeof(cmd)));
-    ret = system(cmd);
-    g_assert(ret == 0);
-
-    free(qemu_img_abs_path);
-
-    unlink(raw_path);
+    g_assert_true(mkqcow2_with_mbr(qcow2_path, buf, sectors * 512));
 
     return qcow2_path;
 }
@@ -1063,6 +1102,10 @@ int main(int argc, char **argv)
     int ret;
 
     g_test_init(&argc, &argv, NULL);
+
+    if (have_qemu_img()) {
+        imgfmt = "qcow2";
+    }
 
     for (i = 0; i < backend_last; i++) {
         if (img_secs[i] >= 0) {
