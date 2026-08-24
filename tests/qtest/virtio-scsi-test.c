@@ -292,7 +292,10 @@ static void test_iothread_attach_node(void *obj, void *data,
         goto fail;
     }
 
-    mkqcow2(tmp_path, 64);
+    if (!mkqcow2(tmp_path, 64)) {
+        g_test_message("Could not create the qcow2 overlay");
+        goto fail;
+    }
 
     /* Attach the overlay to the null0 node */
     qtest_qmp_assert_success(scsi_pci->pci_vdev.pdev->bus->qts,

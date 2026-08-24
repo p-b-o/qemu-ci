@@ -138,9 +138,9 @@ void migrate(QOSState *from, QOSState *to, const char *uri)
     migrate_allocator(&from->alloc, &to->alloc);
 }
 
-void mkqcow2(const char *file, unsigned size_mb)
+bool mkqcow2(const char *file, unsigned size_mb)
 {
-    g_assert_true(mkimg(file, "qcow2", size_mb));
+    return mkimg(file, "qcow2", size_mb);
 }
 
 void prepare_blkdebug_script(const char *debug_fn, const char *event)
