@@ -1231,6 +1231,7 @@ int main(int argc, char **argv)
     int i;
     int fd;
     int ret;
+    int err;
 
     /*
      * "base" stores the starting point where we create temporary files.
@@ -1245,24 +1246,36 @@ int main(int argc, char **argv)
     base = ".";
 #endif
 
+    g_test_init(&argc, &argv, NULL);
+
     /* Create temporary blkdebug instructions */
     debug_path = g_strdup_printf("%s/qtest-blkdebug.XXXXXX", base);
     fd = g_mkstemp(debug_path);
-    g_assert(fd >= 0);
+    if (fd < 0) {
+        g_test_message("Could not create %s: %s", debug_path,
+                       strerror(errno));
+        goto test_add_done;
+    }
     close(fd);
 
     /* Create a temporary raw image */
     for (i = 0; i < 2; ++i) {
         tmp_path[i] = g_strdup_printf("%s/qtest.XXXXXX", base);
         fd = g_mkstemp(tmp_path[i]);
-        g_assert(fd >= 0);
+        if (fd < 0) {
+            g_test_message("Could not create %s: %s", tmp_path[i],
+                           strerror(errno));
+            goto test_add_done;
+        }
         ret = ftruncate(fd, TEST_IMAGE_SIZE);
-        g_assert(ret == 0);
+        err = errno;
         close(fd);
+        if (ret < 0) {
+            g_test_message("Could not size %s: %s", tmp_path[i],
+                           strerror(err));
+            goto test_add_done;
+        }
     }
-
-    /* Run the tests */
-    g_test_init(&argc, &argv, NULL);
 
     qtest_add_func("/ide/read_native", test_specify);
 
@@ -1288,10 +1301,14 @@ int main(int argc, char **argv)
     qtest_add_func("/ide/cdrom/pio_raw", test_cdrom_pio_raw);
     qtest_add_func("/ide/cdrom/dma_raw", test_cdrom_dma_raw);
 
+test_add_done:
     ret = g_test_run();
 
     /* Cleanup */
     for (i = 0; i < 2; ++i) {
+        if (!tmp_path[i]) {
+            continue;
+        }
         unlink(tmp_path[i]);
         g_free(tmp_path[i]);
     }
