@@ -37,6 +37,12 @@
 /* Specified by ATA (physical) CHS geometry for ~64 MiB device.  */
 #define TEST_IMAGE_SIZE ((130 * 16 * 63) * 512)
 
+/*
+ * The tests that reach the image behind QEMU's back, or that need an
+ * event to reach blkdebug, get a raw one of their own.
+ */
+#define RAW_IMAGE_SIZE (1 * 1024 * 1024)
+
 #define IDE_PCI_DEV     1
 #define IDE_PCI_FUNC    1
 
@@ -131,7 +137,9 @@ static QPCIBus *pcibus = NULL;
 static QGuestAllocator guest_malloc;
 
 static char *tmp_path[2];
+static char *raw_path;
 static char *debug_path;
+static const char *imgfmt = "raw";
 
 G_GNUC_PRINTF(1, 2)
 static QTestState *ide_test_start(const char *cmdline_fmt, ...)
@@ -348,9 +356,9 @@ static QTestState *test_bmdma_setup(void)
     QTestState *qts;
 
     qts = ide_test_start(
-        "-drive file=%s,if=ide,cache=writeback,format=raw "
+        "-drive file=%s,if=ide,cache=writeback,format=%s "
         "-global ide-hd.serial=%s -global ide-hd.ver=%s",
-        tmp_path[0], "testdisk", "version");
+        tmp_path[0], imgfmt, "testdisk", "version");
     qtest_irq_intercept_in(qts, "ioapic");
 
     return qts;
@@ -506,7 +514,7 @@ static void test_bmdma_trim_reset(void)
         "inject-error.0.event=none,inject-error.0.iotype=discard,"
         "inject-error.0.errno=0,inject-error.0.delay-ns=1000000 "
         "-device ide-hd,drive=dbg,bus=ide.0",
-        tmp_path[0]);
+        raw_path);
     qtest_irq_intercept_in(qts, "ioapic");
 
     guest_buf = guest_alloc(&guest_malloc, len);
@@ -664,9 +672,9 @@ static void test_specify(void)
     uint8_t heads, spt;
 
     qts = ide_test_start(
-        "-blockdev driver=file,node-name=hda,filename=%s "
+        "-drive if=none,id=hda,format=%s,file=%s "
         "-device ide-hd,drive=hda,bus=ide.0,unit=0 ",
-        tmp_path[0]);
+        imgfmt, tmp_path[0]);
 
     dev = get_pci_device(qts, &bmdma_bar, &ide_bar);
 
@@ -706,9 +714,9 @@ static void test_identify(void)
     int ret;
 
     qts = ide_test_start(
-        "-drive file=%s,if=ide,cache=writeback,format=raw "
+        "-drive file=%s,if=ide,cache=writeback,format=%s "
         "-global ide-hd.serial=%s -global ide-hd.ver=%s",
-        tmp_path[0], "testdisk", "version");
+        tmp_path[0], imgfmt, "testdisk", "version");
 
     dev = get_pci_device(qts, &bmdma_bar, &ide_bar);
 
@@ -756,11 +764,11 @@ static void test_diagnostic(void)
     uint8_t data;
 
     qts = ide_test_start(
-        "-blockdev driver=file,node-name=hda,filename=%s "
-        "-blockdev driver=file,node-name=hdb,filename=%s "
+        "-drive if=none,id=hda,format=%s,file=%s "
+        "-drive if=none,id=hdb,format=%s,file=%s "
         "-device ide-hd,drive=hda,bus=ide.0,unit=0 "
         "-device ide-hd,drive=hdb,bus=ide.0,unit=1 ",
-        tmp_path[0], tmp_path[1]);
+        imgfmt, tmp_path[0], imgfmt, tmp_path[1]);
 
     dev = get_pci_device(qts, &bmdma_bar, &ide_bar);
 
@@ -826,7 +834,7 @@ static void test_flush(void)
 
     qts = ide_test_start(
         "-drive file=blkdebug::%s,if=ide,cache=writeback,format=raw",
-        tmp_path[0]);
+        raw_path);
 
     dev = get_pci_device(qts, &bmdma_bar, &ide_bar);
 
@@ -877,7 +885,7 @@ static void test_pci_retry_flush(void)
     qts = ide_test_start(
         "-drive file=blkdebug:%s:%s,if=ide,cache=writeback,format=raw,"
         "rerror=stop,werror=stop",
-        debug_path, tmp_path[0]);
+        debug_path, raw_path);
 
     dev = get_pci_device(qts, &bmdma_bar, &ide_bar);
 
@@ -1100,14 +1108,14 @@ static void cdrom_read_impl(int nblocks, unsigned flags)
 
     /* Prepopulate the CDROM with an interesting pattern */
     generate_pattern(pattern, patt_len, ATAPI_BLOCK_SIZE);
-    fh = fopen(tmp_path[0], "wb+");
+    fh = fopen(raw_path, "wb+");
     ret = fwrite(pattern, ATAPI_BLOCK_SIZE, patt_blocks, fh);
     g_assert_cmpint(ret, ==, patt_blocks);
     fclose(fh);
 
     qts = ide_test_start(
             "-drive if=none,file=%s,media=cdrom,format=raw,id=sr0,index=0 "
-            "-device ide-cd,drive=sr0,bus=ide.0", tmp_path[0]);
+            "-device ide-cd,drive=sr0,bus=ide.0", raw_path);
     dev = get_pci_device(qts, &bmdma_bar, &ide_bar);
     qtest_irq_intercept_in(qts, "ioapic");
 
@@ -1258,7 +1266,11 @@ int main(int argc, char **argv)
     }
     close(fd);
 
-    /* Create a temporary raw image */
+    if (have_qemu_img()) {
+        imgfmt = "qcow2";
+    }
+
+    /* Create the disks the tests share */
     for (i = 0; i < 2; ++i) {
         tmp_path[i] = g_strdup_printf("%s/qtest.XXXXXX", base);
         fd = g_mkstemp(tmp_path[i]);
@@ -1266,6 +1278,15 @@ int main(int argc, char **argv)
             g_test_message("Could not create %s: %s", tmp_path[i],
                            strerror(errno));
             goto test_add_done;
+        }
+        if (!strcmp(imgfmt, "qcow2")) {
+            close(fd);
+            if (!mkimg_bytes(tmp_path[i], imgfmt, TEST_IMAGE_SIZE)) {
+                g_test_message("Could not create %s with qemu-img",
+                               tmp_path[i]);
+                goto test_add_done;
+            }
+            continue;
         }
         ret = ftruncate(fd, TEST_IMAGE_SIZE);
         err = errno;
@@ -1275,6 +1296,20 @@ int main(int argc, char **argv)
                            strerror(err));
             goto test_add_done;
         }
+    }
+
+    raw_path = g_strdup_printf("%s/qtest.XXXXXX", base);
+    fd = g_mkstemp(raw_path);
+    if (fd < 0) {
+        g_test_message("Could not create %s: %s", raw_path, strerror(errno));
+        goto test_add_done;
+    }
+    ret = ftruncate(fd, RAW_IMAGE_SIZE);
+    err = errno;
+    close(fd);
+    if (ret < 0) {
+        g_test_message("Could not size %s: %s", raw_path, strerror(err));
+        goto test_add_done;
     }
 
     qtest_add_func("/ide/read_native", test_specify);
@@ -1311,6 +1346,10 @@ test_add_done:
         }
         unlink(tmp_path[i]);
         g_free(tmp_path[i]);
+    }
+    if (raw_path) {
+        unlink(raw_path);
+        g_free(raw_path);
     }
     unlink(debug_path);
     g_free(debug_path);
