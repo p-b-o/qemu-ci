@@ -1,0 +1,36 @@
+Looking up 20260824030505.1969726-1-kchiu@axiado.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 8 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/6] hw/sd/axiado_sdhci: Add header guard
+    + Link: https://lore.kernel.org/qemu-devel/20260824030505.1969726-2-kchiu@axiado.com
+  [32m✓[0m [PATCH v2 2/6] hw/arm: Rename ax3000-boards as axiado-boards
+    + Link: https://lore.kernel.org/qemu-devel/20260824030505.1969726-3-kchiu@axiado.com
+  [32m✓[0m [PATCH v2 3/6] hw/arm/ax3000-soc: Add missing class_size to TypeInfo
+    + Link: https://lore.kernel.org/qemu-devel/20260824030505.1969726-4-kchiu@axiado.com
+  [32m✓[0m [PATCH v2 4/6] hw/arm/ax3000: Specify SoC name in header and variable
+    + Link: https://lore.kernel.org/qemu-devel/20260824030505.1969726-5-kchiu@axiado.com
+  [32m✓[0m [PATCH v2 5/6] hw/arm: Add Axiado SoC AX3005
+    + Link: https://lore.kernel.org/qemu-devel/20260824030505.1969726-6-kchiu@axiado.com
+  [32m✓[0m [PATCH v2 6/6] hw/arm: Add Axiado Ax3005 EVB
+    + Link: https://lore.kernel.org/qemu-devel/20260824030505.1969726-7-kchiu@axiado.com
+  ---
+  [32m✓[0m Signed: DKIM/axiado.com
+---
+Total patches: 6
+---
+Applying: hw/sd/axiado_sdhci: Add header guard
+Applying: hw/arm: Rename ax3000-boards as axiado-boards
+Applying: hw/arm/ax3000-soc: Add missing class_size to TypeInfo
+Patch failed at 0003 hw/arm/ax3000-soc: Add missing class_size to TypeInfo
+error: patch failed: hw/arm/ax3000-soc.c:235
+error: hw/arm/ax3000-soc.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
