@@ -2110,8 +2110,10 @@ static void create_ahci_io_test(enum IOMode type, enum AddrMode addr,
 
 int main(int argc, char **argv)
 {
+    g_autoptr(GError) error = NULL;
     const char *arch, *base;
     int ret;
+    int err;
     int fd;
     int c;
     int i, j, k, m;
@@ -2164,30 +2166,49 @@ int main(int argc, char **argv)
     /* Create a temporary image */
     tmp_path = g_strdup_printf("%s/qtest.XXXXXX", base);
     fd = g_mkstemp(tmp_path);
-    g_assert(fd >= 0);
+    if (fd < 0) {
+        g_test_message("Could not create %s: %s", tmp_path, strerror(errno));
+        goto test_add_done;
+    }
     if (have_qemu_img()) {
         imgfmt = "qcow2";
         test_image_size_mb = TEST_IMAGE_SIZE_MB_LARGE;
-        mkqcow2(tmp_path, TEST_IMAGE_SIZE_MB_LARGE);
+        close(fd);
+        if (!mkqcow2(tmp_path, TEST_IMAGE_SIZE_MB_LARGE)) {
+            g_test_message("Could not create %s with qemu-img", tmp_path);
+            goto test_add_done;
+        }
     } else {
         g_test_message("QTEST_QEMU_IMG not set or qemu-img missing; "
                        "skipping LBA48 high-sector tests");
         imgfmt = "raw";
         test_image_size_mb = TEST_IMAGE_SIZE_MB_SMALL;
         ret = ftruncate(fd, test_image_size_mb * 1024 * 1024);
-        g_assert(ret == 0);
+        err = errno;
+        close(fd);
+        if (ret < 0) {
+            g_test_message("Could not size %s: %s", tmp_path, strerror(err));
+            goto test_add_done;
+        }
     }
-    close(fd);
 
     /* Create temporary blkdebug instructions */
     debug_path = g_strdup_printf("%s/qtest-blkdebug.XXXXXX", base);
     fd = g_mkstemp(debug_path);
-    g_assert(fd >= 0);
+    if (fd < 0) {
+        g_test_message("Could not create %s: %s", debug_path,
+                       strerror(errno));
+        goto test_add_done;
+    }
     close(fd);
 
     /* Reserve a hollow file to use as a socket for migration tests */
-    fd = g_file_open_tmp("qtest-migration.XXXXXX", &mig_socket, NULL);
-    g_assert(fd >= 0);
+    fd = g_file_open_tmp("qtest-migration.XXXXXX", &mig_socket, &error);
+    if (fd < 0) {
+        g_test_message("Could not create a temporary file: %s",
+                       error->message);
+        goto test_add_done;
+    }
     close(fd);
 
     /* Run the tests */
@@ -2244,15 +2265,20 @@ int main(int argc, char **argv)
     qtest_add_func("/ahci/cdrom/drain/pio", test_atapi_drain_pio);
     qtest_add_func("/ahci/cdrom/drain/dma", test_atapi_drain_dma);
 
+test_add_done:
     ret = g_test_run();
 
     /* Cleanup */
     unlink(tmp_path);
     g_free(tmp_path);
-    unlink(debug_path);
-    g_free(debug_path);
-    unlink(mig_socket);
-    g_free(mig_socket);
+    if (debug_path) {
+        unlink(debug_path);
+        g_free(debug_path);
+    }
+    if (mig_socket) {
+        unlink(mig_socket);
+        g_free(mig_socket);
+    }
 
     return ret;
 }
