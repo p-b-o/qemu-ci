@@ -1,0 +1,71 @@
+Looking up 20260824111711.26297-1-philmd@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 21 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 82 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/20] target/i386: Remove const qualifier in ptw_setl*()
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-2-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 2/20] linux-user: Uncast void pointer argument as Object in target_cpu_free()
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-3-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 3/20] cpus: Add const-qualified CPU environment accessors
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-4-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 4/20] linux-user: Replace env_cpu_const() by generic env_cpu() equivalent
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-5-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 5/20] system/cpus: Constify various CPUState arguments
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-6-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 6/20] target/arm: Constify CPUARMState for various cpu_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-7-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 7/20] target/avr: Constify CPUAVRState for some cpu_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-8-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 8/20] target/hexagon: Constify CPUHexagonState in hexagon_thread_is_enabled()
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-9-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 9/20] target/i386: Constify CPU*State for cpu_*_interrupt() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-10-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 10/20] target/loongarch: Constify CPULoongArchState for various cpu_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-11-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 11/20] target/loongarch: Constify CPULoongArchState for various tlb_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-12-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 12/20] target/mips: Constify CPUMIPSState for various cpu_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-13-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 13/20] target/s390x: Constify S390CPU for cpu_has_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-14-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 14/20] target/riscv: Constify @iprio argument in riscv_cpu_pending_to_irq()
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-15-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 15/20] target/riscv: Constify CPURISCVState for various cpu_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-16-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 16/20] target/sparc: Constify CPUSPARCState for various cpu_*() getters
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-17-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 17/20] target/tricore: Document architectural interrupts as not implemented
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-18-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 18/20] target/xtensa: Constify CPUXtensaState in xtensa_replicate_windowstart()
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-19-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 19/20] cpus: Constify @cpu in SysemuCPUOps::has_work() handler
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-20-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 20/20] accel/tcg: Constify @cpu in cpu_mmu_index() and TCGCPUOps handlers
+    + Link: https://lore.kernel.org/qemu-devel/20260824111711.26297-21-philmd@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 20
+---
+Applying: target/i386: Remove const qualifier in ptw_setl*()
+Applying: linux-user: Uncast void pointer argument as Object in target_cpu_free()
+Applying: cpus: Add const-qualified CPU environment accessors
+Applying: linux-user: Replace env_cpu_const() by generic env_cpu() equivalent
+Applying: system/cpus: Constify various CPUState arguments
+Applying: target/arm: Constify CPUARMState for various cpu_*() getters
+Applying: target/avr: Constify CPUAVRState for some cpu_*() getters
+Applying: target/hexagon: Constify CPUHexagonState in hexagon_thread_is_enabled()
+Applying: target/i386: Constify CPU*State for cpu_*_interrupt() getters
+Applying: target/loongarch: Constify CPULoongArchState for various cpu_*() getters
+Patch failed at 0010 target/loongarch: Constify CPULoongArchState for various cpu_*() getters
+error: patch failed: target/loongarch/internals.h:38
+error: target/loongarch/internals.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
