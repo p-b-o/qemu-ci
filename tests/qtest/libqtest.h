@@ -1187,6 +1187,18 @@ bool have_qemu_img(void);
 bool mkimg(const char *file, const char *fmt, unsigned size_mb);
 
 /**
+ * mkimg_bytes:
+ * @file: File name of the image that should be created
+ * @fmt: Format, e.g. "qcow2" or "raw"
+ * @size: Size of the image in bytes
+ *
+ * As mkimg(), for images whose size is not a whole number of megabytes.
+ *
+ * Returns: true if the image has been created successfully.
+ */
+bool mkimg_bytes(const char *file, const char *fmt, uint64_t size);
+
+/**
  * qtest_verbose:
  * @domain: The logging domain
  *

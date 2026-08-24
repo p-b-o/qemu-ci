@@ -2116,6 +2116,11 @@ bool have_qemu_img(void)
 
 bool mkimg(const char *file, const char *fmt, unsigned size_mb)
 {
+    return mkimg_bytes(file, fmt, (uint64_t)size_mb * 1024 * 1024);
+}
+
+bool mkimg_bytes(const char *file, const char *fmt, uint64_t size)
+{
     gchar *cli;
     bool ret;
     int rc;
@@ -2133,8 +2138,8 @@ bool mkimg(const char *file, const char *fmt, unsigned size_mb)
         return false;
     }
 
-    cli = g_strdup_printf("%s create -f %s %s %uM", qemu_img_abs_path,
-                          fmt, file, size_mb);
+    cli = g_strdup_printf("%s create -f %s %s %" PRIu64, qemu_img_abs_path,
+                          fmt, file, size);
     ret = g_spawn_command_line_sync(cli, &out, &out2, &rc, &err);
     if (err || !g_spawn_check_exit_status(rc, &err)) {
         fprintf(stderr, "%s\n", err->message);
