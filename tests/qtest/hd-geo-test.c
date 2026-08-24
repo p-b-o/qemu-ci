@@ -27,15 +27,24 @@
 
 static char *create_test_img(int secs)
 {
+    g_autoptr(GError) error = NULL;
     char *template;
-    int fd, ret;
+    int fd, ret, err;
 
-    fd = g_file_open_tmp("qtest.XXXXXX", &template, NULL);
-    g_assert(fd >= 0);
+    fd = g_file_open_tmp("qtest.XXXXXX", &template, &error);
+    if (fd < 0) {
+        g_test_message("Could not create a temporary file: %s",
+                       error->message);
+        return NULL;
+    }
+
     ret = ftruncate(fd, (off_t)secs * 512);
+    err = errno;
     close(fd);
 
     if (ret) {
+        g_test_message("Could not size %s: %s", template, strerror(err));
+        unlink(template);
         g_free(template);
         template = NULL;
     }
@@ -1059,7 +1068,6 @@ int main(int argc, char **argv)
         if (img_secs[i] >= 0) {
             img_file_name[i] = create_test_img(img_secs[i]);
             if (!img_file_name[i]) {
-                g_test_message("Could not create test images.");
                 goto test_add_done;
             }
         } else {
