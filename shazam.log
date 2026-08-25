@@ -1,0 +1,72 @@
+Looking up 20260825-upstream-ntrace_core-v1-0-f8be2f40d2fd@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 14 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH 1/13] hw/riscv/trace-encoder: add ntrace enable flag
+    [31m✗[0m No key: openpgp/antikostya2@gmail.com
+    [32m✓[0m Signed: DKIM/gmail.com
+    + Link: https://lore.kernel.org/qemu-devel/20260825-upstream-ntrace_core-v1-1-f8be2f40d2fd@gmail.com
+  [31m✗[0m [PATCH 2/13] hw/riscv/trace-encoder.c: add trace ntrace/etrace selection logic
+    [31m✗[0m No key: openpgp/antikostya2@gmail.com
+    [32m✓[0m Signed: DKIM/gmail.com
+    + Link: https://lore.kernel.org/qemu-devel/20260825-upstream-ntrace_core-v1-2-f8be2f40d2fd@gmail.com
+  [31m✗[0m [PATCH 3/13] hw/riscv: add n-trace encoder with ProgTraceSync message
+    [31m✗[0m No key: openpgp/antikostya2@gmail.com
+    [32m✓[0m Signed: DKIM/gmail.com
+    + Link: https://lore.kernel.org/qemu-devel/20260825-upstream-ntrace_core-v1-3-f8be2f40d2fd@gmail.com
+  [31m✗[0m [PATCH 4/13] hw/riscv/trace-encoder.c: align ntrace messages with ones
+    [31m✗[0m No key: openpgp/antikostya2@gmail.com
+    [32m✓[0m Signed: DKIM/gmail.com
+    + Link: https://lore.kernel.org/qemu-devel/20260825-upstream-ntrace_core-v1-4-f8be2f40d2fd@gmail.com
+  [31m✗[0m [PATCH 5/13] hw/riscv/trace_encoder, target/riscv: add trace pc history logic
+    [31m✗[0m No key: openpgp/antikostya2@gmail.com
+    [32m✓[0m Signed: DKIM/gmail.com
+    + Link: https://lore.kernel.org/qemu-devel/20260825-upstream-ntrace_core-v1-5-f8be2f40d2fd@gmail.com
+  [31m✗[0m [PATCH 6/13] hw/riscv: add n-trace IndirectBranchHist rv-trace-message
+    [31m✗[0m No key: openpgp/antikostya2@gmail.com
+    [32m✓[0m Signed: DKIM/gmail.com
+    + Link: https://lore.kernel.org/qemu-devel/20260825-upstream-ntrace_core-v1-6-f8be2f40d2fd@gmail.com
+  [31m✗[0m [PATCH 7/13] hw/riscv/trace-encoder: add interrupt support to N-Trace encoder
+    [31m✗[0m No key: openpgp/antikostya2@gmail.com
+    [32m✓[0m Signed: DKIM/gmail.com
+    + Link: https://lore.kernel.org/qemu-devel/20260825-upstream-ntrace_core-v1-7-f8be2f40d2fd@gmail.com
+  [31m✗[0m [PATCH 8/13] hw/riscv: add n-trace ResourceFull rv-trace-message
+    [31m✗[0m No key: openpgp/antikostya2@gmail.com
+    [32m✓[0m Signed: DKIM/gmail.com
+    + Link: https://lore.kernel.org/qemu-devel/20260825-upstream-ntrace_core-v1-8-f8be2f40d2fd@gmail.com
+  [31m✗[0m [PATCH 9/13] hw/riscv: add n-trace ProgTraceCorrelation rv-trace-message
+    [31m✗[0m No key: openpgp/antikostya2@gmail.com
+    [32m✓[0m Signed: DKIM/gmail.com
+    + Link: https://lore.kernel.org/qemu-devel/20260825-upstream-ntrace_core-v1-9-f8be2f40d2fd@gmail.com
+  [31m✗[0m [PATCH 10/13] test/qtest/riscv-trace-test: add test-ntrace-simple qtest
+    [31m✗[0m No key: openpgp/antikostya2@gmail.com
+    [32m✓[0m Signed: DKIM/gmail.com
+    + Link: https://lore.kernel.org/qemu-devel/20260825-upstream-ntrace_core-v1-10-f8be2f40d2fd@gmail.com
+  [31m✗[0m [PATCH 11/13] hw/riscv/trace-encoder.c: add remaining fields to trace-encoder
+    [31m✗[0m No key: openpgp/antikostya2@gmail.com
+    [32m✓[0m Signed: DKIM/gmail.com
+    + Link: https://lore.kernel.org/qemu-devel/20260825-upstream-ntrace_core-v1-11-f8be2f40d2fd@gmail.com
+  [31m✗[0m [PATCH 12/13] hw/riscv/trace-encoder.c: remaining fields to ram-sink as RO values
+    [31m✗[0m No key: openpgp/antikostya2@gmail.com
+    [32m✓[0m Signed: DKIM/gmail.com
+    + Link: https://lore.kernel.org/qemu-devel/20260825-upstream-ntrace_core-v1-12-f8be2f40d2fd@gmail.com
+  [31m✗[0m [PATCH 13/13] hw/riscv/trace-encoder: refactor register accesses
+    [31m✗[0m BADSIG: openpgp/antikostya2@gmail.com
+    [32m✓[0m Signed: DKIM/gmail.com
+    + Link: https://lore.kernel.org/qemu-devel/20260825-upstream-ntrace_core-v1-13-f8be2f40d2fd@gmail.com
+---
+Total patches: 13
+---
+Applying: hw/riscv/trace-encoder: add ntrace enable flag
+Patch failed at 0001 hw/riscv/trace-encoder: add ntrace enable flag
+error: hw/riscv/trace-encoder.c: does not exist in index
+error: hw/riscv/trace-encoder.h: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
