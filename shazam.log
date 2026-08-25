@@ -1,0 +1,96 @@
+Looking up 20260825213811.3725682-1-vsementsov@yandex-team.ru
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Server returned an error.
+Analyzing 31 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 26 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/30] tests/unit/test-vmstate: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-2-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 2/30] ui/vdagent: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-3-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 3/30] hw/virtio: extra state: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-4-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 4/30] hw/virtio: config save/load: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-5-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 5/30] hw/virtio: make virtio_save() and virtio_load() static
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-6-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 6/30] hw/virtio: remaining: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-7-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 7/30] hw/s390x/virtio-ccw.c: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-8-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 8/30] hw/scsi/spapr_vscsi: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-9-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 9/30] hw/scsi/scsi-bus.c: use new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-10-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 10/30] hw/vfio/pci: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-11-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 11/30] hw/pci/pci: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-12-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 12/30] hw/pci/msix.c: use new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-13-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 13/30] hw/pci/shpc.c: use new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-14-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 14/30] hw/display/virtio-gpu: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-15-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 15/30] hw/net/virtio-net.c: use new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-16-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 16/30] hw/nvram/eeprom93xx.c: use new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-17-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 17/30] hw/nvram/fw_cfg.c: use new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-18-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 18/30] hw/usb/redirect.c: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-19-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 19/30] alpha/machine: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-20-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 20/30] avr/machine: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-21-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 21/30] or1k/machine: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-22-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 22/30] microblaze/machine: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-23-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 23/30] hppa/machine: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-24-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 24/30] sparc/machine: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-25-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 25/30] ppc/machine: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-26-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 26/30] mips/machine: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-27-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 27/30] arm/machine: move to new migration APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-28-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 28/30] migration/vmstate-types: convert vmstate_info_g_byte_array to new APIs
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-29-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 29/30] migration: VMStateInfo: remove old .get / .set handlers
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-30-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 30/30] migration: finally drop vmstate_save/load_state() functions
+    + Link: https://lore.kernel.org/qemu-devel/20260825213811.3725682-31-vsementsov@yandex-team.ru
+  ---
+  [32m✓[0m Signed: DKIM/yandex-team.ru
+---
+Total patches: 30
+---
+Applying: tests/unit/test-vmstate: move to new migration APIs
+Applying: ui/vdagent: move to new migration APIs
+Applying: hw/virtio: extra state: move to new migration APIs
+Applying: hw/virtio: config save/load: move to new migration APIs
+Applying: hw/virtio: make virtio_save() and virtio_load() static
+Applying: hw/virtio: remaining: move to new migration APIs
+Applying: hw/s390x/virtio-ccw.c: move to new migration APIs
+Applying: hw/scsi/spapr_vscsi: move to new migration APIs
+Applying: hw/scsi/scsi-bus.c: use new migration APIs
+Applying: hw/vfio/pci: move to new migration APIs
+Applying: hw/pci/pci: move to new migration APIs
+Applying: hw/pci/msix.c: use new migration APIs
+Applying: hw/pci/shpc.c: use new migration APIs
+Applying: hw/display/virtio-gpu: move to new migration APIs
+Patch failed at 0014 hw/display/virtio-gpu: move to new migration APIs
+error: patch failed: hw/display/virtio-gpu.c:1446
+error: hw/display/virtio-gpu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
