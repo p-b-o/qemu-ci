@@ -336,11 +336,11 @@ static void virgl_cmd_create_resource_2d(VirtIOGPU *g,
     }
 
     res = g_new0(struct virtio_gpu_virgl_resource, 1);
+    res->base.dmabuf_fd = -1;
     res->base.width = c2d.width;
     res->base.height = c2d.height;
     res->base.format = c2d.format;
     res->base.resource_id = c2d.resource_id;
-    res->base.dmabuf_fd = -1;
     QTAILQ_INSERT_HEAD(&g->reslist, &res->base, next);
 
     args.handle = c2d.resource_id;
@@ -384,11 +384,11 @@ static void virgl_cmd_create_resource_3d(VirtIOGPU *g,
     }
 
     res = g_new0(struct virtio_gpu_virgl_resource, 1);
+    res->base.dmabuf_fd = -1;
     res->base.width = c3d.width;
     res->base.height = c3d.height;
     res->base.format = c3d.format;
     res->base.resource_id = c3d.resource_id;
-    res->base.dmabuf_fd = -1;
     QTAILQ_INSERT_HEAD(&g->reslist, &res->base, next);
 
     args.handle = c3d.resource_id;
@@ -862,9 +862,9 @@ static void virgl_cmd_resource_create_blob(VirtIOGPU *g,
     }
 
     res = g_new0(struct virtio_gpu_virgl_resource, 1);
+    res->base.dmabuf_fd = -1;
     res->base.resource_id = cblob.resource_id;
     res->base.blob_size = cblob.size;
-    res->base.dmabuf_fd = -1;
 
     if (cblob.blob_mem != VIRTIO_GPU_BLOB_MEM_HOST3D) {
         ret = virtio_gpu_create_mapping_iov(g, cblob.nr_entries, sizeof(cblob),

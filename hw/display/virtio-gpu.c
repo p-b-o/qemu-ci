@@ -274,7 +274,7 @@ static void virtio_gpu_resource_create_2d(VirtIOGPU *g,
     }
 
     res = g_new0(struct virtio_gpu_simple_resource, 1);
-
+    res->dmabuf_fd = -1;
     res->width = c2d.width;
     res->height = c2d.height;
     res->format = c2d.format;
@@ -360,6 +360,7 @@ static void virtio_gpu_resource_create_blob(VirtIOGPU *g,
     }
 
     res = g_new0(struct virtio_gpu_simple_resource, 1);
+    res->dmabuf_fd = -1;
     res->resource_id = cblob.resource_id;
     res->blob_size = cblob.size;
 
@@ -1407,6 +1408,7 @@ static int virtio_gpu_load(QEMUFile *f, void *opaque, size_t size,
         }
 
         res = g_new0(struct virtio_gpu_simple_resource, 1);
+        res->dmabuf_fd = -1;
         res->resource_id = resource_id;
         res->width = qemu_get_be32(f);
         res->height = qemu_get_be32(f);
@@ -1518,6 +1520,7 @@ static int virtio_gpu_blob_load(QEMUFile *f, void *opaque, size_t size,
         }
 
         res = g_new0(struct virtio_gpu_simple_resource, 1);
+        res->dmabuf_fd = -1;
         res->resource_id = resource_id;
         res->blob_size = qemu_get_be32(f);
         res->iov_cnt = qemu_get_be32(f);

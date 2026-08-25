@@ -101,6 +101,7 @@ rutabaga_cmd_create_resource_2d(VirtIOGPU *g,
     CHECK(!result, cmd);
 
     res = g_new0(struct virtio_gpu_simple_resource, 1);
+    res->dmabuf_fd = -1;
     res->width = c2d.width;
     res->height = c2d.height;
     res->format = c2d.format;
@@ -140,6 +141,7 @@ rutabaga_cmd_create_resource_3d(VirtIOGPU *g,
     CHECK(!result, cmd);
 
     res = g_new0(struct virtio_gpu_simple_resource, 1);
+    res->dmabuf_fd = -1;
     res->width = c3d.width;
     res->height = c3d.height;
     res->format = c3d.format;
@@ -637,7 +639,7 @@ rutabaga_cmd_resource_create_blob(VirtIOGPU *g,
     CHECK(cblob.resource_id != 0, cmd);
 
     res = g_new0(struct virtio_gpu_simple_resource, 1);
-
+    res->dmabuf_fd = -1;
     res->resource_id = cblob.resource_id;
     res->blob_size = cblob.size;
 
