@@ -79,7 +79,7 @@ static void virtio_gpu_remap_udmabuf(struct virtio_gpu_simple_resource *res)
     }
 }
 
-static void virtio_gpu_destroy_udmabuf(struct virtio_gpu_simple_resource *res)
+void virtio_gpu_fini_udmabuf(struct virtio_gpu_simple_resource *res)
 {
     if (res->remapped) {
         munmap(res->remapped, res->blob_size);
@@ -143,7 +143,7 @@ void virtio_gpu_init_udmabuf(struct virtio_gpu_simple_resource *res)
         }
         virtio_gpu_remap_udmabuf(res);
         if (!res->remapped) {
-            virtio_gpu_destroy_udmabuf(res);
+            virtio_gpu_fini_udmabuf(res);
             return;
         }
         pdata = res->remapped;
@@ -152,34 +152,20 @@ void virtio_gpu_init_udmabuf(struct virtio_gpu_simple_resource *res)
     res->blob = pdata;
 }
 
-void virtio_gpu_fini_udmabuf(VirtIOGPU *g, struct virtio_gpu_simple_resource *res)
-{
-    int max_outputs = g->parent_obj.conf.max_outputs;
-    int i;
-
-    for (i = 0; i < max_outputs; i++) {
-        struct virtio_gpu_scanout *scanout = &g->parent_obj.scanout[i];
-
-        if (scanout->dmabuf &&
-            qemu_dmabuf_get_num_planes(scanout->dmabuf) > 0 &&
-            qemu_dmabuf_get_fds(scanout->dmabuf, NULL)[0] == res->dmabuf_fd &&
-            res->dmabuf_fd != -1) {
-            qemu_dmabuf_close(scanout->dmabuf);
-            res->dmabuf_fd = -1;
-        }
-    }
-
-    virtio_gpu_destroy_udmabuf(res);
-}
-
 static QemuDmaBuf *
 virtio_gpu_create_dmabuf(struct virtio_gpu_simple_resource *res,
                          struct virtio_gpu_framebuffer *fb,
                          struct virtio_gpu_rect *r)
 {
     uint32_t offset = 0;
+    int fd;
 
     if (res->dmabuf_fd < 0) {
+        return NULL;
+    }
+
+    fd = qemu_dup(res->dmabuf_fd);
+    if (fd < 0) {
         return NULL;
     }
 
@@ -187,7 +173,7 @@ virtio_gpu_create_dmabuf(struct virtio_gpu_simple_resource *res,
                            &offset, &fb->stride,
                            r->x, r->y, fb->width, fb->height,
                            qemu_pixman_to_drm_format(fb->format),
-                           DRM_FORMAT_MOD_INVALID, &res->dmabuf_fd,
+                           DRM_FORMAT_MOD_INVALID, &fd,
                            1, true, false);
 }
 
