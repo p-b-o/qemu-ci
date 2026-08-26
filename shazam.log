@@ -1,0 +1,53 @@
+Looking up cover.1787739852.git.prcups@krgm.moe
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 15 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH v4 1/14] target/loongarch: Define LVZ CSR fields
+    + Link: https://lore.kernel.org/qemu-devel/4e393c8c6f5d7d42ede6fa65fc94753bd8b14c17.1787739852.git.prcups@krgm.moe
+  [PATCH v4 2/14] target/loongarch: Add LVZ CPU state definitions
+    + Link: https://lore.kernel.org/qemu-devel/17b4c21625c92521c49585de983babc0400b4836.1787739852.git.prcups@krgm.moe
+  [PATCH v4 3/14] target/loongarch: Add LVZ CSR metadata
+    + Link: https://lore.kernel.org/qemu-devel/2c261c4b32b901a077952757d7228570a822e592.1787739852.git.prcups@krgm.moe
+  [PATCH v4 4/14] target/loongarch: Add LVZ CPU model support
+    + Link: https://lore.kernel.org/qemu-devel/bfcdf85a59d800eb40457871691b1dea111e0019.1787739852.git.prcups@krgm.moe
+  [PATCH v4 5/14] target/loongarch: Add LVZ guest interrupt state
+    + Link: https://lore.kernel.org/qemu-devel/32e816aa68489d4e6b0b2b24e99a6c8a4e3469bf.1787739852.git.prcups@krgm.moe
+  [PATCH v4 6/14] target/loongarch: Add LVZ guest timer support
+    + Link: https://lore.kernel.org/qemu-devel/0de498ed984527f0c4e86a18295c12354f81ebdf.1787739852.git.prcups@krgm.moe
+  [PATCH v4 7/14] target/loongarch: Add LVZ VM entry and exception handling
+    + Link: https://lore.kernel.org/qemu-devel/3470bfa14e997c73d106a796205b3f0030b2f41c.1787739852.git.prcups@krgm.moe
+  [PATCH v4 8/14] target/loongarch: Add LVZ guest CSR helpers
+    + Link: https://lore.kernel.org/qemu-devel/ff1b8657252d1247f22d68a0fb55dad2690357a4.1787739852.git.prcups@krgm.moe
+  [PATCH v4 9/14] target/loongarch: Add LVZ migration state
+    + Link: https://lore.kernel.org/qemu-devel/4d53d7db40dd8da468539c6c0c900e2722669381.1787739852.git.prcups@krgm.moe
+  [PATCH v4 10/14] target/loongarch: Add LVZ MMU and PTW support
+    + Link: https://lore.kernel.org/qemu-devel/6ef84c2ef4c2669703e107107d7e8c89ec46577f.1787739852.git.prcups@krgm.moe
+  [PATCH v4 11/14] target/loongarch: Translate LVZ guest CSR instructions
+    + Link: https://lore.kernel.org/qemu-devel/e2be598b538ab467dda5603f59cd7aa6faa5d7fe.1787739852.git.prcups@krgm.moe
+  [PATCH v4 12/14] target/loongarch: Translate LVZ guest TLB instructions
+    + Link: https://lore.kernel.org/qemu-devel/82b3c68f23fba6bc33620c4e510d658a358a9425.1787739852.git.prcups@krgm.moe
+  [PATCH v4 13/14] target/loongarch: Translate LVZ guest traps and HVC
+    + Link: https://lore.kernel.org/qemu-devel/ac951e0b31cc1e90fbb0274becc0877f509f0370.1787739852.git.prcups@krgm.moe
+  [PATCH v4 14/14] fix(tcg/loongarch): strip flag bits in lddir/ldpte address calculation
+    + Link: https://lore.kernel.org/qemu-devel/372f72246c404586bc810e48862a650b39cc4866.1787739852.git.prcups@krgm.moe
+---
+Total patches: 14
+---
+Applying: target/loongarch: Define LVZ CSR fields
+Applying: target/loongarch: Add LVZ CPU state definitions
+Applying: target/loongarch: Add LVZ CSR metadata
+Applying: target/loongarch: Add LVZ CPU model support
+Applying: target/loongarch: Add LVZ guest interrupt state
+Applying: target/loongarch: Add LVZ guest timer support
+Patch failed at 0006 target/loongarch: Add LVZ guest timer support
+error: patch failed: target/loongarch/tcg/constant_timer.c:20
+error: target/loongarch/tcg/constant_timer.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
