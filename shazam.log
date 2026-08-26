@@ -1,0 +1,76 @@
+Looking up 20260826174213.614571-1-richard.henderson@linaro.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 26 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 56 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/25] target/arm: Split zdn in do_z2z_n1 and do_z2z_n1_fpst
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 2/25] target/arm: Split zdn in do_z2z_nn and do_z2z_nn_fpst
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 3/25] target/arm: Split decode of BFloat SME FMAX/FMIN
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 4/25] target/arm: Implement FMUL (multiple/multiple and single vectors)
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 5/25] target/arm: Enable FEAT_SVE2p2 and FEAT_SME2p2 for -cpu max
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 6/25] target/arm: Remove DO_ZPZZ_FP from translate-sme.c
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-7-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 7/25] target/arm: Remove DO_ZPZZ_FP_B16 from translate-sme.c
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 8/25] target/arm: Remove DO_ZPZZ_AH_FP from translate-sme.c
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 9/25] target/arm: Remove DO_ZPZZ_AH_FP_B16 from translate-sme.c
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 10/25] target/arm: Split decode of BFloat SVE FADD, FSUB, FMUL, FMIN*, FMAX*
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-11-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 11/25] target/arm: Implement SVE BFSCALE
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-12-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 12/25] target/arm: Implement SME BFSCALE
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-13-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 13/25] target/arm: Implement SME BFMUL
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-14-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 14/25] target/arm: Enable FEAT_SVE_BFSCALE for -cpu max
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-15-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 15/25] target/arm: Rename isar_feature_aa64_sve_pmull128
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-16-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 16/25] target/arm: Rename isar_feature_aa64_sve_bitperm
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-17-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 17/25] target/arm: Rename isar_feature_aa64_sve_sha3
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-18-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 18/25] target/arm: Rename isar_feature_aa64_sve_sm4
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-19-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 19/25] target/arm: Implement and enable FEAT_SSVE_BitPerm for -cpu max
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-20-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 20/25] target/arm: Implement AESE (indexed)
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-21-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 21/25] target/arm: Implement AESD (indexed)
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-22-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 22/25] target/arm: Implement AESEMC
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-23-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 23/25] target/arm: Implement AESDIMC
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-24-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 24/25] target/arm: Implement PMULL, PMLAL
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-25-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 25/25] target/arm: Enable FEAT_SVE_AES2 for -cpu max
+    + Link: https://lore.kernel.org/qemu-devel/20260826174213.614571-26-richard.henderson@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 25
+---
+Applying: target/arm: Split zdn in do_z2z_n1 and do_z2z_n1_fpst
+Applying: target/arm: Split zdn in do_z2z_nn and do_z2z_nn_fpst
+Applying: target/arm: Split decode of BFloat SME FMAX/FMIN
+Applying: target/arm: Implement FMUL (multiple/multiple and single vectors)
+Applying: target/arm: Enable FEAT_SVE2p2 and FEAT_SME2p2 for -cpu max
+Patch failed at 0005 target/arm: Enable FEAT_SVE2p2 and FEAT_SME2p2 for -cpu max
+error: patch failed: target/arm/tcg/cpu64.c:1469
+error: target/arm/tcg/cpu64.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
