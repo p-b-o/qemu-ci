@@ -1,0 +1,23 @@
+Looking up 4a86e81ffa5e392efa069463cd21457374915b93.camel@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] Fix mac.w / mac.l insn
+    + Link: https://lore.kernel.org/qemu-devel/4a86e81ffa5e392efa069463cd21457374915b93.camel@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 1
+---
+Applying: Fix mac.w / mac.l insn
+Patch failed at 0001 Fix mac.w / mac.l insn
+error: patch with only garbage at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:3
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
