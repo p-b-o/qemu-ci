@@ -1,0 +1,44 @@
+Looking up 20260826074635.2850931-1-kchiu@axiado.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 12 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 34 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/8] hw/sd/axiado_sdhci: Add header guard
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260826074635.2850931-2-kchiu@axiado.com
+  [32m✓[0m [PATCH v4 2/8] hw/arm: Rename ax3000-boards as axiado-boards
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260826074635.2850931-3-kchiu@axiado.com
+  [32m✓[0m [PATCH v4 3/8] hw/arm/ax3000: Specify SoC name in header and variable
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260826074635.2850931-4-kchiu@axiado.com
+  [32m✓[0m [PATCH v4 4/8] hw/char/cadence_uart: Reserve MMIO with dynamic size
+    + Link: https://lore.kernel.org/qemu-devel/20260826074635.2850931-5-kchiu@axiado.com
+  [32m✓[0m [PATCH v4 5/8] hw/arm/ax3000-soc: Reserve MMIO of UART with 512 KiB
+    + Link: https://lore.kernel.org/qemu-devel/20260826074635.2850931-6-kchiu@axiado.com
+  [32m✓[0m [PATCH v4 6/8] hw/arm/ax3000-boards: Add memory guard
+    + Link: https://lore.kernel.org/qemu-devel/20260826074635.2850931-7-kchiu@axiado.com
+  [32m✓[0m [PATCH v4 7/8] hw/arm: Add Axiado SoC AX3005
+    + Link: https://lore.kernel.org/qemu-devel/20260826074635.2850931-8-kchiu@axiado.com
+  [32m✓[0m [PATCH v4 8/8] hw/arm: Add Axiado Ax3005 EVB
+    + Link: https://lore.kernel.org/qemu-devel/20260826074635.2850931-9-kchiu@axiado.com
+  ---
+  [32m✓[0m Signed: DKIM/axiado.com
+---
+Total patches: 8
+---
+Applying: hw/sd/axiado_sdhci: Add header guard
+Applying: hw/arm: Rename ax3000-boards as axiado-boards
+Applying: hw/arm/ax3000: Specify SoC name in header and variable
+Applying: hw/char/cadence_uart: Reserve MMIO with dynamic size
+Patch failed at 0004 hw/char/cadence_uart: Reserve MMIO with dynamic size
+error: patch failed: include/hw/char/cadence_uart.h:31
+error: include/hw/char/cadence_uart.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
