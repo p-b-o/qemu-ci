@@ -1,0 +1,50 @@
+Looking up 20260826184229.1145-1-luoyonggang@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Server returned an error.
+Analyzing 15 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 43 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/13] accel: use a shared TYPE_ACCEL_CPU parent
+    + Link: https://lore.kernel.org/qemu-devel/20260826184229.1145-2-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v2 2/13] hw/riscv/virt: register TYPE_TARGET_SPECIFIC
+    + Link: https://lore.kernel.org/qemu-devel/20260826184229.1145-3-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v2 3/13] hw/arm/virt: register TYPE_TARGET_SPECIFIC on the abstract parent
+    + Link: https://lore.kernel.org/qemu-devel/20260826184229.1145-4-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v2 4/13] machine: allow -M name to differ from QOM type
+    + Link: https://lore.kernel.org/qemu-devel/20260826184229.1145-5-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v2 5/13] hw/riscv/virt: use unique QOM name
+    + Link: https://lore.kernel.org/qemu-devel/20260826184229.1145-6-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v2 6/13] hw/arm/virt: use unique QOM name
+    + Link: https://lore.kernel.org/qemu-devel/20260826184229.1145-7-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v2 7/13] hw/arm/virt: prefix ACPI helpers with arm_virt_
+    + Link: https://lore.kernel.org/qemu-devel/20260826184229.1145-8-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v2 8/13] hw/riscv/virt: prefix ACPI helpers with riscv_virt_
+    + Link: https://lore.kernel.org/qemu-devel/20260826184229.1145-9-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v2 9/13] hw/loongarch/virt: prefix ACPI helper with loongarch_virt_
+    + Link: https://lore.kernel.org/qemu-devel/20260826184229.1145-10-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v2 10/13] target/riscv: uniquify TCG crc32, crc32c, and wfi helper names
+    + Link: https://lore.kernel.org/qemu-devel/20260826184229.1145-11-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v2 11/13] system/vl: add new option -target
+    + Link: https://lore.kernel.org/qemu-devel/20260826184229.1145-12-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v2 12/13] target-info: dispatch CPU QMP, dump, and arm/riscv semihosting
+    + Link: https://lore.kernel.org/qemu-devel/20260826184229.1145-13-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v2 13/13] meson: build single binary
+    + Link: https://lore.kernel.org/qemu-devel/20260826184229.1145-14-luoyonggang@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 13
+---
+Applying: accel: use a shared TYPE_ACCEL_CPU parent
+Applying: hw/riscv/virt: register TYPE_TARGET_SPECIFIC
+Patch failed at 0002 hw/riscv/virt: register TYPE_TARGET_SPECIFIC
+error: patch failed: hw/riscv/virt.c:1790
+error: hw/riscv/virt.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
