@@ -1,0 +1,27 @@
+Looking up 20260827004530.600410-1-tdave@nvidia.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC v2 1/2] MdeModulePkg/PciBusDxe: honor fixed BAR addresses from IncompatiblePci
+    [32m✓[0m Signed: DKIM/nvidia.com
+    + Link: https://lore.kernel.org/qemu-devel/20260827004530.600410-2-tdave@nvidia.com
+  [31m✗[0m [PATCH RFC v2 2/2] ArmVirtPkg, OvmfPkg: add QemuFixedBarsDxe for fixed PCI BAR placement
+    [31m✗[0m BADSIG: DKIM/nvidia.com
+    + Link: https://lore.kernel.org/qemu-devel/20260827004530.600410-3-tdave@nvidia.com
+---
+Total patches: 2
+---
+Applying: MdeModulePkg/PciBusDxe: honor fixed BAR addresses from IncompatiblePci
+Patch failed at 0001 MdeModulePkg/PciBusDxe: honor fixed BAR addresses from IncompatiblePci
+error: MdeModulePkg/Bus/Pci/PciBusDxe/PciBus.h: does not exist in index
+error: MdeModulePkg/Bus/Pci/PciBusDxe/PciEnumeratorSupport.c: does not exist in index
+error: MdeModulePkg/Bus/Pci/PciBusDxe/PciResourceSupport.c: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
