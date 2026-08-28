@@ -1,0 +1,62 @@
+Looking up 20260827222608.329788-1-daniel.barboza@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 19 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 63 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/14] hw/riscv/fdt-common: prepend helpers with "riscv_"
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-2-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 2/14] hw/riscv/fdt-common, virt.c: add riscv_create_fdt_flash()
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-3-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 3/14] hw/riscv/fdt-common, virt.c: add riscv_create_fdt_syscon()
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-4-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 4/14] hw/riscv/fdt-common, virt.c: add riscv_create_fdt_riscv_iommu_sys()
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-5-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 5/14] hw/riscv/fdt_common, virt.c: add riscv_create_fdt_pcie()
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-6-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 6/14] hw/riscv/fdt_common, virt.c: add riscv_create_fdt_imsic()
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-7-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 7/14] hw/riscv/fdt_common, virt.c: add riscv_create_fdt_socket_aplic()
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-8-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 8/14] hw/riscv/fdt-common, virt.c: add riscv_create_fdt_socket_aclint()
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-9-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 9/14] hw/riscv/fdt-common, virt.c: add riscv_create_fdt_uart()
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-10-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 10/14] hw/riscv/fdt-common, virt.c: add riscv_create_fdt_rtc()
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-11-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 11/14] hw/riscv/device-common, virt.c: add riscv_create_platform_bus()
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-12-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 12/14] hw/riscv/device-common, virt.c: add flash helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-13-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 13/14] hw/riscv/device-common, virt.c: add riscv_gpex_pcie_init()
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-14-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 14/14] hw/riscv/riscv-iommu-sys.c, virt.c: add riscv_create_iommu_sys()
+    + Link: https://lore.kernel.org/qemu-devel/20260827222608.329788-15-daniel.barboza@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 14
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Reviewed-by: Chao Liu <chao.liu@processmission.com>
+     Msg From: Chao Liu via qemu development <qemu-devel@nongnu.org>
+    ! Trailer: Reviewed-by: Chao Liu <chao.liu@processmission.com>
+     Msg From: Chao Liu via <qemu-riscv@nongnu.org>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: hw/riscv/fdt-common: prepend helpers with "riscv_"
+Applying: hw/riscv/fdt-common, virt.c: add riscv_create_fdt_flash()
+Applying: hw/riscv/fdt-common, virt.c: add riscv_create_fdt_syscon()
+Applying: hw/riscv/fdt-common, virt.c: add riscv_create_fdt_riscv_iommu_sys()
+Applying: hw/riscv/fdt_common, virt.c: add riscv_create_fdt_pcie()
+Applying: hw/riscv/fdt_common, virt.c: add riscv_create_fdt_imsic()
+Patch failed at 0006 hw/riscv/fdt_common, virt.c: add riscv_create_fdt_imsic()
+error: patch failed: hw/riscv/virt.c:320
+error: hw/riscv/virt.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
