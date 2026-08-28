@@ -292,6 +292,9 @@ static CPUARMTBFlags rebuild_hflags_a32(CPUARMState *env, int fp_el,
     if (env->uncached_cpsr & CPSR_IL) {
         DP_TBFLAG_ANY(flags, PSTATE__IL, 1);
     }
+    if (env->pstate & PSTATE_UINJ) {
+        DP_TBFLAG_ANY(flags, PSTATE__UINJ, 1);
+    }
 
     /*
      * The SME exception we are testing for is raised via
@@ -512,6 +515,9 @@ static CPUARMTBFlags rebuild_hflags_a64(CPUARMState *env, int el, int fp_el,
 
     if (env->pstate & PSTATE_IL) {
         DP_TBFLAG_ANY(flags, PSTATE__IL, 1);
+    }
+    if (env->pstate & PSTATE_UINJ) {
+        DP_TBFLAG_ANY(flags, PSTATE__UINJ, 1);
     }
 
     if (arm_fgt_active(env, el)) {
