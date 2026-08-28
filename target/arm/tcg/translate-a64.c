@@ -11168,6 +11168,14 @@ static void aarch64_tr_translate_insn(DisasContextBase *dcbase, CPUState *cpu)
         gen_exception_insn(s, 0, EXCP_UDEF, syn_illegalstate());
         return;
     }
+    if (s->pstate_uinj) {
+        /*
+         * PSTATE.UINJ injected undefined instruction.
+         * Priority immediately after PSTATE.IL.
+         */
+        unallocated_encoding(s);
+        return;
+    }
 
     if (dc_isar_feature(aa64_bti, s)) {
         if (s->base.num_insns == 1) {

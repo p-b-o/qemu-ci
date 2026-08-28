@@ -6125,6 +6125,14 @@ static void disas_arm_insn(DisasContext *s, unsigned int insn)
         gen_exception_insn(s, 0, EXCP_UDEF, syn_illegalstate());
         return;
     }
+    if (s->pstate_uinj) {
+        /*
+         * PSTATE.UINJ injected undefined instruction.
+         * Priority immediately after PSTATE.IL.
+         */
+        unallocated_encoding(s);
+        return;
+    }
 
     if (cond == 0xf) {
         /* In ARMv3 and v4 the NV condition is UNPREDICTABLE; we
@@ -6698,6 +6706,14 @@ static void thumb_tr_translate_insn(DisasContextBase *dcbase, CPUState *cpu)
          * exceptions, but comes after instruction abort exceptions.
          */
         gen_exception_insn(dc, 0, EXCP_UDEF, syn_illegalstate());
+        return;
+    }
+    if (dc->pstate_uinj) {
+        /*
+         * PSTATE.UINJ injected undefined instruction.
+         * Priority immediately after PSTATE.IL.
+         */
+        unallocated_encoding(dc);
         return;
     }
 
