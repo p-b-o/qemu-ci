@@ -1,0 +1,23 @@
+Looking up 77e89fea-0284-4e19-8ee7-04b900b13749@linux.ibm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] tests/functional/ppc64: add pseries migration and powernv NVMe tests
+    + Link: https://lore.kernel.org/qemu-devel/77e89fea-0284-4e19-8ee7-04b900b13749@linux.ibm.com
+  ---
+  [32m✓[0m Signed: DKIM/ibm.com (From: asahu1x@linux.ibm.com)
+---
+Total patches: 1
+---
+Applying: tests/functional/ppc64: add pseries migration and powernv NVMe tests
+Patch failed at 0001 tests/functional/ppc64: add pseries migration and powernv NVMe tests
+error: git diff header lacks filename information when removing 1 leading pathname component at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:2
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
