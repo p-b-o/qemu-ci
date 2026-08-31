@@ -1,0 +1,42 @@
+Looking up 20260831135206.126184-1-hreitz@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/9] block/accounting: Add offset to BlockAcctCookie
+    + Link: https://lore.kernel.org/qemu-devel/20260831135206.126184-2-hreitz@redhat.com
+  [32m✓[0m [PATCH 2/9] qapi/block: Add IoAccountingOperation enum
+    + Link: https://lore.kernel.org/qemu-devel/20260831135206.126184-3-hreitz@redhat.com
+  [32m✓[0m [PATCH 3/9] qapi/block: Add BLOCK_IO_DELAY event
+    + Link: https://lore.kernel.org/qemu-devel/20260831135206.126184-4-hreitz@redhat.com
+  [32m✓[0m [PATCH 4/9] block-backend: Public blk_get_attached_dev_path()
+    + Link: https://lore.kernel.org/qemu-devel/20260831135206.126184-5-hreitz@redhat.com
+  [32m✓[0m [PATCH 5/9] block/accounting: Add BB field to latency checker
+    + Link: https://lore.kernel.org/qemu-devel/20260831135206.126184-6-hreitz@redhat.com
+  [32m✓[0m [PATCH 6/9] block/accounting: Emit BLOCK_IO_DELAY event
+    + Link: https://lore.kernel.org/qemu-devel/20260831135206.126184-7-hreitz@redhat.com
+  [32m✓[0m [PATCH 7/9] block: Add delay-alert-ms property
+    + Link: https://lore.kernel.org/qemu-devel/20260831135206.126184-8-hreitz@redhat.com
+  [32m✓[0m [PATCH 8/9] block/accounting: Move latency_ns override down
+    + Link: https://lore.kernel.org/qemu-devel/20260831135206.126184-9-hreitz@redhat.com
+  [32m✓[0m [PATCH 9/9] iotests: Add delay-alert test
+    + Link: https://lore.kernel.org/qemu-devel/20260831135206.126184-10-hreitz@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 9
+---
+Applying: block/accounting: Add offset to BlockAcctCookie
+Patch failed at 0001 block/accounting: Add offset to BlockAcctCookie
+error: patch failed: hw/block/virtio-blk.c:437
+error: hw/block/virtio-blk.c: patch does not apply
+error: patch failed: hw/nvme/ctrl.c:2983
+error: hw/nvme/ctrl.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
