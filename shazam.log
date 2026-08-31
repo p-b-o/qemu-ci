@@ -1,0 +1,38 @@
+Looking up 20260831141007.353854-1-daniel.barboza@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v7 1/7] target/riscv: add sdext debug CSRs state
+    + Link: https://lore.kernel.org/qemu-devel/20260831141007.353854-2-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 2/7] target/riscv: add sdext Debug Mode helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260831141007.353854-3-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 3/7] target/riscv: add dret instruction
+    + Link: https://lore.kernel.org/qemu-devel/20260831141007.353854-4-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 4/7] target/riscv: add sdext enter Debug Mode on ebreak
+    + Link: https://lore.kernel.org/qemu-devel/20260831141007.353854-5-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 5/7] target/riscv: add sdext single-step support
+    + Link: https://lore.kernel.org/qemu-devel/20260831141007.353854-6-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 6/7] target/riscv: add sdtrig trigger action=debug mode
+    + Link: https://lore.kernel.org/qemu-devel/20260831141007.353854-7-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH v7 7/7] tests/tcg/riscv64: add sdext "not on Debug mode" sigill tests
+    + Link: https://lore.kernel.org/qemu-devel/20260831141007.353854-8-daniel.barboza@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 7
+---
+Applying: target/riscv: add sdext debug CSRs state
+Patch failed at 0001 target/riscv: add sdext debug CSRs state
+error: patch failed: target/riscv/cpu.c:248
+error: target/riscv/cpu.c: patch does not apply
+error: patch failed: target/riscv/cpu_cfg_fields.h.inc:105
+error: target/riscv/cpu_cfg_fields.h.inc: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
