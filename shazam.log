@@ -1,0 +1,26 @@
+Looking up c186b1bbca79df01c96ffb1f21e1dadf83e01698.1788290677.git.matheus.bernardino@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] target/hexagon: add OPEN/READ/CLOSE DIR semihosting operations
+    + Reviewed-by: Pierrick Bouvier <pierrick.bouvier@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/c186b1bbca79df01c96ffb1f21e1dadf83e01698.1788290677.git.matheus.bernardino@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 1
+---
+Applying: target/hexagon: add OPEN/READ/CLOSE DIR semihosting operations
+Patch failed at 0001 target/hexagon: add OPEN/READ/CLOSE DIR semihosting operations
+error: patch failed: target/hexagon/hexswi.c:30
+error: target/hexagon/hexswi.c: patch does not apply
+error: tests/functional/hexagon/test_systests.py: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
