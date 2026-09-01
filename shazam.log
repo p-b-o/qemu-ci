@@ -1,0 +1,48 @@
+Looking up 20260901085238.995968-1-jamin_lin@aspeedtech.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 52 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/9] qapi/crypto: Add ECDSA algorithm and curve id
+    + Link: https://lore.kernel.org/qemu-devel/20260901085238.995968-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 2/9] crypto/akcipher: Support ECDSA sign/verify with gcrypt
+    + Link: https://lore.kernel.org/qemu-devel/20260901085238.995968-3-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 3/9] crypto/akcipher: Support ECDSA sign/verify with nettle
+    + Link: https://lore.kernel.org/qemu-devel/20260901085238.995968-4-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 4/9] tests/crypto: Add ECDSA sign/verify tests
+    + Link: https://lore.kernel.org/qemu-devel/20260901085238.995968-5-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 5/9] hw/arm/aspeed_ast10x0: Remove obsolete unimplemented SBC mapping
+    + Link: https://lore.kernel.org/qemu-devel/20260901085238.995968-6-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 6/9] hw/misc/aspeed_sbc: Increase register space to 0x1000
+    + Link: https://lore.kernel.org/qemu-devel/20260901085238.995968-7-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 7/9] hw/arm/aspeed_ast10x0: Wire SEC SRAM to the SBC model
+    + Link: https://lore.kernel.org/qemu-devel/20260901085238.995968-8-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 8/9] hw/misc/aspeed_sbc: Support the ECDSA verify command
+    + Link: https://lore.kernel.org/qemu-devel/20260901085238.995968-9-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v4 9/9] tests/qtest: Add ASPEED SBC ECDSA engine test
+    + Link: https://lore.kernel.org/qemu-devel/20260901085238.995968-10-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 9
+---
+Applying: qapi/crypto: Add ECDSA algorithm and curve id
+Applying: crypto/akcipher: Support ECDSA sign/verify with gcrypt
+Applying: crypto/akcipher: Support ECDSA sign/verify with nettle
+Applying: tests/crypto: Add ECDSA sign/verify tests
+Applying: hw/arm/aspeed_ast10x0: Remove obsolete unimplemented SBC mapping
+Applying: hw/misc/aspeed_sbc: Increase register space to 0x1000
+Applying: hw/arm/aspeed_ast10x0: Wire SEC SRAM to the SBC model
+Applying: hw/misc/aspeed_sbc: Support the ECDSA verify command
+Applying: tests/qtest: Add ASPEED SBC ECDSA engine test
+Patch failed at 0009 tests/qtest: Add ASPEED SBC ECDSA engine test
+error: patch failed: tests/qtest/meson.build:223
+error: tests/qtest/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
