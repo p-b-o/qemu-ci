@@ -1,0 +1,23 @@
+Looking up CAE14pdd_8whV+A_2qpujNTS+zeCes8M0e53LfN_zLY+v7iKPcw@mail.gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] hw/ufs: Reset controller and MCQ state on HCE transition to 0
+    + Link: https://lore.kernel.org/qemu-devel/CAE14pdd_8whV+A_2qpujNTS+zeCes8M0e53LfN_zLY+v7iKPcw@mail.gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/google.com
+---
+Total patches: 1
+---
+Applying: hw/ufs: Reset controller and MCQ state on HCE transition to 0
+Patch failed at 0001 hw/ufs: Reset controller and MCQ state on HCE transition to 0
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:11
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
