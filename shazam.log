@@ -1,0 +1,82 @@
+Looking up 20260903144143.2328870-1-den@openvz.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 26 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 149 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v7 1/25] parallels: Set s->used_bmap to NULL in parallels_free_used_bitmap()
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-2-den@openvz.org
+  [32m✓[0m [PATCH v7 2/25] parallels: split inactivation out and add the activation counterpart
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-3-den@openvz.org
+  [32m✓[0m [PATCH v7 3/25] iotests: cover inactivating a read-only node
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-4-den@openvz.org
+  [32m✓[0m [PATCH v7 4/25] parallels: Make mark_used() a global function
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-5-den@openvz.org
+  [32m✓[0m [PATCH v7 5/25] parallels: Limit search in parallels_mark_used to the last marked cluster
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-6-den@openvz.org
+  [32m✓[0m [PATCH v7 6/25] parallels: Move host clusters allocation to a separate function
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-7-den@openvz.org
+  [32m✓[0m [PATCH v7 7/25] parallels: do not let the check die on what it is meant to report
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-8-den@openvz.org
+  [32m✓[0m [PATCH v7 8/25] parallels: Create used bitmap even if checks needed
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-9-den@openvz.org
+  [32m✓[0m [PATCH v7 9/25] parallels: Drop unused clusters at the end of the image
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-10-den@openvz.org
+  [32m✓[0m [PATCH v7 10/25] parallels: Remove unnecessary data_end field
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-11-den@openvz.org
+  [32m✓[0m [PATCH v7 11/25] parallels: Add dirty bitmaps saving
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-12-den@openvz.org
+  [32m✓[0m [PATCH v7 12/25] parallels: Let image extensions work in RW mode
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-13-den@openvz.org
+  [32m✓[0m [PATCH v7 13/25] parallels: Handle L1 entries equal to one
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-14-den@openvz.org
+  [32m✓[0m [PATCH v7 14/25] iotests: cover the Format Extension against the leak check
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-15-den@openvz.org
+  [32m✓[0m [PATCH v7 15/25] iotests: run the persistent dirty bitmap test on parallels
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-16-den@openvz.org
+  [32m✓[0m [PATCH v7 16/25] parallels: reject a bitmap L1 entry outside the data area
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-17-den@openvz.org
+  [32m✓[0m [PATCH v7 17/25] parallels: do not trust the bitmaps of an image which was not closed
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-18-den@openvz.org
+  [32m✓[0m [PATCH v7 18/25] parallels: implement removing a stored dirty bitmap
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-19-den@openvz.org
+  [32m✓[0m [PATCH v7 19/25] parallels: report the stored dirty bitmaps in qemu-img info
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-20-den@openvz.org
+  [32m✓[0m [PATCH v7 20/25] iotests: rename parallels-read-bitmap to parallels-bitmap
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-21-den@openvz.org
+  [32m✓[0m [PATCH v7 21/25] iotests: cover storing a parallels dirty bitmap
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-22-den@openvz.org
+  [32m✓[0m [PATCH v7 22/25] iotests: cover the qemu-img bitmap operations on parallels
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-23-den@openvz.org
+  [32m✓[0m [PATCH v7 23/25] iotests: cover a broken Format Extension and a combined repair
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-24-den@openvz.org
+  [32m✓[0m [PATCH v7 24/25] tests: Turned on 256, 299, 304 and block-status-cache for parallels format
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-25-den@openvz.org
+  [32m✓[0m [PATCH v7 25/25] tests: Add parallels format support to image-fleecing
+    + Link: https://lore.kernel.org/qemu-devel/20260903144143.2328870-26-den@openvz.org
+  ---
+  [32m✓[0m Signed: DKIM/openvz.org
+---
+Total patches: 25
+---
+Applying: parallels: Set s->used_bmap to NULL in parallels_free_used_bitmap()
+Applying: parallels: split inactivation out and add the activation counterpart
+Applying: iotests: cover inactivating a read-only node
+Applying: parallels: Make mark_used() a global function
+Applying: parallels: Limit search in parallels_mark_used to the last marked cluster
+Applying: parallels: Move host clusters allocation to a separate function
+Applying: parallels: do not let the check die on what it is meant to report
+Applying: parallels: Create used bitmap even if checks needed
+Applying: parallels: Drop unused clusters at the end of the image
+Applying: parallels: Remove unnecessary data_end field
+Applying: parallels: Add dirty bitmaps saving
+Patch failed at 0011 parallels: Add dirty bitmaps saving
+error: patch failed: block/parallels-ext.c:328
+error: block/parallels-ext.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
