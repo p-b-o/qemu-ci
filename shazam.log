@@ -1,0 +1,67 @@
+Looking up 20260903055131.257903-1-joel@jms.id.au
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 53 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 56 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v3 1/16] hw/riscv/aia: Take a MemoryRegion for the created devices
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-2-joel@jms.id.au
+  [31m✗[0m [PATCH v3 2/16] hw/intc/riscv_aclint: Take a MemoryRegion for the created devices
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-3-joel@jms.id.au
+  [31m✗[0m [PATCH v3 3/16] hw/intc/riscv_imsic: Take a MemoryRegion for the created device
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-4-joel@jms.id.au
+  [31m✗[0m [PATCH v3 4/16] hw/intc/riscv_aplic: Take a MemoryRegion for the created device
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-5-joel@jms.id.au
+  [31m✗[0m [PATCH v3 5/16] hw/intc/sifive_plic: Take a MemoryRegion for the created device
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-6-joel@jms.id.au
+  [31m✗[0m [PATCH v3 6/16] hw/riscv/cps: Map interrupt controllers in SoC container
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-7-joel@jms.id.au
+  [31m✗[0m [PATCH v3 7/16] hw/riscv/atlantis: Make UART unimp region a SoC device
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-8-joel@jms.id.au
+  [31m✗[0m [PATCH v3 8/16] hw/riscv/atlantis: Remove unused fdt_size
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-9-joel@jms.id.au
+  [31m✗[0m [PATCH v3 9/16] hw/riscv/atlantis: Rename hart array 'soc' to 'cpus'
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-10-joel@jms.id.au
+  [31m✗[0m [PATCH v3 10/16] hw/riscv/atlantis: Rework device tree creation
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-11-joel@jms.id.au
+  [31m✗[0m [PATCH v3 11/16] hw/riscv/atlantis: Use local reference for system memory
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-12-joel@jms.id.au
+  [31m✗[0m [PATCH v3 12/16] hw/riscv/atlantis: Decouple RAM size from MachineState
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-13-joel@jms.id.au
+  [31m✗[0m [PATCH v3 13/16] hw/riscv/atlantis: Make TTAtlantisState own memory containers
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-14-joel@jms.id.au
+  [31m✗[0m [PATCH v3 14/16] hw/riscv: Add property to hart array to allow private memory
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-15-joel@jms.id.au
+  [31m✗[0m [PATCH v3 15/16] hw/riscv/atlantis: Extract an Atlantis SoC device
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-16-joel@jms.id.au
+  [31m✗[0m [PATCH v3 16/16] hw/riscv/atlantis: Map the SoC through a memory container
+    + Link: https://lore.kernel.org/qemu-devel/20260903055131.257903-17-joel@jms.id.au
+  ---
+  [31m✗[0m BADSIG: DKIM/gmail.com
+---
+Total patches: 16
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Reviewed-by: Chao Liu <chao.liu@processmission.com>
+     Msg From: Chao Liu via <qemu-riscv@nongnu.org>
+    ! Trailer: Reviewed-by: Chao Liu <chao.liu@processmission.com>
+     Msg From: Chao Liu via qemu development <qemu-devel@nongnu.org>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: hw/riscv/aia: Take a MemoryRegion for the created devices
+Patch failed at 0001 hw/riscv/aia: Take a MemoryRegion for the created devices
+error: patch failed: hw/riscv/aia.h:13
+error: hw/riscv/aia.h: patch does not apply
+error: patch failed: hw/riscv/aia.c:24
+error: hw/riscv/aia.c: patch does not apply
+error: patch failed: hw/riscv/tt_atlantis.c:498
+error: hw/riscv/tt_atlantis.c: patch does not apply
+error: patch failed: hw/riscv/virt.c:809
+error: hw/riscv/virt.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
