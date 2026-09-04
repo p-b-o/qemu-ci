@@ -1,0 +1,59 @@
+Looking up 20260904160643.353833-1-berrange@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 15 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 44 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/13] crypto: Use g_autofree
+    + Link: https://lore.kernel.org/qemu-devel/20260904160643.353833-2-berrange@redhat.com
+  [32m✓[0m [PATCH v2 2/13] crypto/x509-utils: don't double set errp
+    + Link: https://lore.kernel.org/qemu-devel/20260904160643.353833-3-berrange@redhat.com
+  [32m✓[0m [PATCH v2 3/13] crypto/x509-utils: propagate the error
+    + Link: https://lore.kernel.org/qemu-devel/20260904160643.353833-4-berrange@redhat.com
+  [32m✓[0m [PATCH v2 4/13] io/channel-socket: do not treat a zero length write as an error
+    + Link: https://lore.kernel.org/qemu-devel/20260904160643.353833-5-berrange@redhat.com
+  [32m✓[0m [PATCH v2 5/13] io/channel-websock: send an HTTP 400 when the greeting has no space
+    + Link: https://lore.kernel.org/qemu-devel/20260904160643.353833-6-berrange@redhat.com
+  [32m✓[0m [PATCH v2 6/13] io/channel-websock: handle a blocked write during the handshake
+    + Link: https://lore.kernel.org/qemu-devel/20260904160643.353833-7-berrange@redhat.com
+  [32m✓[0m [PATCH v2 7/13] tests/unit: add websock handshake test
+    + Link: https://lore.kernel.org/qemu-devel/20260904160643.353833-8-berrange@redhat.com
+  [32m✓[0m [PATCH v2 8/13] io/channel-websock: do not lose QIO_CHANNEL_ERR_BLOCK while reading
+    + Link: https://lore.kernel.org/qemu-devel/20260904160643.353833-9-berrange@redhat.com
+  [32m✓[0m [PATCH v2 9/13] tests/unit: cover blocked IO during the websock handshake
+    + Link: https://lore.kernel.org/qemu-devel/20260904160643.353833-10-berrange@redhat.com
+  [32m✓[0m [PATCH v2 10/13] crypto: deprecate the AF_ALG crypto backend
+    + Link: https://lore.kernel.org/qemu-devel/20260904160643.353833-11-berrange@redhat.com
+  [32m✓[0m [PATCH v2 11/13] gitlab: use --emacs --quiet for checkpatch.pl instead of --terse
+    + Link: https://lore.kernel.org/qemu-devel/20260904160643.353833-12-berrange@redhat.com
+  [32m✓[0m [PATCH v2 12/13] configure: correctly honour --disable-containers
+    + Link: https://lore.kernel.org/qemu-devel/20260904160643.353833-13-berrange@redhat.com
+  [32m✓[0m [PATCH v2 13/13] docs/system/security: exclude uninitialized stack variables as bugs
+    + Link: https://lore.kernel.org/qemu-devel/20260904160643.353833-14-berrange@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 13
+---
+Applying: crypto: Use g_autofree
+Applying: crypto/x509-utils: don't double set errp
+Applying: crypto/x509-utils: propagate the error
+Applying: io/channel-socket: do not treat a zero length write as an error
+Applying: io/channel-websock: send an HTTP 400 when the greeting has no space
+Applying: io/channel-websock: handle a blocked write during the handshake
+Applying: tests/unit: add websock handshake test
+Applying: io/channel-websock: do not lose QIO_CHANNEL_ERR_BLOCK while reading
+Applying: tests/unit: cover blocked IO during the websock handshake
+Applying: crypto: deprecate the AF_ALG crypto backend
+Applying: gitlab: use --emacs --quiet for checkpatch.pl instead of --terse
+Applying: configure: correctly honour --disable-containers
+Patch failed at 0012 configure: correctly honour --disable-containers
+error: patch failed: configure:1414
+error: configure: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
