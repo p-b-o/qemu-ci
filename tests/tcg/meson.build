@@ -267,7 +267,7 @@ foreach target, plan: tcg_tests
     image_name = 'image-' + cc_dockerfile
     if cc_dockerfile not in image_targets and docker_supported
       cmd = [docker_wrapper, 'build', '-f', dockerfile, '-t', 'qemu/' + cc_dockerfile,
-             docker_platform, '--add-current-user']
+             docker_platform, '--timestamp', '0', '--add-current-user']
       if get_option('container_registry') != ''
         cmd += ['--registry', get_option('container_registry')]
       endif
