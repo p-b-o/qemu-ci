@@ -1,0 +1,38 @@
+Looking up cover.1788630333.git.mchehab+huawei@kernel.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/8] acpi_dev_interface: a ghes support state at AcpiDeviceIfClass
+    + Link: https://lore.kernel.org/qemu-devel/28339fd62574150afe924b93c81f62bfaacb54b6.1788630333.git.mchehab+huawei@kernel.org
+  [32m✓[0m [PATCH 2/8] tests/acpi: virt: reserve expected tables for PC GHES SCI support
+    + Link: https://lore.kernel.org/qemu-devel/bd387daaf58644a71258ebcff789d285da2ff8e7.1788630333.git.mchehab+huawei@kernel.org
+  [32m✓[0m [PATCH 3/8] hw/i186: add support for HEST table with SCI
+    + Link: https://lore.kernel.org/qemu-devel/b57abc926bb60af1ebb4c444f0e1b5ea94d46444.1788630333.git.mchehab+huawei@kernel.org
+  [32m✓[0m [PATCH 4/8] hw/i386: add GHES support at ICH9 and PIIX4 PM
+    + Link: https://lore.kernel.org/qemu-devel/b8649bce2afeef273880bac6c7a1dc4fa2d947d1.1788630333.git.mchehab+huawei@kernel.org
+  [32m✓[0m [PATCH 5/8] tests/acpi: virt: add x86 DSDT and HEST tables
+    + Link: https://lore.kernel.org/qemu-devel/fd8720055fdad2b1498c6f69580e6306278a6c26.1788630333.git.mchehab+huawei@kernel.org
+  [32m✓[0m [PATCH 6/8] docs: acpi_hest_ghes: document notification mechanisms
+    + Link: https://lore.kernel.org/qemu-devel/ad5db180cbb52fe101c19edfcd1bf144e11fff76.1788630333.git.mchehab+huawei@kernel.org
+  [32m✓[0m [PATCH 7/8] tests: test GHES notifications on arm64 virt machine
+    + Link: https://lore.kernel.org/qemu-devel/16e6d6155893f3facb9f258103eea6f9ba4c4818.1788630333.git.mchehab+huawei@kernel.org
+  [32m✓[0m [PATCH 8/8] tests: add GHES tests for x86 piix4 and q35
+    + Link: https://lore.kernel.org/qemu-devel/694086fd203b3149de806e66aaa70b8f181db957.1788630333.git.mchehab+huawei@kernel.org
+  ---
+  [32m✓[0m Signed: DKIM/kernel.org
+---
+Total patches: 8
+---
+Applying: acpi_dev_interface: a ghes support state at AcpiDeviceIfClass
+Patch failed at 0001 acpi_dev_interface: a ghes support state at AcpiDeviceIfClass
+error: patch failed: hw/acpi/generic_event_device.c:608
+error: hw/acpi/generic_event_device.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
