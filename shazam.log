@@ -1,0 +1,21 @@
+Looking up 20260905070448.34648-1-xiongweimin@kylinos.cn
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH v2] net/tap-solaris: Fix resource leaks on error paths
+    + Link: https://lore.kernel.org/qemu-devel/20260905070448.34648-2-xiongweimin@kylinos.cn
+---
+Total patches: 1
+---
+Applying: net/tap-solaris: Fix resource leaks on error paths
+Patch failed at 0001 net/tap-solaris: Fix resource leaks on error paths
+error: tap-solaris.c: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
