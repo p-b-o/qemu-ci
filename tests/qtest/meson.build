@@ -248,6 +248,8 @@ qtests_stm32l4x5 = \
    'stm32l4x5_usart-test']
 
 qtests_arm = \
+  (config_all_devices.has_key('CONFIG_RP2040') ?
+   ['rp2040-sysinfo-test'] : []) + \
   (config_all_devices.has_key('CONFIG_ARM_VIRT') and
    config_all_devices.has_key('CONFIG_PL011_C') ? ['pl011-test'] : []) + \
   (config_all_devices.has_key('CONFIG_MPS2') ? ['sse-timer-test'] : []) + \
