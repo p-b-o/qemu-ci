@@ -9,6 +9,7 @@
 #include "qemu/osdep.h"
 #include "qemu/units.h"
 #include "qapi/error.h"
+#include "qapi/visitor.h"
 #include "hw/arm/boot.h"
 #include "hw/arm/rp2040.h"
 #include "hw/core/boards.h"
@@ -27,7 +28,34 @@ struct RaspiPicoMachineState {
 
     RP2040State soc;
     MemoryRegion flash;
+    uint64_t rosc_random_seed;
+    bool rosc_random_seed_set;
 };
+
+static void raspi_pico_get_rosc_random_seed(Object *obj, Visitor *v,
+                                            const char *name, void *opaque,
+                                            Error **errp)
+{
+    RaspiPicoMachineState *s = RASPI_PICO_MACHINE(obj);
+    uint64_t seed = s->rosc_random_seed;
+
+    visit_type_uint64(v, name, &seed, errp);
+}
+
+static void raspi_pico_set_rosc_random_seed(Object *obj, Visitor *v,
+                                            const char *name, void *opaque,
+                                            Error **errp)
+{
+    RaspiPicoMachineState *s = RASPI_PICO_MACHINE(obj);
+    uint64_t seed;
+
+    if (!visit_type_uint64(v, name, &seed, errp)) {
+        return;
+    }
+
+    s->rosc_random_seed = seed;
+    s->rosc_random_seed_set = true;
+}
 
 static void raspi_pico_init(MachineState *machine)
 {
@@ -37,6 +65,10 @@ static void raspi_pico_init(MachineState *machine)
     object_initialize_child(OBJECT(machine), "soc", &s->soc, TYPE_RP2040);
     qdev_prop_set_chr(DEVICE(&s->soc), "serial0", serial_hd(0));
     qdev_prop_set_chr(DEVICE(&s->soc), "serial1", serial_hd(1));
+    qdev_prop_set_uint64(DEVICE(&s->soc.rosc), "random-seed",
+                         s->rosc_random_seed);
+    qdev_prop_set_bit(DEVICE(&s->soc.rosc), "random-seed-set",
+                      s->rosc_random_seed_set);
     if (machine->firmware) {
         qdev_prop_set_string(DEVICE(&s->soc), "bootrom-file",
                              machine->firmware);
@@ -67,6 +99,14 @@ static void raspi_pico_machine_class_init(ObjectClass *oc, const void *data)
     mc->no_parallel = 1;
     mc->no_floppy = 1;
     mc->no_cdrom = 1;
+
+    object_class_property_add(oc, "rosc-random-seed", "uint64",
+                              raspi_pico_get_rosc_random_seed,
+                              raspi_pico_set_rosc_random_seed, NULL, NULL);
+    object_class_property_set_description(oc, "rosc-random-seed",
+                                          "Use a deterministic seed for the "
+                                          "ROSC RANDOMBIT stream; if unset, "
+                                          "QEMU guest entropy is used");
 }
 
 static const TypeInfo raspi_pico_machine_info = {
