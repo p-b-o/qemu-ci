@@ -15,6 +15,11 @@ qemu_base_args = ['-display', 'none',
                   '-semihosting-config', 'enable=on',
                   '-kernel']
 qemu_def_args = ['-M', 'virt', '-cpu', 'max', qemu_base_args]
+rp2040_cflags = ['-mcpu=cortex-m0plus', '-mthumb', '-mfloat-abi=soft',
+                 '-nostdlib', '-Wl,--build-id=none',
+                 '-T', files('rp2040-minimal.ld')]
+rp2040_qemu_args = ['-M', 'raspi-pico', '-monitor', 'none',
+                    qemu_base_args]
 
 # Multi arch tests
 multi_src = []
@@ -50,6 +55,15 @@ tests += {
                '-Wl,--build-id=none',
                '-T', files('test-armv6m-undef.ld')],
     'qemu_args': ['-M', 'microbit', qemu_base_args],
+  },
+  'rp2040-boot.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_qemu_args,
+  },
+  'rp2040-uart.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': ['-serial', 'stdio', rp2040_qemu_args],
+    'expected_output': 'rp2040-uart.ref',
   },
   'semiconsole.c': {
     'cflags': cflags,
