@@ -1405,6 +1405,11 @@ static uint32_t nvic_readl(NVICState *s, uint32_t offset, MemTxAttrs attrs)
             return cpu->env.pmsav8.rbar[attrs.secure][region];
         }
 
+        if (offset != 0xd9c &&
+            !arm_feature(&cpu->env, ARM_FEATURE_V7)) {
+            goto bad_offset;
+        }
+
         if (region >= cpu->pmsav7_dregion) {
             return 0;
         }
@@ -1430,6 +1435,11 @@ static uint32_t nvic_readl(NVICState *s, uint32_t offset, MemTxAttrs attrs)
                 return 0;
             }
             return cpu->env.pmsav8.rlar[attrs.secure][region];
+        }
+
+        if (offset != 0xda0 &&
+            !arm_feature(&cpu->env, ARM_FEATURE_V7)) {
+            goto bad_offset;
         }
 
         if (region >= cpu->pmsav7_dregion) {
@@ -1919,6 +1929,11 @@ static void nvic_writel(NVICState *s, uint32_t offset, uint32_t value,
             return;
         }
 
+        if (offset != 0xd9c &&
+            !arm_feature(&cpu->env, ARM_FEATURE_V7)) {
+            goto bad_offset;
+        }
+
         if (value & (1 << 4)) {
             /* VALID bit means use the region number specified in this
              * value and also update MPU_RNR.REGION with that value.
@@ -1969,12 +1984,22 @@ static void nvic_writel(NVICState *s, uint32_t offset, uint32_t value,
             return;
         }
 
+        if (offset != 0xda0 &&
+            !arm_feature(&cpu->env, ARM_FEATURE_V7)) {
+            goto bad_offset;
+        }
+
         if (region >= cpu->pmsav7_dregion) {
             return;
         }
 
         cpu->env.pmsav7.drsr[region] = value & 0xff3f;
-        cpu->env.pmsav7.dracr[region] = (value >> 16) & 0x173f;
+        if (arm_feature(&cpu->env, ARM_FEATURE_V7)) {
+            cpu->env.pmsav7.dracr[region] = (value >> 16) & 0x173f;
+        } else {
+            /* Armv6-M has XN, AP, S, C and B, but no TEX field. */
+            cpu->env.pmsav7.dracr[region] = (value >> 16) & 0x1707;
+        }
         tlb_flush(CPU(cpu));
         break;
     }
