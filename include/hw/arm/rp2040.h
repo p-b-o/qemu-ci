@@ -13,6 +13,8 @@
 #include "hw/char/pl011.h"
 #include "hw/core/clock.h"
 #include "hw/core/sysbus.h"
+#include "hw/misc/rp2040_clocks.h"
+#include "hw/misc/rp2040_pll.h"
 #include "hw/misc/rp2040_rosc.h"
 #include "hw/misc/rp2040_sysinfo.h"
 #include "hw/misc/rp2040_syscfg.h"
@@ -41,6 +43,9 @@ struct RP2040State {
 
     ARMv7MState armv7m[RP2040_NUM_CORES];
     PL011State uart[2];
+    RP2040ClocksState clocks;
+    RP2040PllState pll_sys;
+    RP2040PllState pll_usb;
     RP2040SysCfgState syscfg;
     RP2040SysInfoState sysinfo;
     RP2040RoscState rosc;

@@ -1,0 +1,79 @@
+/*
+ * RP2040 clocks emulation
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
+#ifndef HW_MISC_RP2040_CLOCKS_H
+#define HW_MISC_RP2040_CLOCKS_H
+
+#include "hw/core/clock.h"
+#include "hw/core/registerfields.h"
+#include "hw/core/sysbus.h"
+#include "qom/object.h"
+
+#define TYPE_RP2040_CLOCKS "rp2040-clocks"
+OBJECT_DECLARE_SIMPLE_TYPE(RP2040ClocksState, RP2040_CLOCKS)
+
+#define RP2040_CLOCKS_BASE 0x40008000
+#define RP2040_CLOCKS_SIZE 0x4000
+
+REG32(CLK_GPOUT0_CTRL, 0x00)
+REG32(CLK_REF_CTRL, 0x30)
+REG32(CLK_REF_DIV, 0x34)
+REG32(CLK_REF_SELECTED, 0x38)
+REG32(CLK_SYS_CTRL, 0x3c)
+REG32(CLK_SYS_DIV, 0x40)
+REG32(CLK_SYS_SELECTED, 0x44)
+REG32(CLK_PERI_CTRL, 0x48)
+    FIELD(CLK_PERI_CTRL, ENABLE, 11, 1)
+REG32(CLK_PERI_DIV, 0x4c)
+REG32(CLK_PERI_SELECTED, 0x50)
+REG32(CLK_USB_CTRL, 0x54)
+    FIELD(CLK_USB_CTRL, ENABLE, 11, 1)
+REG32(CLK_USB_DIV, 0x58)
+REG32(CLK_USB_SELECTED, 0x5c)
+REG32(CLK_ADC_CTRL, 0x60)
+    FIELD(CLK_ADC_CTRL, ENABLE, 11, 1)
+REG32(CLK_ADC_DIV, 0x64)
+REG32(CLK_ADC_SELECTED, 0x68)
+REG32(CLK_RTC_CTRL, 0x6c)
+    FIELD(CLK_RTC_CTRL, ENABLE, 11, 1)
+REG32(CLK_RTC_DIV, 0x70)
+REG32(CLK_RTC_SELECTED, 0x74)
+REG32(FC0_REF_KHZ, 0x80)
+REG32(FC0_MIN_KHZ, 0x84)
+REG32(FC0_MAX_KHZ, 0x88)
+REG32(FC0_DELAY, 0x8c)
+REG32(FC0_INTERVAL, 0x90)
+REG32(FC0_SRC, 0x94)
+REG32(FC0_STATUS, 0x98)
+    FIELD(FC0_STATUS, DONE, 4, 1)
+REG32(FC0_RESULT, 0x9c)
+REG32(WAKE_EN0, 0xa0)
+REG32(WAKE_EN1, 0xa4)
+REG32(SLEEP_EN0, 0xa8)
+REG32(SLEEP_EN1, 0xac)
+REG32(ENABLED0, 0xb0)
+REG32(ENABLED1, 0xb4)
+REG32(CLOCKS_INTR, 0xb8)
+
+#define RP2040_CLOCKS_DIV_RESET 0x00000100
+
+struct RP2040ClocksState {
+    SysBusDevice parent_obj;
+
+    MemoryRegion iomem;
+    Clock *clk_ref;
+    Clock *clk_sys;
+    Clock *clk_peri;
+    Clock *clk_usb;
+    Clock *clk_adc;
+    Clock *clk_rtc;
+    Clock *pll_sys;
+    Clock *pll_usb;
+
+    uint32_t regs[0x100 / 4];
+};
+
+#endif
