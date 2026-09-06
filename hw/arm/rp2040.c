@@ -13,6 +13,7 @@
 #include "hw/core/loader.h"
 #include "hw/core/qdev-clock.h"
 #include "hw/core/qdev-properties.h"
+#include "hw/core/irq.h"
 #include "hw/misc/unimp.h"
 #include "qemu/datadir.h"
 #include "target/arm/cpu-qom.h"
@@ -49,7 +50,6 @@ static const struct {
     hwaddr base;
     hwaddr size;
 } rp2040_unimplemented[] = {
-    { "rp2040.syscfg",   0x40004000, 0x4000 },
     { "rp2040.clocks",   0x40008000, 0x4000 },
     { "rp2040.resets",   0x4000c000, 0x4000 },
     { "rp2040.psm",      0x40010000, 0x4000 },
@@ -83,6 +83,40 @@ static const struct {
     { "rp2040.sio",      0xd0000000, 0x1000 },
 };
 
+static void rp2040_update_nmi(RP2040State *s)
+{
+    unsigned core;
+
+    for (core = 0; core < RP2040_NUM_CORES; core++) {
+        uint32_t nmi_mask = rp2040_syscfg_get_nmi_mask(&s->syscfg, core);
+        bool nmi_level = false;
+        int irq;
+
+        for (irq = 0; irq < RP2040_NUM_IRQS; irq++) {
+            bool route_to_nmi = nmi_mask & BIT(irq);
+
+            qemu_set_irq(s->cpu_irq[core][irq],
+                         s->irq_level[irq] && !route_to_nmi);
+            nmi_level |= s->irq_level[irq] && route_to_nmi;
+        }
+        qemu_set_irq(s->nmi_irq[core], nmi_level);
+    }
+}
+
+static void rp2040_syscfg_update(void *opaque)
+{
+    rp2040_update_nmi(opaque);
+}
+
+static void rp2040_set_irq(void *opaque, int irq, int level)
+{
+    RP2040State *s = opaque;
+
+    assert(irq >= 0 && irq < RP2040_NUM_IRQS);
+    s->irq_level[irq] = level;
+    rp2040_update_nmi(s);
+}
+
 static void rp2040_soc_init(Object *obj)
 {
     RP2040State *s = RP2040(obj);
@@ -109,7 +143,10 @@ static void rp2040_soc_init(Object *obj)
                                   "chardev");
     }
 
+    object_initialize_child(obj, "syscfg", &s->syscfg, TYPE_RP2040_SYSCFG);
     object_initialize_child(obj, "sysinfo", &s->sysinfo, TYPE_RP2040_SYSINFO);
+
+    s->irq = qemu_allocate_irqs(rp2040_set_irq, s, RP2040_NUM_IRQS);
 
     s->sysclk = clock_new(obj, "sysclk");
     clock_set_hz(s->sysclk, RP2040_SYSCLK_FRQ);
@@ -221,7 +258,20 @@ static void rp2040_soc_realize(DeviceState *dev, Error **errp)
         if (!sysbus_realize(SYS_BUS_DEVICE(&s->armv7m[i]), errp)) {
             return;
         }
+
+        for (int irq = 0; irq < RP2040_NUM_IRQS; irq++) {
+            s->cpu_irq[i][irq] =
+                qdev_get_gpio_in(DEVICE(&s->armv7m[i]), irq);
+        }
+        s->nmi_irq[i] = qdev_get_gpio_in_named(DEVICE(&s->armv7m[i]),
+                                               "NMI", 0);
     }
+
+    if (!sysbus_realize(SYS_BUS_DEVICE(&s->syscfg), errp)) {
+        return;
+    }
+    sysbus_mmio_map(SYS_BUS_DEVICE(&s->syscfg), 0, RP2040_SYSCFG_BASE);
+    rp2040_syscfg_set_update_callback(&s->syscfg, rp2040_syscfg_update, s);
 
     if (!sysbus_realize(SYS_BUS_DEVICE(&s->sysinfo), errp)) {
         return;
@@ -235,9 +285,10 @@ static void rp2040_soc_realize(DeviceState *dev, Error **errp)
         }
         sysbus_mmio_map(SYS_BUS_DEVICE(&s->uart[i]), 0, uart_base[i]);
         sysbus_connect_irq(SYS_BUS_DEVICE(&s->uart[i]), 0,
-                           qdev_get_gpio_in(DEVICE(&s->armv7m[0]),
-                                            uart_irq[i]));
+                           s->irq[uart_irq[i]]);
     }
+
+    rp2040_update_nmi(s);
 }
 
 static const Property rp2040_soc_properties[] = {
