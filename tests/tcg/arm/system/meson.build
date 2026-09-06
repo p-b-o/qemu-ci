@@ -65,6 +65,11 @@ tests += {
     'qemu_args': ['-serial', 'stdio', rp2040_qemu_args],
     'expected_output': 'rp2040-uart.ref',
   },
+  'rp2040-mpu.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': ['-serial', 'stdio', rp2040_qemu_args],
+    'expected_output': 'rp2040-mpu.ref',
+  },
   'semiconsole.c': {
     'cflags': cflags,
     'qemu_args': ['-serial', 'none', '-chardev', 'stdio,mux=on,id=stdio0',
