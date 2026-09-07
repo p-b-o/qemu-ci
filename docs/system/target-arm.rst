@@ -96,6 +96,7 @@ Board-specific documentation
    arm/imx8m
    arm/orangepi
    arm/raspi
+   arm/raspi-pico
    arm/collie
    arm/sx1
    arm/stellaris
