@@ -265,6 +265,7 @@ qtests_arm = \
   (config_all_devices.has_key('CONFIG_RP2040') ?
    ['rp2040-syscfg-test',
      'rp2040-sysinfo-test',
+    'rp2040-busctrl-test',
     'rp2040-clocks-test',
     'rp2040-dma-test',
     'rp2040-iobank0-test',
