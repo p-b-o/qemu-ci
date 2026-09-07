@@ -162,6 +162,16 @@ tests += {
     'qemu_args': rp2040_uart_qemu_args,
     'expected_output': 'rp2040-bootrom-helpers.ref',
   },
+  'rp2040-bootrom-float.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-bootrom-float.ref',
+  },
+  'rp2040-flash-lockout.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-flash-lockout.ref',
+  },
   'semiconsole.c': {
     'cflags': cflags,
     'qemu_args': ['-serial', 'none', '-chardev', 'stdio,mux=on,id=stdio0',
