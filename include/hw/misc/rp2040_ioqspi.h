@@ -30,6 +30,8 @@ struct RP2040IoQspiState {
     uint32_t proc1_intf;
     uint32_t dormant_wake_inte;
     uint32_t dormant_wake_intf;
+    qemu_irq proc0_irq;
+    qemu_irq proc1_irq;
     RP2040XipState *xip;
 };
 

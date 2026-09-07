@@ -103,9 +103,10 @@ struct RP2040State {
     char *bootrom_file;
 
     qemu_irq *irq;
+    qemu_irq *core_irq[RP2040_NUM_CORES];
     qemu_irq cpu_irq[RP2040_NUM_CORES][RP2040_NUM_IRQS];
     qemu_irq nmi_irq[RP2040_NUM_CORES];
-    bool irq_level[RP2040_NUM_IRQS];
+    bool irq_level[RP2040_NUM_CORES][RP2040_NUM_IRQS];
     bool strict_uart_pins;
     bool uart0_tx_pin_enabled;
     bool uart0_rx_pin_enabled;

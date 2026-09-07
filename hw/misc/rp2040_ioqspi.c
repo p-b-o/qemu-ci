@@ -54,6 +54,16 @@ static uint32_t rp2040_ioqspi_ints(uint32_t intr, uint32_t inte,
     return (intr & inte) | intf;
 }
 
+static void rp2040_ioqspi_update_irq(RP2040IoQspiState *s)
+{
+    qemu_set_irq(s->proc0_irq,
+                 rp2040_ioqspi_ints(s->intr, s->proc0_inte,
+                                    s->proc0_intf) != 0);
+    qemu_set_irq(s->proc1_irq,
+                 rp2040_ioqspi_ints(s->intr, s->proc1_inte,
+                                    s->proc1_intf) != 0);
+}
+
 static void rp2040_ioqspi_update_ss(RP2040IoQspiState *s)
 {
     uint32_t outover;
@@ -148,26 +158,31 @@ static void rp2040_ioqspi_write(void *opaque, hwaddr addr,
         switch (offset) {
         case IOQSPI_INTR:
             s->intr &= ~(value & IOQSPI_INTR_EDGE_MASK);
+            rp2040_ioqspi_update_irq(s);
             break;
         case IOQSPI_PROC0_INTE:
             s->proc0_inte =
                 rp2040_atomic_update(s->proc0_inte, value, alias) &
                 IOQSPI_IRQ_MASK;
+            rp2040_ioqspi_update_irq(s);
             break;
         case IOQSPI_PROC0_INTF:
             s->proc0_intf =
                 rp2040_atomic_update(s->proc0_intf, value, alias) &
                 IOQSPI_IRQ_MASK;
+            rp2040_ioqspi_update_irq(s);
             break;
         case IOQSPI_PROC1_INTE:
             s->proc1_inte =
                 rp2040_atomic_update(s->proc1_inte, value, alias) &
                 IOQSPI_IRQ_MASK;
+            rp2040_ioqspi_update_irq(s);
             break;
         case IOQSPI_PROC1_INTF:
             s->proc1_intf =
                 rp2040_atomic_update(s->proc1_intf, value, alias) &
                 IOQSPI_IRQ_MASK;
+            rp2040_ioqspi_update_irq(s);
             break;
         case IOQSPI_DORMANT_INTE:
             s->dormant_wake_inte =
@@ -222,6 +237,7 @@ static void rp2040_ioqspi_reset(DeviceState *dev)
     s->proc1_intf = 0;
     s->dormant_wake_inte = 0;
     s->dormant_wake_intf = 0;
+    rp2040_ioqspi_update_irq(s);
 }
 
 static void rp2040_ioqspi_init(Object *obj)
@@ -231,6 +247,8 @@ static void rp2040_ioqspi_init(Object *obj)
     memory_region_init_io(&s->iomem, obj, &rp2040_ioqspi_ops, s,
                           "rp2040.ioqspi", RP2040_IOQSPI_SIZE);
     sysbus_init_mmio(SYS_BUS_DEVICE(obj), &s->iomem);
+    sysbus_init_irq(SYS_BUS_DEVICE(obj), &s->proc0_irq);
+    sysbus_init_irq(SYS_BUS_DEVICE(obj), &s->proc1_irq);
 }
 
 static const VMStateDescription rp2040_ioqspi_vmstate = {

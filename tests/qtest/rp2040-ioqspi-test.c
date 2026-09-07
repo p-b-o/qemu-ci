@@ -15,6 +15,8 @@
 #define IOQSPI_PROC0_INTE       0x34
 #define IOQSPI_PROC0_INTF       0x38
 #define IOQSPI_PROC0_INTS       0x3c
+#define IOQSPI_PROC1_INTF       0x44
+#define IOQSPI_PROC1_INTS       0x48
 
 #define IOQSPI_CTRL_RESET       0x1f
 #define IOQSPI_SD1_CTRL_SET     0x201c
@@ -58,11 +60,31 @@ static void test_ioqspi_interrupt_force_status(void)
 {
     QTestState *qts = rp2040_start();
 
+    qtest_irq_intercept_in(qts, "/machine/soc/proc0");
+    g_assert_false(qtest_get_irq(qts, 14));
+
     qtest_writel(qts, IOQSPI_BASE + IOQSPI_PROC0_INTE, BIT(1));
     qtest_writel(qts, IOQSPI_BASE + IOQSPI_PROC0_INTF, BIT(2));
 
     g_assert_cmphex(qtest_readl(qts, IOQSPI_BASE + IOQSPI_PROC0_INTS), ==,
                     BIT(2));
+    g_assert_true(qtest_get_irq(qts, 14));
+    qtest_writel(qts, IOQSPI_BASE + IOQSPI_PROC0_INTF + 0x3000, BIT(2));
+    g_assert_false(qtest_get_irq(qts, 14));
+
+    qtest_quit(qts);
+    qts = rp2040_start();
+
+    qtest_irq_intercept_in(qts, "/machine/soc/proc1");
+    g_assert_false(qtest_get_irq(qts, 14));
+
+    qtest_writel(qts, IOQSPI_BASE + IOQSPI_PROC1_INTF, BIT(3));
+    g_assert_cmphex(qtest_readl(qts, IOQSPI_BASE + IOQSPI_PROC1_INTS), ==,
+                    BIT(3));
+    g_assert_true(qtest_get_irq(qts, 14));
+
+    qtest_writel(qts, IOQSPI_BASE + IOQSPI_PROC1_INTF + 0x3000, BIT(3));
+    g_assert_false(qtest_get_irq(qts, 14));
 
     qtest_quit(qts);
 }

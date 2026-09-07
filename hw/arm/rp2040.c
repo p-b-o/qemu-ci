@@ -34,6 +34,7 @@
 #define RP2040_DMA_IRQ_0  11
 #define RP2040_DMA_IRQ_1  12
 #define RP2040_IO_IRQ_BANK0 13
+#define RP2040_IO_IRQ_QSPI 14
 #define RP2040_SIO_IRQ_PROC0 15
 #define RP2040_SIO_IRQ_PROC1 16
 
@@ -1474,8 +1475,8 @@ static void rp2040_update_nmi(RP2040State *s)
             bool route_to_nmi = nmi_mask & BIT(irq);
 
             qemu_set_irq(s->cpu_irq[core][irq],
-                         s->irq_level[irq] && !route_to_nmi);
-            nmi_level |= s->irq_level[irq] && route_to_nmi;
+                         s->irq_level[core][irq] && !route_to_nmi);
+            nmi_level |= s->irq_level[core][irq] && route_to_nmi;
         }
         qemu_set_irq(s->nmi_irq[core], nmi_level);
     }
@@ -1491,7 +1492,26 @@ static void rp2040_set_irq(void *opaque, int irq, int level)
     RP2040State *s = opaque;
 
     assert(irq >= 0 && irq < RP2040_NUM_IRQS);
-    s->irq_level[irq] = level;
+    s->irq_level[0][irq] = level;
+    s->irq_level[1][irq] = level;
+    rp2040_update_nmi(s);
+}
+
+static void rp2040_set_core0_irq(void *opaque, int irq, int level)
+{
+    RP2040State *s = opaque;
+
+    assert(irq >= 0 && irq < RP2040_NUM_IRQS);
+    s->irq_level[0][irq] = level;
+    rp2040_update_nmi(s);
+}
+
+static void rp2040_set_core1_irq(void *opaque, int irq, int level)
+{
+    RP2040State *s = opaque;
+
+    assert(irq >= 0 && irq < RP2040_NUM_IRQS);
+    s->irq_level[1][irq] = level;
     rp2040_update_nmi(s);
 }
 
@@ -1671,6 +1691,10 @@ static void rp2040_soc_init(Object *obj)
     object_initialize_child(obj, "xosc", &s->xosc, TYPE_RP2040_XOSC);
 
     s->irq = qemu_allocate_irqs(rp2040_set_irq, s, RP2040_NUM_IRQS);
+    s->core_irq[0] = qemu_allocate_irqs(rp2040_set_core0_irq, s,
+                                        RP2040_NUM_IRQS);
+    s->core_irq[1] = qemu_allocate_irqs(rp2040_set_core1_irq, s,
+                                        RP2040_NUM_IRQS);
 
     s->sysclk = clock_new(obj, "sysclk");
 }
@@ -1882,7 +1906,7 @@ static void rp2040_soc_realize(DeviceState *dev, Error **errp)
     }
     sysbus_mmio_map(SYS_BUS_DEVICE(&s->sio), 0, RP2040_SIO_BASE);
     sysbus_connect_irq(SYS_BUS_DEVICE(&s->sio), 0,
-                       s->irq[RP2040_SIO_IRQ_PROC0]);
+                       s->core_irq[0][RP2040_SIO_IRQ_PROC0]);
 
     for (i = 0; i < RP2040_NUM_CORES; i++) {
         g_autofree char *memory_name =
@@ -1938,9 +1962,9 @@ static void rp2040_soc_realize(DeviceState *dev, Error **errp)
     }
     sysbus_mmio_map(SYS_BUS_DEVICE(&s->iobank0), 0, RP2040_IOBANK0_BASE);
     sysbus_connect_irq(SYS_BUS_DEVICE(&s->iobank0), 0,
-                       s->irq[RP2040_IO_IRQ_BANK0]);
+                       s->core_irq[0][RP2040_IO_IRQ_BANK0]);
     sysbus_connect_irq(SYS_BUS_DEVICE(&s->iobank0), 1,
-                       s->cpu_irq[RP2040_PROC1][RP2040_IO_IRQ_BANK0]);
+                       s->core_irq[1][RP2040_IO_IRQ_BANK0]);
     qdev_connect_gpio_out_named(DEVICE(&s->iobank0), "uart0-pin", 0,
                                 qdev_get_gpio_in_named(dev, "uart-pin", 0));
     qdev_connect_gpio_out_named(DEVICE(&s->iobank0), "uart0-pin", 1,
@@ -1950,7 +1974,7 @@ static void rp2040_soc_realize(DeviceState *dev, Error **errp)
     qdev_connect_gpio_out_named(DEVICE(&s->iobank0), "uart1-pin", 1,
                                 qdev_get_gpio_in_named(dev, "uart-pin", 3));
     sysbus_connect_irq(SYS_BUS_DEVICE(&s->sio), 1,
-                       s->cpu_irq[RP2040_PROC1][RP2040_SIO_IRQ_PROC1]);
+                       s->core_irq[1][RP2040_SIO_IRQ_PROC1]);
 
     object_property_set_link(OBJECT(&s->ioqspi), "xip", OBJECT(&s->xip),
                              &err);
@@ -1962,6 +1986,10 @@ static void rp2040_soc_realize(DeviceState *dev, Error **errp)
         return;
     }
     sysbus_mmio_map(SYS_BUS_DEVICE(&s->ioqspi), 0, RP2040_IOQSPI_BASE);
+    sysbus_connect_irq(SYS_BUS_DEVICE(&s->ioqspi), 0,
+                       s->core_irq[0][RP2040_IO_IRQ_QSPI]);
+    sysbus_connect_irq(SYS_BUS_DEVICE(&s->ioqspi), 1,
+                       s->core_irq[1][RP2040_IO_IRQ_QSPI]);
 
     if (!sysbus_realize(SYS_BUS_DEVICE(&s->rosc), errp)) {
         return;
