@@ -1,0 +1,28 @@
+Looking up 20260907113715.1219775-1-subrahmanya.lingappa@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v1 1/2] hw/riscv: add RPMI support for server reference platform
+    + Link: https://lore.kernel.org/qemu-devel/20260907113715.1219775-2-subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v1 2/2] tests/qtest: split RISC-V RPMI tests by machine
+    + Link: https://lore.kernel.org/qemu-devel/20260907113715.1219775-3-subrahmanya.lingappa@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 2
+---
+Applying: hw/riscv: add RPMI support for server reference platform
+Patch failed at 0001 hw/riscv: add RPMI support for server reference platform
+error: docs/system/riscv/riscv-server-ref.rst: does not exist in index
+error: patch failed: hw/riscv/Kconfig:85
+error: hw/riscv/Kconfig: patch does not apply
+error: hw/riscv/server_platform_ref.c: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
