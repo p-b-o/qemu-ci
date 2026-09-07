@@ -24,6 +24,9 @@ rp2040_qemu_args = ['-M', 'raspi-pico', '-monitor', 'none',
 rp2040_uart_qemu_args = ['-M', 'raspi-pico,strict-uart-pins=off',
                          '-monitor', 'none', '-serial', 'stdio',
                          qemu_base_args]
+rp2040_uart1_qemu_args = ['-M', 'raspi-pico,strict-uart-pins=off',
+                          '-monitor', 'none', '-serial', 'null',
+                          '-serial', 'stdio', qemu_base_args]
 rp2040_flash_persist = find_program('rp2040-flash-persist.sh')
 
 # Multi arch tests
@@ -131,6 +134,28 @@ tests += {
     'cflags': rp2040_cflags,
     'qemu_args': rp2040_uart_qemu_args,
     'expected_output': 'rp2040-core1-xip-fault.ref',
+  },
+  'rp2040-dma-memory.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-dma-memory.ref',
+  },
+  'rp2040-dma-uart.S': {
+    'exe_name': 'rp2040-dma-uart0',
+    'test_name': 'rp2040-dma-uart0',
+    'cflags': rp2040_cflags + ['-DUART_INDEX=0'],
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-dma-uart0.ref',
+  },
+}
+
+tests += {
+  'rp2040-dma-uart.S': {
+    'exe_name': 'rp2040-dma-uart1',
+    'test_name': 'rp2040-dma-uart1',
+    'cflags': rp2040_cflags + ['-DUART_INDEX=1'],
+    'qemu_args': rp2040_uart1_qemu_args,
+    'expected_output': 'rp2040-dma-uart1.ref',
   },
   'semiconsole.c': {
     'cflags': cflags,
