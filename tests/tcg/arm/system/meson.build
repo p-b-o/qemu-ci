@@ -17,7 +17,8 @@ qemu_base_args = ['-display', 'none',
 qemu_def_args = ['-M', 'virt', '-cpu', 'max', qemu_base_args]
 rp2040_cflags = ['-mcpu=cortex-m0plus', '-mthumb', '-mfloat-abi=soft',
                  '-nostdlib', '-Wl,--build-id=none',
-                 '-T', files('rp2040-minimal.ld')]
+                 files('rp2040-boot2-w25q080.S'),
+                 '-T', files('rp2040.ld')]
 rp2040_qemu_args = ['-M', 'raspi-pico', '-monitor', 'none',
                     qemu_base_args]
 rp2040_uart_qemu_args = ['-M', 'raspi-pico,strict-uart-pins=off',
