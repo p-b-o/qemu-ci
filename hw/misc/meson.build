@@ -111,6 +111,7 @@ system_ss.add(when: 'CONFIG_RP2040', if_true: files('rp2040_syscfg.c'))
 system_ss.add(when: 'CONFIG_RP2040',
               if_true: files('rp2040_sysinfo.c'))
 system_ss.add(when: 'CONFIG_RP2040', if_true: files('rp2040_tbman.c'))
+system_ss.add(when: 'CONFIG_RP2040', if_true: files('rp2040_timer.c'))
 system_ss.add(when: 'CONFIG_RP2040', if_true: files('rp2040_vreg.c'))
 system_ss.add(when: 'CONFIG_RP2040',
               if_true: files('rp2040_watchdog.c'))
