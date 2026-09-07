@@ -14,6 +14,10 @@
 #define TYPE_RP2040_XIP "rp2040-xip"
 OBJECT_DECLARE_SIMPLE_TYPE(RP2040XipState, RP2040_XIP)
 
+typedef void (*RP2040XipBusyCallback)(void *opaque, bool busy);
+typedef void (*RP2040XipChangedCallback)(void *opaque, hwaddr addr,
+                                         hwaddr size);
+
 #define RP2040_XIP_CTRL_BASE 0x14000000
 #define RP2040_XIP_SSI_BASE  0x18000000
 #define RP2040_XIP_AUX_BASE  0x50400000
@@ -40,6 +44,10 @@ struct RP2040XipState {
     uint64_t flash_uid;
     uint8_t *storage;
     bool xip_writable;
+    RP2040XipBusyCallback busy_cb;
+    void *busy_opaque;
+    RP2040XipChangedCallback changed_cb;
+    void *changed_opaque;
 
     uint32_t xip_ctrl;
 
@@ -79,6 +87,12 @@ struct RP2040XipState {
 };
 
 void rp2040_xip_set_writable(RP2040XipState *s, bool writable);
+void rp2040_xip_set_busy_callback(RP2040XipState *s,
+                                  RP2040XipBusyCallback callback,
+                                  void *opaque);
+void rp2040_xip_set_changed_callback(RP2040XipState *s,
+                                     RP2040XipChangedCallback callback,
+                                     void *opaque);
 MemTxResult rp2040_xip_read_data(RP2040XipState *s, hwaddr addr,
                                  uint64_t *data, unsigned size);
 void rp2040_xip_load_image(RP2040XipState *s, const char *filename,

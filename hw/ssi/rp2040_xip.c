@@ -306,13 +306,21 @@ static uint8_t rp2040_xip_flash_uid_byte(RP2040XipState *s, unsigned index)
 
 static void rp2040_xip_set_busy(RP2040XipState *s, bool busy)
 {
+    bool changed = s->busy != busy;
+
     s->busy = busy;
     memory_region_rom_device_set_romd(&s->xip, !busy);
+    if (changed && s->busy_cb) {
+        s->busy_cb(s->busy_opaque, busy);
+    }
 }
 
 static void rp2040_xip_changed(RP2040XipState *s, hwaddr addr, hwaddr size)
 {
     memory_region_flush_rom_device(&s->xip, addr, size);
+    if (s->changed_cb) {
+        s->changed_cb(s->changed_opaque, addr, size);
+    }
 }
 
 static void rp2040_xip_finish_busy(RP2040XipState *s)
@@ -1058,6 +1066,22 @@ static const MemoryRegionOps rp2040_xip_aux_ops = {
 void rp2040_xip_set_writable(RP2040XipState *s, bool writable)
 {
     s->xip_writable = writable;
+}
+
+void rp2040_xip_set_busy_callback(RP2040XipState *s,
+                                  RP2040XipBusyCallback callback,
+                                  void *opaque)
+{
+    s->busy_cb = callback;
+    s->busy_opaque = opaque;
+}
+
+void rp2040_xip_set_changed_callback(RP2040XipState *s,
+                                     RP2040XipChangedCallback callback,
+                                     void *opaque)
+{
+    s->changed_cb = callback;
+    s->changed_opaque = opaque;
 }
 
 void rp2040_xip_qspi_cs(RP2040XipState *s, bool high)

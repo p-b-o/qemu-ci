@@ -28,6 +28,7 @@ rp2040_uart1_qemu_args = ['-M', 'raspi-pico,strict-uart-pins=off',
                           '-monitor', 'none', '-serial', 'null',
                           '-serial', 'stdio', qemu_base_args]
 rp2040_flash_persist = find_program('rp2040-flash-persist.sh')
+rp2040_check_exit = find_program('rp2040-check-exit.sh')
 
 # Multi arch tests
 multi_src = []
@@ -171,6 +172,31 @@ tests += {
     'cflags': rp2040_cflags,
     'qemu_args': rp2040_uart_qemu_args,
     'expected_output': 'rp2040-flash-lockout.ref',
+  },
+  'rp2040-bkpt-hardfault.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-bkpt-hardfault.ref',
+  },
+  'rp2040-exit.S': {
+    'exe_name': 'rp2040-semihost-exit',
+    'test_name': 'rp2040-semihost-exit',
+    'cflags': rp2040_cflags + ['-DEXIT_MODE=0'],
+    'qemu_args': ['-M', 'raspi-pico', '-monitor', 'none',
+                  '-serial', 'none', qemu_base_args],
+    'wrapper': [rp2040_check_exit, '23'],
+  },
+}
+
+tests += {
+  'rp2040-exit.S': {
+    'exe_name': 'rp2040-pico-sdk-exit',
+    'test_name': 'rp2040-pico-sdk-exit',
+    'cflags': rp2040_cflags + ['-DEXIT_MODE=1'],
+    'qemu_args': ['-M', 'raspi-pico,pico-sdk-exit=on',
+                  '-monitor', 'none', '-display', 'none',
+                  '-serial', 'none', '-kernel'],
+    'wrapper': [rp2040_check_exit, '23'],
   },
   'semiconsole.c': {
     'cflags': cflags,
