@@ -20,6 +20,9 @@ rp2040_cflags = ['-mcpu=cortex-m0plus', '-mthumb', '-mfloat-abi=soft',
                  '-T', files('rp2040-minimal.ld')]
 rp2040_qemu_args = ['-M', 'raspi-pico', '-monitor', 'none',
                     qemu_base_args]
+rp2040_uart_qemu_args = ['-M', 'raspi-pico,strict-uart-pins=off',
+                         '-monitor', 'none', '-serial', 'stdio',
+                         qemu_base_args]
 
 # Multi arch tests
 multi_src = []
@@ -62,13 +65,33 @@ tests += {
   },
   'rp2040-uart.S': {
     'cflags': rp2040_cflags,
-    'qemu_args': ['-serial', 'stdio', rp2040_qemu_args],
+    'qemu_args': rp2040_uart_qemu_args,
     'expected_output': 'rp2040-uart.ref',
   },
   'rp2040-mpu.S': {
     'cflags': rp2040_cflags,
-    'qemu_args': ['-serial', 'stdio', rp2040_qemu_args],
+    'qemu_args': rp2040_uart_qemu_args,
     'expected_output': 'rp2040-mpu.ref',
+  },
+  'rp2040-sio-fifo.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-sio-fifo.ref',
+  },
+  'rp2040-sio-divider.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-sio-divider.ref',
+  },
+  'rp2040-psm-proc1.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-psm-proc1.ref',
+  },
+  'rp2040-core1-launch.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-core1-launch.ref',
   },
   'semiconsole.c': {
     'cflags': cflags,
