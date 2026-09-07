@@ -267,6 +267,7 @@ qtests_arm = \
      'rp2040-sysinfo-test',
     'rp2040-clocks-test',
     'rp2040-iobank0-test',
+    'rp2040-ioqspi-test',
     'rp2040-pads-test',
     'rp2040-resets-test',
     'rp2040-rosc-test',
