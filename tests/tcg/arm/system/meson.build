@@ -157,6 +157,11 @@ tests += {
     'qemu_args': rp2040_uart1_qemu_args,
     'expected_output': 'rp2040-dma-uart1.ref',
   },
+  'rp2040-bootrom-helpers.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-bootrom-helpers.ref',
+  },
   'semiconsole.c': {
     'cflags': cflags,
     'qemu_args': ['-serial', 'none', '-chardev', 'stdio,mux=on,id=stdio0',
