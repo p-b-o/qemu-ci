@@ -24,6 +24,7 @@ rp2040_qemu_args = ['-M', 'raspi-pico', '-monitor', 'none',
 rp2040_uart_qemu_args = ['-M', 'raspi-pico,strict-uart-pins=off',
                          '-monitor', 'none', '-serial', 'stdio',
                          qemu_base_args]
+rp2040_flash_persist = find_program('rp2040-flash-persist.sh')
 
 # Multi arch tests
 multi_src = []
@@ -98,6 +99,38 @@ tests += {
     'cflags': rp2040_cflags,
     'qemu_args': rp2040_uart_qemu_args,
     'expected_output': 'rp2040-timer.ref',
+  },
+  'rp2040-flash-commands.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'wrapper': [rp2040_flash_persist,
+                files('rp2040-flash-commands.ref'),
+                files('rp2040-flash-persist-reader.ref')],
+  },
+  'rp2040-flash-ioqspi.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-flash-ioqspi.ref',
+  },
+  'rp2040-flash-busy-hardfault.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-flash-busy-hardfault.ref',
+  },
+  'rp2040-flash-busy-lockout.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-flash-busy-lockout.ref',
+  },
+  'rp2040-core0-xip-fault.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-core0-xip-fault.ref',
+  },
+  'rp2040-core1-xip-fault.S': {
+    'cflags': rp2040_cflags,
+    'qemu_args': rp2040_uart_qemu_args,
+    'expected_output': 'rp2040-core1-xip-fault.ref',
   },
   'semiconsole.c': {
     'cflags': cflags,
