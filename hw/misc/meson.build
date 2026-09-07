@@ -106,6 +106,7 @@ system_ss.add(when: 'CONFIG_RP2040', if_true: files('rp2040_pll.c'))
 system_ss.add(when: 'CONFIG_RP2040', if_true: files('rp2040_psm.c'))
 system_ss.add(when: 'CONFIG_RP2040', if_true: files('rp2040_resets.c'))
 system_ss.add(when: 'CONFIG_RP2040', if_true: files('rp2040_rosc.c'))
+system_ss.add(when: 'CONFIG_RP2040', if_true: files('rp2040_sio.c'))
 system_ss.add(when: 'CONFIG_RP2040', if_true: files('rp2040_syscfg.c'))
 system_ss.add(when: 'CONFIG_RP2040',
               if_true: files('rp2040_sysinfo.c'))

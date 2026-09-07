@@ -72,6 +72,7 @@ static void raspi_pico_init(MachineState *machine)
                          s->rosc_random_seed);
     qdev_prop_set_bit(DEVICE(&s->soc.rosc), "random-seed-set",
                       s->rosc_random_seed_set);
+    qdev_prop_set_uint32(DEVICE(&s->soc.sio), "gpio-hi-in", 1u << 1);
     if (machine->firmware) {
         qdev_prop_set_string(DEVICE(&s->soc), "bootrom-file",
                              machine->firmware);

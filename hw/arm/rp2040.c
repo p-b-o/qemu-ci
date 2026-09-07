@@ -16,6 +16,7 @@
 #include "hw/core/irq.h"
 #include "hw/misc/unimp.h"
 #include "qemu/datadir.h"
+#include "target/arm/cpu.h"
 #include "target/arm/cpu-qom.h"
 
 #define RP2040_UART0_BASE 0x40034000
@@ -23,25 +24,42 @@
 #define RP2040_UART1_BASE 0x40038000
 #define RP2040_UART1_IRQ  21
 #define RP2040_IO_IRQ_BANK0 13
+#define RP2040_SIO_IRQ_PROC0 15
+#define RP2040_SIO_IRQ_PROC1 16
+#define RP2040_PROC1          1
 
 /*
- * Temporary boot ROM used until the synthetic ROM is introduced. It loads
- * the reset handler from a vector table at the base of the XIP window.
+ * Minimal synthetic ROM. Core 0 enters the XIP image while core 1 waits for
+ * the RP2040 ROM FIFO launch sequence: { 0, 0, 1, VTOR, SP, PC }.
  */
 static const uint8_t rp2040_bootrom[] = {
-    0x00, 0x20, 0x04, 0x20, /* initial SP: 0x20042000 */
-    0x09, 0x00, 0x00, 0x00, /* reset handler: 0x00000009 */
-    0x03, 0x48,             /* ldr r0, vtor */
-    0x04, 0x49,             /* ldr r1, xip_base */
-    0x01, 0x60,             /* str r1, [r0] */
-    0x04, 0x48,             /* ldr r0, xip_reset_vector */
-    0x01, 0x68,             /* ldr r1, [r0] */
-    0x08, 0x47,             /* bx r1 */
-    0xfe, 0xe7,             /* b . */
-    0xc0, 0x46,             /* nop */
-    0x08, 0xed, 0x00, 0xe0, /* VTOR: 0xe000ed08 */
-    0x00, 0x00, 0x00, 0x10, /* XIP base: 0x10000000 */
-    0x04, 0x00, 0x00, 0x10, /* XIP reset vector: 0x10000004 */
+    0x00, 0x20, 0x04, 0x20, 0x41, 0x00, 0x00, 0x00,
+    0x97, 0x00, 0x00, 0x00, 0x97, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x1f, 0x4c, 0x20, 0x68, 0x00, 0x28, 0x05, 0xd1,
+    0x1e, 0x48, 0x1f, 0x49, 0x01, 0x60, 0x1f, 0x48,
+    0x01, 0x68, 0x08, 0x47, 0x1e, 0x4d, 0x00, 0x26,
+    0x00, 0xf0, 0x1e, 0xf8, 0x03, 0x2e, 0x07, 0xd2,
+    0xb1, 0x00, 0x6a, 0x58, 0x90, 0x42, 0x0c, 0xd0,
+    0x00, 0x26, 0x00, 0xf0, 0x1c, 0xf8, 0xf3, 0xe7,
+    0x03, 0x2e, 0x01, 0xd1, 0x07, 0x46, 0x04, 0xe0,
+    0x04, 0x2e, 0x01, 0xd1, 0x03, 0x46, 0x00, 0xe0,
+    0x05, 0x46, 0x00, 0xf0, 0x10, 0xf8, 0x01, 0x36,
+    0x06, 0x2e, 0xe5, 0xd1, 0x0d, 0x49, 0x0f, 0x60,
+    0x83, 0xf3, 0x08, 0x88, 0x28, 0x47, 0xfe, 0xe7,
+    0x09, 0x4c, 0x20, 0x6d, 0x01, 0x21, 0x08, 0x42,
+    0xfb, 0xd0, 0xa0, 0x6d, 0x70, 0x47, 0x06, 0x4c,
+    0x21, 0x6d, 0x02, 0x22, 0x11, 0x42, 0xfb, 0xd0,
+    0x60, 0x65, 0x70, 0x47, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0xd0, 0x08, 0xed, 0x00, 0xe0,
+    0x00, 0x00, 0x00, 0x10, 0x04, 0x00, 0x00, 0x10,
+    0xb4, 0x00, 0x00, 0x00,
 };
 
 static const struct {
@@ -63,7 +81,6 @@ static const struct {
     { "rp2040.usbctrl_regs",  0x50110000, 0x10000 },
     { "rp2040.pio0",     0x50200000, 0x10000 },
     { "rp2040.pio1",     0x50300000, 0x10000 },
-    { "rp2040.sio",      0xd0000000, 0x1000 },
 };
 
 static void rp2040_update_nmi(RP2040State *s)
@@ -98,6 +115,71 @@ static void rp2040_set_irq(void *opaque, int irq, int level)
     assert(irq >= 0 && irq < RP2040_NUM_IRQS);
     s->irq_level[irq] = level;
     rp2040_update_nmi(s);
+}
+
+static void rp2040_start_core1_async_work(CPUState *cs, run_on_cpu_data data)
+{
+    ARMCPU *cpu = ARM_CPU(cs);
+    CPUARMState *env = &cpu->env;
+
+    cpu_reset(cs);
+    cpu->power_state = PSCI_ON;
+    env->halt_reason = NOT_HALTED;
+    arm_rebuild_hflags(env);
+    cs->halted = 0;
+    cpu_resume(cs);
+}
+
+static bool rp2040_core1_powered_off(RP2040State *s)
+{
+    ARMCPU *cpu = s->armv7m[RP2040_PROC1].cpu;
+
+    return !cpu || cpu->power_state == PSCI_OFF;
+}
+
+static void rp2040_start_core1(RP2040State *s)
+{
+    if (!s->armv7m[RP2040_PROC1].cpu ||
+        !rp2040_core1_powered_off(s)) {
+        return;
+    }
+
+    async_run_on_cpu(CPU(s->armv7m[RP2040_PROC1].cpu),
+                     rp2040_start_core1_async_work, RUN_ON_CPU_NULL);
+}
+
+static void rp2040_stop_core1_async_work(CPUState *cs, run_on_cpu_data data)
+{
+    ARMCPU *cpu = ARM_CPU(cs);
+
+    cpu->power_state = PSCI_OFF;
+    cpu->env.halt_reason = HALT_PSCI;
+    cs->halted = 1;
+    cs->exception_index = EXCP_HLT;
+}
+
+static void rp2040_stop_core1(RP2040State *s)
+{
+    if (!s->armv7m[RP2040_PROC1].cpu ||
+        rp2040_core1_powered_off(s)) {
+        return;
+    }
+
+    async_run_on_cpu(CPU(s->armv7m[RP2040_PROC1].cpu),
+                     rp2040_stop_core1_async_work, RUN_ON_CPU_NULL);
+}
+
+static void rp2040_psm_update(void *opaque)
+{
+    RP2040State *s = opaque;
+    bool proc1_forced_off = rp2040_psm_get_frce_off(&s->psm) &
+                            RP2040_PSM_PROC1;
+
+    if (proc1_forced_off) {
+        rp2040_stop_core1(s);
+    } else {
+        rp2040_start_core1(s);
+    }
 }
 
 static void rp2040_update_uart_pins(RP2040State *s)
@@ -158,7 +240,8 @@ static void rp2040_soc_init(Object *obj)
                              RP2040_NUM_IRQS);
         qdev_prop_set_uint32(DEVICE(&s->armv7m[i]), "mpu-ns-regions", 8);
     }
-    qdev_prop_set_bit(DEVICE(&s->armv7m[1]), "start-powered-off", true);
+    qdev_prop_set_bit(DEVICE(&s->armv7m[RP2040_PROC1]),
+                      "start-powered-off", true);
 
     for (i = 0; i < ARRAY_SIZE(s->uart); i++) {
         g_autofree char *name = g_strdup_printf("uart%d", i);
@@ -196,6 +279,7 @@ static void rp2040_soc_init(Object *obj)
     object_initialize_child(obj, "syscfg", &s->syscfg, TYPE_RP2040_SYSCFG);
     object_initialize_child(obj, "sysinfo", &s->sysinfo, TYPE_RP2040_SYSINFO);
     object_initialize_child(obj, "rosc", &s->rosc, TYPE_RP2040_ROSC);
+    object_initialize_child(obj, "sio", &s->sio, TYPE_RP2040_SIO);
     object_initialize_child(obj, "tbman", &s->tbman, TYPE_RP2040_TBMAN);
     object_initialize_child(obj, "vreg", &s->vreg, TYPE_RP2040_VREG);
     object_initialize_child(obj, "watchdog", &s->watchdog,
@@ -315,11 +399,19 @@ static void rp2040_soc_realize(DeviceState *dev, Error **errp)
         return;
     }
     sysbus_mmio_map(SYS_BUS_DEVICE(&s->psm), 0, RP2040_PSM_BASE);
+    rp2040_psm_set_update_callback(&s->psm, rp2040_psm_update, s);
 
     if (!sysbus_realize(SYS_BUS_DEVICE(&s->resets), errp)) {
         return;
     }
     sysbus_mmio_map(SYS_BUS_DEVICE(&s->resets), 0, RP2040_RESETS_BASE);
+
+    if (!sysbus_realize(SYS_BUS_DEVICE(&s->sio), errp)) {
+        return;
+    }
+    sysbus_mmio_map(SYS_BUS_DEVICE(&s->sio), 0, RP2040_SIO_BASE);
+    sysbus_connect_irq(SYS_BUS_DEVICE(&s->sio), 0,
+                       s->irq[RP2040_SIO_IRQ_PROC0]);
 
     for (i = 0; i < RP2040_NUM_CORES; i++) {
         g_autofree char *memory_name =
@@ -334,6 +426,11 @@ static void rp2040_soc_realize(DeviceState *dev, Error **errp)
                                  UINT64_C(1) << 32);
         memory_region_add_subregion(&s->cpu_memory[i], 0,
                                     &s->cpu_board_alias[i]);
+        if (i == RP2040_PROC1) {
+            memory_region_add_subregion_overlap(
+                &s->cpu_memory[i], RP2040_SIO_BASE,
+                rp2040_sio_core_region(&s->sio, i), 1);
+        }
         qdev_connect_clock_in(DEVICE(&s->armv7m[i]), "cpuclk", s->sysclk);
         object_property_set_link(OBJECT(&s->armv7m[i]), "memory",
                                  OBJECT(&s->cpu_memory[i]), &err);
@@ -352,6 +449,7 @@ static void rp2040_soc_realize(DeviceState *dev, Error **errp)
         s->nmi_irq[i] = qdev_get_gpio_in_named(DEVICE(&s->armv7m[i]),
                                                "NMI", 0);
     }
+    rp2040_update_nmi(s);
 
     if (!sysbus_realize(SYS_BUS_DEVICE(&s->syscfg), errp)) {
         return;
@@ -370,6 +468,8 @@ static void rp2040_soc_realize(DeviceState *dev, Error **errp)
     sysbus_mmio_map(SYS_BUS_DEVICE(&s->iobank0), 0, RP2040_IOBANK0_BASE);
     sysbus_connect_irq(SYS_BUS_DEVICE(&s->iobank0), 0,
                        s->irq[RP2040_IO_IRQ_BANK0]);
+    sysbus_connect_irq(SYS_BUS_DEVICE(&s->iobank0), 1,
+                       s->cpu_irq[RP2040_PROC1][RP2040_IO_IRQ_BANK0]);
     qdev_connect_gpio_out_named(DEVICE(&s->iobank0), "uart0-pin", 0,
                                 qdev_get_gpio_in_named(dev, "uart-pin", 0));
     qdev_connect_gpio_out_named(DEVICE(&s->iobank0), "uart0-pin", 1,
@@ -378,6 +478,8 @@ static void rp2040_soc_realize(DeviceState *dev, Error **errp)
                                 qdev_get_gpio_in_named(dev, "uart-pin", 2));
     qdev_connect_gpio_out_named(DEVICE(&s->iobank0), "uart1-pin", 1,
                                 qdev_get_gpio_in_named(dev, "uart-pin", 3));
+    sysbus_connect_irq(SYS_BUS_DEVICE(&s->sio), 1,
+                       s->cpu_irq[RP2040_PROC1][RP2040_SIO_IRQ_PROC1]);
 
     if (!sysbus_realize(SYS_BUS_DEVICE(&s->ioqspi), errp)) {
         return;
