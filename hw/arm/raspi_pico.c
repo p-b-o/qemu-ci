@@ -30,6 +30,7 @@ struct RaspiPicoMachineState {
     MemoryRegion flash;
     uint64_t rosc_random_seed;
     bool rosc_random_seed_set;
+    bool strict_uart_pins;
 };
 
 static void raspi_pico_get_rosc_random_seed(Object *obj, Visitor *v,
@@ -65,6 +66,8 @@ static void raspi_pico_init(MachineState *machine)
     object_initialize_child(OBJECT(machine), "soc", &s->soc, TYPE_RP2040);
     qdev_prop_set_chr(DEVICE(&s->soc), "serial0", serial_hd(0));
     qdev_prop_set_chr(DEVICE(&s->soc), "serial1", serial_hd(1));
+    qdev_prop_set_bit(DEVICE(&s->soc), "strict-uart-pins",
+                      s->strict_uart_pins);
     qdev_prop_set_uint64(DEVICE(&s->soc.rosc), "random-seed",
                          s->rosc_random_seed);
     qdev_prop_set_bit(DEVICE(&s->soc.rosc), "random-seed-set",
@@ -84,6 +87,28 @@ static void raspi_pico_init(MachineState *machine)
 
     armv7m_load_kernel(s->soc.armv7m[0].cpu, machine->kernel_filename,
                        RP2040_XIP_BASE, PICO_FLASH_SIZE);
+}
+
+static bool raspi_pico_get_strict_uart_pins(Object *obj, Error **errp)
+{
+    RaspiPicoMachineState *s = RASPI_PICO_MACHINE(obj);
+
+    return s->strict_uart_pins;
+}
+
+static void raspi_pico_set_strict_uart_pins(Object *obj, bool value,
+                                            Error **errp)
+{
+    RaspiPicoMachineState *s = RASPI_PICO_MACHINE(obj);
+
+    s->strict_uart_pins = value;
+}
+
+static void raspi_pico_machine_initfn(Object *obj)
+{
+    RaspiPicoMachineState *s = RASPI_PICO_MACHINE(obj);
+
+    s->strict_uart_pins = true;
 }
 
 static void raspi_pico_machine_class_init(ObjectClass *oc, const void *data)
@@ -107,12 +132,20 @@ static void raspi_pico_machine_class_init(ObjectClass *oc, const void *data)
                                           "Use a deterministic seed for the "
                                           "ROSC RANDOMBIT stream; if unset, "
                                           "QEMU guest entropy is used");
+    object_class_property_add_bool(oc, "strict-uart-pins",
+                                   raspi_pico_get_strict_uart_pins,
+                                   raspi_pico_set_strict_uart_pins);
+    object_class_property_set_description(oc, "strict-uart-pins",
+                                          "Require the RP2040 IO_BANK0 "
+                                          "UART pinmux before UART0 or UART1 "
+                                          "reaches its host serial backend");
 }
 
 static const TypeInfo raspi_pico_machine_info = {
     .name = TYPE_RASPI_PICO_MACHINE,
     .parent = TYPE_MACHINE,
     .instance_size = sizeof(RaspiPicoMachineState),
+    .instance_init = raspi_pico_machine_initfn,
     .class_init = raspi_pico_machine_class_init,
 };
 
