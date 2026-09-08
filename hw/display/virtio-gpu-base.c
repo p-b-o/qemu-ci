@@ -36,6 +36,8 @@ virtio_gpu_base_reset(VirtIOGPUBase *g)
         g->scanout[i].y = 0;
         g->scanout[i].ds = NULL;
     }
+
+    virtio_complete_reset(VIRTIO_DEVICE(g));
 }
 
 void

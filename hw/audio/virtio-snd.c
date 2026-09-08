@@ -1383,6 +1383,8 @@ static void virtio_snd_reset(VirtIODevice *vdev)
             virtio_snd_ctrl_cmd_free(cmd);
         }
     }
+
+    virtio_complete_reset(vdev);
 }
 
 static void virtio_snd_class_init(ObjectClass *klass, const void *data)

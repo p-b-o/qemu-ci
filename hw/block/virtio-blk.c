@@ -1168,6 +1168,7 @@ static void virtio_blk_reset(VirtIODevice *vdev)
     }
 
     blk_set_enable_write_cache(s->blk, s->original_wce);
+    virtio_complete_reset(vdev);
 }
 
 /* coalesce internal state, copy to pci i/o region 0

@@ -1015,6 +1015,8 @@ static void virtio_crypto_reset(VirtIODevice *vdev)
     } else {
         vcrypto->status |= VIRTIO_CRYPTO_S_HW_READY;
     }
+
+    virtio_complete_reset(vdev);
 }
 
 static uint32_t virtio_crypto_init_services(uint32_t qservices)

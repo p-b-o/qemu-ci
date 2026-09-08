@@ -3443,11 +3443,7 @@ void virtio_reset(VirtIODevice *vdev)
         }
     }
 
-    if (k->reset) {
-        k->reset(vdev);
-    }
-
-    virtio_complete_reset(vdev);
+    k->reset(vdev);
 }
 
 void virtio_complete_reset(VirtIODevice *vdev)
@@ -4483,6 +4479,7 @@ static void virtio_device_class_init(ObjectClass *klass, const void *data)
     dc->unrealize = virtio_device_unrealize;
     dc->bus_type = TYPE_VIRTIO_BUS;
     device_class_set_props(dc, virtio_properties);
+    vdc->reset = virtio_complete_reset;
     vdc->start_ioeventfd = virtio_device_start_ioeventfd_impl;
     vdc->stop_ioeventfd = virtio_device_stop_ioeventfd_impl;
 

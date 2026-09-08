@@ -348,6 +348,7 @@ static void vhost_user_blk_reset(VirtIODevice *vdev)
     VHostUserBlk *s = VHOST_USER_BLK(vdev);
 
     vhost_dev_free_inflight(s->inflight);
+    virtio_complete_reset(vdev);
 }
 
 static int vhost_user_blk_connect(DeviceState *dev, Error **errp)

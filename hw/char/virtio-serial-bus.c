@@ -639,6 +639,7 @@ static void vser_reset(VirtIODevice *vdev)
 
     vser = VIRTIO_SERIAL(vdev);
     guest_reset(vser);
+    virtio_complete_reset(vdev);
 }
 
 static void virtio_serial_save_device(VirtIODevice *vdev, QEMUFile *f)

@@ -115,6 +115,7 @@ static void virtio_9p_reset(VirtIODevice *vdev)
     V9fsVirtioState *v = (V9fsVirtioState *)vdev;
 
     v9fs_reset(&v->state);
+    virtio_complete_reset(vdev);
 }
 
 static ssize_t coroutine_fn

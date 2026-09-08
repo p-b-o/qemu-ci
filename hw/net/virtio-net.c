@@ -4151,6 +4151,7 @@ static void virtio_net_reset(VirtIODevice *vdev)
     }
 
     virtio_net_disable_rss(n);
+    virtio_complete_reset(vdev);
 }
 
 static void virtio_net_instance_init(Object *obj)

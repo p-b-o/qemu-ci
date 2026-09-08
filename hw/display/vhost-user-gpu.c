@@ -640,9 +640,8 @@ vhost_user_gpu_reset(VirtIODevice *vdev)
 {
     VhostUserGPU *g = VHOST_USER_GPU(vdev);
 
-    virtio_gpu_base_reset(VIRTIO_GPU_BASE(vdev));
-
     vhost_user_backend_stop(g->vhost);
+    virtio_gpu_base_reset(VIRTIO_GPU_BASE(vdev));
 }
 
 static int

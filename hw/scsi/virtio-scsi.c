@@ -1028,6 +1028,8 @@ static void virtio_scsi_reset(VirtIODevice *vdev)
     WITH_QEMU_LOCK_GUARD(&s->event_lock) {
         s->events_dropped = false;
     }
+
+    virtio_complete_reset(vdev);
 }
 
 typedef struct {

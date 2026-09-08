@@ -216,6 +216,8 @@ static void virtio_input_reset(VirtIODevice *vdev)
             vic->change_active(vinput);
         }
     }
+
+    virtio_complete_reset(vdev);
 }
 
 static int virtio_input_post_load(void *opaque, int version_id)

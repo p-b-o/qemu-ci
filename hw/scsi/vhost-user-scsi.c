@@ -371,6 +371,7 @@ static void vhost_user_scsi_reset(VirtIODevice *vdev)
     VHostSCSICommon *vsc = VHOST_SCSI_COMMON(s);
 
     vhost_dev_free_inflight(vsc->inflight);
+    virtio_complete_reset(vdev);
 }
 
 static struct vhost_dev *vhost_user_scsi_get_vhost(VirtIODevice *vdev)
