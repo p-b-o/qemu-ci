@@ -1124,6 +1124,11 @@ static void virtio_gpu_rutabaga_realize(DeviceState *qdev, Error **errp)
     return;
 #endif
 
+    if (virtio_host_has_feature(VIRTIO_DEVICE(qdev), VIRTIO_F_RING_RESET)) {
+        error_setg(errp, "queue_reset is not supported");
+        return;
+    }
+
     error_setg(&bdev->migration_blocker, "rutabaga is not yet migratable");
     if (migrate_add_blocker(&bdev->migration_blocker, errp) < 0) {
         return;
@@ -1165,6 +1170,11 @@ static const Property virtio_gpu_rutabaga_properties[] = {
     DEFINE_PROP_STRING("wsi", VirtIOGPURutabaga, wsi),
 };
 
+static void virtio_gpu_rutabaga_instance_init(Object *obj)
+{
+    object_property_set_bool(obj, "queue_reset", false, &error_abort);
+}
+
 static void virtio_gpu_rutabaga_class_init(ObjectClass *klass, const void *data)
 {
     DeviceClass *dc = DEVICE_CLASS(klass);
@@ -1187,6 +1197,7 @@ static const TypeInfo virtio_gpu_rutabaga_info[] = {
         .name = TYPE_VIRTIO_GPU_RUTABAGA,
         .parent = TYPE_VIRTIO_GPU,
         .instance_size = sizeof(VirtIOGPURutabaga),
+        .instance_init = virtio_gpu_rutabaga_instance_init,
         .class_init = virtio_gpu_rutabaga_class_init,
     },
 };

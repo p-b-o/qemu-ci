@@ -625,6 +625,8 @@ vhost_user_gpu_instance_init(Object *obj)
     g->vhost = VHOST_USER_BACKEND(object_new(TYPE_VHOST_USER_BACKEND));
     object_property_add_alias(obj, "chardev",
                               OBJECT(g->vhost), "chardev");
+
+    object_property_set_bool(obj, "queue_reset", false, &error_abort);
 }
 
 static void
@@ -660,6 +662,11 @@ vhost_user_gpu_device_realize(DeviceState *qdev, Error **errp)
 {
     VhostUserGPU *g = VHOST_USER_GPU(qdev);
     VirtIODevice *vdev = VIRTIO_DEVICE(g);
+
+    if (virtio_host_has_feature(VIRTIO_DEVICE(qdev), VIRTIO_F_RING_RESET)) {
+        error_setg(errp, "queue_reset is not supported");
+        return;
+    }
 
     vhost_dev_set_config_notifier(&g->vhost->dev, &config_ops);
     if (vhost_user_backend_dev_init(g->vhost, vdev, 2, errp) < 0) {

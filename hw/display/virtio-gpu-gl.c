@@ -17,6 +17,7 @@
 #include "qemu/module.h"
 #include "qemu/error-report.h"
 #include "qapi/error.h"
+#include "qom/object.h"
 #include "system/system.h"
 #include "hw/virtio/virtio.h"
 #include "hw/virtio/virtio-gpu.h"
@@ -119,6 +120,11 @@ static void virtio_gpu_gl_device_realize(DeviceState *qdev, Error **errp)
     return;
 #endif
 
+    if (virtio_host_has_feature(VIRTIO_DEVICE(qdev), VIRTIO_F_RING_RESET)) {
+        error_setg(errp, "queue_reset is not supported");
+        return;
+    }
+
     if (!object_resolve_path_type("", TYPE_VIRTIO_GPU_GL, NULL)) {
         error_setg(errp, "at most one %s device is permitted", TYPE_VIRTIO_GPU_GL);
         return;
@@ -209,6 +215,11 @@ static void virtio_gpu_gl_device_unrealize(DeviceState *qdev)
      */
 }
 
+static void virtio_gpu_gl_instance_init(Object *obj)
+{
+    object_property_set_bool(obj, "queue_reset", false, &error_abort);
+}
+
 static void virtio_gpu_gl_class_init(ObjectClass *klass, const void *data)
 {
     DeviceClass *dc = DEVICE_CLASS(klass);
@@ -232,6 +243,7 @@ static const TypeInfo virtio_gpu_gl_info = {
     .name = TYPE_VIRTIO_GPU_GL,
     .parent = TYPE_VIRTIO_GPU,
     .instance_size = sizeof(VirtIOGPUGL),
+    .instance_init = virtio_gpu_gl_instance_init,
     .class_init = virtio_gpu_gl_class_init,
 };
 module_obj(TYPE_VIRTIO_GPU_GL);
