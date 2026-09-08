@@ -1,0 +1,60 @@
+Looking up 20260908205236.838281-1-michael.roth@amd.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 21 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 36 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/19] accel/kvm: Add helper for handling conversions of MMIO holes
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-2-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 2/19] accel/kvm: Fix kvm_convert_memory() calls crossing memory regions
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-3-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 3/19] accel/kvm: Fix handling of MMIO holes at start of conversion ranges
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-4-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 4/19] accel/kvm: Fix handling of conversion ranges with multiple MMIO holes
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-5-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 5/19] accel/kvm: Use dedicated helper for creating private-only gmem instances
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-6-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 6/19] linux-headers: Update headers for v12 of in-place conversion kernel support
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-7-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 7/19] accel/kvm: Add CGS option to control in-place conversion support
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-8-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 8/19] system/memory: Re-use memory-backend-guest-memfd inode for private memory
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-9-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 9/19] accel/kvm: Handle guest_memfd flags internally when creating instances
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-10-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 10/19] system/memory: Default to guest_memfd for RAM for in-place conversion
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-11-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 11/19] accel/kvm: Move post-conversion updates to a separate helper
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-12-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 12/19] accel/kvm: Re-order attribute notifications for in-place conversion
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-13-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 13/19] accel/kvm: Support shared/private conversions via guest_memfd ioctls
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-14-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 14/19] accel/kvm: Don't default to private attributes for in-place conversion
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-15-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 15/19] i386/sev: Update SNP_LAUNCH_UPDATE for in-place conversion
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-16-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 16/19] i386/sev: Allow in-place conversion for SEV-SNP guests
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-17-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 17/19] i386/sev: Update CPUID failure handling for in-place conversion
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-18-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 18/19] accel/kvm: Disable discard for in-place conversion
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-19-michael.roth@amd.com
+  [32m✓[0m [PATCH v2 19/19] hostmem: Automatically select set guest-memfd=on for in-place conversion
+    + Link: https://lore.kernel.org/qemu-devel/20260908205236.838281-20-michael.roth@amd.com
+  ---
+  [32m✓[0m Signed: DKIM/amd.com
+---
+Total patches: 19
+---
+Applying: accel/kvm: Add helper for handling conversions of MMIO holes
+Patch failed at 0001 accel/kvm: Add helper for handling conversions of MMIO holes
+error: patch failed: accel/kvm/kvm-all.c:3356
+error: accel/kvm/kvm-all.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
