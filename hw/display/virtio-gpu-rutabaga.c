@@ -1074,6 +1074,21 @@ virtio_gpu_rutabaga_get_num_capsets(VirtIOGPU *g, uint32_t *num_capsets, Error *
     return true;
 }
 
+static void virtio_gpu_rutabaga_reset(VirtIOGPU *g)
+{
+    VirtIOGPURutabaga *vr = VIRTIO_GPU_RUTABAGA(g);
+    Error *local_err = NULL;
+
+    if (vr->rutabaga) {
+        rutabaga_finish(&vr->rutabaga);
+    }
+
+    if (!virtio_gpu_rutabaga_init(g, &local_err)) {
+        virtio_error(VIRTIO_DEVICE(g), "%s", error_get_pretty(local_err));
+        error_free(local_err);
+    }
+}
+
 static void virtio_gpu_rutabaga_handle_ctrl(VirtIODevice *vdev, VirtQueue *vq)
 {
     VirtIOGPU *g = VIRTIO_GPU(vdev);
@@ -1156,6 +1171,7 @@ static void virtio_gpu_rutabaga_class_init(ObjectClass *klass, const void *data)
     VirtIOGPUClass *vgc = VIRTIO_GPU_CLASS(klass);
 
     vbc->gl_flushed = virtio_gpu_rutabaga_gl_flushed;
+    vgc->reset = virtio_gpu_rutabaga_reset;
     vgc->handle_ctrl = virtio_gpu_rutabaga_handle_ctrl;
     vgc->process_cmd = virtio_gpu_rutabaga_process_cmd;
     vgc->update_cursor_data = virtio_gpu_rutabaga_update_cursor;

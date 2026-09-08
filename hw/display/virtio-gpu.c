@@ -1761,6 +1761,10 @@ static void virtio_gpu_reset_bh(void *opaque)
         qemu_console_set_surface(g->parent_obj.scanout[i].con, NULL);
     }
 
+    if (vgc->reset) {
+        vgc->reset(g);
+    }
+
     g->reset_finished = true;
     qemu_cond_signal(&g->reset_cond);
 }

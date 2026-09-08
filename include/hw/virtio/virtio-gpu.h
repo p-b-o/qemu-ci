@@ -226,6 +226,7 @@ struct VirtIOGPU {
 struct VirtIOGPUClass {
     VirtIOGPUBaseClass parent;
 
+    void (*reset)(VirtIOGPU *g);
     void (*handle_ctrl)(VirtIODevice *vdev, VirtQueue *vq);
     void (*process_cmd)(VirtIOGPU *g, struct virtio_gpu_ctrl_command *cmd);
     void (*update_cursor_data)(VirtIOGPU *g,
