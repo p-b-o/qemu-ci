@@ -3443,6 +3443,7 @@ void virtio_reset(VirtIODevice *vdev)
         }
     }
 
+    vdev->broken = false;
     k->reset(vdev);
 }
 
@@ -3454,11 +3455,14 @@ void virtio_complete_reset(VirtIODevice *vdev)
 
     vdev->start_on_kick = false;
     vdev->started = false;
-    vdev->broken = false;
     virtio_features_clear(features);
     virtio_set_features_nocheck(vdev, features);
     vdev->queue_sel = 0;
-    vdev->status = 0;
+
+    if (!vdev->broken) {
+        vdev->status = 0;
+    }
+
     vdev->disabled = false;
     qatomic_set(&vdev->isr, 0);
     vdev->config_vector = VIRTIO_NO_VECTOR;
