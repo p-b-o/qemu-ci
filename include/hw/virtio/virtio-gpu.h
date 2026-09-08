@@ -195,9 +195,7 @@ struct VirtIOGPU {
 
     QEMUBH *ctrl_bh;
     QEMUBH *cursor_bh;
-    QEMUBH *reset_bh;
-    QemuCond reset_cond;
-    bool reset_finished;
+    bool reset_pending;
 
     QTAILQ_HEAD(, virtio_gpu_simple_resource) reslist;
     QTAILQ_HEAD(, virtio_gpu_ctrl_command) cmdq;
@@ -362,6 +360,7 @@ void virtio_gpu_cleanup_mapping(VirtIOGPU *g,
 void virtio_gpu_process_cmdq(VirtIOGPU *g);
 void virtio_gpu_device_realize(DeviceState *qdev, Error **errp);
 void virtio_gpu_reset(VirtIODevice *vdev);
+void virtio_gpu_complete_reset(VirtIOGPU *g);
 void virtio_gpu_simple_process_cmd(VirtIOGPU *g, struct virtio_gpu_ctrl_command *cmd);
 void virtio_gpu_update_cursor_data(VirtIOGPU *g,
                                    struct virtio_gpu_scanout *s,

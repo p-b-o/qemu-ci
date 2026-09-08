@@ -1087,6 +1087,8 @@ static void virtio_gpu_rutabaga_reset(VirtIOGPU *g)
         virtio_error(VIRTIO_DEVICE(g), "%s", error_get_pretty(local_err));
         error_free(local_err);
     }
+
+    virtio_gpu_complete_reset(g);
 }
 
 static void virtio_gpu_rutabaga_handle_ctrl(VirtIODevice *vdev, VirtQueue *vq)
