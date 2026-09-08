@@ -3423,11 +3423,10 @@ int virtio_set_features_ex(VirtIODevice *vdev, const uint64_t *features)
 void virtio_reset(VirtIODevice *vdev)
 {
     VirtioDeviceClass *k = VIRTIO_DEVICE_GET_CLASS(vdev);
-    VirtioSharedMemory *shmem;
-    uint64_t features[VIRTIO_FEATURES_NU64S];
-    int i;
 
     virtio_set_status(vdev, 0);
+    vdev->status = VIRTIO_CONFIG_S_FAILED;
+
     if (current_cpu) {
         /* Guest initiated reset */
         vdev->device_endian = virtio_current_cpu_endian();
@@ -3447,6 +3446,15 @@ void virtio_reset(VirtIODevice *vdev)
     if (k->reset) {
         k->reset(vdev);
     }
+
+    virtio_complete_reset(vdev);
+}
+
+void virtio_complete_reset(VirtIODevice *vdev)
+{
+    VirtioSharedMemory *shmem;
+    uint64_t features[VIRTIO_FEATURES_NU64S];
+    int i;
 
     vdev->start_on_kick = false;
     vdev->started = false;
