@@ -440,8 +440,7 @@ virtio_gpu_virgl_resource_unref(VirtIOGPU *g,
 }
 
 static void virgl_cmd_resource_unref(VirtIOGPU *g,
-                                     struct virtio_gpu_ctrl_command *cmd,
-                                     bool *cmd_suspended)
+                                     struct virtio_gpu_ctrl_command *cmd)
 {
     struct virtio_gpu_resource_unref unref;
     struct virtio_gpu_virgl_resource *res;
@@ -457,7 +456,7 @@ static void virgl_cmd_resource_unref(VirtIOGPU *g,
         return;
     }
 
-    virtio_gpu_virgl_resource_unref(g, res, cmd_suspended);
+    virtio_gpu_virgl_resource_unref(g, res, &cmd->suspended);
 }
 
 void virtio_gpu_virgl_resource_destroy(VirtIOGPU *g,
@@ -946,8 +945,7 @@ static void virgl_cmd_resource_map_blob(VirtIOGPU *g,
 }
 
 static void virgl_cmd_resource_unmap_blob(VirtIOGPU *g,
-                                          struct virtio_gpu_ctrl_command *cmd,
-                                          bool *cmd_suspended)
+                                          struct virtio_gpu_ctrl_command *cmd)
 {
     struct virtio_gpu_resource_unmap_blob ublob;
     struct virtio_gpu_virgl_resource *res;
@@ -964,7 +962,7 @@ static void virgl_cmd_resource_unmap_blob(VirtIOGPU *g,
         return;
     }
 
-    ret = virtio_gpu_virgl_unmap_resource_blob(g, res, cmd_suspended);
+    ret = virtio_gpu_virgl_unmap_resource_blob(g, res, &cmd->suspended);
     if (ret) {
         cmd->error = VIRTIO_GPU_RESP_ERR_UNSPEC;
         return;
@@ -1036,7 +1034,6 @@ static void virgl_cmd_set_scanout_blob(VirtIOGPU *g,
 void virtio_gpu_virgl_process_cmd(VirtIOGPU *g,
                                       struct virtio_gpu_ctrl_command *cmd)
 {
-    bool cmd_suspended = false;
     int ret;
 
     VIRTIO_GPU_FILL_CMD(cmd->cmd_hdr);
@@ -1080,7 +1077,7 @@ void virtio_gpu_virgl_process_cmd(VirtIOGPU *g,
         virgl_cmd_resource_flush(g, cmd);
         break;
     case VIRTIO_GPU_CMD_RESOURCE_UNREF:
-        virgl_cmd_resource_unref(g, cmd, &cmd_suspended);
+        virgl_cmd_resource_unref(g, cmd);
         break;
     case VIRTIO_GPU_CMD_CTX_ATTACH_RESOURCE:
         /* TODO add security */
@@ -1110,7 +1107,7 @@ void virtio_gpu_virgl_process_cmd(VirtIOGPU *g,
         virgl_cmd_resource_map_blob(g, cmd);
         break;
     case VIRTIO_GPU_CMD_RESOURCE_UNMAP_BLOB:
-        virgl_cmd_resource_unmap_blob(g, cmd, &cmd_suspended);
+        virgl_cmd_resource_unmap_blob(g, cmd);
         break;
     case VIRTIO_GPU_CMD_SET_SCANOUT_BLOB:
         virgl_cmd_set_scanout_blob(g, cmd);
@@ -1121,7 +1118,7 @@ void virtio_gpu_virgl_process_cmd(VirtIOGPU *g,
         break;
     }
 
-    if (cmd_suspended || cmd->finished) {
+    if (cmd->suspended || cmd->finished) {
         return;
     }
     if (cmd->error) {

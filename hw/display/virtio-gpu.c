@@ -1193,11 +1193,10 @@ void virtio_gpu_process_cmdq(VirtIOGPU *g)
             break;
         }
 
-        /* process command */
+        cmd->suspended = false;
         vgc->process_cmd(g, cmd);
 
-        /* command suspended */
-        if (!cmd->finished && !(cmd->cmd_hdr.flags & VIRTIO_GPU_FLAG_FENCE)) {
+        if (cmd->suspended) {
             trace_virtio_gpu_cmd_suspended(cmd->cmd_hdr.type);
             break;
         }
