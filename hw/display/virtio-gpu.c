@@ -1750,6 +1750,31 @@ static void virtio_gpu_device_unrealize(DeviceState *qdev)
     virtio_gpu_base_device_unrealize(qdev);
 }
 
+static void virtio_gpu_queue_reset(VirtIODevice *vdev, uint32_t queue_index)
+{
+    VirtIOGPU *g = VIRTIO_GPU(vdev);
+    struct virtio_gpu_ctrl_command *cmd;
+
+    if (queue_index) {
+        return;
+    }
+
+    while (!QTAILQ_EMPTY(&g->cmdq)) {
+        cmd = QTAILQ_FIRST(&g->cmdq);
+        QTAILQ_REMOVE(&g->cmdq, cmd, next);
+        virtqueue_detach_element(cmd->vq, &cmd->elem, 0);
+        g_free(cmd);
+    }
+
+    while (!QTAILQ_EMPTY(&g->fenceq)) {
+        cmd = QTAILQ_FIRST(&g->fenceq);
+        QTAILQ_REMOVE(&g->fenceq, cmd, next);
+        virtqueue_detach_element(cmd->vq, &cmd->elem, 0);
+        g->inflight--;
+        g_free(cmd);
+    }
+}
+
 static void virtio_gpu_reset_bh(VirtIOGPU *g)
 {
     VirtIOGPUClass *vgc = VIRTIO_GPU_GET_CLASS(g);
@@ -1816,23 +1841,7 @@ void virtio_gpu_reset(VirtIODevice *vdev)
 
 void virtio_gpu_complete_reset(VirtIOGPU *g)
 {
-    struct virtio_gpu_ctrl_command *cmd;
-
-    while (!QTAILQ_EMPTY(&g->cmdq)) {
-        cmd = QTAILQ_FIRST(&g->cmdq);
-        QTAILQ_REMOVE(&g->cmdq, cmd, next);
-        virtqueue_detach_element(cmd->vq, &cmd->elem, 0);
-        g_free(cmd);
-    }
-
-    while (!QTAILQ_EMPTY(&g->fenceq)) {
-        cmd = QTAILQ_FIRST(&g->fenceq);
-        QTAILQ_REMOVE(&g->fenceq, cmd, next);
-        virtqueue_detach_element(cmd->vq, &cmd->elem, 0);
-        g->inflight--;
-        g_free(cmd);
-    }
-
+    virtio_gpu_queue_reset(VIRTIO_DEVICE(g), 0);
     virtio_gpu_base_reset(VIRTIO_GPU_BASE(g));
 }
 
@@ -1940,6 +1949,7 @@ static void virtio_gpu_class_init(ObjectClass *klass, const void *data)
     vdc->realize = virtio_gpu_device_realize;
     vdc->unrealize = virtio_gpu_device_unrealize;
     vdc->reset = virtio_gpu_reset;
+    vdc->queue_reset = virtio_gpu_queue_reset;
     vdc->get_config = virtio_gpu_get_config;
     vdc->set_config = virtio_gpu_set_config;
 
