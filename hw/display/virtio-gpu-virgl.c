@@ -1266,14 +1266,14 @@ static void virtio_gpu_virgl_async_fence_bh(void *opaque)
             virtio_gpu_ctrl_response_nodata(g, cmd, VIRTIO_GPU_RESP_OK_NODATA);
             QTAILQ_REMOVE(&g->fenceq, cmd, next);
             g_free(cmd);
+            g->inflight--;
+            if (virtio_gpu_stats_enabled(g->parent_obj.conf)) {
+                trace_virtio_gpu_dec_inflight_fences(g->inflight);
+            }
         }
 
         trace_virtio_gpu_fence_resp(f->fence_id);
         g_free(f);
-        g->inflight--;
-        if (virtio_gpu_stats_enabled(g->parent_obj.conf)) {
-            trace_virtio_gpu_dec_inflight_fences(g->inflight);
-        }
     }
 }
 
