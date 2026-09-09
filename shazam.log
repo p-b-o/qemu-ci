@@ -1,0 +1,50 @@
+Looking up 20260902102134.3039174-1-kchiu@axiado.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+  Added from v6: 13 patches
+Analyzing 15 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 65 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v6 1/12] hw/char/cadence_uart: Reduce the size of MMIO to 0x80
+    + Link: https://lore.kernel.org/qemu-devel/20260909105543.1478008-2-kchiu@axiado.com
+  [32m✓[0m [PATCH v6 2/12] hw/char/cadence_uart: Add BXRS register definition
+    + Link: https://lore.kernel.org/qemu-devel/20260909105543.1478008-3-kchiu@axiado.com
+  [32m✓[0m [PATCH v6 3/12] hw/arm/ax3000-soc: Enable BXRS support of CADENCE UART
+    + Link: https://lore.kernel.org/qemu-devel/20260909105543.1478008-4-kchiu@axiado.com
+  [32m✓[0m [PATCH v6 4/12] hw/arm: Rename ax3000-boards as axiado-boards
+    + Link: https://lore.kernel.org/qemu-devel/20260909105543.1478008-5-kchiu@axiado.com
+  [32m✓[0m [PATCH v6 5/12] hw/arm/ax3000: Specify SoC name in header and variable
+    + Link: https://lore.kernel.org/qemu-devel/20260909105543.1478008-6-kchiu@axiado.com
+  [32m✓[0m [PATCH v6 6/12] hw/arm/ax3000-boards: Add memory guard
+    + Link: https://lore.kernel.org/qemu-devel/20260909105543.1478008-7-kchiu@axiado.com
+  [32m✓[0m [PATCH v6 7/12] hw/arm/ax3000-boards: Add modify_dtb for discontiguous memory
+    + Link: https://lore.kernel.org/qemu-devel/20260909105543.1478008-8-kchiu@axiado.com
+  [32m✓[0m [PATCH v6 8/12] hw/arm/ax3000-boards: Remove redundant pointor from struct
+    + Link: https://lore.kernel.org/qemu-devel/20260909105543.1478008-9-kchiu@axiado.com
+  [32m✓[0m [PATCH v6 9/12] hw/arm: Add Axiado SoC AX3005
+    + Link: https://lore.kernel.org/qemu-devel/20260909105543.1478008-10-kchiu@axiado.com
+  [32m✓[0m [PATCH v6 10/12] hw/arm: Add Axiado Ax3005 EVB
+    + Link: https://lore.kernel.org/qemu-devel/20260909105543.1478008-11-kchiu@axiado.com
+  [32m✓[0m [PATCH v6 11/12] docs/system/arm: Document Axiado boards
+    + Link: https://lore.kernel.org/qemu-devel/20260909105543.1478008-12-kchiu@axiado.com
+  [32m✓[0m [PATCH v6 12/12] tests/functional/aarch64: Add functional test for Axiado EVKs
+    + Link: https://lore.kernel.org/qemu-devel/20260909105543.1478008-13-kchiu@axiado.com
+  ---
+  [32m✓[0m Signed: DKIM/axiado.com
+---
+Total patches: 12
+---
+Applying: hw/char/cadence_uart: Reduce the size of MMIO to 0x80
+Applying: hw/char/cadence_uart: Add BXRS register definition
+Applying: hw/arm/ax3000-soc: Enable BXRS support of CADENCE UART
+Applying: hw/arm: Rename ax3000-boards as axiado-boards
+Patch failed at 0004 hw/arm: Rename ax3000-boards as axiado-boards
+error: patch failed: hw/arm/ax3000-boards.c:7
+error: hw/arm/ax3000-boards.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
