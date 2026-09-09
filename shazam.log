@@ -1,0 +1,28 @@
+Looking up 20260909031229.1650315-1-stanleyjhu@google.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 4 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/2] hw/ufs: Add experimental fault injection properties for task abort testing
+    + Link: https://lore.kernel.org/qemu-devel/20260909031229.1650315-2-stanleyjhu@google.com
+  [32m✓[0m [PATCH v2 2/2] hw/ufs: Add ssu-timeout mode for power management recovery testing
+    + Link: https://lore.kernel.org/qemu-devel/20260909031229.1650315-3-stanleyjhu@google.com
+  ---
+  [32m✓[0m Signed: DKIM/google.com
+---
+Total patches: 2
+---
+Applying: hw/ufs: Add experimental fault injection properties for task abort testing
+Patch failed at 0001 hw/ufs: Add experimental fault injection properties for task abort testing
+error: patch failed: hw/ufs/trace-events:16
+error: hw/ufs/trace-events: patch does not apply
+error: patch failed: hw/ufs/ufs.c:816
+error: hw/ufs/ufs.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
