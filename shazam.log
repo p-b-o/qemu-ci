@@ -1,0 +1,28 @@
+Looking up 20260909031146.1646684-1-stanleyjhu@google.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 4 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/3] hw/ufs: Track SCSIRequest and cancel pending requests in ufs_clear_req
+    + Link: https://lore.kernel.org/qemu-devel/20260909031146.1646684-2-stanleyjhu@google.com
+  [32m✓[0m [PATCH v2 2/3] hw/ufs: Support MCQ runtime interrupt and queue status registers
+    + Link: https://lore.kernel.org/qemu-devel/20260909031146.1646684-3-stanleyjhu@google.com
+  [32m✓[0m [PATCH v2 3/3] hw/ufs: Implement Task Management Request (TMR) handling
+    + Link: https://lore.kernel.org/qemu-devel/20260909031146.1646684-4-stanleyjhu@google.com
+  ---
+  [32m✓[0m Signed: DKIM/google.com
+---
+Total patches: 3
+---
+Applying: hw/ufs: Track SCSIRequest and cancel pending requests in ufs_clear_req
+Patch failed at 0001 hw/ufs: Track SCSIRequest and cancel pending requests in ufs_clear_req
+error: patch failed: hw/ufs/lu.c:190
+error: hw/ufs/lu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
