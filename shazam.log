@@ -1,0 +1,35 @@
+Looking up 20260909084154.223529-1-max.chou@sifive.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/6] target/riscv: Match PMP entries lying inside the checked range
+    + Link: https://lore.kernel.org/qemu-devel/20260909084154.223529-2-max.chou@sifive.com
+  [32m✓[0m [PATCH 2/6] target/riscv: rvv: Probe unit-stride accesses by the first element
+    + Link: https://lore.kernel.org/qemu-devel/20260909084154.223529-3-max.chou@sifive.com
+  [32m✓[0m [PATCH 3/6] tests/tcg/riscv64: Add vector masked fault-only-first PMP test
+    + Link: https://lore.kernel.org/qemu-devel/20260909084154.223529-4-max.chou@sifive.com
+  [32m✓[0m [PATCH 4/6] tests/tcg/riscv64: Add vector unit-stride PMP test
+    + Link: https://lore.kernel.org/qemu-devel/20260909084154.223529-5-max.chou@sifive.com
+  [32m✓[0m [PATCH 5/6] tests/tcg/riscv64: Add vector fault-only-first page probe test
+    + Link: https://lore.kernel.org/qemu-devel/20260909084154.223529-6-max.chou@sifive.com
+  [32m✓[0m [PATCH 6/6] tests/tcg/riscv64: Add vector segment PMP region spanning test
+    + Link: https://lore.kernel.org/qemu-devel/20260909084154.223529-7-max.chou@sifive.com
+  ---
+  [32m✓[0m Signed: DKIM/sifive.com
+---
+Total patches: 6
+---
+Applying: target/riscv: Match PMP entries lying inside the checked range
+Applying: target/riscv: rvv: Probe unit-stride accesses by the first element
+Patch failed at 0002 target/riscv: rvv: Probe unit-stride accesses by the first element
+error: patch failed: target/riscv/tcg/vector_helper.c:406
+error: target/riscv/tcg/vector_helper.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
