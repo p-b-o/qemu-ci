@@ -2025,12 +2025,24 @@ static void gen_jmp_rel(DisasContext *s, MemOp ot, int diff, int tb_num)
 
     if (tb_cflags(s->base.tb) & CF_PCREL) {
         tcg_gen_addi_tl(cpu_eip, cpu_eip, new_pc - s->pc_save);
+
         /*
-         * If we can prove the branch does not leave the page and we have
-         * no extra masking to apply (data16 branch in code32, see above),
-         * then we have also proven that the addition does not wrap.
+         * True if a wrap cannot be ruled out: the source and destination EIP
+         * are in different EIP pages.  If they share one, the addition cannot
+         * leave [0, mask] on any rerun of this TB, which only ever shifts EIP
+         * by whole pages.
          */
-        if (!use_goto_tb || !translator_is_same_page(&s->base, new_pc)) {
+        bool eip_may_wrap = !CODE64(s) &&
+            (((s->pc_save - s->cs_base) ^ (new_pc - s->cs_base))
+             & TARGET_PAGE_MASK) != 0;
+
+        /*
+         * If we can prove the branch does not leave the page, does not leave
+         * its EIP page, and we have no extra masking to apply (data16 branch
+         * in code32, see above), then the addition does not wrap.
+         */
+        if (!use_goto_tb || !translator_is_same_page(&s->base, new_pc)
+                || eip_may_wrap) {
             tcg_gen_andi_tl(cpu_eip, cpu_eip, mask);
             use_goto_tb = false;
         }
