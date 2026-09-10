@@ -34,6 +34,13 @@ foreach t: tcg_tests['multiarch-softmmu']['tests']
   endforeach
 endforeach
 
+tests += {
+  'test-branch-wrap16.c': {
+    'cflags': cflags,
+    'qemu_args': qemu_def_args,
+  }
+}
+
 if 'qemu-system-i386' in emulators
   tcg_tests += {
     'i386-softmmu': {
