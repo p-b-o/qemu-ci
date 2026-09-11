@@ -1,0 +1,61 @@
+Looking up 20260911100709.726366-1-zhangckid@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 18 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 116 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v16 1/13] iothread: introduce holder tracking
+    + Based-on: <20260907063725.626685-2-zhangckid@gmail.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260911100709.726366-2-zhangckid@gmail.com
+  [32m✓[0m [PATCH v16 2/13] iothread: add holder-aware AioContext accessors
+    + Based-on: <20260907063725.626685-2-zhangckid@gmail.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260911100709.726366-3-zhangckid@gmail.com
+  [32m✓[0m [PATCH v16 3/13] block/export: track IOThread references
+    + Based-on: <20260907063725.626685-2-zhangckid@gmail.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260911100709.726366-4-zhangckid@gmail.com
+  [32m✓[0m [PATCH v16 4/13] monitor: track IOThread users with QOM paths
+    + Based-on: <20260907063725.626685-2-zhangckid@gmail.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260911100709.726366-5-zhangckid@gmail.com
+  [32m✓[0m [PATCH v16 5/13] virtio-vq-mapping: track iothread-vq-mapping references using device path
+    + Based-on: <20260907063725.626685-2-zhangckid@gmail.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260911100709.726366-6-zhangckid@gmail.com
+  [32m✓[0m [PATCH v16 6/13] virtio: track IOThread references for thread pinning
+    + Based-on: <20260907063725.626685-2-zhangckid@gmail.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260911100709.726366-7-zhangckid@gmail.com
+  [32m✓[0m [PATCH v16 7/13] net/colo: track IOThread references using path-based holder
+    + Based-on: <20260907063725.626685-2-zhangckid@gmail.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260911100709.726366-8-zhangckid@gmail.com
+  [32m✓[0m [PATCH v16 8/13] virtio-balloon: Update tracking iothread users with holder
+    + Based-on: <20260907063725.626685-2-zhangckid@gmail.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260911100709.726366-9-zhangckid@gmail.com
+  [32m✓[0m [PATCH v16 9/13] vfio-user/proxy: Update tracking iothread users with holder name
+    + Based-on: <20260907063725.626685-2-zhangckid@gmail.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260911100709.726366-10-zhangckid@gmail.com
+  [32m✓[0m [PATCH v16 10/13] xen-block: Update tracking iothread users with holder name
+    + Based-on: <20260907063725.626685-2-zhangckid@gmail.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260911100709.726366-11-zhangckid@gmail.com
+  [32m✓[0m [PATCH v16 11/13] monitor/hmp: display IOThread holders
+    + Based-on: <20260907063725.626685-2-zhangckid@gmail.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260911100709.726366-12-zhangckid@gmail.com
+  [32m✓[0m [PATCH v16 12/13] iothread: make legacy AioContext getter explicitly unsafe
+    + Based-on: <20260907063725.626685-2-zhangckid@gmail.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260911100709.726366-13-zhangckid@gmail.com
+  [32m✓[0m [PATCH v16 13/13] tests/unit/iothread: update AioContext ref/put helpers
+    + Based-on: <20260907063725.626685-2-zhangckid@gmail.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260911100709.726366-14-zhangckid@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 13
+---
+Applying: iothread: introduce holder tracking
+Patch failed at 0001 iothread: introduce holder tracking
+error: patch failed: qapi/misc.json:122
+error: qapi/misc.json: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
