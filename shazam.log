@@ -1,0 +1,34 @@
+Looking up 20260911152754.706518-1-skolothumtho@nvidia.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC v2 1/5] target/arm/kvm-consts.h: Add SMCCC vendor hypercall definitions
+    + Link: https://lore.kernel.org/qemu-devel/20260911152754.706518-2-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH RFC v2 2/5] target/arm/kvm: Introduce helper to check target impl CPU support
+    + Link: https://lore.kernel.org/qemu-devel/20260911152754.706518-3-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH RFC v2 3/5] target/arm/kvm: Add QAPI struct ArmTargetImplCPU
+    + Link: https://lore.kernel.org/qemu-devel/20260911152754.706518-4-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH RFC v2 4/5] target/arm/kvm: Handle KVM Target Imp CPU hypercalls
+    + Link: https://lore.kernel.org/qemu-devel/20260911152754.706518-5-skolothumtho@nvidia.com
+  [32m✓[0m [PATCH RFC v2 5/5] hw/arm/virt: Add Target Implementation CPU support
+    + Link: https://lore.kernel.org/qemu-devel/20260911152754.706518-6-skolothumtho@nvidia.com
+  ---
+  [32m✓[0m Signed: DKIM/nvidia.com
+---
+Total patches: 5
+---
+Applying: target/arm/kvm-consts.h: Add SMCCC vendor hypercall definitions
+Applying: target/arm/kvm: Introduce helper to check target impl CPU support
+Applying: target/arm/kvm: Add QAPI struct ArmTargetImplCPU
+Patch failed at 0003 target/arm/kvm: Add QAPI struct ArmTargetImplCPU
+error: patch failed: target/arm/kvm_arm.h:281
+error: target/arm/kvm_arm.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
