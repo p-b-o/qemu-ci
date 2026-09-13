@@ -1,0 +1,33 @@
+Looking up 20260913-pcie-ep-emulation-v1-0-b8e8f74a5842@kernel.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 5 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH 1/4] docs/system/devices: Add PCIe Endpoint emulation documentation
+    + Link: https://lore.kernel.org/qemu-devel/20260913-pcie-ep-emulation-v1-1-b8e8f74a5842@kernel.org
+  [31m✗[0m [PATCH 2/4] hw/pci: Add PCIe Endpoint Function device (pcie-ep-generic)
+    + Link: https://lore.kernel.org/qemu-devel/20260913-pcie-ep-emulation-v1-2-b8e8f74a5842@kernel.org
+  [31m✗[0m [PATCH 3/4] hw/misc: Add PCIe Endpoint Controller emulation (pcie-ep-ctrl)
+    + Link: https://lore.kernel.org/qemu-devel/20260913-pcie-ep-emulation-v1-3-b8e8f74a5842@kernel.org
+  [31m✗[0m [PATCH 4/4] hw/arm/virt: Add PCIe Endpoint Controller support
+    + Link: https://lore.kernel.org/qemu-devel/20260913-pcie-ep-emulation-v1-4-b8e8f74a5842@kernel.org
+  ---
+  [31m✗[0m No key: openpgp/mani@kernel.org
+  [32m✓[0m Signed: DKIM/kernel.org
+---
+Total patches: 4
+---
+Applying: docs/system/devices: Add PCIe Endpoint emulation documentation
+Applying: hw/pci: Add PCIe Endpoint Function device (pcie-ep-generic)
+Applying: hw/misc: Add PCIe Endpoint Controller emulation (pcie-ep-ctrl)
+Patch failed at 0003 hw/misc: Add PCIe Endpoint Controller emulation (pcie-ep-ctrl)
+error: patch failed: hw/misc/meson.build:26
+error: hw/misc/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
