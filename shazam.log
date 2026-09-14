@@ -1,0 +1,34 @@
+Looking up 20260914-qdev-v4-0-93f849b4865c@rsg.ci.i.u-tokyo.ac.jp
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v4 1/4] qdev: Clarify instantiation and realization
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260914-qdev-v4-1-93f849b4865c@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH v4 2/4] hw/qdev: Introduce DevicePhase
+    + Link: https://lore.kernel.org/qemu-devel/20260914-qdev-v4-2-93f849b4865c@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH v4 3/4] hw/qdev: Introduce the initialized and retired phases
+    + Link: https://lore.kernel.org/qemu-devel/20260914-qdev-v4-3-93f849b4865c@rsg.ci.i.u-tokyo.ac.jp
+  [31m✗[0m [PATCH v4 4/4] hw/qdev: Introduce the realizing phase
+    + Link: https://lore.kernel.org/qemu-devel/20260914-qdev-v4-4-93f849b4865c@rsg.ci.i.u-tokyo.ac.jp
+  ---
+  [31m✗[0m No key: openpgp/odaki@rsg.ci.i.u-tokyo.ac.jp
+  [32m✓[0m Signed: DKIM/rsg.ci.i.u-tokyo.ac.jp
+---
+Total patches: 4
+---
+Applying: qdev: Clarify instantiation and realization
+Applying: hw/qdev: Introduce DevicePhase
+Applying: hw/qdev: Introduce the initialized and retired phases
+Patch failed at 0003 hw/qdev: Introduce the initialized and retired phases
+error: patch failed: hw/core/qdev.c:499
+error: hw/core/qdev.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
