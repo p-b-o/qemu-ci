@@ -172,6 +172,7 @@ fi
 # some defaults, based on the host environment
 
 # default parameters
+container_command=""
 cpu=""
 cross_compile="no"
 cross_prefix=""
@@ -227,6 +228,19 @@ for opt do
   ;;
   --extra-ldflags=*) EXTRA_LDFLAGS="$EXTRA_LDFLAGS $optarg"
   ;;
+  --cross-cc-*[!a-zA-Z0-9_-]*=*) error_exit "Passed bad --cross-cc-FOO option"
+  ;;
+  --cross-cc-cflags-*) cc_arch=${opt#--cross-cc-cflags-}; cc_arch=${cc_arch%%=*}
+                      eval "cross_cc_cflags_${cc_arch}=\$optarg"
+  ;;
+  --cross-cc-*) cc_arch=${opt#--cross-cc-}; cc_arch=${cc_arch%%=*}
+                eval "cross_cc_${cc_arch}=\$optarg"
+  ;;
+  --cross-prefix-*[!a-zA-Z0-9_-]*=*) error_exit "Passed bad --cross-prefix-FOO option"
+  ;;
+  --cross-prefix-*) cc_arch=${opt#--cross-prefix-}; cc_arch=${cc_arch%%=*}
+                    eval "cross_prefix_${cc_arch}=\$optarg"
+  ;;
   --without-default-features) default_feature="no"
   ;;
   --wasm64-32bit-address-limit) wasm64_memory64="2"
@@ -246,6 +260,7 @@ ninja=""
 python=
 download="enabled"
 skip_meson=no
+use_containers=""
 rust="disabled"
 rust_target_triple=""
 
@@ -618,19 +633,9 @@ for opt do
   ;;
   --extra-ldflags=*)
   ;;
-  --cross-cc-*[!a-zA-Z0-9_-]*=*) error_exit "Passed bad --cross-cc-FOO option"
+  --cross-cc-*)
   ;;
-  --cross-cc-cflags-*) arch=${opt#--cross-cc-cflags-}; arch=${arch%%=*}
-                       meson_option_add "-Dtcg_tests_cross_cflags_${arch}=${optarg}"
-  ;;
-  --cross-cc-*) arch=${opt#--cross-cc-}; arch=${arch%%=*}
-                meson_option_add "-Dtcg_tests_cross_cc_${arch}=${optarg}"
-  ;;
-  --cross-prefix-*[!a-zA-Z0-9_-]*=*) error_exit "Passed bad --cross-prefix-FOO option"
-  ;;
-  # cross-prefix is just used as a syntactic sugar for -cross-cc.
-  --cross-prefix-*) arch=${opt#--cross-prefix-}; arch=${arch%%=*}
-                    meson_option_add "-Dtcg_tests_cross_cc_${arch}=${optarg}gcc"
+  --cross-prefix-*)
   ;;
   --enable-docs) docs=enabled
   ;;
@@ -1273,7 +1278,7 @@ if test "$container_command" = ""; then
     container_command=$($python "$source_path"/tests/docker/docker.py probe)
     test "$container_command" = "no" && container_command=""
 fi
-if test $use_containers = "yes" && test "$container_command" != ""; then
+if test "$use_containers" = "yes" && test "$container_command" != ""; then
     docker_py="$python $source_path/tests/docker/docker.py --command $container_command"
 fi
 
