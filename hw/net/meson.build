@@ -70,4 +70,6 @@ if have_hmp
   system_ss.add(files('rocker/rocker-hmp-cmds.c'))
 endif
 
+system_ss.add(when: 'CONFIG_AXIADO_HCP', if_true: files('axiado_hcp.c'))
+
 subdir('can')
