@@ -9,6 +9,7 @@
 #include "qemu/error-report.h"
 #include "qapi/error.h"
 #include "qemu/error-report.h"
+#include "qemu/lockable.h"
 #include "hw/vfio/vfio-cpr.h"
 #include "migration/cpr.h"
 #include "migration/misc.h"
@@ -25,6 +26,14 @@
 
 CprState cpr_state;
 static GHashTable *cpr_fds_hash;
+
+/* Callers are spread across the tree and need not share a thread. */
+static QemuMutex cpr_fds_lock;
+
+static void __attribute__((constructor)) cpr_fds_lock_init(void)
+{
+    qemu_mutex_init(&cpr_fds_lock);
+}
 
 /****************************************************************************/
 
@@ -94,6 +103,8 @@ static int cpr_fd_pre_save(void *opaque)
     GHashTableIter iter;
     CprFd *elem;
 
+    QEMU_LOCK_GUARD(&cpr_fds_lock);
+
     QLIST_INIT(&state->fds);
 
     g_hash_table_iter_init(&iter, get_cpr_fds_hash());
@@ -108,6 +119,8 @@ static int cpr_fd_post_load(void *opaque, int version_id)
 {
     CprState *state = (CprState *)opaque;
     CprFd *elem;
+
+    QEMU_LOCK_GUARD(&cpr_fds_lock);
 
     while ((elem = QLIST_FIRST(&state->fds))) {
         QLIST_REMOVE(elem, next);
@@ -127,7 +140,7 @@ static int cpr_fd_post_load(void *opaque, int version_id)
     return 0;
 }
 
-void cpr_save_fd(const char *name, int id, int fd)
+static void do_cpr_save_fd(const char *name, int id, int fd)
 {
     CprFd *elem = g_new0(CprFd, 1);
 
@@ -137,6 +150,13 @@ void cpr_save_fd(const char *name, int id, int fd)
     elem->id = id;
     elem->fd = fd;
     cpr_fd_hash_insert(elem);
+}
+
+void cpr_save_fd(const char *name, int id, int fd)
+{
+    QEMU_LOCK_GUARD(&cpr_fds_lock);
+
+    do_cpr_save_fd(name, id, fd);
 }
 
 static CprFd *find_fd(const char *name, int id)
@@ -149,19 +169,7 @@ static CprFd *find_fd(const char *name, int id)
     return g_hash_table_lookup(get_cpr_fds_hash(), &key);
 }
 
-void cpr_delete_fd(const char *name, int id)
-{
-    CprFd key = {
-        .name = (char *)name,
-        .id = id,
-    };
-
-    g_hash_table_remove(get_cpr_fds_hash(), &key);
-
-    trace_cpr_delete_fd(name, id);
-}
-
-int cpr_find_fd(const char *name, int id)
+static int do_cpr_find_fd(const char *name, int id)
 {
     CprFd *elem = find_fd(name, id);
     int fd = elem ? elem->fd : -1;
@@ -170,13 +178,39 @@ int cpr_find_fd(const char *name, int id)
     return fd;
 }
 
+void cpr_delete_fd(const char *name, int id)
+{
+    CprFd key = {
+        .name = (char *)name,
+        .id = id,
+    };
+
+    QEMU_LOCK_GUARD(&cpr_fds_lock);
+
+    g_hash_table_remove(get_cpr_fds_hash(), &key);
+
+    trace_cpr_delete_fd(name, id);
+}
+
+int cpr_find_fd(const char *name, int id)
+{
+    QEMU_LOCK_GUARD(&cpr_fds_lock);
+
+    return do_cpr_find_fd(name, id);
+}
+
 void cpr_resave_fd(const char *name, int id, int fd)
 {
-    CprFd *elem = find_fd(name, id);
-    int old_fd = elem ? elem->fd : -1;
+    CprFd *elem;
+    int old_fd;
+
+    QEMU_LOCK_GUARD(&cpr_fds_lock);
+
+    elem = find_fd(name, id);
+    old_fd = elem ? elem->fd : -1;
 
     if (old_fd < 0) {
-        cpr_save_fd(name, id, fd);
+        do_cpr_save_fd(name, id, fd);
     } else if (old_fd != fd) {
         error_report("internal error: cpr fd '%s' id %d value %d "
                      "already saved with a different value %d",
@@ -188,12 +222,15 @@ void cpr_resave_fd(const char *name, int id, int fd)
 int cpr_open_fd(const char *path, int flags, const char *name, int id,
                 Error **errp)
 {
-    int fd = cpr_find_fd(name, id);
+    int fd;
 
+    QEMU_LOCK_GUARD(&cpr_fds_lock);
+
+    fd = do_cpr_find_fd(name, id);
     if (fd < 0) {
         fd = qemu_open(path, flags, errp);
         if (fd >= 0) {
-            cpr_save_fd(name, id, fd);
+            do_cpr_save_fd(name, id, fd);
         }
     }
     return fd;
@@ -203,6 +240,8 @@ bool cpr_walk_fd(cpr_walk_fd_cb cb)
 {
     GHashTableIter iter;
     CprFd *elem;
+
+    QEMU_LOCK_GUARD(&cpr_fds_lock);
 
     g_hash_table_iter_init(&iter, get_cpr_fds_hash());
     while (g_hash_table_iter_next(&iter, (gpointer *)&elem, NULL)) {
