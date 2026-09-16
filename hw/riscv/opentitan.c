@@ -20,6 +20,7 @@
 
 #include "qemu/osdep.h"
 #include "qemu/cutils.h"
+#include "qemu/target-info.h"
 #include "hw/riscv/opentitan.h"
 #include "qapi/error.h"
 #include "qemu/error-report.h"
@@ -332,11 +333,13 @@ static const TypeInfo open_titan_types[] = {
         .instance_size  = sizeof(LowRISCIbexSoCState),
         .instance_init  = lowrisc_ibex_soc_init,
         .class_init     = lowrisc_ibex_soc_class_init,
+        .is_available   = target_riscv32,
     }, {
         .name           = TYPE_OPENTITAN_MACHINE,
         .parent         = TYPE_MACHINE,
         .instance_size  = sizeof(OpenTitanState),
         .class_init     = opentitan_machine_class_init,
+        .is_available   = target_riscv32,
     }
 };
 

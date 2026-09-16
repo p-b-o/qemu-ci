@@ -38,6 +38,7 @@
 #include "qemu/error-report.h"
 #include "qemu/units.h"
 #include "qemu/cutils.h"
+#include "qemu/target-info.h"
 #include "qapi/error.h"
 #include "qapi/visitor.h"
 #include "hw/core/boards.h"
@@ -504,6 +505,7 @@ static const TypeInfo microchip_pfsoc_soc_type_info = {
     .instance_size = sizeof(MicrochipPFSoCState),
     .instance_init = microchip_pfsoc_soc_instance_init,
     .class_init = microchip_pfsoc_soc_class_init,
+    .is_available = target_riscv64,
 };
 
 static void microchip_pfsoc_soc_register_types(void)
@@ -757,6 +759,7 @@ static const TypeInfo microchip_icicle_kit_machine_typeinfo = {
     .class_init = microchip_icicle_kit_machine_class_init,
     .instance_init = microchip_icicle_kit_machine_instance_init,
     .instance_size = sizeof(MicrochipIcicleKitState),
+    .is_available = target_riscv64,
 };
 
 static void microchip_icicle_kit_machine_init_register_types(void)

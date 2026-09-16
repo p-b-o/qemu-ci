@@ -10,6 +10,7 @@
  */
 
 #include "qemu/osdep.h"
+#include "qemu/target-info.h"
 #include "qemu/units.h"
 
 #include "hw/core/boards.h"
@@ -473,4 +474,4 @@ static void boston_mach_class_init(MachineClass *mc)
     mc->default_cpu_type = TYPE_RISCV_CPU_MIPS_P8700;
 }
 
-DEFINE_MACHINE("boston-aia", boston_mach_class_init)
+DEFINE_MACHINE_WITH_GUARD("boston-aia", boston_mach_class_init, target_riscv64)

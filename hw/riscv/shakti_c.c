@@ -21,6 +21,7 @@
 #include "hw/riscv/shakti_c.h"
 #include "qapi/error.h"
 #include "qemu/error-report.h"
+#include "qemu/target-info.h"
 #include "hw/intc/sifive_plic.h"
 #include "hw/intc/riscv_aclint.h"
 #include "system/system.h"
@@ -97,6 +98,7 @@ static const TypeInfo shakti_c_machine_type_info = {
     .class_init = shakti_c_machine_class_init,
     .instance_init = shakti_c_machine_instance_init,
     .instance_size = sizeof(ShaktiCMachineState),
+    .is_available = target_riscv64,
 };
 
 static void shakti_c_machine_type_info_register(void)
@@ -186,6 +188,7 @@ static const TypeInfo shakti_c_type_info = {
     .class_init = shakti_c_soc_class_init,
     .instance_init = shakti_c_soc_instance_init,
     .instance_size = sizeof(ShaktiCSoCState),
+    .is_available = target_riscv64,
 };
 
 static void shakti_c_type_info_register(void)
