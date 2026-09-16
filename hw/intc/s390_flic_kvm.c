@@ -264,7 +264,7 @@ static int __get_all_irqs(KVMS390FLICState *flic,
         }
         len *= 2;
         *buf = g_try_realloc(*buf, len);
-        if (!buf) {
+        if (!*buf) {
             return -ENOMEM;
         }
     } while (r == -ENOMEM && len <= KVM_S390_FLIC_MAX_BUFFER);
