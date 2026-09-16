@@ -92,6 +92,13 @@ bool target_ppc64(void);
 bool target_s390x(void);
 
 /**
+ * target_riscv32:
+ *
+ * Returns whether the target architecture is riscv32
+ */
+bool target_riscv32(void);
+
+/**
  * target_riscv64:
  *
  * Returns whether the target architecture is riscv64
