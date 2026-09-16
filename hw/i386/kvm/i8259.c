@@ -93,7 +93,7 @@ static void kvm_pic_reset(DeviceState *dev)
     I8259CommonState *s = I8259_COMMON(dev);
 
     s->elcr = 0;
-    pic_reset_common(s);
+    i8259_common_reset(s);
 
     kvm_pic_put(s);
 }
@@ -102,7 +102,7 @@ static void kvm_pic_set_irq(void *opaque, int irq, int level)
 {
     int delivered;
 
-    pic_stat_update_irq(irq, level);
+    i8259_stat_update_irq(irq, level);
     delivered = kvm_set_irq(kvm_state, irq, level);
     kvm_report_irq_delivered(delivered);
 }
