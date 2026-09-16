@@ -1016,7 +1016,9 @@ static int css_interpret_ccw(SubchDev *sch, hwaddr ccw_addr,
 
     check_len = !((ccw.flags & CCW_FLAG_SLI) && !(ccw.flags & CCW_FLAG_DC));
 
-    if (!ccw.cda) {
+    if (!ccw.cda ||
+        (ccw.flags & CCW_FLAG_SKIP) ||
+        (ccw.cmd_code == CCW_CMD_NOOP)) {
         if (sch->ccw_no_data_cnt == 255) {
             return -EINVAL;
         }
