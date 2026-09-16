@@ -18,7 +18,7 @@ typedef struct {
 static int connect_qga(char *path)
 {
     int s, ret, len, i = 0;
-    struct sockaddr_un remote;
+    struct sockaddr_un remote = { 0 };
 
     s = socket(AF_UNIX, SOCK_STREAM, 0);
     g_assert(s != -1);
@@ -26,7 +26,11 @@ static int connect_qga(char *path)
     remote.sun_family = AF_UNIX;
     do {
         strcpy(remote.sun_path, path);
+#ifdef SUN_LEN
+        len = SUN_LEN(&remote);
+#else
         len = strlen(remote.sun_path) + sizeof(remote.sun_family);
+#endif
         ret = connect(s, (struct sockaddr *)&remote, len);
         if (ret == -1) {
             g_usleep(G_USEC_PER_SEC);
