@@ -1,0 +1,75 @@
+Looking up 20260916070721.3279229-1-xiaoou@iscas.ac.cn
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 20 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH v3 1/19] target/riscv: Add packed SIMD extension state
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-2-xiaoou@iscas.ac.cn
+  [PATCH v3 2/19] target/riscv: Add packed SIMD helper framework
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-3-xiaoou@iscas.ac.cn
+  [PATCH v3 3/19] target/riscv: Add packed SIMD arithmetic instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-4-xiaoou@iscas.ac.cn
+  [PATCH v3 4/19] target/riscv: Add packed SIMD averaging and rounding instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-5-xiaoou@iscas.ac.cn
+  [PATCH v3 5/19] target/riscv: Add packed SIMD absolute, difference, compare and mask instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-6-xiaoou@iscas.ac.cn
+  [PATCH v3 6/19] target/riscv: Add packed SIMD shift instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-7-xiaoou@iscas.ac.cn
+  [PATCH v3 7/19] target/riscv: Add packed SIMD exchange instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-8-xiaoou@iscas.ac.cn
+  [PATCH v3 8/19] target/riscv: Add packed SIMD horizontal reduction instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-9-xiaoou@iscas.ac.cn
+  [PATCH v3 9/19] target/riscv: Add packed SIMD pack, merge and count-leading instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-10-xiaoou@iscas.ac.cn
+  [PATCH v3 10/19] target/riscv: Add packed SIMD pure multiplication instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-11-xiaoou@iscas.ac.cn
+  [PATCH v3 11/19] target/riscv: Add packed SIMD multiply-accumulate instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-12-xiaoou@iscas.ac.cn
+  [PATCH v3 12/19] target/riscv: Add packed SIMD Q-format multiplication instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-13-xiaoou@iscas.ac.cn
+  [PATCH v3 13/19] target/riscv: Add packed SIMD Q-format MAC instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-14-xiaoou@iscas.ac.cn
+  [PATCH v3 14/19] target/riscv: Add packed SIMD two-way multiply-add/subtract instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-15-xiaoou@iscas.ac.cn
+  [PATCH v3 15/19] target/riscv: Add packed SIMD four-way multiply-add instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-16-xiaoou@iscas.ac.cn
+  [PATCH v3 16/19] target/riscv: Add packed SIMD load-replicate instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-17-xiaoou@iscas.ac.cn
+  [PATCH v3 17/19] target/riscv: Add packed SIMD RV32 only instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-18-xiaoou@iscas.ac.cn
+  [PATCH v3 18/19] target/riscv: Remove Zbkb dependency from P extension to align with the spec
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-19-xiaoou@iscas.ac.cn
+  [PATCH v3 19/19] tests/tcg/riscv: Add tests for the P extension
+    + Link: https://lore.kernel.org/qemu-devel/20260916070721.3279229-20-xiaoou@iscas.ac.cn
+---
+Total patches: 19
+---
+Applying: target/riscv: Add packed SIMD extension state
+Applying: target/riscv: Add packed SIMD helper framework
+Applying: target/riscv: Add packed SIMD arithmetic instructions
+Applying: target/riscv: Add packed SIMD averaging and rounding instructions
+Applying: target/riscv: Add packed SIMD absolute, difference, compare and mask instructions
+Applying: target/riscv: Add packed SIMD shift instructions
+Applying: target/riscv: Add packed SIMD exchange instructions
+Applying: target/riscv: Add packed SIMD horizontal reduction instructions
+Applying: target/riscv: Add packed SIMD pack, merge and count-leading instructions
+Applying: target/riscv: Add packed SIMD pure multiplication instructions
+Applying: target/riscv: Add packed SIMD multiply-accumulate instructions
+Applying: target/riscv: Add packed SIMD Q-format multiplication instructions
+Applying: target/riscv: Add packed SIMD Q-format MAC instructions
+Applying: target/riscv: Add packed SIMD two-way multiply-add/subtract instructions
+Applying: target/riscv: Add packed SIMD four-way multiply-add instructions
+Applying: target/riscv: Add packed SIMD load-replicate instructions
+Applying: target/riscv: Add packed SIMD RV32 only instructions
+Applying: target/riscv: Remove Zbkb dependency from P extension to align with the spec
+Applying: tests/tcg/riscv: Add tests for the P extension
+Patch failed at 0019 tests/tcg/riscv: Add tests for the P extension
+error: tests/tcg/riscv64/Makefile.target: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
