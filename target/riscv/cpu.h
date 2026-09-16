@@ -589,8 +589,11 @@ typedef struct RISCVCPUDef {
     int32_t vext_spec;
     RISCVCPUConfig cfg;
     bool bare;
-#if defined(CONFIG_TCG) && !defined(CONFIG_USER_ONLY)
+#if !defined(CONFIG_USER_ONLY)
+#if defined(CONFIG_TCG)
     const RISCVCSR *custom_csrs;
+#endif
+    uint8_t irq_local_guest_max;
 #endif
     /* This is just a setter for env->num_triggers.  */
     uint32_t num_triggers;
