@@ -546,13 +546,13 @@ static void set_satp_mode_default_map(RISCVCPU *cpu)
 #endif
 
 /* Used by csr.c and the KVM driver */
-target_ulong riscv_new_csr_seed(target_ulong new_value,
-                                target_ulong write_mask)
+uint64_t riscv_new_csr_seed(uint64_t new_value,
+                            uint64_t write_mask)
 {
     uint16_t random_v;
     Error *random_e = NULL;
     int random_r;
-    target_ulong rval;
+    uint64_t rval;
 
     random_r = qemu_guest_getrandom(&random_v, 2, &random_e);
     if (unlikely(random_r < 0)) {
