@@ -1075,7 +1075,8 @@ static bool main_loop_should_exit(int *status)
          */
         if (!runstate_check(RUN_STATE_RUNNING) &&
                 !runstate_check(RUN_STATE_INMIGRATE) &&
-                !runstate_check(RUN_STATE_FINISH_MIGRATE)) {
+                !runstate_check(RUN_STATE_FINISH_MIGRATE) &&
+                !runstate_check(RUN_STATE_SAVE_VM)) {
             runstate_set(RUN_STATE_PRELAUNCH);
         }
     }
