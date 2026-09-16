@@ -264,8 +264,11 @@ foreach target, plan: tcg_tests
     if not cc_from_system
       summary_cc += ' (from \'qemu/' + plan['cc_dockerfile'] + '\' container)'
     endif
+    tcg_tests_summary += {'cc for ' + target: summary_cc}
+  else
+    # no compiler, skip this target
+    continue
   endif
-  tcg_tests_summary += {'cc for ' + target: summary_cc}
 
   folder = plan['folder']
   gdb_arch = plan['gdb_arch']
@@ -373,6 +376,9 @@ foreach target, plan: tcg_tests
           cc_has_feat += {cc_feat: avail}
         endif
 
+        # While we skip defining tests for whole architectures if we
+        # don't have the compiler we do skip individual tests where
+        # the compiler is missing a feature.
         if not cc_has_feat[cc_feat]
           skip_test = 'compiler feature ' + cc_feat + ' not supported'
           built_tests += {exe_name: exe_name}
@@ -380,10 +386,8 @@ foreach target, plan: tcg_tests
         cflags += cc_feat_cflags[cc_feat]
       endif
 
-      if not has_cc
-        skip_test = 'compiler ' + plan['cc'] + ' not available'
-        built_tests += {exe_name: exe_name}
-      endif
+      # We should either have a compiler or have skipped the whole target
+      assert(has_cc)
 
       exe_depends = build_test_depends
       if 'depends' in setup
