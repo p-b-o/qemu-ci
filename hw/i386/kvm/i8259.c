@@ -137,15 +137,12 @@ static void kvm_i8259_class_init(ObjectClass *klass, const void *data)
     k->post_load  = kvm_i8259_put;
 }
 
-static const TypeInfo kvm_i8259_info = {
-    .name = TYPE_KVM_I8259,
-    .parent = TYPE_I8259_COMMON,
-    .class_init = kvm_i8259_class_init,
+static const TypeInfo kvm_i8259_type_infos[] = {
+    {
+        .name = TYPE_KVM_I8259,
+        .parent = TYPE_I8259_COMMON,
+        .class_init = kvm_i8259_class_init,
+    },
 };
 
-static void kvm_i8259_register_types(void)
-{
-    type_register_static(&kvm_i8259_info);
-}
-
-type_init(kvm_i8259_register_types)
+DEFINE_TYPES(kvm_i8259_type_infos)
