@@ -37,6 +37,8 @@ OBJECT_DECLARE_TYPE(I8259CommonState, I8259CommonClass, I8259_COMMON)
 struct I8259CommonClass {
     DeviceClass parent_class;
 
+    DeviceRealize parent_realize;
+
     void (*pre_save)(I8259CommonState *s);
     void (*post_load)(I8259CommonState *s);
 };
