@@ -72,6 +72,7 @@ struct I8259CommonState {
 };
 
 void i8259_common_reset(I8259CommonState *s);
-void i8259_stat_update_irq(int irq, int level);
+void i8259_stat_update_irq(uint64_t *irq_levels, int *irq_counts,
+                           int irq, int level);
 
 #endif /* QEMU_I8259_INTERNAL_H */
