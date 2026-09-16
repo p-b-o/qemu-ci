@@ -79,28 +79,11 @@ if gdb.found()
 endif
 tcg_tests_summary += {'gdb': gdb}
 
-docker_supported = false
-container_command = false
-if get_option('containers')
-  if get_option('container_command') != ''
-    # make sure command is working
-    container_command = get_option('container_command')
-    cmd = container_command.split()
-    run_command([cmd, 'info'], check: true)
-    docker_supported = true
-    docker_wrapper = [docker_wrapper, '--command',
-                      container_command]
-  else
-    docker_probe = run_command(docker_wrapper, 'probe', check: false)
-    docker_supported = docker_probe.returncode() == 0
-    if docker_supported
-      container_command = docker_probe.stdout().strip()
-      docker_wrapper = [docker_wrapper, '--command',
-                        container_command]
-    endif
-  endif
+docker_probe = run_command(docker_wrapper, 'probe', check: false)
+docker_supported = docker_probe.returncode() == 0
+if docker_supported
+  docker_wrapper = [docker_wrapper, '--command', docker_probe.stdout().strip()]
 endif
-tcg_tests_summary += {'container command': container_command}
 
 # plugins come first, as we need to build the list
 test_plugins = {}
