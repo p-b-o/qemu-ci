@@ -501,7 +501,8 @@ static void i8259_pic_realize(DeviceState *dev, Error **errp)
     }
 
     /* Wire up secondary cascade */
-    qdev_connect_gpio_out(sec_dev, 0, s->pass_irqs[2]);
+    qdev_connect_gpio_out(sec_dev, 0,
+                          qdev_get_gpio_in(pri_dev, 2));
 
     for (i = 8; i < ISA_NUM_IRQS; i++) {
         s->pass_irqs[i] = qdev_get_gpio_in(sec_dev, i - 8);
