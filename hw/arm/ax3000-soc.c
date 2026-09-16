@@ -41,6 +41,10 @@ static void ax3000_init(Object *obj)
         g_autofree char *name = g_strdup_printf("gpio%d", i);
         object_initialize_child(obj, name, &s->gpio[i], TYPE_CADENCE_GPIO);
     }
+
+
+    object_initialize_child(obj, "hcp", &s->hcp, TYPE_AXIADO_HCP);
+
 }
 
 static void ax3000_realize(DeviceState *dev, Error **errp)
@@ -49,6 +53,7 @@ static void ax3000_realize(DeviceState *dev, Error **errp)
     Ax3000SoCClass *sc = AX3000_SOC_GET_CLASS(s);
     SysBusDevice *gic_sbd = SYS_BUS_DEVICE(&s->gic);
     DeviceState *gic_dev = DEVICE(&s->gic);
+    SysBusDevice *hcp_sbd = SYS_BUS_DEVICE(&s->hcp);
     QList *redist_region_count;
     SysBusDevice *sdhci0_sbd;
     DeviceState *card;
@@ -217,6 +222,24 @@ static void ax3000_realize(DeviceState *dev, Error **errp)
         sysbus_connect_irq(SYS_BUS_DEVICE(&s->gpio[i]), 0,
                            qdev_get_gpio_in(gic_dev, gpio_table[i].irq));
     }
+
+    /* HCP */
+    if (!sysbus_realize(SYS_BUS_DEVICE(&s->hcp), errp)) {
+        return;
+    }
+
+    sysbus_mmio_map(hcp_sbd, 0, AX3000_HCP_EIP197_BASE);
+
+    sysbus_mmio_map(hcp_sbd, 1, AX3000_HCP_SHIM_BASE);
+
+    sysbus_mmio_map(hcp_sbd, 2, AX3000_HCP_PHY_CSR_BASE);
+
+    for (int i = 0; i < HCP_NUM_IRQS; i++) {
+        sysbus_connect_irq(hcp_sbd, i,
+                           qdev_get_gpio_in(gic_dev,
+                                            AX3000_HCP_IRQ_BASE + i));
+    }
+
 }
 
 static void ax3000_class_init(ObjectClass *oc, const void *data)
