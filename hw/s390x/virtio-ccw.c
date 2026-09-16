@@ -565,6 +565,11 @@ static int virtio_ccw_cb(SubchDev *sch, CCW1 ccw)
             ret = -EINVAL;
             break;
         }
+        if (dev->indicators) {
+            /* Do not set without un-setting first */
+            ret = -ENOSYS;
+            break;
+        }
         if (sch->thinint_active) {
             /* Trigger a command reject. */
             ret = -ENOSYS;
@@ -597,6 +602,11 @@ static int virtio_ccw_cb(SubchDev *sch, CCW1 ccw)
         } else if (ccw.count < sizeof(indicators)) {
             /* Can't execute command. */
             ret = -EINVAL;
+            break;
+        }
+        if (dev->indicators2) {
+            /* Do not set without un-setting first */
+            ret = -ENOSYS;
             break;
         }
         if (!ccw.cda) {
@@ -657,7 +667,7 @@ static int virtio_ccw_cb(SubchDev *sch, CCW1 ccw)
         }
         if (!ccw.cda) {
             ret = -EFAULT;
-        } else if (dev->indicators && !sch->thinint_active) {
+        } else if (dev->indicators || dev->summary_indicator) {
             /* Trigger a command reject. */
             ret = -ENOSYS;
         } else {
