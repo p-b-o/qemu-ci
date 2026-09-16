@@ -6,8 +6,9 @@
 /* i8259.c */
 
 typedef struct I8259CommonState I8259CommonState;
+typedef struct I8259PICState I8259PICState;
 
-extern I8259CommonState *isa_pic;
+extern I8259PICState *isa_pic;
 
 /*
  * i8259_init()
@@ -18,8 +19,8 @@ extern I8259CommonState *isa_pic;
  */
 qemu_irq *i8259_init(ISABus *bus, qemu_irq parent_irq_in);
 qemu_irq *kvm_i8259_init(ISABus *bus);
-int pic_get_output(I8259CommonState *s);
-int pic_read_irq(I8259CommonState *s);
+int pic_get_output(I8259PICState *s);
+int pic_read_irq(I8259PICState *s);
 bool i8259_pic_get_statistics(InterruptStatsProvider *obj,
                               uint64_t **irq_counts,
                               unsigned int *nb_irqs);

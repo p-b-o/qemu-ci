@@ -57,8 +57,7 @@ OBJECT_DECLARE_SIMPLE_TYPE(I8259PICState, I8259_PIC)
 #ifdef DEBUG_IRQ_LATENCY
 static int64_t irq_time[16];
 #endif
-I8259CommonState *isa_pic;
-static I8259CommonState *slave_pic;
+I8259PICState *isa_pic;
 
 /* return the highest priority found in mask (highest = smallest
    number). Return 8 if no irq */
@@ -175,33 +174,35 @@ static void i8259_intack(I8259CommonState *s, int irq)
     i8259_update_irq(s);
 }
 
-int pic_read_irq(I8259CommonState *s)
+int pic_read_irq(I8259PICState *s)
 {
+    I8259CommonState *pri = &s->i8259[0];
+    I8259CommonState *sec = &s->i8259[1];
     int irq, intno;
 
-    irq = i8259_get_irq(s);
+    irq = i8259_get_irq(pri);
     if (irq >= 0) {
         int irq2;
 
         if (irq == 2) {
-            irq2 = i8259_get_irq(slave_pic);
+            irq2 = i8259_get_irq(sec);
             if (irq2 >= 0) {
-                i8259_intack(slave_pic, irq2);
+                i8259_intack(sec, irq2);
             } else {
                 /* spurious IRQ on slave controller */
                 irq2 = 7;
             }
-            intno = slave_pic->irq_base + irq2;
-            i8259_intack(s, irq);
+            intno = sec->irq_base + irq2;
+            i8259_intack(pri, irq);
             irq = irq2 + 8;
         } else {
-            intno = s->irq_base + irq;
-            i8259_intack(s, irq);
+            intno = pri->irq_base + irq;
+            i8259_intack(pri, irq);
         }
     } else {
         /* spurious IRQ on host controller */
         irq = 7;
-        intno = s->irq_base + irq;
+        intno = pri->irq_base + irq;
     }
 
 #ifdef DEBUG_IRQ_LATENCY
@@ -353,9 +354,9 @@ static uint64_t i8259_base_ioport_read(void *opaque, hwaddr addr,
     return ret;
 }
 
-int pic_get_output(I8259CommonState *s)
+int pic_get_output(I8259PICState *s)
 {
-    return (i8259_get_irq(s) >= 0);
+    return (i8259_get_irq(&s->i8259[0]) >= 0);
 }
 
 static void i8259_elcr_ioport_write(void *opaque, hwaddr addr,
@@ -410,7 +411,6 @@ qemu_irq *i8259_init(ISABus *bus, qemu_irq parent_irq_in)
 {
     qemu_irq *irq_set;
     DeviceState *dev;
-    Object *pic_obj;
     int i;
 
     irq_set = g_new0(qemu_irq, ISA_NUM_IRQS);
@@ -424,10 +424,7 @@ qemu_irq *i8259_init(ISABus *bus, qemu_irq parent_irq_in)
         irq_set[i] = qdev_get_gpio_in(dev, i);
     }
 
-    pic_obj = object_resolve_path_component(OBJECT(dev), "primary");
-    isa_pic = I8259_COMMON(pic_obj);
-    pic_obj = object_resolve_path_component(OBJECT(dev), "secondary");
-    slave_pic = I8259_COMMON(pic_obj);
+    isa_pic = I8259_PIC(dev);
 
     return irq_set;
 }
