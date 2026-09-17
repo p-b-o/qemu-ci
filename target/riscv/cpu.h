@@ -525,7 +525,6 @@ struct CPUArchState {
     hwaddr kernel_addr;
     hwaddr fdt_addr;
 
-#ifdef CONFIG_KVM
     /* kvm timer */
     bool kvm_timer_dirty;
     uint64_t kvm_timer_time;
@@ -536,7 +535,6 @@ struct CPUArchState {
     /* KVM multiprocessor state */
     uint32_t kvm_mp_state;
     bool kvm_mp_state_loaded;
-#endif /* CONFIG_KVM */
 };
 
 /*
@@ -743,14 +741,10 @@ FIELD(EXT_TB_FLAGS, MISA_EXT, 0, 32)
 FIELD(EXT_TB_FLAGS, ALTFMT, 32, 1)
 FIELD(EXT_TB_FLAGS, BIG_ENDIAN, 33, 1)
 
-#ifdef TARGET_RISCV32
-#define riscv_cpu_mxl(env)  ((void)(env), MXL_RV32)
-#else
 static inline RISCVMXL riscv_cpu_mxl(CPURISCVState *env)
 {
     return env->misa_mxl;
 }
-#endif
 #define riscv_cpu_mxl_bits(env) (1UL << (4 + riscv_cpu_mxl(env)))
 
 static inline const RISCVCPUConfig *riscv_cpu_cfg(CPURISCVState *env)
@@ -794,9 +788,6 @@ static inline RISCVMXL cpu_get_xl(CPURISCVState *env, privilege_mode_t mode)
 }
 #endif
 
-#if defined(TARGET_RISCV32)
-#define cpu_recompute_xl(env)  ((void)(env), MXL_RV32)
-#else
 static inline RISCVMXL cpu_recompute_xl(CPURISCVState *env)
 {
 #if !defined(CONFIG_USER_ONLY)
@@ -805,43 +796,32 @@ static inline RISCVMXL cpu_recompute_xl(CPURISCVState *env)
     return env->misa_mxl;
 #endif
 }
-#endif
 
-#if defined(TARGET_RISCV32)
-#define cpu_address_xl(env)  ((void)(env), MXL_RV32)
-#else
 static inline RISCVMXL cpu_address_xl(CPURISCVState *env)
 {
-#ifdef CONFIG_USER_ONLY
+#ifndef CONFIG_USER_ONLY
+    if (target_riscv64()) {
+        privilege_mode_t mode = cpu_address_mode(env);
+        return cpu_get_xl(env, mode);
+    }
+#endif
     return env->xl;
-#else
-    privilege_mode_t mode = cpu_address_mode(env);
-
-    return cpu_get_xl(env, mode);
-#endif
 }
-#endif
 
 static inline uint16_t riscv_cpu_xlen(CPURISCVState *env)
 {
     return 16 << env->xl;
 }
 
-#ifdef TARGET_RISCV32
-#define riscv_cpu_sxl(env)  ((void)(env), MXL_RV32)
-#else
 static inline RISCVMXL riscv_cpu_sxl(CPURISCVState *env)
 {
-#ifdef CONFIG_USER_ONLY
-    return env->misa_mxl;
-#else
+#ifndef CONFIG_USER_ONLY
     if (env->misa_mxl != MXL_RV32) {
         return get_field(env->mstatus, MSTATUS64_SXL);
     }
 #endif
-    return MXL_RV32;
+    return env->misa_mxl;
 }
-#endif
 
 /*
  * Returns the current effective privilege mode.
