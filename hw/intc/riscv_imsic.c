@@ -501,13 +501,15 @@ DeviceState *riscv_imsic_create(MemoryRegion *container, hwaddr addr,
 {
     DeviceState *dev = qdev_new(TYPE_RISCV_IMSIC);
     CPUState *cpu = cpu_by_arch_id(hartid);
+    RISCVCPUClass *mcc = RISCV_CPU_GET_CLASS(RISCV_CPU(cpu));
     uint32_t i;
 
     assert(!(addr & (IMSIC_MMIO_PAGE_SZ - 1)));
     if (mmode) {
         assert(num_pages == 1);
     } else {
-        assert(num_pages >= 1 && num_pages <= (IRQ_LOCAL_GUEST_MAX + 1));
+        assert(num_pages >= 1 &&
+               num_pages <= (mcc->def->irq_local_guest_max + 1));
     }
     assert(IMSIC_MIN_ID <= num_ids);
     assert(num_ids <= IMSIC_MAX_ID);
