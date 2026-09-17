@@ -24,6 +24,7 @@ def get_args():
     parser.add_argument("--qemu", help="Qemu binary for test",
                         required=True)
     parser.add_argument("--qargs", help="Qemu arguments for test")
+    parser.add_argument("--pargs", help="Program arguments for test")
     parser.add_argument("--binary", help="Binary to debug",
                         required=True)
     parser.add_argument("--test", help="GDB test script")
@@ -88,6 +89,8 @@ if __name__ == '__main__':
             suspend = ''
         cmd = f'{args.qemu} {args.qargs} -g {socket_name}{suspend}' \
             f' {args.binary}'
+        if args.pargs:
+            cmd += f' {args.pargs}'
 
     log(output, "QEMU CMD: %s" % (cmd))
     inferior = subprocess.Popen(shlex.split(cmd))
