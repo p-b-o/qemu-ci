@@ -102,6 +102,8 @@ PCI devices (other than virtio):
   PCI RISC-V IOMMU device
 1b36:0015
   CnuasNIC RDMA network adapter
+1b36:0016
+  CnuasGPU AI/ML compute accelerator
 
 All these devices are documented in :doc:`index`.
 
