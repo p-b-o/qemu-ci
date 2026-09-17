@@ -20,6 +20,7 @@
 #define RISCV_CPU_INTERNALS_H
 
 #include "exec/cpu-common.h"
+#include "exec/target_long.h"
 #include "hw/core/registerfields.h"
 #include "fpu/softfloat-types.h"
 #include "target/riscv/cpu_bits.h"

@@ -21,6 +21,7 @@
 
 #include "cpu.h"
 #include "qapi/error.h"
+#include "exec/target_long.h"
 
 bool riscv_pmu_ctr_monitor_instructions(CPURISCVState *env,
                                         uint32_t target_ctr);

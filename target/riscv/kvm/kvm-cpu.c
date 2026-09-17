@@ -35,6 +35,7 @@
 #include "accel/accel-cpu-target.h"
 #include "hw/pci/pci.h"
 #include "exec/memattrs.h"
+#include "exec/target_long.h"
 #include "system/address-spaces.h"
 #include "system/memory.h"
 #include "hw/core/boards.h"
