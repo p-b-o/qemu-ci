@@ -17,6 +17,7 @@
 #include "cpu-qom.h"
 #include "qemu/cutils.h"
 #include "qemu/error-report.h"
+#include "qemu/target-info.h"
 #include "qapi/error.h"
 #include "system/device_tree.h"
 #include "system/system.h"
@@ -420,6 +421,7 @@ static const TypeInfo k230_soc_type_info = {
     .instance_size = sizeof(K230SoCState),
     .instance_init = k230_soc_init,
     .class_init = k230_soc_class_init,
+    .is_available = target_riscv64,
 };
 
 static void k230_soc_register_types(void)
@@ -558,6 +560,7 @@ static const TypeInfo k230_machine_typeinfo = {
     .class_init = k230_machine_class_init,
     .instance_init = k230_machine_instance_init,
     .instance_size = sizeof(K230MachineState),
+    .is_available = target_riscv64,
 };
 
 static void k230_machine_init_register_types(void)

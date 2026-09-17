@@ -11,6 +11,7 @@
 #include "qemu/cutils.h"
 #include "qemu/error-report.h"
 #include "qemu/guest-random.h"
+#include "qemu/target-info.h"
 #include "qemu/units.h"
 
 #include "hw/core/boards.h"
@@ -694,11 +695,13 @@ static const TypeInfo tt_atlantis_types[] = {
         .instance_size = sizeof(TTAtlantisSoCState),
         .instance_init = tt_atlantis_soc_init,
         .class_init = tt_atlantis_soc_class_init,
+        .is_available = target_riscv64,
     }, {
         .name       = MACHINE_TYPE_NAME("tt-atlantis"),
         .parent     = TYPE_MACHINE,
         .class_init = tt_atlantis_machine_class_init,
         .instance_size = sizeof(TTAtlantisState),
+        .is_available = target_riscv64,
     },
 };
 

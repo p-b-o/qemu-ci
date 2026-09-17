@@ -30,6 +30,7 @@
  */
 
 #include "qemu/osdep.h"
+#include "qemu/target-info.h"
 #include "qapi/error.h"
 #include "system/address-spaces.h"
 #include "hw/core/boards.h"
@@ -157,6 +158,7 @@ static const TypeInfo xiangshan_kmh_soc_info = {
     .instance_size = sizeof(XiangshanKmhSoCState),
     .instance_init = xiangshan_kmh_soc_instance_init,
     .class_init = xiangshan_kmh_soc_class_init,
+    .is_available = target_riscv64,
 };
 
 static void xiangshan_kmh_soc_register_types(void)
@@ -220,6 +222,7 @@ static const TypeInfo xiangshan_kmh_machine_info = {
     .parent = TYPE_MACHINE,
     .instance_size = sizeof(XiangshanKmhState),
     .class_init = xiangshan_kmh_machine_class_init,
+    .is_available = target_riscv64,
 };
 
 static void xiangshan_kmh_machine_register_types(void)

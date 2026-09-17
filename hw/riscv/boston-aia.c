@@ -10,6 +10,7 @@
  */
 
 #include "qemu/osdep.h"
+#include "qemu/target-info.h"
 #include "qemu/units.h"
 
 #include "hw/core/boards.h"
@@ -263,18 +264,6 @@ static const MemoryRegionOps boston_platreg_ops = {
     },
 };
 
-static const TypeInfo boston_device = {
-    .name          = TYPE_MIPS_BOSTON_AIA,
-    .parent        = TYPE_SYS_BUS_DEVICE,
-    .instance_size = sizeof(BostonState),
-};
-
-static void boston_register_types(void)
-{
-    type_register_static(&boston_device);
-}
-type_init(boston_register_types)
-
 #define NUM_INSNS 6
 static void gen_firmware(uint32_t *p)
 {
@@ -462,8 +451,9 @@ static void boston_mach_init(MachineState *machine)
     }
 }
 
-static void boston_mach_class_init(MachineClass *mc)
+static void boston_mach_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
     mc->desc = "MIPS Boston-aia";
     mc->init = boston_mach_init;
     mc->block_default_type = IF_IDE;
@@ -473,4 +463,20 @@ static void boston_mach_class_init(MachineClass *mc)
     mc->default_cpu_type = TYPE_RISCV_CPU_MIPS_P8700;
 }
 
-DEFINE_MACHINE("boston-aia", boston_mach_class_init)
+static const TypeInfo boston_types[] = {
+    {
+        .name          = TYPE_MIPS_BOSTON_AIA,
+        .parent        = TYPE_SYS_BUS_DEVICE,
+        .instance_size = sizeof(BostonState),
+        .is_available  = target_riscv64,
+    },
+    {
+        .name          = MACHINE_TYPE_NAME("boston-aia"),
+        .parent        = TYPE_MACHINE,
+        .class_init    = boston_mach_class_init,
+        .instance_size = sizeof(MachineState),
+        .is_available  = target_riscv64,
+    },
+};
+
+DEFINE_TYPES(boston_types)
