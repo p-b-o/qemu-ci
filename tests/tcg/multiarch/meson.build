@@ -118,6 +118,12 @@ tests += {
     'gdb_test': ['--test', files('gdbstub/follow-fork-mode-parent.py')],
   },
 }
+tests += {
+  multiarch/'test-xpage-chain.c': {
+    'test_name': 'xpage-chain',
+    'gdb_test': ['--test', files('gdbstub/xpage-bp.py'), '--pargs=-b'],
+  },
+}
 
 # Specific plugin tests
 # Test plugin memory access instrumentation
