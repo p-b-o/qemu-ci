@@ -20,7 +20,6 @@
 #define HW_SIFIVE_E_H
 
 #include "hw/riscv/riscv_hart.h"
-#include "hw/riscv/sifive_cpu.h"
 #include "hw/gpio/sifive_gpio.h"
 #include "hw/misc/sifive_e_aon.h"
 #include "hw/core/boards.h"
