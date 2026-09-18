@@ -1,0 +1,51 @@
+Looking up 20260917093307.1092084-1-richard.henderson@linaro.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 14 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v6 1/13] tcg: add tcg_gen_goto_jc{3}_{i32,i64,tl}
+    + Link: https://lore.kernel.org/qemu-devel/20260917093307.1092084-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v6 2/13] target/alpha: Use tcg_gen_goto_jc{3}_i64
+    + Link: https://lore.kernel.org/qemu-devel/20260917093307.1092084-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v6 3/13] target/loongarch: Use tcg_gen_goto_jc_tl for JIRL
+    + Link: https://lore.kernel.org/qemu-devel/20260917093307.1092084-4-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v6 4/13] target/ppc: Use tcg_gen_goto_jc_tl
+    + Link: https://lore.kernel.org/qemu-devel/20260917093307.1092084-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v6 5/13] target/s390x/tcg: Remove DISAS_PC_UPDATED
+    + Link: https://lore.kernel.org/qemu-devel/20260917093307.1092084-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v6 6/13] target/s390x/tcg: Use tcg_gen_goto_jc3_i64 for branches
+    + Link: https://lore.kernel.org/qemu-devel/20260917093307.1092084-7-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v6 7/13] accel/tcg: add CF_NO_GOTO_JC, set while a breakpoint is present
+    + Link: https://lore.kernel.org/qemu-devel/20260917093307.1092084-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v6 8/13] include/exec: Move tc within TranslationBlock
+    + Link: https://lore.kernel.org/qemu-devel/20260917093307.1092084-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v6 9/13] tcg: Probe the TB jump cache inline instead of calling a helper
+    + Link: https://lore.kernel.org/qemu-devel/20260917093307.1092084-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v6 10/13] tcg: Add INDEX_op_goto_jc
+    + Link: https://lore.kernel.org/qemu-devel/20260917093307.1092084-11-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v6 11/13] tcg/x86_64: Implement INDEX_op_goto_jc
+    + Link: https://lore.kernel.org/qemu-devel/20260917093307.1092084-12-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v6 12/13] tcg/aarch64: Implement INDEX_op_goto_jc
+    + Link: https://lore.kernel.org/qemu-devel/20260917093307.1092084-13-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v6 13/13] tcg/s390x: Implement INDEX_op_goto_jc
+    + Link: https://lore.kernel.org/qemu-devel/20260917093307.1092084-14-richard.henderson@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 13
+---
+Applying: tcg: add tcg_gen_goto_jc{3}_{i32,i64,tl}
+Patch failed at 0001 tcg: add tcg_gen_goto_jc{3}_{i32,i64,tl}
+error: patch failed: include/tcg/tcg-op-common.h:85
+error: include/tcg/tcg-op-common.h: patch does not apply
+error: include/tcg/tcg-op-def.h.inc: does not exist in index
+error: patch failed: tcg/tcg-op.c:277
+error: tcg/tcg-op.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
