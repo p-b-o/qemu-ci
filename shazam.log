@@ -1,0 +1,38 @@
+Looking up 20260917143011.881361-1-vsementsov@yandex-team.ru
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/8] vhost-user: inline scrub_shadow_regions() into the only caller
+    + Link: https://lore.kernel.org/qemu-devel/20260917143011.881361-2-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 2/8] vhost-user: introduce send_add_rem_mem_reg()
+    + Link: https://lore.kernel.org/qemu-devel/20260917143011.881361-3-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 3/8] vhost-user: store into shadow_regions only regions we sent to backend
+    + Link: https://lore.kernel.org/qemu-devel/20260917143011.881361-4-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 4/8] vhost-user: add send_add_region() and send_remove_region() helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260917143011.881361-5-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 5/8] vhost-user: vhost_user_add_remove_regions(): drop extra reg variable
+    + Link: https://lore.kernel.org/qemu-devel/20260917143011.881361-6-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 6/8] vhost-user: move to QLIST for shadow_regions
+    + Link: https://lore.kernel.org/qemu-devel/20260917143011.881361-7-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 7/8] vhost-user: vhost_user_add_remove_regions(): final cosmetics
+    + Link: https://lore.kernel.org/qemu-devel/20260917143011.881361-8-vsementsov@yandex-team.ru
+  [32m✓[0m [PATCH 8/8] vhost-user: stop store userspace_addr for shadow when GPA negotiated
+    + Link: https://lore.kernel.org/qemu-devel/20260917143011.881361-9-vsementsov@yandex-team.ru
+  ---
+  [32m✓[0m Signed: DKIM/yandex-team.ru
+---
+Total patches: 8
+---
+Applying: vhost-user: inline scrub_shadow_regions() into the only caller
+Patch failed at 0001 vhost-user: inline scrub_shadow_regions() into the only caller
+error: patch failed: hw/virtio/vhost-user.c:677
+error: hw/virtio/vhost-user.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
