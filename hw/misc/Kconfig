@@ -261,6 +261,8 @@ config AXIADO_CLK
     bool
 
 config K230_DECOMP_GZIP
+
+config BECKHOFF_CCAT
     bool
 
 source macio/Kconfig
