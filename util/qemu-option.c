@@ -900,12 +900,8 @@ static QemuOpts *opts_parse(QemuOptsList *list, const char *params,
 
     opts = qemu_opts_create(list, id, !list->merge_lists, errp);
     g_free(id);
-    if (opts == NULL) {
-        return NULL;
-    }
-
-    if (!opts_do_parse(opts, params, firstname,
-                       warn_on_flag, help_wanted, errp)) {
+    if (!opts || !opts_do_parse(opts, params, firstname,
+                                warn_on_flag, help_wanted, errp)) {
         qemu_opts_del(opts);
         return NULL;
     }
