@@ -726,7 +726,8 @@ static void install_link(DisasContext *ctx, unsigned link, bool with_sr0)
 
 static void gen_excp_1(int exception)
 {
-    gen_helper_excp(tcg_env, tcg_constant_i32(exception));
+    gen_helper_raise_excp(tcg_env, tcg_constant_i32(exception),
+                          tcg_constant_i32(0));
 }
 
 static void gen_excp(DisasContext *ctx, int exception)
