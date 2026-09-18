@@ -1,0 +1,25 @@
+Looking up 20260918063301.35060-1-prcups@krgm.moe
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Assuming new revision: v2 ([PATCH] target/loongarch: add get_sys() helper)
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Will use the latest revision: v2
+You can pick other revisions using the -vN flag
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH] target/loongarch: add get_sys() helper
+    + Link: https://lore.kernel.org/qemu-devel/20260918063301.35060-2-prcups@krgm.moe
+---
+Total patches: 1
+---
+Applying: target/loongarch: add get_sys() helper
+Patch failed at 0001 target/loongarch: add get_sys() helper
+error: patch failed: target/loongarch/cpu.h:507
+error: target/loongarch/cpu.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
