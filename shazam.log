@@ -1,0 +1,32 @@
+Looking up 20260918092120.370805-1-wangyize7@huawei.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH 1/4] Sync KVM ARM VGIC batch register UAPI to QEMU headers
+    + Link: https://lore.kernel.org/qemu-devel/20260918092120.370805-2-wangyize7@huawei.com
+  [31m✗[0m [PATCH 2/4] hw/intc/arm_gicv3_kvm: Add batch helper structures and functions
+    + Link: https://lore.kernel.org/qemu-devel/20260918092120.370805-3-wangyize7@huawei.com
+  [31m✗[0m [PATCH 3/4] hw/intc/arm_gicv3_kvm: Refactor kvm_arm_gicv3_put for batch register access
+    + Link: https://lore.kernel.org/qemu-devel/20260918092120.370805-4-wangyize7@huawei.com
+  [31m✗[0m [PATCH 4/4] hw/intc/arm_gicv3_kvm: Refactor kvm_arm_gicv3_get for batch register access
+    + Link: https://lore.kernel.org/qemu-devel/20260918092120.370805-5-wangyize7@huawei.com
+  ---
+  [31m✗[0m BADSIG: DKIM/huawei.com
+---
+Total patches: 4
+---
+Applying: Sync KVM ARM VGIC batch register UAPI to QEMU headers
+Applying: hw/intc/arm_gicv3_kvm: Add batch helper structures and functions
+Applying: hw/intc/arm_gicv3_kvm: Refactor kvm_arm_gicv3_put for batch register access
+Patch failed at 0003 hw/intc/arm_gicv3_kvm: Refactor kvm_arm_gicv3_put for batch register access
+error: patch failed: hw/intc/arm_gicv3_kvm.c:409
+error: hw/intc/arm_gicv3_kvm.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
