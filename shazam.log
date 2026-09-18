@@ -1,0 +1,36 @@
+Looking up 20260918-upstream-ntrace_msg-v1-0-16a56ad8e0ef@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH 1/6] hw/riscv/trace-encoder.c: support ACTIVE ENABLE EMPTY of trTeRamControl
+    + Link: https://lore.kernel.org/qemu-devel/20260918-upstream-ntrace_msg-v1-1-16a56ad8e0ef@gmail.com
+  [31m✗[0m [PATCH 2/6] hw/riscv/trace-encoder.c: Support sync messages for N-trace
+    + Link: https://lore.kernel.org/qemu-devel/20260918-upstream-ntrace_msg-v1-2-16a56ad8e0ef@gmail.com
+  [31m✗[0m [PATCH 3/6] hw/riscv/trace-encoder.c: Implement Ownership messages for NTrace
+    + Link: https://lore.kernel.org/qemu-devel/20260918-upstream-ntrace_msg-v1-3-16a56ad8e0ef@gmail.com
+  [31m✗[0m [PATCH 4/6] hw/riscv/ntrace: emit PPCCD and Ownership on priv change
+    + Link: https://lore.kernel.org/qemu-devel/20260918-upstream-ntrace_msg-v1-4-16a56ad8e0ef@gmail.com
+  [31m✗[0m [PATCH 5/6] hw/riscv/trace-encoder: emit Ownership after ProgTraceSync
+    + Link: https://lore.kernel.org/qemu-devel/20260918-upstream-ntrace_msg-v1-5-16a56ad8e0ef@gmail.com
+  [31m✗[0m [PATCH 6/6] hw/riscv/trace-encoder.c: implementated SRC field
+    + Link: https://lore.kernel.org/qemu-devel/20260918-upstream-ntrace_msg-v1-6-16a56ad8e0ef@gmail.com
+  ---
+  [31m✗[0m No key: openpgp/antikostya2@gmail.com
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 6
+---
+Applying: hw/riscv/trace-encoder.c: support ACTIVE ENABLE EMPTY of trTeRamControl
+Patch failed at 0001 hw/riscv/trace-encoder.c: support ACTIVE ENABLE EMPTY of trTeRamControl
+error: hw/riscv/trace-encoder.c: does not exist in index
+error: hw/riscv/trace-ram-sink.c: does not exist in index
+error: tests/qtest/riscv-trace-test.c: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
