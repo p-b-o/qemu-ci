@@ -305,7 +305,12 @@ static void gen_left_shift_sar(DisasContext *dc, TCGv_i32 sa)
 
 static void gen_exception(DisasContext *dc, int excp)
 {
-    gen_helper_exception(tcg_env, tcg_constant_i32(excp));
+    if (excp == EXCP_YIELD) {
+        tcg_gen_st_i32(tcg_constant_i32(0), tcg_env,
+                       offsetof(CPUXtensaState, yield_needed));
+    }
+    gen_helper_raise_excp(tcg_env, tcg_constant_i32(excp),
+                         tcg_constant_i32(0));
 }
 
 static void gen_exception_cause(DisasContext *dc, uint32_t cause)

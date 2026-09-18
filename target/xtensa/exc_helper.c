@@ -35,15 +35,12 @@
 #include "qemu/atomic.h"
 #include "qemu/plugin.h"
 
-void HELPER(exception)(CPUXtensaState *env, uint32_t excp)
+void xtensa_exception(CPUXtensaState *env, uint32_t excp)
 {
-    CPUState *cs = env_cpu(env);
-
-    cs->exception_index = excp;
     if (excp == EXCP_YIELD) {
         env->yield_needed = 0;
     }
-    cpu_loop_exit(cs);
+    cpu_loop_exit_excp(env_cpu(env), excp, 0);
 }
 
 void HELPER(exception_cause)(CPUXtensaState *env, uint32_t pc, uint32_t cause)
@@ -66,7 +63,7 @@ void HELPER(exception_cause)(CPUXtensaState *env, uint32_t pc, uint32_t cause)
     env->sregs[EXCCAUSE] = cause;
     env->sregs[PS] |= PS_EXCM;
 
-    HELPER(exception)(env, vector);
+    xtensa_exception(env, vector);
 }
 
 void HELPER(exception_cause_vaddr)(CPUXtensaState *env,
@@ -93,7 +90,7 @@ void HELPER(debug_exception)(CPUXtensaState *env, uint32_t pc, uint32_t cause)
     env->sregs[EPS2 + level - 2] = env->sregs[PS];
     env->sregs[PS] = (env->sregs[PS] & ~PS_INTLEVEL) | PS_EXCM |
         (level << PS_INTLEVEL_SHIFT);
-    HELPER(exception)(env, EXC_DEBUG);
+    xtensa_exception(env, EXC_DEBUG);
 }
 
 #ifndef CONFIG_USER_ONLY
@@ -116,7 +113,7 @@ void HELPER(waiti)(CPUXtensaState *env, uint32_t pc, uint32_t intlevel)
     }
 
     cpu->halted = 1;
-    HELPER(exception)(env, EXCP_HLT);
+    xtensa_exception(env, EXCP_HLT);
 }
 
 void HELPER(check_interrupts)(CPUXtensaState *env)
