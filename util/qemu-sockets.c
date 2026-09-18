@@ -704,7 +704,7 @@ static QemuOptsList inet_opts = {
 
 int inet_parse(InetSocketAddress *addr, const char *str, Error **errp)
 {
-    QemuOpts *opts = qemu_opts_parse(&inet_opts, str, true, errp);
+    QemuOpts *opts = qemu_opts_parse_list(&inet_opts, str, true, errp);
     if (!opts) {
         return -1;
     }

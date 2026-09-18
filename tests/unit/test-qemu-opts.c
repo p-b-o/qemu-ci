@@ -349,7 +349,7 @@ static void test_qemu_opt_unset(void)
     int ret;
 
     /* dynamically initialized (parsed) opts */
-    opts = qemu_opts_parse(&opts_list_03, "key=value", false, NULL);
+    opts = qemu_opts_parse_list(&opts_list_03, "key=value", false, NULL);
     g_assert(opts != NULL);
 
     /* check default/parsed value */
@@ -431,95 +431,96 @@ static void test_opts_parse(void)
     QemuOpts *opts;
 
     /* Nothing */
-    opts = qemu_opts_parse(&opts_list_03, "", false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, "", false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 0);
 
     /* Empty key */
-    opts = qemu_opts_parse(&opts_list_03, "=val", false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, "=val", false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 1);
     g_assert_cmpstr(qemu_opt_get(opts, ""), ==, "val");
 
     /* Multiple keys, last one wins */
-    opts = qemu_opts_parse(&opts_list_03, "a=1,b=2,,x,a=3",
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, "a=1,b=2,,x,a=3",
+                                false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 3);
     g_assert_cmpstr(qemu_opt_get(opts, "a"), ==, "3");
     g_assert_cmpstr(qemu_opt_get(opts, "b"), ==, "2,x");
 
     /* Except when it doesn't */
-    opts = qemu_opts_parse(&opts_list_03, "id=foo,id=bar",
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, "id=foo,id=bar",
+                                false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 0);
     g_assert_cmpstr(qemu_opts_id(opts), ==, "foo");
 
     /* TODO Cover low-level access to repeated keys */
 
     /* Trailing comma is ignored */
-    opts = qemu_opts_parse(&opts_list_03, "x=y,", false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, "x=y,", false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 1);
     g_assert_cmpstr(qemu_opt_get(opts, "x"), ==, "y");
 
     /* Except when it isn't */
-    opts = qemu_opts_parse(&opts_list_03, ",", false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, ",", false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 1);
     g_assert_cmpstr(qemu_opt_get(opts, ""), ==, "on");
 
     /* Duplicate ID */
-    opts = qemu_opts_parse(&opts_list_03, "x=y,id=foo", false, &err);
+    opts = qemu_opts_parse_list(&opts_list_03, "x=y,id=foo", false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
     /* TODO Cover .merge_lists = true */
 
     /* Buggy ID recognition (fixed) */
-    opts = qemu_opts_parse(&opts_list_03, "x=,,id=bar", false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, "x=,,id=bar", false,
+                                &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 1);
     g_assert(!qemu_opts_id(opts));
     g_assert_cmpstr(qemu_opt_get(opts, "x"), ==, ",id=bar");
 
     /* Anti-social ID */
-    opts = qemu_opts_parse(&opts_list_01, "id=666", false, &err);
+    opts = qemu_opts_parse_list(&opts_list_01, "id=666", false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
 
     /* Implied value (qemu_opts_parse warns but accepts it) */
-    opts = qemu_opts_parse(&opts_list_03, "an,noaus,noaus=",
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, "an,noaus,noaus=",
+                                false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 3);
     g_assert_cmpstr(qemu_opt_get(opts, "an"), ==, "on");
     g_assert_cmpstr(qemu_opt_get(opts, "aus"), ==, "off");
     g_assert_cmpstr(qemu_opt_get(opts, "noaus"), ==, "");
 
     /* Implied value, negated empty key */
-    opts = qemu_opts_parse(&opts_list_03, "no", false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, "no", false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 1);
     g_assert_cmpstr(qemu_opt_get(opts, ""), ==, "off");
 
     /* Implied key */
-    opts = qemu_opts_parse(&opts_list_03, "an,noaus,noaus=", true,
-                           &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, "an,noaus,noaus=", true,
+                                &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 3);
     g_assert_cmpstr(qemu_opt_get(opts, "implied"), ==, "an");
     g_assert_cmpstr(qemu_opt_get(opts, "aus"), ==, "off");
     g_assert_cmpstr(qemu_opt_get(opts, "noaus"), ==, "");
 
     /* Implied key with empty value */
-    opts = qemu_opts_parse(&opts_list_03, ",", true, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, ",", true, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 1);
     g_assert_cmpstr(qemu_opt_get(opts, "implied"), ==, "");
 
     /* Implied key with comma value */
-    opts = qemu_opts_parse(&opts_list_03, ",,,a=1", true, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, ",,,a=1", true, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 2);
     g_assert_cmpstr(qemu_opt_get(opts, "implied"), ==, ",");
     g_assert_cmpstr(qemu_opt_get(opts, "a"), ==, "1");
 
     /* Empty key is not an implied key */
-    opts = qemu_opts_parse(&opts_list_03, "=val", true, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, "=val", true, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 1);
     g_assert_cmpstr(qemu_opt_get(opts, ""), ==, "val");
 
     /* Unknown key */
-    opts = qemu_opts_parse(&opts_list_01, "nonexistent=", false, &err);
+    opts = qemu_opts_parse_list(&opts_list_01, "nonexistent=", false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
 
@@ -532,13 +533,13 @@ static void test_opts_parse_bool(void)
     Error *err = NULL;
     QemuOpts *opts;
 
-    opts = qemu_opts_parse(&opts_list_02, "bool1=on,bool2=off",
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_02, "bool1=on,bool2=off",
+                                false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 2);
     g_assert(qemu_opt_get_bool(opts, "bool1", false));
     g_assert(!qemu_opt_get_bool(opts, "bool2", true));
 
-    opts = qemu_opts_parse(&opts_list_02, "bool1=offer", false, &err);
+    opts = qemu_opts_parse_list(&opts_list_02, "bool1=offer", false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
 
@@ -551,59 +552,60 @@ static void test_opts_parse_number(void)
     QemuOpts *opts;
 
     /* Lower limit zero */
-    opts = qemu_opts_parse(&opts_list_01, "number1=0", false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_01, "number1=0", false,
+                                &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 1);
     g_assert_cmpuint(qemu_opt_get_number(opts, "number1", 1), ==, 0);
 
     /* Upper limit 2^64-1 */
-    opts = qemu_opts_parse(&opts_list_01,
-                           "number1=18446744073709551615,number2=-1",
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_01,
+                                "number1=18446744073709551615,number2=-1",
+                                false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 2);
     g_assert_cmphex(qemu_opt_get_number(opts, "number1", 1), ==, UINT64_MAX);
     g_assert_cmphex(qemu_opt_get_number(opts, "number2", 0), ==, UINT64_MAX);
 
     /* Above upper limit */
-    opts = qemu_opts_parse(&opts_list_01, "number1=18446744073709551616",
-                           false, &err);
+    opts = qemu_opts_parse_list(&opts_list_01, "number1=18446744073709551616",
+                                false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
 
     /* Below lower limit */
-    opts = qemu_opts_parse(&opts_list_01, "number1=-18446744073709551616",
-                           false, &err);
+    opts = qemu_opts_parse_list(&opts_list_01, "number1=-18446744073709551616",
+                                false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
 
     /* Hex and octal */
-    opts = qemu_opts_parse(&opts_list_01, "number1=0x2a,number2=052",
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_01, "number1=0x2a,number2=052",
+                                false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 2);
     g_assert_cmpuint(qemu_opt_get_number(opts, "number1", 1), ==, 42);
     g_assert_cmpuint(qemu_opt_get_number(opts, "number2", 0), ==, 42);
 
     /* Invalid */
-    opts = qemu_opts_parse(&opts_list_01, "number1=", false, &err);
+    opts = qemu_opts_parse_list(&opts_list_01, "number1=", false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
-    opts = qemu_opts_parse(&opts_list_01, "number1=eins", false, &err);
+    opts = qemu_opts_parse_list(&opts_list_01, "number1=eins", false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
 
     /* Leading whitespace */
-    opts = qemu_opts_parse(&opts_list_01, "number1= \t42",
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_01, "number1= \t42",
+                                false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 1);
     g_assert_cmpuint(qemu_opt_get_number(opts, "number1", 1), ==, 42);
 
     /* Trailing crap */
-    opts = qemu_opts_parse(&opts_list_01, "number1=3.14", false, &err);
+    opts = qemu_opts_parse_list(&opts_list_01, "number1=3.14", false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
-    opts = qemu_opts_parse(&opts_list_01, "number1=08", false, &err);
+    opts = qemu_opts_parse_list(&opts_list_01, "number1=08", false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
-    opts = qemu_opts_parse(&opts_list_01, "number1=0 ", false, &err);
+    opts = qemu_opts_parse_list(&opts_list_01, "number1=0 ", false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
 
@@ -616,18 +618,18 @@ static void test_opts_parse_size(void)
     QemuOpts *opts;
 
     /* Lower limit zero */
-    opts = qemu_opts_parse(&opts_list_02, "size1=0", false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_02, "size1=0", false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 1);
     g_assert_cmpuint(qemu_opt_get_size(opts, "size1", 1), ==, 0);
 
     /* Note: full 64 bits of precision */
 
     /* Around double limit of precision: 2^53-1, 2^53, 2^53+1 */
-    opts = qemu_opts_parse(&opts_list_02,
-                           "size1=9007199254740991,"
-                           "size2=9007199254740992,"
-                           "size3=9007199254740993",
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_02,
+                                "size1=9007199254740991,"
+                                "size2=9007199254740992,"
+                                "size3=9007199254740993",
+                                false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 3);
     g_assert_cmphex(qemu_opt_get_size(opts, "size1", 1),
                      ==, 0x1fffffffffffff);
@@ -637,11 +639,12 @@ static void test_opts_parse_size(void)
                      ==, 0x20000000000001);
 
     /* Close to signed int limit: 2^63-1, 2^63, 2^63+1 */
-    opts = qemu_opts_parse(&opts_list_02,
-                           "size1=9223372036854775807," /* 7fffffffffffffff */
-                           "size2=9223372036854775808," /* 8000000000000000 */
-                           "size3=9223372036854775809", /* 8000000000000001 */
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(
+        &opts_list_02,
+        "size1=9223372036854775807," /* 7fffffffffffffff */
+        "size2=9223372036854775808," /* 8000000000000000 */
+        "size3=9223372036854775809", /* 8000000000000001 */
+        false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 3);
     g_assert_cmphex(qemu_opt_get_size(opts, "size1", 1),
                      ==, 0x7fffffffffffffff);
@@ -651,10 +654,11 @@ static void test_opts_parse_size(void)
                      ==, 0x8000000000000001);
 
     /* Close to actual upper limit 0xfffffffffffff800 (53 msbs set) */
-    opts = qemu_opts_parse(&opts_list_02,
-                           "size1=18446744073709549568," /* fffffffffffff800 */
-                           "size2=18446744073709550591", /* fffffffffffffbff */
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(
+        &opts_list_02,
+        "size1=18446744073709549568," /* fffffffffffff800 */
+        "size2=18446744073709550591", /* fffffffffffffbff */
+        false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 2);
     g_assert_cmphex(qemu_opt_get_size(opts, "size1", 1),
                      ==, 0xfffffffffffff800);
@@ -662,47 +666,48 @@ static void test_opts_parse_size(void)
                      ==, 0xfffffffffffffbff);
 
     /* Actual limit, 2^64-1 */
-    opts = qemu_opts_parse(&opts_list_02,
-                           "size1=18446744073709551615", /* ffffffffffffffff */
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(
+        &opts_list_02,
+        "size1=18446744073709551615", /* ffffffffffffffff */
+        false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 1);
     g_assert_cmphex(qemu_opt_get_size(opts, "size1", 1),
                      ==, 0xffffffffffffffff);
 
     /* Beyond limits */
-    opts = qemu_opts_parse(&opts_list_02, "size1=-1", false, &err);
+    opts = qemu_opts_parse_list(&opts_list_02, "size1=-1", false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
-    opts = qemu_opts_parse(&opts_list_02,
-                           "size1=18446744073709551616", /* 2^64 */
-                           false, &err);
+    opts = qemu_opts_parse_list(&opts_list_02,
+                                "size1=18446744073709551616", /* 2^64 */
+                                false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
 
     /* Suffixes */
-    opts = qemu_opts_parse(&opts_list_02, "size1=8b,size2=1.5k,size3=2M",
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_02, "size1=8b,size2=1.5k,size3=2M",
+                                false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 3);
     g_assert_cmphex(qemu_opt_get_size(opts, "size1", 0), ==, 8);
     g_assert_cmphex(qemu_opt_get_size(opts, "size2", 0), ==, 1536);
     g_assert_cmphex(qemu_opt_get_size(opts, "size3", 0), ==, 2 * MiB);
-    opts = qemu_opts_parse(&opts_list_02, "size1=0.1G,size2=16777215T",
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_02, "size1=0.1G,size2=16777215T",
+                                false, &error_abort);
     g_assert_cmpuint(opts_count(opts), ==, 2);
     g_assert_cmphex(qemu_opt_get_size(opts, "size1", 0), ==, GiB / 10);
     g_assert_cmphex(qemu_opt_get_size(opts, "size2", 0), ==, 16777215ULL * TiB);
 
     /* Beyond limit with suffix */
-    opts = qemu_opts_parse(&opts_list_02, "size1=16777216T",
-                           false, &err);
+    opts = qemu_opts_parse_list(&opts_list_02, "size1=16777216T",
+                                false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
 
     /* Trailing crap */
-    opts = qemu_opts_parse(&opts_list_02, "size1=16E", false, &err);
+    opts = qemu_opts_parse_list(&opts_list_02, "size1=16E", false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
-    opts = qemu_opts_parse(&opts_list_02, "size1=16Gi", false, &err);
+    opts = qemu_opts_parse_list(&opts_list_02, "size1=16Gi", false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
 
@@ -737,13 +742,13 @@ static void test_has_help_option(void)
     for (i = 0; i < ARRAY_SIZE(test); i++) {
         g_assert_cmpint(has_help_option(test[i].params),
                         ==, test[i].expect);
-        opts = qemu_opts_parse(&opts_list_03, test[i].params, false,
-                               &error_abort);
+        opts = qemu_opts_parse_list(&opts_list_03, test[i].params, false,
+                                    &error_abort);
         g_assert_cmpint(qemu_opt_has_help_opt(opts),
                         ==, test[i].expect);
         qemu_opts_del(opts);
-        opts = qemu_opts_parse(&opts_list_03, test[i].params, true,
-                               &error_abort);
+        opts = qemu_opts_parse_list(&opts_list_03, test[i].params, true,
+                                    &error_abort);
         g_assert_cmpint(qemu_opt_has_help_opt(opts),
                         ==, test[i].expect_implied);
         qemu_opts_del(opts);
@@ -877,8 +882,9 @@ static void test_opts_to_qdict_basic(void)
     QemuOpts *opts;
     QDict *dict;
 
-    opts = qemu_opts_parse(&opts_list_01, "str1=foo,str2=,str3=bar,number1=42",
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_01,
+                                "str1=foo,str2=,str3=bar,number1=42",
+                                false, &error_abort);
     g_assert(opts != NULL);
 
     dict = qemu_opts_to_qdict(opts, NULL);
@@ -903,9 +909,9 @@ static void test_opts_to_qdict_filtered(void)
     first = qemu_opts_append(NULL, &opts_list_02);
     merged = qemu_opts_append(first, &opts_list_01);
 
-    opts = qemu_opts_parse(merged,
-                           "str1=foo,str2=,str3=bar,bool1=off,number1=42",
-                           false, &error_abort);
+    opts = qemu_opts_parse_list(
+        merged, "str1=foo,str2=,str3=bar,bool1=off,number1=42",
+        false, &error_abort);
     g_assert(opts != NULL);
 
     /* Convert to QDict without deleting from opts */
@@ -962,7 +968,8 @@ static void test_opts_to_qdict_duplicates(void)
     QemuOpt *opt;
     QDict *dict;
 
-    opts = qemu_opts_parse(&opts_list_03, "foo=a,foo=b", false, &error_abort);
+    opts = qemu_opts_parse_list(&opts_list_03, "foo=a,foo=b", false,
+                                &error_abort);
     g_assert(opts != NULL);
 
     /* Verify that opts has two options with the same name */
