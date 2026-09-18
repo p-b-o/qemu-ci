@@ -950,19 +950,18 @@ QemuOpts *qemu_opts_parse_list(QemuOptsList *list, const char *params,
 {
     bool noisily = !errp;
     QemuOpts *opts = NULL;
+    Error *err = NULL;
 
     assert(list);
+    opts = opts_parse(list, params, permit_abbrev, noisily, &err);
 
-    if (noisily) {
-        Error *err = NULL;
-
-        opts = opts_parse(list, params, permit_abbrev, noisily, &err);
-        if (!opts && err) {
+    if (!opts) {
+        assert(err);
+        if (noisily) {
             error_report_err(err);
+        } else {
+            error_propagate(errp, err);
         }
-
-    } else {
-        opts = opts_parse(list, params, permit_abbrev, noisily, errp);
     }
 
     return opts;
