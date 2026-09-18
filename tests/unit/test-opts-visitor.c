@@ -39,8 +39,7 @@ setup_fixture(OptsVisitorFixture *f, gconstpointer test_data)
     QemuOpts *opts;
     Visitor *v;
 
-    opts = qemu_opts_parse(qemu_find_opts("userdef"), opts_string, false,
-                           NULL);
+    opts = qemu_opts_parse("userdef", opts_string, false, NULL);
     g_assert(opts != NULL);
 
     v = opts_visitor_new(opts);
@@ -181,8 +180,7 @@ test_opts_range_unvisited(void)
     QemuOpts *opts;
     Visitor *v;
 
-    opts = qemu_opts_parse(qemu_find_opts("userdef"), "ilist=0-2", false,
-                           &error_abort);
+    opts = qemu_opts_parse("userdef", "ilist=0-2", false, &error_abort);
 
     v = opts_visitor_new(opts);
 
@@ -222,8 +220,7 @@ test_opts_range_beyond(void)
     Visitor *v;
     int64_t val;
 
-    opts = qemu_opts_parse(qemu_find_opts("userdef"), "ilist=0", false,
-                           &error_abort);
+    opts = qemu_opts_parse("userdef", "ilist=0", false, &error_abort);
 
     v = opts_visitor_new(opts);
 
@@ -257,8 +254,7 @@ test_opts_dict_unvisited(void)
     Visitor *v;
     UserDefOptions *userdef;
 
-    opts = qemu_opts_parse(qemu_find_opts("userdef"), "i64x=0,bogus=1", false,
-                           &error_abort);
+    opts = qemu_opts_parse("userdef", "i64x=0,bogus=1", false, &error_abort);
 
     v = opts_visitor_new(opts);
     visit_type_UserDefOptions(v, NULL, &userdef, &err);

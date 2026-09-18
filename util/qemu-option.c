@@ -26,6 +26,7 @@
 #include "qemu/osdep.h"
 
 #include "qapi/error.h"
+#include "qemu/config-file.h"
 #include "qemu/error-report.h"
 #include "qobject/qbool.h"
 #include "qobject/qdict.h"
@@ -910,16 +911,18 @@ static QemuOpts *opts_parse(QemuOptsList *list, const char *params,
 }
 
 /**
- * Create a QemuOpts in @list and with options parsed from @params.
- * If @permit_abbrev, the first key=value in @params may omit key=,
- * and is treated as if key was @list->implied_opt_name.
- * On error, store an error object through @errp if non-null.
- * Return the new QemuOpts on success, null pointer on error.
+ * Find the @group and create a QemuOpts with options parsed from
+ * @params.  If @permit_abbrev, the first key=value in @params may
+ * omit key=.  On error, store an error object through @errp if
+ * non-null.  Return the new QemuOpts on success, null pointer on
+ * error.
  */
-QemuOpts *qemu_opts_parse(QemuOptsList *list, const char *params,
+QemuOpts *qemu_opts_parse(const char *group, const char *params,
                           bool permit_abbrev, Error **errp)
 {
-    return opts_parse(list, params, permit_abbrev, false, NULL, errp);
+    QemuOptsList *list = qemu_find_opts_err(group, errp);
+
+    return qemu_opts_parse_list(list, params, permit_abbrev, errp);
 }
 
 /**
@@ -932,7 +935,7 @@ QemuOpts *qemu_opts_parse(QemuOptsList *list, const char *params,
 QemuOpts *qemu_opts_parse_list(QemuOptsList *list, const char *params,
                                bool permit_abbrev, Error **errp)
 {
-    return qemu_opts_parse(list, params, permit_abbrev, errp);
+    return opts_parse(list, params, permit_abbrev, false, NULL, errp);
 }
 
 /**
