@@ -938,7 +938,23 @@ QemuOpts *qemu_opts_parse(const char *group, const char *params,
 QemuOpts *qemu_opts_parse_list(QemuOptsList *list, const char *params,
                                bool permit_abbrev, Error **errp)
 {
-    return opts_parse(list, params, permit_abbrev, false, false, errp);
+    bool noisily = !errp;
+    QemuOpts *opts = NULL;
+
+    if (noisily) {
+        Error *err = NULL;
+        bool help_wanted = !opts_accepts_any(list);
+
+        opts = opts_parse(list, params, permit_abbrev, true, help_wanted, &err);
+        if (!opts && err) {
+            error_report_err(err);
+        }
+
+    } else {
+        opts = opts_parse(list, params, permit_abbrev, false, false, errp);
+    }
+
+    return opts;
 }
 
 /**
@@ -952,19 +968,7 @@ QemuOpts *qemu_opts_parse_list(QemuOptsList *list, const char *params,
 QemuOpts *qemu_opts_parse_noisily(QemuOptsList *list, const char *params,
                                   bool permit_abbrev)
 {
-    Error *err = NULL;
-    QemuOpts *opts;
-    bool help_wanted = !opts_accepts_any(list);
-
-    opts = opts_parse(list, params, permit_abbrev, true, help_wanted, &err);
-    if (!opts) {
-        if (help_wanted) {
-            assert(!err);
-        } else {
-            error_report_err(err);
-        }
-    }
-    return opts;
+    return qemu_opts_parse_list(list, params, permit_abbrev, NULL);
 }
 
 static bool qemu_opts_from_qdict_entry(QemuOpts *opts,
