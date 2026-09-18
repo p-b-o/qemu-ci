@@ -925,6 +925,10 @@ QemuOpts *qemu_opts_parse(const char *group, const char *params,
 {
     QemuOptsList *list = qemu_find_opts_err(group, errp);
 
+    if (!list) {
+        return NULL;
+    }
+
     return qemu_opts_parse_list(list, params, permit_abbrev, errp);
 }
 
