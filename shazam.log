@@ -1,0 +1,68 @@
+Looking up 20260917081716.946668-1-richard.henderson@linaro.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 17 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 34 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/16] tcg: Add INDEX_op_lea
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-2-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 2/16] tcg: Add tcg_gen_lea_{i32,i64,tl}
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-3-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 3/16] tcg/optimize: Handle INDEX_op_lea
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-4-richard.henderson@linaro.org
+  [31m✗[0m [PATCH v2 4/16] target/alpha: Use tcg_gen_lea_i64 for S{4, 8}ADD{L, Q}
+    [31m✗[0m BADSIG: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-5-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 5/16] target/loongarch: Use tcg_gen_lea_tl for ALSL
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-6-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 6/16] target/mips: Use tcg_gen_lea() for [D]LSA and MXU S32LD*V opcodes
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-7-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 7/16] target/riscv: Use tcg_gen_lea_tl for SH*ADD
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-8-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 8/16] target/s390x: Use tcg_gen_lea_i64 in get_address
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-9-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 9/16] target/i386: Use tcg_gen_lea_tl in gen_lea_modrm_1
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-10-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 10/16] tcg/x86_64: Introduce TCG_REG_NONE
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-11-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 11/16] tcg/x86_64: Implement INDEX_op_lea
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-12-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 12/16] tcg/loongarch64: Import SLADD insns
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-13-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 13/16] tcg/loongarch64: Implement INDEX_op_lea
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-14-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 14/16] tcg/aarch64: Implement INDEX_op_lea
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-15-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 15/16] tcg/riscv64: Implement INDEX_op_lea
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-16-richard.henderson@linaro.org
+  [32m✓[0m [PATCH v2 16/16] tcg/s390x: Implement INDEX_op_lea
+    [32m✓[0m Signed: DKIM/linaro.org
+    + Link: https://lore.kernel.org/qemu-devel/20260917081716.946668-17-richard.henderson@linaro.org
+---
+Total patches: 16
+---
+Applying: tcg: Add INDEX_op_lea
+Patch failed at 0001 tcg: Add INDEX_op_lea
+error: patch failed: tcg/tcg.c:1191
+error: tcg/tcg.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
