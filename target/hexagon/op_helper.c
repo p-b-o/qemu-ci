@@ -72,31 +72,24 @@ uint64_t HELPER(utimer)(void)
 #define SF_MANTBITS    23
 
 /* Exceptions processing helpers */
-G_NORETURN
-void do_raise_exception(CPUHexagonState *env, uint32_t exception,
-                        uint32_t PC, uintptr_t retaddr)
-{
-    CPUState *cs = env_cpu(env);
-    qemu_log_mask(CPU_LOG_INT, "%s: 0x%08" PRIx32 ", @ %08" PRIx32 "\n",
-                  __func__, exception, PC);
-    ASSERT_DIRECT_TO_GUEST_UNSET(env, exception);
-
-    env->gpr[HEX_REG_PC] = PC;
-    cs->exception_index = exception;
-    cpu_loop_exit_restore(cs, retaddr);
-}
-
 G_NORETURN void hexagon_raise_exception_err(CPUHexagonState *env,
                                             uint32_t exception,
-                                            uintptr_t pc)
+                                            vaddr pc, uintptr_t retaddr)
 {
-    do_raise_exception(env, exception, pc, 0);
+    CPUState *cs = env_cpu(env);
+    qemu_log_mask(CPU_LOG_INT, "%s: 0x%08" PRIx32 ", @ %08" VADDR_PRIx "\n",
+                  __func__, exception, pc);
+    ASSERT_DIRECT_TO_GUEST_UNSET(env, exception);
+
+    env->gpr[HEX_REG_PC] = pc;
+    cpu_loop_exit_excp(cs, exception, retaddr);
 }
 
-G_NORETURN void HELPER(raise_exception)(CPUHexagonState *env, uint32_t excp,
-                                        uint32_t PC)
+G_NORETURN void HELPER(hexagon_raise_exception)(CPUHexagonState *env,
+                                                uint32_t exception,
+                                                vaddr pc)
 {
-    hexagon_raise_exception_err(env, excp, PC);
+    hexagon_raise_exception_err(env, exception, pc, 0);
 }
 
 void log_store32(CPUHexagonState *env, target_ulong addr,
@@ -1733,7 +1726,7 @@ static void set_wait_mode(CPUHexagonState *env)
     SET_SYSTEM_FIELD(env, HEX_SREG_MODECTL, MODECTL_W, thread_wait_mask);
 }
 
-static void hexagon_wait_thread(CPUHexagonState *env, uint32_t PC)
+static void hexagon_wait_thread(CPUHexagonState *env, vaddr pc)
 {
     CPUState *cs;
 
@@ -1760,7 +1753,7 @@ static void hexagon_wait_thread(CPUHexagonState *env, uint32_t PC)
         return;
     }
     set_wait_mode(env);
-    env->wait_next_pc = PC + 4;
+    env->wait_next_pc = pc + 4;
 
     cpu_interrupt(cs, CPU_INTERRUPT_HALT);
 }
@@ -1828,12 +1821,12 @@ void HELPER(resched)(CPUHexagonState *env)
     resched(env);
 }
 
-void HELPER(wait)(CPUHexagonState *env, uint32_t PC)
+void HELPER(hexagon_wait)(CPUHexagonState *env, vaddr pc)
 {
     BQL_LOCK_GUARD();
 
     if (!fIN_DEBUG_MODE(env->threadId)) {
-        hexagon_wait_thread(env, PC);
+        hexagon_wait_thread(env, pc);
     }
 }
 

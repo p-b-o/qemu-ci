@@ -637,7 +637,7 @@ static inline TCGv gen_read_ireg(TCGv result, TCGv val, int shift)
 #ifdef CONFIG_USER_ONLY
 #define fTRAP(TRAPTYPE, IMM) \
     do { \
-        hexagon_raise_exception_err(env, HEX_EVENT_TRAP0, PC); \
+        hexagon_raise_exception_err(env, HEX_EVENT_TRAP0, PC, 0); \
     } while (0)
 #endif
 

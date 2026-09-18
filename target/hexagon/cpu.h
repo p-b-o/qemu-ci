@@ -210,7 +210,7 @@ FIELD(TB_FLAGS, PCYCLE_ENABLED, 4, 1)
 
 G_NORETURN void hexagon_raise_exception_err(CPUHexagonState *env,
                                             uint32_t exception,
-                                            uintptr_t pc);
+                                            vaddr pc, uintptr_t retaddr);
 
 #ifndef CONFIG_USER_ONLY
 /*

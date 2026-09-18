@@ -333,7 +333,7 @@ static TCGTBCPUState hexagon_get_tb_cpu_state(CPUState *cs)
     }
     if (pc & PCALIGN_MASK) {
         env->cause_code = HEX_CAUSE_PC_NOT_ALIGNED;
-        hexagon_raise_exception_err(env, HEX_EVENT_PRECISE, pc);
+        hexagon_raise_exception_err(env, HEX_EVENT_PRECISE, pc, 0);
     }
 
 #ifndef CONFIG_USER_ONLY
@@ -711,14 +711,15 @@ static bool hexagon_tlb_fill(CPUState *cs, vaddr address, int size,
             return false;
         }
         raise_perm_exception(cs, address, slot, access_type, excp);
-        do_raise_exception(env, cs->exception_index, env->gpr[HEX_REG_PC],
-                           retaddr);
+        hexagon_raise_exception_err(env, cs->exception_index,
+                                    env->gpr[HEX_REG_PC], retaddr);
     }
     if (probe) {
         return false;
     }
     raise_tlbmiss_exception(cs, address, slot, access_type);
-    do_raise_exception(env, cs->exception_index, env->gpr[HEX_REG_PC], retaddr);
+    hexagon_raise_exception_err(env, cs->exception_index,
+                                env->gpr[HEX_REG_PC], retaddr);
 }
 
 #include "hw/core/sysemu-cpu-ops.h"
@@ -761,8 +762,8 @@ void hexagon_cpu_do_unaligned_access(CPUState *cs, vaddr addr,
     CPUHexagonState *env = cpu_env(cs);
 
     raise_misaligned_exception(cs, addr, 0, access_type);
-    do_raise_exception(env, cs->exception_index, env->gpr[HEX_REG_PC],
-                       retaddr);
+    hexagon_raise_exception_err(env, cs->exception_index,
+                                env->gpr[HEX_REG_PC], retaddr);
 }
 
 #endif
