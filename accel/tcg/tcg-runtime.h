@@ -22,6 +22,17 @@ DEF_HELPER_FLAGS_1(ctpop_i64, TCG_CALL_NO_RWG_SE, i64, i64)
 
 DEF_HELPER_FLAGS_1(lookup_tb_ptr, TCG_CALL_NO_WG_SE, cptr, env)
 
+/**
+ * raise_excp:
+ * @arg1: env -- CPU env
+ * @arg2: exception -- EXCP_* or target trap number
+ * @arg3: restore -- 0 skip unwind, 1 use GETPC()
+ *
+ * Shared TCG exception raise. Translate calls gen_helper_raise_excp.
+ * Exits via cpu_loop_exit_excp.
+ */
+DEF_HELPER_FLAGS_3(raise_excp, TCG_CALL_NO_WG, noreturn, env, i32, i32)
+
 DEF_HELPER_FLAGS_1(exit_atomic, TCG_CALL_NO_WG, noreturn, env)
 
 #ifndef IN_HELPER_PROTO

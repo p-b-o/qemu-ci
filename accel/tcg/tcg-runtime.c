@@ -130,6 +130,12 @@ uint64_t HELPER(ctpop_i64)(uint64_t arg)
     return ctpop64(arg);
 }
 
+void HELPER(raise_excp)(CPUArchState *env, uint32_t exception,
+                        uint32_t restore)
+{
+    cpu_loop_exit_excp(env_cpu(env), exception, restore ? GETPC() : 0);
+}
+
 void HELPER(exit_atomic)(CPUArchState *env)
 {
     cpu_loop_exit_atomic(env_cpu(env), GETPC());
