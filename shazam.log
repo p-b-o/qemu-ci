@@ -1,0 +1,33 @@
+Looking up 20260916223843.3995552-1-namangulati@google.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 5 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 15 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/4] vfio-user: add multi-fd region mmap capability
+    + Link: https://lore.kernel.org/qemu-devel/20260916223843.3995552-2-namangulati@google.com
+  [32m✓[0m [PATCH v3 2/4] vfio: add 'fd' and 'fd_offset' to VFIOMmap
+    + Link: https://lore.kernel.org/qemu-devel/20260916223843.3995552-3-namangulati@google.com
+  [32m✓[0m [PATCH v3 3/4] vfio: add setup_sparse_mmaps hook to VFIODeviceIOOps
+    + Link: https://lore.kernel.org/qemu-devel/20260916223843.3995552-4-namangulati@google.com
+  [32m✓[0m [PATCH v3 4/4] vfio-user: support multiple FDs for sparse mmap regions
+    + Link: https://lore.kernel.org/qemu-devel/20260916223843.3995552-5-namangulati@google.com
+  ---
+  [32m✓[0m Signed: DKIM/google.com
+---
+Total patches: 4
+---
+Applying: vfio-user: add multi-fd region mmap capability
+Applying: vfio: add 'fd' and 'fd_offset' to VFIOMmap
+Applying: vfio: add setup_sparse_mmaps hook to VFIODeviceIOOps
+Applying: vfio-user: support multiple FDs for sparse mmap regions
+Patch failed at 0004 vfio-user: support multiple FDs for sparse mmap regions
+error: patch failed: hw/vfio-user/device.c:187
+error: hw/vfio-user/device.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
