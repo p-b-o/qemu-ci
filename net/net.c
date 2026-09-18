@@ -2029,7 +2029,7 @@ void netdev_parse_modern(const char *optstr)
 
 void net_client_parse(QemuOptsList *opts_list, const char *optstr)
 {
-    if (!qemu_opts_parse_noisily(opts_list, optstr, true)) {
+    if (!qemu_opts_parse_list_noisily(opts_list, optstr, true)) {
         exit(1);
     }
 }

@@ -706,8 +706,8 @@ int main(int argc, char **argv)
             break;
         case 'l':
             if (strstart(optarg, SNAPSHOT_OPT_BASE, NULL)) {
-                sn_opts = qemu_opts_parse_noisily(&internal_snapshot_opts,
-                                                  optarg, false);
+                sn_opts = qemu_opts_parse_list_noisily(&internal_snapshot_opts,
+                                                       optarg, false);
                 if (!sn_opts) {
                     error_report("Failed in parsing snapshot param `%s'",
                                  optarg);
@@ -1117,7 +1117,7 @@ int main(int argc, char **argv)
             error_report("--image-opts and -f are mutually exclusive");
             exit(EXIT_FAILURE);
         }
-        o = qemu_opts_parse_noisily(&file_opts, opts.srcpath, true);
+        o = qemu_opts_parse_list_noisily(&file_opts, opts.srcpath, true);
         if (!o) {
             qemu_opts_reset(&file_opts);
             exit(EXIT_FAILURE);

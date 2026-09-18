@@ -179,7 +179,7 @@ static BlockBackend *start_primary(void)
                               "file.driver=qcow2,file.file.filename=%s,"
                               "file.file.locking=off"
                               , p_local_disk);
-    opts = qemu_opts_parse_noisily(&qemu_drive_opts, cmdline, false);
+    opts = qemu_opts_parse_list_noisily(&qemu_drive_opts, cmdline, false);
     g_free(cmdline);
 
     qdict = qemu_opts_to_qdict(opts, NULL);
@@ -295,7 +295,7 @@ static BlockBackend *start_secondary(void)
     cmdline = g_strdup_printf("file.filename=%s,driver=qcow2,"
                               "file.locking=off",
                               s_local_disk);
-    opts = qemu_opts_parse_noisily(&qemu_drive_opts, cmdline, false);
+    opts = qemu_opts_parse_list_noisily(&qemu_drive_opts, cmdline, false);
     g_free(cmdline);
 
     qdict = qemu_opts_to_qdict(opts, NULL);
@@ -321,7 +321,7 @@ static BlockBackend *start_secondary(void)
                               "file.backing.backing=%s"
                               , S_ID, s_active_disk, s_hidden_disk
                               , S_LOCAL_DISK_ID);
-    opts = qemu_opts_parse_noisily(&qemu_drive_opts, cmdline, false);
+    opts = qemu_opts_parse_list_noisily(&qemu_drive_opts, cmdline, false);
     g_free(cmdline);
 
     qdict = qemu_opts_to_qdict(opts, NULL);

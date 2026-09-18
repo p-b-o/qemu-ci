@@ -897,7 +897,7 @@ static QDict *monitor_parse_arguments(MonitorHMP *mon,
                 if (get_str(buf, sizeof(buf), &p) < 0) {
                     goto fail;
                 }
-                opts = qemu_opts_parse_noisily(opts_list, buf, true);
+                opts = qemu_opts_parse_list_noisily(opts_list, buf, true);
                 if (!opts) {
                     goto fail;
                 }

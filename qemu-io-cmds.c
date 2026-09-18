@@ -2540,7 +2540,7 @@ static int reopen_f(BlockBackend *blk, int argc, char **argv, Error **errp)
             has_cache_option = true;
             break;
         case 'o':
-            if (!qemu_opts_parse_noisily(&reopen_opts, optarg, 0)) {
+            if (!qemu_opts_parse_list_noisily(&reopen_opts, optarg, 0)) {
                 qemu_opts_reset(&reopen_opts);
                 return -EINVAL;
             }

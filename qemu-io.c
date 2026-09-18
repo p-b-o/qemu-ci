@@ -220,7 +220,7 @@ static int open_f(BlockBackend *blk, int argc, char **argv, Error **errp)
                 qemu_opts_reset(&empty_opts);
                 return -EINVAL;
             }
-            if (!qemu_opts_parse_noisily(&empty_opts, optarg, false)) {
+            if (!qemu_opts_parse_list_noisily(&empty_opts, optarg, false)) {
                 qemu_opts_reset(&empty_opts);
                 return -EINVAL;
             }
@@ -240,7 +240,7 @@ static int open_f(BlockBackend *blk, int argc, char **argv, Error **errp)
     }
 
     if (imageOpts && (optind == argc - 1)) {
-        if (!qemu_opts_parse_noisily(&empty_opts, argv[optind], false)) {
+        if (!qemu_opts_parse_list_noisily(&empty_opts, argv[optind], false)) {
             qemu_opts_reset(&empty_opts);
             return -EINVAL;
         }
@@ -659,7 +659,8 @@ int main(int argc, char **argv)
     if ((argc - optind) == 1) {
         if (imageOpts) {
             QemuOpts *qopts = NULL;
-            qopts = qemu_opts_parse_noisily(&file_opts, argv[optind], false);
+            qopts = qemu_opts_parse_list_noisily(&file_opts, argv[optind],
+                                                 false);
             if (!qopts) {
                 exit(1);
             }
