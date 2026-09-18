@@ -899,26 +899,6 @@ bool qemu_opts_do_parse(QemuOpts *opts, const char *params,
     return opts_do_parse(opts, params, firstname, false, errp);
 }
 
-static QemuOpts *opts_parse(QemuOptsList *list, const char *params,
-                            bool permit_abbrev, bool noisily, Error **errp)
-{
-    const char *firstname;
-    char *id = opts_parse_id(params);
-    QemuOpts *opts;
-
-    assert(!permit_abbrev || list->implied_opt_name);
-    firstname = permit_abbrev ? list->implied_opt_name : NULL;
-
-    opts = qemu_opts_create(list, id, !list->merge_lists, errp);
-    g_free(id);
-    if (!opts || !opts_do_parse(opts, params, firstname, noisily, errp)) {
-        qemu_opts_del(opts);
-        return NULL;
-    }
-
-    return opts;
-}
-
 /**
  * Find the @group and create a QemuOpts with options parsed from
  * @params.  If @permit_abbrev, the first key=value in @params may
@@ -948,20 +928,27 @@ QemuOpts *qemu_opts_parse(const char *group, const char *params,
 QemuOpts *qemu_opts_parse_list(QemuOptsList *list, const char *params,
                                bool permit_abbrev, Error **errp)
 {
+    const char *firstname;
+    g_autofree char *id = opts_parse_id(params);
     bool noisily = !errp;
     QemuOpts *opts = NULL;
     Error *err = NULL;
 
     assert(list);
-    opts = opts_parse(list, params, permit_abbrev, noisily, &err);
+    assert(!permit_abbrev || list->implied_opt_name);
 
-    if (!opts) {
-        assert(err);
+    firstname = permit_abbrev ? list->implied_opt_name : NULL;
+
+    opts = qemu_opts_create(list, id, !list->merge_lists, &err);
+    if (!opts || !opts_do_parse(opts, params, firstname, noisily, &err)) {
+        qemu_opts_del(opts);
+
         if (noisily) {
             error_report_err(err);
         } else {
             error_propagate(errp, err);
         }
+        return NULL;
     }
 
     return opts;
