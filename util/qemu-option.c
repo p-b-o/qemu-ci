@@ -756,9 +756,9 @@ void qemu_opts_print(QemuOpts *opts, const char *separator)
 
 static const char *get_opt_name_value(const char *params,
                                       const char *firstname,
-                                      bool warn_on_flag,
                                       bool *help_wanted,
-                                      char **name, char **value)
+                                      char **name, char **value,
+                                      Error **errp)
 {
     const char *p;
     const char *prefix = "";
@@ -783,13 +783,15 @@ static const char *get_opt_name_value(const char *params,
                 *value = g_strdup("on");
                 is_help = is_help_option(*name);
             }
-            if (!is_help && warn_on_flag) {
-                warn_report("short-form boolean option '%s%s' deprecated", prefix, *name);
+            if (!is_help) {
                 if (g_str_equal(*name, "delay")) {
-                    error_printf("Please use nodelay=%s instead\n", prefix[0] ? "on" : "off");
+                    error_setg(errp, "Please use nodelay=%s instead",
+                               prefix[0] ? "on" : "off");
                 } else {
-                    error_printf("Please use %s=%s instead\n", *name, *value);
+                    error_setg(errp, "Please use %s=%s instead", *name, *value);
                 }
+                error_prepend(errp, "short-form boolean option '%s%s' "
+                              "deprecated", prefix, *name);
             }
         }
     } else {
@@ -821,9 +823,14 @@ static bool opts_do_parse(QemuOpts *opts, const char *params,
         g_autofree char *option = NULL;
         g_autofree char *value = NULL;
         bool is_help = false;
+        Error *warn = NULL;
 
-        p = get_opt_name_value(p, firstname, warn_on_flag, &is_help, &option,
-                               &value);
+        p = get_opt_name_value(p, firstname, &is_help, &option, &value, &warn);
+
+        if (warn_on_flag && warn) {
+            warn_report_err(warn);
+        }
+
         if (help_wanted && is_help) {
             qemu_opts_print_help(opts->list, true);
             return false;
@@ -852,7 +859,7 @@ static char *opts_parse_id(const char *params)
         g_autofree char *name = NULL;
         g_autofree char *value = NULL;
 
-        p = get_opt_name_value(p, NULL, false, NULL, &name, &value);
+        p = get_opt_name_value(p, NULL, NULL, &name, &value, NULL);
         if (!strcmp(name, "id")) {
             return g_steal_pointer(&value);
         }
@@ -870,7 +877,7 @@ bool has_help_option(const char *params)
         g_autofree char *name = NULL;
         g_autofree char *value = NULL;
 
-        p = get_opt_name_value(p, NULL, false, &ret, &name, &value);
+        p = get_opt_name_value(p, NULL, &ret, &name, &value, NULL);
         if (ret) {
             return true;
         }
