@@ -134,8 +134,8 @@ void qemu_semihosting_enable(void)
 
 int qemu_semihosting_config_options(const char *optstr)
 {
-    QemuOptsList *opt_list = qemu_find_opts("semihosting-config");
-    QemuOpts *opts = qemu_opts_parse_noisily(opt_list, optstr, false);
+    QemuOpts *opts = qemu_opts_parse_noisily("semihosting-config", optstr,
+                                             false);
 
     semihosting.enabled = true;
 

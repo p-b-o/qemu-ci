@@ -128,7 +128,7 @@ void qemu_opts_del(QemuOpts *opts);
 bool qemu_opts_validate(QemuOpts *opts, const QemuOptDesc *desc, Error **errp);
 bool qemu_opts_do_parse(QemuOpts *opts, const char *params,
                         const char *firstname, Error **errp);
-QemuOpts *qemu_opts_parse_noisily(QemuOptsList *list, const char *params,
+QemuOpts *qemu_opts_parse_noisily(const char *group, const char *params,
                                   bool permit_abbrev);
 QemuOpts *qemu_opts_parse(const char *group, const char *params,
                           bool permit_abbrev, Error **errp);

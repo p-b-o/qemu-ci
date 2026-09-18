@@ -4324,8 +4324,7 @@ static char *vnc_auto_assign_id(QemuOpts *opts)
 
 void vnc_parse(const char *str)
 {
-    QemuOptsList *olist = qemu_find_opts("vnc");
-    QemuOpts *opts = qemu_opts_parse_noisily(olist, str, !is_help_option(str));
+    QemuOpts *opts = qemu_opts_parse_noisily("vnc", str, !is_help_option(str));
 
     if (!opts) {
         exit(1);

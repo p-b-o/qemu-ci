@@ -147,7 +147,7 @@ void qemu_plugin_opt_parse(const char *optstr, QemuPluginList *head)
     struct qemu_plugin_parse_arg arg;
     QemuOpts *opts;
 
-    opts = qemu_opts_parse_noisily(qemu_find_opts("plugin"), optstr, true);
+    opts = qemu_opts_parse_noisily("plugin", optstr, true);
     if (opts == NULL) {
         exit(1);
     }

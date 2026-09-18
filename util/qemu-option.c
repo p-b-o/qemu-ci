@@ -941,6 +941,8 @@ QemuOpts *qemu_opts_parse_list(QemuOptsList *list, const char *params,
     bool noisily = !errp;
     QemuOpts *opts = NULL;
 
+    assert(list);
+
     if (noisily) {
         Error *err = NULL;
         bool help_wanted = !opts_accepts_any(list);
@@ -958,16 +960,24 @@ QemuOpts *qemu_opts_parse_list(QemuOptsList *list, const char *params,
 }
 
 /**
- * Create a QemuOpts in @list and with options parsed from @params.
+ * Find the @group and create a QemuOpts with options parsed from @params.
  * If @permit_abbrev, the first key=value in @params may omit key=,
  * and is treated as if key was @list->implied_opt_name.
  * Report errors with error_report_err().  This is inappropriate in
  * QMP context.  Do not use this function there!
  * Return the new QemuOpts on success, null pointer on error.
  */
-QemuOpts *qemu_opts_parse_noisily(QemuOptsList *list, const char *params,
+QemuOpts *qemu_opts_parse_noisily(const char *group, const char *params,
                                   bool permit_abbrev)
 {
+    Error *err = NULL;
+    QemuOptsList *list = qemu_find_opts_err(group, &err);
+
+    if (!list) {
+        error_report_err(err);
+        return NULL;
+    }
+
     return qemu_opts_parse_list(list, params, permit_abbrev, NULL);
 }
 

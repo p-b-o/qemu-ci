@@ -31,15 +31,11 @@ static void test_seccomp_helper(const char *args, bool killed,
                                 int errnum, int (*doit)(void))
 {
     if (g_test_subprocess()) {
-        QemuOptsList *olist;
         QemuOpts *opts;
         int ret;
 
         module_call_init(MODULE_INIT_OPTS);
-        olist = qemu_find_opts("sandbox");
-        g_assert(olist != NULL);
-
-        opts = qemu_opts_parse_noisily(olist, args, true);
+        opts = qemu_opts_parse_noisily("sandbox", args, true);
         g_assert(opts != NULL);
 
         parse_sandbox(NULL, opts, &error_abort);

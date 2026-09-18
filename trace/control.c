@@ -288,8 +288,7 @@ bool trace_init_backends(void)
 
 void trace_opt_parse(const char *optstr)
 {
-    QemuOpts *opts = qemu_opts_parse_noisily(qemu_find_opts("trace"),
-                                             optstr, true);
+    QemuOpts *opts = qemu_opts_parse_noisily("trace", optstr, true);
     if (!opts) {
         exit(1);
     }

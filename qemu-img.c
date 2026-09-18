@@ -358,8 +358,7 @@ static BlockBackend *img_open(bool image_opts,
             error_report("--image-opts and --format are mutually exclusive");
             return NULL;
         }
-        opts = qemu_opts_parse_noisily(qemu_find_opts("source"),
-                                       filename, true);
+        opts = qemu_opts_parse_noisily("source", filename, true);
         if (!opts) {
             return NULL;
         }
