@@ -1,0 +1,24 @@
+Looking up da75d0f0-d98e-4e27-ac6c-c575a2d382ff@swemel.ru
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 4 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] hw/display/tcx: use memmove instead of memcpy for overlapping blit memory regions
+    + Link: https://lore.kernel.org/qemu-devel/da75d0f0-d98e-4e27-ac6c-c575a2d382ff@swemel.ru
+  ---
+  [32m✓[0m Signed: DKIM/swemel.ru
+---
+Total patches: 1
+---
+Applying: hw/display/tcx: use memmove instead of memcpy for overlapping blit memory regions
+Patch failed at 0001 hw/display/tcx: use memmove instead of memcpy for overlapping blit memory regions
+error: patch failed: hw/display/tcx.c:587
+error: hw/display/tcx.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
