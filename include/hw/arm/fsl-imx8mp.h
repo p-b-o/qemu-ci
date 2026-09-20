@@ -20,6 +20,7 @@
 #include "hw/misc/imx8mp_gpc.h"
 #include "hw/misc/imx8mp_gpr.h"
 #include "hw/misc/imx8mp_src.h"
+#include "hw/misc/imx8mp_mu.h"
 #include "hw/net/flexcan.h"
 #include "hw/net/imx_fec.h"
 #include "hw/core/or-irq.h"
@@ -40,6 +41,8 @@ OBJECT_DECLARE_SIMPLE_TYPE(FslImx8mpState, FSL_IMX8MP)
 #define FSL_IMX8MP_RAM_START        0x40000000
 #define FSL_IMX8MP_RAM_SIZE_MAX     (8 * GiB)
 
+#define FSL_IMX8MP_MU1_A_IRQ  88
+
 enum FslImx8mpConfiguration {
     FSL_IMX8MP_NUM_CANS         = 2,
     FSL_IMX8MP_NUM_CPUS         = 4,
@@ -48,11 +51,17 @@ enum FslImx8mpConfiguration {
     FSL_IMX8MP_NUM_GPTS         = 6,
     FSL_IMX8MP_NUM_I2CS         = 6,
     FSL_IMX8MP_NUM_IRQS         = 160,
+    FSL_IMX8MP_NUM_MU           = 3,
     FSL_IMX8MP_NUM_UARTS        = 4,
     FSL_IMX8MP_NUM_USBS         = 2,
     FSL_IMX8MP_NUM_USDHCS       = 3,
     FSL_IMX8MP_NUM_WDTS         = 3,
 };
+
+typedef struct IMX8MPMUPair {
+    IMX8MPMUState a;
+    IMX8MPMUState b;
+} IMX8MPMUPair;
 
 struct FslImx8mpState {
     SysBusDevice   parent_obj;
@@ -67,6 +76,7 @@ struct FslImx8mpState {
     IMX8MPAnalogState  analog;
     IMX7SNVSState      snvs;
     IMXSPIState        spi[FSL_IMX8MP_NUM_ECSPIS];
+    IMX8MPMUPair       mu[FSL_IMX8MP_NUM_MU];
     FslImx8mpSrcState  src;
     IMXI2CState        i2c[FSL_IMX8MP_NUM_I2CS];
     IMXSerialState     uart[FSL_IMX8MP_NUM_UARTS];
