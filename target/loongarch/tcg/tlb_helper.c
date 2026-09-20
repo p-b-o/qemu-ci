@@ -750,7 +750,7 @@ target_ulong helper_lddir(CPULoongArchState *env, target_ulong base,
     }
 
     badvaddr = sys->CSR_TLBRBADV;
-    base = base & palen_mask;
+    base = base & palen_mask & ~MAKE_64BIT_MASK(0, 12);
     get_dir_base_width(env, &dir_base, &dir_width, level);
     index = (badvaddr >> dir_base) & ((1 << dir_width) - 1);
     phys = base | index << 3;
@@ -772,7 +772,6 @@ void helper_ldpte(CPULoongArchState *env, target_ulong base, target_ulong odd,
     uint64_t palen_mask = loongarch_palen_mask(env);
     uint64_t dir_base, dir_width;
     uint8_t  ps;
-
 
     /*
      * The parameter "base" has only two types,
@@ -815,9 +814,7 @@ void helper_ldpte(CPULoongArchState *env, target_ulong base, target_ulong odd,
         }
     } else {
         badv = sys->CSR_TLBRBADV;
-
-        base = base & palen_mask;
-
+        base = base & palen_mask & ~MAKE_64BIT_MASK(0, 12);
         ptindex = (badv >> ptbase) & ((1 << ptwidth) - 1);
         ptindex = ptindex & ~0x1;   /* clear bit 0 */
         ptoffset0 = ptindex << 3;
