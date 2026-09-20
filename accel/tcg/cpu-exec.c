@@ -560,6 +560,9 @@ void cpu_exec_step_atomic(CPUState *cpu)
         g_assert(!cpu->running);
         cpu->running = true;
 
+#ifdef CONFIG_USER_ONLY
+next_instr:
+#endif
         TCGTBCPUState s = cpu->cc->tcg_ops->get_tb_cpu_state(cpu);
         s.cflags = curr_cflags(cpu);
 
@@ -586,7 +589,19 @@ void cpu_exec_step_atomic(CPUState *cpu)
         trace_exec_tb(tb, s.pc);
         cpu_tb_exec(cpu, tb, &tb_exit);
         cpu_exec_exit(cpu);
+#ifdef CONFIG_USER_ONLY
+        if (cpu->cc->tcg_ops->is_uninterruptible && cpu->cc->tcg_ops->is_uninterruptible(cpu)) {
+            if ((tb_exit & TB_EXIT_MASK) != TB_EXIT_REQUESTED)
+                goto next_instr;
+            if (cpu->cc->tcg_ops->revert_uninterruptible)
+                cpu->cc->tcg_ops->revert_uninterruptible(cpu);
+        }
+#endif
     } else {
+#ifdef CONFIG_USER_ONLY
+        if (cpu->cc->tcg_ops->revert_uninterruptible)
+            cpu->cc->tcg_ops->revert_uninterruptible(cpu);
+#endif
         cpu_exec_longjmp_cleanup(cpu);
     }
 

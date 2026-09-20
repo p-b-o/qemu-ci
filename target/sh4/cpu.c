@@ -92,6 +92,26 @@ static void superh_restore_state_to_opc(CPUState *cs,
      */
 }
 
+#ifdef CONFIG_USER_ONLY
+static bool superh_cpu_is_uninterruptible(CPUState *cs)
+{
+    SuperHCPU *cpu = SUPERH_CPU(cs);
+
+    return cpu->env.gregs[15] >= -128u;
+}
+
+static void superh_cpu_revert_uninterruptible(CPUState *cs)
+{
+    SuperHCPU *cpu = SUPERH_CPU(cs);
+
+    if (cpu->env.gregs[15] >= -128u && cpu->env.pc < cpu->env.gregs[0]) {
+        cpu->env.pc = cpu->env.gregs[0] + cpu->env.gregs[15] - 2;
+        cpu->env.gregs[15] = cpu->env.gregs[1];
+        cpu->env.flags &= ~(TB_FLAG_DELAY_SLOT_MASK | TB_FLAG_GUSA_MASK);
+    }
+}
+#endif /* CONFIG_USER_ONLY */
+
 #ifndef CONFIG_USER_ONLY
 static bool superh_io_recompile_replay_branch(CPUState *cs,
                                               const TranslationBlock *tb)
@@ -308,7 +328,10 @@ static const TCGCPUOps superh_tcg_ops = {
     .restore_state_to_opc = superh_restore_state_to_opc,
     .mmu_index = sh4_cpu_mmu_index,
 
-#ifndef CONFIG_USER_ONLY
+#ifdef CONFIG_USER_ONLY
+    .is_uninterruptible = superh_cpu_is_uninterruptible,
+    .revert_uninterruptible = superh_cpu_revert_uninterruptible,
+#else
     .tlb_fill = superh_cpu_tlb_fill,
     .pointer_wrap = cpu_pointer_wrap_notreached,
     .cpu_exec_interrupt = superh_cpu_exec_interrupt,

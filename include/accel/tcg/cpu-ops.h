@@ -168,6 +168,26 @@ struct TCGCPUOps {
      * @addr: tagged guest address
      */
     vaddr (*untagged_addr)(CPUState *cs, vaddr addr);
+
+    /**
+     * is_uninterruptible:
+     * @cpu: cpu context
+     *
+     * Returns true if we are in the middle of the gUSA region and
+     * cpu_exec_step_atomic must keep on executing instructions without
+     * dropping the exclusive lock.
+     */
+    bool (*is_uninterruptible)(CPUState *cs);
+
+    /**
+     * revert_uninterruptible:
+     * @cpu: cpu context
+     *
+     * This function is called if cpu_exec_step_atomic needs to exit. It
+     * tests if we are in the gUSA region and rolls back PC to the
+     * beginning of it.
+     */
+    void (*revert_uninterruptible)(CPUState *cs);
 #else
     /** @do_interrupt: Callback for interrupt handling.  */
     void (*do_interrupt)(CPUState *cpu);
