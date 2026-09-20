@@ -121,7 +121,7 @@ struct target_msgbuf {
 /*
  *  sys/mman.h
  */
-#define TARGET_BSD_MAP_FLAGMASK         0x3ff7
+#define MAP_TYPE                        0xf
 
 /*
  * sys/time.h
