@@ -46,7 +46,8 @@ OBJECT_DECLARE_SIMPLE_TYPE(FslImx8mpState, FSL_IMX8MP)
 
 enum FslImx8mpConfiguration {
     FSL_IMX8MP_NUM_CANS         = 2,
-    FSL_IMX8MP_NUM_CPUS         = 4,
+    FSL_IMX8MP_NUM_A53          = 4,
+    FSL_IMX8MP_NUM_M7           = 1,
     FSL_IMX8MP_NUM_ECSPIS       = 3,
     FSL_IMX8MP_NUM_GPIOS        = 5,
     FSL_IMX8MP_NUM_GPTS         = 6,
@@ -67,7 +68,7 @@ typedef struct IMX8MPMUPair {
 struct FslImx8mpState {
     SysBusDevice   parent_obj;
 
-    ARMCPU             cpu[FSL_IMX8MP_NUM_CPUS];
+    ARMCPU             cpu[FSL_IMX8MP_NUM_A53];
     ARMv7MState        cm7;
     bool               enable_cm7;
     uint32_t           cm7_vector_base;

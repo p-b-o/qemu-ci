@@ -25,7 +25,6 @@
 #include "qobject/qlist.h"
 #include "target/arm/arm-powerctl.h"
 
-#define IMX8MP_NUM_A53 4
 
 static const struct {
     hwaddr addr;
@@ -289,15 +288,15 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
     const char *cpu_type = ms->cpu_type ?: ARM_CPU_TYPE_NAME("cortex-a53");
     int i;
 
-    for (i = 0; i < IMX8MP_NUM_A53; i++) {
+    for (i = 0; i < FSL_IMX8MP_NUM_A53; i++) {
         g_autofree char *name = g_strdup_printf("cpu%d", i);
         object_initialize_child(OBJECT(dev), name, &s->cpu[i], cpu_type);
     }
 
     /* CPUs */
-    for (i = 0; i < IMX8MP_NUM_A53; i++) {
+    for (i = 0; i < FSL_IMX8MP_NUM_A53; i++) {
         /* On uniprocessor, the CBAR is set to 0 */
-        if (IMX8MP_NUM_A53 > 1 &&
+        if (FSL_IMX8MP_NUM_A53 > 1 &&
                 object_property_find(OBJECT(&s->cpu[i]), "reset-cbar")) {
             object_property_set_int(OBJECT(&s->cpu[i]), "reset-cbar",
                                     fsl_imx8mp_memmap[FSL_IMX8MP_GIC_DIST].addr,
@@ -340,11 +339,11 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
         QList *redist_region_count;
         bool pmu = object_property_get_bool(OBJECT(first_cpu), "pmu", NULL);
 
-        qdev_prop_set_uint32(gicdev, "num-cpu", IMX8MP_NUM_A53);
+        qdev_prop_set_uint32(gicdev, "num-cpu", FSL_IMX8MP_NUM_A53);
         qdev_prop_set_uint32(gicdev, "num-irq",
                              FSL_IMX8MP_NUM_IRQS + GIC_INTERNAL);
         redist_region_count = qlist_new();
-        qlist_append_int(redist_region_count, IMX8MP_NUM_A53);
+        qlist_append_int(redist_region_count, FSL_IMX8MP_NUM_A53);
         qdev_prop_set_array(gicdev, "redist-region-count", redist_region_count);
         object_property_set_link(OBJECT(&s->gic), "sysmem",
                                  OBJECT(get_system_memory()), &error_fatal);
@@ -359,7 +358,7 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
          * maintenance interrupt signal to the appropriate GIC PPI inputs, and
          * the GIC's IRQ/FIQ interrupt outputs to the CPU's inputs.
          */
-        for (i = 0; i < IMX8MP_NUM_A53; i++) {
+        for (i = 0; i < FSL_IMX8MP_NUM_A53; i++) {
             DeviceState *cpudev = DEVICE(&s->cpu[i]);
             int intidbase = FSL_IMX8MP_NUM_IRQS + i * GIC_INTERNAL;
             qemu_irq irq;
@@ -389,11 +388,11 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
 
             sysbus_connect_irq(gicsbd, i,
                                qdev_get_gpio_in(cpudev, ARM_CPU_IRQ));
-            sysbus_connect_irq(gicsbd, i + IMX8MP_NUM_A53,
+            sysbus_connect_irq(gicsbd, i + FSL_IMX8MP_NUM_A53,
                                qdev_get_gpio_in(cpudev, ARM_CPU_FIQ));
-            sysbus_connect_irq(gicsbd, i + 2 * IMX8MP_NUM_A53,
+            sysbus_connect_irq(gicsbd, i + 2 * FSL_IMX8MP_NUM_A53,
                                qdev_get_gpio_in(cpudev, ARM_CPU_VIRQ));
-            sysbus_connect_irq(gicsbd, i + 3 * IMX8MP_NUM_A53,
+            sysbus_connect_irq(gicsbd, i + 3 * FSL_IMX8MP_NUM_A53,
                                qdev_get_gpio_in(cpudev, ARM_CPU_VFIQ));
 
             if (kvm_enabled()) {
