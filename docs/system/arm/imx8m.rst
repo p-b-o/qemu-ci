@@ -26,8 +26,9 @@ following devices:
  * 6 General Purpose Timers
  * Secure Non-Volatile Storage (SNVS) including an RTC
  * Clock Tree
- * General Power Controller (GPC)
- * General Purpose Register (GPR)
+ * General Power Controller
+ * General Purpose Register
+ * System Reset Controller
 
 Boot options
 ------------
