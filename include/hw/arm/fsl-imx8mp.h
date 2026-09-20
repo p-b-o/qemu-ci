@@ -10,6 +10,7 @@
 #define FSL_IMX8MP_H
 
 #include "target/arm/cpu.h"
+#include "hw/arm/armv7m.h"
 #include "hw/char/imx_serial.h"
 #include "hw/gpio/imx_gpio.h"
 #include "hw/i2c/imx_i2c.h"
@@ -67,6 +68,9 @@ struct FslImx8mpState {
     SysBusDevice   parent_obj;
 
     ARMCPU             cpu[FSL_IMX8MP_NUM_CPUS];
+    ARMv7MState        cm7;
+    bool               enable_cm7;
+    uint32_t           cm7_vector_base;
     GICv3State         gic;
     IMX8MPGPCState     gpc;
     IMX8MPGPRState     gpr;
@@ -89,12 +93,16 @@ struct FslImx8mpState {
     FlexcanState       flexcan[FSL_IMX8MP_NUM_CANS];
     OrIRQState         gpt5_gpt6_irq;
     MemoryRegion       ocram;
-
+    MemoryRegion       itcm;
+    MemoryRegion       dtcm;
+    MemoryRegion       itcm_alias;
+    MemoryRegion       dtcm_alias;
     uint32_t           phy_num;
     bool               phy_connected;
 
     CanBusState       *canbus[FSL_IMX8MP_NUM_CANS];
 };
+
 
 enum FslImx8mpMemoryRegions {
     FSL_IMX8MP_A53_DAP,

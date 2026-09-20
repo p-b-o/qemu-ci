@@ -12,6 +12,8 @@
 #include "system/address-spaces.h"
 #include "hw/arm/bsa.h"
 #include "hw/arm/fsl-imx8mp.h"
+#include "hw/core/qdev-properties.h"
+#include "hw/core/qdev-clock.h"
 #include "hw/misc/unimp.h"
 #include "hw/core/boards.h"
 #include "system/kvm.h"
@@ -21,6 +23,9 @@
 #include "target/arm/kvm_arm.h"
 #include "qapi/error.h"
 #include "qobject/qlist.h"
+#include "target/arm/arm-powerctl.h"
+
+#define IMX8MP_NUM_A53 4
 
 static const struct {
     hwaddr addr;
@@ -196,6 +201,8 @@ static void fsl_imx8mp_init(Object *obj)
     FslImx8mpState *s = FSL_IMX8MP(obj);
     int i;
 
+    object_initialize_child(obj, "cm7", &s->cm7, TYPE_ARMV7M);
+
     object_initialize_child(obj, "gic", &s->gic, gicv3_class_name());
 
     object_initialize_child(obj, "ccm", &s->ccm, TYPE_IMX8MP_CCM);
@@ -282,21 +289,15 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
     const char *cpu_type = ms->cpu_type ?: ARM_CPU_TYPE_NAME("cortex-a53");
     int i;
 
-    if (ms->smp.cpus > FSL_IMX8MP_NUM_CPUS) {
-        error_setg(errp, "%s: Only %d CPUs are supported (%d requested)",
-                   TYPE_FSL_IMX8MP, FSL_IMX8MP_NUM_CPUS, ms->smp.cpus);
-        return;
-    }
-
-    for (i = 0; i < ms->smp.cpus; i++) {
+    for (i = 0; i < IMX8MP_NUM_A53; i++) {
         g_autofree char *name = g_strdup_printf("cpu%d", i);
         object_initialize_child(OBJECT(dev), name, &s->cpu[i], cpu_type);
     }
 
     /* CPUs */
-    for (i = 0; i < ms->smp.cpus; i++) {
+    for (i = 0; i < IMX8MP_NUM_A53; i++) {
         /* On uniprocessor, the CBAR is set to 0 */
-        if (ms->smp.cpus > 1 &&
+        if (IMX8MP_NUM_A53 > 1 &&
                 object_property_find(OBJECT(&s->cpu[i]), "reset-cbar")) {
             object_property_set_int(OBJECT(&s->cpu[i]), "reset-cbar",
                                     fsl_imx8mp_memmap[FSL_IMX8MP_GIC_DIST].addr,
@@ -339,11 +340,11 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
         QList *redist_region_count;
         bool pmu = object_property_get_bool(OBJECT(first_cpu), "pmu", NULL);
 
-        qdev_prop_set_uint32(gicdev, "num-cpu", ms->smp.cpus);
+        qdev_prop_set_uint32(gicdev, "num-cpu", IMX8MP_NUM_A53);
         qdev_prop_set_uint32(gicdev, "num-irq",
                              FSL_IMX8MP_NUM_IRQS + GIC_INTERNAL);
         redist_region_count = qlist_new();
-        qlist_append_int(redist_region_count, ms->smp.cpus);
+        qlist_append_int(redist_region_count, IMX8MP_NUM_A53);
         qdev_prop_set_array(gicdev, "redist-region-count", redist_region_count);
         object_property_set_link(OBJECT(&s->gic), "sysmem",
                                  OBJECT(get_system_memory()), &error_fatal);
@@ -358,7 +359,7 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
          * maintenance interrupt signal to the appropriate GIC PPI inputs, and
          * the GIC's IRQ/FIQ interrupt outputs to the CPU's inputs.
          */
-        for (i = 0; i < ms->smp.cpus; i++) {
+        for (i = 0; i < IMX8MP_NUM_A53; i++) {
             DeviceState *cpudev = DEVICE(&s->cpu[i]);
             int intidbase = FSL_IMX8MP_NUM_IRQS + i * GIC_INTERNAL;
             qemu_irq irq;
@@ -388,11 +389,11 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
 
             sysbus_connect_irq(gicsbd, i,
                                qdev_get_gpio_in(cpudev, ARM_CPU_IRQ));
-            sysbus_connect_irq(gicsbd, i + ms->smp.cpus,
+            sysbus_connect_irq(gicsbd, i + IMX8MP_NUM_A53,
                                qdev_get_gpio_in(cpudev, ARM_CPU_FIQ));
-            sysbus_connect_irq(gicsbd, i + 2 * ms->smp.cpus,
+            sysbus_connect_irq(gicsbd, i + 2 * IMX8MP_NUM_A53,
                                qdev_get_gpio_in(cpudev, ARM_CPU_VIRQ));
-            sysbus_connect_irq(gicsbd, i + 3 * ms->smp.cpus,
+            sysbus_connect_irq(gicsbd, i + 3 * IMX8MP_NUM_A53,
                                qdev_get_gpio_in(cpudev, ARM_CPU_VFIQ));
 
             if (kvm_enabled()) {
@@ -443,13 +444,6 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
                            qdev_get_gpio_in(gicdev, serial_table[i].irq));
     }
 
-    /* SRC */
-    if (!sysbus_realize(SYS_BUS_DEVICE(&s->src), errp)) {
-        return;
-    }
-    sysbus_mmio_map(SYS_BUS_DEVICE(&s->src), 0,
-                    fsl_imx8mp_memmap[FSL_IMX8MP_SRC].addr);
-
     /* GPC */
     if (!sysbus_realize(SYS_BUS_DEVICE(&s->gpc), errp)) {
         return;
@@ -463,6 +457,49 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
     }
     sysbus_mmio_map(SYS_BUS_DEVICE(&s->gpr), 0,
                     fsl_imx8mp_memmap[FSL_IMX8MP_IOMUXC_GPR].addr);
+
+    /* Realize Cortex-M7 subsystem */
+    {
+        DeviceState *cm7dev = DEVICE(&s->cm7);
+        DeviceState *ccmdev = DEVICE(&s->ccm);
+        qdev_prop_set_string(cm7dev, "cpu-type",
+                             ARM_CPU_TYPE_NAME("cortex-m7"));
+        qdev_prop_set_uint32(cm7dev, "num-irq", 160);
+        qdev_prop_set_bit(cm7dev, "enable-bitband", false);
+
+        /* CM7 vector table base (configurable) */
+        qdev_prop_set_uint32(cm7dev, "init-nsvtor", s->cm7_vector_base);
+
+        /* Connect CM7 clocks from CCM exported outputs */
+        qdev_connect_clock_in(cm7dev, "cpuclk",
+                              qdev_get_clock_out(ccmdev, "cm7_cpuclk"));
+        qdev_connect_clock_in(cm7dev, "refclk",
+                              qdev_get_clock_out(ccmdev, "cm7_refclk"));
+        object_property_set_link(OBJECT(&s->cm7), "memory",
+                                 OBJECT(get_system_memory()), &error_abort);
+
+        if (!sysbus_realize(SYS_BUS_DEVICE(&s->cm7), errp)) {
+            return;
+        }
+
+        arm_set_cpu_off(arm_cpu_mp_affinity(s->cm7.cpu));
+    }
+
+    qdev_prop_set_uint32(DEVICE(&s->src), "cm7-vector-base",
+                         s->cm7_vector_base);
+    object_property_set_link(OBJECT(&s->src), "cm7-cpu",
+                             OBJECT(s->cm7.cpu), &error_abort);
+    object_property_set_link(OBJECT(&s->src), "gpr",
+                             OBJECT(&s->gpr), &error_abort);
+    if (!sysbus_realize(SYS_BUS_DEVICE(&s->src), errp)) {
+        return;
+    }
+    sysbus_mmio_map(SYS_BUS_DEVICE(&s->src), 0,
+                    fsl_imx8mp_memmap[FSL_IMX8MP_SRC].addr);
+
+    sysbus_connect_irq(SYS_BUS_DEVICE(&s->gpr), 0,
+                       qdev_get_gpio_in_named(DEVICE(&s->src),
+                                              "cm7-cpuwait", 0));
 
     /* GPTs */
     object_property_set_int(OBJECT(&s->gpt5_gpt6_irq), "num-lines", 2,
@@ -777,6 +814,37 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
                                 fsl_imx8mp_memmap[FSL_IMX8MP_OCRAM].addr,
                                 &s->ocram);
 
+    if (!memory_region_init_ram(&s->itcm, OBJECT(dev), "imx8mp.itcm",
+                                fsl_imx8mp_memmap[FSL_IMX8MP_TCM_ITCM].size,
+                                errp)) {
+        return;
+    }
+    memory_region_add_subregion(get_system_memory(),
+                                fsl_imx8mp_memmap[FSL_IMX8MP_TCM_ITCM].addr,
+                                &s->itcm);
+
+    if (!memory_region_init_ram(&s->dtcm, OBJECT(dev), "imx8mp.dtcm",
+                                fsl_imx8mp_memmap[FSL_IMX8MP_TCM_DTCM].size,
+                                errp)) {
+        return;
+    }
+    memory_region_add_subregion(get_system_memory(),
+                                fsl_imx8mp_memmap[FSL_IMX8MP_TCM_DTCM].addr,
+                                &s->dtcm);
+
+    /* M7-view aliases: ITCM@0x0, DTCM@0x20000000 */
+    memory_region_init_alias(&s->itcm_alias, OBJECT(dev), "imx8mp.itcm-alias",
+                             &s->itcm, 0,
+                             fsl_imx8mp_memmap[FSL_IMX8MP_TCM_ITCM].size);
+    memory_region_add_subregion_overlap(get_system_memory(),
+                                        0x00000000, &s->itcm_alias, 1);
+
+    memory_region_init_alias(&s->dtcm_alias, OBJECT(dev), "imx8mp.dtcm-alias",
+                             &s->dtcm, 0,
+                             fsl_imx8mp_memmap[FSL_IMX8MP_TCM_DTCM].size);
+    memory_region_add_subregion_overlap(get_system_memory(),
+                                        0x20000000, &s->dtcm_alias, 1);
+
     /* Unimplemented devices */
     for (i = 0; i < ARRAY_SIZE(fsl_imx8mp_memmap); i++) {
         switch (i) {
@@ -794,6 +862,8 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
         case FSL_IMX8MP_IOMUXC_GPR:
         case FSL_IMX8MP_MU_1_A ... FSL_IMX8MP_MU_3_B:
         case FSL_IMX8MP_OCRAM:
+        case FSL_IMX8MP_TCM_ITCM:
+        case FSL_IMX8MP_TCM_DTCM:
         case FSL_IMX8MP_PCIE1:
         case FSL_IMX8MP_PCIE_PHY1:
         case FSL_IMX8MP_RAM:
@@ -822,6 +892,8 @@ static const Property fsl_imx8mp_properties[] = {
                      CanBusState *),
     DEFINE_PROP_LINK("canbus1", FslImx8mpState, canbus[1], TYPE_CAN_BUS,
                      CanBusState *),
+    DEFINE_PROP_UINT32("cm7-vector-base", FslImx8mpState,
+                       cm7_vector_base, 0x80000000),
 };
 
 static void fsl_imx8mp_class_init(ObjectClass *oc, const void *data)
