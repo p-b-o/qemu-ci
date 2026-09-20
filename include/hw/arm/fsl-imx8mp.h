@@ -25,6 +25,7 @@
 #include "hw/net/flexcan.h"
 #include "hw/net/imx_fec.h"
 #include "hw/core/or-irq.h"
+#include "hw/core/split-irq.h"
 #include "hw/pci-host/designware.h"
 #include "hw/pci-host/fsl_imx8m_phy.h"
 #include "hw/sd/sdhci.h"
@@ -93,6 +94,7 @@ struct FslImx8mpState {
     FslImx8mPciePhyState   pcie_phy;
     FlexcanState       flexcan[FSL_IMX8MP_NUM_CANS];
     OrIRQState         gpt5_gpt6_irq;
+    SplitIRQ           cpu_irq_splitter[FSL_IMX8MP_NUM_IRQS];
     MemoryRegion       ocram;
     MemoryRegion       itcm;
     MemoryRegion       dtcm;
