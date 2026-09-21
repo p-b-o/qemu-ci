@@ -6902,8 +6902,11 @@ void register_cp_regs_for_features(ARMCPU *cpu)
                                R_ID_AA64FPFR0_F8CVT_MASK },
             { .name = "ID_AA64MMFR0_EL1",
               .exported_bits = R_ID_AA64MMFR0_ECV_MASK,
-              .fixed_bits = (0xfu << R_ID_AA64MMFR0_TGRAN64_SHIFT) |
-                            (0xfu << R_ID_AA64MMFR0_TGRAN4_SHIFT) },
+              .fixed_bits = (0xfULL << R_ID_AA64MMFR0_TGRAN64_SHIFT) |
+                            (0xfULL << R_ID_AA64MMFR0_TGRAN4_SHIFT) |
+                            (0x1ULL << R_ID_AA64MMFR0_TGRAN4_2_SHIFT) |
+                            (0x1ULL << R_ID_AA64MMFR0_TGRAN64_2_SHIFT) |
+                            (0x1ULL << R_ID_AA64MMFR0_TGRAN16_2_SHIFT) },
             { .name = "ID_AA64MMFR1_EL1",
               .exported_bits = R_ID_AA64MMFR1_AFP_MASK },
             { .name = "ID_AA64MMFR2_EL1",
