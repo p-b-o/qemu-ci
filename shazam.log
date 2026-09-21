@@ -1,0 +1,74 @@
+Looking up 20260921123249.1708067-1-khushit.shah@nutanix.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 26 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 152 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC v4 1/25] target/arm: expose SYSREG_ props for REVIDR_EL1 and AIDR_EL1
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-2-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 2/25] target/arm: expose all non-res ID reg fields as properties
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-3-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 3/25] target/arm: move SYSREG_ prop infra to cpu64.c
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-4-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 4/25] target/arm/kvm: enable writable implementation ID registers
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-5-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 5/25] target/arm/kvm: read all ID registers from KVM
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-6-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 6/25] target/arm/kvm: handle special ID registers when reading from KVM
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-7-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 7/25] target/arm/kvm: process ID register writeback per field
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-8-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 8/25] target/arm/kvm: handle writeback for special ID register fields
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-9-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 9/25] target/arm: introduce named CPU model infrastructure
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-10-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 10/25] target/arm: fix SVE and PAuth finalize for named CPU models
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-11-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 11/25] target/arm: disable PMU support for named CPU models
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-12-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 12/25] target/arm: add arm-v9.0-a-v1 named CPU model
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-13-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 13/25] target/arm: add neoverse-v2-v1 named CPU model
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-14-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 14/25] target/arm: add neoverse-v2-v2 named CPU model
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-15-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 15/25] target/arm: add graviton4-v1 named CPU model
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-16-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 16/25] target/arm: add grace-v1 named CPU model
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-17-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 17/25] target/arm: fail named CPU models on unknown non-zero feature ID regs
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-18-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 18/25] target/arm: add cpu-models-stub.c
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-19-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 19/25] target/arm/qmp: allow named CPU models on cpu-model-expansion
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-20-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 20/25] target/arm/kvm: compute host-supported values for ID register fields
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-21-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 21/25] target/arm: report 0 as supported for ID fields gated by vCPU init flags
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-22-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 22/25] target/arm/kvm: add kvm_arm_get_host_isar helper
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-23-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 23/25] qmp: add query-cpu-props-info command
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-24-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 24/25] target/arm/qmp: implement query-cpu-props-info for KVM
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-25-khushit.shah@nutanix.com
+  [32m✓[0m [PATCH RFC v4 25/25] target/arm/qmp: hook blockers in query-cpu-definitions
+    + Link: https://lore.kernel.org/qemu-devel/20260921123249.1708067-26-khushit.shah@nutanix.com
+  ---
+  [32m✓[0m Signed: DKIM/nutanix.com
+---
+Total patches: 25
+---
+Applying: target/arm: expose SYSREG_ props for REVIDR_EL1 and AIDR_EL1
+Patch failed at 0001 target/arm: expose SYSREG_ props for REVIDR_EL1 and AIDR_EL1
+error: scripts/update-aarch64-cpu-sysreg-properties.py: does not exist in index
+error: target/arm/cpu-idregs.h.inc: does not exist in index
+error: patch failed: target/arm/kvm.c:554
+error: target/arm/kvm.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
