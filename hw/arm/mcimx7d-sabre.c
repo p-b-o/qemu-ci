@@ -83,6 +83,7 @@ static void mcimx7d_sabre_machine_init(MachineClass *mc)
     mc->max_cpus = FSL_IMX7_NUM_CPUS;
     mc->default_ram_id = "mcimx7d-sabre.ram";
     mc->auto_create_sdcard = true;
+    mc->ignore_memory_transaction_failures = true;
 }
 
 DEFINE_MACHINE_EXTENDED("mcimx7d-sabre", MACHINE, Mcimx7dSabreMachineState,
