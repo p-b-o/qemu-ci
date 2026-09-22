@@ -7,6 +7,7 @@ test_x86_64_timeouts = {
   'netdev_ethtool' : 180,
   'replay' : 480,
   'virtio_balloon': 120,
+  'virtio_status': 120,
 }
 
 tests_x86_64_system_quick = [
@@ -50,5 +51,6 @@ tests_x86_64_system_thorough = [
   'vhost_user_bridge',
   'virtio_balloon',
   'virtio_gpu',
+  'virtio_status',
   'rebuild_vmfd',
 ]

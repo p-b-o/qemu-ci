@@ -387,12 +387,13 @@ class QemuSystemTest(QemuBaseTest):
         if helptxt.find(devicename) < 0:
             self.skipTest('no support for device ' + devicename)
 
-    def _new_vm(self, name, monitor_address):
+    def _new_vm(self, name, monitor_address, wrapper):
         vm = QEMUMachine(self.qemu_bin,
                          name=name,
                          base_temp_dir=self.workdir,
                          log_dir=self.log_file(),
-                         monitor_address=monitor_address)
+                         monitor_address=monitor_address,
+                         wrapper=wrapper)
         self.log.debug('QEMUMachine "%s" created', name)
         self.log.debug('QEMUMachine "%s" temp_dir: %s', name, vm.temp_dir)
 
@@ -407,11 +408,11 @@ class QemuSystemTest(QemuBaseTest):
     def vm(self):
         return self.get_vm(name='default')
 
-    def get_vm(self, name=None, monitor_address=None):
+    def get_vm(self, name=None, monitor_address=None, wrapper=()):
         if not name:
             name = str(uuid.uuid4())
         if self._vms.get(name) is None:
-            self._vms[name] = self._new_vm(name, monitor_address)
+            self._vms[name] = self._new_vm(name, monitor_address, wrapper)
             if self.cpu is not None:
                 self._vms[name].add_args('-cpu', self.cpu)
             if self.machine is not None:

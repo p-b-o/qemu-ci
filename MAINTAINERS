@@ -2535,6 +2535,7 @@ F: include/hw/virtio/
 F: docs/devel/virtio*
 F: docs/devel/migration/virtio.rst
 F: tests/functional/x86_64/test_virtio_version.py
+F: tests/functional/x86_64/test_virtio_status.py
 
 virtio-balloon
 M: Michael S. Tsirkin <mst@redhat.com>
