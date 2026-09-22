@@ -123,12 +123,14 @@ static const TypeInfo pxb_pcie_bus_info = {
     .class_init    = pxb_bus_class_init,
 };
 
+#ifdef CONFIG_CXL
 static const TypeInfo pxb_cxl_bus_info = {
     .name          = TYPE_PXB_CXL_BUS,
     .parent        = TYPE_CXL_BUS,
     .instance_size = sizeof(PXBBus),
     .class_init    = pxb_bus_class_init,
 };
+#endif /* CONFIG_CXL */
 
 static const char *pxb_host_root_bus_path(PCIHostState *host_bridge,
                                           PCIBus *rootbus)
@@ -192,6 +194,7 @@ static const TypeInfo pxb_host_info = {
     .class_init    = pxb_host_class_init,
 };
 
+#ifdef CONFIG_CXL
 static void pxb_cxl_realize(DeviceState *dev, Error **errp)
 {
     SysBusDevice *sbd = SYS_BUS_DEVICE(dev);
@@ -250,6 +253,7 @@ static const TypeInfo cxl_host_info = {
     .instance_size = sizeof(CXLHost),
     .class_init    = pxb_cxl_host_class_init,
 };
+#endif /* CONFIG_CXL */
 
 /*
  * Registers the PXB bus as a child of pci host root bus.
@@ -297,6 +301,7 @@ static int pxb_map_irq_fn(PCIDevice *pci_dev, int pin)
     return pin - PCI_SLOT(pxb->devfn);
 }
 
+#ifdef CONFIG_CXL
 static void pxb_cxl_dev_reset(DeviceState *dev)
 {
     CXLHost *cxl = PXB_CXL_DEV(dev)->cxl_host_bridge;
@@ -324,6 +329,7 @@ static void pxb_cxl_dev_reset(DeviceState *dev)
                          8);
     }
 }
+#endif /* CONFIG_CXL */
 
 static gint pxb_compare(gconstpointer a, gconstpointer b)
 {
@@ -496,6 +502,7 @@ static const TypeInfo pxb_pcie_dev_info = {
     },
 };
 
+#ifdef CONFIG_CXL
 static void pxb_cxl_dev_realize(PCIDevice *dev, Error **errp)
 {
     /* A CXL PXB's parent bus is still PCIe */
@@ -546,17 +553,20 @@ static const TypeInfo pxb_cxl_dev_info = {
             {},
         },
 };
+#endif /* CONFIG_CXL */
 
 static void pxb_register_types(void)
 {
     type_register_static(&pxb_bus_info);
     type_register_static(&pxb_pcie_bus_info);
-    type_register_static(&pxb_cxl_bus_info);
     type_register_static(&pxb_host_info);
-    type_register_static(&cxl_host_info);
     type_register_static(&pxb_dev_info);
     type_register_static(&pxb_pcie_dev_info);
+#ifdef CONFIG_CXL
+    type_register_static(&pxb_cxl_bus_info);
+    type_register_static(&cxl_host_info);
     type_register_static(&pxb_cxl_dev_info);
+#endif /* CONFIG_CXL */
 }
 
 type_init(pxb_register_types)
