@@ -2780,6 +2780,7 @@ F: docs/specs/cnuasgpu.rst
 F: hw/misc/cnuasgpu.c
 F: hw/net/cnuas_vnic.c
 F: tests/qtest/cnuas-vnic-test.c
+F: tests/qtest/cnuasgpu-test.c
 
 VMware
 M: Dmitry Fleytman <dmitry.fleytman@gmail.com>
