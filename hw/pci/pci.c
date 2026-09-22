@@ -105,6 +105,8 @@ static const Property pci_props[] = {
     DEFINE_PROP_STRING("sriov-pf", PCIDevice, sriov_pf),
     DEFINE_PROP_BIT("x-pcie-ext-tag", PCIDevice, cap_present,
                     QEMU_PCIE_EXT_TAG_BITNR, true),
+    DEFINE_PROP_BIT("x-pcie-acs", PCIDevice, cap_present,
+                    QEMU_PCIE_ACS_BITNR, true),
     { .name = "busnr", .info = &prop_pci_busnr },
 };
 

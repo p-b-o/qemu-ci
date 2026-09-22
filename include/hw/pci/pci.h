@@ -231,6 +231,9 @@ enum {
     QEMU_PCI_CAP_PM = (1 << QEMU_PCI_CAP_PM_BITNR),
 #define QEMU_PCI_SKIP_RESET_ON_CPR_BITNR 15
     QEMU_PCI_SKIP_RESET_ON_CPR = (1 << QEMU_PCI_SKIP_RESET_ON_CPR_BITNR),
+    /* PCIe ACS (Access Control Services) extended capability present */
+#define QEMU_PCIE_ACS_BITNR 16
+    QEMU_PCIE_CAP_ACS = (1 << QEMU_PCIE_ACS_BITNR),
 };
 
 typedef struct PCIINTxRoute {
