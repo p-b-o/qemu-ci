@@ -45,7 +45,6 @@ class VirtioStatus(LinuxKernelTest):
         vm.cmd("x-query-virtio-status", path=self.VIRTIO_PATH)
 
     @skipIfMissingCommands("unshare")
-    @skipIfMissingEnv("QEMU_FAILING_TESTS")
     def test_vhost(self):
         self.require_netdev("tap")
         for device in ("/dev/net/tun", "/dev/vhost-net"):
