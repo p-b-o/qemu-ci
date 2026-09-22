@@ -84,7 +84,6 @@ class VirtioStatus(LinuxKernelTest):
 
         self.check_commands(vm)
 
-    @skipIfMissingEnv("QEMU_FAILING_TESTS")
     def test_no_vhost(self):
         self.vm.add_args("-accel", "kvm",
                          "-S", "-net", "none", "-device",
