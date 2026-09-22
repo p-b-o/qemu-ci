@@ -156,7 +156,8 @@ static void rp_exit(PCIDevice *d)
 static const Property rp_props[] = {
     DEFINE_PROP_BIT(COMPAT_PROP_PCP, PCIDevice, cap_present,
                     QEMU_PCIE_SLTCAP_PCP_BITNR, true),
-    DEFINE_PROP_UINT16("acs-ctrl", PCIEPort, acs_ctrl, 0),
+    DEFINE_PROP_UNSIGNED_NODEFAULT("acs-ctrl", PCIEPort, acs_ctrl,
+                                   qdev_prop_acs_ctrl, uint16_t),
 };
 
 static void rp_instance_post_init(Object *obj)
