@@ -1,0 +1,455 @@
+Looking up 20260923-nohmp-v1-0-ebc029d4bd80@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Server returned an error.
+Analyzing 91 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 32 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH 1/88] scripts/checkpatch: skip trailer checks inside patch diff
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-1-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 2/88] build-sys: bump minimum glib version to v2.68
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-2-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 3/88] docs/devel: minor fix in qom documentation
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([31m✗[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-3-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 4/88] qom: auto-terminate interfaces array in OBJECT_DEFINE_TYPE macros
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-4-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 5/88] qemu-io: drop "qemu-io:" prefix in error-report
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Reviewed-by: Vladimir Sementsov-Ogievskiy <vsementsov@yandex-team.ru> ([32m✓[0m DKIM/yandex-team.ru)
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-5-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 6/88] monitor: allow a bare Monitor
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-6-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 7/88] qemu-print: use monitor_puts() for any non-QMP monitor
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-7-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 8/88] block/monitor: capture x-qemu-io output
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-8-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 9/88] qemu-iotests/iotests: filter x-qemu-io messages
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-9-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 10/88] tests/qemu-iotests: do no interpret backslash as escape
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-10-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 11/88] tests/qemu-iotests: filter all generated node ids
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-11-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 12/88] qemu-iotests/216: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-12-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 13/88] qemu-iotests/310: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-13-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 14/88] qemu-iotests/283: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-14-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 15/88] qemu-iotests/281: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-15-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 16/88] qemu-iotests/reopen-file: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-16-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 17/88] qemu-iotests/mirror-ready-cancel-error: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-17-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 18/88] qemu-iotests/copy-before-write: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-18-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 19/88] qemu-iotests/132: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-19-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 20/88] qemu-iotests/152: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-20-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 21/88] qemu-iotests/254: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-21-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 22/88] qemu-iotests/264: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-22-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 23/88] qemu-iotests/304: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-23-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 24/88] qemu-iotests/300: replace hmp_qemu_io with qmp
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-24-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 25/88] qemu-iotests/298: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-25-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 26/88] qemu-iotests/056: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-26-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 27/88] qemu-iotests/093: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-27-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 28/88] qemu-iotests/124: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-28-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 29/88] qemu-iotests/136: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-29-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 30/88] qemu-iotests/148: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-30-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 31/88] qemu-iotests/151: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-31-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 32/88] qemu-iotests/236: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-32-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 33/88] qemu-iotests/245: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-33-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 34/88] qemu-iotests/255: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-34-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 35/88] qemu-iotests/257: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-35-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 36/88] qemu-iotests/260: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-36-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 37/88] qemu-iotests/280: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-37-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 38/88] qemu-iotests/backup-discard-source: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-38-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 39/88] qemu-iotests/qsd-migrate: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-39-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 40/88] qemu-iotests/mirror-change-copy-mode: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-40-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 41/88] qemu-iotests/migrate-bitmaps-test: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-41-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 42/88] qemu-iotests/image-fleecing: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-42-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 43/88] qemu-iotests/migrate-bitmaps-postcopy: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-43-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 44/88] qemu-iotests/165: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-44-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 45/88] qemu-iotests/iothreads-create: doesn't actually depend on HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-45-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 46/88] qemu-iotests/045: remove HMP monitor dependency
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-46-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 47/88] qemu-iotests/common: add _run_qmp_job helper
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-47-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 48/88] qemu-iotests/007: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-48-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 49/88] qemu-iotests/028: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-49-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 50/88] qemu-iotests/225: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-50-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 51/88] qemu-iotests/300: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-51-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 52/88] qemu-iotests/286: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-52-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 53/88] qemu-iotests/142: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-53-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 54/88] qemu-iotests/146: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-54-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 55/88] qemu-iotests/117: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-55-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 56/88] qemu-iotests/119: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-56-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 57/88] qemu-iotests/060: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-57-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 58/88] qemu-iotests/071: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-58-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 59/88] qemu-iotests/081: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-59-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 60/88] qemu-iotests/102: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-60-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 61/88] qemu-iotests/091: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-61-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 62/88] qemu-iotests/120: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-62-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 63/88] qemu-iotests/161: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-63-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 64/88] qemu-iotests/249: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-64-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 65/88] qemu-iotests/156: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-65-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 66/88] qemu-iotests/write-zeroes-unmap: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-66-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 67/88] qemu-iotests/luks-detached-header: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-67-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 68/88] qemu-iotests/qcow2-internal-snapshots: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-68-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 69/88] qemu-iotests/185: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-69-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 70/88] qemu-iotests/246: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-70-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 71/88] qemu-iotests/274: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-71-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 72/88] qemu-iotests/145: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-72-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 73/88] qemu-iotests/068: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-73-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 74/88] qemu-iotests/130: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-74-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 75/88] qemu-iotests/153: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-75-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 76/88] qemu-iotests/157: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-76-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 77/88] qemu-iotests/181: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-77-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 78/88] qemu-iotests/182: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-78-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 79/88] qemu-iotests/186: migrate away from HMP
+    [31m✗[0m BADSIG: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-79-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 80/88] qemu-iotests/192: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-80-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 81/88] qemu-iotests/201: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-81-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 82/88] qemu-iotests/232: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-82-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 83/88] qemu-iotests/267: migrate away from HMP
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-83-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 84/88] qemu-iotests/051: migrate away from HMP
+    [31m✗[0m BADSIG: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-84-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 85/88] qdev: add x-query-qtree QMP command
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-85-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 86/88] qemu-iotests/172: migrate away from HMP
+    [31m✗[0m BADSIG: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-86-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 87/88] qemu-iotests: remove HMP framework support
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-87-ebc029d4bd80@redhat.com
+  [31m✗[0m [PATCH 88/88] block/monitor: redirect HMP qemu-io to HMP stream
+    [31m✗[0m No key: openpgp/marcandre.lureau@redhat.com
+    [32m✓[0m Signed: DKIM/redhat.com
+    + Link: https://lore.kernel.org/qemu-devel/20260923-nohmp-v1-88-ebc029d4bd80@redhat.com
+---
+Total patches: 88
+---
+Applying: scripts/checkpatch: skip trailer checks inside patch diff
+Applying: build-sys: bump minimum glib version to v2.68
+Applying: docs/devel: minor fix in qom documentation
+Applying: qom: auto-terminate interfaces array in OBJECT_DEFINE_TYPE macros
+Applying: qemu-io: drop "qemu-io:" prefix in error-report
+Applying: monitor: allow a bare Monitor
+Applying: qemu-print: use monitor_puts() for any non-QMP monitor
+Applying: block/monitor: capture x-qemu-io output
+Applying: qemu-iotests/iotests: filter x-qemu-io messages
+Applying: tests/qemu-iotests: do no interpret backslash as escape
+Applying: tests/qemu-iotests: filter all generated node ids
+Applying: qemu-iotests/216: migrate away from HMP
+Applying: qemu-iotests/310: migrate away from HMP
+Applying: qemu-iotests/283: migrate away from HMP
+Applying: qemu-iotests/281: migrate away from HMP
+Applying: qemu-iotests/reopen-file: migrate away from HMP
+Applying: qemu-iotests/mirror-ready-cancel-error: migrate away from HMP
+Applying: qemu-iotests/copy-before-write: migrate away from HMP
+Applying: qemu-iotests/132: migrate away from HMP
+Applying: qemu-iotests/152: migrate away from HMP
+Applying: qemu-iotests/254: migrate away from HMP
+Applying: qemu-iotests/264: migrate away from HMP
+Applying: qemu-iotests/304: migrate away from HMP
+Applying: qemu-iotests/300: replace hmp_qemu_io with qmp
+Applying: qemu-iotests/298: migrate away from HMP
+Applying: qemu-iotests/056: migrate away from HMP
+Applying: qemu-iotests/093: migrate away from HMP
+Applying: qemu-iotests/124: migrate away from HMP
+Applying: qemu-iotests/136: migrate away from HMP
+Applying: qemu-iotests/148: migrate away from HMP
+Applying: qemu-iotests/151: migrate away from HMP
+Applying: qemu-iotests/236: migrate away from HMP
+Applying: qemu-iotests/245: migrate away from HMP
+Applying: qemu-iotests/255: migrate away from HMP
+Applying: qemu-iotests/257: migrate away from HMP
+Applying: qemu-iotests/260: migrate away from HMP
+Applying: qemu-iotests/280: migrate away from HMP
+Applying: qemu-iotests/backup-discard-source: migrate away from HMP
+Applying: qemu-iotests/qsd-migrate: migrate away from HMP
+Applying: qemu-iotests/mirror-change-copy-mode: migrate away from HMP
+Applying: qemu-iotests/migrate-bitmaps-test: migrate away from HMP
+Applying: qemu-iotests/image-fleecing: migrate away from HMP
+Applying: qemu-iotests/migrate-bitmaps-postcopy: migrate away from HMP
+Applying: qemu-iotests/165: migrate away from HMP
+Applying: qemu-iotests/iothreads-create: doesn't actually depend on HMP
+Applying: qemu-iotests/045: remove HMP monitor dependency
+Applying: qemu-iotests/common: add _run_qmp_job helper
+Applying: qemu-iotests/007: migrate away from HMP
+Applying: qemu-iotests/028: migrate away from HMP
+Applying: qemu-iotests/225: migrate away from HMP
+Applying: qemu-iotests/300: migrate away from HMP
+Applying: qemu-iotests/286: migrate away from HMP
+Applying: qemu-iotests/142: migrate away from HMP
+Applying: qemu-iotests/146: migrate away from HMP
+Applying: qemu-iotests/117: migrate away from HMP
+Applying: qemu-iotests/119: migrate away from HMP
+Applying: qemu-iotests/060: migrate away from HMP
+Applying: qemu-iotests/071: migrate away from HMP
+Applying: qemu-iotests/081: migrate away from HMP
+Applying: qemu-iotests/102: migrate away from HMP
+Applying: qemu-iotests/091: migrate away from HMP
+Applying: qemu-iotests/120: migrate away from HMP
+Applying: qemu-iotests/161: migrate away from HMP
+Applying: qemu-iotests/249: migrate away from HMP
+Applying: qemu-iotests/156: migrate away from HMP
+Applying: qemu-iotests/write-zeroes-unmap: migrate away from HMP
+Applying: qemu-iotests/luks-detached-header: migrate away from HMP
+Applying: qemu-iotests/qcow2-internal-snapshots: migrate away from HMP
+Applying: qemu-iotests/185: migrate away from HMP
+Applying: qemu-iotests/246: migrate away from HMP
+Applying: qemu-iotests/274: migrate away from HMP
+Applying: qemu-iotests/145: migrate away from HMP
+Applying: qemu-iotests/068: migrate away from HMP
+Applying: qemu-iotests/130: migrate away from HMP
+Applying: qemu-iotests/153: migrate away from HMP
+Applying: qemu-iotests/157: migrate away from HMP
+Applying: qemu-iotests/181: migrate away from HMP
+Applying: qemu-iotests/182: migrate away from HMP
+Applying: qemu-iotests/186: migrate away from HMP
+Patch failed at 0079 qemu-iotests/186: migrate away from HMP
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:152: new blank line at EOF.
++
+warning: 1 line adds whitespace errors.
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:766
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
