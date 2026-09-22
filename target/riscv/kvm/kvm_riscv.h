@@ -23,10 +23,11 @@
 
 void kvm_riscv_reset_vcpu(RISCVCPU *cpu);
 void kvm_riscv_set_irq(RISCVCPU *cpu, int irq, int level);
-void kvm_riscv_aia_create(MachineState *machine, uint64_t group_shift,
-                          uint64_t aia_irq_num, uint64_t aia_msi_num,
-                          uint64_t aplic_base, uint64_t imsic_base,
-                          uint64_t guest_num);
+int kvm_riscv_aia_create(uint64_t aia_irq_num, uint32_t *aia_msi_num);
+void kvm_riscv_aia_init(MachineState *machine, int aia_fd,
+                        uint64_t group_shift, uint64_t aia_irq_num,
+                        uint64_t aplic_base, uint64_t imsic_base,
+                        uint64_t guest_num);
 void riscv_kvm_aplic_request(void *opaque, int irq, int level);
 bool kvm_riscv_has_mp_state(void);
 void riscv_kvm_cpu_finalize_features(RISCVCPU *cpu, Error **errp);
