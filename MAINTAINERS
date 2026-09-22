@@ -2777,6 +2777,7 @@ M: Weqaar Janjua <weqaar.janjua@packetfive.com>
 S: Maintained
 F: docs/specs/cnuas-vnic.rst
 F: hw/net/cnuas_vnic.c
+F: tests/qtest/cnuas-vnic-test.c
 
 VMware
 M: Dmitry Fleytman <dmitry.fleytman@gmail.com>
