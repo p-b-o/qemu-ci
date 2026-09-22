@@ -2772,6 +2772,12 @@ F: net/eth.c
 F: hw/net/net_rx_pkt*
 F: hw/net/net_tx_pkt*
 
+Cnuas virtual devices
+M: Weqaar Janjua <weqaar.janjua@packetfive.com>
+S: Maintained
+F: docs/specs/cnuas-vnic.rst
+F: hw/net/cnuas_vnic.c
+
 VMware
 M: Dmitry Fleytman <dmitry.fleytman@gmail.com>
 S: Maintained
