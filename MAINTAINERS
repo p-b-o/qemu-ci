@@ -2776,6 +2776,8 @@ Cnuas virtual devices
 M: Weqaar Janjua <weqaar.janjua@packetfive.com>
 S: Maintained
 F: docs/specs/cnuas-vnic.rst
+F: docs/specs/cnuasgpu.rst
+F: hw/misc/cnuasgpu.c
 F: hw/net/cnuas_vnic.c
 F: tests/qtest/cnuas-vnic-test.c
 
