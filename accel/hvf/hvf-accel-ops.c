@@ -227,10 +227,9 @@ static void do_hvf_update_guest_debug(CPUState *cpu, run_on_cpu_data arg)
     hvf_arch_update_guest_debug(cpu);
 }
 
-int hvf_update_guest_debug(CPUState *cpu)
+void hvf_update_guest_debug(CPUState *cpu)
 {
     run_on_cpu(cpu, do_hvf_update_guest_debug, RUN_ON_CPU_NULL);
-    return 0;
 }
 
 static int hvf_insert_gdbstub_breakpoint(CPUState *cpu, GdbBreakpointType type,
