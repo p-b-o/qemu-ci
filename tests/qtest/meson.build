@@ -250,7 +250,8 @@ qtests_stm32l4x5 = \
    'stm32l4x5_usart-test']
 
 qtests_stm32f405 = \
-  ['stm32f405-timer-test']
+  ['stm32f405-timer-test',
+   'stm32f405-rcc-test']
 
 qtests_arm = \
   (config_all_devices.has_key('CONFIG_MPS2') ? ['sse-timer-test'] : []) + \
