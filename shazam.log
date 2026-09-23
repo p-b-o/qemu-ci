@@ -1,0 +1,24 @@
+Looking up 179015005471.1471.12638559665582988999-0@git.sr.ht
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH 1/1] hw/net/e1000e: reset the PHY on a D3hot to D0 transition
+    + Link: https://lore.kernel.org/qemu-devel/179015005471.1471.12638559665582988999-1@git.sr.ht
+  ---
+  [31m✗[0m BADSIG: DKIM/git.sr.ht
+---
+Total patches: 1
+---
+Applying: hw/net/e1000e: reset the PHY on a D3hot to D0 transition
+Patch failed at 0001 hw/net/e1000e: reset the PHY on a D3hot to D0 transition
+error: patch failed: tests/qtest/e1000e-test.c:36
+error: tests/qtest/e1000e-test.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
