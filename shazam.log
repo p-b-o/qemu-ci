@@ -1,0 +1,24 @@
+Looking up 20260923052511.2842596-1-yuan1.wang@intel.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 4 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v5] vfio/igd: Make MTL/ARL guests fall back to BAR-based framebuffer access
+    + Link: https://lore.kernel.org/qemu-devel/20260923052511.2842596-1-yuan1.wang@intel.com
+  ---
+  [32m✓[0m Signed: DKIM/intel.com
+---
+Total patches: 1
+---
+Applying: vfio/igd: Make MTL/ARL guests fall back to BAR-based framebuffer access
+Patch failed at 0001 vfio/igd: Make MTL/ARL guests fall back to BAR-based framebuffer access
+error: patch failed: hw/vfio/igd.c:452
+error: hw/vfio/igd.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
