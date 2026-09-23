@@ -1,0 +1,56 @@
+Looking up 20260923141518.960364-1-kshk@linux.ibm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 17 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 213 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v10 1/16] s390x/pci: implement IOMMU replay
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-2-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 2/16] s390x/pci: Create function to contain translation status check
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-3-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 3/16] s390x/pci: Move iommu_mr from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-4-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 4/16] s390x/pci: Move dm_mr from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-5-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 5/16] s390x/pci: Move iotlb from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-6-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 6/16] s390x/pci: Remove a ptr to S390PCIBusDevice from S390PCIIOMMU
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-7-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 7/16] s390x/pci: Move/rename enabled from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-8-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 8/16] s390x/pci: Move dma_limit from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-9-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 9/16] s390x/pci: Move g_iota from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-10-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 10/16] s390x/pci: Move pba from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-11-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 11/16] s390x/pci: Move pal from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-12-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 12/16] s390x/pci: Move max_dma_limit from S390PCIIOMMU to S390PCIBusDevice
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-13-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 13/16] s390x/pci: Add a comment explaining S390PCIIOMMU purpose
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-14-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 14/16] s390x/pci: Factor ioat sanity checks into a separate function
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-15-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 15/16] s390x/pci: Implement migration for emulated devices
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-16-kshk@linux.ibm.com
+  [32m✓[0m [PATCH v10 16/16] s390x/pci: Create function to contain fmb_timer start
+    + Link: https://lore.kernel.org/qemu-devel/20260923141518.960364-17-kshk@linux.ibm.com
+  ---
+  [32m✓[0m Signed: DKIM/ibm.com (From: kshk@linux.ibm.com)
+---
+Total patches: 16
+---
+Applying: s390x/pci: implement IOMMU replay
+Applying: s390x/pci: Create function to contain translation status check
+Applying: s390x/pci: Move iommu_mr from S390PCIIOMMU to S390PCIBusDevice
+Patch failed at 0003 s390x/pci: Move iommu_mr from S390PCIIOMMU to S390PCIBusDevice
+error: patch failed: hw/s390x/s390-pci-inst.c:662
+error: hw/s390x/s390-pci-inst.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
