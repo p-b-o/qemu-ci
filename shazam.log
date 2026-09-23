@@ -1,0 +1,68 @@
+Looking up 20260923173021.317809-1-pbonzini@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 18 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 57 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/17] target/i386/tcg: generalize zero- and sign-extension
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-2-pbonzini@redhat.com
+  [32m✓[0m [PATCH 2/17] target/i386/tcg: use standard operand order for BSF and BSR
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-3-pbonzini@redhat.com
+  [32m✓[0m [PATCH 3/17] target/i386/tcg: use zextT1 for CMPXCHG
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-4-pbonzini@redhat.com
+  [32m✓[0m [PATCH 4/17] target/i386/tcg: unify MOVBE and BSWAP generators
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-5-pbonzini@redhat.com
+  [32m✓[0m [PATCH 5/17] target/i386/tcg: add APX support to XSAVE/XRSTOR
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-6-pbonzini@redhat.com
+  [32m✓[0m [PATCH 6/17] target/i386/tcg: add definition for REX2 prefix
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-7-pbonzini@redhat.com
+  [32m✓[0m [PATCH 7/17] target/i386/tcg: mark XSAVE* as not allowing REX2
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-8-pbonzini@redhat.com
+  [32m✓[0m [PATCH 8/17] target/i386/tcg: treat 0x0F as a prefix
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-9-pbonzini@redhat.com
+  [32m✓[0m [PATCH 9/17] target/i386/tcg: decode REX2 prefix
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-10-pbonzini@redhat.com
+  [32m✓[0m [PATCH 10/17] target/i386/tcg: implement JMPABS instruction
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-11-pbonzini@redhat.com
+  [32m✓[0m [PATCH 11/17] target/i386/tcg: extend VEX.vvvv parsing for APX
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-12-pbonzini@redhat.com
+  [32m✓[0m [PATCH 12/17] target/i386/tcg: decode EVEX prefix
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-13-pbonzini@redhat.com
+  [32m✓[0m [PATCH 13/17] target/i386/tcg: add decode functionality for APX
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-14-pbonzini@redhat.com
+  [32m✓[0m [PATCH 14/17] target/i386/tcg: implement CCMP/CTEST
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-15-pbonzini@redhat.com
+  [32m✓[0m [PATCH 15/17] target/i386/tcg: decode APX instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-16-pbonzini@redhat.com
+  [32m✓[0m [PATCH 16/17] target/i386: extract computation of no-autoenable features
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-17-pbonzini@redhat.com
+  [32m✓[0m [PATCH 17/17] target/i386/tcg: mark APX as supported
+    + Link: https://lore.kernel.org/qemu-devel/20260923173021.317809-18-pbonzini@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 17
+---
+Applying: target/i386/tcg: generalize zero- and sign-extension
+Applying: target/i386/tcg: use standard operand order for BSF and BSR
+Applying: target/i386/tcg: use zextT1 for CMPXCHG
+Applying: target/i386/tcg: unify MOVBE and BSWAP generators
+Applying: target/i386/tcg: add APX support to XSAVE/XRSTOR
+Applying: target/i386/tcg: add definition for REX2 prefix
+Applying: target/i386/tcg: mark XSAVE* as not allowing REX2
+Applying: target/i386/tcg: treat 0x0F as a prefix
+Applying: target/i386/tcg: decode REX2 prefix
+Applying: target/i386/tcg: implement JMPABS instruction
+Applying: target/i386/tcg: extend VEX.vvvv parsing for APX
+Applying: target/i386/tcg: decode EVEX prefix
+Applying: target/i386/tcg: add decode functionality for APX
+Patch failed at 0013 target/i386/tcg: add decode functionality for APX
+error: patch failed: target/i386/tcg/decode-new.h:279
+error: target/i386/tcg/decode-new.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
