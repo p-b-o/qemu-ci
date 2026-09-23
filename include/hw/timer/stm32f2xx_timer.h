@@ -79,6 +79,13 @@ struct STM32F2XXTimerState {
     uint64_t hit_time;
     uint64_t freq_hz;
 
+    /*
+     * Frozen counter value while CEN == 0. RM0090: disabling CEN stops
+     * the counter and CNT retains its value; writes to TIM_CNT while
+     * stopped update it, and enabling CEN resumes from it.
+     */
+    uint32_t stopped_cnt;
+
     uint32_t tim_cr1;
     uint32_t tim_cr2;
     uint32_t tim_smcr;

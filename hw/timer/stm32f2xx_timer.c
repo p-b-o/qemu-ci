@@ -53,7 +53,8 @@ static void stm32f2xx_timer_interrupt(void *opaque)
     if (s->tim_dier & TIM_DIER_UIE && s->tim_cr1 & TIM_CR1_CEN) {
         s->tim_sr |= 1;
         qemu_irq_pulse(s->irq);
-        stm32f2xx_timer_set_alarm(s, s->hit_time);
+        stm32f2xx_timer_set_alarm(s,
+                                  qemu_clock_get_ns(QEMU_CLOCK_VIRTUAL));
     }
 
     if (s->tim_ccmr1 & (TIM_CCMR1_OC2M2 | TIM_CCMR1_OC2M1) &&
@@ -71,26 +72,46 @@ static inline int64_t stm32f2xx_ns_to_ticks(STM32F2XXTimerState *s, int64_t t)
     return muldiv64(t, s->freq_hz, 1000000000ULL) / (s->tim_psc + 1);
 }
 
+static uint64_t stm32f2xx_timer_get_cnt(STM32F2XXTimerState *s, int64_t now)
+{
+    uint64_t period_ticks = (uint64_t)s->tim_arr + 1;
+    uint64_t elapsed_ticks =
+        (uint64_t)(stm32f2xx_ns_to_ticks(s, now) - s->tick_offset);
+
+    return elapsed_ticks % period_ticks;
+}
+
 static void stm32f2xx_timer_set_alarm(STM32F2XXTimerState *s, int64_t now)
 {
-    uint64_t ticks;
-    int64_t now_ticks;
+    uint64_t period_ticks;
+    uint64_t cnt;
+    uint64_t remaining_ticks;
+    uint64_t delta_ns;
 
-    if (s->tim_arr == 0) {
+    if (!(s->tim_cr1 & TIM_CR1_CEN)) {
+        timer_del(s->timer);
         return;
     }
 
     DB_PRINT("Alarm set at: 0x%x\n", s->tim_cr1);
 
-    now_ticks = stm32f2xx_ns_to_ticks(s, now);
-    ticks = s->tim_arr - (now_ticks - s->tick_offset);
+    /*
+     * RM0090: counter counts from 0 to ARR inclusive, then wraps.
+     * Period is ARR + 1 for all ARR values including ARR == 0.
+     */
+    period_ticks = (uint64_t)s->tim_arr + 1;
+    cnt = stm32f2xx_timer_get_cnt(s, now);
+    remaining_ticks = period_ticks - cnt;
 
-    DB_PRINT("Alarm set in %d ticks\n", (int) ticks);
+    DB_PRINT("Alarm set in %" PRIu64 " ticks\n", remaining_ticks);
 
-    s->hit_time = muldiv64((ticks + (uint64_t) now_ticks) * (s->tim_psc + 1),
-                               1000000000ULL, s->freq_hz);
-
-    timer_mod(s->timer, qemu_clock_get_ns(QEMU_CLOCK_VIRTUAL) + s->hit_time);
+    delta_ns = muldiv64(remaining_ticks * (uint64_t)(s->tim_psc + 1),
+                        1000000000ULL, s->freq_hz);
+    /*
+     * QEMU timers expect an absolute expiry time.
+     */
+    s->hit_time = (uint64_t)now + delta_ns;
+    timer_mod(s->timer, s->hit_time);
     DB_PRINT("Wait Time: %" PRId64 " ticks\n", s->hit_time);
 }
 
@@ -119,6 +140,9 @@ static void stm32f2xx_timer_reset(DeviceState *dev)
     s->tim_or = 0;
 
     s->tick_offset = stm32f2xx_ns_to_ticks(s, now);
+    s->stopped_cnt = 0;
+    s->hit_time = 0;
+    timer_del(s->timer);
 }
 
 static uint64_t stm32f2xx_timer_read(void *opaque, hwaddr offset,
@@ -148,8 +172,11 @@ static uint64_t stm32f2xx_timer_read(void *opaque, hwaddr offset,
     case TIM_CCER:
         return s->tim_ccer;
     case TIM_CNT:
-        return stm32f2xx_ns_to_ticks(s, qemu_clock_get_ns(QEMU_CLOCK_VIRTUAL)) -
-               s->tick_offset;
+        if (!(s->tim_cr1 & TIM_CR1_CEN)) {
+            return s->stopped_cnt % ((uint64_t)s->tim_arr + 1);
+        }
+        return stm32f2xx_timer_get_cnt(s,
+                   qemu_clock_get_ns(QEMU_CLOCK_VIRTUAL));
     case TIM_PSC:
         return s->tim_psc;
     case TIM_ARR:
@@ -187,9 +214,24 @@ static void stm32f2xx_timer_write(void *opaque, hwaddr offset,
     DB_PRINT("Write 0x%x, 0x%"HWADDR_PRIx"\n", value, offset);
 
     switch (offset) {
-    case TIM_CR1:
+    case TIM_CR1: {
+        uint32_t old_cr1 = s->tim_cr1;
+
         s->tim_cr1 = value;
+        if (!(old_cr1 & TIM_CR1_CEN) && (s->tim_cr1 & TIM_CR1_CEN)) {
+            /*
+             * Resume from the frozen CNT value so that a TIM_CNT write
+             * programmed while stopped is preserved (RM0090: CNT is
+             * retained while CEN == 0).
+             */
+            s->tick_offset = stm32f2xx_ns_to_ticks(s, now) - s->stopped_cnt;
+            stm32f2xx_timer_set_alarm(s, now);
+        } else if ((old_cr1 & TIM_CR1_CEN) && !(s->tim_cr1 & TIM_CR1_CEN)) {
+            s->stopped_cnt = stm32f2xx_timer_get_cnt(s, now);
+            timer_del(s->timer);
+        }
         return;
+    }
     case TIM_CR2:
         s->tim_cr2 = value;
         return;
@@ -206,8 +248,12 @@ static void stm32f2xx_timer_write(void *opaque, hwaddr offset,
     case TIM_EGR:
         s->tim_egr = value;
         if (s->tim_egr & TIM_EGR_UG) {
-            timer_val = 0;
-            break;
+            if (s->tim_cr1 & TIM_CR1_CEN) {
+                timer_val = 0;
+                break;
+            }
+            s->stopped_cnt = 0;
+            return;
         }
         return;
     case TIM_CCMR1:
@@ -220,15 +266,25 @@ static void stm32f2xx_timer_write(void *opaque, hwaddr offset,
         s->tim_ccer = value;
         return;
     case TIM_PSC:
-        timer_val = stm32f2xx_ns_to_ticks(s, now) - s->tick_offset;
+        if (!(s->tim_cr1 & TIM_CR1_CEN)) {
+            s->tim_psc = value & 0xFFFF;
+            return;
+        }
+        timer_val = stm32f2xx_timer_get_cnt(s, now);
         s->tim_psc = value & 0xFFFF;
         break;
     case TIM_CNT:
+        if (!(s->tim_cr1 & TIM_CR1_CEN)) {
+            s->stopped_cnt = value;
+            return;
+        }
         timer_val = value;
         break;
     case TIM_ARR:
         s->tim_arr = value;
-        stm32f2xx_timer_set_alarm(s, now);
+        if (s->tim_cr1 & TIM_CR1_CEN) {
+            stm32f2xx_timer_set_alarm(s, now);
+        }
         return;
     case TIM_CCR1:
         s->tim_ccr1 = value;
@@ -272,7 +328,7 @@ static const MemoryRegionOps stm32f2xx_timer_ops = {
 
 static const VMStateDescription vmstate_stm32f2xx_timer = {
     .name = TYPE_STM32F2XX_TIMER,
-    .version_id = 1,
+    .version_id = 2,
     .minimum_version_id = 1,
     .fields = (const VMStateField[]) {
         VMSTATE_INT64(tick_offset, STM32F2XXTimerState),
@@ -294,6 +350,13 @@ static const VMStateDescription vmstate_stm32f2xx_timer = {
         VMSTATE_UINT32(tim_dcr, STM32F2XXTimerState),
         VMSTATE_UINT32(tim_dmar, STM32F2XXTimerState),
         VMSTATE_UINT32(tim_or, STM32F2XXTimerState),
+        /*
+         * New in version 2: frozen CNT while CEN == 0. Pre-existing
+         * limitation left unchanged: QEMUTimer expiry (hit_time) is
+         * not migrated and is re-armed by the next register write;
+         * see stm32f2xx_timer_set_alarm.
+         */
+        VMSTATE_UINT32_V(stopped_cnt, STM32F2XXTimerState, 2),
         VMSTATE_END_OF_LIST()
     }
 };
