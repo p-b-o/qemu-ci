@@ -24,6 +24,7 @@
 #include "qemu/madvise.h"
 #include "qemu/cutils.h"
 #include "hw/core/qdev.h"
+#include "migration/cpr.h"
 
 #ifdef CONFIG_NUMA
 #include <numaif.h>
@@ -364,6 +365,10 @@ host_memory_backend_memory_complete(UserCreatable *uc, Error **errp)
     }
     if (!backend->dump) {
         qemu_madvise(ptr, sz, QEMU_MADV_DONTDUMP);
+    }
+    /* Memory inherited over CPR already has its pages and policy */
+    if (cpr_is_incoming()) {
+        return;
     }
 #ifdef CONFIG_NUMA
     unsigned long lastbit = find_last_bit(backend->host_nodes, MAX_NODES);
