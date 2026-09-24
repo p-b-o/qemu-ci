@@ -1,0 +1,31 @@
+Looking up 20260924213942.26491-1-pierrick.bouvier@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 5 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/4] tests/tcg/meson.build: report correct cc in summary
+    + Link: https://lore.kernel.org/qemu-devel/20260924213942.26491-2-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 2/4] tests/tcg/meson.build: introduce cc_alt (alternative cross compiler)
+    + Link: https://lore.kernel.org/qemu-devel/20260924213942.26491-3-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 3/4] tests/tcg: add alternative cross-compilers for fedora
+    + Link: https://lore.kernel.org/qemu-devel/20260924213942.26491-4-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 4/4] tests/tcg: add alternative cross-compilers for macos (homebrew)
+    + Link: https://lore.kernel.org/qemu-devel/20260924213942.26491-5-pierrick.bouvier@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 4
+---
+Applying: tests/tcg/meson.build: report correct cc in summary
+Applying: tests/tcg/meson.build: introduce cc_alt (alternative cross compiler)
+Patch failed at 0002 tests/tcg/meson.build: introduce cc_alt (alternative cross compiler)
+error: patch failed: tests/tcg/meson.build:21
+error: tests/tcg/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
