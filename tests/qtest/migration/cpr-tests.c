@@ -169,6 +169,7 @@ static void set_cpr_exec_args(QTestState *who, MigrateCommon *args)
     g_autofree char *to_args = NULL;
     g_autofree char *exec_args = NULL;
     g_auto(GStrv) argv = NULL;
+    MigrateStart start = args->start;
     char *from_str, *src, *dst;
     int ret;
 
@@ -179,7 +180,11 @@ static void set_cpr_exec_args(QTestState *who, MigrateCommon *args)
      */
     g_assert(args->start.hide_stderr == false);
 
-    ret = migrate_args(&from_args, &to_args, &args->start);
+    /* opts_target, if set, replaces opts_source for the exec'd QEMU */
+    if (start.opts_target) {
+        start.opts_source = start.opts_target;
+    }
+    ret = migrate_args(&from_args, &to_args, &start);
     g_assert(!ret);
     qtest_from_args = qtest_qemu_args(from_args);
 
@@ -276,7 +281,8 @@ static void *test_mode_exec_start(QTestState *from, QTestState *to)
     return NULL;
 }
 
-static void test_mode_exec(char *name, MigrateCommon *args)
+static void test_mode_exec_common(MigrateCommon *args, const char *opts_source,
+                                  const char *opts_target)
 {
     g_autofree char *uri = g_strdup_printf("file:%s/%s", tmpfs,
                                            FILE_TEST_FILENAME);
@@ -284,11 +290,34 @@ static void test_mode_exec(char *name, MigrateCommon *args)
     args->start_hook = test_mode_exec_start;
 
     args->start.only_source = true;
-    args->start.opts_source = "-machine aux-ram-share=on -nodefaults";
+    args->start.opts_source = opts_source;
+    args->start.opts_target = opts_target;
     args->start.mem_type = MEM_TYPE_MEMFD;
 
     test_cpr_exec(args);
 }
+
+static void test_mode_exec(char *name, MigrateCommon *args)
+{
+    test_mode_exec_common(args, "-machine aux-ram-share=on -nodefaults", NULL);
+}
+
+#ifdef CONFIG_NUMA
+/*
+ * mbind() rejects host node 127 as it would a node the cpuset dropped
+ * while the VM ran.
+ */
+static void test_mode_exec_numa(char *name, MigrateCommon *args)
+{
+    test_mode_exec_common(args,
+                          "-machine aux-ram-share=on -nodefaults "
+                          "-object memory-backend-memfd,id=numa0,size=2M,"
+                          "policy=bind,host-nodes=0",
+                          "-machine aux-ram-share=on -nodefaults "
+                          "-object memory-backend-memfd,id=numa0,size=2M,"
+                          "policy=bind,host-nodes=127");
+}
+#endif
 
 void migration_test_add_cpr(MigrationTestEnv *env)
 {
@@ -313,5 +342,8 @@ void migration_test_add_cpr(MigrationTestEnv *env)
         migration_test_add("/migration/mode/transfer/defer",
                            test_mode_transfer_defer);
         migration_test_add("/migration/mode/exec", test_mode_exec);
+#ifdef CONFIG_NUMA
+        migration_test_add("/migration/mode/exec/numa", test_mode_exec_numa);
+#endif
     }
 }
