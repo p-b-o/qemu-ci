@@ -237,12 +237,13 @@ static inline void ctx_log_vreg_write(DisasContext *ctx,
             ctx->has_hvx_overlap = true;
         }
     }
-    if (!test_bit(rnum, ctx->vregs_written)) {
-        set_bit(rnum, ctx->vregs_written);
-    } else {
-        set_bit(rnum, ctx->vregs_multi_write);
-    }
+
     if (type != EXT_TMP) {
+        if (!test_bit(rnum, ctx->vregs_written)) {
+            set_bit(rnum, ctx->vregs_written);
+        } else {
+            set_bit(rnum, ctx->vregs_multi_write);
+        }
         if (!test_bit(rnum, ctx->vregs_updated)) {
             ctx->vreg_log[ctx->vreg_log_idx] = rnum;
             ctx->vreg_log_idx++;
@@ -263,8 +264,6 @@ static inline void ctx_log_vreg_write(DisasContext *ctx,
         set_bit(rnum, ctx->vregs_updated_tmp);
         if (is_predicated) {
             set_bit(rnum, ctx->predicated_tmp_vregs);
-        } else {
-            set_bit(rnum, ctx->vregs_uncond);
         }
     }
 }
