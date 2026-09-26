@@ -1,0 +1,161 @@
+Looking up 20260923131635.1894-1-luoyonggang@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+  Added from v4: 56 patches
+Analyzing 100 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 258 code-review messages
+Will use the latest revision: v4
+You can pick other revisions using the -vN flag
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/55] target-info: Introduce target_riscv32
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-2-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 2/55] configs/targets: remove target info definitions
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-3-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 3/55] target-info: rename target-info-stub.c in target-info-def.c
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-4-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 4/55] target-info: rename target-info-impl.h to target-info-def.h
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-5-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 5/55] vl: parse early options before target-info init
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-6-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 6/55] target-info: replace QOM registration with a constructor list
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-7-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 7/55] tests/unit: add test-target-info
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-8-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 8/55] tests/qtest: prepare machine-list-test for combined qemu-system
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-9-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 9/55] kconfig: rename REGISTER to HW_REGISTER
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-10-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 10/55] target-info: add TargetKconfig
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-11-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 11/55] target-info: add target_is_* helpers for each architecture
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-12-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 12/55] target-info: add target_is_any()
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-13-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 13/55] qom: pass TargetInfo to is_available for latter use
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-14-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 14/55] target/arm: move kvm_arm_set_cpreg_mig_tolerances to kvm.c
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-15-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 15/55] target/arm: allow -cpu host with Nitro
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-16-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 16/55] target/arm: gate -cpu host with TypeIsAvailable
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-17-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 17/55] target/arm: replace target_long in A64 translate
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-18-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 18/55] target/arm: use vaddr for the A64 insn_start pc
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-19-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 19/55] tests/qtest: raise aspeed_smc-test timeout to 12 minutes
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-20-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 20/55] target-info: add tl_is_64() and target_is_tl32/64 helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-21-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 21/55] tcg: declare TCGv in tcg.h
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-22-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 22/55] tcg: dispatch TL memory helpers from tcg-op-mem.h
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-23-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 23/55] tcg: dispatch tcg_gen_*_tl without TARGET_LONG_BITS
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-24-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 24/55] tcg: dispatch tcg_gen_gvec_dup_tl at runtime
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-25-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 25/55] tcg: give common-system helper tl an i64 slot
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-26-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 26/55] accel/tcg: move helper_exit_atomic next to cpu_loop_exit_atomic
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-27-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 27/55] tcg: move dup_const into tcg.c
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-28-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 28/55] tcg: move goto_tb helpers into tcg-op-ldst.c
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-29-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 29/55] accel/tcg: move gvec helpers into tcg-runtime-gvec.h
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-30-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 30/55] accel/tcg: move helper_lookup_tb_ptr into cpu-exec.h
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-31-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 31/55] accel/tcg: move memory helpers out of tcg-runtime.h
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-32-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 32/55] tests/unit: cover common-system tl dispatch and calls
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-33-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 33/55] target/arm: fix A64 guest address width at 64
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-34-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 34/55] target/arm: pass tl temps into SVE and SME helpers
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-35-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 35/55] exec: provide target_ulong for softmmu common code
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-36-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 36/55] exec: compile abi_ptr.h without per-target cpu-param.h
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-37-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 37/55] accel/tcg: keep cpu-ldst endian aliases per-target
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-38-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 38/55] target/arm: fold arm_ss into common source sets
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-39-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 39/55] target/microblaze: fold system sources into common source sets
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-40-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 40/55] meson: link shared objects into qemu-system
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-41-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 41/55] target-info: add SysEmuTarget none
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-42-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 42/55] module: load every arch-tagged module when target is none
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-43-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 43/55] accel/tcg: tolerate NULL target_cpu_type for -M none
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-44-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 44/55] target-info: select combined qemu-system target by name
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-45-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 45/55] vl: parse arch: machine types on combined qemu-system
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-46-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 46/55] qapi: add query-targets
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-47-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 47/55] target-info: add target_is_microblaze
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-48-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 48/55] hw/microblaze: set petalogix-s3adsp1800 TypeInfo.is_available
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-49-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 49/55] hw/microblaze: expand petalogix-ml605 and xlnx-zynqmp-pmu to TypeInfo
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-50-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 50/55] hw/arm: expand leftover 32-bit DEFINE_MACHINE to TypeInfo
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-51-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 51/55] hw/arm: expand imx8mm-evk DEFINE_MACHINE to TypeInfo
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-52-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 52/55] hw/arm: set virt TypeInfo.is_available
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-53-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 53/55] hw/arm: set remaining 32-bit machine TypeInfo.is_available
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-54-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 54/55] hw/arm: set aarch64-only machine TypeInfo.is_available
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-55-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 55/55] tests/qtest: cover combined qemu-system machines
+    + Link: https://lore.kernel.org/qemu-devel/20260926070057.1234-56-luoyonggang@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 55
+---
+Applying: target-info: Introduce target_riscv32
+Applying: configs/targets: remove target info definitions
+Applying: target-info: rename target-info-stub.c in target-info-def.c
+Applying: target-info: rename target-info-impl.h to target-info-def.h
+Applying: vl: parse early options before target-info init
+Applying: target-info: replace QOM registration with a constructor list
+Applying: tests/unit: add test-target-info
+Applying: tests/qtest: prepare machine-list-test for combined qemu-system
+Applying: kconfig: rename REGISTER to HW_REGISTER
+Applying: target-info: add TargetKconfig
+Applying: target-info: add target_is_* helpers for each architecture
+Applying: target-info: add target_is_any()
+Applying: qom: pass TargetInfo to is_available for latter use
+Applying: target/arm: move kvm_arm_set_cpreg_mig_tolerances to kvm.c
+Applying: target/arm: allow -cpu host with Nitro
+Applying: target/arm: gate -cpu host with TypeIsAvailable
+Applying: target/arm: replace target_long in A64 translate
+Applying: target/arm: use vaddr for the A64 insn_start pc
+Applying: tests/qtest: raise aspeed_smc-test timeout to 12 minutes
+Applying: target-info: add tl_is_64() and target_is_tl32/64 helpers
+Applying: tcg: declare TCGv in tcg.h
+Applying: tcg: dispatch TL memory helpers from tcg-op-mem.h
+Applying: tcg: dispatch tcg_gen_*_tl without TARGET_LONG_BITS
+Applying: tcg: dispatch tcg_gen_gvec_dup_tl at runtime
+Applying: tcg: give common-system helper tl an i64 slot
+Applying: accel/tcg: move helper_exit_atomic next to cpu_loop_exit_atomic
+Patch failed at 0026 accel/tcg: move helper_exit_atomic next to cpu_loop_exit_atomic
+error: patch failed: accel/tcg/cpu-exec-common.c:23
+error: accel/tcg/cpu-exec-common.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
