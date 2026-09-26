@@ -1,0 +1,64 @@
+Looking up 20260925155149.843870-1-dmitrii.omelchenko@cloud.ionos.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 14 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC 1/13] migration/rdma: Add nb_sent send-queue-depth stats
+    + Link: https://lore.kernel.org/qemu-devel/20260925155149.843870-2-dmitrii.omelchenko@cloud.ionos.com
+  [32m✓[0m [PATCH RFC 2/13] migration/rdma: Add producer/consumer send-ring types
+    + Link: https://lore.kernel.org/qemu-devel/20260925155149.843870-3-dmitrii.omelchenko@cloud.ionos.com
+  [32m✓[0m [PATCH RFC 3/13] migration/rdma: Add send-ring lifecycle (no consumer thread yet)
+    + Link: https://lore.kernel.org/qemu-devel/20260925155149.843870-4-dmitrii.omelchenko@cloud.ionos.com
+  [32m✓[0m [PATCH RFC 4/13] migration/rdma: Add the send consumer thread (drain only)
+    + Link: https://lore.kernel.org/qemu-devel/20260925155149.843870-5-dmitrii.omelchenko@cloud.ionos.com
+  [32m✓[0m [PATCH RFC 5/13] migration/rdma: Handle write/flush/reg-stop on the consumer
+    + Link: https://lore.kernel.org/qemu-devel/20260925155149.843870-6-dmitrii.omelchenko@cloud.ionos.com
+  [32m✓[0m [PATCH RFC 6/13] migration/rdma: Extract qemu_rdma_write_file() and dispatch FILE
+    + Link: https://lore.kernel.org/qemu-devel/20260925155149.843870-7-dmitrii.omelchenko@cloud.ionos.com
+  [32m✓[0m [PATCH RFC 7/13] migration/rdma: Switch the producer onto the send ring
+    + Link: https://lore.kernel.org/qemu-devel/20260925155149.843870-8-dmitrii.omelchenko@cloud.ionos.com
+  [32m✓[0m [PATCH RFC 8/13] migration/rdma: Add producer/consumer tuning instrumentation
+    + Link: https://lore.kernel.org/qemu-devel/20260925155149.843870-9-dmitrii.omelchenko@cloud.ionos.com
+  [32m✓[0m [PATCH RFC 9/13] migration/rdma: drain the send ring in batches
+    + Link: https://lore.kernel.org/qemu-devel/20260925155149.843870-10-dmitrii.omelchenko@cloud.ionos.com
+  [32m✓[0m [PATCH RFC 10/13] migration/rdma: size reg_resp.len by the register request count
+    + Link: https://lore.kernel.org/qemu-devel/20260925155149.843870-11-dmitrii.omelchenko@cloud.ionos.com
+  [32m✓[0m [PATCH RFC 11/13] migration/rdma: batch chunk registration in one round-trip
+    + Link: https://lore.kernel.org/qemu-devel/20260925155149.843870-12-dmitrii.omelchenko@cloud.ionos.com
+  [32m✓[0m [PATCH RFC 12/13] migration/rdma: trace batching and register runs
+    + Link: https://lore.kernel.org/qemu-devel/20260925155149.843870-13-dmitrii.omelchenko@cloud.ionos.com
+  [32m✓[0m [PATCH RFC 13/13] migration/rdma: negotiate batched chunk registration
+    + Link: https://lore.kernel.org/qemu-devel/20260925155149.843870-14-dmitrii.omelchenko@cloud.ionos.com
+  ---
+  [32m✓[0m Signed: DKIM/cloud.ionos.com
+---
+Total patches: 13
+---
+ Deps: looking for dependencies matching 7 patch-ids
+Grabbing search results from lore.kernel.org
+ Deps: Applying prerequisite patch: [PATCH v3 1/4] migration/ram: Add RAM round synchronization notifiers
+ Deps: Applying prerequisite patch: [PATCH v2 2/4] migration/rdma: Drain writes at RAM round boundaries
+ Deps: Applying prerequisite patch: [PATCH v2 3/4] migration/rdma: Allow multiple in-flight writes per chunk
+ Deps: Applying prerequisite patch: [PATCH v2 4/4] migration/rdma: Remove unused transit bitmap
+ Deps: Applying prerequisite patch: [PATCH RFC 2/9] migration/rdma: Fix wrong context in qio_channel_rdma_shutdown()
+ Deps: Applying prerequisite patch: [PATCH 2/3] migration/rdma: Post initial receive before accepting
+Applying: migration/ram: Add RAM round synchronization notifiers
+Applying: migration/rdma: Drain writes at RAM round boundaries
+Applying: migration/rdma: Allow multiple in-flight writes per chunk
+Applying: migration/rdma: Remove unused transit bitmap
+Applying: migration/rdma: Fix wrong context in qio_channel_rdma_shutdown()
+Applying: migration/rdma: Post initial receive before accepting
+Applying: migration/rdma: Add nb_sent send-queue-depth stats
+Patch failed at 0007 migration/rdma: Add nb_sent send-queue-depth stats
+error: patch failed: migration/rdma.c:1438
+error: migration/rdma.c: patch does not apply
+error: patch failed: migration/trace-events:245
+error: migration/trace-events: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
