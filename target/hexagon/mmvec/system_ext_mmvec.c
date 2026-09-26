@@ -21,15 +21,13 @@
 
 void mem_gather_store(CPUHexagonState *env, target_ulong vaddr, int slot)
 {
-    size_t size = sizeof(MMVector);
-
     env->vstore_pending[slot] = 1;
     env->vstore[slot].va   = vaddr;
-    env->vstore[slot].size = size;
-    memcpy(&env->vstore[slot].data, &env->tmp_VRegs[0], size);
+    env->vstore[slot].size = MAX_VEC_SIZE_BYTES;
+    memcpy(&env->vstore[slot].data, &env->tmp_VRegs[0], sizeof(MMVector));
 
     /* On a gather store, overwrite the store mask to emulate dropped gathers */
-    bitmap_copy(env->vstore[slot].mask, env->vtcm_log.mask, size);
+    bitmap_copy(env->vstore[slot].mask, env->vtcm_log.mask, MAX_VEC_SIZE_BYTES);
 }
 
 void mem_vector_scatter_init(CPUHexagonState *env)
