@@ -1,0 +1,27 @@
+Looking up 20260926032336.933-1-paul@galbraiths.ca
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 2 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/2] target/i386/tcg: fix EIP truncation for wrapping 16-bit near branches
+    + Link: https://lore.kernel.org/qemu-devel/20260926032336.933-2-paul@galbraiths.ca
+  [32m✓[0m [PATCH v3 2/2] tests/tcg/i386: add regression test for wrapping 16-bit near branches
+    + Link: https://lore.kernel.org/qemu-devel/20260926032336.933-3-paul@galbraiths.ca
+  ---
+  [32m✓[0m Signed: DKIM/galbraiths.ca
+---
+Total patches: 2
+---
+Applying: target/i386/tcg: fix EIP truncation for wrapping 16-bit near branches
+Applying: tests/tcg/i386: add regression test for wrapping 16-bit near branches
+Patch failed at 0002 tests/tcg/i386: add regression test for wrapping 16-bit near branches
+error: patch failed: tests/tcg/i386/system/meson.build:34
+error: tests/tcg/i386/system/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
