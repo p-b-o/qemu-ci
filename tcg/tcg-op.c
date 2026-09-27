@@ -240,11 +240,13 @@ void tcg_gen_plugin_mem_cb(TCGv_i64 addr, unsigned meminfo)
 
 #define C_TCGv_i32      tcgv_i32_temp
 #define C_TCGv_i64      tcgv_i64_temp
+#define C_TCGv_ptr      tcgv_ptr_temp
 #define C_int32_t
 #define C_int64_t
 #define C_MemOp
 #define C_TCGCond
 #define C_TCGLabelPtr
+#define C_tcg_target_long
 #define C_unsigned
 
 #define TCGV  glue(TCGv,TExt)
@@ -271,11 +273,13 @@ void tcg_gen_plugin_mem_cb(TCGv_i64 addr, unsigned meminfo)
 
 #undef C_TCGv_i32
 #undef C_TCGv_i64
+#undef C_TCGv_ptr
 #undef C_int32_t
 #undef C_int64_t
 #undef C_MemOp
 #undef C_TCGCond
 #undef C_TCGLabelPtr
+#undef C_tcg_target_long
 #undef C_unsigned
 
 #undef DEF1
@@ -765,6 +769,11 @@ void tcg_gen_extract2(TCGType type, TCGTemp *dst, TCGTemp *lo, TCGTemp *hi,
     } else {
         tcg_gen_op_ttti(INDEX_op_extract2, type, dst, lo, hi, ofs);
     }
+}
+
+void tcg_gen_ld(TCGType type, TCGTemp *dst, TCGTemp *base, tcg_target_long ofs)
+{
+    tcg_gen_op_tti(INDEX_op_ld, type, dst, base, ofs);
 }
 
 void tcg_gen_mov(TCGType type, TCGTemp *dst, TCGTemp *src)
@@ -1392,11 +1401,6 @@ void tcg_gen_ld16s_i32(TCGv_i32 ret, TCGv_ptr arg2, tcg_target_long offset)
     tcg_gen_ldst_op_i32(INDEX_op_ld16s, ret, arg2, offset);
 }
 
-void tcg_gen_ld_i32(TCGv_i32 ret, TCGv_ptr arg2, tcg_target_long offset)
-{
-    tcg_gen_ldst_op_i32(INDEX_op_ld, ret, arg2, offset);
-}
-
 void tcg_gen_st8_i32(TCGv_i32 arg1, TCGv_ptr arg2, tcg_target_long offset)
 {
     tcg_gen_ldst_op_i32(INDEX_op_st8, arg1, arg2, offset);
@@ -1443,11 +1447,6 @@ void tcg_gen_ld32u_i64(TCGv_i64 ret, TCGv_ptr arg2, tcg_target_long offset)
 void tcg_gen_ld32s_i64(TCGv_i64 ret, TCGv_ptr arg2, tcg_target_long offset)
 {
     tcg_gen_ldst_op_i64(INDEX_op_ld32s, ret, arg2, offset);
-}
-
-void tcg_gen_ld_i64(TCGv_i64 ret, TCGv_ptr arg2, tcg_target_long offset)
-{
-    tcg_gen_ldst_op_i64(INDEX_op_ld, ret, arg2, offset);
 }
 
 void tcg_gen_st8_i64(TCGv_i64 arg1, TCGv_ptr arg2, tcg_target_long offset)
