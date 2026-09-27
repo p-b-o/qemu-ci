@@ -293,6 +293,8 @@ typedef struct TCGTemp {
     void *state_ptr;
 } TCGTemp;
 
+typedef TCGTemp *TCGTempPtr;
+
 typedef struct TCGContext TCGContext;
 
 typedef struct TCGTempSet {
