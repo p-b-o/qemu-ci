@@ -497,22 +497,22 @@ void tcg_gen_stl_vec(TCGv_vec r, TCGv_ptr base, TCGArg offset, TCGType t);
 
 /* Host pointer ops */
 
-TCGv_ptr tcg_constant_ptr_int(intptr_t x);
+QEMU_RET_NONNULL TCGv_ptr tcg_constant_ptr_int(intptr_t x);
 #define tcg_constant_ptr(X)  tcg_constant_ptr_int((intptr_t)(X))
 
-void tcg_gen_ld_ptr(TCGv_ptr r, TCGv_ptr a, intptr_t o);
-void tcg_gen_st_ptr(TCGv_ptr r, TCGv_ptr a, intptr_t o);
+QEMU_ARG_NONNULL void tcg_gen_ld_ptr(TCGv_ptr r, TCGv_ptr a, intptr_t o);
+QEMU_ARG_NONNULL void tcg_gen_st_ptr(TCGv_ptr r, TCGv_ptr a, intptr_t o);
 
-void tcg_gen_discard_ptr(TCGv_ptr a);
-void tcg_gen_add_ptr(TCGv_ptr r, TCGv_ptr a, TCGv_ptr b);
-void tcg_gen_addi_ptr(TCGv_ptr r, TCGv_ptr a, intptr_t b);
-void tcg_gen_mov_ptr(TCGv_ptr d, TCGv_ptr s);
-void tcg_gen_movi_ptr(TCGv_ptr d, intptr_t s);
-void tcg_gen_brcondi_ptr(TCGCond cond, TCGv_ptr a,
-                         intptr_t b, TCGLabel *label);
-void tcg_gen_ext_i32_ptr(TCGv_ptr r, TCGv_i32 a);
-void tcg_gen_trunc_i64_ptr(TCGv_ptr r, TCGv_i64 a);
-void tcg_gen_extu_ptr_i64(TCGv_i64 r, TCGv_ptr a);
-void tcg_gen_trunc_ptr_i32(TCGv_i32 r, TCGv_ptr a);
+QEMU_ARG_NONNULL void tcg_gen_discard_ptr(TCGv_ptr a);
+QEMU_ARG_NONNULL void tcg_gen_add_ptr(TCGv_ptr r, TCGv_ptr a, TCGv_ptr b);
+QEMU_ARG_NONNULL void tcg_gen_addi_ptr(TCGv_ptr r, TCGv_ptr a, intptr_t b);
+QEMU_ARG_NONNULL void tcg_gen_mov_ptr(TCGv_ptr d, TCGv_ptr s);
+QEMU_ARG_NONNULL void tcg_gen_movi_ptr(TCGv_ptr d, intptr_t s);
+QEMU_ARG_NONNULL void tcg_gen_brcondi_ptr(TCGCond cond, TCGv_ptr a,
+                                          intptr_t b, TCGLabel *label);
+QEMU_ARG_NONNULL void tcg_gen_ext_i32_ptr(TCGv_ptr r, TCGv_i32 a);
+QEMU_ARG_NONNULL void tcg_gen_trunc_i64_ptr(TCGv_ptr r, TCGv_i64 a);
+QEMU_ARG_NONNULL void tcg_gen_extu_ptr_i64(TCGv_i64 r, TCGv_ptr a);
+QEMU_ARG_NONNULL void tcg_gen_trunc_ptr_i32(TCGv_i32 r, TCGv_ptr a);
 
 #endif /* TCG_TCG_OP_COMMON_H */
