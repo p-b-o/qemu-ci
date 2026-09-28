@@ -232,7 +232,7 @@ FIELD(TB_FLAGS, HVX_COPROC_ENABLED, 5, 1)
 
 G_NORETURN void hexagon_raise_exception_err(CPUHexagonState *env,
                                             uint32_t exception,
-                                            uintptr_t pc);
+                                            vaddr pc, uintptr_t retaddr);
 
 #ifndef CONFIG_USER_ONLY
 /*
