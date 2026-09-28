@@ -174,6 +174,7 @@ F: system/watchpoint.c
 F: page-vary-system.c
 F: page-vary-common.c
 F: accel/tcg/
+F: accel/tcg/cpu-exec-common.h
 F: accel/stubs/tcg-stub.c
 F: util/cacheflush.c
 F: scripts/decodetree.py
