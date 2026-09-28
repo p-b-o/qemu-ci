@@ -1814,6 +1814,7 @@ void kvm_riscv_set_irq(RISCVCPU *cpu, int irq, int level)
 }
 
 static int aia_mode;
+static int aia_fd = -1;
 
 static const char *kvm_aia_mode_str(uint64_t mode)
 {
@@ -1859,13 +1860,22 @@ void kvm_arch_accel_class_init(ObjectClass *oc)
                                     "auto");
 }
 
-void kvm_riscv_aia_create(MachineState *machine, uint64_t group_shift,
-                          uint64_t aia_irq_num, uint64_t aia_msi_num,
-                          uint64_t aplic_base, uint64_t imsic_base,
-                          uint64_t guest_num)
+void kvm_riscv_aia_create(void)
+{
+    aia_fd = kvm_create_device(kvm_state, KVM_DEV_TYPE_RISCV_AIA, false);
+
+    if (aia_fd < 0) {
+        error_report("Unable to create in-kernel irqchip");
+        exit(1);
+    }
+}
+
+void kvm_riscv_aia_init(MachineState *machine, uint64_t group_shift,
+                        uint64_t aia_irq_num, uint64_t aia_msi_num,
+                        uint64_t aplic_base, uint64_t imsic_base,
+                        uint64_t guest_num)
 {
     int ret, i;
-    int aia_fd = -1;
     uint64_t default_aia_mode;
     uint64_t socket_count = riscv_socket_count(machine);
     uint64_t max_hart_per_socket = 0;
@@ -1873,12 +1883,7 @@ void kvm_riscv_aia_create(MachineState *machine, uint64_t group_shift,
     uint64_t socket_bits, hart_bits, guest_bits;
     uint64_t max_group_id;
 
-    aia_fd = kvm_create_device(kvm_state, KVM_DEV_TYPE_RISCV_AIA, false);
-
-    if (aia_fd < 0) {
-        error_report("Unable to create in-kernel irqchip");
-        exit(1);
-    }
+    g_assert(aia_fd >= 0);
 
     ret = kvm_device_access(aia_fd, KVM_DEV_RISCV_AIA_GRP_CONFIG,
                             KVM_DEV_RISCV_AIA_CONFIG_MODE,
