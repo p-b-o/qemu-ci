@@ -14,6 +14,11 @@ void kvm_riscv_aia_create(void)
     g_assert_not_reached();
 }
 
+uint64_t kvm_riscv_aia_get_num_ids(void)
+{
+    g_assert_not_reached();
+}
+
 void kvm_riscv_aia_init(MachineState *machine, uint64_t group_shift,
                         uint64_t aia_irq_num, uint64_t aia_msi_num,
                         uint64_t aplic_base, uint64_t imsic_base,

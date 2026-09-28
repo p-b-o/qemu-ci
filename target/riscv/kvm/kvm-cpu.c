@@ -1870,6 +1870,22 @@ void kvm_riscv_aia_create(void)
     }
 }
 
+uint64_t kvm_riscv_aia_get_num_ids(void)
+{
+    uint64_t num_ids;
+    int ret;
+
+    ret = kvm_device_access(aia_fd, KVM_DEV_RISCV_AIA_GRP_CONFIG,
+                            KVM_DEV_RISCV_AIA_CONFIG_IDS,
+                            &num_ids, false, NULL);
+    if (ret < 0) {
+        error_report("KVM AIA: failed to get number of msi");
+        exit(1);
+    }
+
+    return num_ids;
+}
+
 void kvm_riscv_aia_init(MachineState *machine, uint64_t group_shift,
                         uint64_t aia_irq_num, uint64_t aia_msi_num,
                         uint64_t aplic_base, uint64_t imsic_base,

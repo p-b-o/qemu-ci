@@ -78,6 +78,16 @@ static bool virt_use_emulated_aplic(RISCVVirtAIAType aia_type)
     return riscv_use_emulated_aplic(msimode);
 }
 
+static void virt_kvm_aia_create(RISCVVirtState *s)
+{
+    kvm_riscv_aia_create();
+
+    s->num_msis = MIN(s->num_msis, kvm_riscv_aia_get_num_ids());
+    if (!virt_use_emulated_aplic(s->aia_type)) {
+        s->num_sources = MIN(s->num_sources, s->num_msis);
+    }
+}
+
 static bool virt_aclint_allowed(void)
 {
     return tcg_enabled() || qtest_enabled();
@@ -734,7 +744,7 @@ static void virt_machine_init(MachineState *machine)
     }
 
     if (kvm_enabled() && virt_use_kvm_aia_aplic_imsic(s->aia_type)) {
-        kvm_riscv_aia_create();
+        virt_kvm_aia_create(s);
     }
 
     /* Initialize sockets */
