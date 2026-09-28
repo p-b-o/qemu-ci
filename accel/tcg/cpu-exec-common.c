@@ -124,6 +124,18 @@ void cpu_loop_exit_excp(CPUState *cpu, int exception_index, uintptr_t pc)
     cpu_loop_exit_restore(cpu, pc);
 }
 
+/* Raise exception and exit the TB without restoring guest state. */
+void HELPER(raise_excp)(CPUArchState *env, uint32_t exception)
+{
+    cpu_loop_exit_excp(env_cpu(env), exception, 0);
+}
+
+/* Raise exception and exit the TB, restoring state from GETPC(). */
+void HELPER(raise_excp_restore)(CPUArchState *env, uint32_t exception)
+{
+    cpu_loop_exit_excp(env_cpu(env), exception, GETPC());
+}
+
 void cpu_loop_exit_atomic(CPUState *cpu, uintptr_t pc)
 {
     /* Prevent looping if already executing in a serial context. */
