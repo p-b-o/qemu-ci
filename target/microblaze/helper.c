@@ -146,8 +146,7 @@ bool mb_cpu_tlb_fill(CPUState *cs, vaddr address, int size,
     }
 
     /* TLB miss.  */
-    cs->exception_index = EXCP_MMU;
-    cpu_loop_exit_restore(cs, retaddr);
+    cpu_loop_exit_excp(cs, EXCP_MMU, retaddr);
 }
 
 void mb_cpu_do_interrupt(CPUState *cs)
