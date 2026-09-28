@@ -1,0 +1,122 @@
+Looking up 20260928130228.877003-1-pbonzini@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 31 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 107 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/30] target/i386/tcg: raise #GP(0) on null SS load with RPL != CPL
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-2-pbonzini@redhat.com
+  [32m✓[0m [PATCH 2/30] target/i386/tcg: compute C of CC_OP_ADOX without going through helper
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([31m✗[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-3-pbonzini@redhat.com
+  [32m✓[0m [PATCH 3/30] target/i386: Migrate error code only with an exception
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-4-pbonzini@redhat.com
+  [32m✓[0m [PATCH 4/30] target/i386: fix EFLAGS reads in TCG plugin callbacks
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-5-pbonzini@redhat.com
+  [32m✓[0m [PATCH 5/30] target/i386: Don't clear C1 for FCOMI/FCOMIP/FUCOMI/FUCOMIP
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-6-pbonzini@redhat.com
+  [32m✓[0m [PATCH 6/30] target/i386/tcg: ignore VEX.L for unary scalar instructions
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-7-pbonzini@redhat.com
+  [32m✓[0m [PATCH 7/30] target/i386/tcg: fix REPScalar with memory operand
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-8-pbonzini@redhat.com
+  [32m✓[0m [PATCH 8/30] target/i386/tcg: JO/JNO can use flags directly if it is in CC_SRC
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-9-pbonzini@redhat.com
+  [32m✓[0m [PATCH 9/30] system: fix buffer overflow in tdx_parse_panic_message
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-10-pbonzini@redhat.com
+  [32m✓[0m [PATCH 10/30] accel/kvm: protect kvm_resample_fd_list with a mutex
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-11-pbonzini@redhat.com
+  [32m✓[0m [PATCH 11/30] accel/kvm: coalesced mmio: check lenght of the MMIO write entry
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-12-pbonzini@redhat.com
+  [32m✓[0m [PATCH 12/30] target/i386/tcg: generalize zero- and sign-extension
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-13-pbonzini@redhat.com
+  [32m✓[0m [PATCH 13/30] target/i386/tcg: use standard operand order for BSF and BSR
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-14-pbonzini@redhat.com
+  [32m✓[0m [PATCH 14/30] target/i386/tcg: use zextT1 for CMPXCHG
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-15-pbonzini@redhat.com
+  [32m✓[0m [PATCH 15/30] target/i386/tcg: unify MOVBE and BSWAP generators
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-16-pbonzini@redhat.com
+  [32m✓[0m [PATCH 16/30] target/i386/tcg: add APX support to XSAVE/XRSTOR
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-17-pbonzini@redhat.com
+  [32m✓[0m [PATCH 17/30] target/i386/tcg: add definition for REX2 prefix
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-18-pbonzini@redhat.com
+  [32m✓[0m [PATCH 18/30] target/i386/tcg: mark XSAVE* as not allowing REX2
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-19-pbonzini@redhat.com
+  [32m✓[0m [PATCH 19/30] target/i386/tcg: treat 0x0F as a prefix
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-20-pbonzini@redhat.com
+  [32m✓[0m [PATCH 20/30] target/i386/tcg: decode REX2 prefix
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-21-pbonzini@redhat.com
+  [32m✓[0m [PATCH 21/30] target/i386/tcg: implement JMPABS instruction
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-22-pbonzini@redhat.com
+  [32m✓[0m [PATCH 22/30] target/i386/tcg: extend VEX.vvvv parsing for APX
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-23-pbonzini@redhat.com
+  [32m✓[0m [PATCH 23/30] target/i386/tcg: decode EVEX prefix
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-24-pbonzini@redhat.com
+  [32m✓[0m [PATCH 24/30] target/i386/tcg: add decode functionality for APX
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-25-pbonzini@redhat.com
+  [32m✓[0m [PATCH 25/30] target/i386/tcg: implement CCMP/CTEST
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-26-pbonzini@redhat.com
+  [32m✓[0m [PATCH 26/30] target/i386/tcg: decode APX instructions
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-27-pbonzini@redhat.com
+  [32m✓[0m [PATCH 27/30] target/i386/tcg: optimize CCMP
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-28-pbonzini@redhat.com
+  [32m✓[0m [PATCH 28/30] target/i386: extract computation of no-autoenable features
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-29-pbonzini@redhat.com
+  [32m✓[0m [PATCH 29/30] target/i386/tcg: mark APX as supported
+    + Tested-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-30-pbonzini@redhat.com
+  [32m✓[0m [PATCH 30/30] agents: Add a skill for finding your way around QEMU
+    + Link: https://lore.kernel.org/qemu-devel/20260928130228.877003-31-pbonzini@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 30
+---
+Applying: target/i386/tcg: raise #GP(0) on null SS load with RPL != CPL
+Applying: target/i386/tcg: compute C of CC_OP_ADOX without going through helper
+Applying: target/i386: Migrate error code only with an exception
+Applying: target/i386: fix EFLAGS reads in TCG plugin callbacks
+Applying: target/i386: Don't clear C1 for FCOMI/FCOMIP/FUCOMI/FUCOMIP
+Applying: target/i386/tcg: ignore VEX.L for unary scalar instructions
+Applying: target/i386/tcg: fix REPScalar with memory operand
+Applying: target/i386/tcg: JO/JNO can use flags directly if it is in CC_SRC
+Applying: system: fix buffer overflow in tdx_parse_panic_message
+Applying: accel/kvm: protect kvm_resample_fd_list with a mutex
+Applying: accel/kvm: coalesced mmio: check lenght of the MMIO write entry
+Applying: target/i386/tcg: generalize zero- and sign-extension
+Applying: target/i386/tcg: use standard operand order for BSF and BSR
+Applying: target/i386/tcg: use zextT1 for CMPXCHG
+Applying: target/i386/tcg: unify MOVBE and BSWAP generators
+Applying: target/i386/tcg: add APX support to XSAVE/XRSTOR
+Applying: target/i386/tcg: add definition for REX2 prefix
+Applying: target/i386/tcg: mark XSAVE* as not allowing REX2
+Applying: target/i386/tcg: treat 0x0F as a prefix
+Applying: target/i386/tcg: decode REX2 prefix
+Applying: target/i386/tcg: implement JMPABS instruction
+Applying: target/i386/tcg: extend VEX.vvvv parsing for APX
+Applying: target/i386/tcg: decode EVEX prefix
+Applying: target/i386/tcg: add decode functionality for APX
+Applying: target/i386/tcg: implement CCMP/CTEST
+Patch failed at 0025 target/i386/tcg: implement CCMP/CTEST
+error: patch failed: target/i386/tcg/translate.c:976
+error: target/i386/tcg/translate.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
