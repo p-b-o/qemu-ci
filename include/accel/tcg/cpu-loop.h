@@ -66,6 +66,18 @@ G_NORETURN void cpu_loop_exit_restore(CPUState *cpu, uintptr_t host_pc);
 G_NORETURN void cpu_loop_exit_atomic(CPUState *cpu, uintptr_t host_pc);
 
 /**
+ * cpu_loop_exit_excp:
+ * @cpu: the cpu context
+ * @exception_index: EXCP_* or target trap number
+ * @host_pc: the host pc within the translation
+ *
+ * Set cpu->exception_index and exit the current TB, restoring
+ * guest state from @host_pc the same way as cpu_loop_exit_restore.
+ */
+G_NORETURN void cpu_loop_exit_excp(CPUState *cpu, int exception_index,
+                                   uintptr_t host_pc);
+
+/**
  * cpu_loop_exit:
  * @cpu: the cpu context
  *
