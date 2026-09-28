@@ -121,6 +121,12 @@ typedef struct VMBusRecvRingBuf {
     uint32_t last_rd_idx;
     /* last seen write index */
     uint32_t last_seen_wr_idx;
+    /*
+     * recv_start was called outside the channel notify callback (e.g. from a
+     * QMP-triggered device path such as hv-balloon's balloon target change),
+     * so it started the I/O on the ring itself and recv_done must end it.
+     */
+    bool own_io;
 } VMBusRecvRingBuf;
 
 
@@ -1113,7 +1119,7 @@ static VMBusChanReq *vmbus_alloc_req(VMBusChannel *chan,
     return req;
 }
 
-int vmbus_channel_recv_start(VMBusChannel *chan)
+static int vmbus_channel_recv_start_io(VMBusChannel *chan)
 {
     VMBusRecvRingBuf *ringbuf = &chan->recv_ringbuf;
     vmbus_ring_buffer *rb;
@@ -1132,6 +1138,33 @@ int vmbus_channel_recv_start(VMBusChannel *chan)
     /* prevent reorder of the following data operation with write_index read */
     smp_mb();                   /* barrier pair [C] */
     return 0;
+}
+
+int vmbus_channel_recv_start(VMBusChannel *chan)
+{
+    VMBusRecvRingBuf *ringbuf = &chan->recv_ringbuf;
+    bool own_io = false;
+    int ret;
+
+    /*
+     * Receives normally happen within channel_event_cb(), which brackets them
+     * with ringbuf_start_io()/ringbuf_end_io().  Device code may also receive
+     * from other contexts (hv-balloon does from its QMP balloon handler); make
+     * that safe instead of tripping the iter->active assertion in
+     * gpadl_iter_seek() when a packet is pending.
+     */
+    if (!ringbuf->common.iter.active) {
+        ringbuf_start_io(&ringbuf->common);
+        own_io = true;
+    }
+
+    ret = vmbus_channel_recv_start_io(chan);
+    if (ret && own_io) {
+        ringbuf_end_io(&ringbuf->common);
+        own_io = false;
+    }
+    ringbuf->own_io = own_io;
+    return ret;
 }
 
 void *vmbus_channel_recv_peek(VMBusChannel *chan, uint32_t size)
@@ -1208,7 +1241,7 @@ void vmbus_channel_recv_pop(VMBusChannel *chan)
     ringbuf->rd_idx = ringbuf_tell(&ringbuf->common);
 }
 
-ssize_t vmbus_channel_recv_done(VMBusChannel *chan)
+static ssize_t vmbus_channel_recv_done_io(VMBusChannel *chan)
 {
     VMBusRecvRingBuf *ringbuf = &chan->recv_ringbuf;
     vmbus_ring_buffer *rb;
@@ -1266,6 +1299,18 @@ out:
     ringbuf_unmap_hdr(&ringbuf->common, rb, true);
     ringbuf->last_rd_idx = ringbuf->rd_idx;
     return read;
+}
+
+ssize_t vmbus_channel_recv_done(VMBusChannel *chan)
+{
+    VMBusRecvRingBuf *ringbuf = &chan->recv_ringbuf;
+    ssize_t ret = vmbus_channel_recv_done_io(chan);
+
+    if (ringbuf->own_io) {
+        ringbuf_end_io(&ringbuf->common);
+        ringbuf->own_io = false;
+    }
+    return ret;
 }
 
 void vmbus_free_req(void *req)
