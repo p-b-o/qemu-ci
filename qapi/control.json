@@ -46,7 +46,7 @@
 # connection, used for agreeing on particular QMP extension behaviors.
 #
 # @oob: QMP ability to support out-of-band requests.  (Please refer to
-#     qmp-spec.rst for more information on OOB)
+#     :doc:`/interop/qmp-spec` for more information on OOB)
 #
 # Since: 2.12
 ##
