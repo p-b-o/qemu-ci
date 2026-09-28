@@ -277,7 +277,7 @@ static void create_fdt_sockets(RISCVVirtState *s,
             .imsic_m_base = !kvm_enabled() ? s->memmap[VIRT_IMSIC_M].base : 0,
             .imsic_s_base = s->memmap[VIRT_IMSIC_S].base,
             .imsic_group_max_size = VIRT_IMSIC_GROUP_MAX_SIZE,
-            .irqchip_num_msis = VIRT_IRQCHIP_NUM_MSIS,
+            .irqchip_num_msis = s->num_msis,
             .aia_guests = s->aia_guests
         };
 
@@ -826,7 +826,7 @@ static void virt_machine_init(MachineState *machine)
                                              &s->memmap[VIRT_IMSIC_M],
                                              &s->memmap[VIRT_IMSIC_S],
                                              i, base_hartid, hart_count,
-                                             VIRT_IRQCHIP_NUM_MSIS,
+                                             s->num_msis,
                                              VIRT_IRQCHIP_NUM_PRIO_BITS);
         }
 
@@ -847,7 +847,7 @@ static void virt_machine_init(MachineState *machine)
 
     if (kvm_enabled() && virt_use_kvm_aia_aplic_imsic(s->aia_type)) {
         kvm_riscv_aia_create(machine, IMSIC_MMIO_GROUP_MIN_SHIFT,
-                             VIRT_IRQCHIP_NUM_SOURCES, VIRT_IRQCHIP_NUM_MSIS,
+                             s->num_sources, s->num_msis,
                              s->memmap[VIRT_APLIC_S].base,
                              s->memmap[VIRT_IMSIC_S].base,
                              s->aia_guests);
@@ -972,6 +972,7 @@ static void virt_machine_instance_init(Object *obj)
     s->acpi = ON_OFF_AUTO_AUTO;
     s->iommu_sys = ON_OFF_AUTO_AUTO;
     s->num_sources = VIRT_IRQCHIP_NUM_SOURCES;
+    s->num_msis = VIRT_IRQCHIP_NUM_MSIS;
 }
 
 static char *virt_get_aia_guests(Object *obj, Error **errp)
