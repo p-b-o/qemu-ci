@@ -102,6 +102,8 @@ PCI devices (other than virtio):
   PCI RISC-V IOMMU device
 1b36:0017
   Cnuas virtual RDMA network adapter (:doc:`cnuas-vnic`)
+1b36:0018
+  CnuasGPU virtual accelerator
 
 All these devices are documented in :doc:`index`.
 
