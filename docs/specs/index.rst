@@ -26,6 +26,7 @@ guest hardware that is specific to QEMU.
    fw_cfg
    fsi
    vmw_pvscsi-spec
+   cnuas-vnic
    edu
    ivshmem-spec
    pvpanic

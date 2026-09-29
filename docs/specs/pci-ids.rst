@@ -101,7 +101,7 @@ PCI devices (other than virtio):
 1b36:0014
   PCI RISC-V IOMMU device
 1b36:0017
-  Cnuas virtual RDMA network adapter
+  Cnuas virtual RDMA network adapter (:doc:`cnuas-vnic`)
 
 All these devices are documented in :doc:`index`.
 

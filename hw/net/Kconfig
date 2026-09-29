@@ -49,6 +49,11 @@ config IGB_PCI_EXPRESS
     default y if PCI_DEVICES || PCIE_DEVICES
     depends on PCI_EXPRESS && MSI_NONBROKEN
 
+config CNUAS_VNIC
+    bool
+    default y if PCI_DEVICES || PCIE_DEVICES
+    depends on LINUX && PCI_EXPRESS && MSI_NONBROKEN
+
 config RTL8139_PCI
     bool
     default y if PCI_DEVICES
