@@ -103,7 +103,7 @@ PCI devices (other than virtio):
 1b36:0017
   Cnuas virtual RDMA network adapter (:doc:`cnuas-vnic`)
 1b36:0018
-  CnuasGPU virtual accelerator
+  CnuasGPU virtual accelerator (:doc:`cnuasgpu`)
 
 All these devices are documented in :doc:`index`.
 
