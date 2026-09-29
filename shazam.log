@@ -1,0 +1,33 @@
+Looking up 20260929031644.1016354-1-portias@oss.tenstorrent.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/5] hw/char/dw8250: Fix leak when creating child device
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20260929031644.1016354-2-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 2/5] hw/riscv/atlantis: Use dw8250 UART model
+    + Link: https://lore.kernel.org/qemu-devel/20260929031644.1016354-3-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 3/5] hw/riscv/atlantis: Add all UARTs for Atlantis SoC
+    + Link: https://lore.kernel.org/qemu-devel/20260929031644.1016354-4-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 4/5] hw/riscv/atlantis: Add machine property to select default uart
+    + Link: https://lore.kernel.org/qemu-devel/20260929031644.1016354-5-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 5/5] docs/atlantis: Update Atlantis UART documentation
+    + Link: https://lore.kernel.org/qemu-devel/20260929031644.1016354-6-portias@oss.tenstorrent.com
+  ---
+  [32m✓[0m Signed: DKIM/tenstorrent.com (From: portias@oss.tenstorrent.com)
+---
+Total patches: 5
+---
+Applying: hw/char/dw8250: Fix leak when creating child device
+Patch failed at 0001 hw/char/dw8250: Fix leak when creating child device
+error: hw/char/dw8250.c: does not exist in index
+error: include/hw/char/dw8250.h: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
