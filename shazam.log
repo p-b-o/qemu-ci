@@ -1,0 +1,52 @@
+Looking up 20260928223657.2303684-1-jsnow@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 15 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 12 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/14] qapi: rename "plain" sections to "details"
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-2-jsnow@redhat.com
+  [32m✓[0m [PATCH 2/14] docs/qapi-code-gen: expand each section's syntax into a mini-section
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-3-jsnow@redhat.com
+  [32m✓[0m [PATCH 3/14] qapi: re-order QAPI doc block sections
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-4-jsnow@redhat.com
+  [32m✓[0m [PATCH 4/14] qapi/parser: enforce doc block section ordering
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-5-jsnow@redhat.com
+  [32m✓[0m [PATCH 5/14] qapi: move 'details' sections to the bottom of doc blocks
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-6-jsnow@redhat.com
+  [32m✓[0m [PATCH 6/14] qapi/parser: enforce 'details' sections' relative position
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-7-jsnow@redhat.com
+  [32m✓[0m [PATCH 7/14] qapi: re-order 'since' sections to always be last
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-8-jsnow@redhat.com
+  [32m✓[0m [PATCH 8/14] qapi/parser: enforce strict positioning for "Since:" section
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-9-jsnow@redhat.com
+  [32m✓[0m [PATCH 9/14] qapi/parser: remove _insert_after_intro() helper
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-10-jsnow@redhat.com
+  [32m✓[0m [PATCH 10/14] qapi/parser: add _append() method
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-11-jsnow@redhat.com
+  [32m✓[0m [PATCH 11/14] qapi/parser: privatize "all_sections" field as "_sections"
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-12-jsnow@redhat.com
+  [32m✓[0m [PATCH 12/14] qapi/parser: add _active_section private member
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-13-jsnow@redhat.com
+  [32m✓[0m [PATCH 13/14] qapi/parser: add new _sections mapping
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-14-jsnow@redhat.com
+  [32m✓[0m [PATCH 14/14] qapi/parser: convert single-section properties to getter properties
+    + Link: https://lore.kernel.org/qemu-devel/20260928223657.2303684-15-jsnow@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 14
+---
+Applying: qapi: rename "plain" sections to "details"
+Patch failed at 0001 qapi: rename "plain" sections to "details"
+error: patch failed: scripts/qapi/parser.py:855
+error: scripts/qapi/parser.py: patch does not apply
+error: patch failed: tests/qapi-schema/doc-good.out:131
+error: tests/qapi-schema/doc-good.out: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
