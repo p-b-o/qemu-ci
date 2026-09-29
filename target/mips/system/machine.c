@@ -374,6 +374,7 @@ static const VMStateDescription mips_vmstate_octeon_crypto = {
 
 const VMStateDescription vmstate_mips_cpu = {
     .name = "cpu",
+    .cpu_sync = true,
     .version_id = 21,
     .minimum_version_id = 21,
     .post_load = cpu_post_load,

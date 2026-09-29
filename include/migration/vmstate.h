@@ -298,6 +298,12 @@ struct VMStateDescription {
      */
 
     bool early_setup;
+    /*
+     * This VMSD describes a CPU which requires synchronization with an
+     * accelerator after it's loaded. Can be set to true only if the device
+     * described by this VMSD is of type CPU.
+     */
+    bool cpu_sync;
     int version_id;
     int minimum_version_id;
     MigrationPriority priority;

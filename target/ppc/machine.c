@@ -733,6 +733,7 @@ static const VMStateDescription vmstate_bhrb = {
 
 const VMStateDescription vmstate_ppc_cpu = {
     .name = "cpu",
+    .cpu_sync = true,
     .version_id = 5,
     .minimum_version_id = 5,
     .pre_save = cpu_pre_save,

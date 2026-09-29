@@ -256,6 +256,7 @@ static const VMStateDescription vmstate_diag318 = {
 
 const VMStateDescription vmstate_s390_cpu = {
     .name = "cpu",
+    .cpu_sync = true,
     .post_load = cpu_post_load,
     .pre_save = cpu_pre_save,
     .version_id = 4,

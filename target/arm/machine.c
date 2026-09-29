@@ -1247,6 +1247,7 @@ static int cpu_post_load(void *opaque, int version_id)
 
 const VMStateDescription vmstate_arm_cpu = {
     .name = "cpu",
+    .cpu_sync = true,
     .version_id = 22,
     .minimum_version_id = 22,
     .pre_save = cpu_pre_save,

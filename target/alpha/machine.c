@@ -82,6 +82,7 @@ static const VMStateField vmstate_cpu_fields[] = {
 
 const VMStateDescription vmstate_alpha_cpu = {
     .name = "cpu",
+    .cpu_sync = true,
     .version_id = 1,
     .minimum_version_id = 1,
     .fields = vmstate_cpu_fields,

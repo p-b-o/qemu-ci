@@ -497,6 +497,7 @@ static const VMStateDescription vmstate_mseccfg = {
 
 const VMStateDescription vmstate_riscv_cpu = {
     .name = "cpu",
+    .cpu_sync = true,
     .version_id = 12,
     .minimum_version_id = 12,
 #ifdef CONFIG_KVM

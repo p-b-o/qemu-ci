@@ -19,6 +19,7 @@
 #include "qemu-file.h"
 #include "qemu/bitops.h"
 #include "qemu/error-report.h"
+#include "system/hw_accel.h"
 #include "trace.h"
 
 static bool vmstate_subsection_save(QEMUFile *f, const VMStateDescription *vmsd,
@@ -447,6 +448,11 @@ bool vmstate_load_vmsd(QEMUFile *f, const VMStateDescription *vmsd,
     if (!vmstate_post_load(vmsd, opaque, version_id, errp)) {
         trace_vmstate_load_state_fail(vmsd->name, "post-load");
         return false;
+    }
+
+    if (vmsd->cpu_sync) {
+        CPUState *cpu = CPU(opaque);
+        cpu_synchronize_post_init(cpu);
     }
 
     trace_vmstate_load_state_success(vmsd->name);

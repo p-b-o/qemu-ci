@@ -210,6 +210,7 @@ static const VMStateDescription vmstate_tlb = {
 /* LoongArch CPU state */
 const VMStateDescription vmstate_loongarch_cpu = {
     .name = "cpu",
+    .cpu_sync = true,
     .version_id = 4,
     .minimum_version_id = 4,
     .fields = (const VMStateField[]) {

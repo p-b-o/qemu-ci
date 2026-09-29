@@ -638,6 +638,7 @@ const VMStateDescription vmstate_68040_spregs = {
 
 static const VMStateDescription vmstate_m68k_cpu = {
     .name = "cpu",
+    .cpu_sync = true,
     .version_id = 1,
     .minimum_version_id = 1,
     .fields = (const VMStateField[]) {

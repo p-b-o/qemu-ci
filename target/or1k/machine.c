@@ -133,6 +133,7 @@ static int cpu_post_load(void *opaque, int version_id)
 
 const VMStateDescription vmstate_openrisc_cpu = {
     .name = "cpu",
+    .cpu_sync = true,
     .version_id = 1,
     .minimum_version_id = 1,
     .post_load = cpu_post_load,

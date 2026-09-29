@@ -2235,8 +2235,6 @@ static void loadvm_postcopy_handle_run_bh(void *opaque)
     /* TODO we should move all of this lot into postcopy_ram.c or a shared code
      * in migration.c
      */
-    cpu_synchronize_all_post_init();
-
     trace_vmstate_downtime_checkpoint("dst-postcopy-bh-cpu-synced");
 
     qemu_announce_self(&mis->announce_timer, migrate_announce_params());
@@ -3217,8 +3215,6 @@ int qemu_loadvm_state(QEMUFile *f, Error **errp)
         }
     }
 
-    cpu_synchronize_all_post_init();
-
     return ret;
 }
 
@@ -3233,7 +3229,6 @@ int qemu_load_device_state(QEMUFile *f, Error **errp)
         return ret;
     }
 
-    cpu_synchronize_all_post_init();
     return 0;
 }
 

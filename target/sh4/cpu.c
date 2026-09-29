@@ -285,6 +285,7 @@ static void superh_cpu_initfn(Object *obj)
 #ifndef CONFIG_USER_ONLY
 static const VMStateDescription vmstate_sh_cpu = {
     .name = "cpu",
+    .cpu_sync = true,
     .unmigratable = 1,
 };
 

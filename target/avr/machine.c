@@ -99,6 +99,7 @@ static const VMStateInfo vms_eind = {
 
 const VMStateDescription vms_avr_cpu = {
     .name = "cpu",
+    .cpu_sync = true,
     .version_id = 1,
     .minimum_version_id = 1,
     .fields = (const VMStateField[]) {

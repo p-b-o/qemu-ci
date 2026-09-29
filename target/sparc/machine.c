@@ -227,6 +227,7 @@ static int cpu_pre_save(void *opaque)
 
 const VMStateDescription vmstate_sparc_cpu = {
     .name = "cpu",
+    .cpu_sync = true,
     .version_id = SPARC_VMSTATE_VER,
     .minimum_version_id = SPARC_VMSTATE_VER,
     .pre_save = cpu_pre_save,

@@ -1806,6 +1806,7 @@ static const VMStateDescription vmstate_apx = {
 
 const VMStateDescription vmstate_x86_cpu = {
     .name = "cpu",
+    .cpu_sync = true,
     .version_id = 12,
     .minimum_version_id = 11,
     .pre_save = cpu_pre_save,
