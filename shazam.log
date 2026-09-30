@@ -1,0 +1,47 @@
+Looking up 20260930174946.82195-1-philmd@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 57 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/9] accel/tcg: Refactor poll-while-halted flow in cpu_exec()
+    + Link: https://lore.kernel.org/qemu-devel/20260930174946.82195-2-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 2/9] accel/tcg: Introduce poll_during_halt() and leaving_halt()
+    + Link: https://lore.kernel.org/qemu-devel/20260930174946.82195-3-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 3/9] target/arm: Split leaving-halt handling from arm_cpu_exec_halt()
+    + Link: https://lore.kernel.org/qemu-devel/20260930174946.82195-4-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 4/9] target/arm: Convert cpu_exec_halt() to leaving_halt()
+    + Link: https://lore.kernel.org/qemu-devel/20260930174946.82195-5-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 5/9] target/i386: Split APIC polling from x86_cpu_exec_halt()
+    + Link: https://lore.kernel.org/qemu-devel/20260930174946.82195-6-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 6/9] target/i386: Split leaving-halt handling from x86_cpu_exec_halt()
+    + Link: https://lore.kernel.org/qemu-devel/20260930174946.82195-7-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 7/9] target/i386: Use generic halt transition handlers
+    + Link: https://lore.kernel.org/qemu-devel/20260930174946.82195-8-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 8/9] accel/tcg: Remove the redundant cpu_exec_halt() hook
+    + Link: https://lore.kernel.org/qemu-devel/20260930174946.82195-9-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 9/9] target/arm: Kick vCPU after updating PSCI power state
+    + Link: https://lore.kernel.org/qemu-devel/20260930174946.82195-10-philmd@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 9
+---
+Applying: accel/tcg: Refactor poll-while-halted flow in cpu_exec()
+Applying: accel/tcg: Introduce poll_during_halt() and leaving_halt()
+Applying: target/arm: Split leaving-halt handling from arm_cpu_exec_halt()
+Applying: target/arm: Convert cpu_exec_halt() to leaving_halt()
+Applying: target/i386: Split APIC polling from x86_cpu_exec_halt()
+Applying: target/i386: Split leaving-halt handling from x86_cpu_exec_halt()
+Applying: target/i386: Use generic halt transition handlers
+Applying: accel/tcg: Remove the redundant cpu_exec_halt() hook
+Patch failed at 0008 accel/tcg: Remove the redundant cpu_exec_halt() hook
+error: patch failed: target/riscv/cpu.c:960
+error: target/riscv/cpu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
