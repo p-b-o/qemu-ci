@@ -813,27 +813,24 @@ static bool opts_do_parse(QemuOpts *opts, const char *params,
                           const char *firstname,
                           bool warn_on_flag, bool *help_wanted, Error **errp)
 {
-    char *option, *value;
     const char *p;
     QemuOpt *opt;
 
     for (p = params; *p;) {
+        g_autofree char *option = NULL;
+        g_autofree char *value = NULL;
+
         p = get_opt_name_value(p, firstname, warn_on_flag, help_wanted, &option, &value);
         if (help_wanted && *help_wanted) {
-            g_free(option);
-            g_free(value);
             return false;
         }
         firstname = NULL;
 
         if (!strcmp(option, "id")) {
-            g_free(option);
-            g_free(value);
             continue;
         }
 
-        opt = opt_create(opts, option, value);
-        g_free(option);
+        opt = opt_create(opts, option, g_steal_pointer(&value));
         if (!opt_validate(opt, errp)) {
             qemu_opt_del(opt);
             return false;
@@ -846,16 +843,15 @@ static bool opts_do_parse(QemuOpts *opts, const char *params,
 static char *opts_parse_id(const char *params)
 {
     const char *p;
-    char *name, *value;
 
     for (p = params; *p;) {
+        g_autofree char *name = NULL;
+        g_autofree char *value = NULL;
+
         p = get_opt_name_value(p, NULL, false, NULL, &name, &value);
         if (!strcmp(name, "id")) {
-            g_free(name);
-            return value;
+            return g_steal_pointer(&value);
         }
-        g_free(name);
-        g_free(value);
     }
 
     return NULL;
@@ -864,13 +860,13 @@ static char *opts_parse_id(const char *params)
 bool has_help_option(const char *params)
 {
     const char *p;
-    char *name, *value;
     bool ret = false;
 
     for (p = params; *p;) {
+        g_autofree char *name = NULL;
+        g_autofree char *value = NULL;
+
         p = get_opt_name_value(p, NULL, false, &ret, &name, &value);
-        g_free(name);
-        g_free(value);
         if (ret) {
             return true;
         }
