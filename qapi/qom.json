@@ -1004,11 +1004,15 @@
 #
 # @file: IGVM file to use to configure guest
 #
+# @cmdline: command line for the software loaded from the IGVM file,
+#     rather than for the guest OS.  Ignored if the IGVM file does
+#     not ask for one.  (since 11.2)
+#
 # Since: 10.1
 ##
 { 'struct': 'IgvmCfgProperties',
   'if': 'CONFIG_IGVM',
-  'data': { 'file': 'str' } }
+  'data': { 'file': 'str', '*cmdline': 'str' } }
 
 ##
 # @SevCommonProperties:
