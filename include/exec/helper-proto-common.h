@@ -9,9 +9,35 @@
 
 #include "qemu/atomic128.h"  /* for HAVE_CMPXCHG128 */
 
+#undef HELPER_ASM
+#define HELPER_ASM(name) CORE_HELPER_ASM(name)
+
+#define HELPER_H "accel/tcg/cpu-exec-common.h"
+#include "exec/helper-proto.h.inc"
+#undef  HELPER_H
+
+#define HELPER_H "accel/tcg/cpu-exec.h"
+#include "exec/helper-proto.h.inc"
+#undef  HELPER_H
+
 #define HELPER_H "accel/tcg/tcg-runtime.h"
 #include "exec/helper-proto.h.inc"
 #undef  HELPER_H
+
+#define HELPER_H "accel/tcg/ldst_common.h"
+#include "exec/helper-proto.h.inc"
+#undef  HELPER_H
+
+#define HELPER_H "accel/tcg/atomic_common.h"
+#include "exec/helper-proto.h.inc"
+#undef  HELPER_H
+
+#define HELPER_H "accel/tcg/tcg-runtime-gvec.h"
+#include "exec/helper-proto.h.inc"
+#undef  HELPER_H
+
+#undef HELPER_ASM
+#define HELPER_ASM(name) TARGET_HELPER_ASM(name)
 
 #include "accel/tcg/getpc.h"
 

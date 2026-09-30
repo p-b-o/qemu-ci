@@ -8,7 +8,32 @@
 
 #include "fpu/softfloat-types.h"
 
+#define TCG_TARGET_HELPER_INFO_I(prefix, name) helper_info_##prefix##_##name
+#define TCG_TARGET_HELPER_INFO(prefix, name) \
+    TCG_TARGET_HELPER_INFO_I(prefix, name)
+#define TCG_HELPER_STRINGIFY_I(value) #value
+#define TCG_HELPER_STRINGIFY(value) TCG_HELPER_STRINGIFY_I(value)
+
+#ifdef TCG_HELPER_PREFIX
+#define TARGET_HELPER_INFO(name) \
+    TCG_TARGET_HELPER_INFO(TCG_HELPER_PREFIX, name)
+#define TARGET_HELPER_ASM(name) \
+    __asm__("helper_" TCG_HELPER_STRINGIFY(TCG_HELPER_PREFIX) "_" #name)
+#else
+#define TARGET_HELPER_INFO(name) glue(helper_info_, name)
+#define TARGET_HELPER_ASM(name)
+#endif
+
+#define CORE_HELPER_INFO(name) glue(helper_info_, name)
+#define CORE_HELPER_ASM(name)
+
 #define HELPER(name) glue(helper_, name)
+#ifndef HELPER_INFO
+#define HELPER_INFO(name) TARGET_HELPER_INFO(name)
+#endif
+#ifndef HELPER_ASM
+#define HELPER_ASM(name) TARGET_HELPER_ASM(name)
+#endif
 
 /* Some types that make sense in C, but not for TCG.  */
 #define dh_alias_i32 i32
