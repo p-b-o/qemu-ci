@@ -494,6 +494,10 @@ static void hexagon_cpu_realize(DeviceState *dev, Error **errp)
                              gdb_find_static_feature("hexagon-hvx.xml"));
 
 #ifndef CONFIG_USER_ONLY
+    gdb_register_coprocessor(cs, hexagon_sys_gdb_read_register,
+                             hexagon_sys_gdb_write_register,
+                             gdb_find_static_feature("hexagon-sys.xml"));
+
     if (!HEXAGON_CPU(dev)->tlb) {
         error_setg(errp, "hexagon cpu requires 'tlb' link property to be set");
         return;
@@ -862,6 +866,16 @@ uint32_t hexagon_greg_read(CPUHexagonState *env, uint32_t reg)
                 " not yet supported.\n", reg);
         return 0;
     }
+}
+
+void hexagon_greg_write(CPUHexagonState *env, uint32_t reg, uint32_t val)
+{
+    if (reg <= HEX_GREG_G3) {
+        env->greg[reg] = val;
+        return;
+    }
+    qemu_log_mask(LOG_UNIMP, "writing greg %" PRIu32
+            " not yet supported.\n", reg);
 }
 #endif
 
