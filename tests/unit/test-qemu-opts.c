@@ -750,6 +750,31 @@ static void test_has_help_option(void)
     }
 }
 
+static void test_has_help_option_with_value(void)
+{
+    static const struct {
+        const char *params;
+    } test[] = {
+        { "help=on" },
+        { "help=off" },
+        { "help=foo" },
+        { "help=" },
+    };
+    int i;
+    QemuOpts *opts;
+
+    for (i = 0; i < ARRAY_SIZE(test); i++) {
+        /* reject all */
+        g_assert_cmpint(has_help_option(test[i].params), ==, false);
+
+        /* accept all */
+        opts = qemu_opts_parse(&opts_list_03, test[i].params, false,
+                               &error_abort);
+        g_assert_cmpint(qemu_opt_has_help_opt(opts), ==, true);
+        qemu_opts_del(opts);
+    }
+}
+
 static void append_verify_list_01(QemuOptDesc *desc, bool with_overlapping)
 {
     int i = 0;
@@ -1012,6 +1037,8 @@ int main(int argc, char *argv[])
     g_test_add_func("/qemu-opts/opts_parse/number", test_opts_parse_number);
     g_test_add_func("/qemu-opts/opts_parse/size", test_opts_parse_size);
     g_test_add_func("/qemu-opts/has_help_option", test_has_help_option);
+    g_test_add_func("/qemu-opts/has_help_option_with_value",
+                    test_has_help_option_with_value);
     g_test_add_func("/qemu-opts/append_to_null", test_opts_append_to_null);
     g_test_add_func("/qemu-opts/append", test_opts_append);
     g_test_add_func("/qemu-opts/to_qdict/basic", test_opts_to_qdict_basic);
