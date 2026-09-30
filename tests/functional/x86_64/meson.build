@@ -13,6 +13,7 @@ tests_x86_64_system_quick = [
   'bad_vmstate',
   'cpu_model_versions',
   'cpu_queries',
+  'kvm_gdbstub',
   'mem_addr_space',
   'migration',
   'pc_cpu_hotplug_props',
