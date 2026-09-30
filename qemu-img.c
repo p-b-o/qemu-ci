@@ -354,12 +354,15 @@ static BlockBackend *img_open(bool image_opts,
     BlockBackend *blk;
     if (image_opts) {
         QemuOpts *opts;
+        Error *err = NULL;
+
         if (fmt) {
             error_report("--image-opts and --format are mutually exclusive");
             return NULL;
         }
-        opts = qemu_opts_parse_noisily("source", filename, true);
+        opts = qemu_opts_parse("source", filename, true, &err);
         if (!opts) {
+            error_report_err(err);
             return NULL;
         }
         blk = img_open_opts(filename, opts, flags, writethrough, quiet,

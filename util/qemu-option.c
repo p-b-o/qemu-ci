@@ -995,6 +995,9 @@ QemuOpts *qemu_opts_parse_list_noisily(QemuOptsList *list, const char *params,
     Error *err = NULL;
     QemuOpts *opts;
 
+    assert(g_str_equal("drive", list->name) ||
+           !opts_accepts_any(list));
+
     opts = opts_parse(list, params, permit_abbrev, &err);
     if (!opts) {
         error_report_err(err);

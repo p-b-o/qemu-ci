@@ -1871,11 +1871,7 @@ static void object_option_parse(const char *str)
         v = qobject_input_visitor_new(obj);
         qobject_unref(obj);
     } else {
-        opts = qemu_opts_parse_noisily("object", str, true);
-        if (!opts) {
-            exit(1);
-        }
-
+        opts = qemu_opts_parse("object", str, true, &error_fatal);
         type = qemu_opt_get(opts, "qom-type");
         if (!type) {
             error_report(QERR_MISSING_PARAMETER, "qom-type");
@@ -2483,12 +2479,15 @@ static void configure_accelerators(const char *progname)
         accel_list = g_strsplit(accelerators, ":", 0);
 
         for (tmp = accel_list; *tmp; tmp++) {
+            Error *err = NULL;
             /*
              * Filter invalid accelerators here, to prevent obscenities
              * such as "-machine accel=tcg,,thread=single".
              */
             if (accel_find(*tmp)) {
-                qemu_opts_parse_noisily("accel", *tmp, true);
+                if (!qemu_opts_parse("accel", *tmp, true, &err)) {
+                    error_report_err(err);
+                }
             } else {
                 init_failed = true;
                 error_report("invalid accelerator %s", *tmp);
@@ -3013,9 +3012,7 @@ void qemu_init(int argc, char **argv)
                 replay_add_blocker("-snapshot");
                 break;
             case QEMU_OPTION_numa:
-                if (!qemu_opts_parse_noisily("numa", optarg, true)) {
-                    exit(1);
-                }
+                qemu_opts_parse("numa", optarg, true, &error_fatal);
                 break;
             case QEMU_OPTION_display:
                 parse_display(optarg);
@@ -3131,9 +3128,7 @@ void qemu_init(int argc, char **argv)
                 break;
 #ifdef CONFIG_TPM
             case QEMU_OPTION_tpmdev:
-                if (tpm_config_parse(qemu_find_opts("tpmdev"), optarg) < 0) {
-                    exit(1);
-                }
+                tpm_config_parse(qemu_find_opts("tpmdev"), optarg, &error_fatal);
                 break;
 #endif
             case QEMU_OPTION_mempath:
@@ -3396,17 +3391,11 @@ void qemu_init(int argc, char **argv)
                 object_register_sugar_prop("ide-device", "win2k-install-hack", "true", true);
                 break;
             case QEMU_OPTION_acpitable:
-                opts = qemu_opts_parse_noisily("acpi", optarg, true);
-                if (!opts) {
-                    exit(1);
-                }
+                opts = qemu_opts_parse("acpi", optarg, true, &error_fatal);
                 acpi_table_add(opts, &error_fatal);
                 break;
             case QEMU_OPTION_smbios:
-                opts = qemu_opts_parse_noisily("smbios", optarg, false);
-                if (!opts) {
-                    exit(1);
-                }
+                opts = qemu_opts_parse("smbios", optarg, false, &error_fatal);
                 smbios_entry_add(opts, &error_fatal);
                 break;
             case QEMU_OPTION_fwcfg:
@@ -3433,7 +3422,13 @@ void qemu_init(int argc, char **argv)
                     break;
                 }
             case QEMU_OPTION_accel:
-                accel_opts = qemu_opts_parse_noisily("accel", optarg, true);
+            {
+                Error *err = NULL;
+
+                accel_opts = qemu_opts_parse("accel", optarg, true, &err);
+                if (!accel_opts) {
+                    error_report_err(err);
+                }
                 optarg = qemu_opt_get(accel_opts, "accel");
                 if (!optarg || is_help_option(optarg)) {
                     printf("Accelerators supported in QEMU binary:\n");
@@ -3459,6 +3454,7 @@ void qemu_init(int argc, char **argv)
                     exit(0);
                 }
                 break;
+            }
             case QEMU_OPTION_usb:
                 qdict_put_str(machine_opts_dict, "usb", "on");
                 break;
@@ -3475,9 +3471,7 @@ void qemu_init(int argc, char **argv)
                     assert(opt->opts != NULL);
                     QTAILQ_INSERT_TAIL(&device_opts, opt, next);
                 } else {
-                    if (!qemu_opts_parse_noisily("device", optarg, true)) {
-                        exit(1);
-                    }
+                    qemu_opts_parse("device", optarg, true, &error_fatal);
                 }
                 break;
             case QEMU_OPTION_smp:

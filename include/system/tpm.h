@@ -17,7 +17,8 @@
 
 #ifdef CONFIG_TPM
 
-int tpm_config_parse(QemuOptsList *opts_list, const char *optstr);
+bool tpm_config_parse(QemuOptsList *opts_list, const char *optstr,
+                      Error **errp);
 int tpm_init(void);
 void tpm_cleanup(void);
 

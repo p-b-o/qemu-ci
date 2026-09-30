@@ -176,7 +176,7 @@ int tpm_init(void)
  * Parse the TPM configuration options.
  * To display all available TPM backends the user may use '-tpmdev help'
  */
-int tpm_config_parse(QemuOptsList *opts_list, const char *optstr)
+bool tpm_config_parse(QemuOptsList *opts_list, const char *optstr, Error **errp)
 {
     QemuOpts *opts;
 
@@ -184,11 +184,11 @@ int tpm_config_parse(QemuOptsList *opts_list, const char *optstr)
         tpm_display_backend_drivers();
         exit(EXIT_SUCCESS);
     }
-    opts = qemu_opts_parse_list_noisily(opts_list, optstr, true);
+    opts = qemu_opts_parse_list(opts_list, optstr, true, errp);
     if (!opts) {
-        return -1;
+        return false;
     }
-    return 0;
+    return true;
 }
 
 /*

@@ -883,6 +883,7 @@ static QDict *monitor_parse_arguments(MonitorHMP *mon,
             {
                 QemuOptsList *opts_list;
                 QemuOpts *opts;
+                Error *err = NULL;
 
                 opts_list = qemu_find_opts(key);
                 if (!opts_list || opts_list->desc->name) {
@@ -897,8 +898,9 @@ static QDict *monitor_parse_arguments(MonitorHMP *mon,
                 if (get_str(buf, sizeof(buf), &p) < 0) {
                     goto fail;
                 }
-                opts = qemu_opts_parse_list_noisily(opts_list, buf, true);
+                opts = qemu_opts_parse_list(opts_list, buf, true, &err);
                 if (!opts) {
+                    error_report_err(err);
                     goto fail;
                 }
                 qemu_opts_to_qdict(opts, qdict);

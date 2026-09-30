@@ -659,11 +659,8 @@ int main(int argc, char **argv)
     if ((argc - optind) == 1) {
         if (imageOpts) {
             QemuOpts *qopts = NULL;
-            qopts = qemu_opts_parse_list_noisily(&file_opts, argv[optind],
-                                                 false);
-            if (!qopts) {
-                exit(1);
-            }
+            qopts = qemu_opts_parse_list(&file_opts, argv[optind], false,
+                                         &error_fatal);
             opts = qemu_opts_to_qdict(qopts, NULL);
             if (openfile(NULL, flags, writethrough, force_share, opts)) {
                 exit(1);

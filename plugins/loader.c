@@ -147,10 +147,7 @@ void qemu_plugin_opt_parse(const char *optstr, QemuPluginList *head)
     struct qemu_plugin_parse_arg arg;
     QemuOpts *opts;
 
-    opts = qemu_opts_parse_noisily("plugin", optstr, true);
-    if (opts == NULL) {
-        exit(1);
-    }
+    opts = qemu_opts_parse("plugin", optstr, true, &error_fatal);
     arg.head = head;
     arg.curr = NULL;
     qemu_opt_foreach(opts, plugin_add, &arg, &error_fatal);
