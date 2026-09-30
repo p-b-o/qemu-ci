@@ -777,16 +777,15 @@ static void test_has_help_option_with_value(void)
     };
     int i;
     QemuOpts *opts;
+    Error *err = NULL;
 
     for (i = 0; i < ARRAY_SIZE(test); i++) {
         /* reject all */
         g_assert_cmpint(has_help_option(test[i].params), ==, false);
 
-        /* accept all */
-        opts = qemu_opts_parse(&opts_list_03, test[i].params, false,
-                               &error_abort);
-        g_assert_cmpint(qemu_opt_has_help_opt(opts), ==, true);
-        qemu_opts_del(opts);
+        opts = qemu_opts_parse(&opts_list_03, test[i].params, false, &err);
+        error_free_or_abort(&err);
+        g_assert(!opts);
     }
 }
 

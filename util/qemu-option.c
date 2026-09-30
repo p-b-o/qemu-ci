@@ -331,7 +331,7 @@ bool qemu_opt_has_help_opt(QemuOpts *opts)
     QemuOpt *opt;
 
     QTAILQ_FOREACH_REVERSE(opt, &opts->head, next) {
-        if (is_help_option(opt->name)) {
+        if (opt->is_help) {
             return true;
         }
     }
@@ -499,6 +499,7 @@ static QemuOpt *opt_create(QemuOpts *opts, const char *name, char *value)
     opt->name = g_strdup(name);
     opt->str = value;
     opt->opts = opts;
+    opt->is_help = is_help_option(name);
     QTAILQ_INSERT_TAIL(&opts->head, opt, next);
 
     return opt;
@@ -760,12 +761,10 @@ void qemu_opts_print(QemuOpts *opts, const char *separator)
 
 static const char *get_opt_name_value(const char *params,
                                       const char *firstname,
-                                      bool *help_wanted,
                                       char **name, char **value)
 {
     const char *p;
     size_t len;
-    bool is_help = false;
 
     len = strcspn(params, "=,");
     if (params[len] != '=') {
@@ -776,22 +775,6 @@ static const char *get_opt_name_value(const char *params,
             p = get_opt_value(params, value);
         } else {
             p = get_opt_name(params, name, len);
-
-            /*
-             * Short-form flags (i.e. without any value) are not
-             * supported, except for two cases:
-             */
-
-            /* the 'help' or '?' flag */
-            is_help = is_help_option(*name);
-            if (is_help) {
-                *value = g_strdup("on");
-            }
-
-            /* a missing, non-implicit key, i.e. a single comma ',' */
-            if (g_str_equal(*name, "") && *p == ',') {
-                *value = g_strdup("on");
-            }
         }
     } else {
         /* found "foo=bar,more" */
@@ -802,18 +785,46 @@ static const char *get_opt_name_value(const char *params,
     }
 
     assert(!*p || *p == ',');
-    if (help_wanted && is_help) {
-        *help_wanted = true;
-    }
     if (*p == ',') {
         p++;
     }
     return p;
 }
 
+/*
+ * Short-form parameters (i.e. without any value) are not
+ * supported, except for two cases:
+ *
+ * - the 'help' or '?' flag
+ * - the empty, non-implicit key combined with an empty
+ *   non-implicit value, i.e. a single comma ','
+ *
+ * The rest of the code is not prepared to deal with empty values, set
+ * the special cases to "on".
+ */
+static bool opt_short_form_compat(QemuOpt *opt, Error **errp)
+{
+    if (opt->str) {
+        /*
+         * Validate the 'help' parameter at this point because the
+         * opt_validate() routine can be reentrant and this very check
+         * would fail once the "on" value is set below.
+         */
+        if (opt->is_help) {
+            error_setg(errp, "Parameter '%s' doesn't take any values",
+                       opt->name);
+            return false;
+        }
+    } else {
+        if (opt->is_help || g_str_equal(opt->name, "")) {
+            opt->str = g_strdup("on");
+        }
+    }
+    return true;
+}
+
 static bool opts_do_parse(QemuOpts *opts, const char *params,
-                          const char *firstname,
-                          bool *help_wanted, Error **errp)
+                          const char *firstname, Error **errp)
 {
     const char *p;
     QemuOpt *opt;
@@ -822,10 +833,7 @@ static bool opts_do_parse(QemuOpts *opts, const char *params,
         g_autofree char *option = NULL;
         g_autofree char *value = NULL;
 
-        p = get_opt_name_value(p, firstname, help_wanted, &option, &value);
-        if (help_wanted && *help_wanted) {
-            return false;
-        }
+        p = get_opt_name_value(p, firstname, &option, &value);
         firstname = NULL;
 
         if (!strcmp(option, "id")) {
@@ -833,9 +841,14 @@ static bool opts_do_parse(QemuOpts *opts, const char *params,
         }
 
         opt = opt_create(opts, option, g_steal_pointer(&value));
-        if (!opt_validate(opt, errp)) {
+        if (!opt_short_form_compat(opt, errp) ||
+            !opt_validate(opt, errp)) {
             qemu_opt_del(opt);
             return false;
+        }
+
+        if (opt->is_help) {
+            return true;
         }
     }
 
@@ -850,8 +863,9 @@ static char *opts_parse_id(const char *params)
         g_autofree char *name = NULL;
         g_autofree char *value = NULL;
 
-        p = get_opt_name_value(p, NULL, NULL, &name, &value);
+        p = get_opt_name_value(p, NULL, &name, &value);
         if (!strcmp(name, "id")) {
+            assert(value);
             return g_steal_pointer(&value);
         }
     }
@@ -862,14 +876,13 @@ static char *opts_parse_id(const char *params)
 bool has_help_option(const char *params)
 {
     const char *p;
-    bool ret = false;
 
     for (p = params; *p;) {
         g_autofree char *name = NULL;
         g_autofree char *value = NULL;
 
-        p = get_opt_name_value(p, NULL, &ret, &name, &value);
-        if (ret) {
+        p = get_opt_name_value(p, NULL, &name, &value);
+        if (is_help_option(name) && !value) {
             return true;
         }
     }
@@ -886,11 +899,11 @@ bool has_help_option(const char *params)
 bool qemu_opts_do_parse(QemuOpts *opts, const char *params,
                        const char *firstname, Error **errp)
 {
-    return opts_do_parse(opts, params, firstname, NULL, errp);
+    return opts_do_parse(opts, params, firstname, errp);
 }
 
 static QemuOpts *opts_parse(QemuOptsList *list, const char *params,
-                            bool permit_abbrev, bool *help_wanted, Error **errp)
+                            bool permit_abbrev, Error **errp)
 {
     const char *firstname;
     char *id = opts_parse_id(params);
@@ -905,7 +918,7 @@ static QemuOpts *opts_parse(QemuOptsList *list, const char *params,
         return NULL;
     }
 
-    if (!opts_do_parse(opts, params, firstname, help_wanted, errp)) {
+    if (!opts_do_parse(opts, params, firstname, errp)) {
         qemu_opts_del(opts);
         return NULL;
     }
@@ -923,7 +936,7 @@ static QemuOpts *opts_parse(QemuOptsList *list, const char *params,
 QemuOpts *qemu_opts_parse(QemuOptsList *list, const char *params,
                           bool permit_abbrev, Error **errp)
 {
-    return opts_parse(list, params, permit_abbrev, NULL, errp);
+    return opts_parse(list, params, permit_abbrev, errp);
 }
 
 /**
@@ -939,17 +952,16 @@ QemuOpts *qemu_opts_parse_noisily(QemuOptsList *list, const char *params,
 {
     Error *err = NULL;
     QemuOpts *opts;
-    bool help_wanted = false;
 
-    opts = opts_parse(list, params, permit_abbrev,
-                      opts_accepts_any(list) ? NULL : &help_wanted, &err);
+    opts = opts_parse(list, params, permit_abbrev, &err);
     if (!opts) {
-        assert(!!err + !!help_wanted == 1);
-        if (help_wanted) {
-            qemu_opts_print_help(list, true);
-        } else {
-            error_report_err(err);
-        }
+        error_report_err(err);
+        return NULL;
+    }
+
+    if (qemu_opt_has_help_opt(opts) && !opts_accepts_any(list)) {
+        qemu_opts_print_help(list, true);
+        return NULL;
     }
     return opts;
 }

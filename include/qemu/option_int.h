@@ -32,6 +32,7 @@
 struct QemuOpt {
     char *name;
     char *str;
+    bool is_help;
 
     const QemuOptDesc *desc;
     union {
