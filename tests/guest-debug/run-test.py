@@ -28,6 +28,7 @@ def get_args():
     parser.add_argument("--kargs", help="Kernel args to --append")
     parser.add_argument("--binary", help="Binary to debug",
                         required=True)
+    parser.add_argument("--symbols", help="Symbol file for binary to debug")
     parser.add_argument("--test", help="GDB test script")
     parser.add_argument('test_args', nargs='*',
                         help="Additional args for GDB test script. "
@@ -114,6 +115,10 @@ if __name__ == '__main__':
     gdb_cmd += " -ex 'set confirm off'"
     # connect to remote
     gdb_cmd += " -ex 'target remote %s'" % (socket_name)
+
+    if args.symbols:
+        gdb_cmd += " -ex 'symbol-file %s'" % args.symbols
+
     # finally the test script itself
     if args.test:
         if args.test_args:
