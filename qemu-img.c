@@ -2383,8 +2383,8 @@ static int img_convert(const img_cmd_t *ccmd, int argc, char **argv)
             break;
         case 'l':
             if (strstart(optarg, SNAPSHOT_OPT_BASE, NULL)) {
-                sn_opts = qemu_opts_parse_noisily(&internal_snapshot_opts,
-                                                  optarg, false);
+                sn_opts = qemu_opts_parse_list_noisily(&internal_snapshot_opts,
+                                                       optarg, false);
                 if (!sn_opts) {
                     error_report("Failed in parsing snapshot param '%s'",
                                  optarg);
@@ -5768,8 +5768,8 @@ static int img_measure(const img_cmd_t *ccmd, int argc, char **argv)
             break;
         case 'l':
             if (strstart(optarg, SNAPSHOT_OPT_BASE, NULL)) {
-                sn_opts = qemu_opts_parse_noisily(&internal_snapshot_opts,
-                                                  optarg, false);
+                sn_opts = qemu_opts_parse_list_noisily(&internal_snapshot_opts,
+                                                       optarg, false);
                 if (!sn_opts) {
                     error_report("Failed in parsing snapshot param '%s'",
                                  optarg);

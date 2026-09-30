@@ -283,8 +283,8 @@ static void process_options(int argc, char *argv[], bool pre_init_pass)
         case OPTION_CHARDEV:
             {
                 /* TODO This interface is not stable until we QAPIfy it */
-                QemuOpts *opts = qemu_opts_parse_noisily(&qemu_chardev_opts,
-                                                         optarg, true);
+                QemuOpts *opts = qemu_opts_parse_list_noisily(
+                    &qemu_chardev_opts, optarg, true);
                 if (opts == NULL) {
                     exit(EXIT_FAILURE);
                 }

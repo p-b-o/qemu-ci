@@ -377,7 +377,7 @@ setup_vnc_opts(const char *vnc_addr, const char *tls_creds_dir,
         g_string_append(opts_str, ",non-adaptive=on");
     }
 
-    opts = qemu_opts_parse_noisily(olist, opts_str->str, true);
+    opts = qemu_opts_parse_list_noisily(olist, opts_str->str, true);
     if (!opts) {
         return false;
     }

@@ -63,7 +63,7 @@ static void hmp_drive_add_node(MonitorHMP *hmp, const char *optstr)
     QDict *qdict;
     Error *err = NULL;
 
-    opts = qemu_opts_parse_noisily(&qemu_drive_opts, optstr, false);
+    opts = qemu_opts_parse_list_noisily(&qemu_drive_opts, optstr, false);
     if (!opts) {
         return;
     }

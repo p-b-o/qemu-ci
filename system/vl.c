@@ -3277,7 +3277,7 @@ void qemu_init(int argc, char **argv)
                     error_report("fsdev support is disabled");
                     exit(1);
                 }
-                if (!qemu_opts_parse_noisily(olist, optarg, true)) {
+                if (!qemu_opts_parse_list_noisily(olist, optarg, true)) {
                     exit(1);
                 }
                 break;
@@ -3292,7 +3292,7 @@ void qemu_init(int argc, char **argv)
                     error_report("virtfs support is disabled");
                     exit(1);
                 }
-                opts = qemu_opts_parse_noisily(olist, optarg, true);
+                opts = qemu_opts_parse_list_noisily(olist, optarg, true);
                 if (!opts) {
                     exit(1);
                 }
@@ -3644,7 +3644,7 @@ void qemu_init(int argc, char **argv)
                     exit(1);
                 }
 
-                opts = qemu_opts_parse_noisily(olist, optarg, true);
+                opts = qemu_opts_parse_list_noisily(olist, optarg, true);
                 if (!opts) {
                     exit(1);
                 }
