@@ -1754,7 +1754,7 @@ int vhost_dev_init(struct vhost_dev *hdev, void *opaque,
         error_append_hint(errp, "Try plugging this vhost backend before"
             " plugging such memory devices.\n");
         r = -EINVAL;
-        goto fail;
+        goto fail_owner;
     }
 
     for (i = 0; i < hdev->nvqs; ++i, ++n_initialized_vqs) {
@@ -1762,7 +1762,7 @@ int vhost_dev_init(struct vhost_dev *hdev, void *opaque,
                                  busyloop_timeout);
         if (r < 0) {
             error_setg_errno(errp, -r, "Failed to initialize virtqueue %d", i);
-            goto fail;
+            goto fail_owner;
         }
     }
 
@@ -1799,7 +1799,7 @@ int vhost_dev_init(struct vhost_dev *hdev, void *opaque,
     if (hdev->migration_blocker != NULL) {
         r = migrate_add_blocker_normal(&hdev->migration_blocker, errp);
         if (r < 0) {
-            goto fail;
+            goto fail_owner;
         }
     }
 
@@ -1831,7 +1831,7 @@ int vhost_dev_init(struct vhost_dev *hdev, void *opaque,
                    " than current number of used (%d) and reserved (%d)"
                    " memory slots for memory devices.", limit, used, reserved);
         r = -EINVAL;
-        goto fail;
+        goto fail_owner;
     }
 
     hdev->initialized = true;
@@ -1840,6 +1840,8 @@ int vhost_dev_init(struct vhost_dev *hdev, void *opaque,
 
     return 0;
 
+fail_owner:
+    vhost_dev_reset_owner(hdev);
 fail:
     hdev->nvqs = n_initialized_vqs;
     vhost_dev_cleanup(hdev);
