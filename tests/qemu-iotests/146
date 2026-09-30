@@ -165,7 +165,7 @@ echo
 echo === Testing Image create, force_size ===
 echo
 
-_make_test_img -o force_size 4G
+_make_test_img -o force_size=on 4G
 
 echo
 echo === Read created image, default opts ====

@@ -516,36 +516,6 @@ static void test_inet_parse_all_options_good(void)
         , &exp_addr, true);
 }
 
-static void test_inet_parse_all_implicit_bool_good(void)
-{
-    char host[] = "::1";
-    char port[] = "5000";
-    InetSocketAddress exp_addr = {
-        .host = host,
-        .port = port,
-        .has_numeric = true,
-        .numeric =  true,
-        .has_to = true,
-        .to = 5006,
-        .has_ipv4 = true,
-        .ipv4 = true,
-        .has_ipv6 = true,
-        .ipv6 = true,
-        .has_keep_alive = true,
-        .keep_alive = true,
-#ifdef HAVE_IPPROTO_MPTCP
-        .has_mptcp = true,
-        .mptcp = true,
-#endif
-    };
-    inet_parse_test_helper(
-        "[::1]:5000,numeric,to=5006,ipv4,ipv6,keep-alive"
-#ifdef HAVE_IPPROTO_MPTCP
-        ",mptcp"
-#endif
-        , &exp_addr, true);
-}
-
 int main(int argc, char **argv)
 {
     bool has_ipv4, has_ipv6;
@@ -613,9 +583,6 @@ int main(int argc, char **argv)
                     test_inet_parse_hostname_good);
     g_test_add_func("/util/socket/inet-parse/all-options-good",
                     test_inet_parse_all_options_good);
-    g_test_add_func("/util/socket/inet-parse/all-bare-bool-good",
-                    test_inet_parse_all_implicit_bool_good);
-
 end:
     return g_test_run();
 }

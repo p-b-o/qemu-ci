@@ -51,7 +51,7 @@ bii_offset=384 # block in image field offset
 echo
 echo "=== Statically allocated image creation ==="
 echo
-_make_test_img $size -o static
+_make_test_img $size -o static=on
 _img_info
 stat -c"disk image file size in bytes: %s" "${TEST_IMG}"
 _cleanup_test_img

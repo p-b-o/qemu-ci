@@ -481,26 +481,10 @@ static void test_opts_parse(void)
     error_free_or_abort(&err);
     g_assert(!opts);
 
-    /* Implied value (qemu_opts_parse warns but accepts it) */
-    opts = qemu_opts_parse(&opts_list_03, "an,noaus,noaus=",
-                           false, &error_abort);
-    g_assert_cmpuint(opts_count(opts), ==, 3);
-    g_assert_cmpstr(qemu_opt_get(opts, "an"), ==, "on");
-    g_assert_cmpstr(qemu_opt_get(opts, "aus"), ==, "off");
-    g_assert_cmpstr(qemu_opt_get(opts, "noaus"), ==, "");
-
-    /* Implied value, negated empty key */
-    opts = qemu_opts_parse(&opts_list_03, "no", false, &error_abort);
-    g_assert_cmpuint(opts_count(opts), ==, 1);
-    g_assert_cmpstr(qemu_opt_get(opts, ""), ==, "off");
-
     /* Implied key */
-    opts = qemu_opts_parse(&opts_list_03, "an,noaus,noaus=", true,
-                           &error_abort);
-    g_assert_cmpuint(opts_count(opts), ==, 3);
+    opts = qemu_opts_parse(&opts_list_03, "an", true, &error_abort);
+    g_assert_cmpuint(opts_count(opts), ==, 1);
     g_assert_cmpstr(qemu_opt_get(opts, "implied"), ==, "an");
-    g_assert_cmpstr(qemu_opt_get(opts, "aus"), ==, "off");
-    g_assert_cmpstr(qemu_opt_get(opts, "noaus"), ==, "");
 
     /* Implied key with empty value */
     opts = qemu_opts_parse(&opts_list_03, ",", true, &error_abort);
@@ -522,6 +506,45 @@ static void test_opts_parse(void)
     opts = qemu_opts_parse(&opts_list_01, "nonexistent=", false, &err);
     error_free_or_abort(&err);
     g_assert(!opts);
+
+    /* Implied value */
+    opts = qemu_opts_parse(&opts_list_03, "an", false, &err);
+    error_free_or_abort(&err);
+    g_assert(!opts);
+
+    /* Implied value, unknown key */
+    opts = qemu_opts_parse(&opts_list_01, "nonexistent", false, &err);
+    error_free_or_abort(&err);
+    g_assert(!opts);
+
+    /* Implied value, negated key */
+    opts = qemu_opts_parse(&opts_list_03, "noaus", false, &err);
+    error_free_or_abort(&err);
+    g_assert(!opts);
+
+    /* Implied value, negated empty key */
+    opts = qemu_opts_parse(&opts_list_03, "no", false, &err);
+    error_free_or_abort(&err);
+    g_assert(!opts);
+
+    /* Empty value */
+    opts = qemu_opts_parse(&opts_list_03, "aus=", false, &error_abort);
+    g_assert_cmpuint(opts_count(opts), ==, 1);
+
+    /* Implied key */
+    opts = qemu_opts_parse(&opts_list_03, "an", true, &error_abort);
+    g_assert_cmpuint(opts_count(opts), ==, 1);
+
+    /* Implied key, implied value */
+    opts = qemu_opts_parse(&opts_list_03, "an,noaus,noaus=", true, &err);
+    error_free_or_abort(&err);
+    g_assert(!opts);
+
+    /* Implied key, empty value */
+    opts = qemu_opts_parse(&opts_list_03, "an,noaus=", true, &error_abort);
+    g_assert_cmpuint(opts_count(opts), ==, 2);
+    g_assert_cmpstr(qemu_opt_get(opts, "implied"), ==, "an");
+    g_assert_cmpstr(qemu_opt_get(opts, "noaus"), ==, "");
 
     qemu_opts_reset(&opts_list_01);
     qemu_opts_reset(&opts_list_03);
@@ -720,16 +743,8 @@ static void test_has_help_option(void)
     } test[] = {
         { "help", true, false },
         { "?", true, false },
-        { "helpme", false, false },
-        { "?me", false, false },
-        { "a,help", true, true },
-        { "a,?", true, true },
-        { "a=0,help,b", true, true },
-        { "a=0,?,b", true, true },
         { "help,b=1", true, false },
         { "?,b=1", true, false },
-        { "a,b,,help", true, true },
-        { "a,b,,?", true, true },
     };
     int i;
     QemuOpts *opts;
