@@ -203,7 +203,7 @@ QemuOpts *drive_add(BlockInterfaceType type, int index, const char *file,
 
     GLOBAL_STATE_CODE();
 
-    opts = qemu_opts_parse_noisily(qemu_find_opts("drive"), optstr, false);
+    opts = qemu_opts_parse_noisily("drive", optstr, false);
     if (!opts) {
         return NULL;
     }

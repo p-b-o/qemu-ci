@@ -101,7 +101,7 @@ void hmp_drive_add(MonitorHMP *hmp, const QDict *qdict)
         return;
     }
 
-    opts = qemu_opts_parse_noisily(qemu_find_opts("drive"), optstr, false);
+    opts = qemu_opts_parse_noisily("drive", optstr, false);
     if (!opts)
         return;
 

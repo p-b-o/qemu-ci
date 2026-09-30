@@ -1210,8 +1210,7 @@ static void char_socket_server_test(gconstpointer opaque)
                                          config->fd_pass,
                                          NULL,
                                          true);
-    opts = qemu_opts_parse_noisily(qemu_find_opts("chardev"),
-                                   optstr, true);
+    opts = qemu_opts_parse_noisily("chardev", optstr, true);
     g_assert_nonnull(opts);
     chr = qemu_chr_new_from_opts(opts, NULL, &error_abort);
     qemu_opts_del(opts);
@@ -1352,8 +1351,7 @@ static void char_socket_client_dupid_test(gconstpointer opaque)
                                          config->reconnect,
                                          false);
 
-    opts = qemu_opts_parse_noisily(qemu_find_opts("chardev"),
-                                   optstr, true);
+    opts = qemu_opts_parse_noisily("chardev", optstr, true);
     g_assert_nonnull(opts);
     chr1 = qemu_chr_new_from_opts(opts, NULL, &error_abort);
     g_assert_nonnull(chr1);
@@ -1412,8 +1410,7 @@ static void char_socket_client_test(gconstpointer opaque)
                                          config->reconnect,
                                          false);
 
-    opts = qemu_opts_parse_noisily(qemu_find_opts("chardev"),
-                                   optstr, true);
+    opts = qemu_opts_parse_noisily("chardev", optstr, true);
     g_assert_nonnull(opts);
     chr = qemu_chr_new_from_opts(opts, NULL, &error_abort);
     qemu_opts_del(opts);
@@ -1544,8 +1541,7 @@ static void char_socket_server_two_clients_test(gconstpointer opaque)
                                          false,
                                          NULL,
                                          true);
-    opts = qemu_opts_parse_noisily(qemu_find_opts("chardev"),
-                                   optstr, true);
+    opts = qemu_opts_parse_noisily("chardev", optstr, true);
     g_assert_nonnull(opts);
     chr = qemu_chr_new_from_opts(opts, NULL, &error_abort);
     qemu_opts_del(opts);

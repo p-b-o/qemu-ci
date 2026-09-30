@@ -1871,8 +1871,7 @@ static void object_option_parse(const char *str)
         v = qobject_input_visitor_new(obj);
         qobject_unref(obj);
     } else {
-        opts = qemu_opts_parse_noisily(qemu_find_opts("object"),
-                                       str, true);
+        opts = qemu_opts_parse_noisily("object", str, true);
         if (!opts) {
             exit(1);
         }
@@ -1898,8 +1897,7 @@ static void overcommit_parse(const char *str)
     QemuOpts *opts;
     const char *mem_lock_opt;
 
-    opts = qemu_opts_parse_noisily(qemu_find_opts("overcommit"),
-                                   str, false);
+    opts = qemu_opts_parse_noisily("overcommit", str, false);
     if (!opts) {
         exit(1);
     }
@@ -2490,7 +2488,7 @@ static void configure_accelerators(const char *progname)
              * such as "-machine accel=tcg,,thread=single".
              */
             if (accel_find(*tmp)) {
-                qemu_opts_parse_noisily(qemu_find_opts("accel"), *tmp, true);
+                qemu_opts_parse_noisily("accel", *tmp, true);
             } else {
                 init_failed = true;
                 error_report("invalid accelerator %s", *tmp);
@@ -2990,8 +2988,7 @@ void qemu_init(int argc, char **argv)
                     break;
                 }
             case QEMU_OPTION_drive:
-                if (!qemu_opts_parse_noisily(qemu_find_opts("drive"),
-                                             optarg, false)) {
+                if (!qemu_opts_parse_noisily("drive", optarg, false)) {
                     exit(1);
                 }
                 break;
@@ -3016,8 +3013,7 @@ void qemu_init(int argc, char **argv)
                 replay_add_blocker("-snapshot");
                 break;
             case QEMU_OPTION_numa:
-                if (!qemu_opts_parse_noisily(qemu_find_opts("numa"),
-                                             optarg, true)) {
+                if (!qemu_opts_parse_noisily("numa", optarg, true)) {
                     exit(1);
                 }
                 break;
@@ -3076,8 +3072,7 @@ void qemu_init(int argc, char **argv)
                 break;
 #ifdef CONFIG_LIBISCSI
             case QEMU_OPTION_iscsi:
-                if (!qemu_opts_parse_noisily(qemu_find_opts("iscsi"),
-                                             optarg, false)) {
+                if (!qemu_opts_parse_noisily("iscsi", optarg, false)) {
                     exit(1);
                 }
                 break;
@@ -3130,8 +3125,7 @@ void qemu_init(int argc, char **argv)
                 exit(0);
                 break;
             case QEMU_OPTION_m:
-                if (!qemu_opts_parse_noisily(qemu_find_opts("memory"),
-                                             optarg, true)) {
+                if (!qemu_opts_parse_noisily("memory", optarg, true)) {
                     exit(1);
                 }
                 break;
@@ -3259,15 +3253,13 @@ void qemu_init(int argc, char **argv)
                     "See '-object' docs in the QEMU manual for further "
                     "configuration guidance: "
                     "https://www.qemu.org/docs/master/system/invocation.html");
-                if (!qemu_opts_parse_noisily(qemu_find_opts("mon"), optarg,
-                                             true)) {
+                if (!qemu_opts_parse_noisily("mon", optarg, true)) {
                     exit(1);
                 }
                 default_monitor = 0;
                 break;
             case QEMU_OPTION_chardev:
-                if (!qemu_opts_parse_noisily(qemu_find_opts("chardev"),
-                                             optarg, true)) {
+                if (!qemu_opts_parse_noisily("chardev", optarg, true)) {
                     exit(1);
                 }
                 break;
@@ -3371,9 +3363,8 @@ void qemu_init(int argc, char **argv)
                 }
                 break;
             case QEMU_OPTION_action:
-                olist = qemu_find_opts("action");
-                if (!qemu_opts_parse_noisily(olist, optarg, false)) {
-                     exit(1);
+                if (!qemu_opts_parse_noisily("action", optarg, false)) {
+                    exit(1);
                 }
                 break;
             case QEMU_OPTION_watchdog_action: {
@@ -3405,24 +3396,21 @@ void qemu_init(int argc, char **argv)
                 object_register_sugar_prop("ide-device", "win2k-install-hack", "true", true);
                 break;
             case QEMU_OPTION_acpitable:
-                opts = qemu_opts_parse_noisily(qemu_find_opts("acpi"),
-                                               optarg, true);
+                opts = qemu_opts_parse_noisily("acpi", optarg, true);
                 if (!opts) {
                     exit(1);
                 }
                 acpi_table_add(opts, &error_fatal);
                 break;
             case QEMU_OPTION_smbios:
-                opts = qemu_opts_parse_noisily(qemu_find_opts("smbios"),
-                                               optarg, false);
+                opts = qemu_opts_parse_noisily("smbios", optarg, false);
                 if (!opts) {
                     exit(1);
                 }
                 smbios_entry_add(opts, &error_fatal);
                 break;
             case QEMU_OPTION_fwcfg:
-                if (!qemu_opts_parse_noisily(qemu_find_opts("fw_cfg"),
-                                             optarg, true)) {
+                if (!qemu_opts_parse_noisily("fw_cfg", optarg, true)) {
                     exit(1);
                 }
                 break;
@@ -3445,8 +3433,7 @@ void qemu_init(int argc, char **argv)
                     break;
                 }
             case QEMU_OPTION_accel:
-                accel_opts = qemu_opts_parse_noisily(qemu_find_opts("accel"),
-                                                     optarg, true);
+                accel_opts = qemu_opts_parse_noisily("accel", optarg, true);
                 optarg = qemu_opt_get(accel_opts, "accel");
                 if (!optarg || is_help_option(optarg)) {
                     printf("Accelerators supported in QEMU binary:\n");
@@ -3488,8 +3475,7 @@ void qemu_init(int argc, char **argv)
                     assert(opt->opts != NULL);
                     QTAILQ_INSERT_TAIL(&device_opts, opt, next);
                 } else {
-                    if (!qemu_opts_parse_noisily(qemu_find_opts("device"),
-                                                 optarg, true)) {
+                    if (!qemu_opts_parse_noisily("device", optarg, true)) {
                         exit(1);
                     }
                 }
@@ -3505,12 +3491,10 @@ void qemu_init(int argc, char **argv)
                 break;
 #endif
             case QEMU_OPTION_no_reboot:
-                olist = qemu_find_opts("action");
-                qemu_opts_parse_noisily(olist, "reboot=shutdown", false);
+                qemu_opts_parse_noisily("action", "reboot=shutdown", false);
                 break;
             case QEMU_OPTION_no_shutdown:
-                olist = qemu_find_opts("action");
-                qemu_opts_parse_noisily(olist, "shutdown=pause", false);
+                qemu_opts_parse_noisily("action", "shutdown=pause", false);
                 break;
             case QEMU_OPTION_uuid:
                 if (qemu_uuid_parse(optarg, &qemu_uuid) < 0) {
@@ -3524,8 +3508,7 @@ void qemu_init(int argc, char **argv)
                     error_report("too many option ROMs");
                     exit(1);
                 }
-                opts = qemu_opts_parse_noisily(qemu_find_opts("option-rom"),
-                                               optarg, true);
+                opts = qemu_opts_parse_noisily("option-rom", optarg, true);
                 if (!opts) {
                     exit(1);
                 }
@@ -3547,8 +3530,7 @@ void qemu_init(int argc, char **argv)
                 }
                 break;
             case QEMU_OPTION_name:
-                opts = qemu_opts_parse_noisily(qemu_find_opts("name"),
-                                               optarg, true);
+                opts = qemu_opts_parse_noisily("name", optarg, true);
                 if (!opts) {
                     exit(1);
                 }
@@ -3564,15 +3546,13 @@ void qemu_init(int argc, char **argv)
                 nb_prom_envs++;
                 break;
             case QEMU_OPTION_rtc:
-                opts = qemu_opts_parse_noisily(qemu_find_opts("rtc"), optarg,
-                                               false);
+                opts = qemu_opts_parse_noisily("rtc", optarg, false);
                 if (!opts) {
                     exit(1);
                 }
                 break;
             case QEMU_OPTION_icount:
-                icount_opts = qemu_opts_parse_noisily(qemu_find_opts("icount"),
-                                                      optarg, true);
+                icount_opts = qemu_opts_parse_noisily("icount", optarg, true);
                 if (!icount_opts) {
                     exit(1);
                 }
@@ -3621,7 +3601,7 @@ void qemu_init(int argc, char **argv)
                 break;
 #ifdef CONFIG_SPICE
             case QEMU_OPTION_spice:
-                opts = qemu_opts_parse_noisily(qemu_find_opts("spice"), optarg, false);
+                opts = qemu_opts_parse_noisily("spice", optarg, false);
                 if (!opts) {
                     exit(1);
                 }
@@ -3651,8 +3631,7 @@ void qemu_init(int argc, char **argv)
                 break;
             case QEMU_OPTION_add_fd:
 #ifndef _WIN32
-                opts = qemu_opts_parse_noisily(qemu_find_opts("add-fd"),
-                                               optarg, false);
+                opts = qemu_opts_parse_noisily("add-fd", optarg, false);
                 if (!opts) {
                     exit(1);
                 }
@@ -3684,8 +3663,7 @@ void qemu_init(int argc, char **argv)
                     break;
                 }
             case QEMU_OPTION_msg:
-                opts = qemu_opts_parse_noisily(qemu_find_opts("msg"), optarg,
-                                               false);
+                opts = qemu_opts_parse_noisily("msg", optarg, false);
                 if (!opts) {
                     exit(1);
                 }
@@ -3715,8 +3693,7 @@ void qemu_init(int argc, char **argv)
                 break;
             case QEMU_OPTION_run_with: {
                 const char *str;
-                opts = qemu_opts_parse_noisily(qemu_find_opts("run-with"),
-                                                         optarg, false);
+                opts = qemu_opts_parse_noisily("run-with", optarg, false);
                 if (!opts) {
                     exit(1);
                 }

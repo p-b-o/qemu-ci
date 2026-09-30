@@ -83,7 +83,7 @@ void hmp_chardev_add(MonitorHMP *hmp, const QDict *qdict)
     Error *err = NULL;
     QemuOpts *opts;
 
-    opts = qemu_opts_parse_noisily(qemu_find_opts("chardev"), args, true);
+    opts = qemu_opts_parse_noisily("chardev", args, true);
     if (opts == NULL) {
         error_setg(&err, "Parsing chardev args failed");
     } else {
@@ -100,8 +100,7 @@ void hmp_chardev_change(MonitorHMP *hmp, const QDict *qdict)
     Error *err = NULL;
     ChardevBackend *backend = NULL;
     ChardevReturn *ret = NULL;
-    QemuOpts *opts = qemu_opts_parse_noisily(qemu_find_opts("chardev"), args,
-                                             true);
+    QemuOpts *opts = qemu_opts_parse_noisily("chardev", args, true);
     if (!opts) {
         error_setg(&err, "Parsing chardev args failed");
         goto end;
