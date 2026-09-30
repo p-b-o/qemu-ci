@@ -966,6 +966,20 @@ QemuOpts *qemu_opts_parse_list(QemuOptsList *list, const char *params,
 QemuOpts *qemu_opts_parse_noisily(QemuOptsList *list, const char *params,
                                   bool permit_abbrev)
 {
+    return qemu_opts_parse_list_noisily(list, params, permit_abbrev);
+}
+
+/**
+ * Create a QemuOpts in @list and with options parsed from @params.
+ * If @permit_abbrev, the first key=value in @params may omit key=,
+ * and is treated as if key was @list->implied_opt_name.
+ * Report errors with error_report_err().  This is inappropriate in
+ * QMP context.  Do not use this function there!
+ * Return the new QemuOpts on success, null pointer on error.
+ */
+QemuOpts *qemu_opts_parse_list_noisily(QemuOptsList *list, const char *params,
+                                       bool permit_abbrev)
+{
     Error *err = NULL;
     QemuOpts *opts;
 
