@@ -1,0 +1,60 @@
+Looking up 20261001-rv-dedup-v1-0-ea69b07afd31@rev.ng
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 20 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH 1/18] target/riscv: Make internals.h target agnostic
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-1-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 2/18] target/riscv: meson, add user and common system source sets
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-2-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 3/18] target/riscv: Move pmu CSR read to csr.h
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-3-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 4/18] target/riscv: Make debug.c target agnostic
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-4-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 5/18] target/riscv: Widen CSR ops to 64-bit and compile once for system-mode
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-5-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 6/18] target/riscv: Runtime CPU registration
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-6-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 7/18] target/riscv: Runtime register MAX and BARE CPUs
+    + Signed-off-by: Yonggang Luo <luoyonggang@gmail.com> ([32m✓[0m DKIM/gmail.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-7-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 8/18] target/riscv: cpu.c unconditionally check larger MXL
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-8-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 9/18] target/riscv: Stub KVM functions for machines.c/cpu.c
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-9-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 10/18] target/riscv: Compile cpu.c once for system-mode
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-10-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 11/18] target/riscv: Compile cpu_helper.c once for system-mode
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-11-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 12/18] target/riscv: Compile tcg-cpu.c once for system-mode
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-12-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 13/18] target/riscv: Compile riscv-qmp-cmds.c once
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-13-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 14/18] target/riscv: Compile pmp.c once
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-14-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 15/18] target/riscv: Compile arch_dump.c once
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-15-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 16/18] target/riscv: Compile machine.c once
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-16-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 17/18] target/riscv: Compile time_helper.c once
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-17-ea69b07afd31@rev.ng
+  [31m✗[0m [PATCH 18/18] target/riscv: Compile monitor.c once
+    + Link: https://lore.kernel.org/qemu-devel/20261001-rv-dedup-v1-18-ea69b07afd31@rev.ng
+  ---
+  [31m✗[0m No key: ed25519/anjo@rev.ng
+  [31m✗[0m BADSIG: DKIM/rev.ng
+---
+Total patches: 18
+---
+Applying: target/riscv: Make internals.h target agnostic
+Patch failed at 0001 target/riscv: Make internals.h target agnostic
+error: patch failed: target/riscv/internals.h:20
+error: target/riscv/internals.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
