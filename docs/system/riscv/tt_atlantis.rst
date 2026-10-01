@@ -13,7 +13,21 @@ tt-atlantis QEMU model features
 
 * 8-core Ascalon-X CPU Cluster
 * RISC-V compliant Advanced Interrupt Architecture
-* 16550A compatible UART
+* DW8250 compatible UART x5
+
+Boot options
+----------------
+
+ * ``console`` to change the UART which is on the first serial interface.
+   Most users will be intersted in the Ascalon boot console ``UART1`` but
+   Ascalon has 5 UARTs and this may not always be the case. The RCPU console
+   is on ``UART0``.
+
+To change the serial console and use device ``UART3``
+
+.. code-block:: bash
+
+  -M tt-atlantis,console=3
 
 Known limitations
 -----------------
@@ -24,9 +38,6 @@ real platform. Notably:
 * There is no PCI host bridge, so virtio-pci devices cannot be
   attached. Boots that need block storage must use ``-initrd`` with
   an initramfs.
-* The DesignWare UART is modelled with QEMU's ns16550-compatible
-  ``serial_mm`` device; DesignWare-specific registers beyond that
-  set return 0.
 
 Supported software
 ------------------
