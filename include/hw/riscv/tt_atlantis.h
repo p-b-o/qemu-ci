@@ -56,6 +56,7 @@ struct TTAtlantisState {
 
     MemoryRegion soc_memory;
     TTAtlantisSoCState soc;
+    uint32_t uart_chosen;
 };
 
 enum {
