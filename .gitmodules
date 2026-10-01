@@ -45,3 +45,6 @@
 [submodule "tests/lcitool/libvirt-ci"]
 	path = tests/lcitool/libvirt-ci
 	url = https://gitlab.com/libvirt/libvirt-ci.git
+[submodule "tests/functional/virtio-villain"]
+	path = tests/functional/virtio-villain
+	url = https://github.com/weltling/virtio-villain.git

@@ -18,6 +18,7 @@ test_aarch64_timeouts = {
   'virt' : 360,
   'virt_gpu' : 480,
   'virt_vbsa' : 240,
+  'virtio_villain' : 900,
 }
 
 tests_aarch64_system_quick = [
@@ -55,6 +56,7 @@ tests_aarch64_system_thorough = [
   'virt_aarch64_off',
   'virt_gpu',
   'virt_vbsa',
+  'virtio_villain',
   'xen',
   'xlnx_versal',
 ]

@@ -83,6 +83,33 @@ files around on disk by setting ``QEMU_TEST_KEEP_SCRATCH=1`` as an env
 variable.  Any preserved files will be deleted the next time the test is run
 without this variable set.
 
+The virtio-villain fault injection test
+---------------------------------------
+
+The ``virtio_villain`` test drives a guest side virtio fault injection
+harness against the QEMU under test. It is included as a git submodule
+under ``tests/functional/virtio-villain``. Initialize it before running
+the test::
+
+  $ git submodule update --init tests/functional/virtio-villain
+
+The harness boots one short lived guest per case. Each case violates a
+driver rule from the virtio spec and checks that the device model
+handles the bad input without crashing, hanging, or corrupting state.
+The test builds a static guest init and then runs the whole supported
+suite through the harness, failing if any case reports a failure.
+
+Building the guest init needs a static toolchain that targets the
+guest architecture. When the guest matches the host, musl-gcc or the
+host compiler is used. When it differs, a cross compiler such as
+``aarch64-linux-gnu-gcc`` is used. The test is skipped when no
+suitable kernel or compiler is available for the guest architecture.
+
+The test is part of the thorough suite for x86_64 and aarch64, so it
+runs with ``make check-functional-x86_64`` or on its own with::
+
+  $ meson test -C build --setup thorough func-x86_64-virtio_villain
+
 Logging
 -------
 
