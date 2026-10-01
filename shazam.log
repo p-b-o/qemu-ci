@@ -1,0 +1,58 @@
+Looking up 20261001-up-vsock-vhost-v5-v10-0-8c094843e98b@virtuozzo.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 20 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 275 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v10 1/18] migration/cpr: forbid saving duplicate CprFds into hash table
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-1-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 2/18] tests/unit: add test for duplicate keys in CPR FD table
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-2-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 3/18] migration: forbid snapshots in CPR migration modes
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-3-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 4/18] migration: forbid snapshots under Xen
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-4-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 5/18] tests/qtest/migration: add test for snapshot rejection in CPR modes
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-5-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 6/18] vhost-vsock: block CPR migration modes
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-6-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 7/18] vhost: add vhost_reset_owner op
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-7-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 8/18] vhost-vsock: don't reset connections during CPR
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-8-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 9/18] vhost-vsock: fix FD leak in realize()
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-9-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 10/18] vhost-vsock: preserve vhost FD during CPR
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-10-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 11/18] vhost: factor out vhost_dev_init_backend()
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-11-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 12/18] vhost: make vhost_dev_cleanup() safe on a partially initialized device
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-12-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 13/18] vhost: add vhost_dev_set_owner() / vhost_dev_reset_owner() helpers
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-13-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 14/18] vhost: add vhost_dev_is_initialized() helper
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-14-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 15/18] vhost: release ownership in vhost_dev_cleanup()
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-15-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 16/18] vhost-vsock: hand off device ownership across CPR
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-16-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 17/18] tests/qtest/migration: add vhost-vsock tests for cpr-transfer and cpr-exec
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-17-8c094843e98b@virtuozzo.com
+  [32m✓[0m [PATCH v10 18/18] tests/functional: add vhost-vsock CPR test with a live guest
+    + Link: https://lore.kernel.org/qemu-devel/20261001-up-vsock-vhost-v5-v10-18-8c094843e98b@virtuozzo.com
+  ---
+  [32m✓[0m Signed: DKIM/virtuozzo.com
+---
+Total patches: 18
+---
+Applying: migration/cpr: forbid saving duplicate CprFds into hash table
+Patch failed at 0001 migration/cpr: forbid saving duplicate CprFds into hash table
+error: patch failed: backends/hostmem-memfd.c:54
+error: backends/hostmem-memfd.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
