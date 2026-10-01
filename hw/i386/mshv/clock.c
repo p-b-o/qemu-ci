@@ -182,7 +182,7 @@ static const VMStateDescription vmstate_mshv_clock = {
     },
 };
 
-void mshv_clock_init(void)
+void mshv_arch_clock_init(void)
 {
     vmstate_register(NULL, 0, &vmstate_mshv_clock, &mshv_clock);
     qemu_add_vm_change_state_handler(mshv_clock_vm_state_change, &mshv_clock);
