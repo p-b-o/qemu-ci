@@ -12,6 +12,7 @@
 #include "qemu/error-report.h"
 #include "qemu/guest-random.h"
 #include "qemu/units.h"
+#include "qapi/visitor.h"
 
 #include "hw/core/boards.h"
 #include "hw/core/loader.h"
@@ -422,6 +423,26 @@ static void load_fdt(TTAtlantisState *ams)
     create_fdt_memory(ms->fdt, &ams->soc);
 }
 
+static inline int tt_atlantis_uart_index(int uart_dev)
+{
+    return uart_dev - TT_ATL_UART0;
+}
+
+static void tt_atlantis_connect_serial_hds_to_uarts(TTAtlantisState *ams)
+{
+    TTAtlantisSoCState *s = &ams->soc;
+    int uart_index = tt_atlantis_uart_index(ams->uart_chosen);
+
+    qdev_prop_set_chr(DEVICE(&s->uart[uart_index]), "chardev", serial_hd(0));
+
+    for (int i = 1, uart = 0; i < TT_ATL_NUM_UARTS; uart++) {
+        if (uart == uart_index) {
+            continue;
+        }
+        qdev_prop_set_chr(DEVICE(&s->uart[uart]), "chardev", serial_hd(i++));
+    }
+}
+
 static void tt_atlantis_machine_done(Notifier *n, void *data)
 {
     TTAtlantisState *ams = container_of(n, TTAtlantisState, machine_done);
@@ -482,11 +503,6 @@ static void tt_atlantis_machine_done(Notifier *n, void *data)
                               s->memmap[TT_ATL_BOOTROM].size,
                               kernel_entry,
                               fdt_load_addr);
-}
-
-static inline int tt_atlantis_uart_index(int uart_dev)
-{
-    return uart_dev - TT_ATL_UART0;
 }
 
 static void tt_atlantis_soc_init(Object *obj)
@@ -592,10 +608,6 @@ static void tt_atlantis_soc_realize(DeviceState *dev, Error **errp)
     memory_region_add_subregion(s->memory, s->memmap[TT_ATL_BOOTROM].base,
                                 &s->bootrom);
 
-    /* UART1, the soc console (UART0 is for the boot microcontroller */
-    qdev_prop_set_chr(DEVICE(&s->uart[tt_atlantis_uart_index(TT_ATL_UART1)]),
-                      "chardev", serial_hd(0));
-
     for (int i = 0; i < TT_ATL_NUM_UARTS; i++) {
         SysBusDevice *sbd = SYS_BUS_DEVICE(&s->uart[i]);
         if (!sysbus_realize(sbd, errp)) {
@@ -663,6 +675,10 @@ static void tt_atlantis_machine_init(MachineState *machine)
                              OBJECT(&ams->soc_memory), &error_abort);
     object_property_set_link(OBJECT(&ams->soc), "dram", OBJECT(machine->ram),
                              &error_abort);
+
+    /* Map serial interfaces to uart */
+    tt_atlantis_connect_serial_hds_to_uarts(ams);
+
     qdev_realize(DEVICE(&ams->soc), NULL, &error_fatal);
 
     /* I2C peripherals: qemu specific */
@@ -680,6 +696,47 @@ static void tt_atlantis_machine_init(MachineState *machine)
     qemu_add_machine_init_done_notifier(&ams->machine_done);
 }
 
+static void tt_atlantis_get_console(Object *obj, Visitor *v, const char *name,
+                                    void *opaque, Error **errp)
+{
+    TTAtlantisState *ams = TT_ATLANTIS_MACHINE(obj);
+    uint32_t uart_index = tt_atlantis_uart_index(ams->uart_chosen);
+
+    visit_type_uint32(v, name, &uart_index, errp);
+}
+
+static void tt_atlantis_set_console(Object *obj, Visitor *v, const char *name,
+                                    void *opaque, Error **errp)
+{
+    TTAtlantisState *ams = TT_ATLANTIS_MACHINE(obj);
+    uint32_t value;
+
+    if (!visit_type_uint32(v, name, &value, errp)) {
+        return;
+    }
+
+    if (value >= TT_ATL_NUM_UARTS) {
+        error_setg(errp, "\"console\" should be in range [%d - %d]",
+                   0, TT_ATL_NUM_UARTS - 1);
+        return;
+    }
+    ams->uart_chosen = value + TT_ATL_UART0;
+}
+
+static void tt_atlantis_machine_class_props_init(ObjectClass *oc)
+{
+    ObjectProperty *console;
+
+    console = object_class_property_add(oc, "console", "uint32_t",
+                                        tt_atlantis_get_console,
+                                        tt_atlantis_set_console, NULL, NULL);
+    object_class_property_set_description(oc, "console",
+            "Change the default UART index on -serial. Valid values are 0 " \
+            "through 4");
+    /* Default to UART1, the Ascalon console */
+    object_property_set_default_uint(console, 1);
+}
+
 static void tt_atlantis_machine_class_init(ObjectClass *oc, const void *data)
 {
     MachineClass *mc = MACHINE_CLASS(oc);
@@ -693,6 +750,8 @@ static void tt_atlantis_machine_class_init(ObjectClass *oc, const void *data)
     mc->block_default_type = IF_VIRTIO;
     mc->no_cdrom = 1;
     mc->default_ram_id = "tt_atlantis.ram";
+
+    tt_atlantis_machine_class_props_init(oc);
 }
 
 static const TypeInfo tt_atlantis_types[] = {
