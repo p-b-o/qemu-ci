@@ -60,30 +60,6 @@ static int init_mshv(int *mshv_fd)
     return 0;
 }
 
-static int mshv_load_cleanup(void *opaque)
-{
-    CPUState *cpu;
-    int ret;
-
-    ret = mshv_arch_set_partition_msrs(first_cpu);
-    if (ret < 0) {
-        error_report("Failed to set partition MSRs: %s", strerror(-ret));
-        return -1;
-    }
-
-    CPU_FOREACH(cpu) {
-        ret = mshv_arch_set_mp_state(cpu);
-        if (ret < 0) {
-            error_report("Failed to set mp state for vCPU %d: %s",
-                         cpu->cpu_index, strerror(-ret));
-            return -1;
-        }
-    }
-
-    return 0;
-}
-
-
 static int get_host_partition_property(int mshv_fd, uint32_t property_code,
                                        uint64_t *value)
 {
@@ -519,10 +495,6 @@ static int mshv_init_vcpu(CPUState *cpu)
     return 0;
 }
 
-static SaveVMHandlers savevm_mshv = {
-    .load_cleanup = mshv_load_cleanup,
-};
-
 static int mshv_init(AccelState *as, MachineState *ms)
 {
     MshvState *s;
@@ -574,9 +546,10 @@ static int mshv_init(AccelState *as, MachineState *ms)
                                   0, "mshv-memory");
     memory_listener_register(&mshv_io_listener, &address_space_io);
 
-    register_savevm_live("mshv", 0, 1, &savevm_mshv, s);
-
-    mshv_clock_init();
+    ret = mshv_arch_migration_init(s);
+    if (ret < 0) {
+        return ret;
+    }
 
     return 0;
 }
