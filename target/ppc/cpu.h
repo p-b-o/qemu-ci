@@ -1392,7 +1392,7 @@ struct CPUArchState {
     uint64_t insns_flags;
     uint64_t insns_flags2;
 
-    int error_code;
+    int32_t error_code;
     uint32_t pending_interrupts;
 #if !defined(CONFIG_USER_ONLY)
     uint64_t excp_stats[POWERPC_EXCP_NB];
@@ -2818,9 +2818,6 @@ void cpu_write_xer(CPUPPCState *env, target_ulong xer);
  * have PPC_SEGMENT_64B.
  */
 #define is_book3s_arch2x(ctx) (!!((ctx)->insns_flags & PPC_SEGMENT_64B))
-
-G_NORETURN void raise_exception_err_ra(CPUPPCState *env, uint32_t exception,
-                                       uint32_t error_code, uintptr_t raddr);
 
 /* PERFM EBB helper*/
 #if defined(TARGET_PPC64) && !defined(CONFIG_USER_ONLY)
