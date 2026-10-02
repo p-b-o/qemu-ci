@@ -59,9 +59,9 @@ static const char *loongarch_exception_name(int32_t exception)
     return "Unknown";
 }
 
-void G_NORETURN do_raise_exception(CPULoongArchState *env,
-                                   uint32_t exception,
-                                   uintptr_t pc)
+void G_NORETURN loongarch_do_raise_exception(CPULoongArchState *env,
+                                             uint32_t exception,
+                                             uintptr_t pc)
 {
     CPUState *cs = env_cpu(env);
 
@@ -69,9 +69,7 @@ void G_NORETURN do_raise_exception(CPULoongArchState *env,
                   __func__,
                   exception,
                   loongarch_exception_name(exception));
-    cs->exception_index = exception;
-
-    cpu_loop_exit_restore(cs, pc);
+    cpu_raise_excp_restore(cs, exception, pc);
 }
 
 #ifndef CONFIG_USER_ONLY
