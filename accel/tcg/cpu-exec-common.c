@@ -118,6 +118,19 @@ void cpu_loop_exit_restore(CPUState *cpu, uintptr_t pc)
     cpu_loop_exit(cpu);
 }
 
+void cpu_raise_excp(CPUState *cpu, int exception_index)
+{
+    cpu->exception_index = exception_index;
+    cpu_loop_exit(cpu);
+}
+
+void cpu_raise_excp_restore(CPUState *cpu, int exception_index,
+                            uintptr_t retaddr)
+{
+    cpu->exception_index = exception_index;
+    cpu_loop_exit_restore(cpu, retaddr);
+}
+
 void cpu_loop_exit_atomic(CPUState *cpu, uintptr_t pc)
 {
     /* Prevent looping if already executing in a serial context. */
