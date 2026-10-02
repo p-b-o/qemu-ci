@@ -245,7 +245,8 @@ static int is_privileged(DisasContext *ctx, int is_exception)
 {
     if (FIELD_EX32(ctx->tb_flags, PSW, PM)) {
         if (is_exception) {
-            gen_helper_raise_privilege_violation(tcg_env);
+            gen_helper_raise_excp_restore(
+                tcg_env, tcg_constant_i32(RX_EXCP_PRIVILEGE_VIOLATION));
         }
         return 0;
     } else {
@@ -2173,7 +2174,8 @@ static bool trans_RTE(DisasContext *ctx, arg_RTE *a)
 static bool do_trap(DisasContext *ctx, uint8_t vec)
 {
     tcg_gen_movi_i32(cpu_pc, ctx->base.pc_next);
-    gen_helper_trap(tcg_env, tcg_constant_i32(vec));
+    gen_helper_raise_excp(
+        tcg_env, tcg_constant_i32(RX_EXCP_TRAP_BASE + vec));
     ctx->base.is_jmp = DISAS_NORETURN;
     return true;
 }
@@ -2227,7 +2229,8 @@ static void rx_tr_translate_insn(DisasContextBase *dcbase, CPUState *cs)
     ctx->pc = ctx->base.pc_next;
     insn = decode_load(ctx);
     if (!decode(ctx, insn)) {
-        gen_helper_raise_illegal_instruction(tcg_env);
+        gen_helper_raise_excp_restore(
+            tcg_env, tcg_constant_i32(RX_EXCP_ILLEGAL_INSTRUCTION));
     }
 }
 

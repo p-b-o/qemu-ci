@@ -25,10 +25,6 @@
 #include "fpu/softfloat.h"
 #include "tcg/debug-assert.h"
 
-static inline G_NORETURN
-void raise_exception(CPURXState *env, int index,
-                     uintptr_t retaddr);
-
 static void _set_psw(CPURXState *env, uint32_t psw, uint32_t rte)
 {
     uint32_t prev_u;
@@ -115,7 +111,7 @@ static void update_fpsw(CPURXState *env, float32 ret, uintptr_t retaddr)
         enable = FIELD_EX32(env->fpsw, FPSW, ENABLE);
         enable |= 1 << 5; /* CE always enabled */
         if (cause & enable) {
-            raise_exception(env, RX_EXCP_ACCESS, retaddr);
+            cpu_raise_excp_restore(env_cpu(env), RX_EXCP_ACCESS, retaddr);
         }
     }
 }
@@ -419,32 +415,6 @@ uint32_t helper_divu(CPURXState *env, uint32_t num, uint32_t den)
     return ret;
 }
 
-/* exception */
-static inline G_NORETURN
-void raise_exception(CPURXState *env, int index,
-                     uintptr_t retaddr)
-{
-    CPUState *cs = env_cpu(env);
-
-    cs->exception_index = index;
-    cpu_loop_exit_restore(cs, retaddr);
-}
-
-G_NORETURN void helper_raise_privilege_violation(CPURXState *env)
-{
-    raise_exception(env, RX_EXCP_PRIVILEGE_VIOLATION, GETPC());
-}
-
-G_NORETURN void helper_raise_access_fault(CPURXState *env)
-{
-    raise_exception(env, RX_EXCP_ACCESS, GETPC());
-}
-
-G_NORETURN void helper_raise_illegal_instruction(CPURXState *env)
-{
-    raise_exception(env, RX_EXCP_ILLEGAL_INSTRUCTION, GETPC());
-}
-
 G_NORETURN void helper_wait(CPURXState *env)
 {
     CPUState *cs = env_cpu(env);
@@ -452,10 +422,5 @@ G_NORETURN void helper_wait(CPURXState *env)
     cs->halted = 1;
     env->in_sleep = 1;
     env->psw_i = 1;
-    raise_exception(env, EXCP_HLT, 0);
-}
-
-G_NORETURN void helper_trap(CPURXState *env, uint32_t vec)
-{
-    raise_exception(env, RX_EXCP_TRAP_BASE + vec, 0);
+    cpu_raise_excp(env_cpu(env), EXCP_HLT);
 }
