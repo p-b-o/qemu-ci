@@ -64,10 +64,9 @@ void raise_exception(CPUARMState *env, uint32_t excp,
     }
 
     assert(!excp_is_internal(excp));
-    cs->exception_index = excp;
     env->exception.syndrome = syndrome;
     env->exception.target_el = target_el;
-    cpu_loop_exit(cs);
+    cpu_raise_excp(cs, excp);
 }
 
 void raise_exception_ra(CPUARMState *env, uint32_t excp, uint64_t syndrome,
@@ -399,9 +398,8 @@ void HELPER(wfi)(CPUARMState *env, uint32_t insn_len)
     }
 
     qatomic_set(&env->halt_reason, HALT_WFI);
-    cs->exception_index = EXCP_HLT;
     cs->halted = 1;
-    cpu_loop_exit(cs);
+    cpu_raise_excp(cs, EXCP_HLT);
 #endif
 }
 
@@ -462,9 +460,8 @@ void HELPER(wfit)(CPUARMState *env, uint32_t rd)
         timer_mod(cpu->wfxt_timer, nexttick);
     }
     qatomic_set(&env->halt_reason, HALT_WFI);
-    cs->exception_index = EXCP_HLT;
     cs->halted = 1;
-    cpu_loop_exit(cs);
+    cpu_raise_excp(cs, EXCP_HLT);
 #endif
 }
 
@@ -631,9 +628,8 @@ void HELPER(wfe)(CPUARMState *env, uint32_t insn_len)
     }
 
     qatomic_set(&env->halt_reason, HALT_WFE);
-    cs->exception_index = EXCP_HLT;
     cs->halted = 1;
-    cpu_loop_exit(cs);
+    cpu_raise_excp(cs, EXCP_HLT);
 #endif
 }
 
@@ -726,9 +722,8 @@ void HELPER(wfet)(CPUARMState *env, uint32_t rd)
     }
 
     qatomic_set(&env->halt_reason, HALT_WFE);
-    cs->exception_index = EXCP_HLT;
     cs->halted = 1;
-    cpu_loop_exit(cs);
+    cpu_raise_excp(cs, EXCP_HLT);
 #endif
 }
 
@@ -740,23 +735,7 @@ void HELPER(yield)(CPUARMState *env)
      * that the guest is currently busy-looping. Yield control back to the
      * top level loop so that a more deserving VCPU has a chance to run.
      */
-    cs->exception_index = EXCP_YIELD;
-    cpu_loop_exit(cs);
-}
-
-/* Raise an internal-to-QEMU exception. This is limited to only
- * those EXCP values which are special cases for QEMU to interrupt
- * execution and not to be used for exceptions which are passed to
- * the guest (those must all have syndrome information and thus should
- * use exception_with_syndrome*).
- */
-void HELPER(exception_internal)(CPUARMState *env, uint32_t excp)
-{
-    CPUState *cs = env_cpu(env);
-
-    assert(excp_is_internal(excp));
-    cs->exception_index = excp;
-    cpu_loop_exit(cs);
+    cpu_raise_excp(cs, EXCP_YIELD);
 }
 
 /* Raise an exception with the specified syndrome register value */
