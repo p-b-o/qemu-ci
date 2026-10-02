@@ -36,10 +36,18 @@ extern const char * const hexagon_sregnames[];
 extern const char * const hexagon_gregnames[];
 #endif
 
-void G_NORETURN do_raise_exception(CPUHexagonState *env,
+void G_NORETURN hexagon_do_raise_exception(CPUHexagonState *env,
         uint32_t exception,
         uint32_t PC,
         uintptr_t retaddr);
+
+static inline void G_NORETURN do_raise_exception(CPUHexagonState *env,
+        uint32_t exception,
+        uint32_t PC,
+        uintptr_t retaddr)
+{
+    hexagon_do_raise_exception(env, exception, PC, retaddr);
+}
 
 #define hexagon_cpu_mmu_enabled(env) ({ \
     HexagonCPU *cpu = env_archcpu(env); \

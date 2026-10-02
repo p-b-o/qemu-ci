@@ -73,7 +73,7 @@ uint64_t HELPER(utimer)(void)
 
 /* Exceptions processing helpers */
 G_NORETURN
-void do_raise_exception(CPUHexagonState *env, uint32_t exception,
+void hexagon_do_raise_exception(CPUHexagonState *env, uint32_t exception,
                         uint32_t PC, uintptr_t retaddr)
 {
     CPUState *cs = env_cpu(env);
@@ -82,8 +82,7 @@ void do_raise_exception(CPUHexagonState *env, uint32_t exception,
     ASSERT_DIRECT_TO_GUEST_UNSET(env, exception);
 
     env->gpr[HEX_REG_PC] = PC;
-    cs->exception_index = exception;
-    cpu_loop_exit_restore(cs, retaddr);
+    cpu_raise_excp_restore(cs, exception, retaddr);
 }
 
 G_NORETURN void hexagon_raise_exception_err(CPUHexagonState *env,
