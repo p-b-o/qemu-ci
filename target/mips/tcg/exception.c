@@ -60,11 +60,6 @@ void helper_raise_exception_debug(CPUMIPSState *env)
     do_raise_exception(env, EXCP_DEBUG, 0);
 }
 
-static void raise_exception(CPUMIPSState *env, uint32_t exception)
-{
-    do_raise_exception(env, exception, 0);
-}
-
 void helper_wait(CPUMIPSState *env)
 {
     CPUState *cs = env_cpu(env);
@@ -75,7 +70,7 @@ void helper_wait(CPUMIPSState *env)
      * Last instruction in the block, PC was updated before
      * - no need to recover PC and icount.
      */
-    raise_exception(env, EXCP_HLT);
+    do_raise_exception(env, EXCP_HLT, 0);
 }
 
 void mips_cpu_synchronize_from_tb(CPUState *cs, const TranslationBlock *tb)
