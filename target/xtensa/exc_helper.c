@@ -40,9 +40,6 @@ void HELPER(exception)(CPUXtensaState *env, uint32_t excp)
     CPUState *cs = env_cpu(env);
 
     cs->exception_index = excp;
-    if (excp == EXCP_YIELD) {
-        env->yield_needed = 0;
-    }
     cpu_loop_exit(cs);
 }
 

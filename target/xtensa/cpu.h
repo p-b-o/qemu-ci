@@ -541,7 +541,7 @@ struct CPUArchState {
     uint32_t ccount_base;
 #endif
 
-    int yield_needed;
+    int32_t yield_needed;
     unsigned static_vectors;
 
     /* Watchpoints for DBREAK registers */
