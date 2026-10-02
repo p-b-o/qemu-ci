@@ -1141,7 +1141,7 @@ typedef struct CPUArchState {
     TCState tcs[MIPS_SHADOW_SET_MAX];
     CPUMIPSFPUContext fpus[MIPS_FPU_MAX];
     /* QEMU */
-    int error_code;
+    int32_t error_code;
 #define EXCP_TLB_NOMATCH   0x1
 #define EXCP_INST_NOTAVAIL 0x2 /* No valid instruction word for BadInstr */
     uint32_t hflags;    /* CPU State */
