@@ -2443,6 +2443,10 @@ static void *postcopy_listen_thread(void *opaque)
      * state yet; wait for the end of the main thread.
      */
     qemu_event_wait(&mis->main_thread_load_event);
+    /* The VM run state is changed later, in loadvm_postcopy_handle_run_bh() */
+    if (postcopy_state_get() == POSTCOPY_INCOMING_RUNNING) {
+        qemu_event_wait(&mis->postcopy_run_event);
+    }
 
     /*
      * Device load in the main thread has finished, we should be in

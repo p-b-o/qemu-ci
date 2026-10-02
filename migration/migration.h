@@ -108,6 +108,8 @@ struct MigrationIncomingState {
      * loading state.
      */
     QemuEvent main_thread_load_event;
+    /* Set once the postcopy run BH has changed the run state */
+    QemuEvent postcopy_run_event;
 
     /* For network announces */
     AnnounceTimer  announce_timer;

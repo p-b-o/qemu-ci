@@ -324,6 +324,7 @@ void migration_object_init(void)
     qemu_mutex_init(&current_incoming->rp_mutex);
     qemu_mutex_init(&current_incoming->postcopy_prio_thread_mutex);
     qemu_event_init(&current_incoming->main_thread_load_event, false);
+    qemu_event_init(&current_incoming->postcopy_run_event, false);
     qemu_sem_init(&current_incoming->postcopy_pause_sem_dst, 0);
     qemu_sem_init(&current_incoming->postcopy_pause_sem_fault, 0);
     qemu_sem_init(&current_incoming->postcopy_pause_sem_fast_load, 0);
@@ -493,6 +494,7 @@ void migration_incoming_state_destroy(void)
 
     migration_incoming_transport_cleanup(mis);
     qemu_event_reset(&mis->main_thread_load_event);
+    qemu_event_reset(&mis->postcopy_run_event);
 
     if (mis->page_requested) {
         g_tree_destroy(mis->page_requested);

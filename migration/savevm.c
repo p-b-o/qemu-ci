@@ -2263,6 +2263,7 @@ static void loadvm_postcopy_handle_run_bh(void *opaque)
     }
 
     trace_vmstate_downtime_checkpoint("dst-postcopy-bh-vm-started");
+    qemu_event_set(&mis->postcopy_run_event);
 }
 
 /* After all discards we can start running and asking for pages */
