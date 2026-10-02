@@ -97,11 +97,20 @@ void superh_cpu_do_interrupt(CPUState *cs)
     if (qemu_loglevel_mask(CPU_LOG_INT)) {
         const char *expname;
         switch (cs->exception_index) {
+        case SH4_EXCP_RESET:
+            expname = "reset";
+            break;
+        case SH4_EXCP_MANUAL_RESET:
+            expname = "manual_reset";
+            break;
         case SH4_EXCP_ADDR_ERROR:
             expname = "addr_error";
             break;
         case SH4_EXCP_TLB_MISS:
             expname = "tlb_miss";
+            break;
+        case SH4_EXCP_TLB_MULTIPLE:
+            expname = "tlb_multiple";
             break;
         case SH4_EXCP_TLB_VIOLATION:
             expname = "tlb_violation";
@@ -135,6 +144,9 @@ void superh_cpu_do_interrupt(CPUState *cs)
             break;
         case SH4_EXCP_TRAPA:
             expname = "trapa";
+            break;
+        case SH4_EXCP_USER_BREAK:
+            expname = "user_break";
             break;
         default:
             expname = do_irq ? "interrupt" : "???";
