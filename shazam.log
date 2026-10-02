@@ -1,0 +1,93 @@
+Looking up 20261002095232.3605567-1-berrange@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 22 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 33 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/20] osdep: add 'ignore_value(x)' macro
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-2-berrange@redhat.com
+  [32m✓[0m [PATCH v2 2/20] trace: use 'ignore_value()' instead of a dummy variable
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-3-berrange@redhat.com
+  [32m✓[0m [PATCH v2 3/20] trace: fix handling of char** in UST backend
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-4-berrange@redhat.com
+  [32m✓[0m [PATCH v2 4/20] hw/xen: replace "long unsigned int" with "unsigned long " for dtrace
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-5-berrange@redhat.com
+  [32m✓[0m [PATCH v2 5/20] trace: block use of "long int" for dtrace
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-6-berrange@redhat.com
+  [32m✓[0m [PATCH v2 6/20] trace: drop unused trace_event_set_state_dynamic_init()
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-7-berrange@redhat.com
+  [32m✓[0m [PATCH v2 7/20] trace: remove obsolete references to vcpu property
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-8-berrange@redhat.com
+  [32m✓[0m [PATCH v2 8/20] trace: drop 'id' from TraceEvent struct when not required
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-9-berrange@redhat.com
+  [32m✓[0m [PATCH v2 9/20] trace: change "DSTATE" variables from uint16_t to uint8_t
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-10-berrange@redhat.com
+  [32m✓[0m [PATCH v2 10/20] trace: add testing of 'nop' trace backend
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-11-berrange@redhat.com
+  [32m✓[0m [PATCH v2 11/20] trace: don't emit TraceEvent structs when 'nop' backend is used
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-12-berrange@redhat.com
+  [32m✓[0m [PATCH v2 12/20] trace: add test of generation with all backends enabled
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-13-berrange@redhat.com
+  [32m✓[0m [PATCH v2 13/20] trace: remove redundant headers from simple trace backend code
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-14-berrange@redhat.com
+  [32m✓[0m [PATCH v2 14/20] audio: remove mistaken use of trace_event_get_state()
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-15-berrange@redhat.com
+  [32m✓[0m [PATCH v2 15/20] hw/ppc: remove mistaken use of trace_event_get_state()
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-16-berrange@redhat.com
+  [32m✓[0m [PATCH v2 16/20] trace: include qemu_loglevel_mask(LOG_TRACE) in guard
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-17-berrange@redhat.com
+  [32m✓[0m [PATCH v2 17/20] trace: remove "disable" property from trace files
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-18-berrange@redhat.com
+  [32m✓[0m [PATCH v2 18/20] trace: stop tracking static disabled state
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-19-berrange@redhat.com
+  [32m✓[0m [PATCH v2 19/20] trace: remove parsing of "disable" event property
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-20-berrange@redhat.com
+  [32m✓[0m [PATCH v2 20/20] trace: remove 'trace_event_get_state' wrapper
+    + Link: https://lore.kernel.org/qemu-devel/20261002095232.3605567-21-berrange@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 20
+---
+Applying: osdep: add 'ignore_value(x)' macro
+Applying: trace: use 'ignore_value()' instead of a dummy variable
+Applying: trace: fix handling of char** in UST backend
+Applying: hw/xen: replace "long unsigned int" with "unsigned long " for dtrace
+Applying: trace: block use of "long int" for dtrace
+Applying: trace: drop unused trace_event_set_state_dynamic_init()
+Applying: trace: remove obsolete references to vcpu property
+Applying: trace: drop 'id' from TraceEvent struct when not required
+Applying: trace: change "DSTATE" variables from uint16_t to uint8_t
+Applying: trace: add testing of 'nop' trace backend
+Applying: trace: don't emit TraceEvent structs when 'nop' backend is used
+Applying: trace: add test of generation with all backends enabled
+Applying: trace: remove redundant headers from simple trace backend code
+Applying: audio: remove mistaken use of trace_event_get_state()
+Applying: hw/ppc: remove mistaken use of trace_event_get_state()
+Applying: trace: include qemu_loglevel_mask(LOG_TRACE) in guard
+Applying: trace: remove "disable" property from trace files
+Applying: trace: stop tracking static disabled state
+Patch failed at 0018 trace: stop tracking static disabled state
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:157: new blank line at EOF.
++
+warning: 1 line adds whitespace errors.
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:94: new blank line at EOF.
++
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:239: new blank line at EOF.
++
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:335: new blank line at EOF.
++
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:357: new blank line at EOF.
++
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:377: new blank line at EOF.
++
+warning: 5 lines add whitespace errors.
+error: patch failed: qapi/trace.json:17
+error: qapi/trace.json: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
