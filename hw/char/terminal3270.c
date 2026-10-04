@@ -205,6 +205,9 @@ static int read_payload_3270(EmulatedCcw3270Device *dev)
         return ret;
     }
     t->in_len -= len;
+    if (t->in_len > 0) {
+        memmove(t->inv, &t->inv[len], t->in_len);
+    }
 
     return len;
 }
