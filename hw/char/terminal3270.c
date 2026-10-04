@@ -23,10 +23,10 @@
 /* Enough spaces for different window sizes. */
 #define INPUT_BUFFER_SIZE  1000
 /*
- * 1 for header, 1024*2 for datastream, 2 for tail
+ * 1*2 for header, 1024*2 for datastream, 2 for tail
  * Reserve enough spaces for telnet IAC escape.
  */
-#define OUTPUT_BUFFER_SIZE 2051
+#define OUTPUT_BUFFER_SIZE 2052
 
 struct Terminal3270 {
     EmulatedCcw3270Device cdev;
