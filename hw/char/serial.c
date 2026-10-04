@@ -178,6 +178,9 @@ static void serial_update_parameters(SerialState *s)
     frame_size += data_bits + stop_bits;
     /* Zero divisor should give about 3500 baud */
     speed = (s->divider == 0) ? 3500 : (float) s->baudbase / s->divider;
+    if (speed <= 0) {
+        speed = 3500;
+    }
     ssp.speed = speed;
     ssp.parity = parity;
     ssp.data_bits = data_bits;
