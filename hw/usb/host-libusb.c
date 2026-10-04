@@ -921,12 +921,12 @@ static void usb_host_ep_update(USBHostDevice *s)
             if (ep == 0) {
                 trace_usb_host_parse_error(s->bus_num, s->addr,
                                            "invalid endpoint address");
-                return;
+                goto out;
             }
             if (usb_ep_get_type(udev, pid, ep) != USB_ENDPOINT_XFER_INVALID) {
                 trace_usb_host_parse_error(s->bus_num, s->addr,
                                            "duplicate endpoint address");
-                return;
+                goto out;
             }
 
             trace_usb_host_parse_endpoint(s->bus_num, s->addr, ep,
@@ -949,6 +949,7 @@ static void usb_host_ep_update(USBHostDevice *s)
         }
     }
 
+out:
     libusb_free_config_descriptor(conf);
 }
 
@@ -1375,6 +1376,7 @@ static int usb_host_claim_interfaces(USBHostDevice *s, int configuration)
         }
     }
     if (claimed != conf->bNumInterfaces) {
+        libusb_free_config_descriptor(conf);
         return USB_RET_STALL;
     }
 
