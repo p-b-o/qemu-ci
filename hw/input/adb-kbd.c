@@ -241,12 +241,18 @@ static int adb_kbd_request(ADBDevice *d, uint8_t *obuf,
     olen = 0;
     switch (cmd) {
     case ADB_WRITEREG:
+        if (len < 2) {
+            return 0;
+        }
         trace_adb_device_kbd_writereg(reg, buf[1]);
         switch (reg) {
         case 2:
             /* LED status */
             break;
         case 3:
+            if (len != 3) {
+                return 0;
+            }
             switch (buf[2]) {
             case ADB_CMD_SELF_TEST:
                 break;
