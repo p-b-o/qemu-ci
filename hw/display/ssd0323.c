@@ -102,6 +102,7 @@ static uint32_t ssd0323_transfer(SSIPeripheral *dev, uint32_t data)
         break;
     case SSD0323_CMD:
         DPRINTF("cmd 0x%02x\n", data);
+        data &= 0xff;
         if (s->cmd_len == 0) {
             s->cmd = data;
         } else {
