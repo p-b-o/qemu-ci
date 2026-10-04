@@ -567,7 +567,7 @@ static int hid_post_load(void *opaque, int version_id)
          * mouse.
          */
         HIDPointerEvent evt;
-        evt = s->ptr.queue[(s->head+s->n) & QUEUE_MASK];
+        evt = s->ptr.queue[(s->head + s->n - 1) & QUEUE_MASK];
         if (s->kind == HID_MOUSE) {
             evt.xdx = 0;
             evt.ydy = 0;
