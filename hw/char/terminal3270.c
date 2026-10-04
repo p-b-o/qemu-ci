@@ -249,13 +249,7 @@ static int write_payload_3270(EmulatedCcw3270Device *dev, uint8_t cmd)
     int out_len = 0;
 
     if (!t->handshake_done) {
-        if (!(t->outv[0] == IAC && t->outv[1] != IAC)) {
-            /*
-             * Before having finished 3270 negotiation,
-             * sending outbound data except protocol options is prohibited.
-             */
-            return 0;
-        }
+        return 0;
     }
     if (!qemu_chr_fe_backend_connected(&t->chr)) {
         /* We just say we consumed all data if there's no backend. */
