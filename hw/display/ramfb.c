@@ -41,8 +41,11 @@ struct RAMFBState {
 static void ramfb_unmap_display_surface(pixman_image_t *image, void *unused)
 {
     void *data = pixman_image_get_data(image);
-    uint32_t size = pixman_image_get_stride(image) *
-        pixman_image_get_height(image);
+    int stride = pixman_image_get_stride(image);
+    int height = pixman_image_get_height(image);
+    hwaddr linesize = pixman_image_get_width(image) *
+        PIXMAN_FORMAT_BPP(pixman_image_get_format(image)) / 8;
+    hwaddr size = (hwaddr)stride * (height - 1) + linesize;
     physical_memory_unmap(data, size, 0, 0);
 }
 
