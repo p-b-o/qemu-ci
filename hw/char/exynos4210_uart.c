@@ -327,7 +327,7 @@ static void exynos4210_uart_update_parameters(Exynos4210UartState *s)
 
     uclk_rate = 24000000;
 
-    speed = uclk_rate / ((16 * (s->reg[I_(UBRDIV)]) & 0xffff) +
+    speed = uclk_rate / ((16 * (s->reg[I_(UBRDIV)] & 0xffff)) +
             (s->reg[I_(UFRACVAL)] & 0x7) + 16);
 
     ssp.speed     = speed;
