@@ -96,6 +96,10 @@ int adb_request(ADBBusState *s, uint8_t *obuf, const uint8_t *buf, int len)
 {
     int ret;
 
+    if (len < 1) {
+        return -1;
+    }
+
     trace_adb_bus_request(buf[0] >> 4, adb_commands[buf[0] & 0xf], len);
 
     assert(s->autopoll_blocked);
