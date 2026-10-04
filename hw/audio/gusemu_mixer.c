@@ -68,9 +68,10 @@ void gus_mixvoices(GUSEmuState * state, unsigned int playback_freq, unsigned int
 
             int             PanningPos = (GUSvoice(wVSRPanning) >> 8) & 0xf;
 
-            unsigned int    Volume32   = 32 * GUSvoice(wVSRCurrVol); /* 32 times larger than original gus for maintaining precision while ramping */
-            unsigned int    StartVol32 = (GUSvoice(wVSRVolRampStartVol) & 0xff00) * 32;
-            unsigned int    EndVol32   = (GUSvoice(wVSRVolRampEndVol)   & 0xff00) * 32;
+            /* 32x original GUS precision for ramping */
+            int Volume32 = 32 * GUSvoice(wVSRCurrVol);
+            int StartVol32 = (GUSvoice(wVSRVolRampStartVol) & 0xff00) * 32;
+            int EndVol32 = (GUSvoice(wVSRVolRampEndVol) & 0xff00) * 32;
             int             VolumeIncrement32 = (32 * 16 * (GUSvoice(wVSRVolRampRate) & 0x3f00) >> 8) >> ((((GUSvoice(wVSRVolRampRate) & 0xc000) >> 8) >> 6) * 3); /* including 1/8/64/512 volume speed divisor */
             VolumeIncrement32 = (((VolumeIncrement32 * 44100 / 2) / playback_freq) * 14) / ((GUSregb(NumVoices) & 31) + 1); /* adjust ramping speed to playback speed */
 
@@ -82,6 +83,7 @@ void gus_mixvoices(GUSEmuState * state, unsigned int playback_freq, unsigned int
             for (sample = 0; sample < numsamples; sample++)
             {
                 int             sample1, sample2, Volume;
+                Volume32 = CLAMP(Volume32, 0, 0x1fe000);
                 if (GUSvoice(wVSRControl) & 0x400)      /* 16bit */
                 {
                     int offset = ((CurrPos >> 9) & 0xc0000) + (((CurrPos >> 9) & 0x1ffff) << 1);
