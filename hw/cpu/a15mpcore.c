@@ -28,6 +28,44 @@
 #include "system/kvm.h"
 #include "target/arm/gtimer.h"
 
+#define TYPE_A15MPCORE_RESERVED "a15mpcore-reserved"
+DECLARE_INSTANCE_CHECKER(A15MPReservedState, A15MPCORE_RESERVED,
+                         TYPE_A15MPCORE_RESERVED)
+
+static uint64_t a15mp_reserved_read(void *opaque, hwaddr offset, unsigned size)
+{
+    return 0;
+}
+
+static void a15mp_reserved_write(void *opaque, hwaddr offset, uint64_t value,
+                                 unsigned size)
+{
+}
+
+static const MemoryRegionOps a15mp_reserved_ops = {
+    .read = a15mp_reserved_read,
+    .write = a15mp_reserved_write,
+    .endianness = DEVICE_LITTLE_ENDIAN,
+};
+
+static void a15mp_reserved_initfn(Object *obj)
+{
+    A15MPReservedState *s = A15MPCORE_RESERVED(obj);
+
+    memory_region_init_io(&s->iomem, obj, &a15mp_reserved_ops, s,
+                          "a15mp-reserved", 0x1000);
+    sysbus_init_mmio(SYS_BUS_DEVICE(obj), &s->iomem);
+}
+
+static void a15mp_reserved_class_init(ObjectClass *klass, const void *data)
+{
+    DeviceClass *dc = DEVICE_CLASS(klass);
+
+    dc->desc = "Reserved private peripheral page";
+    /* This device is an internal child of a15mpcore_priv */
+    dc->user_creatable = false;
+}
+
 static void a15mp_priv_set_irq(void *opaque, int irq, int level)
 {
     A15MPPrivState *s = (A15MPPrivState *)opaque;
@@ -43,6 +81,8 @@ static void a15mp_priv_initfn(Object *obj)
     memory_region_init(&s->container, obj, "a15mp-priv-container", 0x8000);
     sysbus_init_mmio(sbd, &s->container);
 
+    object_initialize_child(obj, "reserved", &s->reserved,
+                            TYPE_A15MPCORE_RESERVED);
     object_initialize_child(obj, "gic", &s->gic, gic_class_name());
     qdev_prop_set_uint32(DEVICE(&s->gic), "revision", 2);
 }
@@ -131,6 +171,12 @@ static void a15mp_priv_realize(DeviceState *dev, Error **errp)
      *  0x5600-0x57ff -- GIC virtual interface control for CPU 3
      *  0x6000-0x7fff -- GIC virtual CPU interface
      */
+    if (!sysbus_realize(SYS_BUS_DEVICE(&s->reserved), errp)) {
+        return;
+    }
+    memory_region_add_subregion(&s->container, 0,
+                                sysbus_mmio_get_region(
+                                    SYS_BUS_DEVICE(&s->reserved), 0));
     memory_region_add_subregion(&s->container, 0x1000,
                                 sysbus_mmio_get_region(busdev, 0));
     memory_region_add_subregion(&s->container, 0x2000,
@@ -171,6 +217,13 @@ static void a15mp_priv_class_init(ObjectClass *klass, const void *data)
 }
 
 static const TypeInfo a15mp_types[] = {
+    {
+        .name           = TYPE_A15MPCORE_RESERVED,
+        .parent         = TYPE_SYS_BUS_DEVICE,
+        .instance_size  = sizeof(A15MPReservedState),
+        .instance_init  = a15mp_reserved_initfn,
+        .class_init     = a15mp_reserved_class_init,
+    },
     {
         .name           = TYPE_A15MPCORE_PRIV,
         .parent         = TYPE_SYS_BUS_DEVICE,

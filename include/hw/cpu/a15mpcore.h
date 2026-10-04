@@ -29,6 +29,11 @@
 #define TYPE_A15MPCORE_PRIV "a15mpcore_priv"
 OBJECT_DECLARE_SIMPLE_TYPE(A15MPPrivState, A15MPCORE_PRIV)
 
+typedef struct A15MPReservedState {
+    SysBusDevice parent_obj;
+    MemoryRegion iomem;
+} A15MPReservedState;
+
 struct A15MPPrivState {
     /*< private >*/
     SysBusDevice parent_obj;
@@ -38,6 +43,7 @@ struct A15MPPrivState {
     uint32_t num_irq;
     MemoryRegion container;
 
+    A15MPReservedState reserved;
     GICState gic;
 };
 
