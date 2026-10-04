@@ -24,6 +24,7 @@
 
 #include "qemu/osdep.h"
 #include "hw/input/adb.h"
+#include "qapi/error.h"
 #include "migration/vmstate.h"
 #include "qemu/module.h"
 #include "standard-headers/linux/input-event-codes.h"
@@ -385,7 +386,12 @@ static void adb_kbd_realizefn(DeviceState *dev, Error **errp)
     KBDState *s = ADB_KEYBOARD(dev);
     ADBKeyboardClass *akc = ADB_KEYBOARD_GET_CLASS(dev);
 
+    ERRP_GUARD();
+
     akc->parent_realize(dev, errp);
+    if (*errp) {
+        return;
+    }
     s->hs = qemu_input_handler_register(dev, &adb_keyboard_handler);
 }
 
