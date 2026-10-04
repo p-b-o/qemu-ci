@@ -284,14 +284,16 @@ static void uart_write_rx_fifo(void *opaque, const uint8_t *buf, int size)
         return;
     }
 
-    if (s->rx_count == CADENCE_UART_RX_FIFO_SIZE) {
-        s->r[R_CISR] |= UART_INTR_ROVR;
-    } else {
-        for (i = 0; i < size; i++) {
-            s->rx_fifo[s->rx_wpos] = buf[i];
-            s->rx_wpos = (s->rx_wpos + 1) % CADENCE_UART_RX_FIFO_SIZE;
-            s->rx_count++;
+    for (i = 0; i < size; i++) {
+        if (s->rx_count >= CADENCE_UART_RX_FIFO_SIZE) {
+            s->r[R_CISR] |= UART_INTR_ROVR;
+            break;
         }
+        s->rx_fifo[s->rx_wpos] = buf[i];
+        s->rx_wpos = (s->rx_wpos + 1) % CADENCE_UART_RX_FIFO_SIZE;
+        s->rx_count++;
+    }
+    if (i > 0) {
         timer_mod(s->fifo_trigger_handle, new_rx_time +
                                                 (s->char_tx_time * 4));
     }
