@@ -586,6 +586,11 @@ static int cadence_uart_post_load(void *opaque, int version_id)
 {
     CadenceUARTState *s = opaque;
 
+    if (s->tx_count > CADENCE_UART_TX_FIFO_SIZE ||
+        s->rx_count > CADENCE_UART_RX_FIFO_SIZE ||
+        s->rx_wpos >= CADENCE_UART_RX_FIFO_SIZE) {
+        return -EINVAL;
+    }
     /* Ensure these two aren't invalid numbers */
     if (s->r[R_BRGR] < 1 || s->r[R_BRGR] & ~0xFFFF ||
         s->r[R_BDIV] <= 3 || s->r[R_BDIV] & ~0xFF) {
