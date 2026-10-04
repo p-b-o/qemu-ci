@@ -324,12 +324,14 @@ static void imx_serial_write(void *opaque, hwaddr offset,
             }
         }
         s->ucr2 = value & 0xffff;
+        imx_update(s);
         break;
 
     case 0x25: /* USR1 */
         value &= USR1_AWAKE | USR1_AIRINT | USR1_DTRD | USR1_AGTIM |
                  USR1_FRAMERR | USR1_ESCF | USR1_RTSD | USR1_PARTYER;
         s->usr1 &= ~value;
+        imx_update(s);
         break;
 
     case 0x26: /* USR2 */
@@ -341,6 +343,7 @@ static void imx_serial_write(void *opaque, hwaddr offset,
                  USR2_RIDELT | USR2_IRINT | USR2_WAKE |
                  USR2_DCDDELT | USR2_RTSF | USR2_BRCD | USR2_ORE;
         s->usr2 &= ~value;
+        imx_update(s);
         break;
 
     /*
