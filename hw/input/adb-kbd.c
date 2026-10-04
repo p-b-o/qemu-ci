@@ -401,7 +401,9 @@ static void adb_kbd_unrealizefn(DeviceState *dev)
     ADBKeyboardClass *akc = ADB_KEYBOARD_GET_CLASS(dev);
 
     g_clear_pointer(&s->hs, qemu_input_handler_unregister);
-    akc->parent_unrealize(dev);
+    if (akc->parent_unrealize) {
+        akc->parent_unrealize(dev);
+    }
 }
 
 static void adb_kbd_initfn(Object *obj)
