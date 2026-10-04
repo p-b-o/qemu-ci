@@ -547,6 +547,13 @@ static int hid_post_load(void *opaque, int version_id)
 {
     HIDState *s = opaque;
 
+    if (s->head >= QUEUE_LENGTH || s->n > QUEUE_LENGTH) {
+        return -EINVAL;
+    }
+    if (s->kind == HID_KEYBOARD &&
+        (s->kbd.keys < 0 || s->kbd.keys > ARRAY_SIZE(s->kbd.key))) {
+        return -EINVAL;
+    }
     hid_set_next_idle(s);
 
     if (s->n == QUEUE_LENGTH && (s->kind == HID_TABLET ||
