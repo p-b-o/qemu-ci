@@ -768,6 +768,12 @@ static int fetch_active_ports_list(QEMUFile *f,
                 error_report("Failed to restore virtio-serial element");
                 return -EINVAL;
             }
+            if (port->iov_idx >= port->elem->out_num ||
+                port->iov_offset > port->elem->out_sg[port->iov_idx].iov_len) {
+                error_report("Invalid iov indexes");
+                g_clear_pointer(&port->elem, g_free);
+                return -EINVAL;
+            }
 
             /*
              *  Port was throttled on source machine.  Let's
