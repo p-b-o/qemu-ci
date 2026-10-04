@@ -25,6 +25,7 @@
 #include "qemu/osdep.h"
 #include "ui/console.h"
 #include "hw/input/adb.h"
+#include "qapi/error.h"
 #include "migration/vmstate.h"
 #include "qemu/module.h"
 #include "adb-internal.h"
@@ -274,7 +275,12 @@ static void adb_mouse_realizefn(DeviceState *dev, Error **errp)
     MouseState *s = ADB_MOUSE(dev);
     ADBMouseClass *amc = ADB_MOUSE_GET_CLASS(dev);
 
+    ERRP_GUARD();
+
     amc->parent_realize(dev, errp);
+    if (*errp) {
+        return;
+    }
 
     s->hs = qemu_input_handler_register(dev, &adb_mouse_handler);
 }
