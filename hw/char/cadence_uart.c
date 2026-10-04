@@ -594,8 +594,7 @@ static int cadence_uart_post_load(void *opaque, int version_id)
     /* Ensure these two aren't invalid numbers */
     if (s->r[R_BRGR] < 1 || s->r[R_BRGR] & ~0xFFFF ||
         s->r[R_BDIV] <= 3 || s->r[R_BDIV] & ~0xFF) {
-        /* Value is invalid, abort */
-        return 1;
+        return -EINVAL;
     }
 
     uart_parameters_setup(s);
