@@ -217,6 +217,10 @@ static void virtio_input_reset(VirtIODevice *vdev)
             vic->change_active(vinput);
         }
     }
+    /*
+     * Don't reset qindex: the queue holds host-side input events
+     * not yet batched (no SYN_REPORT yet), not device state.
+     */
 }
 
 static int virtio_input_post_load(void *opaque, int version_id)
