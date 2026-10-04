@@ -49,6 +49,7 @@ void virtio_input_send(VirtIOInput *vinput, virtio_input_event *event)
         if (!elem) {
             while (--i >= 0) {
                 virtqueue_unpop(vinput->evt, vinput->queue[i].elem, 0);
+                g_free(vinput->queue[i].elem);
             }
             vinput->qindex = 0;
             trace_virtio_input_queue_full();
