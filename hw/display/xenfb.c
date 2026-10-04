@@ -560,8 +560,13 @@ static int xenfb_configure_fb(struct XenFB *xenfb, size_t fb_len_lim,
     return 0;
 }
 
+static inline uint32_t read_pixel24(const uint8_t *p)
+{
+    return p[0] | (p[1] << 8) | (p[2] << 16);
+}
+
 /* A convenient function for munging pixels between different depths */
-#define BLT(SRC_T,DST_T,RSB,GSB,BSB,RDB,GDB,BDB)                        \
+#define BLT(SRC_T,DST_T,READ_PIX,RSB,GSB,BSB,RDB,GDB,BDB)               \
     for (line = y ; line < (y+h) ; line++) {                            \
         SRC_T *src = (SRC_T *)(xenfb->pixels                            \
                                + xenfb->offset                          \
@@ -584,7 +589,7 @@ static int xenfb_configure_fb(struct XenFB *xenfb, size_t fb_len_lim,
         const uint32_t GDM = (~0U) << (32 - GDB);                       \
         const uint32_t BDM = (~0U) << (32 - BDB);                       \
         for (col = x ; col < (x+w) ; col++) {                           \
-            uint32_t spix = *src;                                       \
+            uint32_t spix = READ_PIX(src);                              \
             *dst = (((spix << RSS) & RSM & RDM) >> RDS) |               \
                 (((spix << GSS) & GSM & GDM) >> GDS) |                  \
                 (((spix << BSS) & BSM & BDM) >> BDS);                   \
@@ -592,6 +597,8 @@ static int xenfb_configure_fb(struct XenFB *xenfb, size_t fb_len_lim,
             dst = (DST_T *) ((unsigned long) dst + bpp / 8);            \
         }                                                               \
     }
+
+#define READ_DEREF(p) (*(p))
 
 
 /*
@@ -612,18 +619,18 @@ static void xenfb_guest_copy(struct XenFB *xenfb, int x, int y, int w, int h)
         switch (xenfb->depth) {
         case 8:
             if (bpp == 16) {
-                BLT(uint8_t, uint16_t,   3, 3, 2,   5, 6, 5);
+                BLT(uint8_t, uint16_t, READ_DEREF, 3, 3, 2,  5, 6, 5);
             } else if (bpp == 32) {
-                BLT(uint8_t, uint32_t,   3, 3, 2,   8, 8, 8);
+                BLT(uint8_t, uint32_t, READ_DEREF, 3, 3, 2,  8, 8, 8);
             } else {
                 oops = 1;
             }
             break;
         case 24:
             if (bpp == 16) {
-                BLT(uint32_t, uint16_t,  8, 8, 8,   5, 6, 5);
+                BLT(uint8_t, uint16_t, read_pixel24, 8, 8, 8,  5, 6, 5);
             } else if (bpp == 32) {
-                BLT(uint32_t, uint32_t,  8, 8, 8,   8, 8, 8);
+                BLT(uint8_t, uint32_t, read_pixel24, 8, 8, 8,  8, 8, 8);
             } else {
                 oops = 1;
             }
