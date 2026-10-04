@@ -506,6 +506,10 @@ static const MemoryRegionOps exynos4210_uart_ops = {
         .max_access_size = 4,
         .unaligned = false
     },
+    .impl = {
+        .min_access_size = 4,
+        .max_access_size = 4,
+    },
 };
 
 static int exynos4210_uart_can_receive(void *opaque)
