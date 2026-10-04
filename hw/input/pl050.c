@@ -265,7 +265,6 @@ static const TypeInfo pl050_type_info = {
     .class_init    = pl050_class_init,
     .class_size    = sizeof(PL050DeviceClass),
     .abstract      = true,
-    .class_init    = pl050_class_init,
 };
 
 static void pl050_register_types(void)
