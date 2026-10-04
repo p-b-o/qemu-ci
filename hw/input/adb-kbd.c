@@ -334,10 +334,23 @@ static void adb_keyboard_event(DeviceState *dev, QemuConsole *src,
     adb_kbd_put_keycode(s, keycode);
 }
 
+static int adb_kbd_post_load(void *opaque, int version_id)
+{
+    KBDState *s = opaque;
+
+    if (s->rptr < 0 || s->rptr >= sizeof(s->data) ||
+        s->wptr < 0 || s->wptr >= sizeof(s->data) ||
+        s->count < 0 || s->count > sizeof(s->data)) {
+        return -EINVAL;
+    }
+    return 0;
+}
+
 static const VMStateDescription vmstate_adb_kbd = {
     .name = "adb_kbd",
     .version_id = 2,
     .minimum_version_id = 2,
+    .post_load = adb_kbd_post_load,
     .fields = (const VMStateField[]) {
         VMSTATE_STRUCT(parent_obj, KBDState, 0, vmstate_adb_device, ADBDevice),
         VMSTATE_BUFFER(data, KBDState),
