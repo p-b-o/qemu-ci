@@ -51,6 +51,7 @@ struct ADBMouseClass {
     /*< private >*/
 
     DeviceRealize parent_realize;
+    DeviceUnrealize parent_unrealize;
 };
 
 #define ADB_MOUSE_BUTTON_LEFT   0x01
@@ -285,6 +286,17 @@ static void adb_mouse_realizefn(DeviceState *dev, Error **errp)
     s->hs = qemu_input_handler_register(dev, &adb_mouse_handler);
 }
 
+static void adb_mouse_unrealizefn(DeviceState *dev)
+{
+    MouseState *s = ADB_MOUSE(dev);
+    ADBMouseClass *amc = ADB_MOUSE_GET_CLASS(dev);
+
+    g_clear_pointer(&s->hs, qemu_input_handler_unregister);
+    if (amc->parent_unrealize) {
+        amc->parent_unrealize(dev);
+    }
+}
+
 static void adb_mouse_initfn(Object *obj)
 {
     ADBDevice *d = ADB_DEVICE(obj);
@@ -300,6 +312,8 @@ static void adb_mouse_class_init(ObjectClass *oc, const void *data)
 
     device_class_set_parent_realize(dc, adb_mouse_realizefn,
                                     &amc->parent_realize);
+    device_class_set_parent_unrealize(dc, adb_mouse_unrealizefn,
+                                      &amc->parent_unrealize);
     set_bit(DEVICE_CATEGORY_INPUT, dc->categories);
 
     adc->devreq = adb_mouse_request;
