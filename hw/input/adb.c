@@ -280,10 +280,21 @@ static const TypeInfo adb_bus_type_info = {
     .class_init = adb_bus_class_init,
 };
 
+static int adb_device_post_load(void *opaque, int version_id)
+{
+    ADBDevice *d = opaque;
+
+    if (d->devaddr < 0 || d->devaddr >= MAX_ADB_DEVICES) {
+        return -EINVAL;
+    }
+    return 0;
+}
+
 const VMStateDescription vmstate_adb_device = {
     .name = "adb_device",
     .version_id = 0,
     .minimum_version_id = 0,
+    .post_load = adb_device_post_load,
     .fields = (const VMStateField[]) {
         VMSTATE_INT32(devaddr, ADBDevice),
         VMSTATE_INT32(handler, ADBDevice),
