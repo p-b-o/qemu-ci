@@ -25,6 +25,7 @@
 #include "qemu/osdep.h"
 #include "hw/input/adb.h"
 #include "hw/core/qdev-properties.h"
+#include "qapi/error.h"
 #include "migration/vmstate.h"
 #include "qemu/module.h"
 #include "qemu/timer.h"
@@ -308,6 +309,7 @@ static void adb_device_realizefn(DeviceState *dev, Error **errp)
     ADBBusState *bus = ADB_BUS(qdev_get_parent_bus(dev));
 
     if (bus->nb_devices >= MAX_ADB_DEVICES) {
+        error_setg(errp, "Too many ADB devices");
         return;
     }
 
