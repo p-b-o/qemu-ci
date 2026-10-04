@@ -3319,6 +3319,13 @@ foreach target : target_dirs
   endif
 
   config_target += keyval.load('configs/targets' / target + '.mak')
+  if 'TARGET_SYS_EMU' not in config_target
+    if target.endswith('-softmmu')
+      config_target += { 'TARGET_SYS_EMU': config_target['TARGET_NAME'] }
+    else
+      config_target += { 'TARGET_SYS_EMU': config_target['TARGET_ARCH'] }
+    endif
+  endif
 
   target_kconfig = []
   foreach sym: accelerators
@@ -3372,6 +3379,8 @@ foreach target : target_dirs
       # do nothing
     elif ignored.contains(k)
       # do nothing
+    elif k == 'TARGET_SYS_EMU'
+      config_target_data.set(k, v.to_upper())
     elif k == 'TARGET_BASE_ARCH'
       # Note that TARGET_BASE_ARCH ends up in config-target.h but it is
       # not used to select files from sourcesets.
