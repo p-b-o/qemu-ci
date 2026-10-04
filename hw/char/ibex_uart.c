@@ -395,7 +395,9 @@ static void ibex_uart_write(void *opaque, hwaddr addr,
         if (value & R_CTRL_NCO_MASK) {
             uint64_t baud = ibex_uart_get_baud(s);
 
-            s->char_tx_time = (NANOSECONDS_PER_SECOND / baud) * 10;
+            if (baud) {
+                s->char_tx_time = (NANOSECONDS_PER_SECOND / baud) * 10;
+            }
         }
         break;
     case R_STATUS:
@@ -455,7 +457,9 @@ static void ibex_uart_clk_update(void *opaque, ClockEvent event)
     /* recompute uart's speed on clock change */
     uint64_t baud = ibex_uart_get_baud(s);
 
-    s->char_tx_time = (NANOSECONDS_PER_SECOND / baud) * 10;
+    if (baud) {
+        s->char_tx_time = (NANOSECONDS_PER_SECOND / baud) * 10;
+    }
 }
 
 static void fifo_trigger_update(void *opaque)
