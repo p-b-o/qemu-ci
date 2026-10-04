@@ -63,6 +63,9 @@ static DisplaySurface *ramfb_create_display_surface(int width, int height,
     if (stride == 0) {
         stride = linesize;
     }
+    if (stride < linesize || stride % 4 != 0 || stride > INT_MAX / height) {
+        return NULL;
+    }
 
     mapsize = size = stride * (height - 1) + linesize;
     data = physical_memory_map(addr, &mapsize, false);
