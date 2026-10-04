@@ -764,10 +764,21 @@ static void serial_event(void *opaque, QEMUChrEvent event)
     }
 }
 
+static int escc_chn_post_load(void *opaque, int version_id)
+{
+    ESCCChannelState *s = opaque;
+
+    if (s->reg >= ESCC_SERIAL_REGS) {
+        return -EINVAL;
+    }
+    return 0;
+}
+
 static const VMStateDescription vmstate_escc_chn = {
     .name = "escc_chn",
     .version_id = 2,
     .minimum_version_id = 1,
+    .post_load = escc_chn_post_load,
     .fields = (const VMStateField[]) {
         VMSTATE_UINT32(vmstate_dummy, ESCCChannelState),
         VMSTATE_UINT32(reg, ESCCChannelState),
