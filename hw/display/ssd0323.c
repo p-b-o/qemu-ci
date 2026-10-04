@@ -113,13 +113,13 @@ static uint32_t ssd0323_transfer(SSIPeripheral *dev, uint32_t data)
 #define DATA(x) if (s->cmd_len <= (x)) return 0
         case 0x15: /* Set column.  */
             DATA(2);
-            s->col = s->col_start = s->cmd_data[0] % 64;
-            s->col_end = s->cmd_data[1] % 64;
+            s->col = s->col_start = (uint32_t)s->cmd_data[0] % 64;
+            s->col_end = (uint32_t)s->cmd_data[1] % 64;
             break;
         case 0x75: /* Set row.  */
             DATA(2);
-            s->row = s->row_start = s->cmd_data[0] % 80;
-            s->row_end = s->cmd_data[1] % 80;
+            s->row = s->row_start = (uint32_t)s->cmd_data[0] % 80;
+            s->row_end = (uint32_t)s->cmd_data[1] % 80;
             break;
         case 0x81: /* Set contrast */
             DATA(1);
