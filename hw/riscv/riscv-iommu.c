@@ -1700,6 +1700,7 @@ static void riscv_iommu_iot_update(RISCVIOMMUState *s,
     GHashTable *iot_cache, RISCVIOMMUEntry *iot)
 {
     if (!s->iot_limit) {
+        g_free(iot);
         return;
     }
 
