@@ -133,11 +133,11 @@ void gus_mixvoices(GUSEmuState * state, unsigned int playback_freq, unsigned int
                 }
                 if ((GUSvoice(wVSRVolRampControl) & 0xa000) == 0xa000)  /* volramp IRQ set and enabled? */
                 {
-                    GUSregd(voicevolrampirq) |= 1 << Voice;             /* set irq slot */
+                    GUSregd(voicevolrampirq) |= 1U << Voice;            /* set irq slot */
                 }
                 else
                 {
-                    GUSregd(voicevolrampirq) &= (~(1 << Voice));        /* clear irq slot */
+                    GUSregd(voicevolrampirq) &= ~(1U << Voice); /* clear irq slot */
                     GUSvoice(wVSRVolRampControl) &= 0x7f00;
                 }
 
@@ -164,11 +164,11 @@ void gus_mixvoices(GUSEmuState * state, unsigned int playback_freq, unsigned int
                 }
                 if ((GUSvoice(wVSRControl) & 0xa000) == 0xa000)    /* wavetable IRQ set and enabled? */
                 {
-                    GUSregd(voicewavetableirq) |= 1 << Voice;      /* set irq slot */
+                    GUSregd(voicewavetableirq) |= 1U << Voice;      /* set irq slot */
                 }
                 else
                 {
-                    GUSregd(voicewavetableirq) &= (~(1 << Voice)); /* clear irq slot */
+                    GUSregd(voicewavetableirq) &= ~(1U << Voice); /* clear irq slot */
                     GUSvoice(wVSRControl) &= 0x7f00;
                 }
 
