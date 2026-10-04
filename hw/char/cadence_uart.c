@@ -351,7 +351,7 @@ static void uart_write_tx_fifo(CadenceUARTState *s, const uint8_t *buf,
          * us to here.
          */
         qemu_log_mask(LOG_GUEST_ERROR, "cadence_uart: TxFIFO overflow");
-        s->r[R_CISR] |= UART_INTR_ROVR;
+        s->r[R_CISR] |= UART_INTR_TOVR;
     }
 
     memcpy(s->tx_fifo + s->tx_count, buf, size);
