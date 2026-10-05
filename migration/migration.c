@@ -71,6 +71,8 @@
 #define INMIGRATE_DEFAULT_EXIT_ON_ERROR true
 
 static GSList *migration_state_notifiers[MIG_MODE__MAX];
+static NotifierList incoming_failure_notifiers =
+    NOTIFIER_LIST_INITIALIZER(incoming_failure_notifiers);
 
 /* Messages sent on the return path from destination to source */
 enum mig_rp_message_type {
@@ -818,6 +820,17 @@ fail:
     migrate_set_state(&mis->state, MIGRATION_STATUS_ACTIVE,
                       MIGRATION_STATUS_FAILED);
     migrate_error_propagate(s, local_err);
+
+    /*
+     * Allow the devices which have registered their callbacks for
+     * migration target failure to undo the changes they may have
+     * done in post_load().
+     *
+     * Do that before migration_incoming_state_destroy() reports the
+     * failure over the return path (if present) and before the exit()
+     * below.
+     */
+    notifier_list_notify(&incoming_failure_notifiers, NULL);
     migration_incoming_state_destroy();
 
     if (mis->exit_on_error) {
@@ -1588,6 +1601,16 @@ void migration_add_notifier(NotifierWithReturn *notify,
                             MigrationNotifyFunc func)
 {
     migration_add_notifier_mode(notify, func, MIG_MODE_NORMAL);
+}
+
+void migration_incoming_add_failure_notifier(Notifier *notify)
+{
+    notifier_list_add(&incoming_failure_notifiers, notify);
+}
+
+void migration_incoming_remove_failure_notifier(Notifier *notify)
+{
+    notifier_remove(notify);
 }
 
 void migration_remove_notifier(NotifierWithReturn *notify)

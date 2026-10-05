@@ -112,6 +112,13 @@ void migration_add_notifier_modes(NotifierWithReturn *notify,
  */
 void migration_remove_notifier(NotifierWithReturn *notify);
 
+/*
+ * Incoming side: @notify is called when an incoming migration fails,
+ * before the target dies or before the source is told about the failure.
+ */
+void migration_incoming_add_failure_notifier(Notifier *notify);
+void migration_incoming_remove_failure_notifier(Notifier *notify);
+
 void migration_file_set_error(int ret, Error *err);
 
 /* True if incoming migration entered POSTCOPY_INCOMING_DISCARD */
