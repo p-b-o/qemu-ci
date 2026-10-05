@@ -1460,9 +1460,11 @@ get_whole_cluster(BlockDriverState *bs, VmdkExtent *extent,
     int64_t cluster_bytes;
     uint8_t *whole_grain;
     bool copy_from_backing;
+    BDRVVmdkState *s = bs->opaque;
 
     /* For COW, align request sector_num to cluster start */
-    cluster_bytes = extent->cluster_sectors << BDRV_SECTOR_BITS;
+    cluster_bytes = strcmp(s->create_type, "streamOptimized") == 0 ? SECTOR_SIZE
+      : extent->cluster_sectors << BDRV_SECTOR_BITS;
     offset = QEMU_ALIGN_DOWN(offset, cluster_bytes);
     whole_grain = qemu_blockalign(bs, cluster_bytes);
     copy_from_backing = bs->backing && !zeroed;
