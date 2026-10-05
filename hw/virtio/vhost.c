@@ -26,6 +26,7 @@
 #include "hw/virtio/vhost-user.h"
 #include "hw/mem/memory-device.h"
 #include "migration/blocker.h"
+#include "migration/misc.h"
 #include "migration/qemu-file-types.h"
 #include "system/dma.h"
 #include "system/memory.h"
@@ -52,6 +53,22 @@ static QLIST_HEAD(, vhost_dev) vhost_log_devs[VHOST_BACKEND_TYPE_MAX];
 
 static QLIST_HEAD(, vhost_dev) vhost_devices =
     QLIST_HEAD_INITIALIZER(vhost_devices);
+
+/*
+ * A CPR target takes the device ownership in post_load().  If the load
+ * fails afterwards, release it before the target dies or before the source
+ * learns about the failure and resumes, so that the source can take the
+ * device back.
+ */
+static void vhost_incoming_failure_notify(Notifier *notifier, void *data)
+{
+    struct vhost_dev *hdev = container_of(notifier, struct vhost_dev,
+                                          incoming_failure_notifier);
+
+    if (hdev->owner) {
+        vhost_dev_reset_owner(hdev);
+    }
+}
 
 unsigned int vhost_get_max_memslots(void)
 {
@@ -1823,6 +1840,8 @@ int vhost_dev_init(struct vhost_dev *hdev, void *opaque,
     hdev->log_enabled = false;
     hdev->started = false;
     memory_listener_register(&hdev->memory_listener, &address_space_memory);
+    hdev->incoming_failure_notifier.notify = vhost_incoming_failure_notify;
+    migration_incoming_add_failure_notifier(&hdev->incoming_failure_notifier);
     QLIST_INSERT_HEAD(&vhost_devices, hdev, entry);
 
     /*
@@ -1871,6 +1890,11 @@ void vhost_dev_cleanup(struct vhost_dev *hdev)
         /* those are only safe after successful init */
         memory_listener_unregister(&hdev->memory_listener);
         QLIST_REMOVE(hdev, entry);
+    }
+    if (hdev->incoming_failure_notifier.notify) {
+        migration_incoming_remove_failure_notifier(
+            &hdev->incoming_failure_notifier);
+        hdev->incoming_failure_notifier.notify = NULL;
     }
     migrate_del_blocker(&hdev->migration_blocker);
     g_free(hdev->mem);
