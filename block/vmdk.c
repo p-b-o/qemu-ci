@@ -2218,7 +2218,7 @@ vmdk_co_pwrite_zeroes(BlockDriverState *bs, int64_t offset, int64_t bytes,
 
 static int coroutine_fn GRAPH_UNLOCKED
 vmdk_init_extent(BlockBackend *blk, int64_t filesize, bool flat, bool compress,
-                 bool zeroed_grain, Error **errp)
+                 bool zeroed_grain, bool stream_optimized, Error **errp)
 {
     int ret, i;
     VMDK4Header header;
@@ -2239,9 +2239,10 @@ vmdk_init_extent(BlockBackend *blk, int64_t filesize, bool flat, bool compress,
     } else {
         header.version = 1;
     }
-    header.flags = VMDK4_FLAG_RGD | VMDK4_FLAG_NL_DETECT
+    header.flags =  VMDK4_FLAG_NL_DETECT
                    | (compress ? VMDK4_FLAG_COMPRESS | VMDK4_FLAG_MARKER : 0)
-                   | (zeroed_grain ? VMDK4_FLAG_ZERO_GRAIN : 0);
+                   | (zeroed_grain ? VMDK4_FLAG_ZERO_GRAIN : 0)
+                   | (stream_optimized ? 0 : VMDK4_FLAG_RGD);
     header.compressAlgorithm = compress ? VMDK4_COMPRESSION_DEFLATE : 0;
     header.capacity = filesize / BDRV_SECTOR_SIZE;
     header.granularity = 128;
@@ -2255,8 +2256,15 @@ vmdk_init_extent(BlockBackend *blk, int64_t filesize, bool flat, bool compress,
 
     header.desc_offset = 1;
     header.desc_size = 20;
-    header.rgd_offset = header.desc_offset + header.desc_size;
-    header.gd_offset = header.rgd_offset + gd_sectors + (gt_size * gt_count);
+
+    if (stream_optimized) {
+        header.rgd_offset = 0;
+        header.gd_offset = header.desc_offset + header.desc_size;
+    } else {
+        header.rgd_offset = header.desc_offset + header.desc_size;
+        header.gd_offset = header.rgd_offset + gd_sectors + (gt_size * gt_count);
+    }
+
     header.grain_offset =
         ROUND_UP(header.gd_offset + gd_sectors + (gt_size * gt_count),
                  header.granularity);
@@ -2296,21 +2304,24 @@ vmdk_init_extent(BlockBackend *blk, int64_t filesize, bool flat, bool compress,
         goto exit;
     }
 
-    /* write grain directory */
+    /* write backup grain directory */
     gd_buf_size = gd_sectors * BDRV_SECTOR_SIZE;
     gd_buf = g_malloc0(gd_buf_size);
-    for (i = 0, tmp = le64_to_cpu(header.rgd_offset) + gd_sectors;
-         i < gt_count; i++, tmp += gt_size) {
-        gd_buf[i] = cpu_to_le32(tmp);
-    }
-    ret = blk_co_pwrite(blk, le64_to_cpu(header.rgd_offset) * BDRV_SECTOR_SIZE,
-                        gd_buf_size, gd_buf, 0);
-    if (ret < 0) {
-        error_setg_errno(errp, -ret, "failed to write VMDK grain directory");
-        goto exit;
+
+    if (!stream_optimized) {
+        for (i = 0, tmp = le64_to_cpu(header.rgd_offset) + gd_sectors;
+             i < gt_count; i++, tmp += gt_size) {
+            gd_buf[i] = cpu_to_le32(tmp);
+        }
+        ret = blk_co_pwrite(blk, le64_to_cpu(header.rgd_offset) * BDRV_SECTOR_SIZE,
+                            gd_buf_size, gd_buf, 0);
+        if (ret < 0) {
+            error_setg_errno(errp, -ret, "failed to write VMDK grain directory");
+            goto exit;
+        }
     }
 
-    /* write backup grain directory */
+    /* write grain directory */
     for (i = 0, tmp = le64_to_cpu(header.gd_offset) + gd_sectors;
          i < gt_count; i++, tmp += gt_size) {
         gd_buf[i] = cpu_to_le32(tmp);
@@ -2319,7 +2330,7 @@ vmdk_init_extent(BlockBackend *blk, int64_t filesize, bool flat, bool compress,
                         gd_buf_size, gd_buf, 0);
     if (ret < 0) {
         error_setg_errno(errp, -ret,
-                         "failed to write VMDK backup grain directory");
+                         "failed to write VMDK grain directory");
     }
 
     ret = 0;
@@ -2330,8 +2341,8 @@ exit:
 
 static int coroutine_fn GRAPH_UNLOCKED
 vmdk_create_extent(const char *filename, int64_t filesize, bool flat,
-                   bool compress, bool zeroed_grain, BlockBackend **pbb,
-                   QemuOpts *opts, Error **errp)
+                   bool compress, bool zeroed_grain, bool stream_optimized,
+                   BlockBackend **pbb, QemuOpts *opts, Error **errp)
 {
     int ret;
     BlockBackend *blk = NULL;
@@ -2351,7 +2362,8 @@ vmdk_create_extent(const char *filename, int64_t filesize, bool flat,
 
     blk_set_allow_write_beyond_eof(blk, true);
 
-    ret = vmdk_init_extent(blk, filesize, flat, compress, zeroed_grain, errp);
+    ret = vmdk_init_extent(blk, filesize, flat, compress, zeroed_grain, stream_optimized,
+                           errp);
 exit:
     if (blk) {
         if (pbb) {
@@ -2411,8 +2423,8 @@ static int filename_decompose(const char *filename, char *path, char *prefix,
  */
 typedef BlockBackend * coroutine_fn GRAPH_UNLOCKED_PTR
     (*vmdk_create_extent_fn)(int64_t size, int idx, bool flat, bool split,
-                             bool compress, bool zeroed_grain, void *opaque,
-                             Error **errp);
+                             bool compress, bool zeroed_grain, bool stream_optimized,
+                             void *opaque, Error **errp);
 
 static void vmdk_desc_add_extent(GString *desc,
                                  const char *extent_line_fmt,
@@ -2534,6 +2546,7 @@ vmdk_co_do_create(int64_t size,
     }
     /* Get the descriptor file BDS */
     blk = extent_fn(created_size, 0, flat, split, compress, zeroed_grain,
+                    subformat == BLOCKDEV_VMDK_SUBFORMAT_STREAMOPTIMIZED,
                     opaque, errp);
     if (!blk) {
         ret = -EIO;
@@ -2586,8 +2599,9 @@ vmdk_co_do_create(int64_t size,
     extent_idx = 1;
     while (created_size < size) {
         int64_t cur_size = MIN(size - created_size, extent_size);
-        extent_blk = extent_fn(cur_size, extent_idx, flat, split, compress,
-                               zeroed_grain, opaque, errp);
+        extent_blk = extent_fn(cur_size, extent_idx, flat, split, compress, zeroed_grain,
+                               subformat == BLOCKDEV_VMDK_SUBFORMAT_STREAMOPTIMIZED,
+                               opaque, errp);
         if (!extent_blk) {
             ret = -EINVAL;
             goto exit;
@@ -2601,6 +2615,7 @@ vmdk_co_do_create(int64_t size,
 
     /* Check whether we got excess extents */
     extent_blk = extent_fn(-1, extent_idx, flat, split, compress, zeroed_grain,
+                           subformat == BLOCKDEV_VMDK_SUBFORMAT_STREAMOPTIMIZED,
                            opaque, NULL);
     if (extent_blk) {
         blk_co_unref(extent_blk);
@@ -2661,8 +2676,8 @@ typedef struct {
 
 static BlockBackend * coroutine_fn GRAPH_UNLOCKED
 vmdk_co_create_opts_cb(int64_t size, int idx, bool flat, bool split,
-                       bool compress, bool zeroed_grain, void *opaque,
-                       Error **errp)
+                       bool compress, bool zeroed_grain, bool stream_optimized,
+                       void *opaque, Error **errp)
 {
     BlockBackend *blk = NULL;
     BlockDriverState *bs = NULL;
@@ -2691,8 +2706,8 @@ vmdk_co_create_opts_cb(int64_t size, int idx, bool flat, bool split,
     g_free(rel_filename);
 
     if (vmdk_create_extent(ext_filename, size,
-                           flat, compress, zeroed_grain, &blk, data->opts,
-                           errp)) {
+                           flat, compress, zeroed_grain, stream_optimized, &blk,
+                           data->opts, errp)) {
         goto exit;
     }
     bdrv_co_unref(bs);
@@ -2812,7 +2827,7 @@ exit:
 
 static BlockBackend * coroutine_fn GRAPH_UNLOCKED
 vmdk_co_create_cb(int64_t size, int idx, bool flat, bool split, bool compress,
-                  bool zeroed_grain, void *opaque, Error **errp)
+                  bool zeroed_grain, bool stream_optimized, void *opaque, Error **errp)
 {
     int ret;
     BlockDriverState *bs;
@@ -2852,7 +2867,8 @@ vmdk_co_create_cb(int64_t size, int idx, bool flat, bool split, bool compress,
     bdrv_co_unref(bs);
 
     if (size != -1) {
-        ret = vmdk_init_extent(blk, size, flat, compress, zeroed_grain, errp);
+        ret = vmdk_init_extent(blk, size, flat, compress, zeroed_grain, stream_optimized,
+                               errp);
         if (ret) {
             blk_co_unref(blk);
             blk = NULL;
