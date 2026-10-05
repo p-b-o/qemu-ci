@@ -195,6 +195,13 @@ typedef struct VmdkGrainMarker {
     uint8_t  data[];
 } QEMU_PACKED VmdkGrainMarker;
 
+typedef struct EosMarker {
+   uint64_t val;
+   uint32_t size;
+   uint32_t type;
+   uint8_t pad[512 - 16];
+} QEMU_PACKED EosMarker;
+
 enum {
     MARKER_END_OF_STREAM    = 0,
     MARKER_GRAIN_TABLE      = 1,
@@ -987,12 +994,7 @@ vmdk_open_vmdk4(BlockDriverState *bs, BdrvChild *file, int flags,
             VMDK4Header header;
             uint8_t pad[512 - 4 - sizeof(VMDK4Header)];
 
-            struct {
-                uint64_t val;
-                uint32_t size;
-                uint32_t type;
-                uint8_t pad[512 - 16];
-            } QEMU_PACKED eos_marker;
+            EosMarker eos_marker;
         } QEMU_PACKED footer;
 
         ret = bdrv_pread(file, bs->file->bs->total_sectors * 512 - 1536,
@@ -2180,6 +2182,7 @@ vmdk_co_pwritev_compressed(BlockDriverState *bs, int64_t offset, int64_t bytes,
         BDRVVmdkState *s = bs->opaque;
         int i, ret;
         int64_t length;
+        EosMarker *eos_marker = NULL;
 
         for (i = 0; i < s->num_extents; i++) {
             length = bdrv_co_getlength(s->extents[i].file->bs);
@@ -2193,6 +2196,20 @@ vmdk_co_pwritev_compressed(BlockDriverState *bs, int64_t offset, int64_t bytes,
                 return ret;
             }
         }
+
+        /* Stream optimized disks end with an EOS marker, consisting of 512 null bytes. */
+        if (strcmp(s->create_type, "streamOptimized") == 0) {
+            eos_marker = g_malloc(sizeof(EosMarker));
+            memset(eos_marker, 0, sizeof(EosMarker));
+            length = bdrv_co_getlength(s->extents[s->num_extents - 1].file->bs);
+            ret = bdrv_co_pwrite(s->extents[s->num_extents - 1].file, length,
+                                 sizeof(EosMarker), eos_marker, 0);
+            g_free(eos_marker);
+            if (ret < 0) {
+                return ret;
+            }
+        }
+
         return 0;
     }
     return vmdk_co_pwritev(bs, offset, bytes, qiov, 0);
