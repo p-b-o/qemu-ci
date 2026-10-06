@@ -123,7 +123,7 @@ static void rp_realize(PCIDevice *d, Error **errp)
         if (rc < 0) {
             goto err;
         }
-    } else if (p->acs_ctrl) {
+    } else if (p->acs_ctrl_configured) {
         error_setg(errp, "acs-ctrl is not supported by this root port");
         goto err;
     }
@@ -159,7 +159,8 @@ static void rp_exit(PCIDevice *d)
 static const Property rp_props[] = {
     DEFINE_PROP_BIT(COMPAT_PROP_PCP, PCIDevice, cap_present,
                     QEMU_PCIE_SLTCAP_PCP_BITNR, true),
-    DEFINE_PROP_UINT16("acs-ctrl", PCIEPort, acs_ctrl, 0),
+    DEFINE_PROP_UNSIGNED_NODEFAULT("acs-ctrl", PCIEPort, acs_ctrl,
+                                   qdev_prop_acs_ctrl, uint16_t),
 };
 
 static void rp_instance_post_init(Object *obj)

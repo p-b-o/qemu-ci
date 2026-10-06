@@ -120,7 +120,7 @@ static void xio3130_downstream_realize(PCIDevice *d, Error **errp)
         if (rc < 0) {
             goto err;
         }
-    } else if (p->acs_ctrl) {
+    } else if (p->acs_ctrl_configured) {
         error_setg(errp, "acs-ctrl requires x-pcie-acs to be on");
         goto err;
     }
@@ -154,7 +154,8 @@ static const Property xio3130_downstream_props[] = {
                     QEMU_PCIE_SLTCAP_PCP_BITNR, true),
     DEFINE_PROP_BIT("x-pcie-acs", PCIDevice, cap_present,
                     QEMU_PCIE_ACS_BITNR, true),
-    DEFINE_PROP_UINT16("acs-ctrl", PCIEPort, acs_ctrl, 0),
+    DEFINE_PROP_UNSIGNED_NODEFAULT("acs-ctrl", PCIEPort, acs_ctrl,
+                                   qdev_prop_acs_ctrl, uint16_t),
 };
 
 static const VMStateDescription vmstate_xio3130_downstream = {
