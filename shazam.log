@@ -1,0 +1,24 @@
+Looking up 1e5b1f1f-1d7f-43cf-8883-0e0ab2ec88ce@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] hw/display/apple: Fix obsolete PGDevice function
+    + Link: https://lore.kernel.org/qemu-devel/1e5b1f1f-1d7f-43cf-8883-0e0ab2ec88ce@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 1
+---
+Applying: hw/display/apple: Fix obsolete PGDevice function
+Patch failed at 0001 hw/display/apple: Fix obsolete PGDevice function
+error: patch failed: hw/display/apple-gfx.m:767
+error: hw/display/apple-gfx.m: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
