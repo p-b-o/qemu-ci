@@ -209,8 +209,6 @@ struct SDState {
     char *preset_auth_key;
 };
 
-static void sd_realize(DeviceState *dev, Error **errp);
-
 static const SDProto sd_proto_spi;
 static const SDProto sd_proto_emmc;
 
