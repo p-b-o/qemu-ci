@@ -3,6 +3,8 @@ cc_feat_cflags = {
   'power10': '-mcpu=power10',
 }
 
+subdir('system')
+
 tests = []
 
 # Multi arch tests
