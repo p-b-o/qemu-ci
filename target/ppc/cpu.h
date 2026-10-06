@@ -2568,8 +2568,8 @@ enum {
     PPC2_PRCNTL        = 0x0000000000000008ULL,
     /* Byte-reversed, indexed, double-word load and store                    */
     PPC2_DBRX          = 0x0000000000000010ULL,
-    /* Book I 2.05 PowerPC specification                                     */
-    PPC2_ISA205        = 0x0000000000000020ULL,
+    /* ISA 2.05 cmpb */
+    PPC2_CMPB_ISA205   = 0x0000000000000020ULL,
     /* POWER ISA 2.07                                                        */
     PPC2_ISA207        = 0x0000000000000040ULL,
     /* ISA 2.06B bpermd                                                      */
@@ -2602,15 +2602,27 @@ enum {
     PPC2_PPE42X        = 0x0000000000100000ULL,
     /* PPE42XM instructions                                                  */
     PPC2_PPE42XM       = 0x0000000000200000ULL,
+    /* ISA 2.05 prtyw and prtyd */
+    PPC2_PRTY_ISA205   = 0x0000000000800000ULL,
+    /* ISA 2.05 fcpsgn */
+    PPC2_FCPSGN_ISA205 = 0x0000000001000000ULL,
+    /* ISA 2.05 lfiwax */
+    PPC2_LFIWAX_ISA205 = 0x0000000002000000ULL,
+    /* ISA 2.05 floating-point pair loads and stores */
+    PPC2_FP_PAIR_ISA205 = 0x0000000004000000ULL,
+    /* ISA 2.05 FPSCR access through the W and L fields */
+    PPC2_FPSCR_EXT_ISA205 = 0x0000000008000000ULL,
 
 #define PPC_TCG_INSNS2 (PPC2_BOOKE206 | PPC2_VSX | PPC2_PRCNTL | PPC2_DBRX | \
-                        PPC2_ISA205 | PPC2_ISA207 | PPC2_PERM_ISA206 | \
+                        PPC2_CMPB_ISA205 | PPC2_ISA207 | PPC2_PERM_ISA206 | \
                         PPC2_DIVE_ISA206 | PPC2_ATOMIC_ISA206 | \
                         PPC2_FP_CVT_ISA206 | PPC2_FP_TST_ISA206 | PPC2_DFP | \
                         PPC2_FP_CVT_S64 | PPC2_TM | PPC2_PM_ISA206 | \
                         PPC2_ISA300 | PPC2_ISA310 | PPC2_MEM_LWSYNC | \
                         PPC2_BCDA_ISA206 | PPC2_PPE42 | PPC2_PPE42X | \
-                        PPC2_PPE42XM)
+                        PPC2_PPE42XM | PPC2_PRTY_ISA205 | \
+                        PPC2_FCPSGN_ISA205 | PPC2_LFIWAX_ISA205 | \
+                        PPC2_FP_PAIR_ISA205 | PPC2_FPSCR_EXT_ISA205)
 };
 
 /*****************************************************************************/
