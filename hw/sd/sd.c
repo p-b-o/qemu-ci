@@ -172,7 +172,7 @@ struct SDState {
 
     /* Runtime changeables */
 
-    int32_t state;    /* current card state, one of SDCardStates */
+    enum SDCardStates state; /* current card state */
     uint32_t vhs;
     bool wp_switch;
     unsigned long *wp_group_bmap;
