@@ -1113,20 +1113,22 @@ static const VMStateDescription sd_vmstate = {
     },
 };
 
-static void sd_blk_read(SDState *sd, uint64_t addr, uint32_t len)
+static void sd_blk_read(SDState *sd, void* buf, uint64_t addr,
+                        uint32_t len)
 {
     trace_sdcard_read_block(addr, len);
     addr += sd_part_offset(sd);
-    if (!sd->blk || blk_pread(sd->blk, addr, len, sd->data, 0) < 0) {
+    if (!sd->blk || blk_pread(sd->blk, addr, len, buf, 0) < 0) {
         fprintf(stderr, "sd_blk_read: read error on host side\n");
     }
 }
 
-static void sd_blk_write(SDState *sd, uint64_t addr, uint32_t len)
+static void sd_blk_write(SDState *sd, const void *buf, uint64_t addr,
+                         uint32_t len)
 {
     trace_sdcard_write_block(addr, len);
     addr += sd_part_offset(sd);
-    if (!sd->blk || blk_pwrite(sd->blk, addr, len, sd->data, 0) < 0) {
+    if (!sd->blk || blk_pwrite(sd->blk, addr, len, buf, 0) < 0) {
         fprintf(stderr, "sd_blk_write: write error on host side\n");
     }
 }
@@ -1364,7 +1366,7 @@ static void sd_erase(SDState *sd)
                 continue;
             }
         }
-        sd_blk_write(sd, erase_addr, erase_len);
+        sd_blk_write(sd, sd->data, erase_addr, erase_len);
     }
 }
 
@@ -1985,7 +1987,7 @@ static sd_rsp_type_t sd_cmd_READ_SINGLE_BLOCK(SDState *sd, SDRequest req)
         return sd_r1;
     }
 
-    sd_blk_read(sd, addr, sd->blk_len);
+    sd_blk_read(sd, sd->data, addr, sd->blk_len);
     return sd_cmd_to_sendingdata(sd, req, addr, NULL, sd->blk_len);
 }
 
@@ -2685,7 +2687,7 @@ static size_t sd_write_data(SDState *sd, const void *buf, size_t length)
         if (sd_generic_write_data(sd, buf, &length)) {
             /* TODO: Check CRC before committing */
             sd->state = sd_programming_state;
-            sd_blk_write(sd, sd->data_start, sd->data_offset);
+            sd_blk_write(sd, sd->data, sd->data_start, sd->data_offset);
             sd->blk_written ++;
             sd->csd[14] |= 0x40;
             /* Bzzzzzzztt .... Operation complete.  */
@@ -2720,7 +2722,7 @@ static size_t sd_write_data(SDState *sd, const void *buf, size_t length)
             if (partition_access == EXT_CSD_PART_CONFIG_ACC_RPMB) {
                 emmc_rpmb_blk_write(sd, sd->data_start, sd->data_offset);
             } else {
-                sd_blk_write(sd, sd->data_start, sd->data_offset);
+                sd_blk_write(sd, sd->data, sd->data_start, sd->data_offset);
             }
             sd->blk_written++;
             sd->data_start += sd->blk_len;
@@ -2858,7 +2860,7 @@ static size_t sd_read_data(SDState *sd, void *buf, size_t length)
             if (partition_access == EXT_CSD_PART_CONFIG_ACC_RPMB) {
                 emmc_rpmb_blk_read(sd, sd->data_start, io_len);
             } else {
-                sd_blk_read(sd, sd->data_start, io_len);
+                sd_blk_read(sd, sd->data, sd->data_start, io_len);
             }
         }
 
