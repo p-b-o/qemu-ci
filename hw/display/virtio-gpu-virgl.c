@@ -458,6 +458,7 @@ virtio_gpu_virgl_resource_unref(VirtIOGPU *g,
 
     QTAILQ_REMOVE(&g->reslist, &res->base, next);
 
+    g_free(res->base.addrs);
     g_free(res);
 
     return 0;
