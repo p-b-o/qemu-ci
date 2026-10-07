@@ -3581,6 +3581,22 @@ foreach d : hx_headers
 endforeach
 genh += hxdep
 
+# Use target_mak_all, not target_dirs, so the generated helpers do not
+# depend on --target-list.
+target_info_gen_args = []
+foreach target, mak : target_mak_all
+  if target.endswith('-softmmu')
+    target_info_gen_args += ['--target',
+      target.split('-')[0] + '=' + mak['TARGET_BASE_ARCH']]
+  endif
+endforeach
+target_info_gen = custom_target('target-info-gen',
+                      output: ['target-info-gen.h', 'target-info-gen.c.inc'],
+                      depend_files: files('scripts/qapi/common.py'),
+                      command: [python, files('scripts/gen-target-info.py'),
+                                target_info_gen_args, '@OUTDIR@'])
+genh += target_info_gen
+
 ###############
 # Trace files #
 ###############
