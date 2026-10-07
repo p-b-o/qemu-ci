@@ -266,9 +266,9 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
     const char *cpu_type = ms->cpu_type ?: ARM_CPU_TYPE_NAME("cortex-a53");
     int i;
 
-    if (ms->smp.cpus > FSL_IMX8MP_NUM_CPUS) {
+    if (ms->smp.cpus > FSL_IMX8MP_NUM_A53) {
         error_setg(errp, "%s: Only %d CPUs are supported (%d requested)",
-                   TYPE_FSL_IMX8MP, FSL_IMX8MP_NUM_CPUS, ms->smp.cpus);
+                   TYPE_FSL_IMX8MP, FSL_IMX8MP_NUM_A53, ms->smp.cpus);
         return;
     }
 
