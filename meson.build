@@ -3239,6 +3239,21 @@ config_target_mak = {}
 config_base_arch_mak = {}
 config_target_info = {}
 
+# Load every configs/targets/*.mak unconditionally; target_dirs is the
+# --target-list filtered subset of target_dirs_all.
+target_dirs_all = run_command(python, '-c',
+  'import os, sys; print(" ".join(sorted(f[:-4] for f in os.listdir(sys.argv[1]) if f.endswith(".mak"))))',
+  meson.current_source_dir() / 'configs/targets',
+  check: true).stdout().split()
+target_mak_all = {}
+foreach target : target_dirs_all
+  mak = keyval.load('configs/targets' / target + '.mak')
+  if 'TARGET_BASE_ARCH' not in mak
+    mak += {'TARGET_BASE_ARCH': mak['TARGET_ARCH']}
+  endif
+  target_mak_all += {target: mak}
+endforeach
+
 disassemblers = {
   'alpha' : ['CONFIG_ALPHA_DIS'],
   'avr' : ['CONFIG_AVR_DIS'],
@@ -3318,7 +3333,7 @@ foreach target : target_dirs
     }
   endif
 
-  config_target += keyval.load('configs/targets' / target + '.mak')
+  config_target += target_mak_all[target]
 
   target_kconfig = []
   foreach sym: accelerators
@@ -3348,9 +3363,6 @@ foreach target : target_dirs
 
   # Add default keys
   config_target += { 'TARGET_' + config_target['TARGET_ARCH'].to_upper(): 'y' }
-  if 'TARGET_BASE_ARCH' not in config_target
-    config_target += {'TARGET_BASE_ARCH': config_target['TARGET_ARCH']}
-  endif
   if 'TARGET_ABI_DIR' not in config_target
     config_target += {'TARGET_ABI_DIR': config_target['TARGET_ARCH']}
   endif
