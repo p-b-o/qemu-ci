@@ -3777,6 +3777,9 @@ if enable_modules
   modulecommon = declare_dependency(objects: libmodulecommon.extract_all_objects(recursive: false), compile_args: '-DBUILD_DSO')
 endif
 
+qom_ss.add(files(
+  'target-info.c',
+))
 qom_ss = qom_ss.apply({})
 libqom = static_library('qom', qom_ss.sources() + genh,
                         dependencies: [qom_ss.dependencies()],
@@ -3868,9 +3871,6 @@ if get_option('b_lto')
 endif
 common_ss.add(pagevary)
 system_ss.add(files('page-vary-system.c'))
-
-common_ss.add(files('target-info.c'))
-system_ss.add(files('target-info-qom.c'))
 
 if 'CONFIG_TCG' in config_all_accel
   subdir('contrib/plugins')

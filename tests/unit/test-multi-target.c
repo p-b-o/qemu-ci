@@ -15,7 +15,7 @@
 #include "qemu/osdep.h"
 #include "qemu/module.h"
 #include "qemu/target-info.h"
-#include "qemu/target-info-qom.h"
+#include "qemu/target-info-def.h"
 #include "qom/object.h"
 
 #ifdef CONFIG_SDL
@@ -32,11 +32,11 @@ int (*qemu_main)(void);
 
 static void test_qom_types_are_unique(void)
 {
-    module_call_init(MODULE_INIT_TARGET_INFO);
-    g_autoptr(GSList) targets = object_class_get_list(TYPE_TARGET_INFO, false);
-    g_assert(targets);
-    const TargetInfo *first_ti = TARGET_INFO_CLASS(targets->data)->target_info;
-    target_info_qom_set_target_info(first_ti);
+    const TargetInfoList *targets = target_info_list();
+
+    g_assert_nonnull(QLIST_FIRST(targets));
+
+    g_assert_nonnull(target_info());
 
     /* register all types */
     module_call_init(MODULE_INIT_QOM);
