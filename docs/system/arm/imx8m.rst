@@ -29,6 +29,7 @@ following devices:
  * General Power Controller
  * General Purpose Register
  * System Reset Controller
+ * Messaging Unit
 
 Boot options
 ------------
