@@ -779,6 +779,37 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
                                 fsl_imx8mp_memmap[FSL_IMX8MP_OCRAM].addr,
                                 &s->ocram);
 
+    if (!memory_region_init_ram(&s->itcm, OBJECT(dev), "imx8mp.itcm",
+                                fsl_imx8mp_memmap[FSL_IMX8MP_TCM_ITCM].size,
+                                errp)) {
+        return;
+    }
+    memory_region_add_subregion(get_system_memory(),
+                                fsl_imx8mp_memmap[FSL_IMX8MP_TCM_ITCM].addr,
+                                &s->itcm);
+
+    if (!memory_region_init_ram(&s->dtcm, OBJECT(dev), "imx8mp.dtcm",
+                                fsl_imx8mp_memmap[FSL_IMX8MP_TCM_DTCM].size,
+                                errp)) {
+        return;
+    }
+    memory_region_add_subregion(get_system_memory(),
+                                fsl_imx8mp_memmap[FSL_IMX8MP_TCM_DTCM].addr,
+                                &s->dtcm);
+
+    /* M7-view aliases: ITCM@0x0, DTCM@0x20000000 */
+    memory_region_init_alias(&s->itcm_alias, OBJECT(dev), "imx8mp.itcm-alias",
+                             &s->itcm, 0,
+                             fsl_imx8mp_memmap[FSL_IMX8MP_TCM_ITCM].size);
+    memory_region_add_subregion_overlap(get_system_memory(),
+                                        0x00000000, &s->itcm_alias, 1);
+
+    memory_region_init_alias(&s->dtcm_alias, OBJECT(dev), "imx8mp.dtcm-alias",
+                             &s->dtcm, 0,
+                             fsl_imx8mp_memmap[FSL_IMX8MP_TCM_DTCM].size);
+    memory_region_add_subregion_overlap(get_system_memory(),
+                                        0x20000000, &s->dtcm_alias, 1);
+
     /* Unimplemented devices */
     for (i = 0; i < ARRAY_SIZE(fsl_imx8mp_memmap); i++) {
         switch (i) {
@@ -796,6 +827,8 @@ static void fsl_imx8mp_realize(DeviceState *dev, Error **errp)
         case FSL_IMX8MP_IOMUXC_GPR:
         case FSL_IMX8MP_MU_1_A ... FSL_IMX8MP_MU_3_B:
         case FSL_IMX8MP_OCRAM:
+        case FSL_IMX8MP_TCM_ITCM:
+        case FSL_IMX8MP_TCM_DTCM:
         case FSL_IMX8MP_PCIE1:
         case FSL_IMX8MP_PCIE_PHY1:
         case FSL_IMX8MP_RAM:

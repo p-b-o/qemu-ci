@@ -90,6 +90,10 @@ struct FslImx8mpState {
     FlexcanState       flexcan[FSL_IMX8MP_NUM_CANS];
     OrIRQState         gpt5_gpt6_irq;
     MemoryRegion       ocram;
+    MemoryRegion       itcm;
+    MemoryRegion       dtcm;
+    MemoryRegion       itcm_alias;
+    MemoryRegion       dtcm_alias;
 
     uint32_t           phy_num;
     bool               phy_connected;
