@@ -17,6 +17,7 @@
 #include "qapi/qapi-builtin-types.h"
 #include "qemu/module.h"
 
+typedef struct TargetInfo TargetInfo;
 struct TypeImpl;
 typedef struct TypeImpl *Type;
 
@@ -116,6 +117,15 @@ typedef void (ObjectUnparent)(Object *obj);
  * Called when an object's last reference is removed.
  */
 typedef void (ObjectFree)(void *obj);
+
+/**
+ * typedef TypeIsAvailable:
+ * @ti: TargetInfo to test.
+ *
+ * Returns whether a type is available for @ti. Typical implementations
+ * are target_is_*().
+ */
+typedef bool (TypeIsAvailable)(const TargetInfo *ti);
 
 #define OBJECT_CLASS_CAST_CACHE 4
 
@@ -498,7 +508,7 @@ struct TypeInfo
     void (*class_base_init)(ObjectClass *klass, const void *data);
     const void *class_data;
 
-    bool (*is_available)(void);
+    TypeIsAvailable *is_available;
     const InterfaceInfo *interfaces;
 };
 
