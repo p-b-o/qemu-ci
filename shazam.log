@@ -1,0 +1,70 @@
+Looking up 20261007-rv-dedup-v2-0-8a2f0f296a7f@rev.ng
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 31 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 51 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v2 1/18] target/riscv: Make internals.h target agnostic
+    + Signed-off-by: Yonggang Luo <luoyonggang@gmail.com> ([32m✓[0m DKIM/gmail.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-1-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 2/18] target/riscv: meson, add user and common system source sets
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-2-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 3/18] target/riscv: Move pmu CSR read to csr.h
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-3-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 4/18] target/riscv: Make debug.c target agnostic
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-4-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 5/18] target/riscv: Widen CSR ops to 64-bit and compile once for system-mode
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-5-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 6/18] target/riscv: Runtime CPU registration
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-6-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 7/18] target/riscv: Runtime register MAX and BARE CPUs
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-7-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 8/18] target/riscv: cpu.c unconditionally check larger MXL
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-8-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 9/18] target/riscv: Stub KVM functions for machines.c/cpu.c
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-9-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 10/18] target/riscv: Compile cpu.c once for system-mode
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-10-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 11/18] target/riscv: Compile cpu_helper.c once for system-mode
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-11-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 12/18] target/riscv: Compile tcg-cpu.c once for system-mode
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-12-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 13/18] target/riscv: Compile riscv-qmp-cmds.c once
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-13-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 14/18] target/riscv: Compile pmp.c once
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-14-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 15/18] target/riscv: Compile arch_dump.c once
+    + Acked-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-15-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 16/18] target/riscv: Compile machine.c once
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-16-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 17/18] target/riscv: Compile time_helper.c once
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-17-8a2f0f296a7f@rev.ng
+  [31m✗[0m [PATCH v2 18/18] target/riscv: Compile monitor.c once
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261007-rv-dedup-v2-18-8a2f0f296a7f@rev.ng
+  ---
+  [31m✗[0m No key: ed25519/anjo@rev.ng
+  [31m✗[0m BADSIG: DKIM/rev.ng
+---
+Total patches: 18
+---
+Applying: target/riscv: Make internals.h target agnostic
+Patch failed at 0001 target/riscv: Make internals.h target agnostic
+error: patch failed: target/riscv/internals.h:20
+error: target/riscv/internals.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
