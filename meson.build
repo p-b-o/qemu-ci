@@ -4259,6 +4259,7 @@ endif
 traceable = []
 multi_target_libs = []
 multi_target_deps = []
+multi_target_target_info_objects = []
 multi_target_crates = []
 multi_target_supported_targets = [
   'aarch64-softmmu',
@@ -4274,6 +4275,7 @@ multi_target_supported_targets = [
 ]
 
 emulators = {}
+target_info_def = files('target-info-def.c')
 foreach target : target_dirs
   config_target = config_target_mak[target]
   target_name = config_target['TARGET_NAME']
@@ -4345,7 +4347,7 @@ foreach target : target_dirs
     endif
   endif
 
-  arch_srcs += files('target-info-def.c')
+  arch_srcs += target_info_def
 
   if target_base_arch in target_arch
     t = target_arch[target_base_arch].apply(config_target, strict: false)
@@ -4428,6 +4430,7 @@ foreach target : target_dirs
       multi_target_libs += lib
       multi_target_deps += arch_deps
       multi_target_deps += target_stubs
+      multi_target_target_info_objects += lib.extract_objects(target_info_def)
       multi_target_crates += main_rs
     endif
     execs = [{

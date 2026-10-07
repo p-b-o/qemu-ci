@@ -43,6 +43,10 @@ tests = {
   'test-qgraph': ['../qtest/libqos/qgraph.c'],
   'check-qom-interface': [qom],
   'check-qom-proplist': [qom],
+  'test-target-info': [qom, declare_dependency(
+    objects: multi_target_target_info_objects,
+    compile_args: ['-DTARGET_INFO_DEF_COUNT=@0@'.format(
+      multi_target_target_info_objects.length())])],
   'test-qemu-opts': [],
   'test-keyval': [testqapi],
   'test-logging': [],
