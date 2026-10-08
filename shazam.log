@@ -1,0 +1,90 @@
+Looking up 20261007094516.75732-1-philmd@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 31 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 70 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/27] cpus: Add helper to log raised exceptions with '-d int'
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-2-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 2/27] cpus: Introduce CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-3-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 3/27] target/alpha: Register CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-4-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 4/27] target/arm: Register CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-5-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 5/27] target/avr: Implement and register CPUClass::exception_name()
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-6-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 6/27] target/hexagon: Register CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-7-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 7/27] target/hppa: Register CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-8-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 8/27] target/i386: Replace magic value by proper EXCP0E_PAGE definition
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-9-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 9/27] target/i386: Implement and register CPUClass::exception_name()
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-10-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 10/27] target/loongarch: Register CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-11-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 11/27] target/m68k: Register CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-12-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 12/27] target/microblaze: Implement and register CPUClass::exception_name()
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-13-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 13/27] target/mips: Remove unuseful EXCP_LAST definition
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-14-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 14/27] target/mips: Register CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-15-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 15/27] target/or1k: Register CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-16-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 16/27] target/ppc: Register CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-17-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 17/27] target/riscv: Register CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-18-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 18/27] target/rx: Unify BRK and INT trap handling
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-19-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 19/27] target/rx: Define exception vector constants
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-20-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 20/27] target/rx: Register CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-21-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 21/27] target/s390x: Implement and register CPUClass::exception_name()
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-22-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 22/27] target/sh4: Define exception vector constants
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-23-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 23/27] target/sh4: Register CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-24-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 24/27] target/sparc: Remove well tested DEBUG_PCALL definition
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-25-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 25/27] target/sparc: Register CPUClass::exception_name() handler
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-26-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 26/27] target/tricore: Implement and register CPUClass::exception_name()
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-27-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH 27/27] target/xtensa: Implement and register CPUClass::exception_name()
+    + Link: https://lore.kernel.org/qemu-devel/20261007094516.75732-28-philmd@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 27
+---
+Applying: cpus: Add helper to log raised exceptions with '-d int'
+Applying: cpus: Introduce CPUClass::exception_name() handler
+Applying: target/alpha: Register CPUClass::exception_name() handler
+Applying: target/arm: Register CPUClass::exception_name() handler
+Applying: target/avr: Implement and register CPUClass::exception_name()
+Applying: target/hexagon: Register CPUClass::exception_name() handler
+Applying: target/hppa: Register CPUClass::exception_name() handler
+Applying: target/i386: Replace magic value by proper EXCP0E_PAGE definition
+Applying: target/i386: Implement and register CPUClass::exception_name()
+Applying: target/loongarch: Register CPUClass::exception_name() handler
+Applying: target/m68k: Register CPUClass::exception_name() handler
+Applying: target/microblaze: Implement and register CPUClass::exception_name()
+Applying: target/mips: Remove unuseful EXCP_LAST definition
+Applying: target/mips: Register CPUClass::exception_name() handler
+Applying: target/or1k: Register CPUClass::exception_name() handler
+Patch failed at 0015 target/or1k: Register CPUClass::exception_name() handler
+error: patch failed: target/or1k/exception.c:22
+error: target/or1k/exception.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
