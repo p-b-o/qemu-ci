@@ -94,8 +94,9 @@ qga_ss = qga_ss.apply({})
 gen_tlb = []
 qga_libs = []
 if host_os == 'windows'
-  qga_libs += ['-lws2_32', '-lwinmm', '-lpowrprof', '-lwtsapi32', '-lwininet', '-liphlpapi', '-lnetapi32',
-               '-lsetupapi', '-lcfgmgr32', '-luserenv', '-lpdh' ]
+  qga_libs += ['-lws2_32', '-lwinmm', '-lpowrprof', '-lwtsapi32',
+               '-lwininet', '-liphlpapi', '-lnetapi32', '-lsetupapi',
+               '-lcfgmgr32', '-luserenv', '-lpdh', '-lversion' ]
   if have_qga_vss
     qga_libs += ['-lole32', '-loleaut32', '-lshlwapi', '-Wl,--enable-stdcall-fixup']
     subdir('vss-win32')
