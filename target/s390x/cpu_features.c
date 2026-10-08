@@ -359,10 +359,19 @@ void s390_get_deprecated_features(S390FeatBitmap features)
          S390_FEAT_CONSTRAINT_TRANSACTIONAL_EXE,
          S390_FEAT_TRANSACTIONAL_EXE
     };
-    int i;
+    int i, j;
 
     for (i = 0; i < ARRAY_SIZE(feats); i++) {
         set_bit(feats[i], features);
+    }
+
+    /* Mark features that depend on feats[] */
+    for (i = 0; i < ARRAY_SIZE(feats); i++) {
+        for (j = 0; j < s390_feat_deps_len; j++) {
+            if (s390_feat_deps[j][1] == feats[i]) {
+                set_bit(s390_feat_deps[j][0], features);
+            }
+        }
     }
 }
 
