@@ -80,18 +80,26 @@
 #define fGEN_TCG_Y2_wait(SHORTCODE) \
     do { \
         RsV = RsV; \
+        translator_io_start(&ctx->base); \
         gen_helper_wait(tcg_env, tcg_constant_tl(ctx->pkt.pc)); \
     } while (0)
 
 #define fGEN_TCG_Y2_resume(SHORTCODE) \
-    gen_helper_resume(tcg_env, RsV)
+    do { \
+        translator_io_start(&ctx->base); \
+        gen_helper_resume(tcg_env, RsV); \
+    } while (0)
 
 #define fGEN_TCG_Y2_start(SHORTCODE) \
-    gen_helper_start(tcg_env, RsV)
+    do { \
+        translator_io_start(&ctx->base); \
+        gen_helper_start(tcg_env, RsV); \
+    } while (0)
 
 #define fGEN_TCG_Y2_stop(SHORTCODE) \
     do { \
         RsV = RsV; \
+        translator_io_start(&ctx->base); \
         gen_helper_stop(tcg_env); \
     } while (0)
 
