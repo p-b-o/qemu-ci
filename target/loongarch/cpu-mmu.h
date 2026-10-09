@@ -110,6 +110,8 @@ TLBRet loongarch_ptw(CPULoongArchState *env, MMUContext *context,
                      uintptr_t retaddr);
 void get_dir_base_width(CPULoongArchState *env, uint64_t *dir_base,
                         uint64_t *dir_width, unsigned int level, int vm_level);
+hwaddr loongarch_get_host_address(CPULoongArchState *env, hwaddr gpa,
+                                  uintptr_t retaddr);
 TLBRet loongarch_map_address(CPULoongArchState *env, MMUContext *context,
                              MMUAccessType access_type, int mmu_idx,
                              int is_debug, int vm_level, uintptr_t retaddr);
