@@ -1,0 +1,34 @@
+Looking up 20261009-upstream-ntrace_filter-v1-0-8f061c9b24da@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH 1/6] hw/riscv/trace-encoder.c: move trace_running setting location
+    + Link: https://lore.kernel.org/qemu-devel/20261009-upstream-ntrace_filter-v1-1-8f061c9b24da@gmail.com
+  [31m✗[0m [PATCH 2/6] hw/riscv/trace-encoder.c: encapsulate icnt counting
+    + Link: https://lore.kernel.org/qemu-devel/20261009-upstream-ntrace_filter-v1-2-8f061c9b24da@gmail.com
+  [31m✗[0m [PATCH 3/6] hw/riscv/ntrace: do not use gen_updiscon to gen IndirectBranch message
+    + Link: https://lore.kernel.org/qemu-devel/20261009-upstream-ntrace_filter-v1-3-8f061c9b24da@gmail.com
+  [31m✗[0m [PATCH 4/6] hw/riscv/trace-encoder.c: add N-trace filtering definitions
+    + Link: https://lore.kernel.org/qemu-devel/20261009-upstream-ntrace_filter-v1-4-8f061c9b24da@gmail.com
+  [31m✗[0m [PATCH 5/6] hw/riscv, target/riscv: support initial N-trace filtering
+    + Link: https://lore.kernel.org/qemu-devel/20261009-upstream-ntrace_filter-v1-5-8f061c9b24da@gmail.com
+  [31m✗[0m [PATCH 6/6] hw/riscv/trace-encoder.c: emit PTC message when trace started disabled
+    + Link: https://lore.kernel.org/qemu-devel/20261009-upstream-ntrace_filter-v1-6-8f061c9b24da@gmail.com
+  ---
+  [31m✗[0m No key: openpgp/antikostya2@gmail.com
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 6
+---
+Applying: hw/riscv/trace-encoder.c: move trace_running setting location
+Patch failed at 0001 hw/riscv/trace-encoder.c: move trace_running setting location
+error: hw/riscv/trace-encoder.c: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
