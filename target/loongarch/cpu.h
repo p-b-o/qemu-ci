@@ -583,6 +583,27 @@ static inline bool will_return_to_guest(CPULoongArchState *env)
     return FIELD_EX64(get_sys(env, VM_LEVEL0)->CSR_GSTAT, CSR_GSTAT, PVM);
 }
 
+static inline uint8_t get_gid(CPULoongArchState *env)
+{
+    return FIELD_EX64(get_sys(env, VM_LEVEL0)->CSR_GSTAT, CSR_GSTAT, GID);
+}
+
+static inline uint8_t get_tgid(CPULoongArchState *env)
+{
+    CPUSysState *host = get_sys(env, VM_LEVEL0);
+
+    if (env_vm_level(env) == VM_LEVEL1) {
+        return get_gid(env);
+    }
+
+    if (FIELD_EX64(host->CSR_GTLBC, CSR_GTLBC, USETGID)) {
+        return FIELD_EX64(host->CSR_GTLBC, CSR_GTLBC, TGID);
+    } else if (will_return_to_guest(env)) {
+        return get_gid(env);
+    }
+    return 0;
+}
+
 static inline CPUTimerState *env_timer(CPULoongArchState *env)
 {
     return &env->sys_states[0].timer_state;
