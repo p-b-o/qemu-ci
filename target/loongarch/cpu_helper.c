@@ -160,7 +160,7 @@ TLBRet loongarch_ptw(CPULoongArchState *env, MMUContext *context,
     vaddr address;
     TLBRet ret;
     MemTxResult ret1;
-    CPUSysState *sys = env_sys(env);
+    CPUSysState *sys = get_sys(env, vm_level);
 
     address = context->addr;
     if ((address >> 63) & 0x1) {
@@ -180,7 +180,10 @@ TLBRet loongarch_ptw(CPULoongArchState *env, MMUContext *context,
         /* get next level page directory */
         index = (address >> dir_base) & ((1 << dir_width) - 1);
         phys = base | index << 3;
-        base = address_space_ldq_le(cs->as, phys, attrs, NULL);
+        base = address_space_ldq_le(
+            cs->as,
+            vm_level ? loongarch_get_host_address(env, phys, retaddr) : phys,
+            attrs, NULL);
         if (level) {
             if (FIELD_EX64(base, TLBENTRY, HUGE)) {
                 /* base is a huge pte */
@@ -214,8 +217,11 @@ restart:
 
         index &= 1;
         context->pte_buddy[index] = base;
-        val = address_space_ldq_le(cs->as, phys + 8 * (1 - 2 * index),
-                                   attrs, NULL);
+        val = address_space_ldq_le(
+            cs->as,
+            (vm_level ? loongarch_get_host_address(env, phys, retaddr) : phys) +
+                8 * (1 - 2 * index),
+            attrs, NULL);
         context->pte_buddy[1 - index] = val;
     }
 
@@ -245,10 +251,15 @@ restart:
         if (access_type == MMU_DATA_STORE) {
             base = pte_mkdirty(base);
         }
-        ret1 = loongarch_cmpxchg_phys(cs, phys, pte, base);
+        ret1 = loongarch_cmpxchg_phys(
+            cs, vm_level ? loongarch_get_host_address(env, phys, retaddr) : phys,
+            pte, base);
         /* PTE updated by other CPU, reload PTE entry */
         if (ret1 == MEMTX_DECODE_ERROR) {
-            base = address_space_ldq_le(cs->as, phys, attrs, NULL);
+            base = address_space_ldq_le(
+                cs->as,
+                vm_level ? loongarch_get_host_address(env, phys, retaddr) : phys,
+                attrs, NULL);
             goto restart;
         }
 

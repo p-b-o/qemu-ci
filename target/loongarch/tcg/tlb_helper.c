@@ -724,6 +724,46 @@ static TLBRet loongarch_map_host_address(CPULoongArchState *env, MMUContext *con
     return TLBRET_HOST_MATCH + ret;
 }
 
+static void loongarch_try_ptw(CPULoongArchState *env, MMUContext *context,
+                              MMUAccessType access_type, int mmu_index,
+                              TLBRet *status, bool guest, uintptr_t retaddr)
+{
+    if ((*status == TLBRET_MATCH || *status == TLBRET_HOST_MATCH) &&
+        context->mmu_index != MMU_DA_IDX &&
+        context->mmu_index != MMU_GUEST_DA_IDX && cpu_has_ptw(env, guest)) {
+        bool need_update = true;
+
+        if (access_type == MMU_DATA_STORE && pte_dirty(context->pte)) {
+            need_update = false;
+        } else if (access_type != MMU_DATA_STORE && pte_access(context->pte)) {
+            need_update = false;
+        }
+
+        if (need_update) {
+            *status = (env_vm_level(env) == VM_LEVEL1 &&
+                       !guest) ?
+                      TLBRET_HOST_NOMATCH : TLBRET_NOMATCH;
+        }
+    }
+
+    if (*status != TLBRET_MATCH && *status != TLBRET_HOST_MATCH &&
+        cpu_has_ptw(env, guest)) {
+        if (*status == TLBRET_NOMATCH || *status == TLBRET_INVALID ||
+            *status == TLBRET_HOST_NOMATCH || *status == TLBRET_HOST_INVALID) {
+            *status = ((env_vm_level(env) == VM_LEVEL1 &&
+                        !guest) ?
+                       TLBRET_HOST_MATCH : TLBRET_MATCH) +
+                      loongarch_ptw(env, context, access_type, mmu_index, 0,
+                                    guest, retaddr);
+            if (*status == TLBRET_MATCH || *status == TLBRET_HOST_MATCH) {
+                ptw_update_tlb(env, context, guest);
+            }
+        } else if (context->tlb_index >= 0) {
+            invalidate_tlb(env, context->tlb_index, guest);
+        }
+    }
+}
+
 bool loongarch_cpu_tlb_fill(CPUState *cs, vaddr address, int size,
                             MMUAccessType access_type, int mmu_idx,
                             bool probe, uintptr_t retaddr)
@@ -739,42 +779,8 @@ bool loongarch_cpu_tlb_fill(CPUState *cs, vaddr address, int size,
     context.addr = address;
     context.tlb_index = -1;
     ret = get_physical_address(env, &context, access_type, mmu_idx, 0, retaddr);
-    if (ret == TLBRET_MATCH && context.mmu_index != MMU_DA_IDX
-        && cpu_has_ptw(env, vm_level)) {
-        bool need_update = true;
-
-        if (access_type == MMU_DATA_STORE && pte_dirty(context.pte)) {
-            need_update = false;
-        } else if (access_type != MMU_DATA_STORE && pte_access(context.pte)) {
-            need_update = false;
-
-            /*
-             * FIXME: should context.prot be set without PAGE_WRITE with
-             * pte_write(context.pte) && !pte_dirty(context.pte)??
-             *
-             * Otherwise there will be no loongarch_cpu_tlb_fill() function call
-             * for MMU_DATA_STORE access_type in future since QEMU TLB with
-             * prot PAGE_WRITE is added already
-             */
-        }
-
-        if (need_update) {
-            /* Need update bit A/D in PTE entry, take PTW again */
-            ret = TLBRET_NOMATCH;
-        }
-    }
-
-    if (ret != TLBRET_MATCH && cpu_has_ptw(env, vm_level)) {
-        /* Take HW PTW if TLB missed or bit P is zero */
-        if (ret == TLBRET_NOMATCH || ret == TLBRET_INVALID) {
-            ret = loongarch_ptw(env, &context, access_type, mmu_idx, 0, vm_level, retaddr);
-            if (ret == TLBRET_MATCH) {
-                ptw_update_tlb(env, &context, vm_level);
-            }
-        } else if (context.tlb_index >= 0) {
-            invalidate_tlb(env, context.tlb_index, vm_level);
-        }
-    }
+    loongarch_try_ptw(env, &context, access_type, mmu_idx, &ret, vm_level,
+                      retaddr);
 
     if (ret == TLBRET_MATCH) {
         physical = context.physical;
@@ -784,6 +790,8 @@ bool loongarch_cpu_tlb_fill(CPUState *cs, vaddr address, int size,
             host_context.tlb_index = -1;
             ret = loongarch_map_host_address(env, &host_context, access_type,
                                              retaddr);
+            loongarch_try_ptw(env, &host_context, access_type, MMU_KERNEL_IDX,
+                              &ret, false, retaddr);
             if (ret != TLBRET_HOST_MATCH) {
                 if (probe) {
                     return false;
@@ -847,6 +855,8 @@ hwaddr loongarch_get_host_address(CPULoongArchState *env, hwaddr gpa,
     host_context.tlb_index = -1;
     ret = loongarch_map_host_address(env, &host_context, MMU_DATA_LOAD,
                                      retaddr);
+    loongarch_try_ptw(env, &host_context, MMU_DATA_LOAD, MMU_KERNEL_IDX,
+                      &ret, false, retaddr);
 
     if (ret != TLBRET_HOST_MATCH) {
         raise_mmu_exception(env, gpa, MMU_DATA_LOAD, ret);
