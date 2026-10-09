@@ -599,9 +599,18 @@ void helper_tlbflush(CPULoongArchState *env, uint32_t vm_level)
 void helper_invtlb_all(CPULoongArchState *env, target_ulong info, uint32_t op,
                        uint32_t to_guest)
 {
+    uint16_t gid = to_guest ? (info & 0xff) : get_tgid(env);
+
+    if (to_guest && env_vm_level(env) == VM_LEVEL1) {
+        do_raise_exception(env, EXCCODE_IPE, GETPC());
+    }
+
+    to_guest |= env_vm_level(env) == VM_LEVEL1;
+
     for (int i = 0; i < LOONGARCH_TLB_MAX; i++) {
-        env->tlb[i].tlb_misc = FIELD_DP64(env->tlb[i].tlb_misc,
-                                          TLB_MISC, E, 0);
+        LoongArchTLB *tlb = &env->tlb[i];
+        if ((op == 0 && to_guest == 0) || tlb_entry_matches_gid(tlb, gid))
+            tlb->tlb_misc = FIELD_DP64(tlb->tlb_misc, TLB_MISC, E, 0);
     }
     tlb_flush(env_cpu(env));
 }
@@ -609,11 +618,19 @@ void helper_invtlb_all(CPULoongArchState *env, target_ulong info, uint32_t op,
 void helper_invtlb_all_g(CPULoongArchState *env, target_ulong info, uint32_t g,
                          uint32_t to_guest)
 {
+    uint16_t gid = to_guest ? (info & 0xff) : get_tgid(env);
+
+    if (to_guest && env_vm_level(env) == VM_LEVEL1) {
+        do_raise_exception(env, EXCCODE_IPE, GETPC());
+    }
+
+    to_guest |= env_vm_level(env) == VM_LEVEL1;
+
     for (int i = 0; i < LOONGARCH_TLB_MAX; i++) {
         LoongArchTLB *tlb = &env->tlb[i];
         uint8_t tlb_g = FIELD_EX64(tlb->tlb_entry0, TLBENTRY, G);
 
-        if (tlb_g == g) {
+        if (tlb_g == g && tlb_entry_matches_gid(tlb, gid)) {
             tlb->tlb_misc = FIELD_DP64(tlb->tlb_misc, TLB_MISC, E, 0);
         }
     }
@@ -624,13 +641,19 @@ void helper_invtlb_all_asid(CPULoongArchState *env, target_ulong info,
                             uint32_t to_guest)
 {
     uint16_t asid = info & R_CSR_ASID_ASID_MASK;
+    uint16_t gid = to_guest ? ((info >> 16) & 0xff) : get_tgid(env);
+
+    if (to_guest) {
+        do_raise_exception(env, EXCCODE_IPE, GETPC());
+    }
+    to_guest |= env_vm_level(env);
 
     for (int i = 0; i < LOONGARCH_TLB_MAX; i++) {
         LoongArchTLB *tlb = &env->tlb[i];
         uint8_t tlb_g = FIELD_EX64(tlb->tlb_entry0, TLBENTRY, G);
         uint16_t tlb_asid = FIELD_EX64(tlb->tlb_misc, TLB_MISC, ASID);
 
-        if (!tlb_g && (tlb_asid == asid)) {
+        if (!tlb_g && tlb_asid == asid && tlb_entry_matches_gid(tlb, gid)) {
             tlb->tlb_misc = FIELD_DP64(tlb->tlb_misc, TLB_MISC, E, 0);
         }
     }
@@ -640,12 +663,19 @@ void helper_invtlb_all_asid(CPULoongArchState *env, target_ulong info,
 void helper_invtlb_page_asid(CPULoongArchState *env, target_ulong info,
                              target_ulong addr, uint32_t to_guest)
 {
-    int asid = info & 0x3ff;
+
+    uint16_t asid = info & R_CSR_ASID_ASID_MASK;
+    uint16_t gid = to_guest ? ((info >> 16) & 0xff) : get_tgid(env);
     const LoongArchTLB *tlb;
     tlb_match func;
 
+    if (to_guest && env_vm_level(env)) {
+        do_raise_exception(env, EXCCODE_IPE, GETPC());
+    }
+    to_guest |= env_vm_level(env);
+
     func = tlb_match_asid;
-    tlb = loongarch_tlb_search_cb(env, addr, asid, func, to_guest, 0);
+    tlb = loongarch_tlb_search_cb(env, addr, asid, func, to_guest, gid);
     if (tlb) {
         invalidate_tlb(env, tlb - env->tlb, to_guest);
     }
@@ -654,13 +684,18 @@ void helper_invtlb_page_asid(CPULoongArchState *env, target_ulong info,
 void helper_invtlb_page_asid_or_g(CPULoongArchState *env, target_ulong info,
                                   target_ulong addr, uint32_t to_guest)
 {
-    int asid = info & 0x3ff;
+    uint16_t asid = info & R_CSR_ASID_ASID_MASK;
+    uint16_t gid = to_guest ? ((info >> 16) & 0xff) : get_tgid(env);
     const LoongArchTLB *tlb;
     tlb_match func;
 
     func = tlb_match_any;
+    if (to_guest) {
+        do_raise_exception(env, EXCCODE_IPE, GETPC());
+    }
+    to_guest |= env_vm_level(env);
     tlb = loongarch_tlb_search_cb(env, addr, asid, func,
-                                  to_guest, 0);
+                                  to_guest, gid);
     if (tlb) {
         invalidate_tlb(env, tlb - env->tlb, to_guest);
     }
