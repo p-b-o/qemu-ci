@@ -18,9 +18,10 @@
 #include "cpu-csr.h"
 #include "cpu-mmu.h"
 
-target_ulong helper_csrwr_stlbps(CPULoongArchState *env, target_ulong val)
+target_ulong helper_csrwr_stlbps(CPULoongArchState *env,
+                                 target_ulong val, uint32_t vm_level)
 {
-    CPUSysState *sys = env_sys(env);
+    CPUSysState *sys = get_sys(env, vm_level);
     int64_t old_v = sys->CSR_STLBPS;
 
     /*
@@ -40,10 +41,10 @@ target_ulong helper_csrwr_stlbps(CPULoongArchState *env, target_ulong val)
     return old_v;
 }
 
-target_ulong helper_csrrd_pgd(CPULoongArchState *env)
+target_ulong helper_csrrd_pgd(CPULoongArchState *env, uint32_t vm_level)
 {
     int64_t v;
-    CPUSysState *sys = env_sys(env);
+    CPUSysState *sys = get_sys(env, vm_level);
 
     if (sys->CSR_TLBRERA & 0x1) {
         v = sys->CSR_TLBRBADV;
@@ -60,25 +61,30 @@ target_ulong helper_csrrd_pgd(CPULoongArchState *env)
     return v;
 }
 
-target_ulong helper_csrrd_cpuid(CPULoongArchState *env)
+target_ulong helper_csrrd_cpuid(CPULoongArchState *env, uint32_t vm_level)
 {
     LoongArchCPU *lac = env_archcpu(env);
-    CPUSysState *sys = env_sys(env);
+    CPUSysState *sys = get_sys(env, vm_level);
+
+    if (vm_level) {
+        return sys->CSR_CPUID;
+    }
 
     sys->CSR_CPUID = CPU(lac)->cpu_index;
 
     return sys->CSR_CPUID;
 }
 
-target_ulong helper_csrrd_tval(CPULoongArchState *env)
+target_ulong helper_csrrd_tval(CPULoongArchState *env, uint32_t vm_level)
 {
-    return cpu_loongarch_get_timer_ticks(env_timer(env));
+    CPUTimerState *timer = vm_level ? env_guest_timer(env) : env_timer(env);
+    return cpu_loongarch_get_timer_ticks(timer);
 }
 
-target_ulong helper_csrrd_msgir(CPULoongArchState *env)
+target_ulong helper_csrrd_msgir(CPULoongArchState *env, uint32_t vm_level)
 {
     int irq, new;
-    CPUSysState *sys = env_sys(env);
+    CPUSysState *sys = get_sys(env, vm_level);
 
     irq = find_first_bit((unsigned long *)sys->CSR_MSGIS, 256);
     if (irq < 256) {
@@ -97,13 +103,23 @@ target_ulong helper_csrrd_msgir(CPULoongArchState *env)
     return irq;
 }
 
-target_ulong helper_csrwr_estat(CPULoongArchState *env, target_ulong val)
+target_ulong helper_csrwr_estat(CPULoongArchState *env,
+                                target_ulong val, uint32_t vm_level)
 {
-    CPUSysState *sys = env_sys(env);
+    CPUSysState *sys = get_sys(env, vm_level);
     int64_t old_v = sys->CSR_ESTAT;
 
-    /* Only IS[1:0] can be written */
+    /* When guest = 0, only IS[1:0] can be written.
+     * When guest = 1, ecode and esubcode of
+     * VM_LEVEL1 can be written by VM_LEVEL0.
+     */
     sys->CSR_ESTAT = deposit64(sys->CSR_ESTAT, 0, 2, val);
+    if (vm_level) {
+        sys->CSR_ESTAT = deposit64(sys->CSR_ESTAT, 2, 11,
+                                   extract64(val, 2, 11));
+        sys->CSR_ESTAT = deposit64(sys->CSR_ESTAT, 16, 15,
+                                   extract64(val, 16, 15));
+    }
     /*
      * Software interrupts (SWI0/SWI1) are latched in CSR.ESTAT.IS[1:0].
      * Make sure the CPU interrupt request state tracks the pending bits,
@@ -111,16 +127,17 @@ target_ulong helper_csrwr_estat(CPULoongArchState *env, target_ulong val)
      */
     if (sys->CSR_ESTAT != old_v) {
         bql_lock();
-        loongarch_cpu_update_irq(env_archcpu(env), false);
+        loongarch_cpu_update_irq(env_archcpu(env), vm_level);
         bql_unlock();
     }
 
     return old_v;
 }
 
-target_ulong helper_csrwr_asid(CPULoongArchState *env, target_ulong val)
+target_ulong helper_csrwr_asid(CPULoongArchState *env,
+                               target_ulong val, uint32_t vm_level)
 {
-    CPUSysState *sys = env_sys(env);
+    CPUSysState *sys = get_sys(env, vm_level);
     int64_t old_v = sys->CSR_ASID;
 
     /* Only ASID filed of CSR_ASID can be written */
@@ -131,9 +148,10 @@ target_ulong helper_csrwr_asid(CPULoongArchState *env, target_ulong val)
     return old_v;
 }
 
-target_ulong helper_csrwr_tcfg(CPULoongArchState *env, target_ulong val)
+target_ulong helper_csrwr_tcfg(CPULoongArchState *env,
+                               target_ulong val, uint32_t vm_level)
 {
-    CPUTimerState *timer = env_timer(env);
+    CPUTimerState *timer = vm_level ? env_guest_timer(env) : env_timer(env);
     CPUSysState *sys = container_of(timer, CPUSysState, timer_state);
     int64_t old_v = sys->CSR_TCFG;
 
@@ -142,9 +160,10 @@ target_ulong helper_csrwr_tcfg(CPULoongArchState *env, target_ulong val)
     return old_v;
 }
 
-target_ulong helper_csrwr_ticlr(CPULoongArchState *env, target_ulong val)
+target_ulong helper_csrwr_ticlr(CPULoongArchState *env,
+                                target_ulong val, uint32_t vm_level)
 {
-    CPUTimerState *timer = env_timer(env);
+    CPUTimerState *timer = vm_level ? env_guest_timer(env) : env_timer(env);
     int64_t old_v = 0;
 
     if (val & 0x1) {
@@ -155,10 +174,11 @@ target_ulong helper_csrwr_ticlr(CPULoongArchState *env, target_ulong val)
     return old_v;
 }
 
-target_ulong helper_csrwr_pwcl(CPULoongArchState *env, target_ulong val)
+target_ulong helper_csrwr_pwcl(CPULoongArchState *env,
+                               target_ulong val, uint32_t vm_level)
 {
     uint8_t shift, ptbase;
-    CPUSysState *sys = env_sys(env);
+    CPUSysState *sys = get_sys(env, vm_level);
     int64_t old_v = sys->CSR_PWCL;
 
     /*
@@ -180,18 +200,20 @@ target_ulong helper_csrwr_pwcl(CPULoongArchState *env, target_ulong val)
     return old_v;
 }
 
-target_ulong helper_csrwr_pwch(CPULoongArchState *env, target_ulong val)
+target_ulong helper_csrwr_pwch(CPULoongArchState *env,
+                               target_ulong val, uint32_t vm_level)
 {
-    uint8_t has_ptw;
-    CPUSysState *sys = env_sys(env);
+    uint8_t host_has_ptw;
+    CPUSysState *sys = get_sys(env, vm_level);
     int64_t old_v = sys->CSR_PWCH;
 
     val = FIELD_DP64(val, CSR_PWCH, RESERVE, 0);
-    has_ptw = FIELD_EX32(env->cpucfg[2], CPUCFG2, HPTW);
-    if (!has_ptw) {
+    //TODO: host can't read guest cpucfg
+    host_has_ptw = FIELD_EX32(env->cpucfg[2], CPUCFG2, HPTW);
+    if (!host_has_ptw) {
         val = FIELD_DP64(val, CSR_PWCH, HPTW_EN, 0);
     }
 
     sys->CSR_PWCH = val;
     return old_v;
- }
+}
