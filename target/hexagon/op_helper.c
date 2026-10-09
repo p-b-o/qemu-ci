@@ -1314,6 +1314,7 @@ static void hex_k0_lock(CPUHexagonState *env)
             return;
         }
         env->k0_lock_state = HEX_LOCK_WAITING;
+        env->gpr[HEX_REG_PC] = env->next_PC - 4;
         cpu_interrupt(cs, CPU_INTERRUPT_HALT);
         cpu_loop_exit(cs);
     } else {
