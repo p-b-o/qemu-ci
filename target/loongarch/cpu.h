@@ -323,7 +323,8 @@ typedef struct CPUTimerState {
 } CPUTimerState;
 
 #define VM_LEVEL0   0
-#define VM_LEVELS   1
+#define VM_LEVEL1   1
+#define VM_LEVELS   2
 
 #define CPU_VENDOR_LOONGSON   "Loongson"
 #define CPU_MODEL_3A5000      "3A5000"
@@ -434,7 +435,7 @@ typedef struct CPUArchState {
     /* Fields up to this point are cleared by a CPU reset */
     struct {} end_reset_fields;
 
-    CPUSysState sys_states[1];
+    CPUSysState sys_states[VM_LEVELS];
     uint32_t cpucfg[21];
     uint32_t pv_features;
     uint64_t vendor_id;
@@ -446,6 +447,7 @@ typedef struct CPUArchState {
     uint32_t mp_state;
 #endif
     CPUSysState *sys_state;
+    bool vm_exit;
 } CPULoongArchState;
 
 typedef struct LoongArchCPUTopo {
@@ -517,6 +519,11 @@ static inline CPUSysState *env_sys(CPULoongArchState *env)
     return env->sys_state;
 }
 
+static inline int env_vm_level(CPULoongArchState *env)
+{
+    return env_sys(env) - env->sys_states;
+}
+
 static inline void set_sys(CPULoongArchState *env, int vm_level)
 {
     env->sys_state = &env->sys_states[vm_level];
@@ -530,6 +537,18 @@ static inline CPUSysState *get_sys(CPULoongArchState *env, int vm_level)
 static inline bool cpu_has_lvz(CPULoongArchState *env)
 {
     return FIELD_EX32(env->cpucfg[2], CPUCFG2, LVZ);
+}
+
+static inline void trigger_vm_exit(CPULoongArchState *env)
+{
+    CPUSysState *host = get_sys(env, VM_LEVEL0);
+
+    if (env_vm_level(env) != VM_LEVEL1) {
+        return;
+    }
+
+    host->CSR_GSTAT = FIELD_DP64(host->CSR_GSTAT, CSR_GSTAT, PVM, 1);
+    env->vm_exit = true;
 }
 
 static inline CPUTimerState *env_timer(CPULoongArchState *env)
@@ -572,6 +591,7 @@ static inline void set_pc(CPULoongArchState *env, uint64_t value)
 #define HW_FLAGS_CRMD_PG    R_CSR_CRMD_PG_MASK   /* 0x10 */
 #define HW_FLAGS_VA32       0x20
 #define HW_FLAGS_EUEN_ASXE  0x40
+#define HW_FLAGS_GUEST_MODE 0x80
 
 #define CPU_RESOLVING_TYPE TYPE_LOONGARCH_CPU
 
