@@ -42,6 +42,12 @@ GEN_FALSE_TRANS(idle)
 GEN_FALSE_TRANS(gcsrrd)
 GEN_FALSE_TRANS(gcsrwr)
 GEN_FALSE_TRANS(gcsrxchg)
+GEN_FALSE_TRANS(gtlbclr)
+GEN_FALSE_TRANS(gtlbflush)
+GEN_FALSE_TRANS(gtlbsrch)
+GEN_FALSE_TRANS(gtlbrd)
+GEN_FALSE_TRANS(gtlbwr)
+GEN_FALSE_TRANS(gtlbfill)
 
 #else
 
@@ -339,6 +345,15 @@ static bool trans_tlbsrch(DisasContext *ctx, arg_tlbsrch *a)
     return true;
 }
 
+static bool trans_gtlbsrch(DisasContext *ctx, arg_gtlbsrch *a)
+{
+    if (check_plv(ctx) || !avail_LVZ(ctx) || is_guest_mmu_idx(ctx->mem_idx)) {
+        return false;
+    }
+    gen_helper_tlbsrch(tcg_env, tcg_constant_i32(1));
+    return true;
+}
+
 static bool trans_tlbrd(DisasContext *ctx, arg_tlbrd *a)
 {
     if (check_plv(ctx)) {
@@ -390,6 +405,51 @@ static bool trans_tlbflush(DisasContext *ctx, arg_tlbflush *a)
     gen_helper_tlbflush(tcg_env,
                         tcg_constant_i32(is_guest_mmu_idx(ctx->mem_idx)));
     check_mmu_idx(ctx);
+    return true;
+}
+
+static bool trans_gtlbrd(DisasContext *ctx, arg_gtlbrd *a)
+{
+    if (check_plv(ctx) || !avail_LVZ(ctx) || is_guest_mmu_idx(ctx->mem_idx)) {
+        return false;
+    }
+    gen_helper_tlbrd(tcg_env, tcg_constant_i32(1));
+    return true;
+}
+
+static bool trans_gtlbwr(DisasContext *ctx, arg_gtlbwr *a)
+{
+    if (check_plv(ctx) || !avail_LVZ(ctx) || is_guest_mmu_idx(ctx->mem_idx)) {
+        return false;
+    }
+    gen_helper_tlbwr(tcg_env, tcg_constant_i32(1));
+    return true;
+}
+
+static bool trans_gtlbfill(DisasContext *ctx, arg_gtlbfill *a)
+{
+    if (check_plv(ctx) || !avail_LVZ(ctx) || is_guest_mmu_idx(ctx->mem_idx)) {
+        return false;
+    }
+    gen_helper_tlbfill(tcg_env, tcg_constant_i32(1));
+    return true;
+}
+
+static bool trans_gtlbclr(DisasContext *ctx, arg_gtlbclr *a)
+{
+    if (check_plv(ctx) || !avail_LVZ(ctx) || is_guest_mmu_idx(ctx->mem_idx)) {
+        return false;
+    }
+    gen_helper_tlbclr(tcg_env, tcg_constant_i32(1));
+    return true;
+}
+
+static bool trans_gtlbflush(DisasContext *ctx, arg_gtlbflush *a)
+{
+    if (check_plv(ctx) || !avail_LVZ(ctx) || is_guest_mmu_idx(ctx->mem_idx)) {
+        return false;
+    }
+    gen_helper_tlbflush(tcg_env, tcg_constant_i32(1));
     return true;
 }
 
