@@ -151,7 +151,6 @@ typedef struct CPUArchState {
     hex_lock_state_t k0_lock_state;
     uint32_t tlb_lock_count;
     uint32_t k0_lock_count;
-    uint64_t t_cycle_count;
 #endif
     uint32_t next_PC;
     uint32_t imprecise_exception;
@@ -227,7 +226,6 @@ static inline HexagonHVXContext *hex_hvx(CPUHexagonState *env)
 
 FIELD(TB_FLAGS, IS_TIGHT_LOOP, 0, 1)
 FIELD(TB_FLAGS, MMU_INDEX, 1, 3)
-FIELD(TB_FLAGS, PCYCLE_ENABLED, 4, 1)
 FIELD(TB_FLAGS, HVX_COPROC_ENABLED, 5, 1)
 
 G_NORETURN void hexagon_raise_exception_err(CPUHexagonState *env,
