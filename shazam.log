@@ -1,0 +1,74 @@
+Looking up 20261010133725.642498-1-eric.auger@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 27 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 106 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v10 1/26] target/arm: Move REVIDR into isar.idregs[] storage
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-2-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 2/26] target/arm: Move MIDR into isar.idregs[] storage
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-3-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 3/26] target/arm: Enforce MPIDR into isar.idregs[] storage
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-4-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 4/26] target/arm/cpu-sysregs.h.inc: Update with automatic generation
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-5-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 5/26] arm/cpu: Add infra to handle generated ID register definitions
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-6-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 6/26] target/arm/cpu-idregs.h.inc: Generate with script
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-7-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 7/26] target/arm/cpu-idregs.h.inc: Generate enum values
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-8-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 8/26] target/arm/cpu-idregs.h.inc: Generate reserved fields
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-9-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 9/26] target/arm/cpu_idregs: Generate tables for Arm64 ID registers and fields
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-10-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 10/26] target/arm/kvm: Retrieve writable ID reg map
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-11-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 11/26] hw/arm/virt: Make sure virt_get_caches() keeps on reading CLIDR_EL1 as 0
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-12-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 12/26] arm/kvm: Initialize isar.idregs[] with all writable host ID regs
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-13-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 13/26] target/arm/cpu64: Add properties for writable IDReg fields
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-14-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 14/26] target/arm/kvm: Implement SYSREG property setter and getter
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-15-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 15/26] target/arm/kvm: Let kvm_arm_init_cpreg_list propagate an error handle
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-16-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 16/26] target/arm/kvm: Pass an Error handle to kvm_arch_init_vcpu
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-17-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 17/26] target/arm/kvm: Introduce kvm_arm_override_idreg_field helper
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-18-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 18/26] target/arm/cpu64: Introduce arm_cpu_apply_sysreg_props
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-19-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 19/26] target/arm/kvm: Apply SYSREG props
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-20-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 20/26] target/arm/kvm: Add consistency checking for SYSREG props
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-21-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 21/26] target/arm/cpu64: Add helper to test SYSREG props against a scratch vcpu
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-22-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 22/26] target/arm/kvm: Add an error handle to kvm_arm_create_scratch_host_vcpu
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-23-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 23/26] target/arm/kvm: Introduce kvm_arm_vcpu_prepare_init_features helper
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-24-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 24/26] target/arm/kvm: Introduce kvm_arm_create_init_scratch_vcpu()
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-25-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 25/26] arm-qmp-cmds: introspection for ID register props
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-26-eric.auger@redhat.com
+  [32m✓[0m [PATCH v10 26/26] arm/cpu-features: Document ID reg properties
+    + Link: https://lore.kernel.org/qemu-devel/20261010133725.642498-27-eric.auger@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 26
+---
+Applying: target/arm: Move REVIDR into isar.idregs[] storage
+Patch failed at 0001 target/arm: Move REVIDR into isar.idregs[] storage
+error: patch failed: target/arm/cpu-sysregs.h.inc:44
+error: target/arm/cpu-sysregs.h.inc: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
