@@ -109,6 +109,45 @@ static const MemMapEntry virt_memmap[] = {
     [VIRT_DRAM] =         { 0x80000000,           0x0 },
 };
 
+CPUCoreCaches virt_caches[] = {
+    {
+        .type = DATA_CACHE,
+        .sets = 256,
+        .size = 64 * KiB,
+        .level = 1,
+        .linesize = 64,
+        .attributes = 0x0,
+        .associativity = 4,
+    },
+    {
+        .type = INSTRUCTION_CACHE,
+        .sets = 256,
+        .size = 64 * KiB,
+        .level = 1,
+        .linesize = 64,
+        .attributes = 0x0,
+        .associativity = 4,
+    },
+    {
+        .type = UNIFIED_CACHE,
+        .sets = 4096,
+        .size = 2048 * KiB,
+        .level = 2,
+        .linesize = 64,
+        .attributes = 0x0,
+        .associativity = 8,
+    },
+    {
+        .type = UNIFIED_CACHE,
+        .sets = 8192,
+        .size = 4096 * KiB,
+        .level = 3,
+        .linesize = 64,
+        .attributes = 0x0,
+        .associativity = 8,
+    },
+};
+
 /* PCIe high mmio is fixed for RV32 */
 #define VIRT32_HIGH_PCIE_MMIO_BASE  0x300000000ULL
 #define VIRT32_HIGH_PCIE_MMIO_SIZE  (4 * GiB)
@@ -138,6 +177,15 @@ static void virt_flash_map(RISCVVirtState *s,
                          sysmem, VIRT_FLASH_SECTOR_SIZE);
     riscv_init_flash_map(s->flash[1], flashbase + flashsize, flashsize,
                          sysmem, VIRT_FLASH_SECTOR_SIZE);
+}
+
+unsigned int virt_get_caches(CPUCoreCaches *caches)
+{
+    for (int i = 0; i < ARRAY_SIZE(virt_caches); i++) {
+        caches[i] = virt_caches[i];
+    }
+
+    return ARRAY_SIZE(virt_caches);
 }
 
 static void create_fdt_socket_plic(RISCVVirtState *s,
@@ -1144,6 +1192,12 @@ static void virt_machine_class_init(ObjectClass *oc, const void *data)
     mc->cpu_index_to_instance_props = riscv_numa_cpu_index_to_props;
     mc->get_default_cpu_node_id = riscv_numa_get_default_cpu_node_id;
     mc->numa_mem_supported = true;
+    mc->smp_props.clusters_supported = true;
+    mc->smp_props.cache_supported[CACHE_LEVEL_AND_TYPE_L1D] = true;
+    mc->smp_props.cache_supported[CACHE_LEVEL_AND_TYPE_L1I] = true;
+    mc->smp_props.cache_supported[CACHE_LEVEL_AND_TYPE_L2] = true;
+    mc->smp_props.cache_supported[CACHE_LEVEL_AND_TYPE_L3] = true;
+
     /* platform instead of architectural choice */
     mc->cpu_cluster_has_numa_boundary = true;
     mc->default_ram_id = "riscv_virt_board.ram";

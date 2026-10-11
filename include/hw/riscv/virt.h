@@ -121,9 +121,13 @@ enum {
 #define VIRT_PLIC_SIZE(__num_context) \
     (VIRT_PLIC_CONTEXT_BASE + (__num_context) * VIRT_PLIC_CONTEXT_STRIDE)
 
+#define CPU_MAX_CACHES 16
+
 bool virt_is_acpi_enabled(RISCVVirtState *s);
 bool virt_is_iommu_sys_enabled(RISCVVirtState *s);
 void virt_acpi_setup(RISCVVirtState *vms);
+
+unsigned int virt_get_caches(CPUCoreCaches *caches);
 
 /*
  * The virt machine physical address space used by some of the devices

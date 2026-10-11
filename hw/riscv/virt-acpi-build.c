@@ -882,7 +882,10 @@ static void virt_acpi_build(RISCVVirtState *s, AcpiBuildTables *tables)
     unsigned dsdt, xsdt;
     GArray *tables_blob = tables->table_data;
     MachineState *ms = MACHINE(s);
+    CPUCoreCaches caches[CPU_MAX_CACHES];
+    unsigned int num_caches;
 
+    num_caches = virt_get_caches(caches);
     table_offsets = g_array_new(false, true,
                                 sizeof(uint32_t));
 
@@ -914,6 +917,10 @@ static void virt_acpi_build(RISCVVirtState *s, AcpiBuildTables *tables)
     if (ms->acpi_spcr_enabled) {
         spcr_setup(tables_blob, tables->linker, s);
     }
+
+    acpi_add_table(table_offsets, tables_blob);
+    build_pptt(tables_blob, tables->linker, ms, s->oem_id,
+               s->oem_table_id, num_caches, caches);
 
     acpi_add_table(table_offsets, tables_blob);
     {
