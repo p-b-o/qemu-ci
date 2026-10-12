@@ -54,6 +54,7 @@ typedef struct GDBRegisterState {
     gdb_get_reg_cb get_reg;
     gdb_set_reg_cb set_reg;
     const GDBFeature *feature;
+    bool internal; /* hidden from GDB, accessible via API/monitor */
 } GDBRegisterState;
 
 GDBState gdbserver_state;
@@ -385,6 +386,11 @@ static const char *get_feature_xml(const char *p, const char **newp,
             }
             for (guint i = 0; i < cpu->gdb_regs->len; i++) {
                 r = &g_array_index(cpu->gdb_regs, GDBRegisterState, i);
+                /* The core target.xml feature must never be internal. */
+                g_assert(i > 0 || !r->internal);
+                if (r->internal) {
+                    continue;
+                }
                 g_ptr_array_add(
                     xml,
                     g_markup_printf_escaped("<xi:include href=\"%s\"/>",
@@ -400,6 +406,9 @@ static const char *get_feature_xml(const char *p, const char **newp,
     /* Is it one of the features? */
     for (guint i = 0; i < cpu->gdb_regs->len; i++) {
         r = &g_array_index(cpu->gdb_regs, GDBRegisterState, i);
+        if (r->internal) {
+            continue;
+        }
         if (strncmp(p, r->feature->xmlname, len) == 0) {
             return r->feature->xml;
         }
@@ -563,13 +572,14 @@ int gdb_write_register(CPUState *cpu, uint8_t *mem_buf, int reg)
 
 static void gdb_register_feature(CPUState *cpu, int base_reg,
                                  gdb_get_reg_cb get_reg, gdb_set_reg_cb set_reg,
-                                 const GDBFeature *feature)
+                                 const GDBFeature *feature, bool internal)
 {
     GDBRegisterState s = {
         .base_reg = base_reg,
         .get_reg = get_reg,
         .set_reg = set_reg,
-        .feature = feature
+        .feature = feature,
+        .internal = internal
     };
 
     trace_gdbxml_register_feature(feature->name, feature->xmlname,
@@ -605,7 +615,7 @@ void gdb_init_cpu(CPUState *cpu)
         assert(feature->base_reg == 0);
         gdb_register_feature(cpu, 0,
                              cc->gdb_read_register, cc->gdb_write_register,
-                             feature);
+                             feature, false);
         cpu->gdb_next_base_reg = cpu->gdb_num_g_regs = feature->num_regs;
     } else {
         cpu->gdb_next_base_reg = cpu->gdb_num_g_regs = cc->gdb_num_core_regs;
@@ -616,19 +626,25 @@ void gdb_init_cpu(CPUState *cpu)
                           cc->gdb_num_core_regs);
 }
 
-void gdb_register_coprocessor(CPUState *cpu,
-                              gdb_get_reg_cb get_reg, gdb_set_reg_cb set_reg,
-                              const GDBFeature *feature)
+static void do_gdb_register_coprocessor(CPUState *cpu,
+                                        gdb_get_reg_cb get_reg,
+                                        gdb_set_reg_cb set_reg,
+                                        const GDBFeature *feature,
+                                        bool internal)
 {
     GDBRegisterState *s;
     guint i;
     int base_reg = cpu->gdb_next_base_reg;
 
     for (i = 0; i < cpu->gdb_regs->len; i++) {
-        /* Check for duplicates.  */
         s = &g_array_index(cpu->gdb_regs, GDBRegisterState, i);
+        /* Check for duplicates.  */
         if (s->feature == feature) {
             return;
+        }
+        /* GDB-visible features must not follow internal ones.  */
+        if (!internal) {
+            g_assert(!s->internal);
         }
     }
 
@@ -637,10 +653,25 @@ void gdb_register_coprocessor(CPUState *cpu,
                                               feature->base_reg);
         base_reg = feature->base_reg;
     }
-    gdb_register_feature(cpu, base_reg, get_reg, set_reg, feature);
+    gdb_register_feature(cpu, base_reg, get_reg, set_reg, feature, internal);
 
     /* Add to end of list.  */
     cpu->gdb_next_base_reg = base_reg + feature->num_regs;
+}
+
+void gdb_register_coprocessor(CPUState *cpu,
+                              gdb_get_reg_cb get_reg, gdb_set_reg_cb set_reg,
+                              const GDBFeature *feature)
+{
+    do_gdb_register_coprocessor(cpu, get_reg, set_reg, feature, false);
+}
+
+void gdb_register_internal_coprocessor(CPUState *cpu,
+                                       gdb_get_reg_cb get_reg,
+                                       gdb_set_reg_cb set_reg,
+                                       const GDBFeature *feature)
+{
+    do_gdb_register_coprocessor(cpu, get_reg, set_reg, feature, true);
 }
 
 void gdb_unregister_coprocessor_all(CPUState *cpu)
@@ -1223,12 +1254,30 @@ static void handle_remove_bp(GArray *params, void *user_ctx)
  * the remote gdb to fallback to older methods.
  */
 
+static bool gdb_register_is_internal(CPUState *cpu, int reg)
+{
+    for (guint i = 0; i < cpu->gdb_regs->len; i++) {
+        GDBRegisterState *r = &g_array_index(cpu->gdb_regs, GDBRegisterState, i);
+
+        if (r->base_reg <= reg && reg < r->base_reg + r->feature->num_regs) {
+            return r->internal;
+        }
+    }
+    return false;
+}
+
 static void handle_set_reg(GArray *params, void *user_ctx)
 {
     int reg_size;
 
     if (params->len != 2) {
         gdb_put_packet("E22");
+        return;
+    }
+
+    if (gdb_register_is_internal(gdbserver_state.g_cpu,
+                                 gdb_get_cmd_param(params, 0)->val_ull)) {
+        gdb_put_packet("E14");
         return;
     }
 
@@ -1244,6 +1293,12 @@ static void handle_get_reg(GArray *params, void *user_ctx)
     int reg_size;
 
     if (!params->len) {
+        gdb_put_packet("E14");
+        return;
+    }
+
+    if (gdb_register_is_internal(gdbserver_state.g_cpu,
+                                 gdb_get_cmd_param(params, 0)->val_ull)) {
         gdb_put_packet("E14");
         return;
     }

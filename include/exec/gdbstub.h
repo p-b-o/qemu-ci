@@ -41,6 +41,27 @@ void gdb_register_coprocessor(CPUState *cpu,
                               const GDBFeature *feature);
 
 /**
+ * gdb_register_internal_coprocessor() - register internal registers
+ *
+ * Like gdb_register_coprocessor(), but the feature is NOT exposed to
+ * GDB via the target description XML. The registers are only
+ * accessible through QEMU's internal APIs (HMP monitor ``$register``
+ * expressions via gdb_get_register_list()).
+ *
+ * Internal features must be registered after all GDB-visible features
+ * to avoid register numbering mismatches with GDB.
+ *
+ * @cpu - the CPU associated with registers
+ * @get_reg - get function
+ * @set_reg - set function
+ * @feature - the GDBFeature describing the registers
+ */
+void gdb_register_internal_coprocessor(CPUState *cpu,
+                                       gdb_get_reg_cb get_reg,
+                                       gdb_set_reg_cb set_reg,
+                                       const GDBFeature *feature);
+
+/**
  * gdb_unregister_coprocessor_all() - unregisters supplemental set of registers
  * @cpu - the CPU associated with registers
  */
