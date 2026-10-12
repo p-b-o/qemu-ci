@@ -13,6 +13,8 @@ extern const char *qemu_name;
 extern QemuUUID qemu_uuid;
 extern bool qemu_uuid_set;
 
+bool qemu_machine_uuid_is_set(void);
+
 const char *qemu_get_vm_name(void);
 
 /* Exit notifiers will run with BQL held. */

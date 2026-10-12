@@ -67,6 +67,11 @@ int only_migratable; /* turn it off unless user states otherwise */
 QemuUUID qemu_uuid;
 bool qemu_uuid_set;
 
+bool qemu_machine_uuid_is_set(void)
+{
+    return qemu_uuid_set && !qemu_uuid_is_null(&qemu_uuid);
+}
+
 uint32_t xen_domid;
 enum xen_mode xen_mode = XEN_DISABLED;
 bool xen_domid_restrict;

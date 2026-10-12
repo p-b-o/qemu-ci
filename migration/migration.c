@@ -2090,6 +2090,12 @@ static bool migrate_prepare(MigrationState *s, bool resume, Error **errp)
             error_setg(errp, "Parameter 'cpr-exec-command' required for cpr-exec");
             return false;
         }
+
+        if (migrate_mode() == MIG_MODE_CPR_LUO &&
+            !qemu_machine_uuid_is_set()) {
+            error_setg(errp, "cpr-luo requires a non-null machine UUID");
+            return false;
+        }
     }
 
     if (migrate_init(s, errp)) {

@@ -27,6 +27,7 @@
 #include "qobject/qdict.h"
 #include "qobject/qnull.h"
 #include "system/runstate.h"
+#include "system/system.h"
 #include "migration/colo.h"
 #include "migration/cpr.h"
 #include "migration/misc.h"
@@ -1399,6 +1400,11 @@ bool migrate_params_check(MigrationParameters *params, Error **errp)
          !is_power_of_2(params->x_rdma_chunk_size))) {
         error_setg(errp, "Option x_rdma_chunk_size expects "
                    "a power of 2 in the range 1MiB to 1024MiB");
+        return false;
+    }
+
+    if (params->mode == MIG_MODE_CPR_LUO && !qemu_machine_uuid_is_set()) {
+        error_setg(errp, "cpr-luo requires a non-null machine UUID");
         return false;
     }
 
