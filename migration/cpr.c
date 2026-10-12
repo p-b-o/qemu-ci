@@ -141,6 +141,14 @@ static CprFd *find_fd(const char *name, int id)
     return g_hash_table_lookup(get_cpr_fds_hash(), &key);
 }
 
+void cpr_mark_fd_luo(const char *name, int id)
+{
+    CprFd *elem = find_fd(name, id);
+
+    g_assert(elem);
+    elem->luo = true;
+}
+
 void cpr_delete_fd(const char *name, int id)
 {
     CprFd key = {

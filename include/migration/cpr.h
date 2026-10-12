@@ -23,6 +23,7 @@ typedef struct CprFd {
     unsigned int namelen;
     int id;
     int fd;
+    bool luo;
     QLIST_ENTRY(CprFd) next;
 } CprFd;
 
@@ -37,6 +38,7 @@ typedef struct CprState {
 extern CprState cpr_state;
 
 void cpr_save_fd(const char *name, int id, int fd);
+void cpr_mark_fd_luo(const char *name, int id);
 void cpr_delete_fd(const char *name, int id);
 int cpr_find_fd(const char *name, int id);
 void cpr_resave_fd(const char *name, int id, int fd);

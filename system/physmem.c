@@ -2458,6 +2458,7 @@ static int qemu_ram_get_shared_fd(const char *name, bool *reused, Error **errp)
 
     if (fd >= 0) {
         cpr_save_fd(name, 0, fd);
+        cpr_mark_fd_luo(name, 0);
     }
     *reused = false;
     return fd;

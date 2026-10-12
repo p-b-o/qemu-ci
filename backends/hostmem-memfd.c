@@ -85,6 +85,7 @@ memfd_backend_memory_alloc(HostMemoryBackend *backend, Error **errp)
         return false;
     }
     cpr_save_fd(name, 0, fd);
+    cpr_mark_fd_luo(name, 0);
 
 have_fd:
     backend->aligned = true;

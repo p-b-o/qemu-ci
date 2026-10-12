@@ -49,6 +49,7 @@ shm_backend_memory_alloc(HostMemoryBackend *backend, Error **errp)
         return false;
     }
     cpr_save_fd(backend_name, 0, fd);
+    cpr_mark_fd_luo(backend_name, 0);
 
 have_fd:
     /* Let's do the same as memory-backend-ram,share=on would do. */
