@@ -712,9 +712,18 @@
 #     with the '-machine aux-ram-share=on' option.
 #
 #     (since 10.2)
+#
+# @cpr-luo: A CPR mode that preserves guest RAM backing file
+#     descriptors and CPR state through the Linux Live Update
+#     Orchestrator (LUO) across a host kernel update.
+#
+#     This mode requires Linux with LUO support.
+#
+#     (since 11.2)
 ##
 { 'enum': 'MigMode',
-  'data': [ 'normal', 'cpr-reboot', 'cpr-transfer', 'cpr-exec' ] }
+  'data': [ 'normal', 'cpr-reboot', 'cpr-transfer', 'cpr-exec',
+            'cpr-luo' ] }
 
 ##
 # @ZeroPageDetection:
