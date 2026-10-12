@@ -49,7 +49,6 @@ static const struct {
     hwaddr base;
     hwaddr size;
 } rp2040_unimplemented[] = {
-    { "rp2040.sysinfo",  0x40000000, 0x4000 },
     { "rp2040.syscfg",   0x40004000, 0x4000 },
     { "rp2040.clocks",   0x40008000, 0x4000 },
     { "rp2040.resets",   0x4000c000, 0x4000 },
@@ -109,6 +108,8 @@ static void rp2040_soc_init(Object *obj)
         object_property_add_alias(obj, property, OBJECT(&s->uart[i]),
                                   "chardev");
     }
+
+    object_initialize_child(obj, "sysinfo", &s->sysinfo, TYPE_RP2040_SYSINFO);
 
     s->sysclk = clock_new(obj, "sysclk");
     clock_set_hz(s->sysclk, RP2040_SYSCLK_FRQ);
@@ -221,6 +222,11 @@ static void rp2040_soc_realize(DeviceState *dev, Error **errp)
             return;
         }
     }
+
+    if (!sysbus_realize(SYS_BUS_DEVICE(&s->sysinfo), errp)) {
+        return;
+    }
+    sysbus_mmio_map(SYS_BUS_DEVICE(&s->sysinfo), 0, RP2040_SYSINFO_BASE);
 
     for (i = 0; i < ARRAY_SIZE(s->uart); i++) {
         qdev_connect_clock_in(DEVICE(&s->uart[i]), "clk", s->sysclk);
