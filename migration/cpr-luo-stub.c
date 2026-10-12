@@ -24,3 +24,14 @@ int cpr_luo_retrieve_session(const char *name, Error **errp)
 {
     return cpr_luo_unsupported(errp);
 }
+
+int cpr_luo_preserve_fd(int session_fd, int fd, uint64_t token,
+                        Error **errp)
+{
+    return cpr_luo_unsupported(errp);
+}
+
+int cpr_luo_retrieve_fd(int session_fd, uint64_t token, Error **errp)
+{
+    return cpr_luo_unsupported(errp);
+}

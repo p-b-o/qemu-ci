@@ -77,4 +77,7 @@ void cpr_exec_unpreserve_fds(void);
 
 int cpr_luo_create_session(const char *name, Error **errp);
 int cpr_luo_retrieve_session(const char *name, Error **errp);
+int cpr_luo_preserve_fd(int session_fd, int fd, uint64_t token,
+                        Error **errp);
+int cpr_luo_retrieve_fd(int session_fd, uint64_t token, Error **errp);
 #endif

@@ -72,3 +72,36 @@ int cpr_luo_retrieve_session(const char *name, Error **errp)
     close(fd);
     return retrieve.fd;
 }
+
+int cpr_luo_preserve_fd(int session_fd, int fd, uint64_t token,
+                        Error **errp)
+{
+    struct liveupdate_session_preserve_fd preserve = {
+        .size = sizeof(preserve),
+        .fd = fd,
+        .token = token,
+    };
+
+    if (ioctl(session_fd, LIVEUPDATE_SESSION_PRESERVE_FD, &preserve) < 0) {
+        error_setg_errno(errp, errno, "failed to preserve fd %d with LUO",
+                         fd);
+        return -1;
+    }
+
+    return 0;
+}
+
+int cpr_luo_retrieve_fd(int session_fd, uint64_t token, Error **errp)
+{
+    struct liveupdate_session_retrieve_fd retrieve = {
+        .size = sizeof(retrieve),
+        .token = token,
+    };
+
+    if (ioctl(session_fd, LIVEUPDATE_SESSION_RETRIEVE_FD, &retrieve) < 0) {
+        error_setg_errno(errp, errno, "failed to retrieve LUO fd");
+        return -1;
+    }
+
+    return retrieve.fd;
+}
