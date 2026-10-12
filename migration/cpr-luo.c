@@ -152,6 +152,65 @@ bool cpr_luo_persist_state(int session_fd, QEMUFile *f, Error **errp)
                                CPR_LUO_STATE_TOKEN, errp) == 0;
 }
 
+/*
+ * This function must be called only after cpr_fd_pre_save() has assigned
+ * LUO tokens.
+ */
+static bool cpr_luo_preserve_one(CprFd *elem, Error **errp)
+{
+    if (!elem->luo) {
+        return true;
+    }
+
+    if (!elem->luo_token) {
+        error_setg(errp, "missing LUO token for CprFd %s id %d",
+                   elem->name, elem->id);
+        return false;
+    }
+
+    return cpr_luo_preserve_fd(cpr_state.luo_session_fd, elem->fd,
+                               elem->luo_token, errp) == 0;
+}
+
+bool cpr_luo_preserve_fds(Error **errp)
+{
+    return cpr_walk_fd(cpr_luo_preserve_one, errp);
+}
+
+/*
+ * This function must be called only after cpr_fd_post_load() has
+ * initialized luo and received luo_token.
+ */
+static bool cpr_luo_retrieve_one(CprFd *elem, Error **errp)
+{
+    int retrieved_fd;
+
+    if (!elem->luo) {
+        return true;
+    }
+
+    if (!elem->luo_token) {
+        error_setg(errp, "missing LUO token for CprFd %s id %d",
+                   elem->name, elem->id);
+        return false;
+    }
+
+    retrieved_fd = cpr_luo_retrieve_fd(cpr_state.luo_session_fd,
+                                       elem->luo_token, errp);
+
+    if (retrieved_fd < 0) {
+        return false;
+    }
+
+    elem->fd = retrieved_fd;
+    return true;
+}
+
+bool cpr_luo_retrieve_fds(Error **errp)
+{
+    return cpr_walk_fd(cpr_luo_retrieve_one, errp);
+}
+
 void cpr_luo_abort(void)
 {
     int session_fd = cpr_state.luo_session_fd;
