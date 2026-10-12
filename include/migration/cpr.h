@@ -94,5 +94,6 @@ QEMUFile *cpr_luo_input(int session_fd, Error **errp);
 bool cpr_luo_persist_state(int session_fd, QEMUFile *f, Error **errp);
 bool cpr_luo_preserve_fds(Error **errp);
 bool cpr_luo_retrieve_fds(Error **errp);
+bool cpr_luo_save(QEMUFile *f, Error **errp);
 void cpr_luo_abort(void);
 #endif

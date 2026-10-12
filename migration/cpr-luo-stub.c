@@ -54,6 +54,11 @@ bool cpr_luo_persist_state(int fd, QEMUFile *f, Error **errp)
     return false;
 }
 
+bool cpr_luo_save(QEMUFile *f, Error **errp)
+{
+    return cpr_luo_unsupported(errp);
+}
+
 void cpr_luo_abort(void)
 {
 }

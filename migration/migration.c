@@ -1698,7 +1698,8 @@ bool migrate_mode_is_cpr(void)
     MigMode mode = migrate_mode();
     return mode == MIG_MODE_CPR_REBOOT ||
            mode == MIG_MODE_CPR_TRANSFER ||
-           mode == MIG_MODE_CPR_EXEC;
+           mode == MIG_MODE_CPR_EXEC ||
+           mode == MIG_MODE_CPR_LUO;
 }
 
 int migrate_init(MigrationState *s, Error **errp)

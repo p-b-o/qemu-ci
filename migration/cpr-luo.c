@@ -15,8 +15,10 @@
 #include "qapi/error.h"
 #include "qemu/error-report.h"
 #include "qemu/memfd.h"
+#include "system/system.h"
 
 #define CPR_LUO_STATE_NAME "QEMU_CPR_LUO_STATE"
+#define CPR_LUO_SESSION_PREFIX "qemu-cpr-luo-"
 
 static int luo_open(Error **errp)
 {
@@ -209,6 +211,54 @@ static bool cpr_luo_retrieve_one(CprFd *elem, Error **errp)
 bool cpr_luo_retrieve_fds(Error **errp)
 {
     return cpr_walk_fd(cpr_luo_retrieve_one, errp);
+}
+
+static bool cpr_luo_session_name(char name[LIVEUPDATE_SESSION_NAME_LENGTH],
+                                 Error **errp)
+{
+    char uuid[UUID_STR_LEN];
+
+    if (!qemu_machine_uuid_is_set()) {
+        error_setg(errp, "cpr-luo requires a non-null machine UUID");
+        return false;
+    }
+
+    qemu_uuid_unparse(&qemu_uuid, uuid);
+    snprintf(name, LIVEUPDATE_SESSION_NAME_LENGTH, "%s%s",
+             CPR_LUO_SESSION_PREFIX, uuid);
+
+    return true;
+}
+
+bool cpr_luo_save(QEMUFile *f, Error **errp)
+{
+    char name[LIVEUPDATE_SESSION_NAME_LENGTH];
+    int session_fd;
+
+    if (!cpr_luo_session_name(name, errp)) {
+        return false;
+    }
+
+    session_fd = cpr_luo_create_session(name, errp);
+    if (session_fd < 0) {
+        return false;
+    }
+
+    cpr_state.luo_session_fd = session_fd;
+
+    if (!cpr_luo_persist_state(session_fd, f, errp)) {
+        goto fail;
+    }
+
+    if (!cpr_luo_preserve_fds(errp)) {
+        goto fail;
+    }
+
+    return true;
+
+fail:
+    cpr_luo_abort();
+    return false;
 }
 
 void cpr_luo_abort(void)

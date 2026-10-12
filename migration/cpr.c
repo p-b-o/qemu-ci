@@ -335,6 +335,8 @@ bool cpr_state_save(MigrationChannel *channel, Error **errp)
         f = cpr_transfer_output(channel, errp);
     } else if (mode == MIG_MODE_CPR_EXEC) {
         f = cpr_exec_output(errp);
+    } else if (mode == MIG_MODE_CPR_LUO) {
+        f = cpr_luo_output(errp);
     } else {
         return true;
     }
@@ -352,6 +354,11 @@ bool cpr_state_save(MigrationChannel *channel, Error **errp)
 
     if (migrate_mode() == MIG_MODE_CPR_EXEC) {
         if (!cpr_exec_persist_state(f, errp)) {
+            qemu_fclose(f);
+            return false;
+        }
+    } else if (mode == MIG_MODE_CPR_LUO) {
+        if (!cpr_luo_save(f, errp)) {
             qemu_fclose(f);
             return false;
         }
