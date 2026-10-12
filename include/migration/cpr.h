@@ -17,6 +17,7 @@
 #define QEMU_CPR_FILE_MAGIC     0x51435052
 #define QEMU_CPR_FILE_VERSION   0x00000001
 #define CPR_STATE "CprState"
+#define CPR_LUO_STATE "CprLuoState"
 
 typedef struct CprFd {
     char *name;

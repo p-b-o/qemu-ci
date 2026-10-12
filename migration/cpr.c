@@ -41,6 +41,18 @@ static const VMStateDescription vmstate_cpr_fd = {
     }
 };
 
+static const VMStateDescription vmstate_cpr_luo_fd = {
+    .name = "cpr luo fd",
+    .version_id = 1,
+    .minimum_version_id = 1,
+    .fields = (VMStateField[]) {
+        VMSTATE_UINT32(namelen, CprFd),
+        VMSTATE_VBUFFER_ALLOC_UINT32(name, CprFd, 0, NULL, namelen),
+        VMSTATE_INT32(id, CprFd),
+        VMSTATE_END_OF_LIST()
+    }
+};
+
 static guint cpr_fd_hash(gconstpointer v)
 {
     const CprFd *elem = v;
@@ -85,11 +97,16 @@ static int cpr_fd_pre_save(void *opaque)
     CprState *state = (CprState *)opaque;
     GHashTableIter iter;
     CprFd *elem;
+    MigMode mode = migrate_mode();
 
     QLIST_INIT(&state->fds);
 
     g_hash_table_iter_init(&iter, get_cpr_fds_hash());
     while (g_hash_table_iter_next(&iter, (gpointer *)&elem, NULL)) {
+        if (mode == MIG_MODE_CPR_LUO && !elem->luo) {
+            continue;
+        }
+
         QLIST_INSERT_HEAD(&state->fds, elem, next);
     }
 
@@ -103,6 +120,10 @@ static int cpr_fd_post_load(void *opaque, int version_id)
 
     while ((elem = QLIST_FIRST(&state->fds))) {
         QLIST_REMOVE(elem, next);
+
+        if (cpr_get_incoming_mode() == MIG_MODE_CPR_LUO) {
+            elem->luo = true;
+        }
 
         /*
          * Preserve legacy QLIST lookup semantics if duplicate keys exist in
@@ -214,6 +235,18 @@ bool cpr_walk_fd(cpr_walk_fd_cb cb)
     return true;
 }
 
+static const VMStateDescription vmstate_cpr_luo_state = {
+    .name = CPR_LUO_STATE,
+    .version_id = 1,
+    .minimum_version_id = 1,
+    .pre_save = cpr_fd_pre_save,
+    .post_load = cpr_fd_post_load,
+    .fields = (VMStateField[]) {
+        VMSTATE_QLIST_V(fds, CprState, 1, vmstate_cpr_luo_fd, CprFd, next),
+        VMSTATE_END_OF_LIST()
+    }
+};
+
 /*************************************************************************/
 static const VMStateDescription vmstate_cpr_state = {
     .name = CPR_STATE,
@@ -256,6 +289,15 @@ bool cpr_is_incoming(void)
     return incoming_mode != MIG_MODE_NONE;
 }
 
+static const VMStateDescription *cpr_state_vmsd(MigMode mode)
+{
+    if (mode == MIG_MODE_CPR_LUO) {
+        return &vmstate_cpr_luo_state;
+    }
+
+    return &vmstate_cpr_state;
+}
+
 bool cpr_state_save(MigrationChannel *channel, Error **errp)
 {
     QEMUFile *f;
@@ -278,7 +320,7 @@ bool cpr_state_save(MigrationChannel *channel, Error **errp)
     qemu_put_be32(f, QEMU_CPR_FILE_MAGIC);
     qemu_put_be32(f, QEMU_CPR_FILE_VERSION);
 
-    if (!vmstate_save_vmsd(f, &vmstate_cpr_state, &cpr_state, 0, errp)) {
+    if (!vmstate_save_vmsd(f, cpr_state_vmsd(mode), &cpr_state, 0, errp)) {
         qemu_fclose(f);
         return false;
     }
@@ -340,7 +382,7 @@ bool cpr_state_load(MigrationChannel *channel, Error **errp)
         return false;
     }
 
-    if (!vmstate_load_vmsd(f, &vmstate_cpr_state, &cpr_state, 1, errp)) {
+    if (!vmstate_load_vmsd(f, cpr_state_vmsd(mode), &cpr_state, 1, errp)) {
         qemu_fclose(f);
         return false;
     }
