@@ -108,7 +108,18 @@ static bool stdio_chr_open(Chardev *chr, ChardevBackend *backend, Error **errp)
         return false;
     }
 
-    if (!qemu_chr_open_fd(chr, 0, 1, errp)) {
+    int fd_in = qemu_dup(0);
+    if (fd_in < 0) {
+        return false;
+    }
+    int fd_out = qemu_dup(1);
+    if (fd_out < 0) {
+        qemu_close(fd_in);
+        return false;
+    }
+    if (!qemu_chr_open_fd(chr, fd_in, fd_out, errp)) {
+        qemu_close(fd_in);
+        qemu_close(fd_out);
         return false;
     }
 
