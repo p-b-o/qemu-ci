@@ -24,7 +24,9 @@
 /*************************************************************************/
 /* cpr state container for all information to be saved. */
 
-CprState cpr_state;
+CprState cpr_state = {
+    .luo_session_fd = -1,
+};
 static GHashTable *cpr_fds_hash;
 
 /****************************************************************************/

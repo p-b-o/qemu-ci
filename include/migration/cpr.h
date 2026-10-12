@@ -36,6 +36,7 @@ typedef QLIST_HEAD(CprVFIODeviceList, CprVFIODevice) CprVFIODeviceList;
 typedef struct CprState {
     CprFdList fds;
     CprVFIODeviceList vfio_devices;
+    int luo_session_fd;
 } CprState;
 
 extern CprState cpr_state;
@@ -88,4 +89,8 @@ int cpr_luo_retrieve_session(const char *name, Error **errp);
 int cpr_luo_preserve_fd(int session_fd, int fd, uint64_t token,
                         Error **errp);
 int cpr_luo_retrieve_fd(int session_fd, uint64_t token, Error **errp);
+QEMUFile *cpr_luo_output(Error **errp);
+QEMUFile *cpr_luo_input(int session_fd, Error **errp);
+bool cpr_luo_persist_state(int session_fd, QEMUFile *f, Error **errp);
+void cpr_luo_abort(void);
 #endif

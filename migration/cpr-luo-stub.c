@@ -35,3 +35,25 @@ int cpr_luo_retrieve_fd(int session_fd, uint64_t token, Error **errp)
 {
     return cpr_luo_unsupported(errp);
 }
+
+QEMUFile *cpr_luo_output(Error **errp)
+{
+    cpr_luo_unsupported(errp);
+    return NULL;
+}
+
+QEMUFile *cpr_luo_input(int fd, Error **errp)
+{
+    cpr_luo_unsupported(errp);
+    return NULL;
+}
+
+bool cpr_luo_persist_state(int fd, QEMUFile *f, Error **errp)
+{
+    cpr_luo_unsupported(errp);
+    return false;
+}
+
+void cpr_luo_abort(void)
+{
+}

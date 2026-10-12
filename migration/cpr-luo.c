@@ -8,9 +8,15 @@
 
 #include <sys/ioctl.h>
 
+#include "io/channel-file.h"
 #include "linux-headers/linux/liveupdate.h"
 #include "migration/cpr.h"
+#include "migration/qemu-file.h"
 #include "qapi/error.h"
+#include "qemu/error-report.h"
+#include "qemu/memfd.h"
+
+#define CPR_LUO_STATE_NAME "QEMU_CPR_LUO_STATE"
 
 static int luo_open(Error **errp)
 {
@@ -104,4 +110,55 @@ int cpr_luo_retrieve_fd(int session_fd, uint64_t token, Error **errp)
     }
 
     return retrieve.fd;
+}
+
+QEMUFile *cpr_luo_output(Error **errp)
+{
+    int fd = qemu_memfd_create(CPR_LUO_STATE_NAME, 0, false, 0, 0, errp);
+
+    if (fd < 0) {
+        return NULL;
+    }
+
+    return cpr_file_new_fd_output(fd, CPR_LUO_STATE_NAME);
+}
+
+QEMUFile *cpr_luo_input(int session_fd, Error **errp)
+{
+    int fd = cpr_luo_retrieve_fd(session_fd, CPR_LUO_STATE_TOKEN, errp);
+
+    if (fd < 0) {
+        return NULL;
+    }
+
+    lseek(fd, 0, SEEK_SET);
+    return cpr_file_new_fd_input(fd, CPR_LUO_STATE_NAME);
+}
+
+bool cpr_luo_persist_state(int session_fd, QEMUFile *f, Error **errp)
+{
+    QIOChannelFile *fioc = QIO_CHANNEL_FILE(qemu_file_get_ioc(f));
+
+    /*
+     * The file size (the memfd in this case) cannot be changed after it
+     * is preserved. Flush all data before preserving the state fd.
+     */
+    if (qemu_fflush(f) < 0) {
+        error_setg(errp, "failed to flush cpr-luo state");
+        return false;
+    }
+
+    return cpr_luo_preserve_fd(session_fd, fioc->fd,
+                               CPR_LUO_STATE_TOKEN, errp) == 0;
+}
+
+void cpr_luo_abort(void)
+{
+    int session_fd = cpr_state.luo_session_fd;
+
+    if (session_fd >= 0) {
+        close(session_fd);
+    }
+
+    cpr_state.luo_session_fd = -1;
 }
