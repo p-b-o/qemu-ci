@@ -80,6 +80,13 @@ bool block_acct_setup(BlockAcctStats *stats, enum OnOffAuto account_invalid,
 void block_acct_cleanup(BlockAcctStats *stats)
 {
     BlockAcctTimedStats *s, *next;
+    size_t i;
+    for (i = 0; i < BLOCK_MAX_IOTYPE; i++) {
+        BlockLatencyHistogram *hist = &stats->latency_histogram[i];
+        g_free(hist->bins);
+        g_free(hist->boundaries);
+    }
+
     QSLIST_FOREACH_SAFE(s, &stats->intervals, entries, next) {
         g_free(s);
     }
