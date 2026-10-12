@@ -434,3 +434,67 @@ cpr-exec mode requires permission to use the exec system call, which
 is denied by certain sandbox options, such as spawn.
 
 The guest pause time increases for large guest RAM backed by small pages.
+
+cpr-luo mode
+------------
+
+This mode uses the Linux Live Update Orchestrator (LUO) to preserve QEMU's CPR
+LUO state and the file descriptors backing guest RAM across a kexec handover.
+QEMU writes the remaining migration state to the migration URI.  The outgoing
+QEMU must remain alive in postmigrate until the host performs kexec: closing
+its LUO session releases the preserved file descriptors.
+
+Both the old and new host kernels must support Kexec Handover (KHO) and LUO.
+KHO must be enabled, for example with ``kho=on`` when it is not enabled by
+default, and LUO must be enabled with the ``liveupdate=on`` kernel command
+line parameter.
+
+Only RAMBlock backing file descriptors are currently preserved in LUO.  The
+target must rebuild any non-RAM file descriptors separately. VFIO is blocked.
+
+Usage
+^^^^^
+
+Memory backend objects must use ``share=on`` and the machine must use
+``aux-ram-share=on``. KVM host kernel cmdline must have
+``kho=on liveupdate=on``.
+
+Outgoing:
+  * Set the migration mode parameter to ``cpr-luo``.
+  * ``uuid`` is mandatory.
+  * Issue the ``migrate`` command.  The URI must remain available after
+    kexec, such as a file on local storage.
+  * When QEMU reaches postmigrate, perform host kexec without quitting QEMU.
+
+Incoming:
+  * Start QEMU with the same machine and memory backend configuration.
+  * ``uuid`` is mandatory to match the LUO session.
+  * Pass the UUID and migration URI with ``-incoming cpr-luo:<URI>``.
+  * If ``-incoming cpr-luo:defer`` is used, ``migrate_incoming <URI>`` will
+    be required later.
+
+Example
+^^^^^^^
+::
+
+  # qemu-kvm -monitor stdio
+      -uuid 6f1b9f5a-6b92-4a5d-ae57-7a0ddabc1234
+      -object memory-backend-memfd,id=ram0,size=4G,share=on
+      -machine memory-backend=ram0,aux-ram-share=on ...
+
+  (qemu) migrate_set_parameter mode cpr-luo
+  (qemu) migrate -d file:vm.state
+  (qemu) info status
+  VM status: paused (postmigrate)
+
+  # kexec -s -l /boot/vmlinuz-$(uname -r) --initrd=/boot/initramfs-$(uname -r).img --reuse-cmdline
+  # kexec -e
+
+  # qemu-kvm -monitor stdio
+      -uuid 6f1b9f5a-6b92-4a5d-ae57-7a0ddabc1234
+      -object memory-backend-memfd,id=ram0,size=4G,share=on
+      -machine memory-backend=ram0,aux-ram-share=on
+      -incoming cpr-luo:file:vm.state ...
+
+If ``-incoming cpr-luo:defer`` is configured, explicitly complete the
+migration with ``migrate_incoming file:vm.state``.
