@@ -49,6 +49,7 @@ static const VMStateDescription vmstate_cpr_luo_fd = {
         VMSTATE_UINT32(namelen, CprFd),
         VMSTATE_VBUFFER_ALLOC_UINT32(name, CprFd, 0, NULL, namelen),
         VMSTATE_INT32(id, CprFd),
+        VMSTATE_UINT64(luo_token, CprFd),
         VMSTATE_END_OF_LIST()
     }
 };
@@ -98,6 +99,7 @@ static int cpr_fd_pre_save(void *opaque)
     GHashTableIter iter;
     CprFd *elem;
     MigMode mode = migrate_mode();
+    uint64_t luo_token = CPR_LUO_STATE_TOKEN + 1;
 
     QLIST_INIT(&state->fds);
 
@@ -105,6 +107,10 @@ static int cpr_fd_pre_save(void *opaque)
     while (g_hash_table_iter_next(&iter, (gpointer *)&elem, NULL)) {
         if (mode == MIG_MODE_CPR_LUO && !elem->luo) {
             continue;
+        }
+
+        if (mode == MIG_MODE_CPR_LUO) {
+            elem->luo_token = luo_token++;
         }
 
         QLIST_INSERT_HEAD(&state->fds, elem, next);
@@ -149,6 +155,7 @@ void cpr_save_fd(const char *name, int id, int fd)
     elem->namelen = strlen(name) + 1;
     elem->id = id;
     elem->fd = fd;
+    elem->luo_token = 0;
     cpr_fd_hash_insert(elem);
 }
 

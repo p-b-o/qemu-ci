@@ -18,6 +18,7 @@
 #define QEMU_CPR_FILE_VERSION   0x00000001
 #define CPR_STATE "CprState"
 #define CPR_LUO_STATE "CprLuoState"
+#define CPR_LUO_STATE_TOKEN 1
 
 typedef struct CprFd {
     char *name;
@@ -25,6 +26,7 @@ typedef struct CprFd {
     int id;
     int fd;
     bool luo;
+    uint64_t luo_token;
     QLIST_ENTRY(CprFd) next;
 } CprFd;
 
