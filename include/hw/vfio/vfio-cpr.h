@@ -26,6 +26,7 @@ typedef int (*dma_map_fn)(const struct VFIOContainer *bcontainer,
 
 typedef struct VFIOContainerCPR {
     Error *blocker;
+    Error *luo_blocker;
     bool vaddr_unmapped;
     NotifierWithReturn transfer_notifier;
     MemoryListener remap_listener;

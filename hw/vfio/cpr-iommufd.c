@@ -157,10 +157,20 @@ bool vfio_iommufd_cpr_register_iommufd(IOMMUFDBackend *be, Error **errp)
 {
     Error **cpr_blocker = &be->cpr_blocker;
 
+    error_setg(&be->luo_blocker, "VFIO: cpr-luo is not supported");
+    if (migrate_add_blocker_modes(&be->luo_blocker,
+                                  BIT(MIG_MODE_CPR_LUO), errp) < 0) {
+        return false;
+    }
+
     if (!vfio_cpr_supported(be, cpr_blocker)) {
-        return migrate_add_blocker_modes(cpr_blocker,
-                    BIT(MIG_MODE_CPR_TRANSFER) | BIT(MIG_MODE_CPR_EXEC),
-                    errp) == 0;
+        if (migrate_add_blocker_modes(cpr_blocker,
+            BIT(MIG_MODE_CPR_TRANSFER) | BIT(MIG_MODE_CPR_EXEC), errp) < 0) {
+            migrate_del_blocker(&be->luo_blocker);
+            return false;
+        }
+
+        return true;
     }
 
     vmstate_register(NULL, -1, &iommufd_cpr_vmstate, be);
@@ -172,6 +182,7 @@ void vfio_iommufd_cpr_unregister_iommufd(IOMMUFDBackend *be)
 {
     vmstate_unregister(NULL, &iommufd_cpr_vmstate, be);
     migrate_del_blocker(&be->cpr_blocker);
+    migrate_del_blocker(&be->luo_blocker);
 }
 
 bool vfio_iommufd_cpr_register_container(VFIOIOMMUFDContainer *container,

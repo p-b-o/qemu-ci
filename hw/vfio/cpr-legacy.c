@@ -171,6 +171,13 @@ bool vfio_legacy_cpr_register_container(VFIOLegacyContainer *container,
     VFIOContainer *bcontainer = VFIO_IOMMU(container);
     Error **cpr_blocker = &container->cpr.blocker;
 
+    error_setg(&container->cpr.luo_blocker,
+               "VFIO: cpr-luo is not supported");
+    if (migrate_add_blocker_modes(&container->cpr.luo_blocker,
+                                  BIT(MIG_MODE_CPR_LUO), errp) < 0) {
+        return false;
+    }
+
     migration_add_notifier_mode(&bcontainer->cpr_reboot_notifier,
                                 vfio_cpr_reboot_notifier,
                                 MIG_MODE_CPR_REBOOT);
@@ -199,6 +206,7 @@ void vfio_legacy_cpr_unregister_container(VFIOLegacyContainer *container)
     migrate_del_blocker(&container->cpr.blocker);
     vmstate_unregister(NULL, &vfio_container_vmstate, container);
     migration_remove_notifier(&container->cpr.transfer_notifier);
+    migrate_del_blocker(&container->cpr.luo_blocker);
 }
 
 /*
