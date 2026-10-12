@@ -11,6 +11,7 @@
 #include "io/channel-file.h"
 #include "linux-headers/linux/liveupdate.h"
 #include "migration/cpr.h"
+#include "migration/migration.h"
 #include "migration/qemu-file.h"
 #include "qapi/error.h"
 #include "qemu/error-report.h"
@@ -294,6 +295,25 @@ void cpr_luo_incoming_finish(void)
 
     close(session_fd);
     cpr_state.luo_session_fd = -1;
+}
+
+static int cpr_luo_notifier(NotifierWithReturn *notifier,
+                            MigrationEvent *e, Error **errp)
+{
+
+    if (e->type == MIG_EVENT_FAILED && cpr_state.luo_session_fd >= 0) {
+        cpr_luo_abort();
+    }
+
+    return 0;
+}
+
+void cpr_luo_init(void)
+{
+    static NotifierWithReturn luo_notifier;
+
+    migration_add_notifier_mode(&luo_notifier, cpr_luo_notifier,
+                                MIG_MODE_CPR_LUO);
 }
 
 void cpr_luo_abort(void)

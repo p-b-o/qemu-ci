@@ -69,6 +69,10 @@ void cpr_luo_incoming_finish(void)
 {
 }
 
+void cpr_luo_init(void)
+{
+}
+
 void cpr_luo_abort(void)
 {
 }
