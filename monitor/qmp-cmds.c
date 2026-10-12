@@ -32,6 +32,7 @@
 #include "qapi/type-helpers.h"
 #include "hw/mem/memory-device.h"
 #include "hw/intc/intc.h"
+#include "migration/cpr.h"
 #include "migration/misc.h"
 
 NameInfo *qmp_query_name(Error **errp)
@@ -113,6 +114,12 @@ void qmp_cont(Error **errp)
             error_propagate(errp, local_err);
             return;
         }
+        /*
+         * If the user resumes the source QEMU after a completed cpr-luo
+         * migration, close the LUO session fd. This is a nop for other
+         * migration modes or regular operation.
+         */
+        cpr_luo_abort();
         vm_start();
     }
 }
