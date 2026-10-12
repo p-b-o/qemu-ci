@@ -74,4 +74,7 @@ bool cpr_exec_persist_state(QEMUFile *f, Error **errp);
 bool cpr_exec_has_state(void);
 void cpr_exec_unpersist_state(void);
 void cpr_exec_unpreserve_fds(void);
+
+int cpr_luo_create_session(const char *name, Error **errp);
+int cpr_luo_retrieve_session(const char *name, Error **errp);
 #endif

@@ -54,3 +54,9 @@ system_ss.add(when: qatzip, if_true: files('multifd-qatzip.c'))
 system_ss.add(when: 'CONFIG_VFIO',
               if_true: files('vfio.c'))
 stub_ss.add(files('vfio-stub.c'))
+
+if host_os == 'linux'
+  system_ss.add(files('cpr-luo.c'))
+else
+  system_ss.add(files('cpr-luo-stub.c'))
+endif
