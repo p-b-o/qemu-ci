@@ -230,15 +230,14 @@ int cpr_open_fd(const char *path, int flags, const char *name, int id,
     return fd;
 }
 
-bool cpr_walk_fd(cpr_walk_fd_cb cb)
+bool cpr_walk_fd(cpr_walk_fd_cb cb, Error **errp)
 {
     GHashTableIter iter;
     CprFd *elem;
 
     g_hash_table_iter_init(&iter, get_cpr_fds_hash());
     while (g_hash_table_iter_next(&iter, (gpointer *)&elem, NULL)) {
-        g_assert(elem->fd >= 0);
-        if (!cb(elem->fd)) {
+        if (!cb(elem, errp)) {
             return false;
         }
     }

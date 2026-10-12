@@ -94,26 +94,26 @@ QEMUFile *cpr_exec_input(Error **errp)
     return cpr_file_new_fd_input(mfd, CPR_EXEC_STATE_NAME);
 }
 
-static bool preserve_fd(int fd)
+static bool preserve_fd(CprFd *elem, Error **errp)
 {
-    qemu_clear_cloexec(fd);
+    qemu_clear_cloexec(elem->fd);
     return true;
 }
 
-static bool unpreserve_fd(int fd)
+static bool unpreserve_fd(CprFd *elem, Error **errp)
 {
-    qemu_set_cloexec(fd);
+    qemu_set_cloexec(elem->fd);
     return true;
 }
 
 static void cpr_exec_preserve_fds(void)
 {
-    cpr_walk_fd(preserve_fd);
+    cpr_walk_fd(preserve_fd, NULL);
 }
 
 void cpr_exec_unpreserve_fds(void)
 {
-    cpr_walk_fd(unpreserve_fd);
+    cpr_walk_fd(unpreserve_fd, NULL);
 }
 
 static void cpr_exec_cb(void *opaque)
