@@ -18,6 +18,14 @@
 #define QEMU_CPR_FILE_VERSION   0x00000001
 #define CPR_STATE "CprState"
 
+typedef struct CprFd {
+    char *name;
+    unsigned int namelen;
+    int id;
+    int fd;
+    QLIST_ENTRY(CprFd) next;
+} CprFd;
+
 typedef QLIST_HEAD(CprFdList, CprFd) CprFdList;
 typedef QLIST_HEAD(CprVFIODeviceList, CprVFIODevice) CprVFIODeviceList;
 

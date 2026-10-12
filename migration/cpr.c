@@ -28,14 +28,6 @@ static GHashTable *cpr_fds_hash;
 
 /****************************************************************************/
 
-typedef struct CprFd {
-    char *name;
-    unsigned int namelen;
-    int id;
-    int fd;
-    QLIST_ENTRY(CprFd) next;
-} CprFd;
-
 static const VMStateDescription vmstate_cpr_fd = {
     .name = "cpr fd",
     .version_id = 1,
