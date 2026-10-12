@@ -261,6 +261,41 @@ fail:
     return false;
 }
 
+QEMUFile *cpr_luo_load(Error **errp)
+{
+    char name[LIVEUPDATE_SESSION_NAME_LENGTH];
+    int session_fd;
+
+    if (!cpr_luo_session_name(name, errp)) {
+        return NULL;
+    }
+
+    session_fd = cpr_luo_retrieve_session(name, errp);
+    if (session_fd < 0) {
+        return NULL;
+    }
+
+    cpr_state.luo_session_fd = session_fd;
+    return cpr_luo_input(session_fd, errp);
+}
+
+void cpr_luo_incoming_finish(void)
+{
+    struct liveupdate_session_finish finish = { .size = sizeof(finish) };
+    int session_fd = cpr_state.luo_session_fd;
+
+    if (cpr_get_incoming_mode() != MIG_MODE_CPR_LUO || session_fd < 0) {
+        return;
+    }
+
+    if (ioctl(session_fd, LIVEUPDATE_SESSION_FINISH, &finish) < 0) {
+        warn_report("failed to finish LUO session: %s", strerror(errno));
+    }
+
+    close(session_fd);
+    cpr_state.luo_session_fd = -1;
+}
+
 void cpr_luo_abort(void)
 {
     int session_fd = cpr_state.luo_session_fd;

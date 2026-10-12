@@ -1840,12 +1840,21 @@ static void incoming_option_parse(const char *str)
 {
     MigrationChannelType type = MIGRATION_CHANNEL_TYPE_MAIN;
     MigrationChannel *channel;
+    const char *uri;
     Visitor *v;
 
     if (!strcmp(str, "defer")) {
         channel = NULL;
     } else if (migrate_is_uri(str)) {
         migrate_uri_parse(str, &channel, &error_fatal);
+    } else if (strstart(str, "cpr-luo:", &uri)) {
+        cpr_set_incoming_mode(MIG_MODE_CPR_LUO);
+        if (!strcmp(uri, "defer")) {
+            channel = NULL;
+            str = "defer";
+        } else {
+            migrate_uri_parse(uri, &channel, &error_fatal);
+        }
     } else {
         v = qobject_input_visitor_new_str(str, "channel-type", &error_fatal);
         visit_type_MigrationChannel(v, NULL, &channel, &error_fatal);

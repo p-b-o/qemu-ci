@@ -687,6 +687,8 @@ static void process_incoming_migration_bh(void *opaque)
 
     dirty_bitmap_mig_before_vm_start();
 
+    cpr_luo_incoming_finish();
+
     if (runstate_is_live(migration_get_target_runstate())) {
         if (autostart) {
             /*

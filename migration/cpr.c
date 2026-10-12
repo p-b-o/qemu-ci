@@ -391,11 +391,15 @@ bool cpr_state_load(MigrationChannel *channel, Error **errp)
         mode = MIG_MODE_CPR_TRANSFER;
         cpr_set_incoming_mode(mode);
         f = cpr_transfer_input(channel, errp);
+    } else if (cpr_get_incoming_mode() == MIG_MODE_CPR_LUO) {
+        mode = MIG_MODE_CPR_LUO;
+        f = cpr_luo_load(errp);
     } else {
         return true;
     }
+
     if (!f) {
-        return false;
+        goto fail;
     }
 
     trace_cpr_state_load(MigMode_str(mode));
@@ -405,23 +409,28 @@ bool cpr_state_load(MigrationChannel *channel, Error **errp)
     if (v != QEMU_CPR_FILE_MAGIC) {
         error_setg(errp, "Not a migration stream (bad magic %x)", v);
         qemu_fclose(f);
-        return false;
+        goto fail;
     }
     v = qemu_get_be32(f);
     if (v != QEMU_CPR_FILE_VERSION) {
         error_setg(errp, "Unsupported migration stream version %d", v);
         qemu_fclose(f);
-        return false;
+        goto fail;
     }
 
     if (!vmstate_load_vmsd(f, cpr_state_vmsd(mode), &cpr_state, 1, errp)) {
         qemu_fclose(f);
-        return false;
+        goto fail;
     }
 
     if (migrate_mode() == MIG_MODE_CPR_EXEC) {
         /* Set cloexec to prevent fd leaks from fork until the next cpr-exec */
         cpr_exec_unpreserve_fds();
+    } else if (mode == MIG_MODE_CPR_LUO) {
+        if (!cpr_luo_retrieve_fds(errp)) {
+            qemu_fclose(f);
+            goto fail;
+        }
     }
 
     /*
@@ -431,6 +440,13 @@ bool cpr_state_load(MigrationChannel *channel, Error **errp)
     cpr_state_file = f;
 
     return true;
+
+fail:
+    if (mode == MIG_MODE_CPR_LUO) {
+        cpr_luo_abort();
+    }
+
+    return false;
 }
 
 void cpr_state_close(void)
