@@ -24,22 +24,6 @@
 
 #define CPR_EXEC_STATE_NAME "QEMU_CPR_EXEC_STATE"
 
-static QEMUFile *qemu_file_new_fd_input(int fd, const char *name)
-{
-    g_autoptr(QIOChannelFile) fioc = qio_channel_file_new_fd(fd);
-    QIOChannel *ioc = QIO_CHANNEL(fioc);
-    qio_channel_set_name(ioc, name);
-    return qemu_file_new_input(ioc);
-}
-
-static QEMUFile *qemu_file_new_fd_output(int fd, const char *name)
-{
-    g_autoptr(QIOChannelFile) fioc = qio_channel_file_new_fd(fd);
-    QIOChannel *ioc = QIO_CHANNEL(fioc);
-    qio_channel_set_name(ioc, name);
-    return qemu_file_new_output(ioc);
-}
-
 bool cpr_exec_persist_state(QEMUFile *f, Error **errp)
 {
     QIOChannelFile *fioc = QIO_CHANNEL_FILE(qemu_file_get_ioc(f));
@@ -99,7 +83,7 @@ QEMUFile *cpr_exec_output(Error **errp)
         return NULL;
     }
 
-    return qemu_file_new_fd_output(mfd, CPR_EXEC_STATE_NAME);
+    return cpr_file_new_fd_output(mfd, CPR_EXEC_STATE_NAME);
 }
 
 QEMUFile *cpr_exec_input(Error **errp)
@@ -107,7 +91,7 @@ QEMUFile *cpr_exec_input(Error **errp)
     int mfd = cpr_exec_find_state();
 
     lseek(mfd, 0, SEEK_SET);
-    return qemu_file_new_fd_input(mfd, CPR_EXEC_STATE_NAME);
+    return cpr_file_new_fd_input(mfd, CPR_EXEC_STATE_NAME);
 }
 
 static bool preserve_fd(int fd)

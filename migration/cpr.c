@@ -10,6 +10,7 @@
 #include "qapi/error.h"
 #include "qemu/error-report.h"
 #include "hw/vfio/vfio-cpr.h"
+#include "io/channel-file.h"
 #include "migration/cpr.h"
 #include "migration/misc.h"
 #include "migration/options.h"
@@ -240,6 +241,22 @@ bool cpr_walk_fd(cpr_walk_fd_cb cb)
         }
     }
     return true;
+}
+
+QEMUFile *cpr_file_new_fd_input(int fd, const char *name)
+{
+    g_autoptr(QIOChannelFile) fioc = qio_channel_file_new_fd(fd);
+    QIOChannel *ioc = QIO_CHANNEL(fioc);
+    qio_channel_set_name(ioc, name);
+    return qemu_file_new_input(ioc);
+}
+
+QEMUFile *cpr_file_new_fd_output(int fd, const char *name)
+{
+    g_autoptr(QIOChannelFile) fioc = qio_channel_file_new_fd(fd);
+    QIOChannel *ioc = QIO_CHANNEL(fioc);
+    qio_channel_set_name(ioc, name);
+    return qemu_file_new_output(ioc);
 }
 
 static const VMStateDescription vmstate_cpr_luo_state = {
