@@ -2582,6 +2582,24 @@ static uint64_t irs_save_vm_statusr_read(GICv5 *s, GICv5Domain domain)
     return value;
 }
 
+static void irs_spi_vmr_write(GICv5 *s, GICv5Domain domain)
+{
+    GICv5Common *cs = ARM_GICV5_COMMON(s);
+
+    /* RAZ/WI if no virt */
+    if (!gicv5_domain_has_virt(cs, domain)) {
+        return;
+    }
+
+    /*
+     * The spec merely recommends that passthrough of SPIs is supported.
+     * For an SPI where passthrough is not supported, IRS_SPI_VMR is
+     * RAZ/WI (indicating "not passed through" and not permitting it to
+     * be set to "passed through"). Log the missing functionality.
+     */
+    qemu_log_mask(LOG_UNIMP, "QEMU GICv5 SPI passthrough not implemented\n");
+}
+
 static void spi_sample(GICv5SPIState *spi)
 {
     /*
@@ -2873,6 +2891,11 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_SPI_VMR:
+    case A_IRS_SPI_VMR + 4:
+        /* Always RAZ/WI until we implement SPI passthrough */
+        *data = 0;
+        return true;
     case A_IRS_VPE_CR0:
         /* RES0 when VIRT_ONE_N is not implemented */
         *data = 0;
@@ -3077,6 +3100,12 @@ static bool config_writel(GICv5 *s, GICv5Domain domain, hwaddr offset,
         irs_save_vmr_write(s, domain,
                            deposit64(cs->irs_save_vmr[domain], 32, 32, data));
         return true;
+    case A_IRS_SPI_VMR:
+        irs_spi_vmr_write(s, domain);
+        return true;
+    case A_IRS_SPI_VMR + 4:
+        irs_spi_vmr_write(s, domain);
+        return true;
     case A_IRS_VPE_CR0:
         /* RES0 when VIRT_ONE_N is not implemented */
         return true;
@@ -3244,6 +3273,10 @@ static bool config_readll(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_SPI_VMR:
+        /* Always RAZ/WI until we implement SPI passthrough */
+        *data = 0;
+        return true;
     }
 
     return false;
@@ -3283,6 +3316,8 @@ static bool config_writell(GICv5 *s, GICv5Domain domain, hwaddr offset,
     case A_IRS_SAVE_VMR:
         irs_save_vmr_write(s, domain, data);
         return true;
+    case A_IRS_SPI_VMR:
+        irs_spi_vmr_write(s, domain);
     }
 
     return false;
