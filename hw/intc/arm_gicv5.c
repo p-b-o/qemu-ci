@@ -613,6 +613,19 @@ static void irs_recalc_vhppi(GICv5 *s, VMTE *vmte, uint32_t iaffid)
     /* TODO: we may need to generate a doorbell interrupt. */
 }
 
+static void irs_recalc_all_vhppi_for_vm(GICv5 *s, VMTE *vmte)
+{
+    /* Recalculate the vHPPI for all VPEs in this VM */
+
+    for (uint32_t i = 0; i < (1 << vmte->vpe_id_bits); i++) {
+        VPE *vpe = &vmte->vpet[i];
+
+        if (vpe->valid) {
+            irs_recalc_vhppi(s, vmte, i);
+        }
+    }
+}
+
 static const GICv5ISTConfig *ist_for_vint(GICv5 *s,
                                           GICv5Common *cs,
                                           GICv5Domain domain,
@@ -2131,6 +2144,8 @@ static void irs_vmap_vistr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
     }
     return;
 
+    irs_recalc_all_vhppi_for_vm(s, vmte);
+
 txfail:
     /* Reportable with EC=0x0 if sw error reporting implemented */
     qemu_log_mask(LOG_GUEST_ERROR, "L2 VMTE update failed for VMID 0x%x at "
@@ -2227,6 +2242,8 @@ static void irs_vmap_vper_write(GICv5 *s, GICv5Domain domain, uint64_t value)
 
     init_vpe_from_vpete(&vmte->vpet[vpeid], vmte, vpete);
     trace_gicv5_irs_vmap_vper_write(domain_name[domain], vmte->vmid, vpeid);
+
+    irs_recalc_vhppi(s, vmte, vpeid);
 
     return;
 
