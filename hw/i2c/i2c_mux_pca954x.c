@@ -30,6 +30,10 @@
 
 #define PCA9548_CHANNEL_COUNT 8
 #define PCA9546_CHANNEL_COUNT 4
+#define PCA9544_CHANNEL_COUNT 4
+
+/* enable bit */
+#define PCA9544_ENABLE 0x4
 
 /*
  * struct Pca954xState - The pca954x state object.
@@ -56,6 +60,11 @@ typedef struct Pca954xClass {
     SMBusDeviceClass parent;
 
     uint8_t nchans;
+
+    /* channel enable bit for mux devices, zero for switches */
+    uint8_t mux_enable;
+
+    int (*parent_event)(I2CSlave *s, enum i2c_event event);
 } Pca954xClass;
 
 #define TYPE_PCA954X "pca954x"
@@ -99,28 +108,43 @@ static bool pca954x_match(I2CSlave *candidate, uint8_t address,
     return broadcast;
 }
 
-static void pca954x_enable_channel(Pca954xState *s, uint8_t enable_mask)
+static void pca954x_enable_channel(Pca954xState *s, uint8_t control)
 {
     Pca954xClass *mc = PCA954X_GET_CLASS(s);
     int i;
 
+    if (mc->mux_enable) {
+        uint8_t selected = control & (mc->mux_enable - 1);
+        bool enabled = control & mc->mux_enable;
+
+        for (i = 0; i < mc->nchans; i++) {
+            s->enabled[i] = enabled && i == selected;
+        }
+        return;
+    }
+
     /*
-     * For each channel, check if their bit is set in enable_mask and if yes,
+     * For each channel, check if their bit is set in control and if yes,
      * enable it, otherwise disable, hide it.
      */
     for (i = 0; i < mc->nchans; i++) {
-        if (enable_mask & (1 << i)) {
-            s->enabled[i] = true;
-        } else {
-            s->enabled[i] = false;
-        }
+        s->enabled[i] = control & (1 << i);
     }
 }
 
 static void pca954x_write(Pca954xState *s, uint8_t data)
 {
-    s->control = data;
-    pca954x_enable_channel(s, data);
+    Pca954xClass *mc = PCA954X_GET_CLASS(s);
+    uint8_t data_writable = data;
+
+    if (mc->mux_enable) {
+        data_writable = data & 0x0f;
+    }
+
+    s->control = data_writable;
+    if (!mc->mux_enable) {
+        pca954x_enable_channel(s, data_writable);
+    }
 
     trace_pca954x_write_bytes(data);
 }
@@ -128,6 +152,7 @@ static void pca954x_write(Pca954xState *s, uint8_t data)
 static int pca954x_write_data(SMBusDevice *d, uint8_t *buf, uint8_t len)
 {
     Pca954xState *s = PCA954X(d);
+    Pca954xClass *mc = PCA954X_GET_CLASS(s);
 
     if (len == 0) {
         qemu_log_mask(LOG_GUEST_ERROR, "%s: writing empty data\n", __func__);
@@ -136,15 +161,17 @@ static int pca954x_write_data(SMBusDevice *d, uint8_t *buf, uint8_t len)
 
     /*
      * len should be 1, because they write one byte to enable/disable channels.
+     * In case of PCA9544A, multiple bytes can be written but only the last one
+     * will be used.
      */
-    if (len > 1) {
+    if (len > 1 && !mc->mux_enable) {
         qemu_log_mask(LOG_GUEST_ERROR,
             "%s: extra data after channel selection mask\n",
             __func__);
         return -1;
     }
 
-    pca954x_write(s, buf[0]);
+    pca954x_write(s, buf[len - 1]);
     return 0;
 }
 
@@ -156,11 +183,33 @@ static uint8_t pca954x_read_byte(SMBusDevice *d)
     return data;
 }
 
+static int pca954x_event(I2CSlave *s, enum i2c_event event)
+{
+    Pca954xState *state = PCA954X(s);
+    Pca954xClass *mc = PCA954X_GET_CLASS(state);
+
+    int res = mc->parent_event(s, event);
+
+    /*
+     * When a channel is selected, it will become active after
+     * a STOP condition has been placed on the I2C-bus.
+     */
+    if (mc->mux_enable && event == I2C_FINISH) {
+        pca954x_enable_channel(state, state->control);
+    }
+    return res;
+}
+
 static void pca954x_enter_reset(Object *obj, ResetType type)
 {
     Pca954xState *s = PCA954X(obj);
+    Pca954xClass *mc = PCA954X_GET_CLASS(s);
     /* Reset will disable all channels. */
     pca954x_write(s, 0);
+
+    if (mc->mux_enable) {
+        pca954x_enable_channel(s, s->control);
+    }
 }
 
 I2CBus *pca954x_i2c_get_bus(I2CSlave *mux, uint8_t channel)
@@ -170,6 +219,13 @@ I2CBus *pca954x_i2c_get_bus(I2CSlave *mux, uint8_t channel)
 
     g_assert(channel < pc->nchans);
     return pca954x->bus[channel];
+}
+
+static void pca9544_class_init(ObjectClass *klass, const void *data)
+{
+    Pca954xClass *s = PCA954X_CLASS(klass);
+    s->nchans = PCA9544_CHANNEL_COUNT;
+    s->mux_enable = PCA9544_ENABLE;
 }
 
 static void pca9546_class_init(ObjectClass *klass, const void *data)
@@ -221,8 +277,13 @@ static void pca954x_class_init(ObjectClass *klass, const void *data)
     ResettableClass *rc = RESETTABLE_CLASS(klass);
     DeviceClass *dc = DEVICE_CLASS(klass);
     SMBusDeviceClass *k = SMBUS_DEVICE_CLASS(klass);
+    Pca954xClass *s = PCA954X_CLASS(klass);
+
+    /* hook our parent event handler */
+    s->parent_event = sc->event;
 
     sc->match_and_add = pca954x_match;
+    sc->event = pca954x_event;
 
     rc->phases.enter = pca954x_enter_reset;
 
@@ -244,6 +305,11 @@ static const TypeInfo pca954x_info[] = {
         .class_size    = sizeof(Pca954xClass),
         .class_init    = pca954x_class_init,
         .abstract      = true,
+    },
+    {
+        .name          = TYPE_PCA9544,
+        .parent        = TYPE_PCA954X,
+        .class_init    = pca9544_class_init,
     },
     {
         .name          = TYPE_PCA9546,
