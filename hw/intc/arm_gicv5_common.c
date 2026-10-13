@@ -111,6 +111,7 @@ static void gicv5_common_reset_hold(Object *obj, ResetType type)
         memset(cs->irs_vmap_l2_vmtr, 0, sizeof(cs->irs_vmap_l2_vmtr));
         memset(cs->irs_vmap_vmr, 0, sizeof(cs->irs_vmap_vmr));
         memset(cs->irs_vmap_vistr, 0, sizeof(cs->irs_vmap_vistr));
+        memset(cs->irs_vmap_l2_vistr, 0, sizeof(cs->irs_vmap_l2_vistr));
     }
 }
 
