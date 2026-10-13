@@ -23,10 +23,20 @@
 
 OBJECT_DEFINE_TYPE(GICv5, gicv5, ARM_GICV5, ARM_GICV5_COMMON)
 
+typedef struct VMTE VMTE;
+
+/* Cached per-VPE information, from VPE and VPE descriptor */
+typedef struct VPE {
+    VMTE *vmte;
+    hwaddr vped_addr;
+    bool valid;
+} VPE;
+
 /* In the GICv5VMTConfig::vm_cache this is how we store VMTE info */
-typedef struct VMTE {
+struct VMTE {
     GICv5ISTConfig lpi_ist;
     GICv5ISTConfig spi_ist;
+    VPE *vpet;
     /* Address of the in-memory L2_VMTE for this VMTE */
     hwaddr vmte_addr;
     hwaddr vpet_addr;
@@ -35,7 +45,7 @@ typedef struct VMTE {
     GICv5Domain domain;
     /* We don't cache the VMD_ADDR as we don't use VMDs */
     /* We don't cache VALID: the existence of this struct implies VALID=1 */
-} VMTE;
+};
 
 static const char *domain_name[] = {
     [GICV5_ID_S] = "Secure",
@@ -100,6 +110,8 @@ static void VMTE_free(void *data)
     if (vmte->spi_ist.lpi_cache) {
         g_hash_table_destroy(vmte->spi_ist.lpi_cache);
     }
+
+    g_free(vmte->vpet);
 
     g_free(vmte);
 }
@@ -1219,6 +1231,51 @@ static void initialize_vspi_ist_config(GICv5Common *cs, GICv5Domain domain,
                           id_bits, istsz, l2sz, structure);
 }
 
+static void init_vpe_from_vpete(VPE *vpe, VMTE *vmte, uint64_t vpete)
+{
+    /* Given the value of the in-memory VPETE, set up one VPE struct */
+    vpe->vmte = vmte;
+    vpe->valid = FIELD_EX64(vpete, VPETE, VALID);
+    if (vpe->valid) {
+        vpe->vped_addr = vpete & R_VPETE_VPED_ADDR_MASK;
+        vpe->vped_addr &= ~MAKE_64BIT_MASK(0, QEMU_GICV5_VPED_SZ);
+    }
+}
+
+static void initialize_vpet(GICv5Common *cs, GICv5Domain domain,
+                            GICv5VMTConfig *cfg, VMTE *vmte)
+{
+    /*
+     * Allocate our cached VPE table, and populate it from guest memory.
+     * Note that (per R_DLKTX) the VPE descriptor is supposed to be all
+     * zeroes at this point, and behaviour is UNPREDICTABLE if it is not,
+     * so we do not need to read the descriptor here. In any case QEMU
+     * doesn't use the VPE descriptors.
+     */
+    int num_vpes = 1 << vmte->vpe_id_bits;
+    hwaddr vpete_addr = vmte->vpet_addr;
+
+    vmte->vpet = g_new0(VPE, num_vpes);
+
+    for (int i = 0; i < num_vpes; i++, vpete_addr += 8) {
+        MemTxResult res;
+        uint64_t vpete;
+
+        vpete = address_space_ldq_le(&cs->dma_as, vpete_addr,
+                                     cfg->txattrs, &res);
+        if (res != MEMTX_OK) {
+            qemu_log_mask(LOG_GUEST_ERROR, "VPET lookup failed for VPE 0x%x"
+                          " at physical address 0x" HWADDR_FMT_plx "\n",
+                          i, vpete_addr);
+            return;
+        }
+
+        init_vpe_from_vpete(&vmte->vpet[i], vmte, vpete);
+        trace_gicv5_initialize_vpet(domain_name[vmte->domain], vmte->vmid,
+                                    i, vmte->vpet[i].valid);
+    }
+}
+
 static void cache_vmte(GICv5Common *cs, GICv5Domain domain,
                        GICv5VMTConfig *cfg,
                        uint32_t vmid, uint64_t *l2_vmte, hwaddr l2_addr)
@@ -1243,6 +1300,7 @@ static void cache_vmte(GICv5Common *cs, GICv5Domain domain,
      * it has 2^vpe_id_bits entries of 2^3 == 8 bytes each
      */
     vmte->vpet_addr &= ~MAKE_64BIT_MASK(0, vmte->vpe_id_bits + 3);
+    initialize_vpet(cs, domain, cfg, vmte);
 
     /*
      * If the VALID bits are set for the LPI and SPI ISTs, we can read

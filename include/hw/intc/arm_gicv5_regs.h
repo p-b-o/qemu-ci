@@ -306,6 +306,9 @@ FIELD(L2_VMTE_3, SPI_ID_BITS, 59, 5)
 #define VMT_L2_IDX_BITS 7
 #define VMT_L2_TABLE_SIZE 4096
 
+FIELD(VPETE, VALID, 0, 1)
+FIELD(VPETE, VPED_ADDR, 3, 53)
+
 /*
  * Format used for gicv5_request_config() return value, which matches
  * the ICC_ICSR_EL1 bit layout.
