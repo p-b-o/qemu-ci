@@ -1254,7 +1254,7 @@ static void gic_cddi_write(CPUARMState *env, const ARMCPRegInfo *ri,
     GICv5IntType type = FIELD_EX64(value, GIC_CDDI, TYPE);
     uint32_t id = FIELD_EX64(value, GIC_CDDI, ID);
 
-    trace_gicv5_cddi(domain, value);
+    trace_gicv5_cddi(domain, virtual, value);
 
     switch (type) {
     case GICV5_PPI:
@@ -1268,8 +1268,13 @@ static void gic_cddi_write(CPUARMState *env, const ARMCPRegInfo *ri,
         ppireg = id / 64;
         ppibit = 1ULL << (id % 64);
 
-        env->gicv5_cpuif.ppi_active[ppireg] &= ~ppibit;
-        gic_recalc_ppi_hppi(env);
+        if (virtual) {
+            env->gicv5_cpuif.ich_ppi_active[ppireg] &= ~ppibit;
+            gic_recalc_virt_ppi_hppi(env);
+        } else {
+            env->gicv5_cpuif.ppi_active[ppireg] &= ~ppibit;
+            gic_recalc_ppi_hppi(env);
+        }
         break;
     }
     case GICV5_LPI:
