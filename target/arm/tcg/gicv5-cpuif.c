@@ -1317,6 +1317,27 @@ static bool gic_hppi_is_nmi(CPUARMState *env, GICv5PendingIrq hppi,
     return hppi.prio == 0 && arm_sctlr(env, arm_current_el(env)) & SCTLR_NMI;
 }
 
+static void gic_clear_vppi_pending(CPUARMState *env, uint32_t ppireg,
+                                   uint64_t ppibit)
+{
+    /*
+     * Mark the specified virtual PPI as no longer pending.  ppireg is
+     * the PPI register index (0 or 1) and ppibit is a mask with
+     * exactly 1 bit set in it.
+     */
+    uint64_t dvi_mask = gic_virt_dvi_mask(env, ppireg);
+
+    if (!(dvi_mask & ppibit)) {
+        /* Easy case: vPPI not direct injected */
+        env->gicv5_cpuif.ich_ppi_pend[ppireg] &= ~ppibit;
+        return;
+    }
+    /* vPPI is direct-injected: unpend the physical PPI */
+    ppibit = gic_ppi_vpend_to_ppend(env, ppibit, ppireg);
+    env->gicv5_cpuif.ppi_pend[ppireg] &= ~ppibit;
+    gic_recalc_ppi_hppi(env);
+}
+
 static uint64_t gicr_cdia_read(CPUARMState *env, const ARMCPRegInfo *ri)
 {
     /* Acknowledge HPPI in the current interrupt domain */
@@ -1381,7 +1402,7 @@ static uint64_t gicr_cdia_read(CPUARMState *env, const ARMCPRegInfo *ri)
             env->gicv5_cpuif.ich_ppi_active[ppireg] |= ppibit;
             if (hm_edge) {
                 /* handling mode is Edge: clear pending */
-                env->gicv5_cpuif.ich_ppi_pend[ppireg] &= ~ppibit;
+                gic_clear_vppi_pending(env, ppireg, ppibit);
             }
             gic_recalc_virt_ppi_hppi(env);
         } else {
