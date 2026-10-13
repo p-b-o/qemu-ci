@@ -2334,6 +2334,10 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_VPE_CR0:
+        /* RES0 when VIRT_ONE_N is not implemented */
+        *data = 0;
+        return true;
     case A_IRS_VPE_STATUSR:
         if (gicv5_domain_has_virt(cs, domain)) {
             *data = cs->irs_vpe_statusr[domain];
@@ -2523,6 +2527,9 @@ static bool config_writel(GICv5 *s, GICv5Domain domain, hwaddr offset,
     case A_IRS_VPE_DBR + 4:
         irs_vpe_dbr_write(s, domain,
                           deposit64(cs->irs_vpe_dbr[domain], 32, 32, data));
+        return true;
+    case A_IRS_VPE_CR0:
+        /* RES0 when VIRT_ONE_N is not implemented */
         return true;
     case A_IRS_SPI_SELR:
         cs->irs_spi_selr[domain] = data;
