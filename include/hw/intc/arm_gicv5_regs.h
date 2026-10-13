@@ -296,12 +296,15 @@ FIELD(L2_VMTE_3, SPI_ID_BITS, 59, 5)
 
 /* Size of L2 VMTE in 64-bit words */
 #define L2_VMTE_WORDS 4
+/* ...and in bytes */
+#define L2_VMTE_BYTES (L2_VMTE_WORDS * sizeof(uint64_t))
 
 /*
  * L2 VMTEs are always 32 bytes, and the L2 table is always 4KB,
  * so the lower 7 bits in a VM ID index the L2 table.
  */
 #define VMT_L2_IDX_BITS 7
+#define VMT_L2_TABLE_SIZE 4096
 
 /*
  * Format used for gicv5_request_config() return value, which matches

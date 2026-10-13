@@ -1257,6 +1257,72 @@ static void cache_vmte(GICv5Common *cs, GICv5Domain domain,
     trace_gicv5_cache_vmte(domain_name[domain], vmid);
 }
 
+static void fill_vmt_cache_from_l2_vmt(GICv5Common *cs, GICv5Domain domain,
+                                       GICv5VMTConfig *cfg, hwaddr l2_addr,
+                                       hwaddr l2_limit, uint32_t vmid)
+{
+    /*
+     * Scan an L2 VM table in guest memory, and populate our VMT
+     * cache for each entry that is marked as valid.
+     */
+    for (; l2_addr < l2_limit; l2_addr += 32, vmid += 1) {
+        uint64_t l2_vmte[L2_VMTE_WORDS];
+
+        if (!read_first_vmte_word(cs, cfg, l2_addr, l2_vmte)) {
+            goto txfail;
+        }
+        if (FIELD_EX64(l2_vmte[0], L2_VMTE_0, VALID) == 0) {
+            continue;
+        }
+        if (!read_other_vmte_words(cs, cfg, l2_addr, l2_vmte)) {
+            goto txfail;
+        }
+        cache_vmte(cs, domain, cfg, vmid, l2_vmte, l2_addr);
+    }
+
+txfail:
+    /* Reportable with EC=0x0 if sw error reporting implemented */
+    qemu_log_mask(LOG_GUEST_ERROR, "L2 VMTE read failed for VMID 0x%x at "
+                  "physical address 0x" HWADDR_FMT_plx "\n", vmid, l2_addr);
+}
+
+static void fill_vmt_cache_from_l1_vmt(GICv5Common *cs, GICv5Domain domain,
+                                       GICv5VMTConfig *cfg)
+{
+    /*
+     * Scan the whole VM table in guest memory, and populate our VMT
+     * cache for each entry that is marked as valid.
+     */
+    if (!cfg->structure) {
+        hwaddr l2_limit = cfg->base + (1ULL << cfg->vm_id_bits) * L2_VMTE_BYTES;
+
+        fill_vmt_cache_from_l2_vmt(cs, domain, cfg, cfg->base, l2_limit, 0);
+    } else {
+        uint32_t vmid = 0;
+        hwaddr l1_limit = l1_vmte_addr(cs, cfg, (1ULL << cfg->vm_id_bits));
+
+        for (hwaddr l1_addr = cfg->base;
+             l1_addr < l1_limit;
+             l1_addr += 8, vmid += VMT_L2_TABLE_SIZE / L2_VMTE_BYTES) {
+            MemTxResult res;
+            uint64_t l1_vmte;
+            hwaddr l2_addr;
+
+            l1_vmte = address_space_ldq_le(&cs->dma_as, l1_addr,
+                                           cfg->txattrs, &res);
+            if (res != MEMTX_OK) {
+                continue;
+            }
+            if (FIELD_EX64(l1_vmte, L1_VMTE, VALID) == 0) {
+                continue;
+            }
+            l2_addr = l1_vmte & R_L1_VMTE_L2_ADDR_MASK;
+            fill_vmt_cache_from_l2_vmt(cs, domain, cfg, l2_addr,
+                                       l2_addr + VMT_L2_TABLE_SIZE, vmid);
+        }
+    }
+}
+
 /* Data we need to pass through to irs_clean_lpi_cache_entry() */
 typedef struct CleanLPICacheUserData {
     GICv5Common *cs;
@@ -1461,6 +1527,9 @@ static void irs_vmt_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
 
         cfg->valid = true;
 
+        /* The VMT may already have some VMTEs with VALID=1 */
+        fill_vmt_cache_from_l1_vmt(cs, domain, cfg);
+
         trace_gicv5_vmt_valid(domain_name[domain], cfg->base,
                               cfg->vm_id_bits, cfg->structure);
     }
@@ -1472,7 +1541,7 @@ static void irs_vmap_l2_vmtr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
     GICv5VMTConfig *cfg = &s->vmt_config[domain];
     uint32_t vmid = FIELD_EX64(value, IRS_VMAP_L2_VMTR, VM_ID);
     bool m = FIELD_EX64(value, IRS_VMAP_L2_VMTR, M);
-    hwaddr l1_addr;
+    hwaddr l1_addr, l2_addr;
     uint64_t l1_vmte;
     MemTxResult res;
 
@@ -1513,6 +1582,15 @@ static void irs_vmap_l2_vmtr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
     if (res != MEMTX_OK) {
         goto txfail;
     }
+
+    /*
+     * The L2 VM table we just made valid can have VMTEs which
+     * already have VALID=1 set: read them into the VM cache.
+     */
+    l2_addr = l1_vmte & R_L1_VMTE_L2_ADDR_MASK;
+    fill_vmt_cache_from_l2_vmt(cs, domain, cfg, l2_addr,
+                               l2_addr + VMT_L2_TABLE_SIZE,
+                               vmid & ~MAKE_64BIT_MASK(0, VMT_L2_IDX_BITS));
 
     trace_gicv5_vmap_l2_vmtr(domain_name[domain], vmid);
 
