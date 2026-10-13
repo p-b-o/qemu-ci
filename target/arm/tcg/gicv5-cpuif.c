@@ -214,6 +214,19 @@ static GICv5PendingIrq gic_hppi(CPUARMState *env, GICv5Domain domain)
     return best;
 }
 
+static bool gic_get_irs_virt_hppi(CPUARMState *env)
+{
+    /*
+     * Return true if we should ask the IRS for its candidate virtual
+     * HPPI. We do this only if we have a resident VPE and are not
+     * ignoring IRS candidate HPPIs because of IRICHPPIDIS.
+     */
+    uint64_t ich_contextr_el2 = env->gicv5_cpuif.ich_contextr_el2;
+
+    return (ich_contextr_el2 & R_ICH_CONTEXTR_EL2_V_MASK) &&
+        !(ich_contextr_el2 & R_ICH_CONTEXTR_EL2_IRICHPPIDIS_MASK);
+}
+
 static GICv5PendingIrq gic_virt_hppi(CPUARMState *env)
 {
     /*
@@ -236,12 +249,14 @@ static GICv5PendingIrq gic_virt_hppi(CPUARMState *env)
         return GICV5_PENDING_IRQ_NONE;
     }
 
-    /*
-     * TODO: When we implement ICH_CONTEXTR_EL2, we need to check
-     * IRICHPPIDS and if it is 0 get the IRS candidate HPPI.  For now,
-     * set irs_hppi to "no candidate".
-     */
-    irs_hppi = GICV5_PENDING_IRQ_NONE;
+    if (gic_get_irs_virt_hppi(env)) {
+        GICv5Common *gic = gicv5_get_gic(env);
+        GICv5Domain domain = gicv5_logical_domain(env);
+
+        irs_hppi = gicv5_get_hppi(gic, domain, true, env->gicv5.cpuidx);
+    } else {
+        irs_hppi = GICV5_PENDING_IRQ_NONE;
+    }
 
     /*
      * If the best PPI and the best interrupt from the IRS have the
