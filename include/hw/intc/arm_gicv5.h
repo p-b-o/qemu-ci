@@ -30,6 +30,14 @@ typedef struct GICv5ISTConfig {
     GHashTable *lpi_cache;
 } GICv5ISTConfig;
 
+typedef struct GICv5VMTConfig {
+    hwaddr base; /* Base address */
+    MemTxAttrs txattrs; /* TX attrs to use for this table */
+    uint8_t vm_id_bits; /* number of VM ID bits for the domain */
+    bool structure; /* true if using 2-level table */
+    bool valid; /* true if this table is valid and usable */
+} GICv5VMTConfig;
+
 /*
  * This class is for TCG-specific state for the GICv5.
  */
@@ -38,6 +46,8 @@ struct GICv5 {
 
     /* This is the info from IRS_IST_BASER and IRS_IST_CFGR */
     GICv5ISTConfig phys_lpi_config[NUM_GICV5_DOMAINS];
+    /* This is the info from IRS_VMT_BASER and IRS_VMT_CFGR */
+    GICv5VMTConfig vmt_config[NUM_GICV5_DOMAINS];
 
     /* We cache the HPPI for each CPU for each domain here */
     GICv5PendingIrq *hppi[NUM_GICV5_DOMAINS];

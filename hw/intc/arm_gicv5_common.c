@@ -107,6 +107,7 @@ static void gicv5_common_reset_hold(Object *obj, ResetType type)
 
     if (cs->has_virt) {
         memset(cs->irs_vmt_baser, 0, sizeof(cs->irs_vmt_baser));
+        memset(cs->irs_vmt_cfgr, 0, sizeof(cs->irs_vmt_cfgr));
     }
 }
 

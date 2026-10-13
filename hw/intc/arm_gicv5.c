@@ -1174,7 +1174,7 @@ static void irs_vmt_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
         return;
     }
 
-    if (FIELD_EX64(cs->irs_vmt_baser[domain], IRS_VMT_BASER, VALID)) {
+    if (s->vmt_config[domain].valid) {
         /* If VALID is set, ADDR is RO and we can only update VALID */
         bool valid = FIELD_EX64(value, IRS_VMT_BASER, VALID);
 
@@ -1184,6 +1184,7 @@ static void irs_vmt_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
         }
         cs->irs_vmt_baser[domain] = FIELD_DP64(cs->irs_vmt_baser[domain],
                                                IRS_VMT_BASER, VALID, valid);
+        s->vmt_config[domain].valid = false;
         trace_gicv5_vmt_invalid(domain_name[domain]);
         return;
     }
@@ -1191,8 +1192,60 @@ static void irs_vmt_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
     cs->irs_vmt_baser[domain] = value;
 
     if (FIELD_EX64(cs->irs_vmt_baser[domain], IRS_VMT_BASER, VALID)) {
-        trace_gicv5_vmt_valid(domain_name[domain],
-                              cs->irs_vmt_baser[domain] & R_IRS_VMT_BASER_ADDR_MASK);
+        /*
+         * If the guest just set VALID then capture data into config
+         * struct and sanitize.
+         */
+        GICv5VMTConfig *cfg = &s->vmt_config[domain];
+        uint8_t vm_id_bits = FIELD_EX64(cs->irs_vmt_cfgr[domain],
+                                        IRS_VMT_CFGR, VM_ID_BITS);
+        int tableszbits;
+
+        vm_id_bits = MIN(vm_id_bits, QEMU_GICV5_VM_ID_BITS);
+
+        cfg->structure = FIELD_EX64(cs->irs_vmt_cfgr[domain],
+                                    IRS_VMT_CFGR, STRUCTURE);
+        cfg->vm_id_bits = vm_id_bits;
+        /*
+         * L2 VMTEs are always 32 bytes, and the L2 VM table is always 4KB,
+         * so 7 bits in a VM ID index the L2 table. As the L2 VMTE size
+         * and l2 index bits are constant, we don't need to precalculate
+         * them the way we do for GICv5ISTConfig.
+         */
+        cfg->base = cs->irs_vmt_baser[domain] & R_IRS_VMT_BASER_ADDR_MASK;
+        cfg->txattrs = irs_txattrs(cs, domain);
+
+        /*
+         * Enforce aligment of VM table, ignoring bits [N:0] of the address.
+         * When STRUCTURE = 0, N = VM_ID_BITS + 4
+         * When STRUCTURE = 1, N = VM_ID_BITS - 5
+         * For us, tableszbits = N + 1.
+         */
+        if (cfg->structure) {
+            /*
+             * L1 table indexed by (vm_id_bits - 7) bits, and each entry
+             * is 2^3 == 8 bytes.
+             */
+            tableszbits = vm_id_bits - 4;
+        } else {
+            /* table has 2^vm_id_bits entries of 2^5 == 32 bytes each */
+            tableszbits = vm_id_bits + 5;
+        }
+        /*
+         * tableszbits is <= 0 for the silly but valid config where
+         * STRUCTURE = 1 but VM_ID_BITS is so small that there is only
+         * one L1 table entry pointing to a single L2 table with all
+         * the VMTEs in it. In this case the R_IRS_VMT_BASER_ADDR_MASK
+         * already aligned cfg->base sufficiently.
+         */
+        if (tableszbits > 0) {
+            cfg->base &= ~MAKE_64BIT_MASK(0, tableszbits);
+        }
+
+        cfg->valid = true;
+
+        trace_gicv5_vmt_valid(domain_name[domain], cfg->base,
+                              cfg->vm_id_bits, cfg->structure);
     }
 }
 
@@ -1326,6 +1379,13 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_VMT_CFGR:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = cs->irs_vmt_cfgr[domain];
+        } else {
+            *data = 0;
+        }
+        return true;
     case A_IRS_SPI_STATUSR:
         /*
          * QEMU writes to IRS_SPI_{CFGR,DOMAINR,SELR,VMR} take effect
@@ -1435,6 +1495,18 @@ static bool config_writel(GICv5 *s, GICv5Domain domain, hwaddr offset,
     case A_IRS_VMT_BASER + 4:
         irs_vmt_baser_write(s, domain,
                             deposit64(cs->irs_vmt_baser[domain], 32, 32, data));
+        return true;
+    case A_IRS_VMT_CFGR:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            if (s->vmt_config[domain].valid) {
+                qemu_log_mask(LOG_GUEST_ERROR,
+                              "guest tried to write IRS_VMT_CFGR for %s "
+                              "config frame while IRS_VMT_BASER.VALID set\n",
+                              domain_name[domain]);
+            } else {
+                cs->irs_vmt_cfgr[domain] = data;
+            }
+        }
         return true;
     case A_IRS_SPI_SELR:
         cs->irs_spi_selr[domain] = data;
@@ -1701,6 +1773,11 @@ static void gicv5_reset_hold(Object *obj, ResetType type)
         if (s->phys_lpi_config[i].lpi_cache) {
             g_hash_table_remove_all(s->phys_lpi_config[i].lpi_cache);
         }
+    }
+
+    /* IRS_VMT_BASER and IRS_VMT_CFGR reset to 0, clear cached info */
+    for (int i = 0; i < NUM_GICV5_DOMAINS; i++) {
+        s->vmt_config[i].valid = false;
     }
 }
 
