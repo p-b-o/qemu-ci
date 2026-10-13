@@ -487,6 +487,12 @@ static void gic_ich_ppi_priority_write(CPUARMState *env, const ARMCPRegInfo *ri,
     raw_write(env, ri, value);
 }
 
+static void gic_ich_ppi_dvi_write(CPUARMState *env, const ARMCPRegInfo *ri,
+                                  uint64_t value)
+{
+    raw_write(env, ri, value);
+}
+
 /*
  * ICC_APR_EL1 is banked and reads/writes as the version for the
  * current logical interrupt domain.
@@ -960,6 +966,27 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
         .nv2_redirect_offset = 0xb00,
         .accessfn = access_gicv5_ich_reg,
         .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ich_apr_el2),
+    },
+    /*
+     * Note that DVIR bits RAZ/WI when the PPI isn't assigned to the
+     * current domain, so we will need to mask them when we implement
+     * EL3 support and ICC_PPI_DOMAINR<n>_EL3
+     */
+    {   .name = "ICH_PPI_DVIR0_EL2", .state = ARM_CP_STATE_AA64,
+        .opc0 = 3, .opc1 = 4, .crn = 12, .crm = 10, .opc2 = 0,
+        .access = PL2_RW, .type = ARM_CP_IO | ARM_CP_NO_RAW,
+        .nv2_redirect_offset = 0xb40,
+        .accessfn = access_gicv5_ich_reg,
+        .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ich_ppi_dvi[0]),
+        .writefn = gic_ich_ppi_dvi_write,
+    },
+    {   .name = "ICH_PPI_DVIR1_EL2", .state = ARM_CP_STATE_AA64,
+        .opc0 = 3, .opc1 = 4, .crn = 12, .crm = 10, .opc2 = 1,
+        .access = PL2_RW, .type = ARM_CP_IO | ARM_CP_NO_RAW,
+        .nv2_redirect_offset = 0xb48,
+        .accessfn = access_gicv5_ich_reg,
+        .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ich_ppi_dvi[1]),
+        .writefn = gic_ich_ppi_dvi_write,
     },
     {   .name = "ICH_PPI_ENABLER0_EL2", .state = ARM_CP_STATE_AA64,
         .opc0 = 3, .opc1 = 4, .crn = 12, .crm = 10, .opc2 = 2,
