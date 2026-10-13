@@ -36,6 +36,8 @@ typedef struct GICv5VMTConfig {
     uint8_t vm_id_bits; /* number of VM ID bits for the domain */
     bool structure; /* true if using 2-level table */
     bool valid; /* true if this table is valid and usable */
+    /* This caches information about valid VMs */
+    GHashTable *vm_cache;
 } GICv5VMTConfig;
 
 /*

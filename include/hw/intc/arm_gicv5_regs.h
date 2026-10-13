@@ -294,6 +294,9 @@ FIELD(L2_VMTE_3, SPI_ISTSZ, 56, 2)
 FIELD(L2_VMTE_3, SPI_IST_STRUCTURE, 58, 1)
 FIELD(L2_VMTE_3, SPI_ID_BITS, 59, 5)
 
+/* Size of L2 VMTE in 64-bit words */
+#define L2_VMTE_WORDS 4
+
 /*
  * L2 VMTEs are always 32 bytes, and the L2 table is always 4KB,
  * so the lower 7 bits in a VM ID index the L2 table.

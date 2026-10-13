@@ -23,6 +23,20 @@
 
 OBJECT_DEFINE_TYPE(GICv5, gicv5, ARM_GICV5, ARM_GICV5_COMMON)
 
+/* In the GICv5VMTConfig::vm_cache this is how we store VMTE info */
+typedef struct VMTE {
+    GICv5ISTConfig lpi_ist;
+    GICv5ISTConfig spi_ist;
+    /* Address of the in-memory L2_VMTE for this VMTE */
+    hwaddr vmte_addr;
+    hwaddr vpet_addr;
+    uint32_t vmid;
+    uint8_t vpe_id_bits;
+    GICv5Domain domain;
+    /* We don't cache the VMD_ADDR as we don't use VMDs */
+    /* We don't cache VALID: the existence of this struct implies VALID=1 */
+} VMTE;
+
 static const char *domain_name[] = {
     [GICV5_ID_S] = "Secure",
     [GICV5_ID_NS] = "NonSecure",
@@ -72,6 +86,22 @@ static uint32_t gicv5_idreg(int regoffset)
 
     regoffset /= 4;
     return gic_ids[regoffset];
+}
+
+/* GDestroyNotify function for VMTE struct */
+static void VMTE_free(void *data)
+{
+    VMTE *vmte = data;
+
+    /* Destroy (without writing back to guest memory) the ISTConfigs */
+    if (vmte->lpi_ist.lpi_cache) {
+        g_hash_table_destroy(vmte->lpi_ist.lpi_cache);
+    }
+    if (vmte->spi_ist.lpi_cache) {
+        g_hash_table_destroy(vmte->spi_ist.lpi_cache);
+    }
+
+    g_free(vmte);
 }
 
 static bool gicv5_domain_has_virt(GICv5Common *cs, GICv5Domain domain)
@@ -1116,6 +1146,117 @@ bool gicv5_set_resident(GICv5Common *cs, GICv5Domain domain, bool valid,
     return true;
 }
 
+static bool read_first_vmte_word(GICv5Common *cs, GICv5VMTConfig *cfg,
+                                 hwaddr l2_addr,
+                                 uint64_t l2_vmte[L2_VMTE_WORDS])
+{
+    /* Read the first word of the L2 VMTE, returning false on failure */
+    MemTxResult res;
+
+    l2_vmte[0] = address_space_ldq_le(&cs->dma_as, l2_addr,
+                                      cfg->txattrs, &res);
+    return res == MEMTX_OK;
+}
+
+static bool read_other_vmte_words(GICv5Common *cs, GICv5VMTConfig *cfg,
+                                  hwaddr l2_addr,
+                                  uint64_t l2_vmte[L2_VMTE_WORDS])
+{
+    /*
+     * Read L2 VMTE words 1..3, returning false on failure.
+     * @l2_addr is the address of the start of the VMTE.
+     */
+    for (int i = 1; i < L2_VMTE_WORDS; i++) {
+        MemTxResult res;
+
+        l2_vmte[i] = address_space_ldq_le(&cs->dma_as,
+                                          l2_addr + i * sizeof(uint64_t),
+                                          cfg->txattrs, &res);
+        if (res != MEMTX_OK) {
+            return false;
+        }
+    }
+    return true;
+}
+
+static void initialize_vlpi_ist_config(GICv5Common *cs, GICv5Domain domain,
+                                       VMTE *vmte, uint64_t *l2_vmte)
+{
+    hwaddr base = l2_vmte[2] & R_L2_VMTE_2_LPI_IST_ADDR_MASK;
+    uint8_t l2sz = FIELD_EX64(l2_vmte[2], L2_VMTE_2, LPI_IST_L2SZ);
+    uint8_t istsz = FIELD_EX64(l2_vmte[2], L2_VMTE_2, LPI_ISTSZ);
+    uint8_t id_bits = FIELD_EX64(l2_vmte[2], L2_VMTE_2, LPI_ID_BITS);
+    bool structure = FIELD_EX64(l2_vmte[2], L2_VMTE_2, LPI_IST_STRUCTURE);
+
+    id_bits = MIN(MAX(id_bits, QEMU_GICV5_MIN_LPI_ID_BITS), QEMU_GICV5_ID_BITS);
+
+    initialize_ist_config(cs, domain, &vmte->lpi_ist, base,
+                          id_bits, istsz, l2sz, structure);
+}
+
+static void initialize_vspi_ist_config(GICv5Common *cs, GICv5Domain domain,
+                                       VMTE *vmte, uint64_t *l2_vmte)
+{
+    hwaddr base = l2_vmte[3] & R_L2_VMTE_3_SPI_IST_ADDR_MASK;
+    uint8_t l2sz = FIELD_EX64(l2_vmte[3], L2_VMTE_3, SPI_IST_L2SZ);
+    uint8_t istsz = FIELD_EX64(l2_vmte[3], L2_VMTE_3, SPI_ISTSZ);
+    uint8_t id_bits = FIELD_EX64(l2_vmte[3], L2_VMTE_3, SPI_ID_BITS);
+    bool structure = FIELD_EX64(l2_vmte[3], L2_VMTE_3, SPI_IST_STRUCTURE);
+
+    /*
+     * Note that QEMU_GICV5_MIN_LPI_ID_BITS applies to physical
+     * LPIs and virtual LPIs but not to vSPIs.
+     */
+    id_bits = MIN(id_bits, QEMU_GICV5_ID_BITS);
+
+    initialize_ist_config(cs, domain, &vmte->spi_ist, base,
+                          id_bits, istsz, l2sz, structure);
+}
+
+static void cache_vmte(GICv5Common *cs, GICv5Domain domain,
+                       GICv5VMTConfig *cfg,
+                       uint32_t vmid, uint64_t *l2_vmte, hwaddr l2_addr)
+{
+    /*
+     * Add a VMTE struct for an L2 VMTE to the VM cache for @cfg.
+     * @l2_addr should be the address of the L2 VMTE in guest memory.
+     * @l2_vmte is the contents of that VMTE. The caller guarantees
+     * that the VALID bit is set both in @l2_vmte and in memory.
+     */
+    VMTE *vmte = g_new0(VMTE, 1);
+
+    vmte->vmte_addr = l2_addr;
+    vmte->vmid = vmid;
+    vmte->domain = domain;
+
+    vmte->vpet_addr = l2_vmte[1] & R_L2_VMTE_1_VPET_ADDR_MASK;
+    vmte->vpe_id_bits = MIN(FIELD_EX64(l2_vmte[1], L2_VMTE_1, VPE_ID_BITS),
+                            QEMU_GICV5_VPE_ID_BITS);
+    /*
+     * Enforce alignment of the VPE table to its size:
+     * it has 2^vpe_id_bits entries of 2^3 == 8 bytes each
+     */
+    vmte->vpet_addr &= ~MAKE_64BIT_MASK(0, vmte->vpe_id_bits + 3);
+
+    /*
+     * If the VALID bits are set for the LPI and SPI ISTs, we can read
+     * the address and config fields now to set up the GICv5ISTConfig.
+     * Otherwise, the guest can make them valid later via IRS_VMAP_VISTR,
+     * and we must not read the address/config fields yet.
+     */
+    if (FIELD_EX64(l2_vmte[2], L2_VMTE_2, LPI_IST_VALID)) {
+        initialize_vlpi_ist_config(cs, domain, vmte, l2_vmte);
+    }
+
+    if (FIELD_EX64(l2_vmte[3], L2_VMTE_3, SPI_IST_VALID)) {
+        initialize_vspi_ist_config(cs, domain, vmte, l2_vmte);
+    }
+
+    g_hash_table_insert(cfg->vm_cache, GINT_TO_POINTER(vmid), vmte);
+
+    trace_gicv5_cache_vmte(domain_name[domain], vmid);
+}
+
 /* Data we need to pass through to irs_clean_lpi_cache_entry() */
 typedef struct CleanLPICacheUserData {
     GICv5Common *cs;
@@ -1197,6 +1338,40 @@ static void irs_ist_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
     }
 }
 
+typedef struct CleanVMCacheUserData {
+    GICv5Common *cs;
+    GICv5VMTConfig *cfg;
+} CleanVMCacheUserData;
+
+static gboolean irs_clean_vm_cache_entry(gpointer key, gpointer value,
+                                         gpointer user_data)
+{
+    /*
+     * Drop this entry from the VM cache, including cleaning up its
+     * LPI and SPI caches.
+     */
+    CleanVMCacheUserData *ud = user_data;
+    VMTE *vmte = (VMTE *)value;
+
+    irs_clean_lpi_cache(ud->cs, &vmte->lpi_ist);
+    irs_clean_lpi_cache(ud->cs, &vmte->spi_ist);
+    return true;
+}
+
+static void irs_clean_vm_cache(GICv5Common *cs, GICv5VMTConfig *cfg)
+{
+    /*
+     * Drop the VM table cache. We don't need to write anything back
+     * to guest memory for the VM table entries themselves, but we
+     * need to clean the LPI/SPI cache, which might do writeback.
+     */
+    CleanVMCacheUserData ud;
+
+    ud.cs = cs;
+    ud.cfg = cfg;
+    g_hash_table_foreach_remove(cfg->vm_cache, irs_clean_vm_cache_entry, &ud);
+}
+
 static void irs_vmt_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
 {
     GICv5Common *cs = ARM_GICV5_COMMON(s);
@@ -1213,6 +1388,7 @@ static void irs_vmt_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
             /* Ignore 1->1 transition */
             return;
         }
+        irs_clean_vm_cache(cs, &s->vmt_config[domain]);
         cs->irs_vmt_baser[domain] = FIELD_DP64(cs->irs_vmt_baser[domain],
                                                IRS_VMT_BASER, VALID, valid);
         s->vmt_config[domain].valid = false;
@@ -1271,6 +1447,16 @@ static void irs_vmt_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
          */
         if (tableszbits > 0) {
             cfg->base &= ~MAKE_64BIT_MASK(0, tableszbits);
+        }
+
+        if (!cfg->vm_cache) {
+            /*
+             * Keys are GINT_TO_POINTER(intid), so we want the g_direct_hash
+             * and g_direct_equal hash and equality functions. We don't
+             * want to free the keys, but we do want to free the values
+             * (which are VMTE*).
+             */
+            cfg->vm_cache = g_hash_table_new_full(NULL, NULL, NULL, VMTE_free);
         }
 
         cfg->valid = true;
@@ -1346,7 +1532,7 @@ static void irs_vmap_vmr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
     bool m = FIELD_EX64(value,  IRS_VMAP_VMR, M);
     bool u = FIELD_EX64(value,  IRS_VMAP_VMR, U);
     hwaddr l1_addr, l2_addr;
-    uint64_t l1_vmte, l2_vmte_0;
+    uint64_t l1_vmte, l2_vmte[L2_VMTE_WORDS];
     MemTxResult res;
 
     if (!gicv5_domain_has_virt(cs, domain) || !cfg->valid) {
@@ -1375,16 +1561,25 @@ static void irs_vmap_vmr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
 
     l2_addr = l1_vmte & R_L1_VMTE_L2_ADDR_MASK;
 
-    l2_vmte_0 = address_space_ldq_le(&cs->dma_as, l2_addr, cfg->txattrs, &res);
+    if (!read_first_vmte_word(cs, cfg, l2_addr, l2_vmte)) {
+        goto txfail;
+    }
+
+    l2_vmte[0] = FIELD_DP64(l2_vmte[0], L2_VMTE_0, VALID, !u);
+
+    address_space_stq_le(&cs->dma_as, l2_addr, l2_vmte[0], cfg->txattrs, &res);
     if (res != MEMTX_OK) {
         goto txfail;
     }
 
-    l2_vmte_0 = FIELD_DP64(l2_vmte_0, L2_VMTE_0, VALID, !u);
+    if (u) {
+        g_hash_table_remove(cfg->vm_cache, GINT_TO_POINTER(vmid));
+    } else {
+        if (!read_other_vmte_words(cs, cfg, l2_addr, l2_vmte)) {
+            goto txfail;
+        }
 
-    address_space_stq_le(&cs->dma_as, l2_addr, l2_vmte_0, cfg->txattrs, &res);
-    if (res != MEMTX_OK) {
-        goto txfail;
+        cache_vmte(cs, domain, cfg, vmid, l2_vmte, l2_addr);
     }
 
     return;
@@ -1999,6 +2194,10 @@ static void gicv5_reset_hold(Object *obj, ResetType type)
     /* IRS_VMT_BASER and IRS_VMT_CFGR reset to 0, clear cached info */
     for (int i = 0; i < NUM_GICV5_DOMAINS; i++) {
         s->vmt_config[i].valid = false;
+        /* Drop the VM cache entries without writeback */
+        if (s->vmt_config[i].vm_cache) {
+            g_hash_table_remove_all(s->vmt_config[i].vm_cache);
+        }
     }
 }
 
@@ -2117,6 +2316,11 @@ static void gicv5_finalize(Object *obj)
     for (int i = 0; i < NUM_GICV5_DOMAINS; i++) {
         GHashTable *ht = s->phys_lpi_config[i].lpi_cache;
 
+        if (ht) {
+            g_hash_table_destroy(ht);
+        }
+
+        ht = s->vmt_config[i].vm_cache;
         if (ht) {
             g_hash_table_destroy(ht);
         }
