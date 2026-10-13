@@ -645,6 +645,7 @@ DEF_SET_FIELD_FOR_IST(enabled, bool, ENABLE)
 DEF_SET_FIELD_FOR_IST(handling, bool, HM)
 DEF_SET_FIELD_FOR_IST(pending, bool, PENDING)
 DEF_SET_FIELD_FOR_IST(target, uint32_t, IAFFID)
+DEF_SET_FIELD_FOR_IST(active, bool, ACTIVE)
 
 void gicv5_set_priority(GICv5Common *cs, uint32_t id, uint8_t priority,
                         GICv5Domain domain, GICv5IntType type, bool virtual,
@@ -1097,8 +1098,12 @@ void gicv5_deactivate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
     trace_gicv5_deactivate(domain_name[domain], inttype_name(type), virtual, id);
 
     if (virtual) {
-        qemu_log_mask(LOG_GUEST_ERROR, "gicv5_deactivate: tried to "
-                      "deactivate a virtual interrupt\n");
+        const GICv5ISTConfig *cfg = ist_for_vint(s, cs, domain, type, cpuidx);
+
+        if (!set_active_for_ist(cs, cfg, id, false, &iaffid)) {
+            return;
+        }
+        irs_recalc_vhppi(s, s->res_vpe[cpuidx]->vmte, iaffid);
         return;
     }
 
@@ -1106,15 +1111,10 @@ void gicv5_deactivate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
     case GICV5_LPI:
     {
         const GICv5ISTConfig *cfg = &s->phys_lpi_config[domain];
-        L2_ISTE_Handle h;
-        uint32_t *l2_iste_p = get_l2_iste(cs, cfg, id, &h);
 
-        if (!l2_iste_p) {
+        if (!set_active_for_ist(cs, cfg, id, false, &iaffid)) {
             return;
         }
-        *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, ACTIVE, false);
-        iaffid = FIELD_EX32(*l2_iste_p, L2_ISTE, IAFFID);
-        put_l2_iste(cs, cfg, &h);
         break;
     }
     case GICV5_SPI:
