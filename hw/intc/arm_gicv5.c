@@ -348,11 +348,13 @@ GICv5PendingIrq gicv5_get_hppi(GICv5Common *cs, GICv5Domain domain,
     assert(cpuidx < cs->num_cpus);
 
     if (virtual) {
-        /*
-         * Until we implement virtualization there is never
-         * an available virtual HPPI candidate.
-         */
-         return GICV5_PENDING_IRQ_NONE;
+        VPE *vpe = s->res_vpe[cpuidx];
+
+        if (!vpe || vpe->vmte->domain != domain) {
+            return GICV5_PENDING_IRQ_NONE;
+        }
+
+        return vpe->vhppi;
     }
     return s->hppi[domain][cpuidx];
 }
