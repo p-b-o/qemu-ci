@@ -67,6 +67,9 @@ FIELD(ICC_HPPIR_EL1, ID, 0, 24)
 FIELD(ICC_HPPIR_EL1, TYPE, 29, 3)
 FIELD(ICC_HPPIR_EL1, HPPIV, 32, 1)
 
+FIELD(ICH_VMCR_EL2, EN, 0, 1)
+FIELD(ICH_VMCR_EL2, VMPR, 27, 5)
+
 /*
  * We implement 24 bits of interrupt ID, the mandated 5 bits of priority,
  * and no legacy GICv3.3 vcpu interface (yet)
@@ -564,24 +567,38 @@ static void gic_icc_apr_el1_reset(CPUARMState *env, const ARMCPRegInfo *ri)
 /* ICC_CR0_EL1 is also banked */
 static uint64_t gic_icc_cr0_el1_read(CPUARMState *env, const ARMCPRegInfo *ri)
 {
-    GICv5Domain domain = gicv5_logical_domain(env);
-    return env->gicv5_cpuif.icc_cr0[domain];
+    if (gicv5_icv_access(env)) {
+        /* ICV_CR0_EL1 has only an EN bit, stored in ICH_VMCR_EL2.EN */
+        return FIELD_EX64(env->gicv5_cpuif.ich_vmcr_el2, ICH_VMCR_EL2, EN);
+    } else {
+        GICv5Domain domain = gicv5_logical_domain(env);
+        return env->gicv5_cpuif.icc_cr0[domain];
+    }
 }
 
 static void gic_icc_cr0_el1_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                   uint64_t value)
 {
-    /*
-     * For our implementation the link to the IRI is always connected,
-     * so LINK and LINK_IDLE are always 1. Without EL3, PID and IPPT
-     * are RAZ/WI, so the only writeable bit is the main enable bit EN.
-     */
-    GICv5Domain domain = gicv5_logical_domain(env);
-    value &= R_ICC_CR0_EN_MASK;
-    value |= R_ICC_CR0_LINK_MASK | R_ICC_CR0_LINK_IDLE_MASK;
+    if (gicv5_icv_access(env)) {
+        /* Only the EN bit is writeable, and it lives in ICH_VMCR_EL2 */
+        uint64_t vmcr = env->gicv5_cpuif.ich_vmcr_el2;
 
-    env->gicv5_cpuif.icc_cr0[domain] = value;
-    gicv5_update_irq_fiq(env);
+        vmcr = FIELD_DP64(vmcr, ICH_VMCR_EL2, EN,
+                          FIELD_EX64(value, ICC_CR0, EN));
+        env->gicv5_cpuif.ich_vmcr_el2 = vmcr;
+    } else {
+        /*
+         * For our implementation the link to the IRI is always connected,
+         * so LINK and LINK_IDLE are always 1. Without EL3, PID and IPPT
+         * are RAZ/WI, so the only writeable bit is the main enable bit EN.
+         */
+        GICv5Domain domain = gicv5_logical_domain(env);
+        value &= R_ICC_CR0_EN_MASK;
+        value |= R_ICC_CR0_LINK_MASK | R_ICC_CR0_LINK_IDLE_MASK;
+
+        env->gicv5_cpuif.icc_cr0[domain] = value;
+        gicv5_update_irq_fiq(env);
+    }
 }
 
 static void gic_icc_cr0_el1_reset(CPUARMState *env, const ARMCPRegInfo *ri)
