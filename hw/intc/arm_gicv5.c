@@ -1890,6 +1890,65 @@ static void irs_vmap_l2_vistr_write(GICv5 *s, GICv5Domain domain,
     map_l2_istr(cs, vist, intid);
 }
 
+static void irs_vmap_vper_write(GICv5 *s, GICv5Domain domain, uint64_t value)
+{
+    GICv5Common *cs = ARM_GICV5_COMMON(s);
+    GICv5VMTConfig *cfg = &s->vmt_config[domain];
+    bool m = FIELD_EX64(value, IRS_VMAP_VPER, M);
+    uint32_t vmid = FIELD_EX64(value, IRS_VMAP_VPER, VM_ID);
+    uint32_t vpeid = FIELD_EX64(value, IRS_VMAP_VPER, VPE_ID);
+    VMTE *vmte;
+    hwaddr vpete_addr;
+    MemTxResult res;
+    uint64_t vpete;
+
+    if (!gicv5_domain_has_virt(cs, domain) || !cfg->valid) {
+        /* Whole register RAZ/WI if no virt or no VM table */
+        return;
+    }
+
+    /* M bit is WO/UNKNOWN; write the other fields */
+    cs->irs_vmap_vper[domain] = value & ~R_IRS_VMAP_VPER_M_MASK;
+
+    /* M = 0 and bad VMID must be ignored */
+    if (!m || vmid >= (1 << cfg->vm_id_bits)) {
+        return;
+    }
+
+    vmte = g_hash_table_lookup(cfg->vm_cache, GINT_TO_POINTER(vmid));
+    if (!vmte) {
+        /* VM is not valid */
+        return;
+    }
+
+    if (vpeid >= (1 << vmte->vpe_id_bits) || vmte->vpet[vpeid].valid) {
+        /* Invalid VPE ID, VPE already valid */
+        return;
+    }
+
+    vpete_addr = vmte->vpet_addr + vpeid * 8;
+    vpete = address_space_ldq_le(&cs->dma_as, vpete_addr, cfg->txattrs, &res);
+    if (res != MEMTX_OK) {
+        goto txfail;
+    }
+    vpete = FIELD_DP64(vpete, VPETE, VALID, 1);
+    address_space_stq_le(&cs->dma_as, vpete_addr, vpete, cfg->txattrs, &res);
+    if (res != MEMTX_OK) {
+        goto txfail;
+    }
+
+    init_vpe_from_vpete(&vmte->vpet[vpeid], vmte, vpete);
+    trace_gicv5_irs_vmap_vper_write(domain_name[domain], vmte->vmid, vpeid);
+
+    return;
+
+txfail:
+    qemu_log_mask(LOG_GUEST_ERROR,
+                  "VPETE update failed for VMID 0x%x VPEID 0x%x at "
+                  "physical address 0x" HWADDR_FMT_plx "\n",
+                  vmid, vpeid, vpete_addr);
+}
+
 static void spi_sample(GICv5SPIState *spi)
 {
     /*
@@ -2093,6 +2152,22 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_VMAP_VPER:
+        if (gicv5_domain_has_virt(cs, domain) && s->vmt_config[domain].valid) {
+            *data = extract64(cs->irs_vmap_vper[domain], 0, 32);
+        } else {
+            /* RAZ/WI if no virt or no VM table */
+            *data = 0;
+        }
+        return true;
+    case A_IRS_VMAP_VPER + 4:
+        if (gicv5_domain_has_virt(cs, domain) && s->vmt_config[domain].valid) {
+            *data = extract64(cs->irs_vmap_vper[domain], 32, 32);
+        } else {
+            /* RAZ/WI if no virt or no VM table */
+            *data = 0;
+        }
+        return true;
     case A_IRS_SPI_STATUSR:
         /*
          * QEMU writes to IRS_SPI_{CFGR,DOMAINR,SELR,VMR} take effect
@@ -2251,6 +2326,14 @@ static bool config_writel(GICv5 *s, GICv5Domain domain, hwaddr offset,
                                 deposit64(cs->irs_vmap_vistr[domain],
                                           32, 32, data));
         return true;
+    case A_IRS_VMAP_VPER:
+        irs_vmap_vper_write(s, domain,
+                            deposit64(cs->irs_vmap_vper[domain], 0, 32, data));
+        return true;
+    case A_IRS_VMAP_VPER + 4:
+        irs_vmap_vper_write(s, domain,
+                            deposit64(cs->irs_vmap_vper[domain], 32, 32, data));
+        return true;
     case A_IRS_SPI_SELR:
         cs->irs_spi_selr[domain] = data;
         return true;
@@ -2375,6 +2458,14 @@ static bool config_readll(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_VMAP_VPER:
+        if (gicv5_domain_has_virt(cs, domain) && s->vmt_config[domain].valid) {
+            *data = cs->irs_vmap_vper[domain];
+        } else {
+            /* RAZ/WI if no virt or no VM table */
+            *data = 0;
+        }
+        return true;
     }
 
     return false;
@@ -2401,6 +2492,9 @@ static bool config_writell(GICv5 *s, GICv5Domain domain, hwaddr offset,
         return true;
     case A_IRS_VMAP_L2_VISTR:
         irs_vmap_l2_vistr_write(s, domain, data);
+        return true;
+    case A_IRS_VMAP_VPER:
+        irs_vmap_vper_write(s, domain, data);
         return true;
     }
 

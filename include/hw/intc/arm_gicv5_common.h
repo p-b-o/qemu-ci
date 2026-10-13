@@ -95,6 +95,7 @@ struct GICv5Common {
     uint64_t irs_vmap_vmr[NUM_GICV5_DOMAINS];
     uint64_t irs_vmap_vistr[NUM_GICV5_DOMAINS];
     uint64_t irs_vmap_l2_vistr[NUM_GICV5_DOMAINS];
+    uint64_t irs_vmap_vper[NUM_GICV5_DOMAINS];
 
     /*
      * Pointer to an array of state information for the SPIs.  Array
