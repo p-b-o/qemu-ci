@@ -270,6 +270,15 @@ FIELD(L2_ISTE, HWU, 9, 2)
 FIELD(L2_ISTE, PRIORITY, 11, 5)
 FIELD(L2_ISTE, IAFFID, 16, 16)
 
+FIELD(L1_VMTE, VALID, 0, 1)
+FIELD(L1_VMTE, L2_ADDR, 12, 44)
+
+/*
+ * L2 VMTEs are always 32 bytes, and the L2 table is always 4KB,
+ * so the lower 7 bits in a VM ID index the L2 table.
+ */
+#define VMT_L2_IDX_BITS 7
+
 /*
  * Format used for gicv5_request_config() return value, which matches
  * the ICC_ICSR_EL1 bit layout.

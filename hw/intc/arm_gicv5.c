@@ -49,7 +49,6 @@ static const char *inttype_name(GICv5IntType t)
     return names[t];
 }
 
-
 #define IRS_DEVARCH_VALUE ((0x23b << 31) | (0x1 << 20) | 0x5a19)
 
 static uint32_t gicv5_idreg(int regoffset)
@@ -487,6 +486,19 @@ static void put_l2_iste(GICv5Common *cs, const GICv5ISTConfig *cfg,
         return;
     }
     write_l2_iste_mem(cs, cfg, h->l2_iste_addr, h->l2_iste);
+}
+
+static hwaddr l1_vmte_addr(GICv5Common *cs, const GICv5VMTConfig *cfg,
+                           uint32_t vmid)
+{
+    /*
+     * In a 2-level VMT configuration, return the address of the L1
+     * VMT entry for this VM ID.  The bottom VMT_L2_IDX_BITS of the
+     * ID value are the index into the L2 table, and the higher bits
+     * of the ID index the L1 table. The L1 table entries are 8 bytes.
+     */
+    uint32_t l1_index = vmid >> VMT_L2_IDX_BITS;
+    return cfg->base + (l1_index * 8);
 }
 
 void gicv5_set_priority(GICv5Common *cs, uint32_t id, uint8_t priority,
@@ -1249,6 +1261,62 @@ static void irs_vmt_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
     }
 }
 
+static void irs_vmap_l2_vmtr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
+{
+    GICv5Common *cs = ARM_GICV5_COMMON(s);
+    GICv5VMTConfig *cfg = &s->vmt_config[domain];
+    uint32_t vmid = FIELD_EX64(value, IRS_VMAP_L2_VMTR, VM_ID);
+    bool m = FIELD_EX64(value, IRS_VMAP_L2_VMTR, M);
+    hwaddr l1_addr;
+    uint64_t l1_vmte;
+    MemTxResult res;
+
+    if (!gicv5_domain_has_virt(cs, domain) || !cfg->valid || !cfg->structure) {
+        /*
+         * The whole register is RAZ/WI if no virt, or if the VM
+         * table is invalid or not 2 level.
+         */
+        return;
+    }
+
+    /*
+     * Otherwise, write to the register. The M bit is WO/UNKNOWN,
+     * and we make sure it is 0, so that a 32-bit write to the low
+     * half of the register never appears to have the M bit set.
+     */
+    cs->irs_vmap_l2_vmtr[domain] = value & ~R_IRS_VMAP_L2_VMTR_M_MASK;
+
+    if (!m || vmid >= (1 << cfg->vm_id_bits)) {
+        /*
+         * If guest didn't actually ask to make the L2 table valid, or
+         * the ID is out of range, do nothing except the register update.
+         */
+        return;
+    }
+
+    /* Find the relevant L1 VMTE and set its VALID bit */
+    l1_addr = l1_vmte_addr(cs, cfg, vmid);
+
+    l1_vmte = address_space_ldq_le(&cs->dma_as, l1_addr, cfg->txattrs, &res);
+    if (res != MEMTX_OK) {
+        goto txfail;
+    }
+
+    l1_vmte = FIELD_DP64(l1_vmte, L1_VMTE, VALID, 1);
+
+    address_space_stq_le(&cs->dma_as, l1_addr, l1_vmte, cfg->txattrs, &res);
+    if (res != MEMTX_OK) {
+        goto txfail;
+    }
+
+    return;
+
+txfail:
+    /* Reportable with EC=0x0 if sw error reporting implemented */
+    qemu_log_mask(LOG_GUEST_ERROR, "L1 VMTE update failed for VMID 0x%x at "
+                  "physical address 0x" HWADDR_FMT_plx "\n", vmid, l1_addr);
+}
+
 static void spi_sample(GICv5SPIState *spi)
 {
     /*
@@ -1386,6 +1454,24 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_VMAP_L2_VMTR:
+        if (gicv5_domain_has_virt(cs, domain) &&
+            s->vmt_config[domain].valid && s->vmt_config[domain].structure) {
+            *data = extract64(cs->irs_vmap_l2_vmtr[domain], 0, 32);
+        } else {
+            /* RAZ/WI if no virt or no VM table or VM table not 2 level */
+            *data = 0;
+        }
+        return true;
+    case A_IRS_VMAP_L2_VMTR + 4:
+        if (gicv5_domain_has_virt(cs, domain) &&
+            s->vmt_config[domain].valid && s->vmt_config[domain].structure) {
+            *data = extract64(cs->irs_vmap_l2_vmtr[domain], 32, 32);
+        } else {
+            /* RAZ/WI if no virt or no VM table or VM table not 2 level */
+            *data = 0;
+        }
+        return true;
     case A_IRS_SPI_STATUSR:
         /*
          * QEMU writes to IRS_SPI_{CFGR,DOMAINR,SELR,VMR} take effect
@@ -1508,6 +1594,16 @@ static bool config_writel(GICv5 *s, GICv5Domain domain, hwaddr offset,
             }
         }
         return true;
+    case A_IRS_VMAP_L2_VMTR:
+        irs_vmap_l2_vmtr_write(s, domain,
+                               deposit64(cs->irs_vmap_l2_vmtr[domain],
+                                         0, 32, data));
+        return true;
+    case A_IRS_VMAP_L2_VMTR + 4:
+        irs_vmap_l2_vmtr_write(s, domain,
+                               deposit64(cs->irs_vmap_l2_vmtr[domain],
+                                         32, 32, data));
+        return true;
     case A_IRS_SPI_SELR:
         cs->irs_spi_selr[domain] = data;
         return true;
@@ -1599,6 +1695,15 @@ static bool config_readll(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_VMAP_L2_VMTR:
+        if (gicv5_domain_has_virt(cs, domain) &&
+            s->vmt_config[domain].valid && s->vmt_config[domain].structure) {
+            *data = cs->irs_vmap_l2_vmtr[domain];
+        } else {
+            /* RAZ/WI if no virt or no VM table or not 2-level */
+            *data = 0;
+        }
+        return true;
     }
 
     return false;
@@ -1613,6 +1718,9 @@ static bool config_writell(GICv5 *s, GICv5Domain domain, hwaddr offset,
         return true;
     case A_IRS_VMT_BASER:
         irs_vmt_baser_write(s, domain, data);
+        return true;
+    case A_IRS_VMAP_L2_VMTR:
+        irs_vmap_l2_vmtr_write(s, domain, data);
         return true;
     }
 
