@@ -192,6 +192,97 @@ static GICv5Domain gicv5_domain_for_insn(CPUARMState *env,
     return gicv5_current_phys_domain(env);
 }
 
+static uint64_t gic_virt_dvi_mask(CPUARMState *env, int reg)
+{
+    /*
+     * Return the mask of bits of virtual PPIs which are being direct
+     * injected. 'reg' is which of the two ICH_PPI_DVIR<n>_EL2 regs we
+     * are dealing with.
+     *
+     * The complexity here comes from the requirement when doing
+     * nested virtualization to redirect injected EL1 timer PPIs so
+     * that they appear with the PPI numbers that the inner hypervisor
+     * expects (see R_GYGNW).
+     *
+     * Note that the ICH_PPI_DVIRn bits correspond to physical PPIs;
+     * the ICH_PPI_HVIRn bits correspond to virtual PPIs.
+     */
+    uint64_t dvi_mask = env->gicv5_cpuif.ich_ppi_dvi[reg];
+
+    if (reg == 0 &&
+        (arm_hcr_el2_eff(env) & (HCR_NV | HCR_NV1)) == HCR_NV) {
+        if (arm_is_secure_below_el3(env)) {
+            /*
+             * If we are injecting phys PPI 30, it appears as virtual
+             * PPI 20; phys PPI 27 appears as virtual PPI 19.  Note
+             * that if we are not injecting the phys PPI 30/27 then
+             * the guest is allowed to configure phys PPI 20 to
+             * direct-inject to virt PPI 20 if it likes.
+             */
+            if (extract64(dvi_mask, 30, 1)) {
+                dvi_mask |= 1 << 20;
+            }
+            if (extract64(dvi_mask, 27, 1)) {
+                dvi_mask |= 1 << 19;
+            }
+        } else {
+            /* phys PPI 30 -> vPPI 26; phys PPI 27 -> vPPI 28 */
+            if (extract64(dvi_mask, 30, 1)) {
+                dvi_mask |= 1 << 26;
+            }
+            if (extract64(dvi_mask, 27, 1)) {
+                dvi_mask |= 1 << 28;
+            }
+        }
+        /* We aren't direct injecting to virtual PPIs 30 or 27 */
+        dvi_mask &= ~((1 << 30) | (1 << 27));
+    }
+
+    /*
+     * Now we've converted dvi_mask to virtual PPIs, fold in
+     * ICH_PPI_HVIR<n>_EL2: if the vPPI is hidden it can't be
+     * direct-injected to.
+     */
+    dvi_mask &= ~env->gicv5_cpuif.ich_ppi_hvi[reg];
+    return dvi_mask;
+}
+
+static uint64_t gic_virt_ppi_pending(CPUARMState *env, int reg)
+{
+    /*
+     * Return the pending state of the virtual PPIs; this is the
+     * combination of the ICH_PPI_PENDR<n>_EL2 state and the pending
+     * state of the physical PPIs which are being direct-injected.
+     */
+    uint64_t dvi_pend = env->gicv5_cpuif.ppi_pend[reg];
+    uint64_t ppi_dvi = env->gicv5_cpuif.ich_ppi_dvi[reg];
+    uint64_t dvi_mask = gic_virt_dvi_mask(env, reg);
+
+    if (reg == 0 &&
+        (arm_hcr_el2_eff(env) & (HCR_NV | HCR_NV1)) == HCR_NV) {
+        if (arm_is_secure_below_el3(env)) {
+            /* 30 -> 20 and 27 -> 19 */
+            if (extract64(ppi_dvi, 30, 1)) {
+                dvi_pend = deposit64(dvi_pend, extract64(dvi_pend, 30, 1), 20, 1);
+            }
+            if (extract64(ppi_dvi, 27, 1)) {
+                dvi_pend = deposit64(dvi_pend, extract64(dvi_pend, 27, 1), 19, 1);
+            }
+        } else {
+            /* 30 -> 26 and 27 -> 28 */
+            if (extract64(ppi_dvi, 30, 1)) {
+                dvi_pend = deposit64(dvi_pend, extract64(dvi_pend, 30, 1), 26, 1);
+            }
+            if (extract64(ppi_dvi, 27, 1)) {
+                dvi_pend = deposit64(dvi_pend, extract64(dvi_pend, 27, 1), 28, 1);
+            }
+        }
+        dvi_pend &= ~((1 << 30) | (1 << 27));
+    }
+    dvi_pend &= dvi_mask;
+    return (env->gicv5_cpuif.ich_ppi_pend[reg] & ~dvi_mask) | dvi_pend;
+}
+
 static uint64_t gic_running_prio(CPUARMState *env, GICv5Domain domain)
 {
     /*
@@ -461,7 +552,7 @@ static void gic_recalc_virt_ppi_hppi(CPUARMState *env)
 
     for (int i = 0; i < ARRAY_SIZE(env->gicv5_cpuif.ich_ppi_active); i++) {
         uint64_t en_pend_nact = env->gicv5_cpuif.ich_ppi_enable[i] &
-            env->gicv5_cpuif.ich_ppi_pend[i] &
+            gic_virt_ppi_pending(env, i) &
             ~env->gicv5_cpuif.ich_ppi_active[i];
 
         while (en_pend_nact) {
@@ -716,7 +807,7 @@ static void gic_ppi_sactive_write(CPUARMState *env, const ARMCPRegInfo *ri,
 static uint64_t gic_ppi_pend_read(CPUARMState *env, const ARMCPRegInfo *ri)
 {
     if (gicv5_icv_access(env)) {
-        uint64_t value = env->gicv5_cpuif.ich_ppi_pend[ri->opc2 & 1];
+        uint64_t value = gic_virt_ppi_pending(env, ri->opc2 & 1);
 
         value &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
         return value;
