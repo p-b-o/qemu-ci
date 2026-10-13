@@ -816,16 +816,61 @@ static uint64_t gic_ppi_pend_read(CPUARMState *env, const ARMCPRegInfo *ri)
     }
 }
 
+static uint64_t gic_ppi_vpend_to_ppend(CPUARMState *env,
+                                       uint64_t value, int reg)
+{
+    /*
+     * Given a mask of bits which are virtual PPI pending bits being
+     * changed, output the mask of bits which are to be changed in the
+     * physical PPI pending state, by adjusting them for the the timer
+     * PPI redirection.  We require that the input value has already
+     * had the bits masked out for vPPIs that are not direct-injected.
+     */
+    if (reg == 0 && (arm_hcr_el2_eff(env) & (HCR_NV | HCR_NV1)) == HCR_NV) {
+        if (arm_is_secure_below_el3(env)) {
+            /* vPPI 20 is pPPI 30; vPPI 19 is pPPI 27 */
+            if (value & (1 << 20)) {
+                value |= 1 << 30;
+            }
+            if (value & (1 << 19)) {
+                value |= 1 << 27;
+            }
+        } else {
+            /* vPPI 26 is pPPI 30; vPPI 28 is pPPI 27 */
+            if (value & (1 << 26)) {
+                value |= 1 << 30;
+            }
+            if (value & (1 << 28)) {
+                value |= 1 << 27;
+            }
+        }
+        value &= ~((1 << 26) | (1 << 28));
+    }
+    return value;
+}
+
 static void gic_ppi_cpend_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                 uint64_t value)
 {
+    int reg = ri->opc2 & 1;
     /* If ICC_PPI_HMR_EL1[n].HM is 1, PEND bits are RO */
-    uint64_t hm = env->gicv5_cpuif.ppi_hm[ri->opc2 & 1];
+    uint64_t hm = env->gicv5_cpuif.ppi_hm[reg];
     value &= ~hm;
 
     if (gicv5_icv_access(env)) {
-        value &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
-        env->gicv5_cpuif.ich_ppi_pend[ri->opc2 & 1] &= ~value;
+        uint64_t dvi_mask = gic_virt_dvi_mask(env, reg);
+
+        value &= ~env->gicv5_cpuif.ich_ppi_hvi[reg];
+
+        /* Update state for non-injected virtual PPIs */
+        env->gicv5_cpuif.ich_ppi_pend[reg] &= ~(value & ~dvi_mask);
+        /* Update state for injected PPIs */
+        value &= dvi_mask;
+        value = gic_ppi_vpend_to_ppend(env, value, reg);
+        if (value) {
+            env->gicv5_cpuif.ppi_pend[reg] &= ~value;
+            gic_recalc_ppi_hppi(env);
+        }
         gic_recalc_virt_ppi_hppi(env);
     } else {
         uint64_t old = raw_read(env, ri);
@@ -837,13 +882,25 @@ static void gic_ppi_cpend_write(CPUARMState *env, const ARMCPRegInfo *ri,
 static void gic_ppi_spend_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                 uint64_t value)
 {
+    int reg = ri->opc2 & 1;
     /* If ICC_PPI_HMR_EL1[n].HM is 1, PEND bits are RO */
-    uint64_t hm = env->gicv5_cpuif.ppi_hm[ri->opc2 & 1];
+    uint64_t hm = env->gicv5_cpuif.ppi_hm[reg];
     value &= ~hm;
 
     if (gicv5_icv_access(env)) {
-        value &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
-        env->gicv5_cpuif.ich_ppi_pend[ri->opc2 & 1] |= value;
+        uint64_t dvi_mask = gic_virt_dvi_mask(env, reg);
+
+        value &= ~env->gicv5_cpuif.ich_ppi_hvi[reg];
+
+        /* Update state for non-injected virtual PPIs */
+        env->gicv5_cpuif.ich_ppi_pend[reg] |= (value & ~dvi_mask);
+        /* Update state for injected PPIs */
+        value &= dvi_mask;
+        value = gic_ppi_vpend_to_ppend(env, value, reg);
+        if (value) {
+            env->gicv5_cpuif.ppi_pend[reg] |= value;
+            gic_recalc_ppi_hppi(env);
+        }
         gic_recalc_virt_ppi_hppi(env);
     } else {
         uint64_t old = raw_read(env, ri);
