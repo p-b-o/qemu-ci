@@ -50,6 +50,7 @@ struct VMTE {
     uint32_t vmid;
     uint8_t vpe_id_bits;
     GICv5Domain domain;
+    bool quiesced;
     /* We don't cache the VMD_ADDR as we don't use VMDs */
     /* We don't cache VALID: the existence of this struct implies VALID=1 */
 };
@@ -914,6 +915,8 @@ void gicv5_set_pending(GICv5Common *cs, uint32_t id, bool pending,
         if (!set_pending_for_ist(cs, cfg, id, pending, &iaffid)) {
             return;
         }
+        /* changing Pending state breaks Quiesced */
+        vmte->quiesced = false;
         irs_recalc_vhppi(s, vmte, iaffid);
         return;
     }
@@ -1171,7 +1174,8 @@ uint64_t gicv5_request_config(GICv5Common *cs, uint32_t id, GICv5Domain domain,
 static bool activate_for_ist(GICv5Common *cs,
                              const GICv5ISTConfig *cfg,
                              uint32_t id,
-                             uint32_t *iaffid)
+                             uint32_t *iaffid,
+                             bool *changed_pending)
 {
     L2_ISTE_Handle h;
     uint32_t *l2_iste_p;
@@ -1185,6 +1189,9 @@ static bool activate_for_ist(GICv5Common *cs,
     *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, ACTIVE, true);
     if (FIELD_EX32(*l2_iste_p, L2_ISTE, HM) == GICV5_EDGE) {
         *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, PENDING, false);
+        if (changed_pending) {
+            *changed_pending = true;
+        }
     }
     *iaffid = FIELD_EX32(*l2_iste_p, L2_ISTE, IAFFID);
     put_l2_iste(cs, cfg, &h);
@@ -1201,9 +1208,14 @@ void gicv5_activate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
 
     if (virtual) {
         const GICv5ISTConfig *cfg = ist_for_vint(s, cs, domain, type, cpuidx);
+        bool changed_pending = false;
 
-        if (!activate_for_ist(cs, cfg, id, &iaffid)) {
+        if (!activate_for_ist(cs, cfg, id, &iaffid, &changed_pending)) {
             return;
+        }
+        /* Changing Pending breaks Quiesced state */
+        if (changed_pending) {
+            s->res_vpe[cpuidx]->vmte->quiesced = false;
         }
         irs_recalc_vhppi(s, s->res_vpe[cpuidx]->vmte, iaffid);
         return;
@@ -1214,7 +1226,7 @@ void gicv5_activate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
     {
         const GICv5ISTConfig *cfg = &s->phys_lpi_config[domain];
 
-        if (!activate_for_ist(cs, cfg, id, &iaffid)) {
+        if (!activate_for_ist(cs, cfg, id, &iaffid, NULL)) {
             return;
         }
         break;
@@ -1484,6 +1496,10 @@ bool gicv5_set_resident(GICv5Common *cs, GICv5Domain domain, bool valid,
         vpe->cpuidx = cpuidx;
 
         s->res_vpe[cpuidx] = vpe;
+
+        /* Making a VPE resident breaks Quiesced state */
+        vmte->quiesced = false;
+
         trace_gicv5_set_resident(domain_name[domain], vmid, vpeid, cpuidx);
     } else {
         vpe = s->res_vpe[cpuidx];
@@ -2317,6 +2333,9 @@ static void irs_vmap_vper_write(GICv5 *s, GICv5Domain domain, uint64_t value)
     init_vpe_from_vpete(&vmte->vpet[vpeid], vmte, vpete);
     trace_gicv5_irs_vmap_vper_write(domain_name[domain], vmte->vmid, vpeid);
 
+    /* Adding a VPE to the VM breaks it being Quiesced */
+    vmte->quiesced = false;
+
     irs_recalc_vhppi(s, vmte, vpeid);
 
     return;
@@ -2514,9 +2533,53 @@ static void irs_save_vmr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
     }
 
     trace_gicv5_irs_save_vmr_write(domain_name[domain], vmid);
+    /*
+     * Writing S = 1 is the start of a check for if the VM stays
+     * Quiesced. If some VPE is currently resident than the VM is not
+     * Quiesced. Other state changes later may also flip it to
+     * not-Quiesced.
+     */
+    vmte->quiesced = true;
+    for (uint32_t i = 0; i < (1 << vmte->vpe_id_bits); i++) {
+        VPE *vpe = &vmte->vpet[i];
+
+        if (vpe->valid && vpe->resident) {
+            vmte->quiesced = false;
+            break;
+        }
+    }
 
     irs_sync_ist_to_memory(cs, &vmte->lpi_ist);
     irs_sync_ist_to_memory(cs, &vmte->spi_ist);
+}
+
+static uint64_t irs_save_vm_statusr_read(GICv5 *s, GICv5Domain domain)
+{
+    GICv5Common *cs = ARM_GICV5_COMMON(s);
+    GICv5VMTConfig *cfg = &s->vmt_config[domain];
+    uint32_t vmid;
+    VMTE *vmte;
+    /* IDLE always set; Q set only if VM is Quiesced */
+    uint64_t value = R_IRS_SAVE_VM_STATUSR_IDLE_MASK;
+
+    vmid = FIELD_EX64(cs->irs_save_vmr[domain], IRS_SAVE_VMR, VM_ID);
+
+    if (!cfg->valid || vmid >= (1 << cfg->vm_id_bits)) {
+        return value;
+    }
+
+    vmte = g_hash_table_lookup(cfg->vm_cache, GINT_TO_POINTER(vmid));
+    if (!vmte) {
+        return value;
+    }
+
+    trace_gicv5_irs_save_vm_statusr_read(domain_name[domain],
+                                         vmid, vmte->quiesced);
+
+    if (vmte->quiesced) {
+        value |= R_IRS_SAVE_VM_STATUSR_Q_MASK;
+    }
+    return value;
 }
 
 static void spi_sample(GICv5SPIState *spi)
@@ -2797,6 +2860,14 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
     case A_IRS_SAVE_VMR + 4:
         if (gicv5_domain_has_virt(cs, domain)) {
             *data = extract64(cs->irs_save_vmr[domain], 32, 32);
+        } else {
+            /* RAZ if no virt */
+            *data = 0;
+        }
+        return true;
+    case A_IRS_SAVE_VM_STATUSR:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = irs_save_vm_statusr_read(s, domain);
         } else {
             /* RAZ if no virt */
             *data = 0;
