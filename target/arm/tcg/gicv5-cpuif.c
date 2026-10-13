@@ -493,6 +493,12 @@ static void gic_ich_ppi_dvi_write(CPUARMState *env, const ARMCPRegInfo *ri,
     raw_write(env, ri, value);
 }
 
+static void gic_ich_ppi_hvi_write(CPUARMState *env, const ARMCPRegInfo *ri,
+                                  uint64_t value)
+{
+    raw_write(env, ri, value);
+}
+
 static void gic_ich_vctlr_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                 uint64_t value)
 {
@@ -1001,6 +1007,22 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
         .readfn = gic_icc_pcr_el1_read,
         .writefn = gic_icc_pcr_el1_write,
         .resetfn = gic_icc_pcr_el1_reset,
+    },
+    {   .name = "ICH_PPI_HVIR0_EL2", .state = ARM_CP_STATE_AA64,
+        .opc0 = 3, .opc1 = 4, .crn = 12, .crm = 7, .opc2 = 0,
+        .access = PL2_RW, .type =  ARM_CP_IO | ARM_CP_NO_RAW,
+        .nv2_redirect_offset = 0xc00,
+        .accessfn = access_gicv5_ich_reg,
+        .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ich_ppi_hvi[0]),
+        .writefn = gic_ich_ppi_hvi_write,
+    },
+    {   .name = "ICH_PPI_HVIR1_EL2", .state = ARM_CP_STATE_AA64,
+        .opc0 = 3, .opc1 = 4, .crn = 12, .crm = 7, .opc2 = 1,
+        .access = PL2_RW, .type =  ARM_CP_IO | ARM_CP_NO_RAW,
+        .nv2_redirect_offset = 0xc00,
+        .accessfn = access_gicv5_ich_reg,
+        .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ich_ppi_hvi[1]),
+        .writefn = gic_ich_ppi_hvi_write,
     },
     {   .name = "ICH_APR_EL2", .state = ARM_CP_STATE_AA64,
         .opc0 = 3, .opc1 = 4, .crn = 12, .crm = 8, .opc2 = 4,
