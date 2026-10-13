@@ -310,6 +310,35 @@ static void gicv5_update_irq_fiq(CPUARMState *env)
     arm_cpu_set_irq(env_archcpu(env), ARM_CPU_NMI, superpriority);
 }
 
+static void gicv5_update_virq_vfiq(CPUARMState *env)
+{
+    /*
+     * Update whether we are signalling VIRQ or VFIQ based on the
+     * current state of the CPU interface.
+     */
+    GICv5PendingIrq current_hppi;
+    bool virq, superpriority;
+
+    /*
+     * Only the legacy vCPU interface signals VFIQ, and we don't
+     * implement that yet. So we leave ARM_CPU_VFIQ and ARM_CPU_VFNMI
+     * at their default unasserted levels.
+     */
+
+    /*
+     * We signal VIRQ if there is a HPPI of sufficient priority for
+     * the virtual interrupt domain. It has Superpriority if its
+     * priority is 0 (in which case it is CPU_INTERRUPT_VINMI).
+     */
+    current_hppi = gic_virt_hppi(env);
+    superpriority = current_hppi.prio == 0;
+    virq = current_hppi.prio != PRIO_IDLE && !superpriority;
+
+    trace_gicv5_update_virq_vfiq(virq, superpriority);
+    arm_cpu_set_irq(env_archcpu(env), ARM_CPU_VIRQ, virq);
+    arm_cpu_set_irq(env_archcpu(env), ARM_CPU_VINMI, superpriority);
+}
+
 static void gic_recalc_ppi_hppi(CPUARMState *env)
 {
     /*
@@ -398,6 +427,8 @@ static void gic_recalc_virt_ppi_hppi(CPUARMState *env)
 
     trace_gicv5_recalc_virt_ppi_hppi(env->gicv5_cpuif.virt_ppi_hppi.intid,
                                      env->gicv5_cpuif.virt_ppi_hppi.prio);
+
+    gicv5_update_virq_vfiq(env);
 }
 
 void gicv5_forward_interrupt(ARMCPU *cpu, GICv5Domain domain, bool virtual)
@@ -408,7 +439,12 @@ void gicv5_forward_interrupt(ARMCPU *cpu, GICv5Domain domain, bool virtual)
      * If this is a virtual interrupt, do similarly for VIRQ/VFIQ.
      */
     if (virtual) {
-        /* Here we will eventually update the VIRQ/VFIQ state */
+        /*
+         * We don't need to check here for a mismatch between domain
+         * and the domain of the resident VPE, because that will
+         * be checked when gic_virt_hppi() calls back into the IRS.
+         */
+        gicv5_update_virq_vfiq(&cpu->env);
     } else {
         gicv5_update_irq_fiq(&cpu->env);
     }
@@ -775,12 +811,14 @@ static void gic_ich_vctlr_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                 uint64_t value)
 {
     raw_write(env, ri, value);
+    gicv5_update_virq_vfiq(env);
 }
 
 static void gic_ich_vmcr_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                uint64_t value)
 {
     raw_write(env, ri, value);
+    gicv5_update_virq_vfiq(env);
 }
 
 /*
@@ -798,6 +836,7 @@ static void gic_icc_apr_el1_write(CPUARMState *env, const ARMCPRegInfo *ri,
 
     if (gicv5_icv_access(env)) {
         env->gicv5_cpuif.ich_apr_el2 = value;
+        gicv5_update_virq_vfiq(env);
     } else {
         GICv5Domain domain = gicv5_logical_domain(env);
         env->gicv5_cpuif.icc_apr[domain] = value;
@@ -844,6 +883,7 @@ static void gic_icc_cr0_el1_write(CPUARMState *env, const ARMCPRegInfo *ri,
         vmcr = FIELD_DP64(vmcr, ICH_VMCR_EL2, EN,
                           FIELD_EX64(value, ICC_CR0, EN));
         env->gicv5_cpuif.ich_vmcr_el2 = vmcr;
+        gicv5_update_virq_vfiq(env);
     } else {
         /*
          * For our implementation the link to the IRI is always connected,
@@ -889,6 +929,7 @@ static void gic_icc_pcr_el1_write(CPUARMState *env, const ARMCPRegInfo *ri,
         vmcr = FIELD_DP64(vmcr, ICH_VMCR_EL2, VMPR,
                           FIELD_EX64(value, ICC_PCR, PRIORITY));
         env->gicv5_cpuif.ich_vmcr_el2 = vmcr;
+        gicv5_update_virq_vfiq(env);
     } else {
         GICv5Domain domain = gicv5_logical_domain(env);
 
