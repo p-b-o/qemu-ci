@@ -568,7 +568,8 @@ static hwaddr l1_vmte_addr(GICv5Common *cs, const GICv5VMTConfig *cfg,
 }
 
 void gicv5_set_priority(GICv5Common *cs, uint32_t id, uint8_t priority,
-                        GICv5Domain domain, GICv5IntType type, bool virtual)
+                        GICv5Domain domain, GICv5IntType type, bool virtual,
+                        uint32_t cpuidx)
 {
     GICv5 *s = ARM_GICV5(cs);
     uint32_t iaffid;
@@ -623,7 +624,8 @@ void gicv5_set_priority(GICv5Common *cs, uint32_t id, uint8_t priority,
 }
 
 void gicv5_set_enabled(GICv5Common *cs, uint32_t id, bool enabled,
-                       GICv5Domain domain, GICv5IntType type, bool virtual)
+                       GICv5Domain domain, GICv5IntType type, bool virtual,
+                       uint32_t cpuidx)
 {
     GICv5 *s = ARM_GICV5(cs);
     uint32_t iaffid;
@@ -676,7 +678,7 @@ void gicv5_set_enabled(GICv5Common *cs, uint32_t id, bool enabled,
 
 void gicv5_set_pending(GICv5Common *cs, uint32_t id, bool pending,
                        GICv5Domain domain, GICv5IntType type, bool virtual,
-                       uint32_t vm)
+                       uint32_t vm, uint32_t cpuidx)
 {
     GICv5 *s = ARM_GICV5(cs);
     uint32_t iaffid;
@@ -729,7 +731,7 @@ void gicv5_set_pending(GICv5Common *cs, uint32_t id, bool pending,
 
 void gicv5_set_handling(GICv5Common *cs, uint32_t id,
                         GICv5HandlingMode handling, GICv5Domain domain,
-                        GICv5IntType type, bool virtual)
+                        GICv5IntType type, bool virtual, uint32_t cpuidx)
 {
     GICv5 *s = ARM_GICV5(cs);
 
@@ -777,7 +779,7 @@ void gicv5_set_handling(GICv5Common *cs, uint32_t id,
 
 void gicv5_set_target(GICv5Common *cs, uint32_t id, uint32_t iaffid,
                       GICv5RoutingMode irm, GICv5Domain domain,
-                      GICv5IntType type, bool virtual)
+                      GICv5IntType type, bool virtual, uint32_t cpuidx)
 {
     GICv5 *s = ARM_GICV5(cs);
     uint32_t old_iaffid;
@@ -889,7 +891,7 @@ static uint64_t spi_state_to_icsr(GICv5SPIState *spi)
 }
 
 uint64_t gicv5_request_config(GICv5Common *cs, uint32_t id, GICv5Domain domain,
-                              GICv5IntType type, bool virtual)
+                              GICv5IntType type, bool virtual, uint32_t cpuidx)
 {
     GICv5 *s = ARM_GICV5(cs);
     uint64_t icsr;
@@ -933,7 +935,7 @@ uint64_t gicv5_request_config(GICv5Common *cs, uint32_t id, GICv5Domain domain,
 }
 
 void gicv5_activate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
-                    GICv5IntType type, bool virtual)
+                    GICv5IntType type, bool virtual, uint32_t cpuidx)
 {
     GICv5 *s = ARM_GICV5(cs);
     uint32_t iaffid;
@@ -991,7 +993,7 @@ void gicv5_activate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
 }
 
 void gicv5_deactivate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
-                      GICv5IntType type, bool virtual)
+                      GICv5IntType type, bool virtual, uint32_t cpuidx)
 {
     GICv5 *s = ARM_GICV5(cs);
     uint32_t iaffid;

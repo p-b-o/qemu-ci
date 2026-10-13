@@ -59,6 +59,7 @@ GICv5CPUIFStatus gicv5_set_gicv5state(ARMCPU *cpu, GICv5Common *cs,
  * @domain: interrupt Domain to act on
  * @type: interrupt type (LPI or SPI)
  * @virtual: true if this is a virtual interrupt
+ * @cpuidx: IRS CPU index of this CPU interface
  *
  * Set priority of an interrupt; matches stream interface SetPriority
  * command from CPUIF to IRS. There is no report back of
@@ -66,7 +67,7 @@ GICv5CPUIFStatus gicv5_set_gicv5state(ARMCPU *cpu, GICv5Common *cs,
  */
 void gicv5_set_priority(GICv5Common *cs, uint32_t id,
                         uint8_t priority, GICv5Domain domain,
-                        GICv5IntType type, bool virtual);
+                        GICv5IntType type, bool virtual, uint32_t cpuidx);
 
 /**
  * gicv5_set_enabled
@@ -76,6 +77,7 @@ void gicv5_set_priority(GICv5Common *cs, uint32_t id,
  * @domain: interrupt Domain to act on
  * @type: interrupt type (LPI or SPI)
  * @virtual: true if this is a virtual interrupt
+ * @cpuidx: IRS CPU index of this CPU interface
  *
  * Set enabled state of an interrupt; matches stream interface
  * SetEnabled command from CPUIF to IRS. There is no report back of
@@ -83,7 +85,7 @@ void gicv5_set_priority(GICv5Common *cs, uint32_t id,
  */
 void gicv5_set_enabled(GICv5Common *cs, uint32_t id,
                        bool enabled, GICv5Domain domain,
-                       GICv5IntType type, bool virtual);
+                       GICv5IntType type, bool virtual, uint32_t cpuidx);
 
 /**
  * gicv5_set_pending
@@ -94,6 +96,7 @@ void gicv5_set_enabled(GICv5Common *cs, uint32_t id,
  * @type: interrupt type (LPI or SPI)
  * @virtual: true if this is a virtual interrupt
  * @vm: VM ID (for virtual interrupts)
+ * @cpuidx: IRS CPU index of this CPU interface
  *
  * Set pending state of an interrupt; matches stream interface
  * SetPending command from CPUIF to IRS. There is no report back of
@@ -101,7 +104,8 @@ void gicv5_set_enabled(GICv5Common *cs, uint32_t id,
  */
 void gicv5_set_pending(GICv5Common *cs, uint32_t id,
                        bool pending, GICv5Domain domain,
-                       GICv5IntType type, bool virtual, uint32_t vm);
+                       GICv5IntType type, bool virtual, uint32_t vm,
+                       uint32_t cpuidx);
 
 /**
  * gicv5_set_handling
@@ -111,6 +115,7 @@ void gicv5_set_pending(GICv5Common *cs, uint32_t id,
  * @domain: interrupt Domain to act on
  * @type: interrupt type (LPI or SPI)
  * @virtual: true if this is a virtual interrupt
+ * @cpuidx: IRS CPU index of this CPU interface
  *
  * Set handling mode of an interrupt (edge/level); matches stream
  * interface SetHandling command from CPUIF to IRS. There is no report
@@ -118,7 +123,7 @@ void gicv5_set_pending(GICv5Common *cs, uint32_t id,
  */
 void gicv5_set_handling(GICv5Common *cs, uint32_t id,
                         GICv5HandlingMode handling, GICv5Domain domain,
-                        GICv5IntType type, bool virtual);
+                        GICv5IntType type, bool virtual, uint32_t cpuidx);
 
 /**
  * gicv5_set_target
@@ -129,6 +134,7 @@ void gicv5_set_handling(GICv5Common *cs, uint32_t id,
  * @domain: interrupt Domain to act on
  * @type: interrupt type (LPI or SPI)
  * @virtual: true if this is a virtual interrupt
+ * @cpuidx: IRS CPU index of this CPU interface
  *
  * Set handling mode of an interrupt (edge/level); matches stream
  * interface SetHandling command from CPUIF to IRS. There is no report
@@ -136,7 +142,7 @@ void gicv5_set_handling(GICv5Common *cs, uint32_t id,
  */
 void gicv5_set_target(GICv5Common *cs, uint32_t id, uint32_t iaffid,
                       GICv5RoutingMode irm, GICv5Domain domain,
-                      GICv5IntType type, bool virtual);
+                      GICv5IntType type, bool virtual, uint32_t cpuidx);
 
 /**
  * gicv5_request_config
@@ -145,6 +151,7 @@ void gicv5_set_target(GICv5Common *cs, uint32_t id, uint32_t iaffid,
  * @domain: interrupt domain to act on
  * @type: interrupt type (LPI or SPI)
  * @virtual: true if this is a virtual interrupt
+ * @cpuidx: IRS CPU index of this CPU interface
  *
  * Query the current configuration of an interrupt; matches stream
  * interface RequestConfig command from CPUIF to IRS and the
@@ -159,7 +166,7 @@ void gicv5_set_target(GICv5Common *cs, uint32_t id, uint32_t iaffid,
  * ICC_ICSR_EL1.
  */
 uint64_t gicv5_request_config(GICv5Common *cs, uint32_t id, GICv5Domain domain,
-                              GICv5IntType type, bool virtual);
+                              GICv5IntType type, bool virtual, uint32_t cpuidx);
 
 /**
  * gicv5_activate
@@ -168,6 +175,7 @@ uint64_t gicv5_request_config(GICv5Common *cs, uint32_t id, GICv5Domain domain,
  * @domain: interrupt domain to act on
  * @type: interrupt type (LPI or SPI)
  * @virtual: true if this is a virtual interrupt
+ * @cpuidx: IRS CPU index of this CPU interface
  *
  * Activate the IRS's highest priority pending interrupt; matches the
  * stream interface's Activate command.
@@ -182,7 +190,7 @@ uint64_t gicv5_request_config(GICv5Common *cs, uint32_t id, GICv5Domain domain,
  * its hppi[][] array.
  */
 void gicv5_activate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
-                    GICv5IntType type, bool virtual);
+                    GICv5IntType type, bool virtual, uint32_t cpuidx);
 
 /**
  * gicv5_forward_interrupt
@@ -230,12 +238,13 @@ GICv5PendingIrq gicv5_get_hppi(GICv5Common *cs, GICv5Domain domain,
  * @domain: interrupt Domain to act on
  * @type: interrupt type (LPI or SPI)
  * @virtual: true if this is a virtual interrupt
+ * @cpuidx: IRS CPU index of this CPU interface
  *
  * Deactivate the specified interrupt. There is no report back of
  * success/failure to the CPUIF in the protocol.
  */
 void gicv5_deactivate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
-                      GICv5IntType type, bool virtual);
+                      GICv5IntType type, bool virtual, uint32_t cpuidx);
 
 /**
  * gicv5_set_resident

@@ -680,7 +680,7 @@ static void gic_cddis_write(CPUARMState *env, const ARMCPRegInfo *ri,
     bool virtual;
     GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
 
-    gicv5_set_enabled(gic, id, false, domain, type, virtual);
+    gicv5_set_enabled(gic, id, false, domain, type, virtual, env->gicv5.cpuidx);
 }
 
 static void gic_cden_write(CPUARMState *env, const ARMCPRegInfo *ri,
@@ -692,7 +692,7 @@ static void gic_cden_write(CPUARMState *env, const ARMCPRegInfo *ri,
     bool virtual;
     GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
 
-    gicv5_set_enabled(gic, id, true, domain, type, virtual);
+    gicv5_set_enabled(gic, id, true, domain, type, virtual, env->gicv5.cpuidx);
 }
 
 static void gic_cdpri_write(CPUARMState *env, const ARMCPRegInfo *ri,
@@ -705,7 +705,8 @@ static void gic_cdpri_write(CPUARMState *env, const ARMCPRegInfo *ri,
     bool virtual;
     GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
 
-    gicv5_set_priority(gic, id, priority, domain, type, virtual);
+    gicv5_set_priority(gic, id, priority, domain, type, virtual,
+                       env->gicv5.cpuidx);
 }
 
 static void gic_cdaff_write(CPUARMState *env, const ARMCPRegInfo *ri,
@@ -719,7 +720,8 @@ static void gic_cdaff_write(CPUARMState *env, const ARMCPRegInfo *ri,
     bool virtual;
     GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
 
-    gicv5_set_target(gic, id, iaffid, irm, domain, type, virtual);
+    gicv5_set_target(gic, id, iaffid, irm, domain, type, virtual,
+                     env->gicv5.cpuidx);
 }
 
 static void gic_cdpend_write(CPUARMState *env, const ARMCPRegInfo *ri,
@@ -759,7 +761,8 @@ static void gic_cdpend_write(CPUARMState *env, const ARMCPRegInfo *ri,
         }
     }
 
-    gicv5_set_pending(gic, id, pending, domain, type, virtual, vm);
+    gicv5_set_pending(gic, id, pending, domain, type, virtual, vm,
+                      env->gicv5.cpuidx);
 }
 
 static void gic_cdrcfg_write(CPUARMState *env, const ARMCPRegInfo *ri,
@@ -772,7 +775,7 @@ static void gic_cdrcfg_write(CPUARMState *env, const ARMCPRegInfo *ri,
     GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
 
     env->gicv5_cpuif.icc_icsr_el1 =
-        gicv5_request_config(gic, id, domain, type, virtual);
+        gicv5_request_config(gic, id, domain, type, virtual, env->gicv5.cpuidx);
 }
 
 static void gic_cdhm_write(CPUARMState *env, const ARMCPRegInfo *ri,
@@ -785,7 +788,7 @@ static void gic_cdhm_write(CPUARMState *env, const ARMCPRegInfo *ri,
     bool virtual;
     GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
 
-    gicv5_set_handling(gic, id, hm, domain, type, virtual);
+    gicv5_set_handling(gic, id, hm, domain, type, virtual, env->gicv5.cpuidx);
 }
 
 static uint64_t gic_ppi_hmr_read(CPUARMState *env, const ARMCPRegInfo *ri)
@@ -1466,7 +1469,7 @@ static uint64_t gicr_cdia_read(CPUARMState *env, const ARMCPRegInfo *ri)
          * name of the stream command, does both "set Active" and
          * "maybe set not Pending" as a single atomic action.
          */
-        gicv5_activate(gic, id, domain, type, virtual);
+        gicv5_activate(gic, id, domain, type, virtual, env->gicv5.cpuidx);
         break;
     default:
         g_assert_not_reached();
@@ -1543,7 +1546,7 @@ static void gic_cddi_write(CPUARMState *env, const ARMCPRegInfo *ri,
     case GICV5_LPI:
     case GICV5_SPI:
         /* Tell the IRS to deactivate this interrupt */
-        gicv5_deactivate(gic, id, domain, type, virtual);
+        gicv5_deactivate(gic, id, domain, type, virtual, env->gicv5.cpuidx);
         break;
     default:
         break;
