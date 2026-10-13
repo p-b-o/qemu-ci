@@ -630,6 +630,24 @@ void gicv5_update_ppi_state(CPUARMState *env, int ppi, bool level)
     }
 }
 
+void gicv5_update_on_hcr_nv_change(CPUARMState *env)
+{
+    /* HCR_EL2.{NV,NV1} changed, which affects DVI timer PPI remapping */
+    if (!cpu_isar_feature(aa64_gcie, env_archcpu(env))) {
+        return;
+    }
+    gic_recalc_virt_ppi_hppi(env);
+}
+
+void gicv5_update_on_scr_ns_change(CPUARMState *env)
+{
+    /* SCR_EL3.NS changed, which affects DVI timer PPI remapping */
+    if (!cpu_isar_feature(aa64_gcie, env_archcpu(env))) {
+        return;
+    }
+    gic_recalc_virt_ppi_hppi(env);
+}
+
 static void gic_cddis_write(CPUARMState *env, const ARMCPRegInfo *ri,
                             uint64_t value)
 {

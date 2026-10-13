@@ -1012,6 +1012,12 @@ static void scr_write(CPUARMState *env, const ARMCPRegInfo *ri, uint64_t value)
                                            ARMMMUIdxBit_E2 |
                                            ARMMMUIdxBit_E2_GCS));
     }
+    /* The GICv5 cpuif needs to know if SCR_EL3.NS changes */
+#ifndef CONFIG_USER_ONLY
+    if (changed & SCR_NS) {
+        gicv5_update_on_scr_ns_change(env);
+    }
+#endif
 }
 
 static void scr_reset(CPUARMState *env, const ARMCPRegInfo *ri)
@@ -3881,7 +3887,7 @@ static const ARMCPRegInfo v8_aa32_el1_reginfo[] = {
 static void do_hcr_write(CPUARMState *env, uint64_t value, uint64_t valid_mask)
 {
     ARMCPU *cpu = env_archcpu(env);
-    bool hcr_change_timer;
+    uint64_t changed;
 
     if (arm_feature(env, ARM_FEATURE_V8)) {
         valid_mask |= MAKE_64BIT_MASK(0, 34);  /* ARMv8.0 */
@@ -3960,6 +3966,8 @@ static void do_hcr_write(CPUARMState *env, uint64_t value, uint64_t valid_mask)
         }
     }
 
+    changed = env->cp15.hcr_el2 ^ value;
+
     /*
      * These bits change the MMU setup:
      * HCR_VM enables stage 2 translation
@@ -3969,15 +3977,20 @@ static void do_hcr_write(CPUARMState *env, uint64_t value, uint64_t valid_mask)
      * HCR_FWB changes the interpretation of stage2 descriptor bits
      * HCR_NV and HCR_NV1 affect interpretation of descriptor bits
      */
-    if ((env->cp15.hcr_el2 ^ value) &
+    if (changed &
         (HCR_VM | HCR_PTW | HCR_DC | HCR_DCT | HCR_FWB | HCR_NV | HCR_NV1)) {
         tlb_flush(CPU(cpu));
     }
-    hcr_change_timer = (env->cp15.hcr_el2 ^ value) &
-                       (HCR_E2H | HCR_TGE);
 
     /* update */
     env->cp15.hcr_el2 = value;
+
+    /* If HCR_EL2.{NV,NV1} change we must inform the GICv5 cpuif */
+#ifndef CONFIG_USER_ONLY
+    if (changed & (HCR_NV | HCR_NV1)) {
+        gicv5_update_on_hcr_nv_change(env);
+    }
+#endif
 
     /*
      * Updates to VI and VF require us to update the status of
@@ -3998,7 +4011,7 @@ static void do_hcr_write(CPUARMState *env, uint64_t value, uint64_t valid_mask)
         arm_cpu_update_vinmi(cpu);
         arm_cpu_update_vfnmi(cpu);
     }
-    if (hcr_change_timer) {
+    if (changed & (HCR_E2H | HCR_TGE)) {
 #ifndef CONFIG_USER_ONLY
         gt_recalc_timer(cpu, GTIMER_PHYS);
 #endif
