@@ -29,11 +29,13 @@ typedef struct VMTE VMTE;
 typedef struct VPE {
     VMTE *vmte;
     hwaddr vped_addr;
+    uint32_t cpuidx; /* CPU we're currently resident on */
     uint32_t db_intid; /* doorbell interrupt ID */
     uint8_t dbpm; /* doorbell priority mask */
     bool valid; /* is the VPE valid? */
     bool db_valid; /* are doorbell settings valid? */
     bool db_req; /* is a doorbell requested? */
+    bool resident; /* is VPE resident on some CPU? */
 } VPE;
 
 /* In the GICv5VMTConfig::vm_cache this is how we store VMTE info */
@@ -1182,8 +1184,89 @@ bool gicv5_set_resident(GICv5Common *cs, GICv5Domain domain, bool valid,
                         uint32_t vpeid, bool db, uint8_t dbpm, uint32_t vmid,
                         uint32_t cpuidx)
 {
-    /* Until we implement virtualization, SetResident always fails */
-    return true;
+    VMTE *vmte;
+    VPE *vpe;
+    GICv5 *s = ARM_GICV5(cs);
+    GICv5VMTConfig *cfg = &s->vmt_config[domain];
+
+    assert(cpuidx < cs->num_cpus);
+
+    if (!gicv5_domain_has_virt(cs, domain) || !cfg->valid) {
+        return true;
+    }
+
+    /*
+     * R_PYWKM: if resident VPE is for wrong domain, then ignore
+     * attempts to set a resident VPE. Allow an attempt to clear the
+     * resident VPE, but treat DB as zero.
+     */
+    if (s->res_vpe[cpuidx] &&
+        s->res_vpe[cpuidx]->vmte->domain != domain) {
+        if (valid) {
+            return true;
+        }
+        db = 0;
+    }
+
+    if (valid) {
+        /* Trying to make a VPE resident */
+
+        vmte = g_hash_table_lookup(cfg->vm_cache, GINT_TO_POINTER(vmid));
+        vpe = vpe_for_vpeid(vmte, vpeid);
+        if (!vpe) {
+            return true;
+        }
+
+        if (vpe->resident) {
+            /*
+             * Trying to make a VPE resident when it's already
+             * resident somewhere else is CONSTRAINED UNPREDICTABLE
+             * per R_JJKJV. We choose to fail the request.
+             */
+            return true;
+        }
+
+        vpe->resident = true;
+        vpe->cpuidx = cpuidx;
+
+        s->res_vpe[cpuidx] = vpe;
+        trace_gicv5_set_resident(domain_name[domain], vmid, vpeid, cpuidx);
+    } else {
+        vpe = s->res_vpe[cpuidx];
+        if (!vpe) {
+            /* Making non-resident when already no VPE resident */
+            return true;
+        }
+
+        vmte = vpe->vmte;
+
+        vpe->resident = false;
+        vpe->cpuidx = UINT32_MAX;
+        vpe->db_req = db;
+        if (db) {
+            vpe->dbpm = dbpm;
+        }
+        s->res_vpe[cpuidx] = NULL;
+
+        trace_gicv5_set_non_resident(domain_name[domain], cpuidx, db, dbpm);
+
+        /*
+         * TODO: when we implement VPE doorbells, we should check whether
+         * we should immediately generate a doorbell for a VPE that has
+         * just been made non-resident.
+         */
+    }
+
+    /*
+     * Tell the cpuif that the vHPPI for its resident VPE has changed;
+     * it will then call gicv5_get_hppi() which will return either
+     * IRQ_NONE if this is make-non-resident or the vHPPI for the
+     * now-resident VPE if this is make-resident.
+     */
+    gicv5_forward_interrupt(cs->cpus[cpuidx], vmte->domain, true);
+
+    /* SetResident succeeded */
+    return false;
 }
 
 static bool read_first_vmte_word(GICv5Common *cs, GICv5VMTConfig *cfg,
@@ -1566,6 +1649,8 @@ static void irs_vmt_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
             return;
         }
         irs_clean_vm_cache(cs, &s->vmt_config[domain]);
+        /* No VPE is now resident on any CPU */
+        memset(s->res_vpe, 0, sizeof(VPE) * cs->num_cpus);
         cs->irs_vmt_baser[domain] = FIELD_DP64(cs->irs_vmt_baser[domain],
                                                IRS_VMT_BASER, VALID, valid);
         s->vmt_config[domain].valid = false;
@@ -1713,6 +1798,20 @@ txfail:
                   "physical address 0x" HWADDR_FMT_plx "\n", vmid, l1_addr);
 }
 
+static void remove_res_vpe_by_vmid(GICv5 *s, uint32_t vmid)
+{
+    /* Remove all res_vpe cached information for VPEs for this VMID */
+    GICv5Common *cs = ARM_GICV5_COMMON(s);
+
+    for (int i = 0; i < cs->num_cpus; i++) {
+        VPE *vpe = s->res_vpe[i];
+
+        if (vpe && vpe->vmte->vmid == vmid) {
+            s->res_vpe[i] = NULL;
+        }
+    }
+}
+
 static void irs_vmap_vmr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
 {
     GICv5Common *cs = ARM_GICV5_COMMON(s);
@@ -1762,6 +1861,7 @@ static void irs_vmap_vmr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
     }
 
     if (u) {
+        remove_res_vpe_by_vmid(s, vmid);
         g_hash_table_remove(cfg->vm_cache, GINT_TO_POINTER(vmid));
     } else {
         if (!read_other_vmte_words(cs, cfg, l2_addr, l2_vmte)) {
@@ -2858,6 +2958,7 @@ static void gicv5_set_spi(void *opaque, int irq, int level)
 static void gicv5_reset_hold(Object *obj, ResetType type)
 {
     GICv5 *s = ARM_GICV5(obj);
+    GICv5Common *cs = ARM_GICV5_COMMON(obj);
     GICv5Class *c = ARM_GICV5_GET_CLASS(s);
 
     if (c->parent_phases.hold) {
@@ -2883,6 +2984,11 @@ static void gicv5_reset_hold(Object *obj, ResetType type)
         if (s->vmt_config[i].vm_cache) {
             g_hash_table_remove_all(s->vmt_config[i].vm_cache);
         }
+    }
+
+    if (s->res_vpe) {
+        /* No VPE is now resident on any CPU */
+        memset(s->res_vpe, 0, sizeof(*s->res_vpe) * cs->num_cpus);
     }
 }
 
@@ -2988,6 +3094,10 @@ static void gicv5_realize(DeviceState *dev, Error **errp)
             s->hppi[i] = g_new0(GICv5PendingIrq, cs->num_cpus);
         }
     }
+
+    if (cs->has_virt) {
+        s->res_vpe = g_new0(VPE *, cs->num_cpus);
+    }
 }
 
 static void gicv5_init(Object *obj)
@@ -3012,6 +3122,7 @@ static void gicv5_finalize(Object *obj)
 
         g_free(s->hppi[i]);
     }
+    g_free(s->res_vpe);
 }
 
 static void gicv5_class_init(ObjectClass *oc, const void *data)

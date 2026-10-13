@@ -40,6 +40,8 @@ typedef struct GICv5VMTConfig {
     GHashTable *vm_cache;
 } GICv5VMTConfig;
 
+typedef struct VPE VPE;
+
 /*
  * This class is for TCG-specific state for the GICv5.
  */
@@ -53,6 +55,9 @@ struct GICv5 {
 
     /* We cache the HPPI for each CPU for each domain here */
     GICv5PendingIrq *hppi[NUM_GICV5_DOMAINS];
+
+    /* Array: for each CPU, either NULL or ptr to the resident VPE */
+    VPE **res_vpe;
 };
 
 struct GICv5Class {
