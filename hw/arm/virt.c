@@ -3015,9 +3015,8 @@ static void machvirt_init(MachineState *machine)
         exit(1);
     }
 
-    if ((vms->virt || vms->secure) &&
-        vms->gic_version == VIRT_GIC_VERSION_5) {
-        error_report("mach-virt: GICv5 currently supports EL1 only");
+    if (vms->secure && vms->gic_version == VIRT_GIC_VERSION_5) {
+        error_report("mach-virt: GICv5 currently supports EL1 and EL2 only");
         exit(1);
     }
 
