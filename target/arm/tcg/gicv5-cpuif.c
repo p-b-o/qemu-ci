@@ -481,6 +481,12 @@ static void gic_ich_ppi_active_write(CPUARMState *env, const ARMCPRegInfo *ri,
     raw_write(env, ri, value);
 }
 
+static void gic_ich_ppi_priority_write(CPUARMState *env, const ARMCPRegInfo *ri,
+                                       uint64_t value)
+{
+    raw_write(env, ri, value);
+}
+
 /*
  * ICC_APR_EL1 is banked and reads/writes as the version for the
  * current logical interrupt domain.
@@ -1021,6 +1027,21 @@ void define_gicv5_cpuif_regs(ARMCPU *cpu)
                 .access = PL1_RW, .type = ARM_CP_IO | ARM_CP_NO_RAW,
                 .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ppi_priority[i]),
                 .writefn = gic_ppi_priority_write, .raw_writefn = raw_write,
+            };
+            define_one_arm_cp_reg(cpu, &ppi_prio);
+        }
+        /* Similarly for ICH_PPI_PRIORITYR<n>_EL2 */
+        for (int i = 0; i < 16; i++) {
+            g_autofree char *name = g_strdup_printf("ICH_PPI_PRIORITYR%d_EL2", i);
+            ARMCPRegInfo ppi_prio = {
+                .name = name, .state = ARM_CP_STATE_AA64,
+                .opc0 = 3, .opc1 = 4, .crn = 12,
+                .crm = 14 + (i >> 3), .opc2 = i & 7,
+                .access = PL2_RW, .type = ARM_CP_IO | ARM_CP_NO_RAW,
+                .nv2_redirect_offset = 0xb80 + (8 * i),
+                .accessfn = access_gicv5_ich_reg,
+                .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ich_ppi_priority[i]),
+                .writefn = gic_ich_ppi_priority_write,
             };
             define_one_arm_cp_reg(cpu, &ppi_prio);
         }
