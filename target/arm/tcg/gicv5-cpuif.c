@@ -612,18 +612,32 @@ static void gic_icc_cr0_el1_reset(CPUARMState *env, const ARMCPRegInfo *ri)
 
 static uint64_t gic_icc_pcr_el1_read(CPUARMState *env, const ARMCPRegInfo *ri)
 {
-    GICv5Domain domain = gicv5_logical_domain(env);
-    return env->gicv5_cpuif.icc_pcr[domain];
+    if (gicv5_icv_access(env)) {
+        return FIELD_EX64(env->gicv5_cpuif.ich_vmcr_el2,
+                          ICH_VMCR_EL2, VMPR);
+    } else {
+        GICv5Domain domain = gicv5_logical_domain(env);
+        return env->gicv5_cpuif.icc_pcr[domain];
+    }
 }
 
 static void gic_icc_pcr_el1_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                   uint64_t value)
 {
-    GICv5Domain domain = gicv5_logical_domain(env);
+    if (gicv5_icv_access(env)) {
+        /* The PRIORITY field lives in ICH_VMCR_EL2.VMPR */
+        uint64_t vmcr = env->gicv5_cpuif.ich_vmcr_el2;
 
-    value &= R_ICC_PCR_PRIORITY_MASK;
-    env->gicv5_cpuif.icc_pcr[domain] = value;
-    gicv5_update_irq_fiq(env);
+        vmcr = FIELD_DP64(vmcr, ICH_VMCR_EL2, VMPR,
+                          FIELD_EX64(value, ICC_PCR, PRIORITY));
+        env->gicv5_cpuif.ich_vmcr_el2 = vmcr;
+    } else {
+        GICv5Domain domain = gicv5_logical_domain(env);
+
+        value &= R_ICC_PCR_PRIORITY_MASK;
+        env->gicv5_cpuif.icc_pcr[domain] = value;
+        gicv5_update_irq_fiq(env);
+    }
 }
 
 static void gic_icc_pcr_el1_reset(CPUARMState *env, const ARMCPRegInfo *ri)
