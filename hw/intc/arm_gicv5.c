@@ -2319,6 +2319,21 @@ static void irs_vpe_selr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
     cs->irs_vpe_statusr[domain] = status;
 }
 
+static uint64_t irs_vpe_hppir_read(GICv5 *s, GICv5Domain domain)
+{
+    /*
+     * The spec allows the IRS to update IRS_VPE_HPPIR as the VPE's
+     * vHPPI changes, rather than sampling it when IRS_VPE_SELR
+     * is written like e.g. IRS_VPE_DBR. That's what we choose to do.
+     */
+    VPE *vpe = vpe_from_selr(s, domain);
+
+    if (vpe && vpe->vhppi.prio != PRIO_IDLE) {
+        return vpe->vhppi.intid | R_IRS_VPE_HPPIR_HPPIV_MASK;
+    }
+    return 0;
+}
+
 static void irs_vpe_dbr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
 {
     GICv5Common *cs = ARM_GICV5_COMMON(s);
@@ -2614,6 +2629,22 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = extract64(cs->irs_vpe_dbr[domain], 32, 32);
         } else {
             /* RAZ/WI if no virt */
+            *data = 0;
+        }
+        return true;
+    case A_IRS_VPE_HPPIR:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = extract64(irs_vpe_hppir_read(s, domain), 0, 32);
+        } else {
+            /* RAZ if no virt */
+            *data = 0;
+        }
+        return true;
+    case A_IRS_VPE_HPPIR + 4:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = extract64(irs_vpe_hppir_read(s, domain), 32, 32);
+        } else {
+            /* RAZ if no virt */
             *data = 0;
         }
         return true;
@@ -2959,6 +2990,14 @@ static bool config_readll(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = cs->irs_vpe_dbr[domain];
         } else {
             /* RAZ/WI if no virt */
+            *data = 0;
+        }
+        return true;
+    case A_IRS_VPE_HPPIR:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = irs_vpe_hppir_read(s, domain);
+        } else {
+            /* RAZ if no virt */
             *data = 0;
         }
         return true;
