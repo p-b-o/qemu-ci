@@ -644,6 +644,7 @@ DEF_SET_FIELD_FOR_IST(priority, uint8_t, PRIORITY)
 DEF_SET_FIELD_FOR_IST(enabled, bool, ENABLE)
 DEF_SET_FIELD_FOR_IST(handling, bool, HM)
 DEF_SET_FIELD_FOR_IST(pending, bool, PENDING)
+DEF_SET_FIELD_FOR_IST(target, uint32_t, IAFFID)
 
 void gicv5_set_priority(GICv5Common *cs, uint32_t id, uint8_t priority,
                         GICv5Domain domain, GICv5IntType type, bool virtual,
@@ -878,11 +879,6 @@ void gicv5_set_target(GICv5Common *cs, uint32_t id, uint32_t iaffid,
 
     trace_gicv5_set_target(domain_name[domain], inttype_name(type), virtual,
                            id, iaffid, irm);
-    if (virtual) {
-        qemu_log_mask(LOG_GUEST_ERROR, "gicv5_set_target: tried to set "
-                      "target of a virtual interrupt\n");
-        return;
-    }
     if (irm != GICV5_TARGETED) {
         qemu_log_mask(LOG_GUEST_ERROR, "gicv5_set_target: tried to set "
                       "1-of-N routing\n");
@@ -893,24 +889,32 @@ void gicv5_set_target(GICv5Common *cs, uint32_t id, uint32_t iaffid,
          */
     }
 
+    /*
+     * For QEMU we do not implement 1-of-N routing, and so L2_ISTE.IRM
+     * is RES0.  We never read it, and we can skip explicitly writing
+     * it to zero: it's sufficient to update L2_ISTE.IAFFID alone via
+     * set_target_for_ist().
+     */
+
+    if (virtual) {
+        const GICv5ISTConfig *cfg = ist_for_vint(s, cs, domain, type, cpuidx);
+
+        if (!set_target_for_ist(cs, cfg, id, iaffid, &old_iaffid)) {
+            return;
+        }
+        irs_recalc_vhppi(s, s->res_vpe[cpuidx]->vmte, old_iaffid);
+        irs_recalc_vhppi(s, s->res_vpe[cpuidx]->vmte, iaffid);
+        return;
+    }
+
     switch (type) {
     case GICV5_LPI:
     {
         const GICv5ISTConfig *cfg = &s->phys_lpi_config[domain];
-        L2_ISTE_Handle h;
-        uint32_t *l2_iste_p = get_l2_iste(cs, cfg, id, &h);
 
-        if (!l2_iste_p) {
+        if (!set_target_for_ist(cs, cfg, id, iaffid, &old_iaffid)) {
             return;
         }
-        /*
-         * For QEMU we do not implement 1-of-N routing, and so
-         * L2_ISTE.IRM is RES0.  We never read it, and we can skip
-         * explicitly writing it to zero here.
-         */
-        old_iaffid = FIELD_EX32(*l2_iste_p, L2_ISTE, IAFFID);
-        *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, IAFFID, iaffid);
-        put_l2_iste(cs, cfg, &h);
         break;
     }
     case GICV5_SPI:
