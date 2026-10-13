@@ -643,6 +643,7 @@ static const GICv5ISTConfig *ist_for_vint(GICv5 *s,
 DEF_SET_FIELD_FOR_IST(priority, uint8_t, PRIORITY)
 DEF_SET_FIELD_FOR_IST(enabled, bool, ENABLE)
 DEF_SET_FIELD_FOR_IST(handling, bool, HM)
+DEF_SET_FIELD_FOR_IST(pending, bool, PENDING)
 
 void gicv5_set_priority(GICv5Common *cs, uint32_t id, uint8_t priority,
                         GICv5Domain domain, GICv5IntType type, bool virtual,
@@ -761,8 +762,30 @@ void gicv5_set_pending(GICv5Common *cs, uint32_t id, bool pending,
     trace_gicv5_set_pending(domain_name[domain], inttype_name(type), virtual,
                             vm, id, pending);
     if (virtual) {
-        qemu_log_mask(LOG_GUEST_ERROR, "gicv5_set_pending: tried to set "
-                      "pending state of a virtual interrupt\n");
+        /*
+         * SetPending is the one operation on an interrupt that a cpuif
+         * can do without having a VPE for the VM resident. Instead it
+         * passes us the VM ID to operate on, and we must look up the
+         * IST to use that way rather than with ist_for_vint().
+         */
+        GICv5VMTConfig *vmcfg = &s->vmt_config[domain];
+        const GICv5ISTConfig *cfg;
+        VMTE *vmte;
+
+        if (!gicv5_domain_has_virt(cs, domain) || !vmcfg->valid) {
+            return;
+        }
+
+        vmte = g_hash_table_lookup(vmcfg->vm_cache, GINT_TO_POINTER(vm));
+        if (!vmte) {
+            return;
+        }
+
+        cfg = type == GICV5_LPI ? &vmte->lpi_ist : &vmte->spi_ist;
+        if (!set_pending_for_ist(cs, cfg, id, pending, &iaffid)) {
+            return;
+        }
+        irs_recalc_vhppi(s, vmte, iaffid);
         return;
     }
 
@@ -770,15 +793,10 @@ void gicv5_set_pending(GICv5Common *cs, uint32_t id, bool pending,
     case GICV5_LPI:
     {
         const GICv5ISTConfig *cfg = &s->phys_lpi_config[domain];
-        L2_ISTE_Handle h;
-        uint32_t *l2_iste_p = get_l2_iste(cs, cfg, id, &h);
 
-        if (!l2_iste_p) {
+        if (!set_pending_for_ist(cs, cfg, id, pending, &iaffid)) {
             return;
         }
-        *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, PENDING, pending);
-        iaffid = FIELD_EX32(*l2_iste_p, L2_ISTE, IAFFID);
-        put_l2_iste(cs, cfg, &h);
         break;
     }
     case GICV5_SPI:
