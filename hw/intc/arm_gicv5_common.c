@@ -104,6 +104,10 @@ static void gicv5_common_reset_hold(Object *obj, ResetType type)
          */
         cs->irs_spi_selr[i] = cs->spi_base + cs->spi_irs_range;
     }
+
+    if (cs->has_virt) {
+        memset(cs->irs_vmt_baser, 0, sizeof(cs->irs_vmt_baser));
+    }
 }
 
 static void gicv5_common_init(Object *obj)

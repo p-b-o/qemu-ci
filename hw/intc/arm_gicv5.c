@@ -1166,6 +1166,36 @@ static void irs_ist_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
     }
 }
 
+static void irs_vmt_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
+{
+    GICv5Common *cs = ARM_GICV5_COMMON(s);
+
+    if (!gicv5_domain_has_virt(cs, domain)) {
+        return;
+    }
+
+    if (FIELD_EX64(cs->irs_vmt_baser[domain], IRS_VMT_BASER, VALID)) {
+        /* If VALID is set, ADDR is RO and we can only update VALID */
+        bool valid = FIELD_EX64(value, IRS_VMT_BASER, VALID);
+
+        if (valid) {
+            /* Ignore 1->1 transition */
+            return;
+        }
+        cs->irs_vmt_baser[domain] = FIELD_DP64(cs->irs_vmt_baser[domain],
+                                               IRS_VMT_BASER, VALID, valid);
+        trace_gicv5_vmt_invalid(domain_name[domain]);
+        return;
+    }
+
+    cs->irs_vmt_baser[domain] = value;
+
+    if (FIELD_EX64(cs->irs_vmt_baser[domain], IRS_VMT_BASER, VALID)) {
+        trace_gicv5_vmt_valid(domain_name[domain],
+                              cs->irs_vmt_baser[domain] & R_IRS_VMT_BASER_ADDR_MASK);
+    }
+}
+
 static void spi_sample(GICv5SPIState *spi)
 {
     /*
@@ -1271,6 +1301,31 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
     case A_IRS_IST_CFGR:
         *data = cs->irs_ist_cfgr[domain];
         return true;
+    case A_IRS_VMT_BASER:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = extract64(cs->irs_vmt_baser[domain], 0, 32);
+        } else {
+            *data = 0;
+        }
+        return true;
+    case A_IRS_VMT_BASER + 4:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = extract64(cs->irs_vmt_baser[domain], 32, 32);
+        } else {
+            *data = 0;
+        }
+        return true;
+    case A_IRS_VMT_STATUSR:
+        /*
+         * QEMU writes to IRS_VMT_BASER and IRS_VMAP_* take effect
+         * instantaneously, so the guest can never see the IDLE bit as 0.
+         */
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = R_IRS_VMT_STATUSR_IDLE_MASK;
+        } else {
+            *data = 0;
+        }
+        return true;
     case A_IRS_SPI_STATUSR:
         /*
          * QEMU writes to IRS_SPI_{CFGR,DOMAINR,SELR,VMR} take effect
@@ -1373,6 +1428,14 @@ static bool config_writel(GICv5 *s, GICv5Domain domain, hwaddr offset,
     case A_IRS_MAP_L2_ISTR:
         irs_map_l2_istr_write(s, domain, data);
         return true;
+    case A_IRS_VMT_BASER:
+        irs_vmt_baser_write(s, domain,
+                            deposit64(cs->irs_vmt_baser[domain], 0, 32, data));
+        return true;
+    case A_IRS_VMT_BASER + 4:
+        irs_vmt_baser_write(s, domain,
+                            deposit64(cs->irs_vmt_baser[domain], 32, 32, data));
+        return true;
     case A_IRS_SPI_SELR:
         cs->irs_spi_selr[domain] = data;
         return true;
@@ -1457,6 +1520,13 @@ static bool config_readll(GICv5 *s, GICv5Domain domain, hwaddr offset,
     case A_IRS_IST_BASER:
         *data = cs->irs_ist_baser[domain];
         return true;
+    case A_IRS_VMT_BASER:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = cs->irs_vmt_baser[domain];
+        } else {
+            *data = 0;
+        }
+        return true;
     }
 
     return false;
@@ -1468,6 +1538,9 @@ static bool config_writell(GICv5 *s, GICv5Domain domain, hwaddr offset,
     switch (offset) {
     case A_IRS_IST_BASER:
         irs_ist_baser_write(s, domain, data);
+        return true;
+    case A_IRS_VMT_BASER:
+        irs_vmt_baser_write(s, domain, data);
         return true;
     }
 
