@@ -1221,13 +1221,24 @@ static void gic_cdeoi_write(CPUARMState *env, const ARMCPRegInfo *ri,
      */
     bool virtual;
     GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
-    uint64_t *apr = &env->gicv5_cpuif.icc_apr[domain];
 
-    trace_gicv5_cdeoi(domain);
+    if (virtual) {
+        uint64_t *apr = &env->gicv5_cpuif.ich_apr_el2;
 
-    /* clear lowest bit, doing nothing if already zero */
-    *apr &= *apr - 1;
-    gicv5_update_irq_fiq(env);
+        trace_gicv5_vcdeoi();
+
+        /* clear lowest bit, doing nothing if already zero */
+        *apr &= *apr - 1;
+        gicv5_update_virq_vfiq(env);
+    } else {
+        uint64_t *apr = &env->gicv5_cpuif.icc_apr[domain];
+
+        trace_gicv5_cdeoi(domain);
+
+        /* clear lowest bit, doing nothing if already zero */
+        *apr &= *apr - 1;
+        gicv5_update_irq_fiq(env);
+    }
 }
 
 static void gic_cddi_write(CPUARMState *env, const ARMCPRegInfo *ri,
