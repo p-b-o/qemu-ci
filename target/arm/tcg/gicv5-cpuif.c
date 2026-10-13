@@ -99,6 +99,17 @@ static bool gicv5_legacy_enabled(CPUARMState *env)
     return false;
 }
 
+static bool gicv5_icv_access(CPUARMState *env)
+{
+    /*
+     * Return true if ICC_*_EL1 accesses should redirect to ICV_*_EL1
+     * (i.e. we are in a hypervisor guest). Note that unlike GICv3 we
+     * don't need to care about HCR_FMO. See I_XVDWC.
+     */
+    return arm_current_el(env) == 1 && (arm_hcr_el2_eff(env) & HCR_IMO) &&
+            !gicv5_legacy_enabled(env);
+}
+
 static GICv5Domain gicv5_logical_domain(CPUARMState *env)
 {
     /*
@@ -522,16 +533,25 @@ static void gic_icc_apr_el1_write(CPUARMState *env, const ARMCPRegInfo *ri,
      * With an architectural 5 bits of priority, this register has 32
      * non-RES0 bits
      */
-    GICv5Domain domain = gicv5_logical_domain(env);
     value &= 0xffffffff;
-    env->gicv5_cpuif.icc_apr[domain] = value;
-    gicv5_update_irq_fiq(env);
+
+    if (gicv5_icv_access(env)) {
+        env->gicv5_cpuif.ich_apr_el2 = value;
+    } else {
+        GICv5Domain domain = gicv5_logical_domain(env);
+        env->gicv5_cpuif.icc_apr[domain] = value;
+        gicv5_update_irq_fiq(env);
+    }
 }
 
 static uint64_t gic_icc_apr_el1_read(CPUARMState *env, const ARMCPRegInfo *ri)
 {
-    GICv5Domain domain = gicv5_logical_domain(env);
-    return env->gicv5_cpuif.icc_apr[domain];
+    if (gicv5_icv_access(env)) {
+        return env->gicv5_cpuif.ich_apr_el2;
+    } else {
+        GICv5Domain domain = gicv5_logical_domain(env);
+        return env->gicv5_cpuif.icc_apr[domain];
+    }
 }
 
 static void gic_icc_apr_el1_reset(CPUARMState *env, const ARMCPRegInfo *ri)
