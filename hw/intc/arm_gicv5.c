@@ -29,6 +29,7 @@ typedef struct VMTE VMTE;
 typedef struct VPE {
     VMTE *vmte;
     hwaddr vped_addr;
+    GICv5PendingIrq vhppi; /* vHPPI candidate, if any */
     uint32_t cpuidx; /* CPU we're currently resident on */
     uint32_t db_intid; /* doorbell interrupt ID */
     uint8_t dbpm; /* doorbell priority mask */
@@ -192,6 +193,7 @@ static MemTxAttrs irs_txattrs(GICv5Common *cs, GICv5Domain domain)
 typedef struct GetHPPIUserData {
     GICv5PendingIrq *best;
     uint32_t iaffid;
+    GICv5IntType type;
 } GetHPPIUserData;
 
 static void lpi_cache_get_hppi(gpointer key, gpointer value, gpointer user_data)
@@ -208,7 +210,7 @@ static void lpi_cache_get_hppi(gpointer key, gpointer value, gpointer user_data)
     prio = FIELD_EX32(l2_iste, L2_ISTE, PRIORITY);
     iaffid = FIELD_EX32(l2_iste, L2_ISTE, IAFFID);
     if (iaffid == ud->iaffid && prio < ud->best->prio) {
-        id = FIELD_DP32(id, INTID, TYPE, GICV5_LPI);
+        id = FIELD_DP32(id, INTID, TYPE, ud->type);
         ud->best->intid = id;
         ud->best->prio = prio;
     }
@@ -257,6 +259,7 @@ static void irs_recalc_hppi(GICv5 *s, GICv5Domain domain, uint32_t iaffid)
 
         ud.best = &best;
         ud.iaffid = iaffid;
+        ud.type = GICV5_LPI;
         g_hash_table_foreach(s->phys_lpi_config[domain].lpi_cache,
                              lpi_cache_get_hppi, &ud);
     }
@@ -572,9 +575,42 @@ static void irs_recalc_vhppi(GICv5 *s, VMTE *vmte, uint32_t iaffid)
     /*
      * Recalculate the highest priority pending virtual interrupt for
      * the specified VM and vCPU.
-     *
-     * TODO: we will implement this in a future commit.
      */
+    GICv5Common *cs = ARM_GICV5_COMMON(s);
+    GICv5PendingIrq best = GICV5_PENDING_IRQ_NONE;
+    GetHPPIUserData ud;
+    VPE *vpe = vpe_for_vpeid(vmte, iaffid);
+
+    if (!vpe) {
+        trace_gicv5_irs_recalc_vhppi_fail(domain_name[vmte->domain],
+                                          vmte->vmid, iaffid,
+                                          "IAFFID doesn't match valid VPEID");
+        return;
+    }
+
+    ud.best = &best;
+    ud.iaffid = iaffid;
+    if (vmte->lpi_ist.valid) {
+        ud.type = GICV5_LPI;
+        g_hash_table_foreach(vmte->lpi_ist.lpi_cache, lpi_cache_get_hppi, &ud);
+    }
+    if (vmte->spi_ist.valid) {
+        ud.type = GICV5_SPI;
+        g_hash_table_foreach(vmte->spi_ist.lpi_cache, lpi_cache_get_hppi, &ud);
+    }
+
+    trace_gicv5_irs_recalc_vhppi(domain_name[vmte->domain], vmte->vmid,
+                                 iaffid, best.intid, best.prio);
+
+    vpe->vhppi = best;
+
+    if (FIELD_EX32(cs->irs_cr0[vmte->domain], IRS_CR0, IRSEN) &&
+        vpe->vhppi.prio != PRIO_IDLE && vpe->resident) {
+        /* R_VBPZM: tell the PE about this vHPPI */
+        gicv5_forward_interrupt(cs->cpus[vpe->cpuidx], vmte->domain, true);
+    }
+
+    /* TODO: we may need to generate a doorbell interrupt. */
 }
 
 static const GICv5ISTConfig *ist_for_vint(GICv5 *s,
@@ -1473,6 +1509,7 @@ static void init_vpe_from_vpete(VPE *vpe, VMTE *vmte, uint64_t vpete)
         vpe->vped_addr &= ~MAKE_64BIT_MASK(0, QEMU_GICV5_VPED_SZ);
         /* Doorbell settings always start invalid */
         vpe->db_valid = false;
+        vpe->vhppi = GICV5_PENDING_IRQ_NONE;
     }
 }
 
