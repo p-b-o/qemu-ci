@@ -2450,6 +2450,75 @@ static void irs_vpe_dbr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
     }
 }
 
+/* Data we need to pass to sync_l2_iste() */
+typedef struct SyncL2ISTEUserData {
+    GICv5Common *cs;
+    GICv5ISTConfig *cfg;
+} SyncL2ISTEUserData;
+
+static void sync_l2_iste(gpointer key, gpointer value, gpointer user_data)
+{
+    uint64_t id = GPOINTER_TO_INT(key);
+    uint64_t l2_iste = *(uint32_t *)value;
+    SyncL2ISTEUserData *ud = user_data;
+    hwaddr l2_iste_addr;
+
+    if (get_l2_iste_addr(ud->cs, ud->cfg, id, &l2_iste_addr)) {
+        write_l2_iste_mem(ud->cs, ud->cfg, l2_iste_addr, l2_iste);
+    }
+}
+
+static void irs_sync_ist_to_memory(GICv5Common *cs, GICv5ISTConfig *cfg)
+{
+    /*
+     * Push any information in the IST hash table out to guest memory
+     * (but don't drop the hash table entries).  Writeback errors are
+     * ignored. Compare put_l2_iste()'s code for writing out data whon
+     * it removes L2_ISTE entries from the hash table.
+     */
+    SyncL2ISTEUserData ud;
+
+    if (!cfg->valid) {
+        return;
+    }
+
+    ud.cs = cs;
+    ud.cfg = cfg;
+
+    g_hash_table_foreach(cfg->lpi_cache, sync_l2_iste, &ud);
+}
+
+static void irs_save_vmr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
+{
+    GICv5Common *cs = ARM_GICV5_COMMON(s);
+    GICv5VMTConfig *cfg = &s->vmt_config[domain];
+    uint32_t vmid;
+    VMTE *vmte;
+
+    cs->irs_save_vmr[domain] = value;
+
+    if (!FIELD_EX64(cs->irs_save_vmr[domain], IRS_SAVE_VMR, S)) {
+        return;
+    }
+
+    /* Write out vLPI and vSPI config to guest memory */
+    vmid = FIELD_EX64(cs->irs_save_vmr[domain], IRS_SAVE_VMR, VM_ID);
+
+    if (!cfg->valid || vmid >= (1 << cfg->vm_id_bits)) {
+        return;
+    }
+
+    vmte = g_hash_table_lookup(cfg->vm_cache, GINT_TO_POINTER(vmid));
+    if (!vmte) {
+        return;
+    }
+
+    trace_gicv5_irs_save_vmr_write(domain_name[domain], vmid);
+
+    irs_sync_ist_to_memory(cs, &vmte->lpi_ist);
+    irs_sync_ist_to_memory(cs, &vmte->spi_ist);
+}
+
 static void spi_sample(GICv5SPIState *spi)
 {
     /*
@@ -2717,6 +2786,22 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_SAVE_VMR:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = extract64(cs->irs_save_vmr[domain], 0, 32);
+        } else {
+            /* RAZ if no virt */
+            *data = 0;
+        }
+        return true;
+    case A_IRS_SAVE_VMR + 4:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = extract64(cs->irs_save_vmr[domain], 32, 32);
+        } else {
+            /* RAZ if no virt */
+            *data = 0;
+        }
+        return true;
     case A_IRS_VPE_CR0:
         /* RES0 when VIRT_ONE_N is not implemented */
         *data = 0;
@@ -2913,6 +2998,14 @@ static bool config_writel(GICv5 *s, GICv5Domain domain, hwaddr offset,
         irs_vpe_dbr_write(s, domain,
                           deposit64(cs->irs_vpe_dbr[domain], 32, 32, data));
         return true;
+    case A_IRS_SAVE_VMR:
+        irs_save_vmr_write(s, domain,
+                           deposit64(cs->irs_save_vmr[domain], 0, 32, data));
+        return true;
+    case A_IRS_SAVE_VMR + 4:
+        irs_save_vmr_write(s, domain,
+                           deposit64(cs->irs_save_vmr[domain], 32, 32, data));
+        return true;
     case A_IRS_VPE_CR0:
         /* RES0 when VIRT_ONE_N is not implemented */
         return true;
@@ -3072,6 +3165,14 @@ static bool config_readll(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_SAVE_VMR:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = cs->irs_save_vmr[domain];
+        } else {
+            /* RAZ/WI if no virt */
+            *data = 0;
+        }
+        return true;
     }
 
     return false;
@@ -3107,6 +3208,9 @@ static bool config_writell(GICv5 *s, GICv5Domain domain, hwaddr offset,
         return true;
     case A_IRS_VPE_DBR:
         irs_vpe_dbr_write(s, domain, data);
+        return true;
+    case A_IRS_SAVE_VMR:
+        irs_save_vmr_write(s, domain, data);
         return true;
     }
 
