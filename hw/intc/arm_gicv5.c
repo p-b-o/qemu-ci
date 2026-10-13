@@ -567,6 +567,81 @@ static hwaddr l1_vmte_addr(GICv5Common *cs, const GICv5VMTConfig *cfg,
     return cfg->base + (l1_index * 8);
 }
 
+static void irs_recalc_vhppi(GICv5 *s, VMTE *vmte, uint32_t iaffid)
+{
+    /*
+     * Recalculate the highest priority pending virtual interrupt for
+     * the specified VM and vCPU.
+     *
+     * TODO: we will implement this in a future commit.
+     */
+}
+
+static const GICv5ISTConfig *ist_for_vint(GICv5 *s,
+                                          GICv5Common *cs,
+                                          GICv5Domain domain,
+                                          GICv5IntType type,
+                                          uint32_t cpuidx)
+{
+    /*
+     * Return the GICv5ISTConfig to use to look up the virtual interrupt.
+     * Return NULL for any case where the operation should be a NOP.
+     */
+    VMTE *vmte;
+    VPE *vpe;
+
+    if (!gicv5_domain_has_virt(cs, domain)) {
+        return NULL;
+    }
+
+    vpe = s->res_vpe[cpuidx];
+    if (!vpe) {
+        return NULL;
+    }
+    vmte = vpe->vmte;
+    if (vmte->domain != domain) {
+        /* Ignore commands for the wrong domain (see R_PYWKM) */
+        return NULL;
+    }
+
+    return type == GICV5_LPI ? &vmte->lpi_ist : &vmte->spi_ist;
+}
+
+/*
+ * Define a function that, given a GICv5ISTConfig and an interrupt ID,
+ * will update the L2_ISTE entry for that interrupt in that IST to
+ * set the given field to a new value. The function returns true on
+ * success and if iaffid is non-NULL updates *iaffid with the IAFFID from
+ * the L2_ISTE (which is the IAFFID whose current HPPI will need to be
+ * recalculated).
+ */
+#define DEF_SET_FIELD_FOR_IST(NAME, TYPE, FIELDNAME)                    \
+    static bool set_##NAME##_for_ist(GICv5Common *cs,                   \
+                                     const GICv5ISTConfig *cfg,         \
+                                     uint32_t id,                       \
+                                     TYPE NAME,                         \
+                                     uint32_t *iaffid)                  \
+    {                                                                   \
+        L2_ISTE_Handle h;                                               \
+        uint32_t *l2_iste_p;                                            \
+        if (!cfg) {                                                     \
+            return false;                                               \
+        }                                                               \
+        l2_iste_p = get_l2_iste(cs, cfg, id, &h);                       \
+        if (!l2_iste_p) {                                               \
+            return false;                                               \
+        }                                                               \
+        /* read IAFFID first in case we are about to write to it */     \
+        if (iaffid) {                                                   \
+            *iaffid = FIELD_EX32(*l2_iste_p, L2_ISTE, IAFFID);          \
+        }                                                               \
+        *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, FIELDNAME, NAME);  \
+        put_l2_iste(cs, cfg, &h);                                       \
+        return true;                                                    \
+    }
+
+DEF_SET_FIELD_FOR_IST(priority, uint8_t, PRIORITY)
+
 void gicv5_set_priority(GICv5Common *cs, uint32_t id, uint8_t priority,
                         GICv5Domain domain, GICv5IntType type, bool virtual,
                         uint32_t cpuidx)
@@ -580,8 +655,12 @@ void gicv5_set_priority(GICv5Common *cs, uint32_t id, uint8_t priority,
     priority &= MAKE_64BIT_MASK(5 - QEMU_GICV5_PRI_BITS, QEMU_GICV5_PRI_BITS);
 
     if (virtual) {
-        qemu_log_mask(LOG_GUEST_ERROR, "gicv5_set_priority: tried to set "
-                      "priority of a virtual interrupt\n");
+        const GICv5ISTConfig *cfg = ist_for_vint(s, cs, domain, type, cpuidx);
+
+        if (!set_priority_for_ist(cs, cfg, id, priority, &iaffid)) {
+            return;
+        }
+        irs_recalc_vhppi(s, s->res_vpe[cpuidx]->vmte, iaffid);
         return;
     }
 
@@ -589,15 +668,10 @@ void gicv5_set_priority(GICv5Common *cs, uint32_t id, uint8_t priority,
     case GICV5_LPI:
     {
         const GICv5ISTConfig *cfg = &s->phys_lpi_config[domain];
-        L2_ISTE_Handle h;
-        uint32_t *l2_iste_p = get_l2_iste(cs, cfg, id, &h);
 
-        if (!l2_iste_p) {
+        if (!set_priority_for_ist(cs, cfg, id, priority, &iaffid)) {
             return;
         }
-        *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, PRIORITY, priority);
-        iaffid = FIELD_EX32(*l2_iste_p, L2_ISTE, IAFFID);
-        put_l2_iste(cs, cfg, &h);
         break;
     }
     case GICV5_SPI:
