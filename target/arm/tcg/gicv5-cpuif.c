@@ -73,6 +73,14 @@ FIELD(ICH_VMCR_EL2, VMPR, 27, 5)
 FIELD(ICH_VCTLR_EL2, EN, 0, 1)
 FIELD(ICH_VCTLR_EL2, V3, 1, 1)
 
+FIELD(ICH_CONTEXTR_EL2, VM, 0, 16)
+FIELD(ICH_CONTEXTR_EL2, VPE, 32, 16)
+FIELD(ICH_CONTEXTR_EL2, DBPM, 55, 5)
+FIELD(ICH_CONTEXTR_EL2, DB, 60, 1)
+FIELD(ICH_CONTEXTR_EL2, IRICHPPIDIS, 61, 1)
+FIELD(ICH_CONTEXTR_EL2, F, 62, 1)
+FIELD(ICH_CONTEXTR_EL2, V, 63, 1)
+
 /*
  * We implement 24 bits of interrupt ID, the mandated 5 bits of priority,
  * and no legacy GICv3.3 vcpu interface (yet)
@@ -821,6 +829,110 @@ static void gic_ich_vmcr_write(CPUARMState *env, const ARMCPRegInfo *ri,
     gicv5_update_virq_vfiq(env);
 }
 
+static void gic_ich_contextr_write(CPUARMState *env, const ARMCPRegInfo *ri,
+                                   uint64_t value)
+{
+    GICv5Common *gic = gicv5_get_gic(env);
+    GICv5Domain domain = gicv5_logical_domain(env);
+    bool valid = FIELD_EX64(value, ICH_CONTEXTR_EL2, V);
+    uint32_t vpe = FIELD_EX64(value, ICH_CONTEXTR_EL2, VPE);
+    bool db = FIELD_EX64(value, ICH_CONTEXTR_EL2, DB);
+    uint8_t dbpm = FIELD_EX64(value, ICH_CONTEXTR_EL2, DBPM);
+    uint32_t vm = FIELD_EX64(value, ICH_CONTEXTR_EL2, VM);
+    uint32_t cpuidx = env->gicv5.cpuidx;
+    bool fault;
+    uint64_t oldval = env->gicv5_cpuif.ich_contextr_el2;
+    bool vm_vpe_changed = (oldval ^ value) & (R_ICH_CONTEXTR_EL2_VM_MASK |
+                                              R_ICH_CONTEXTR_EL2_VPE_MASK);
+    bool valid_changed = (oldval ^ value) & R_ICH_CONTEXTR_EL2_V_MASK;
+
+    /*
+     * DB and DBPM are RAZ: they are write-only fields that have
+     * an effect when V is changed from 1 to 0.
+     */
+    value &= ~(R_ICH_CONTEXTR_EL2_DB_MASK | R_ICH_CONTEXTR_EL2_DBPM_MASK);
+
+    raw_write(env, ri, value);
+
+    trace_gicv5_ich_contextr_write(cpuidx, value);
+
+    /*
+     * Changing V definitely causes us to make a new VPE resident, or
+     * remove the old one.
+     *
+     * Changing VPE or VM while V=1 is CONSTRAINED UNPREDICTABLE
+     * (R_VFKHN): we choose to make the new VPE resident so that we
+     * can trust that the information we have in the register matches
+     * what the IRS thinks the resident VPE is.
+     *
+     * For writes that don't trigger a change of resident VPE, we only
+     * need to update our copy of the register, and recalculate
+     * interrupts if IIRICHPPIDIS changed.
+     *
+     * If we do change the resident VPE, the interrupt recalculation
+     * will happen when the IRS calls gicv5_forward_interrupt().
+     */
+    if (!(valid_changed || (valid && vm_vpe_changed))) {
+        if ((oldval & value) & R_ICH_CONTEXTR_EL2_IRICHPPIDIS_MASK) {
+            gicv5_update_virq_vfiq(env);
+        }
+        return;
+    }
+
+    if (valid) {
+        /* Doorbell info is only relevant when clearing the VPE */
+        dbpm = 0;
+        db = false;
+    } else {
+        /* The IRS knows what the VPE is so we don't need to tell it */
+        vm = 0;
+        vpe = 0;
+    }
+
+    fault = gicv5_set_resident(gic, domain, valid, vpe, db, dbpm, vm, cpuidx);
+
+    if (valid) {
+        /*
+         * We only update F for a VPE set, not a clear.
+         *
+         * On a failure, it is CONSTRAINED UNPREDICTABLE whether V
+         * reads as 0 or 1 (R_NHCGW); we choose to set it to 0 so we
+         * can reliably use it to track whether a VPE is resident.  We
+         * use this for instance in GIC VDPEND: we trust the V and VM
+         * fields to be accurate.
+         */
+        value = env->gicv5_cpuif.ich_contextr_el2;
+        value = FIELD_DP64(value, ICH_CONTEXTR_EL2, F, fault);
+        if (fault) {
+            value = FIELD_DP64(value, ICH_CONTEXTR_EL2, V, 0);
+        }
+        env->gicv5_cpuif.ich_contextr_el2 = value;
+    }
+}
+
+static void gic_ich_contextr_reset(CPUARMState *env, const ARMCPRegInfo *ri)
+{
+    /*
+     * This register resets to zero, which includes telling the IRS
+     * that there is no longer a resident VPE for it.
+     *
+     * It doesn't matter if the domain we pass here doesn't match the
+     * domain of the VM/VPE: as with the GIC stream interface (see
+     * rule R_PYWKM) our IRS ignores the mismatch for a SetResident
+     * request with valid = false.
+     *
+     * As this is a reset fn we may get here before the GIC pointer
+     * has been set up yet, so unusually we need to check for NULL>
+     */
+    raw_write(env, ri, 0);
+    GICv5Common *gic = gicv5_get_gic(env);
+
+    if (gic) {
+        gicv5_set_resident(gic, gicv5_logical_domain(env),
+                           false, 0, false, 0, 0, env->gicv5.cpuidx);
+    }
+}
+
 /*
  * ICC_APR_EL1 is banked and reads/writes as the version for the
  * current logical interrupt domain.
@@ -1499,6 +1611,15 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
         .accessfn = access_gicv5_ich_reg,
         .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ich_vctlr_el2),
         .writefn = gic_ich_vctlr_write,
+    },
+    {   .name = "ICH_CONTEXTR_EL2", .state = ARM_CP_STATE_AA64,
+        .opc0 = 3, .opc1 = 4, .crn = 12, .crm = 11, .opc2 = 6,
+        .access = PL2_RW, .type = ARM_CP_IO | ARM_CP_NO_RAW,
+        .nv2_redirect_offset = 0xb08,
+        .accessfn = access_gicv5_ich_reg,
+        .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ich_contextr_el2),
+        .writefn = gic_ich_contextr_write,
+        .resetfn = gic_ich_contextr_reset,
     },
     {   .name = "ICH_VMCR_EL2", .state = ARM_CP_STATE_AA64,
         .opc0 = 3, .opc1 = 4, .crn = 12, .crm = 11, .opc2 = 7,

@@ -599,6 +599,7 @@ typedef struct CPUArchState {
         /* And for the virtual interrupt domain */
         GICv5PendingIrq virt_ppi_hppi;
 
+        uint64_t ich_contextr_el2;
         uint64_t ich_apr_el2;
         uint64_t ich_vctlr_el2;
         uint64_t ich_vmcr_el2;

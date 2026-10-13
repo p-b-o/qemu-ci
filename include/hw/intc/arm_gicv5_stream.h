@@ -229,4 +229,34 @@ GICv5PendingIrq gicv5_get_hppi(GICv5Common *cs, GICv5Domain domain,
 void gicv5_deactivate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
                       GICv5IntType type, bool virtual);
 
+/**
+ * gicv5_set_resident
+ * @cs: GIC IRS to send command to
+ * @domain: interrupt domain to act on
+ * @valid: true if setting resident VPE, false to clear it
+ * @vpeid: identifier of the VPE to make resident
+ * @db: true to request a doorbell
+ * @dbpm: doorbell priority mask
+ * @vmid: Virtual Machine identifier
+ * @cpuidx: IRS CPU index of this CPU interface
+ *
+ * Tell the IRS to make the specified VPE resident for this CPU. This
+ * corresponds approximately to the stream protocol SetResident command.
+ *
+ * Returns the Fault state: false if the SetResident operation
+ * succeeded, true if the VPE could not be made resident. Clearing the
+ * VPE always succeeds and returns false.
+ *
+ * For QEMU this is a synchronous operation: the function does not return
+ * until the IRS has either succeeded or failed in making the VPE resident
+ * (including identifying whether there is a pending virtual interrupt for
+ * the VPE and forwarding it by calling gicv5_forward_interrupt() if so).
+ *
+ * Unlike the stream protocol (where the IRS knows which CPU it is talking
+ * to), we have to pass the cpuidx to tell the IRS which CPU we are.
+ */
+bool gicv5_set_resident(GICv5Common *cs, GICv5Domain domain, bool valid,
+                        uint32_t vpeid, bool db, uint8_t dbpm, uint32_t vmid,
+                        uint32_t cpuidx);
+
 #endif

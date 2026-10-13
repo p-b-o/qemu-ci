@@ -1263,6 +1263,14 @@ txfail:
                   "physical address 0x" HWADDR_FMT_plx "\n", intid, l1_addr);
 }
 
+bool gicv5_set_resident(GICv5Common *cs, GICv5Domain domain, bool valid,
+                        uint32_t vpeid, bool db, uint8_t dbpm, uint32_t vmid,
+                        uint32_t cpuidx)
+{
+    /* Until we implement virtualization, SetResident always fails */
+    return true;
+}
+
 /* Data we need to pass through to irs_clean_lpi_cache_entry() */
 typedef struct CleanLPICacheUserData {
     GICv5Common *cs;
