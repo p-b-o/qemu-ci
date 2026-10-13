@@ -1438,6 +1438,29 @@ static void irs_clean_vm_cache(GICv5Common *cs, GICv5VMTConfig *cfg)
     g_hash_table_foreach_remove(cfg->vm_cache, irs_clean_vm_cache_entry, &ud);
 }
 
+static void invalidate_vlpi_ist_config(GICv5Common *cs, GICv5Domain domain,
+                                       VMTE *vmte)
+{
+    /*
+     * Make the VLPI IST invalid. The caller must also update the
+     * VALID bit in the L2 VMTE in guest memory.
+     * We must write any cached VLPI IST info back to guest memory,
+     */
+    irs_clean_lpi_cache(cs, &vmte->lpi_ist);
+    vmte->lpi_ist.valid = false;
+}
+
+static void invalidate_vspi_ist_config(GICv5Common *cs, GICv5Domain domain,
+                                       VMTE *vmte)
+{
+    /*
+     * Make the VSPI IST invalid. The caller must also update the
+     * VALID bit in the L2 VMTE in guest memory.
+     */
+    irs_clean_lpi_cache(cs, &vmte->spi_ist);
+    vmte->spi_ist.valid = false;
+}
+
 static void irs_vmt_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
 {
     GICv5Common *cs = ARM_GICV5_COMMON(s);
@@ -1668,6 +1691,101 @@ txfail:
                   "physical address 0x" HWADDR_FMT_plx "\n", vmid, l1_addr);
 }
 
+static void irs_vmap_vistr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
+{
+    GICv5Common *cs = ARM_GICV5_COMMON(s);
+    GICv5VMTConfig *cfg = &s->vmt_config[domain];
+    uint32_t vmid = FIELD_EX64(value, IRS_VMAP_VISTR, VM_ID);
+    bool m = FIELD_EX64(value,  IRS_VMAP_VISTR, M);
+    /* U = 0 for "make invalid", 1 for "make valid" */
+    bool valid = !FIELD_EX64(value,  IRS_VMAP_VISTR, U);
+    GICv5IntType type = FIELD_EX64(value, IRS_VMAP_VISTR, TYPE);
+    uint64_t l2_vmte[L2_VMTE_WORDS];
+    MemTxResult res;
+    VMTE *vmte;
+    bool was_valid;
+
+    if (!gicv5_domain_has_virt(cs, domain) || !cfg->valid) {
+        /* Whole register RAZ/WI if no virt or no VM table */
+        return;
+    }
+
+    /* M bit is WO/UNKNOWN; write the other fields */
+    cs->irs_vmap_vistr[domain] = value & ~R_IRS_VMAP_VISTR_M_MASK;
+
+    /*
+     * M = 0 and bad VMID must be ignored; invalid TYPE is
+     * UNPREDICTABLE, and we choose to ignore
+     */
+    if (!m || vmid >= (1 << cfg->vm_id_bits) ||
+        (type != GICV5_LPI && type != GICV5_SPI)) {
+        return;
+    }
+
+    trace_gicv5_irs_vmap_vistr_write(domain_name[domain], vmid,
+                                     inttype_name(type),
+                                     valid ? "valid" : "invalid");
+
+    vmte = g_hash_table_lookup(cfg->vm_cache, GINT_TO_POINTER(vmid));
+    if (!vmte) {
+        /* VM is not valid */
+        return;
+    }
+
+    was_valid = type == GICV5_LPI ? vmte->lpi_ist.valid : vmte->spi_ist.valid;
+    /* Ignore request to make IST valid/invalid when it already is so */
+    if (valid == was_valid) {
+        return;
+    }
+
+    if (!read_first_vmte_word(cs, cfg, vmte->vmte_addr, l2_vmte) ||
+        !read_other_vmte_words(cs, cfg, vmte->vmte_addr, l2_vmte)) {
+        goto txfail;
+    }
+
+    switch (type) {
+    case GICV5_LPI:
+        l2_vmte[2] = FIELD_DP64(l2_vmte[2], L2_VMTE_2, LPI_IST_VALID, valid);
+        address_space_stq_le(&cs->dma_as,
+                             vmte->vmte_addr + sizeof(uint64_t) * 2,
+                             l2_vmte[2], cfg->txattrs, &res);
+        if (res != MEMTX_OK) {
+            goto txfail;
+        }
+
+        if (valid) {
+            initialize_vlpi_ist_config(cs, domain, vmte, l2_vmte);
+        } else {
+            invalidate_vlpi_ist_config(cs, domain, vmte);
+        }
+        break;
+    case GICV5_SPI:
+        l2_vmte[3] = FIELD_DP64(l2_vmte[3], L2_VMTE_3, SPI_IST_VALID, valid);
+        address_space_stq_le(&cs->dma_as,
+                             vmte->vmte_addr + sizeof(uint64_t) * 3,
+                             l2_vmte[3], cfg->txattrs, &res);
+        if (res != MEMTX_OK) {
+            goto txfail;
+        }
+
+        if (valid) {
+            initialize_vspi_ist_config(cs, domain, vmte, l2_vmte);
+        } else {
+            invalidate_vspi_ist_config(cs, domain, vmte);
+        }
+        break;
+    default:
+        g_assert_not_reached();
+    }
+    return;
+
+txfail:
+    /* Reportable with EC=0x0 if sw error reporting implemented */
+    qemu_log_mask(LOG_GUEST_ERROR, "L2 VMTE update failed for VMID 0x%x at "
+                  "physical address 0x" HWADDR_FMT_plx "\n",
+                  vmid, vmte->vmte_addr);
+}
+
 static void spi_sample(GICv5SPIState *spi)
 {
     /*
@@ -1839,6 +1957,22 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_VMAP_VISTR:
+        if (gicv5_domain_has_virt(cs, domain) && s->vmt_config[domain].valid) {
+            *data = extract64(cs->irs_vmap_vistr[domain], 0, 32);
+        } else {
+            /* RAZ/WI if no virt or no VM table */
+            *data = 0;
+        }
+        return true;
+    case A_IRS_VMAP_VISTR + 4:
+        if (gicv5_domain_has_virt(cs, domain) && s->vmt_config[domain].valid) {
+            *data = extract64(cs->irs_vmap_vistr[domain], 32, 32);
+        } else {
+            /* RAZ/WI if no virt or no VM table */
+            *data = 0;
+        }
+        return true;
     case A_IRS_SPI_STATUSR:
         /*
          * QEMU writes to IRS_SPI_{CFGR,DOMAINR,SELR,VMR} take effect
@@ -1979,6 +2113,15 @@ static bool config_writel(GICv5 *s, GICv5Domain domain, hwaddr offset,
         irs_vmap_vmr_write(s, domain,
                            deposit64(cs->irs_vmap_vmr[domain], 32, 32, data));
         return true;
+    case A_IRS_VMAP_VISTR:
+        irs_vmap_vistr_write(s, domain,
+                             deposit64(cs->irs_vmap_vistr[domain], 0, 32, data));
+        return true;
+    case A_IRS_VMAP_VISTR + 4:
+        irs_vmap_vistr_write(s, domain,
+                             deposit64(cs->irs_vmap_vistr[domain],
+                                       32, 32, data));
+        return true;
     case A_IRS_SPI_SELR:
         cs->irs_spi_selr[domain] = data;
         return true;
@@ -2087,6 +2230,14 @@ static bool config_readll(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_VMAP_VISTR:
+        if (gicv5_domain_has_virt(cs, domain) && s->vmt_config[domain].valid) {
+            *data = cs->irs_vmap_vistr[domain];
+        } else {
+            /* RAZ/WI if no virt or no VM table */
+            *data = 0;
+        }
+        return true;
     }
 
     return false;
@@ -2107,6 +2258,9 @@ static bool config_writell(GICv5 *s, GICv5Domain domain, hwaddr offset,
         return true;
     case A_IRS_VMAP_VMR:
         irs_vmap_vmr_write(s, domain, data);
+        return true;
+    case A_IRS_VMAP_VISTR:
+        irs_vmap_vistr_write(s, domain, data);
         return true;
     }
 
