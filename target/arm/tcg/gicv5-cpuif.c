@@ -487,11 +487,70 @@ static void gic_ppi_enable_write(CPUARMState *env, const ARMCPRegInfo *ri,
     }
 }
 
+static int icc_ppi_prio_reg_index(const ARMCPRegInfo *ri)
+{
+    /*
+     * Return the index of the ICC or ICV PPI_PRIORITYR register,
+     * which is CRm[0]:opc2[2:0].
+     */
+    return deposit32(ri->opc2, 3, 1, ri->crm);
+}
+
+static uint64_t gic_ppi_prio_hvi_mask(CPUARMState *env, int idx)
+{
+    /*
+     * Return the mask of which fields in the given priority register
+     * the guest cannot see, which is controlled by the ICH_PPI_HVI
+     * registers.  We need to expand the appropriate 8 bits from
+     * ICH_PPI_HVI out to a mask where each byte is either all-1s or
+     * all-0s.  The return value here is 1s for "do not show the
+     * guest", the same sense as the ICH_PPI_HVI registers.
+     */
+    int regno = idx >> 3;
+    int startbit = idx & 7;
+    /* Extract the relevant 8 HVI bits from the right register */
+    uint64_t mask = extract64(env->gicv5_cpuif.ich_ppi_hvi[regno], startbit, 8);
+
+    /*
+     * Now we're going to distribute those 8 bits so they end up in
+     * bits 0, 8, 16, ... 56 of the mask (i.e. in the LSB of each byte).
+     */
+    /* Split the 8 bits into two 4-bit chunks at bits 0 and 32 */
+    mask = (mask | (mask << 28)) & 0x0000000f0000000fULL;
+    /* Split again into four 2-bit chunks at bits 0, 16, 32, 48 */
+    mask = (mask | (mask << 14)) & 0x0003000300030003ULL;
+    /* Split again into eight 1-bit chunks, at the LSB of each byte */
+    mask = (mask | (mask << 7)) & 0x0101010101010101ULL;
+    /* Finally, the multiply turns each 0x1 byte into 0xFF */
+    mask *= 0xff;
+    return mask;
+}
+
+static uint64_t gic_ppi_priority_read(CPUARMState *env, const ARMCPRegInfo *ri)
+{
+    if (gicv5_icv_access(env)) {
+        int idx = icc_ppi_prio_reg_index(ri);
+        uint64_t r = env->gicv5_cpuif.ich_ppi_priority[idx];
+        uint64_t hvi_mask = gic_ppi_prio_hvi_mask(env, idx);
+
+        return r & ~hvi_mask;
+    } else {
+        return raw_read(env, ri);
+    }
+}
+
 static void gic_ppi_priority_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                    uint64_t value)
 {
-    raw_write(env, ri, value);
-    gic_recalc_ppi_hppi(env);
+    if (gicv5_icv_access(env)) {
+        int idx = icc_ppi_prio_reg_index(ri);
+        uint64_t hvi_mask = gic_ppi_prio_hvi_mask(env, idx);
+
+        env->gicv5_cpuif.ich_ppi_priority[idx] = value & ~hvi_mask;
+    } else {
+        raw_write(env, ri, value);
+        gic_recalc_ppi_hppi(env);
+    }
 }
 
 static void gic_ich_ppi_enable_write(CPUARMState *env, const ARMCPRegInfo *ri,
@@ -1239,6 +1298,7 @@ void define_gicv5_cpuif_regs(ARMCPU *cpu)
                 .fgt = FGT_ICC_PPI_PRIORITYRN_EL1,
                 .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ppi_priority[i]),
                 .writefn = gic_ppi_priority_write, .raw_writefn = raw_write,
+                .readfn = gic_ppi_priority_read,
             };
             define_one_arm_cp_reg(cpu, &ppi_prio);
         }
