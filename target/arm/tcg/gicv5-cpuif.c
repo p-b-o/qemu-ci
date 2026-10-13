@@ -40,6 +40,11 @@ FIELD(GIC_CDPEND, ID, 0, 24)
 FIELD(GIC_CDPEND, TYPE, 29, 3)
 FIELD(GIC_CDPEND, PENDING, 32, 1)
 
+FIELD(GIC_VDPEND, ID, 0, 24)
+FIELD(GIC_VDPEND, TYPE, 29, 3)
+FIELD(GIC_VDPEND, VM, 32, 16)
+FIELD(GIC_VDPEND, PENDING, 63, 1)
+
 FIELD(GIC_CDHM, ID, 0, 24)
 FIELD(GIC_CDHM, TYPE, 29, 3)
 FIELD(GIC_CDHM, HM, 32, 1)
@@ -594,8 +599,35 @@ static void gic_cdpend_write(CPUARMState *env, const ARMCPRegInfo *ri,
     uint32_t id = FIELD_EX64(value, GIC_CDPEND, ID);
     bool virtual;
     GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
+    uint32_t vm = 0;
 
-    gicv5_set_pending(gic, id, pending, domain, type, virtual);
+    if (virtual) {
+        if (ri->opc1 == 4) {
+            /*
+             * GIC VDPEND has a VM argument field, and PENDING
+             * is in a different bit location to normal
+             */
+            vm = FIELD_EX64(value, GIC_VDPEND, VM);
+            pending = FIELD_EX64(value, GIC_VDPEND, PENDING);
+        } else {
+            /*
+             * GIC CDPEND for the virtual interrupt domain operates on
+             * the VM for the resident VPE. Our implementation of
+             * ICH_CONTEXTR_EL2 means we can trust that if the V bit
+             * is set the VM field is the right one.
+             */
+            if (FIELD_EX64(env->gicv5_cpuif.ich_contextr_el2,
+                           ICH_CONTEXTR_EL2, V)) {
+                vm = FIELD_EX64(env->gicv5_cpuif.ich_contextr_el2,
+                                ICH_CONTEXTR_EL2, VM);
+            } else {
+                /* no resident VPE: instruction is a NOP */
+                return;
+            }
+        }
+    }
+
+    gicv5_set_pending(gic, id, pending, domain, type, virtual, vm);
 }
 
 static void gic_cdrcfg_write(CPUARMState *env, const ARMCPRegInfo *ri,

@@ -855,13 +855,14 @@ void gicv5_set_enabled(GICv5Common *cs, uint32_t id, bool enabled,
 }
 
 void gicv5_set_pending(GICv5Common *cs, uint32_t id, bool pending,
-                       GICv5Domain domain, GICv5IntType type, bool virtual)
+                       GICv5Domain domain, GICv5IntType type, bool virtual,
+                       uint32_t vm)
 {
     GICv5 *s = ARM_GICV5(cs);
     uint32_t iaffid;
 
     trace_gicv5_set_pending(domain_name[domain], inttype_name(type), virtual,
-                            id, pending);
+                            vm, id, pending);
     if (virtual) {
         qemu_log_mask(LOG_GUEST_ERROR, "gicv5_set_pending: tried to set "
                       "pending state of a virtual interrupt\n");
