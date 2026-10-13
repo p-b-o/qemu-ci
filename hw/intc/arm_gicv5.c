@@ -1096,11 +1096,8 @@ static void initialize_ist_config(GICv5Common *cs, GICv5Domain domain,
     cfg->valid = true;
 }
 
-static void irs_map_l2_istr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
+static void map_l2_istr(GICv5Common *cs, GICv5ISTConfig *cfg, uint32_t intid)
 {
-    GICv5Common *cs = ARM_GICV5_COMMON(s);
-    GICv5ISTConfig *cfg = &s->phys_lpi_config[domain];
-    uint32_t intid = FIELD_EX32(value, IRS_MAP_L2_ISTR, ID);
     hwaddr l1_addr;
     uint64_t l1_iste;
     MemTxResult res;
@@ -1136,6 +1133,15 @@ txfail:
     /* Reportable with EC=0x0 if sw error reporting implemented */
     qemu_log_mask(LOG_GUEST_ERROR, "L1 ISTE update failed for ID 0x%x at "
                   "physical address 0x" HWADDR_FMT_plx "\n", intid, l1_addr);
+}
+
+static void irs_map_l2_istr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
+{
+    GICv5Common *cs = ARM_GICV5_COMMON(s);
+    GICv5ISTConfig *cfg = &s->phys_lpi_config[domain];
+    uint32_t intid = FIELD_EX32(value, IRS_MAP_L2_ISTR, ID);
+
+    map_l2_istr(cs, cfg, intid);
 }
 
 bool gicv5_set_resident(GICv5Common *cs, GICv5Domain domain, bool valid,
