@@ -153,6 +153,31 @@ struct GICv5CommonClass {
 #define QEMU_GICV5_IAFFID_BITS 16
 /* Number of priority bits supported in the IRS */
 #define QEMU_GICV5_PRI_BITS 5
+/* Number of VM ID bits */
+#define QEMU_GICV5_VM_ID_BITS 16
+/* Number of VPE ID bits */
+#define QEMU_GICV5_VPE_ID_BITS 16
+
+/*
+ * The VPE descriptor is IMPDEF in size and contents; it stores
+ *  - the VPE's residency status and location
+ *  - VPE doorbell settings
+ *  - metadata tracking pending interrupts for the VPE
+ * In a real hardware implementation, the IRS will keep its per-VPE data
+ * in guest memory with a cache so it isn't actually doing full memory
+ * accesses all the time. For QEMU we will keep the per-VPE data in
+ * host-side data structures, which don't have any size limitations.
+ * The specification doesn't define any situations where the IRS
+ * must write its state back out to guest memory, except for the
+ * entirely IMPDEF and optional power-management suspend/resume.
+ * QEMU's IRS doesn't implement power-management, so we will never
+ * write out anything to the VPE descriptors in guest memory.
+ * We therefore define them to the smallest size the spec permits,
+ * which is 8 bytes.
+ * (We similarly do not use VM descriptors, but for those the spec
+ * permits an implementation to tell software it does not use them.)
+ */
+#define QEMU_GICV5_VPED_SZ 3
 
 /*
  * There are no TRMs currently published for hardware implementations

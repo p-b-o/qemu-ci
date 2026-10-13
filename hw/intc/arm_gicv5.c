@@ -75,6 +75,16 @@ static uint32_t gicv5_idreg(int regoffset)
     return gic_ids[regoffset];
 }
 
+static bool gicv5_domain_has_virt(GICv5Common *cs, GICv5Domain domain)
+{
+    /*
+     * Return true if this domain implements virtualization.
+     * EL3 never does; if any CPU connected to the IRS has EL2
+     * then all other domains must implement virtualization (R_KDSPG)
+     */
+    return cs->has_virt && domain != GICV5_ID_EL3;
+}
+
 static GICv5SPIState *spi_for_selr(GICv5Common *cs, GICv5Domain domain)
 {
     /*
@@ -1208,8 +1218,8 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
             /* MEC field RES0 except for the Realm domain */
             v &= ~R_IRS_IDR0_MEC_MASK;
         }
-        if (domain == GICV5_ID_EL3) {
-            /* VIRT is RES0 for EL3 domain */
+        if (!gicv5_domain_has_virt(cs, domain)) {
+            /* VIRT is RES0 for this domain */
             v &= ~R_IRS_IDR0_VIRT_MASK;
             /* ...which means VIRT_ONE_N is also RES0 */
             v &= ~R_IRS_IDR0_VIRT_ONE_N_MASK;
@@ -1223,12 +1233,12 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
         *data = cs->irs_idr2;
         return true;
     case A_IRS_IDR3:
-        /* In EL3 IDR0.VIRT is 0 so this is RES0 */
-        *data = domain == GICV5_ID_EL3 ? 0 : cs->irs_idr3;
+        /* All fields are RES0 if domain doesn't have virt */
+        *data = gicv5_domain_has_virt(cs, domain) ? cs->irs_idr3 : 0;
         return true;
     case A_IRS_IDR4:
-        /* In EL3 IDR0.VIRT is 0 so this is RES0 */
-        *data = domain == GICV5_ID_EL3 ? 0 : cs->irs_idr4;
+        /* All fields are RES0 if domain doesn't have virt */
+        *data = gicv5_domain_has_virt(cs, domain) ? cs->irs_idr4 : 0;
         return true;
     case A_IRS_IDR5:
         *data = cs->irs_idr5;
@@ -1636,6 +1646,7 @@ static void gicv5_set_idregs(GICv5Common *cs)
      * for 56 bits of physical address space.
      */
     v = FIELD_DP32(v, IRS_IDR0, PA_RANGE, 7);
+    v = FIELD_DP32(v, IRS_IDR0, VIRT, cs->has_virt);
     v = FIELD_DP32(v, IRS_IDR0, IRSID, cs->irsid);
     cs->irs_idr0 = v;
 
@@ -1655,9 +1666,20 @@ static void gicv5_set_idregs(GICv5Common *cs)
     /* Our impl does not need IST metadata, so ISTMD and ISTMD_SZ are 0 */
     cs->irs_idr2 = v;
 
-    /* We don't implement virtualization yet, so these are zero */
-    cs->irs_idr3 = 0;
-    cs->irs_idr4 = 0;
+    v = 0;
+    if (cs->has_virt) {
+        /* Our impl doesn't need a VM descriptor, so VMD and VMD_SZ are zero. */
+        v = FIELD_DP32(v, IRS_IDR3, VM_ID_BITS, QEMU_GICV5_VM_ID_BITS);
+        v = FIELD_DP32(v, IRS_IDR3, VMT_LEVELS, 1);
+    }
+    cs->irs_idr3 = v;
+
+    v = 0;
+    if (cs->has_virt) {
+        v = FIELD_DP32(v, IRS_IDR4, VPED_SZ, QEMU_GICV5_VPED_SZ);
+        v = FIELD_DP32(v, IRS_IDR4, VPE_ID_BITS, QEMU_GICV5_VPE_ID_BITS - 1);
+    }
+    cs->irs_idr4 = v;
 
     /* These three have just one field each */
     cs->irs_idr5 = FIELD_DP32(0, IRS_IDR5, SPI_RANGE, cs->spi_range);
