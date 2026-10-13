@@ -425,6 +425,23 @@ static void gic_cdhm_write(CPUARMState *env, const ARMCPRegInfo *ri,
     gicv5_set_handling(gic, id, hm, domain, type, virtual);
 }
 
+static uint64_t gic_ppi_hmr_read(CPUARMState *env, const ARMCPRegInfo *ri)
+{
+    uint64_t value = raw_read(env, ri);
+
+    if (gicv5_icv_access(env)) {
+        /*
+         * The spec defines ICV_PPI_HMR<n>_EL1 virtual versions of these
+         * registers, but they are read-only and can only ever report the
+         * same value as the physical ICC_ versions. However we do need
+         * to make sure the bits RAZ/WI if the hypervisor has made the
+         * PPI appear disabled to the guest via ICH_PPI_HVIR<n>_EL2.
+         */
+        value &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
+    }
+    return value;
+}
+
 static void gic_ppi_cactive_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                   uint64_t value)
 {
@@ -1054,6 +1071,7 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
         .access = PL1_R, .type = ARM_CP_IO | ARM_CP_NO_RAW,
         .fgt = FGT_ICC_PPI_HMRN_EL1,
         .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ppi_hm[0]),
+        .readfn = gic_ppi_hmr_read,
         .resetvalue = PPI_HMR0_RESET,
     },
     {   .name = "ICC_PPI_HMR1_EL1", .state = ARM_CP_STATE_AA64,
@@ -1061,6 +1079,7 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
         .access = PL1_R, .type = ARM_CP_IO | ARM_CP_NO_RAW,
         .fgt = FGT_ICC_PPI_HMRN_EL1,
         .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ppi_hm[1]),
+        .readfn = gic_ppi_hmr_read,
         .resetvalue = PPI_HMR1_RESET,
     },
     {   .name = "ICC_HPPIR_EL1", .state = ARM_CP_STATE_AA64,
