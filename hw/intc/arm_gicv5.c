@@ -572,6 +572,53 @@ static hwaddr l1_vmte_addr(GICv5Common *cs, const GICv5VMTConfig *cfg,
     return cfg->base + (l1_index * 8);
 }
 
+static void irs_maybe_ring_doorbell(GICv5 *s, VPE *vpe)
+{
+    /*
+     * Ring the doorbell for the VPE if required by the conditions
+     * defined in R_CWZMW: the VPE must be non-resident, and have
+     * valid doorbell settings that actually request a doorbell, and
+     * a doorbell priority mask that allows it.
+     */
+    GICv5Common *cs = ARM_GICV5_COMMON(s);
+    GICv5ISTConfig *cfg;
+    L2_ISTE_Handle h;
+    uint32_t *l2_iste_p;
+    uint32_t iaffid;
+
+    if (!vpe->valid || vpe->resident || !vpe->db_valid || !vpe->db_req) {
+        return;
+    }
+    if (vpe->vhppi.prio > vpe->dbpm) {
+        return;
+    }
+    trace_gicv5_irs_ring_doorbell(domain_name[vpe->vmte->domain],
+                                  vpe->vmte->vmid, vpe->db_intid);
+    /*
+     * Generate the doorbell event, and clear db_req so we only do it once.
+     * This is a SET_EDGE event for an LPI, so (R_HHKMN) it forces the
+     * LPI's handling mode to Edge ond its Pending state to Pending.
+     * If the LPI is unreachable (no LPI table, etc) then we would
+     * report it in IRS_SWERR_STATUSR if we implemented error reporting;
+     * the doorbell is marked as no-longer-requested regardless.
+     */
+    vpe->db_req = false;
+
+    cfg = &s->phys_lpi_config[vpe->vmte->domain];
+    if (!cfg) {
+        return;
+    }
+    l2_iste_p = get_l2_iste(cs, cfg, vpe->db_intid, &h);
+    if (!l2_iste_p) {
+        return;
+    }
+    *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, PENDING, true);
+    *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, HM, GICV5_EDGE);
+    iaffid = FIELD_EX32(*l2_iste_p, L2_ISTE, IAFFID);
+    put_l2_iste(cs, cfg, &h);
+    irs_recalc_hppi(s, vpe->vmte->domain, iaffid);
+}
+
 static void irs_recalc_vhppi(GICv5 *s, VMTE *vmte, uint32_t iaffid)
 {
     /*
@@ -612,7 +659,7 @@ static void irs_recalc_vhppi(GICv5 *s, VMTE *vmte, uint32_t iaffid)
         gicv5_forward_interrupt(cs->cpus[vpe->cpuidx], vmte->domain, true);
     }
 
-    /* TODO: we may need to generate a doorbell interrupt. */
+    irs_maybe_ring_doorbell(s, vpe);
 }
 
 static void irs_recalc_all_vhppi_for_vm(GICv5 *s, VMTE *vmte)
@@ -1428,11 +1475,7 @@ bool gicv5_set_resident(GICv5Common *cs, GICv5Domain domain, bool valid,
 
         trace_gicv5_set_non_resident(domain_name[domain], cpuidx, db, dbpm);
 
-        /*
-         * TODO: when we implement VPE doorbells, we should check whether
-         * we should immediately generate a doorbell for a VPE that has
-         * just been made non-resident.
-         */
+        irs_maybe_ring_doorbell(s, vpe);
     }
 
     /*
@@ -2369,11 +2412,8 @@ static void irs_vpe_dbr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
                                                  IRS_VPE_SELR, VPE_ID),
                                       vpe->dbpm, vpe->db_intid, vpe->db_req);
 
-        /*
-         * TODO: when we implement VPE doorbells, check here whether
-         * this config change means we should now generate a VPE
-         * doorbell event for this VPE.
-         */
+        /* This config change might mean we now need to ring the doorbell */
+        irs_maybe_ring_doorbell(s, vpe);
     } else {
         trace_gicv5_irs_vpe_dbr_write_nv(domain_name[domain], vpe->vmte->vmid,
                                          FIELD_EX64(cs->irs_vpe_selr[domain],
