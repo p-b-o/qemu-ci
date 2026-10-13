@@ -1143,7 +1143,7 @@ static uint64_t gicr_cdia_read(CPUARMState *env, const ARMCPRegInfo *ri)
     GICv5Common *gic = gicv5_get_gic(env);
     bool virtual;
     GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
-    GICv5PendingIrq hppi = gic_hppi(env, domain);
+    GICv5PendingIrq hppi = virtual ? gic_virt_hppi(env) : gic_hppi(env, domain);
     GICv5IntType type = FIELD_EX64(hppi.intid, INTID, TYPE);
     uint32_t id = FIELD_EX64(hppi.intid, INTID, ID);
 
@@ -1151,20 +1151,20 @@ static uint64_t gicr_cdia_read(CPUARMState *env, const ARMCPRegInfo *ri)
 
     if (hppi.prio == PRIO_IDLE) {
         /* No interrupt available to acknowledge */
-        trace_gicv5_gicr_cdia_fail(domain,
+        trace_gicv5_gicr_cdia_fail(domain, virtual,
                                    "no available interrupt to acknowledge");
         return 0;
     }
 
     if (gic_hppi_is_nmi(env, hppi, domain) != cdnmia) {
         /* GICR CDIA only acknowledges non-NMI; GICR CDNMIA only NMI */
-        trace_gicv5_gicr_cdia_fail(domain,
+        trace_gicv5_gicr_cdia_fail(domain, virtual,
                                    cdnmia ? "CDNMIA but HPPI is not NMI" :
                                    "CDIA but HPPI is NMI");
         return 0;
     }
 
-    trace_gicv5_gicr_cdia(domain, hppi.intid);
+    trace_gicv5_gicr_cdia(domain, virtual, hppi.intid);
 
     /*
      * The interrupt becomes Active. If the handling mode of the
@@ -1177,23 +1177,41 @@ static uint64_t gicr_cdia_read(CPUARMState *env, const ARMCPRegInfo *ri)
      * gicv5_activate() cause a re-evaluation of HPPIs they use the
      * right (new) running priority.
      */
-    env->gicv5_cpuif.icc_apr[domain] |= (1ULL << hppi.prio);
+    if (virtual) {
+        env->gicv5_cpuif.ich_apr_el2 |= (1ULL << hppi.prio);
+    } else {
+        env->gicv5_cpuif.icc_apr[domain] |= (1ULL << hppi.prio);
+    }
+
     switch (type) {
     case GICV5_PPI:
     {
         uint32_t ppireg;
         uint64_t ppibit;
+        bool hm_edge;
 
         assert(id < GICV5_NUM_PPIS);
         ppireg = id / 64;
         ppibit = 1ULL << (id % 64);
 
-        env->gicv5_cpuif.ppi_active[ppireg] |= ppibit;
-        if (!(env->gicv5_cpuif.ppi_hm[ppireg] & ppibit)) {
-            /* handling mode is Edge: clear pending */
-            env->gicv5_cpuif.ppi_pend[ppireg] &= ~ppibit;
+        /* handling mode is constant and doesn't differ for virt vs phys */
+        hm_edge = !(env->gicv5_cpuif.ppi_hm[ppireg] & ppibit);
+
+        if (virtual) {
+            env->gicv5_cpuif.ich_ppi_active[ppireg] |= ppibit;
+            if (hm_edge) {
+                /* handling mode is Edge: clear pending */
+                env->gicv5_cpuif.ich_ppi_pend[ppireg] &= ~ppibit;
+            }
+            gic_recalc_virt_ppi_hppi(env);
+        } else {
+            env->gicv5_cpuif.ppi_active[ppireg] |= ppibit;
+            if (hm_edge) {
+                /* handling mode is Edge: clear pending */
+                env->gicv5_cpuif.ppi_pend[ppireg] &= ~ppibit;
+            }
+            gic_recalc_ppi_hppi(env);
         }
-        gic_recalc_ppi_hppi(env);
         break;
     }
     case GICV5_LPI:
@@ -1203,7 +1221,7 @@ static uint64_t gicr_cdia_read(CPUARMState *env, const ARMCPRegInfo *ri)
          * name of the stream command, does both "set Active" and
          * "maybe set not Pending" as a single atomic action.
          */
-        gicv5_activate(gic, id, domain, type, false);
+        gicv5_activate(gic, id, domain, type, virtual);
         break;
     default:
         g_assert_not_reached();
