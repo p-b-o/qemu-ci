@@ -1031,6 +1031,29 @@ uint64_t gicv5_request_config(GICv5Common *cs, uint32_t id, GICv5Domain domain,
     }
 }
 
+static bool activate_for_ist(GICv5Common *cs,
+                             const GICv5ISTConfig *cfg,
+                             uint32_t id,
+                             uint32_t *iaffid)
+{
+    L2_ISTE_Handle h;
+    uint32_t *l2_iste_p;
+    if (!cfg) {
+        return false;
+    }
+    l2_iste_p = get_l2_iste(cs, cfg, id, &h);
+    if (!l2_iste_p) {
+        return false;
+    }
+    *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, ACTIVE, true);
+    if (FIELD_EX32(*l2_iste_p, L2_ISTE, HM) == GICV5_EDGE) {
+        *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, PENDING, false);
+    }
+    *iaffid = FIELD_EX32(*l2_iste_p, L2_ISTE, IAFFID);
+    put_l2_iste(cs, cfg, &h);
+    return true;
+}
+
 void gicv5_activate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
                     GICv5IntType type, bool virtual, uint32_t cpuidx)
 {
@@ -1040,8 +1063,12 @@ void gicv5_activate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
     trace_gicv5_activate(domain_name[domain], inttype_name(type), virtual, id);
 
     if (virtual) {
-        qemu_log_mask(LOG_GUEST_ERROR, "gicv5_activate: tried to "
-                      "activate a virtual interrupt\n");
+        const GICv5ISTConfig *cfg = ist_for_vint(s, cs, domain, type, cpuidx);
+
+        if (!activate_for_ist(cs, cfg, id, &iaffid)) {
+            return;
+        }
+        irs_recalc_vhppi(s, s->res_vpe[cpuidx]->vmte, iaffid);
         return;
     }
 
@@ -1049,18 +1076,10 @@ void gicv5_activate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
     case GICV5_LPI:
     {
         const GICv5ISTConfig *cfg = &s->phys_lpi_config[domain];
-        L2_ISTE_Handle h;
-        uint32_t *l2_iste_p = get_l2_iste(cs, cfg, id, &h);
 
-        if (!l2_iste_p) {
+        if (!activate_for_ist(cs, cfg, id, &iaffid)) {
             return;
         }
-        *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, ACTIVE, true);
-        if (FIELD_EX32(*l2_iste_p, L2_ISTE, HM) == GICV5_EDGE) {
-            *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, PENDING, false);
-        }
-        iaffid = FIELD_EX32(*l2_iste_p, L2_ISTE, IAFFID);
-        put_l2_iste(cs, cfg, &h);
         break;
     }
     case GICV5_SPI:
