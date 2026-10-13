@@ -115,6 +115,7 @@ static void gicv5_common_reset_hold(Object *obj, ResetType type)
         memset(cs->irs_vmap_l2_vistr, 0, sizeof(cs->irs_vmap_l2_vistr));
         memset(cs->irs_vmap_vper, 0, sizeof(cs->irs_vmap_vper));
         memset(cs->irs_vpe_selr, 0, sizeof(cs->irs_vpe_selr));
+        memset(cs->irs_vpe_dbr, 0, sizeof(cs->irs_vpe_dbr));
 
         for (int i = 0; i < NUM_GICV5_DOMAINS; i++) {
             cs->irs_vpe_statusr[i] = R_IRS_VPE_STATUSR_IDLE_MASK;

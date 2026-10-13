@@ -29,7 +29,11 @@ typedef struct VMTE VMTE;
 typedef struct VPE {
     VMTE *vmte;
     hwaddr vped_addr;
-    bool valid;
+    uint32_t db_intid; /* doorbell interrupt ID */
+    uint8_t dbpm; /* doorbell priority mask */
+    bool valid; /* is the VPE valid? */
+    bool db_valid; /* are doorbell settings valid? */
+    bool db_req; /* is a doorbell requested? */
 } VPE;
 
 /* In the GICv5VMTConfig::vm_cache this is how we store VMTE info */
@@ -1257,6 +1261,8 @@ static void init_vpe_from_vpete(VPE *vpe, VMTE *vmte, uint64_t vpete)
     if (vpe->valid) {
         vpe->vped_addr = vpete & R_VPETE_VPED_ADDR_MASK;
         vpe->vped_addr &= ~MAKE_64BIT_MASK(0, QEMU_GICV5_VPED_SZ);
+        /* Doorbell settings always start invalid */
+        vpe->db_valid = false;
     }
 }
 
@@ -2008,13 +2014,73 @@ static void irs_vpe_selr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
 
     vpe = vpe_from_selr(s, domain);
     if (vpe) {
-        /* We successfully selected a valid VPE */
+        /*
+         * We successfully selected a valid VPE. Sample the config
+         * into IRS_VPE_DBR.
+         */
+        uint64_t dbr = 0;
+
+        if (vpe->db_valid) {
+            dbr = FIELD_DP64(dbr, IRS_VPE_DBR, DBV, vpe->db_valid);
+            dbr = FIELD_DP64(dbr, IRS_VPE_DBR, DBPM, vpe->dbpm);
+            dbr = FIELD_DP64(dbr, IRS_VPE_DBR, REQ_DB, vpe->db_req);
+            dbr = FIELD_DP64(dbr, IRS_VPE_DBR, INTID, vpe->db_intid);
+        }
+        cs->irs_vpe_dbr[domain] = dbr;
+
         status |= R_IRS_VPE_STATUSR_V_MASK;
     }
 
     trace_gicv5_irs_vpe_selr_write(domain_name[domain], value, status);
 
     cs->irs_vpe_statusr[domain] = status;
+}
+
+static void irs_vpe_dbr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
+{
+    GICv5Common *cs = ARM_GICV5_COMMON(s);
+    VPE *vpe;
+
+    /* RES0 if we don't have virt */
+    if (!gicv5_domain_has_virt(cs, domain)) {
+        return;
+    }
+
+    cs->irs_vpe_dbr[domain] = value;
+
+    if (!FIELD_EX64(cs->irs_vpe_statusr[domain], IRS_VPE_STATUSR, V)) {
+        /* No valid VPE selected via SELR */
+        return;
+    }
+
+    vpe = vpe_from_selr(s, domain);
+    if (!vpe) {
+        /* VPE became invalid since SELR was last written */
+        cs->irs_vpe_statusr[domain] &= ~R_IRS_VPE_STATUSR_V_MASK;
+        return;
+    }
+
+    vpe->db_valid = FIELD_EX64(value, IRS_VPE_DBR, DBV);
+    if (vpe->db_valid) {
+        vpe->dbpm = FIELD_EX64(value, IRS_VPE_DBR, DBPM);
+        vpe->db_intid = FIELD_EX64(value, IRS_VPE_DBR, INTID);
+        vpe->db_req = FIELD_EX64(value, IRS_VPE_DBR, REQ_DB);
+
+        trace_gicv5_irs_vpe_dbr_write(domain_name[domain], vpe->vmte->vmid,
+                                      FIELD_EX64(cs->irs_vpe_selr[domain],
+                                                 IRS_VPE_SELR, VPE_ID),
+                                      vpe->dbpm, vpe->db_intid, vpe->db_req);
+
+        /*
+         * TODO: when we implement VPE doorbells, check here whether
+         * this config change means we should now generate a VPE
+         * doorbell event for this VPE.
+         */
+    } else {
+        trace_gicv5_irs_vpe_dbr_write_nv(domain_name[domain], vpe->vmte->vmid,
+                                         FIELD_EX64(cs->irs_vpe_selr[domain],
+                                                    IRS_VPE_SELR, VPE_ID));
+    }
 }
 
 static void spi_sample(GICv5SPIState *spi)
@@ -2252,6 +2318,22 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_VPE_DBR:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = extract64(cs->irs_vpe_dbr[domain], 0, 32);
+        } else {
+            /* RAZ/WI if no virt */
+            *data = 0;
+        }
+        return true;
+    case A_IRS_VPE_DBR + 4:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = extract64(cs->irs_vpe_dbr[domain], 32, 32);
+        } else {
+            /* RAZ/WI if no virt */
+            *data = 0;
+        }
+        return true;
     case A_IRS_VPE_STATUSR:
         if (gicv5_domain_has_virt(cs, domain)) {
             *data = cs->irs_vpe_statusr[domain];
@@ -2434,6 +2516,14 @@ static bool config_writel(GICv5 *s, GICv5Domain domain, hwaddr offset,
         irs_vpe_selr_write(s, domain,
                            deposit64(cs->irs_vpe_selr[domain], 32, 32, data));
         return true;
+    case A_IRS_VPE_DBR:
+        irs_vpe_dbr_write(s, domain,
+                          deposit64(cs->irs_vpe_dbr[domain], 0, 32, data));
+        return true;
+    case A_IRS_VPE_DBR + 4:
+        irs_vpe_dbr_write(s, domain,
+                          deposit64(cs->irs_vpe_dbr[domain], 32, 32, data));
+        return true;
     case A_IRS_SPI_SELR:
         cs->irs_spi_selr[domain] = data;
         return true;
@@ -2574,6 +2664,14 @@ static bool config_readll(GICv5 *s, GICv5Domain domain, hwaddr offset,
             *data = 0;
         }
         return true;
+    case A_IRS_VPE_DBR:
+        if (gicv5_domain_has_virt(cs, domain)) {
+            *data = cs->irs_vpe_dbr[domain];
+        } else {
+            /* RAZ/WI if no virt */
+            *data = 0;
+        }
+        return true;
     }
 
     return false;
@@ -2606,6 +2704,9 @@ static bool config_writell(GICv5 *s, GICv5Domain domain, hwaddr offset,
         return true;
     case A_IRS_VPE_SELR:
         irs_vpe_selr_write(s, domain, data);
+        return true;
+    case A_IRS_VPE_DBR:
+        irs_vpe_dbr_write(s, domain, data);
         return true;
     }
 
