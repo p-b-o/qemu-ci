@@ -594,6 +594,8 @@ typedef struct CPUArchState {
 
         /* Cached highest-priority pending PPI for each domain */
         GICv5PendingIrq ppi_hppi[NUM_GICV5_DOMAINS];
+
+        uint64_t ich_apr_el2;
     } gicv5_cpuif;
 
     struct {

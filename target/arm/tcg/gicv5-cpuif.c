@@ -90,6 +90,15 @@ static GICv5Common *gicv5_get_gic(CPUARMState *env)
     return env->gicv5.gicv5state;
 }
 
+/*
+ * Return true if GIC virtual interface legacy operation is enabled.
+ * We don't currently implement FEAT_GCIE_LEGACY.
+ */
+static bool gicv5_legacy_enabled(CPUARMState *env)
+{
+    return false;
+}
+
 static GICv5Domain gicv5_logical_domain(CPUARMState *env)
 {
     /*
@@ -696,6 +705,34 @@ static void gic_cddi_write(CPUARMState *env, const ARMCPRegInfo *ri,
     }
 }
 
+static CPAccessResult access_gicv5_ich_reg(CPUARMState *env,
+                                           const ARMCPRegInfo *ri,
+                                           bool isread)
+{
+    /*
+     * accessfn for GICv5 ICH regs. The NV behaviour here is a little
+     * different from usual because of the optional legacy GIC feature.
+     *
+     * At EL1, if GCIE_LEGACY is disabled or not implemented, these
+     * behave like normal EL2 registers, which is that they redirect
+     * to memory if NV2 is enabled and trap to EL2 if not.  If legacy
+     * operation is enabled, these registers must UNDEF to EL1
+     * (because from the inner guest's point of view it has a GICv3
+     * and this sysreg doesn't exist).
+     *
+     * The UNDEF at EL1 when NV==0 is handled already because of the
+     * .access = PL2_RW setting on the cpreg.
+     */
+    if (arm_current_el(env) == 1 && gicv5_legacy_enabled(env)) {
+        return CP_ACCESS_UNDEFINED;
+    }
+    /*
+     * continue to either redirect-to-memory, trap-to-EL2 or (if
+     * current EL is 2 or 3) access the register
+     */
+    return CP_ACCESS_OK;
+}
+
 static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
     /*
      * Barrier: wait until the effects of a cpuif system register
@@ -892,6 +929,13 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
         .readfn = gic_icc_pcr_el1_read,
         .writefn = gic_icc_pcr_el1_write,
         .resetfn = gic_icc_pcr_el1_reset,
+    },
+    {   .name = "ICH_APR_EL2", .state = ARM_CP_STATE_AA64,
+        .opc0 = 3, .opc1 = 4, .crn = 12, .crm = 8, .opc2 = 4,
+        .access = PL2_RW, .type = ARM_CP_NO_RAW,
+        .nv2_redirect_offset = 0xb00,
+        .accessfn = access_gicv5_ich_reg,
+        .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ich_apr_el2),
     },
 };
 
