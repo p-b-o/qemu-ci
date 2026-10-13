@@ -154,6 +154,39 @@ static GICv5Domain gicv5_current_phys_domain(CPUARMState *env)
     return gicv5_logical_domain(env);
 }
 
+static GICv5Domain gicv5_domain_for_insn(CPUARMState *env,
+                                         const ARMCPRegInfo *ri,
+                                         bool *virtual)
+{
+    /*
+     * Return the domain and virtual flag to use when GIC system insns
+     * result in commands to the IRS.
+     *
+     * GIC system insns come in several families where the prefix of
+     * the name indicates which interrupt domain they operate on:
+     *
+     * LD* commands (opc1 == 6) operate on the logical interrupt domain.
+     * VD* commands (opc1 == 4) operate on the virtual interrupt domain,
+     *   which is the domain of the current resident VM, which is the
+     *   the logical interrupt domain but with the virtual flag set.
+     * CD* commands (opc1 == 0) operate on the current domain, which is
+     *   the virtual one if ICC accesses redirect to ICV, and the
+     *   current physical interrupt domain otherwise.
+     *
+     * Returns the domain to use, and updates *virtual to return
+     * whether this is the virtual interrupt domain. The caller can
+     * then pass domain and virtual directly to the IRS functions.
+     */
+    bool logical = ri->opc1 == 6;
+
+    *virtual = ri->opc1 == 4 || gicv5_icv_access(env);
+
+    if (logical || *virtual) {
+        return gicv5_logical_domain(env);
+    }
+    return gicv5_current_phys_domain(env);
+}
+
 static uint64_t gic_running_prio(CPUARMState *env, GICv5Domain domain)
 {
     /*
@@ -507,8 +540,8 @@ static void gic_cddis_write(CPUARMState *env, const ARMCPRegInfo *ri,
     GICv5Common *gic = gicv5_get_gic(env);
     GICv5IntType type = FIELD_EX64(value, GIC_CDDIS, TYPE);
     uint32_t id = FIELD_EX64(value, GIC_CDDIS, ID);
-    bool virtual = false;
-    GICv5Domain domain = gicv5_current_phys_domain(env);
+    bool virtual;
+    GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
 
     gicv5_set_enabled(gic, id, false, domain, type, virtual);
 }
@@ -519,8 +552,8 @@ static void gic_cden_write(CPUARMState *env, const ARMCPRegInfo *ri,
     GICv5Common *gic = gicv5_get_gic(env);
     GICv5IntType type = FIELD_EX64(value, GIC_CDEN, TYPE);
     uint32_t id = FIELD_EX64(value, GIC_CDEN, ID);
-    bool virtual = false;
-    GICv5Domain domain = gicv5_current_phys_domain(env);
+    bool virtual;
+    GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
 
     gicv5_set_enabled(gic, id, true, domain, type, virtual);
 }
@@ -532,8 +565,8 @@ static void gic_cdpri_write(CPUARMState *env, const ARMCPRegInfo *ri,
     uint8_t priority = FIELD_EX64(value, GIC_CDPRI, PRIORITY);
     GICv5IntType type = FIELD_EX64(value, GIC_CDPRI, TYPE);
     uint32_t id = FIELD_EX64(value, GIC_CDPRI, ID);
-    bool virtual = false;
-    GICv5Domain domain = gicv5_current_phys_domain(env);
+    bool virtual;
+    GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
 
     gicv5_set_priority(gic, id, priority, domain, type, virtual);
 }
@@ -546,8 +579,8 @@ static void gic_cdaff_write(CPUARMState *env, const ARMCPRegInfo *ri,
     GICv5RoutingMode irm = FIELD_EX64(value, GIC_CDAFF, IRM);
     GICv5IntType type = FIELD_EX64(value, GIC_CDAFF, TYPE);
     uint32_t id = FIELD_EX64(value, GIC_CDAFF, ID);
-    bool virtual = false;
-    GICv5Domain domain = gicv5_current_phys_domain(env);
+    bool virtual;
+    GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
 
     gicv5_set_target(gic, id, iaffid, irm, domain, type, virtual);
 }
@@ -559,8 +592,8 @@ static void gic_cdpend_write(CPUARMState *env, const ARMCPRegInfo *ri,
     bool pending = FIELD_EX64(value, GIC_CDPEND, PENDING);
     GICv5IntType type = FIELD_EX64(value, GIC_CDPEND, TYPE);
     uint32_t id = FIELD_EX64(value, GIC_CDPEND, ID);
-    bool virtual = false;
-    GICv5Domain domain = gicv5_current_phys_domain(env);
+    bool virtual;
+    GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
 
     gicv5_set_pending(gic, id, pending, domain, type, virtual);
 }
@@ -571,8 +604,8 @@ static void gic_cdrcfg_write(CPUARMState *env, const ARMCPRegInfo *ri,
     GICv5Common *gic = gicv5_get_gic(env);
     GICv5IntType type = FIELD_EX64(value, GIC_CDRCFG, TYPE);
     uint32_t id = FIELD_EX64(value, GIC_CDRCFG, ID);
-    bool virtual = false;
-    GICv5Domain domain = gicv5_current_phys_domain(env);
+    bool virtual;
+    GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
 
     env->gicv5_cpuif.icc_icsr_el1 =
         gicv5_request_config(gic, id, domain, type, virtual);
@@ -585,8 +618,8 @@ static void gic_cdhm_write(CPUARMState *env, const ARMCPRegInfo *ri,
     GICv5HandlingMode hm = FIELD_EX64(value, GIC_CDHM, HM);
     GICv5IntType type = FIELD_EX64(value, GIC_CDAFF, TYPE);
     uint32_t id = FIELD_EX64(value, GIC_CDAFF, ID);
-    bool virtual = false;
-    GICv5Domain domain = gicv5_current_phys_domain(env);
+    bool virtual;
+    GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
 
     gicv5_set_handling(gic, id, hm, domain, type, virtual);
 }
@@ -1108,7 +1141,8 @@ static uint64_t gicr_cdia_read(CPUARMState *env, const ARMCPRegInfo *ri)
 {
     /* Acknowledge HPPI in the current interrupt domain */
     GICv5Common *gic = gicv5_get_gic(env);
-    GICv5Domain domain = gicv5_current_phys_domain(env);
+    bool virtual;
+    GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
     GICv5PendingIrq hppi = gic_hppi(env, domain);
     GICv5IntType type = FIELD_EX64(hppi.intid, INTID, TYPE);
     uint32_t id = FIELD_EX64(hppi.intid, INTID, ID);
@@ -1185,7 +1219,8 @@ static void gic_cdeoi_write(CPUARMState *env, const ARMCPRegInfo *ri,
      * Perform Priority Drop in the current interrupt domain.
      * This is just clearing the lowest set bit in the APR.
      */
-    GICv5Domain domain = gicv5_current_phys_domain(env);
+    bool virtual;
+    GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
     uint64_t *apr = &env->gicv5_cpuif.icc_apr[domain];
 
     trace_gicv5_cdeoi(domain);
@@ -1203,10 +1238,10 @@ static void gic_cddi_write(CPUARMState *env, const ARMCPRegInfo *ri,
      * current interrupt domain.
      */
     GICv5Common *gic = gicv5_get_gic(env);
-    GICv5Domain domain = gicv5_current_phys_domain(env);
+    bool virtual;
+    GICv5Domain domain = gicv5_domain_for_insn(env, ri, &virtual);
     GICv5IntType type = FIELD_EX64(value, GIC_CDDI, TYPE);
     uint32_t id = FIELD_EX64(value, GIC_CDDI, ID);
-    bool virtual = false;
 
     trace_gicv5_cddi(domain, value);
 
