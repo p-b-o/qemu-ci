@@ -1017,6 +1017,11 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
         .fieldoffset = offsetof(CPUARMState, cp15.fgt_read[FGTREG_ICH_HFGRTR]),
         .resetvalue = ICH_HFGRTR_EL2_RES1_MASK,
     },
+    {   .name = "ICC_SRE_EL2", .state = ARM_CP_STATE_AA64,
+        .opc0 = 3, .opc1 = 4, .crn = 12, .crm = 9, .opc2 = 5,
+        .access = PL2_RW, .type = ARM_CP_NO_RAW | ARM_CP_CONST,
+        .resetvalue = 0xf,
+    },
     {   .name = "ICH_HFGWTR_EL2", .state = ARM_CP_STATE_AA64,
         .opc0 = 3, .opc1 = 4, .crn = 12, .crm = 9, .opc2 = 6,
         .access = PL2_RW, .type = ARM_CP_NO_RAW,
@@ -1116,6 +1121,14 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
     },
 };
 
+static const ARMCPRegInfo gicv5_cpuif_el2_reginfo[] = {
+    {   .name = "ICC_SRE_EL1", .state = ARM_CP_STATE_AA64,
+        .opc0 = 3, .opc1 = 0, .crn = 12, .crm = 12, .opc2 = 5,
+        .access = PL1_RW, .type = ARM_CP_NO_RAW | ARM_CP_CONST,
+        .resetvalue = 0x7,
+    },
+};
+
 void define_gicv5_cpuif_regs(ARMCPU *cpu)
 {
     if (cpu_isar_feature(aa64_gcie, cpu)) {
@@ -1152,6 +1165,10 @@ void define_gicv5_cpuif_regs(ARMCPU *cpu)
                 .writefn = gic_ich_ppi_priority_write,
             };
             define_one_arm_cp_reg(cpu, &ppi_prio);
+        }
+
+        if (arm_feature(&cpu->env, ARM_FEATURE_EL2)) {
+            define_arm_cp_regs(cpu, gicv5_cpuif_el2_reginfo);
         }
     }
 }
