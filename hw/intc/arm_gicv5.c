@@ -976,6 +976,96 @@ void gicv5_deactivate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
     irs_recalc_hppi(s, domain, iaffid);
 }
 
+static void initialize_ist_config(GICv5Common *cs, GICv5Domain domain,
+                                  GICv5ISTConfig *cfg,
+                                  hwaddr base,
+                                  uint8_t id_bits, uint8_t istsz, uint8_t l2sz,
+                                  bool structure)
+{
+    uint8_t istbits, l2bits, l2_idx_bits;
+    int tableszbits;
+
+    switch (istsz) {
+    case 0:
+    case 3: /* reserved: acts like the minimum required size */
+        istbits = 2;
+        break;
+    case 1:
+        istbits = 3;
+        break;
+    case 2:
+        istbits = 4;
+        break;
+    default:
+        g_assert_not_reached();
+    }
+    switch (l2sz) {
+    case 0:
+    case 3: /* reserved; CONSTRAINED UNPREDICTABLE */
+        l2bits = 12; /* 4K: 12 bits */
+        break;
+    case 1:
+        l2bits = 14; /* 16K: 14 bits */
+        break;
+    case 2:
+        l2bits = 16; /* 64K: 16 bits */
+        break;
+    default:
+        g_assert_not_reached();
+    }
+    /*
+     * Calculate how many bits of an ID index the L2 table
+     * (e.g. if we need 14 bits to index each byte in a 16K L2 table,
+     * but each entry is 4 bytes wide then we need 14 - 2 = 12 bits
+     * to index an entry in the table).
+     */
+    l2_idx_bits = l2bits - istbits;
+    cfg->base = base;
+    cfg->txattrs = irs_txattrs(cs, domain);
+    cfg->id_bits = id_bits;
+    cfg->istsz = 1 << istbits;
+    cfg->l2_idx_bits = l2_idx_bits;
+    cfg->l2bits = l2bits;
+    cfg->structure = structure;
+
+    /*
+     * Bits [N:0] of the base addr are ignored, to enforce that in a
+     * 1-level IST it is aligned to the size of the ISTE array,
+     * and in a 2-level IST it is aligned to the size of the L1 table.
+     * The spec defines N in terms of the raw L2SZ, ISTSZ and LPI_ID_BITS
+     * fields, but we have already sanitized these to
+     *  istbits = ISTSZ + 2
+     *  l2bits = (L2SZ * 2) + 12
+     *  id_bits = LPI_ID_BITS
+     * We have also already enforced the "bottom 6 bits are 0" via
+     * the fixed field mask, so can skip the Max() operation.
+     * We want tableszbits == the number of bits to zero, which is N + 1.
+     */
+    if (cfg->structure) {
+        /*
+         * L1 table is indexed by the (id_bits - l2_idx_bits) bits in
+         * the ID, so has 2^(id_bits - l2_idx_bits) entries, and each
+         * entry is 8 bytes == 2^3.
+         */
+        tableszbits = id_bits - l2_idx_bits + 3;
+    } else {
+        /* table has 2^id_bits entries of 2^istbits size each */
+        tableszbits = id_bits + istbits;
+    }
+    cfg->base &= ~MAKE_64BIT_MASK(0, tableszbits);
+
+    if (!cfg->lpi_cache) {
+        /*
+         * Keys are GINT_TO_POINTER(intid), so we want the g_direct_hash
+         * and g_direct_equal hash and equality functions. We don't
+         * want to free the keys, but we do want to free the values
+         * (which are pointer-to-uint32_t).
+         */
+        cfg->lpi_cache = g_hash_table_new_full(NULL, NULL, NULL, g_free);
+    }
+    cfg->valid = true;
+}
+
 static void irs_map_l2_istr_write(GICv5 *s, GICv5Domain domain, uint64_t value)
 {
     GICv5Common *cs = ARM_GICV5_COMMON(s);
@@ -1086,92 +1176,21 @@ static void irs_ist_baser_write(GICv5 *s, GICv5Domain domain, uint64_t value)
          * sanitize the reserved values, and expand fields out into byte counts.
          */
         GICv5ISTConfig *cfg = &s->phys_lpi_config[domain];
-        uint8_t istbits, l2bits, l2_idx_bits;
-        int tableszbits;
+        hwaddr base = cs->irs_ist_baser[domain] & R_IRS_IST_BASER_ADDR_MASK;
         uint8_t id_bits = FIELD_EX64(cs->irs_ist_cfgr[domain],
                                      IRS_IST_CFGR, LPI_ID_BITS);
-        id_bits = MIN(MAX(id_bits, QEMU_GICV5_MIN_LPI_ID_BITS), QEMU_GICV5_ID_BITS);
-
-        switch (FIELD_EX64(cs->irs_ist_cfgr[domain], IRS_IST_CFGR, ISTSZ)) {
-        case 0:
-        case 3: /* reserved: acts like the minimum required size */
-            istbits = 2;
-            break;
-        case 1:
-            istbits = 3;
-            break;
-        case 2:
-            istbits = 4;
-            break;
-        default:
-            g_assert_not_reached();
-        }
-        switch (FIELD_EX64(cs->irs_ist_cfgr[domain], IRS_IST_CFGR, L2SZ)) {
-        case 0:
-        case 3: /* reserved; CONSTRAINED UNPREDICTABLE */
-            l2bits = 12; /* 4K: 12 bits */
-            break;
-        case 1:
-            l2bits = 14; /* 16K: 14 bits */
-            break;
-        case 2:
-            l2bits = 16; /* 64K: 16 bits */
-            break;
-        default:
-            g_assert_not_reached();
-        }
-        /*
-         * Calculate how many bits of an ID index the L2 table
-         * (e.g. if we need 14 bits to index each byte in a 16K L2 table,
-         * but each entry is 4 bytes wide then we need 14 - 2 = 12 bits
-         * to index an entry in the table).
-         */
-        l2_idx_bits = l2bits - istbits;
-        cfg->base = cs->irs_ist_baser[domain] & R_IRS_IST_BASER_ADDR_MASK;
-        cfg->txattrs = irs_txattrs(cs, domain),
-        cfg->id_bits = id_bits;
-        cfg->istsz = 1 << istbits;
-        cfg->l2_idx_bits = l2_idx_bits;
-        cfg->l2bits = l2bits;
-        cfg->structure = FIELD_EX64(cs->irs_ist_cfgr[domain],
+        uint8_t istsz = FIELD_EX64(cs->irs_ist_cfgr[domain],
+                                   IRS_IST_CFGR, ISTSZ);
+        uint8_t l2sz = FIELD_EX64(cs->irs_ist_cfgr[domain],
+                                  IRS_IST_CFGR, L2SZ);
+        bool structure = FIELD_EX64(cs->irs_ist_cfgr[domain],
                                     IRS_IST_CFGR, STRUCTURE);
 
-        /*
-         * Bits [N:0] of the base addr are ignored, to enforce that in a
-         * 1-level IST it is aligned to the size of the ISTE array,
-         * and in a 2-level IST it is aligned to the size of the L1 table.
-         * The spec defines N in terms of the raw L2SZ, ISTSZ and LPI_ID_BITS
-         * fields, but we have already sanitized these to
-         *  istbits = ISTSZ + 2
-         *  l2bits = (L2SZ * 2) + 12
-         *  id_bits = LPI_ID_BITS
-         * We have also already enforced the "bottom 6 bits are 0" via
-         * R_IRS_IST_BASER_ADDR_MASK, so can skip the Max() operation.
-         * We want tableszbits == the number of bits to zero, which is N + 1.
-         */
-        if (cfg->structure) {
-            /*
-             * L1 table is indexed by the (id_bits - l2_idx_bits) bits in
-             * the ID, so has 2^(id_bits - l2_idx_bits) entries, and each
-             * entry is 8 bytes == 2^3.
-             */
-            tableszbits = id_bits - l2_idx_bits + 3;
-        } else {
-            /* table has 2^id_bits entries of 2^istbits size each */
-            tableszbits = id_bits + istbits;
-        }
-        cfg->base &= ~MAKE_64BIT_MASK(0, tableszbits);
+        id_bits = MIN(MAX(id_bits, QEMU_GICV5_MIN_LPI_ID_BITS), QEMU_GICV5_ID_BITS);
 
-        if (!cfg->lpi_cache) {
-            /*
-             * Keys are GINT_TO_POINTER(intid), so we want the g_direct_hash
-             * and g_direct_equal hash and equality functions. We don't
-             * want to free the keys, but we do want to free the values
-             * (which are pointer-to-uint32_t).
-             */
-            cfg->lpi_cache = g_hash_table_new_full(NULL, NULL, NULL, g_free);
-        }
-        cfg->valid = true;
+        initialize_ist_config(cs, domain, cfg, base, id_bits,
+                              istsz, l2sz, structure);
+
         trace_gicv5_ist_valid(domain_name[domain], cfg->base, cfg->id_bits,
                               cfg->l2_idx_bits, cfg->istsz, cfg->structure);
         irs_recalc_hppi_all_cpus(s, domain);
