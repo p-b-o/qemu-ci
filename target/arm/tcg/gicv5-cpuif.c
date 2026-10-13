@@ -602,6 +602,28 @@ void gicv5_forward_interrupt(ARMCPU *cpu, GICv5Domain domain, bool virtual)
     }
 }
 
+static void gic_recalc_virt_ppi_hppi_for_dvi(CPUARMState *env, int reg,
+                                             uint64_t mask)
+{
+    /*
+     * Called after the physical PPI pending state has changed for the
+     * PPIs indicated by the mask and reg arguments.  If any of these
+     * PPIs are direct-injected, we need to recalculate the virtual
+     * HPPI.
+     *
+     * It is possible that even if the DVI bit is set we might not
+     * actually be direct-injecting the PPI (e.g. if HVI is set, or if
+     * timer-PPI redirection means we're ignoring this DVI bit), but
+     * if so the recalculation will just do nothing. These cases are
+     * "the guest did something valid but odd" in that it set a DVI
+     * bit it knew wasn't going to have any effect, so not worth
+     * trying to catch early.
+     */
+    if (env->gicv5_cpuif.ich_ppi_dvi[reg] & mask) {
+        gic_recalc_virt_ppi_hppi(env);
+    }
+}
+
 void gicv5_update_ppi_state(CPUARMState *env, int ppi, bool level)
 {
     /*
@@ -627,6 +649,7 @@ void gicv5_update_ppi_state(CPUARMState *env, int ppi, bool level)
         env->gicv5_cpuif.ppi_pend[0] =
             deposit64(env->gicv5_cpuif.ppi_pend[0], ppi, 1, level);
         gic_recalc_ppi_hppi(env);
+        gic_recalc_virt_ppi_hppi_for_dvi(env, 0, 1ULL << ppi);
     }
 }
 
@@ -894,6 +917,7 @@ static void gic_ppi_cpend_write(CPUARMState *env, const ARMCPRegInfo *ri,
         uint64_t old = raw_read(env, ri);
         raw_write(env, ri, old & ~value);
         gic_recalc_ppi_hppi(env);
+        gic_recalc_virt_ppi_hppi_for_dvi(env, reg, value);
     }
 }
 
@@ -924,6 +948,7 @@ static void gic_ppi_spend_write(CPUARMState *env, const ARMCPRegInfo *ri,
         uint64_t old = raw_read(env, ri);
         raw_write(env, ri, old | value);
         gic_recalc_ppi_hppi(env);
+        gic_recalc_virt_ppi_hppi_for_dvi(env, reg, value);
     }
 }
 
@@ -1428,6 +1453,7 @@ static uint64_t gicr_cdia_read(CPUARMState *env, const ARMCPRegInfo *ri)
             if (hm_edge) {
                 /* handling mode is Edge: clear pending */
                 env->gicv5_cpuif.ppi_pend[ppireg] &= ~ppibit;
+                gic_recalc_virt_ppi_hppi_for_dvi(env, ppireg, ppibit);
             }
             gic_recalc_ppi_hppi(env);
         }
