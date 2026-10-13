@@ -994,9 +994,19 @@ uint64_t gicv5_request_config(GICv5Common *cs, uint32_t id, GICv5Domain domain,
     uint64_t icsr;
 
     if (virtual) {
-        qemu_log_mask(LOG_GUEST_ERROR, "gicv5_request_config: tried to "
-                      "read config of a virtual interrupt\n");
-        return R_ICSR_F_MASK;
+        const GICv5ISTConfig *cfg = ist_for_vint(s, cs, domain, type, cpuidx);
+
+        if (!cfg) {
+            qemu_log_mask(LOG_GUEST_ERROR, "gicv5_request_config: tried to "
+                          "read config of unreachable virtual %s %d\n",
+                          inttype_name(type), id);
+            return R_ICSR_F_MASK;
+        }
+
+        icsr = l2_iste_to_icsr(cs, cfg, id);
+        trace_gicv5_request_config(domain_name[domain], inttype_name(type),
+                                   virtual, id, icsr);
+        return icsr;
     }
 
     switch (type) {
