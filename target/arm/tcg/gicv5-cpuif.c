@@ -298,6 +298,45 @@ static void gic_recalc_ppi_hppi(CPUARMState *env)
     gicv5_update_irq_fiq(env);
 }
 
+static void gic_recalc_virt_ppi_hppi(CPUARMState *env)
+{
+    /*
+     * Recalculate the HPPI PPI for the virtual interrupt domain: this is
+     * the best PPI which is enabled, pending and not active.
+     */
+    env->gicv5_cpuif.virt_ppi_hppi = GICV5_PENDING_IRQ_NONE;
+
+    for (int i = 0; i < ARRAY_SIZE(env->gicv5_cpuif.ich_ppi_active); i++) {
+        uint64_t en_pend_nact = env->gicv5_cpuif.ich_ppi_enable[i] &
+            env->gicv5_cpuif.ich_ppi_pend[i] &
+            ~env->gicv5_cpuif.ich_ppi_active[i];
+
+        while (en_pend_nact) {
+            uint8_t prio;
+            int ppi;
+            int bit = ctz64(en_pend_nact);
+
+            en_pend_nact &= ~(1ULL << bit);
+
+            ppi = i * 64 + bit;
+            prio = extract64(env->gicv5_cpuif.ich_ppi_priority[ppi / 8],
+                             (ppi & 7) * 8, 5);
+
+            if (prio < env->gicv5_cpuif.virt_ppi_hppi.prio) {
+                uint32_t intid = 0;
+
+                intid = FIELD_DP32(intid, INTID, ID, ppi);
+                intid = FIELD_DP32(intid, INTID, TYPE, GICV5_PPI);
+                env->gicv5_cpuif.virt_ppi_hppi.intid = intid;
+                env->gicv5_cpuif.virt_ppi_hppi.prio = prio;
+            }
+        }
+    }
+
+    trace_gicv5_recalc_virt_ppi_hppi(env->gicv5_cpuif.virt_ppi_hppi.intid,
+                                     env->gicv5_cpuif.virt_ppi_hppi.prio);
+}
+
 void gicv5_forward_interrupt(ARMCPU *cpu, GICv5Domain domain)
 {
     /*
@@ -460,6 +499,7 @@ static void gic_ppi_cactive_write(CPUARMState *env, const ARMCPRegInfo *ri,
     if (gicv5_icv_access(env)) {
         value &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
         env->gicv5_cpuif.ich_ppi_active[ri->opc2 & 1] &= ~value;
+        gic_recalc_virt_ppi_hppi(env);
     } else {
         uint64_t old = raw_read(env, ri);
         raw_write(env, ri, old & ~value);
@@ -473,6 +513,7 @@ static void gic_ppi_sactive_write(CPUARMState *env, const ARMCPRegInfo *ri,
     if (gicv5_icv_access(env)) {
         value &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
         env->gicv5_cpuif.ich_ppi_active[ri->opc2 & 1] |= value;
+        gic_recalc_virt_ppi_hppi(env);
     } else {
         uint64_t old = raw_read(env, ri);
         raw_write(env, ri, old | value);
@@ -502,6 +543,7 @@ static void gic_ppi_cpend_write(CPUARMState *env, const ARMCPRegInfo *ri,
     if (gicv5_icv_access(env)) {
         value &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
         env->gicv5_cpuif.ich_ppi_pend[ri->opc2 & 1] &= ~value;
+        gic_recalc_virt_ppi_hppi(env);
     } else {
         uint64_t old = raw_read(env, ri);
         raw_write(env, ri, old & ~value);
@@ -519,6 +561,7 @@ static void gic_ppi_spend_write(CPUARMState *env, const ARMCPRegInfo *ri,
     if (gicv5_icv_access(env)) {
         value &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
         env->gicv5_cpuif.ich_ppi_pend[ri->opc2 & 1] |= value;
+        gic_recalc_virt_ppi_hppi(env);
     } else {
         uint64_t old = raw_read(env, ri);
         raw_write(env, ri, old | value);
@@ -544,6 +587,7 @@ static void gic_ppi_enable_write(CPUARMState *env, const ARMCPRegInfo *ri,
     if (gicv5_icv_access(env)) {
         value &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
         env->gicv5_cpuif.ich_ppi_enable[ri->opc2 & 1] = value;
+        gic_recalc_virt_ppi_hppi(env);
     } else {
         raw_write(env, ri, value);
         gic_recalc_ppi_hppi(env);
@@ -610,6 +654,7 @@ static void gic_ppi_priority_write(CPUARMState *env, const ARMCPRegInfo *ri,
         uint64_t hvi_mask = gic_ppi_prio_hvi_mask(env, idx);
 
         env->gicv5_cpuif.ich_ppi_priority[idx] = value & ~hvi_mask;
+        gic_recalc_virt_ppi_hppi(env);
     } else {
         raw_write(env, ri, value);
         gic_recalc_ppi_hppi(env);
@@ -620,36 +665,42 @@ static void gic_ich_ppi_enable_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                      uint64_t value)
 {
     raw_write(env, ri, value);
+    gic_recalc_virt_ppi_hppi(env);
 }
 
 static void gic_ich_ppi_pend_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                    uint64_t value)
 {
     raw_write(env, ri, value);
+    gic_recalc_virt_ppi_hppi(env);
 }
 
 static void gic_ich_ppi_active_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                      uint64_t value)
 {
     raw_write(env, ri, value);
+    gic_recalc_virt_ppi_hppi(env);
 }
 
 static void gic_ich_ppi_priority_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                        uint64_t value)
 {
     raw_write(env, ri, value);
+    gic_recalc_virt_ppi_hppi(env);
 }
 
 static void gic_ich_ppi_dvi_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                   uint64_t value)
 {
     raw_write(env, ri, value);
+    gic_recalc_virt_ppi_hppi(env);
 }
 
 static void gic_ich_ppi_hvi_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                   uint64_t value)
 {
     raw_write(env, ri, value);
+    gic_recalc_virt_ppi_hppi(env);
 }
 
 static void gic_ich_vctlr_write(CPUARMState *env, const ARMCPRegInfo *ri,
