@@ -596,6 +596,8 @@ typedef struct CPUArchState {
         GICv5PendingIrq ppi_hppi[NUM_GICV5_DOMAINS];
 
         uint64_t ich_apr_el2;
+        uint64_t ich_vctlr_el2;
+        uint64_t ich_vmcr_el2;
         uint64_t ich_ppi_active[GICV5_NUM_PPIS / 64];
         uint64_t ich_ppi_pend[GICV5_NUM_PPIS / 64];
         uint64_t ich_ppi_enable[GICV5_NUM_PPIS / 64];

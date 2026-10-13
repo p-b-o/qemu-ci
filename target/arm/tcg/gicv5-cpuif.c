@@ -493,6 +493,18 @@ static void gic_ich_ppi_dvi_write(CPUARMState *env, const ARMCPRegInfo *ri,
     raw_write(env, ri, value);
 }
 
+static void gic_ich_vctlr_write(CPUARMState *env, const ARMCPRegInfo *ri,
+                                uint64_t value)
+{
+    raw_write(env, ri, value);
+}
+
+static void gic_ich_vmcr_write(CPUARMState *env, const ARMCPRegInfo *ri,
+                               uint64_t value)
+{
+    raw_write(env, ri, value);
+}
+
 /*
  * ICC_APR_EL1 is banked and reads/writes as the version for the
  * current logical interrupt domain.
@@ -1033,6 +1045,22 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
         .accessfn = access_gicv5_ich_reg,
         .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ich_ppi_active[1]),
         .writefn = gic_ich_ppi_active_write,
+    },
+    {   .name = "ICH_VCTLR_EL2", .state = ARM_CP_STATE_AA64,
+        .opc0 = 3, .opc1 = 4, .crn = 12, .crm = 11, .opc2 = 4,
+        .access = PL2_RW, .type = ARM_CP_IO | ARM_CP_NO_RAW,
+        .nv2_redirect_offset = 0xb28,
+        .accessfn = access_gicv5_ich_reg,
+        .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ich_vctlr_el2),
+        .writefn = gic_ich_vctlr_write,
+    },
+    {   .name = "ICH_VMCR_EL2", .state = ARM_CP_STATE_AA64,
+        .opc0 = 3, .opc1 = 4, .crn = 12, .crm = 11, .opc2 = 7,
+        .access = PL2_RW, .type = ARM_CP_IO | ARM_CP_NO_RAW,
+        .nv2_redirect_offset = 0x4c8,
+        .accessfn = access_gicv5_ich_reg,
+        .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ich_vmcr_el2),
+        .writefn = gic_ich_vmcr_write,
     },
 };
 
