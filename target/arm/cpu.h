@@ -550,11 +550,13 @@ typedef struct CPUArchState {
          * Fine-Grained Trap registers. We store these as arrays so the
          * access checking code doesn't have to manually select
          * HFGRTR_EL2 vs HFDFGRTR_EL2 etc when looking up the bit to test.
-         * FEAT_FGT2 will add more elements to these arrays.
+         * These include the trap registers for all features which have
+         * FGT-style trapping: FEAT_FGT, FEAT_FGWTE3. GICv5, and (when we
+         * implement it) FEAT_FGT2.
          */
-        uint64_t fgt_read[2]; /* HFGRTR, HDFGRTR */
-        uint64_t fgt_write[3]; /* HFGWTR, HDFGWTR, FGWTE3 */
-        uint64_t fgt_exec[1]; /* HFGITR */
+        uint64_t fgt_read[4]; /* HFGRTR, HDFGRTR, unused, ICH_HFGRTR */
+        uint64_t fgt_write[4]; /* HFGWTR, HDFGWTR, FGWTE3, ICH_HFGWTR */
+        uint64_t fgt_exec[2]; /* HFGITR, ICH_HFGITR */
 
         /* RME registers */
         uint64_t gpccr_el3;
