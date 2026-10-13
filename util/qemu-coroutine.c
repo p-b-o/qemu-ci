@@ -366,6 +366,11 @@ static unsigned int get_global_pool_hard_max_size(void)
 #ifdef __linux__
     g_autofree char *contents = NULL;
     int max_map_count;
+    /*
+     * Read from /proc might fail due to LSM; use (DEFAULT_MAX_MAP_COUNT - 5000)
+     * for distributions that don't change the kernel default
+     */
+    int default_pool_hard_max_size = 60530 / 2;
 
     /*
      * Linux processes can have up to max_map_count virtual memory areas
@@ -378,7 +383,7 @@ static unsigned int get_global_pool_hard_max_size(void)
         /* contents has trailing newline, remove it before conversion */
         g_strchomp(contents);
         if (qemu_strtoi(contents, NULL, 10, &max_map_count) != 0) {
-            return UINT_MAX;
+            return default_pool_hard_max_size;
         }
         /*
          * This is an upper bound that avoids exceeding max_map_count. Leave a
@@ -395,7 +400,7 @@ static unsigned int get_global_pool_hard_max_size(void)
     }
 #endif
 
-    return UINT_MAX;
+    return default_pool_hard_max_size;
 }
 
 static void __attribute__((constructor)) qemu_coroutine_init(void)
