@@ -70,6 +70,9 @@ FIELD(ICC_HPPIR_EL1, HPPIV, 32, 1)
 FIELD(ICH_VMCR_EL2, EN, 0, 1)
 FIELD(ICH_VMCR_EL2, VMPR, 27, 5)
 
+FIELD(ICH_VCTLR_EL2, EN, 0, 1)
+FIELD(ICH_VCTLR_EL2, V3, 1, 1)
+
 /*
  * We implement 24 bits of interrupt ID, the mandated 5 bits of priority,
  * and no legacy GICv3.3 vcpu interface (yet)
@@ -153,6 +156,13 @@ static uint64_t gic_running_prio(CPUARMState *env, GICv5Domain domain)
     return hap < 32 ? hap : PRIO_IDLE;
 }
 
+static uint64_t gic_virt_running_prio(CPUARMState *env)
+{
+    /* Return the current virtual running priority */
+    uint64_t hap = ctz64(env->gicv5_cpuif.ich_apr_el2);
+    return hap < 32 ? hap : PRIO_IDLE;
+}
+
 static GICv5PendingIrq gic_hppi(CPUARMState *env, GICv5Domain domain)
 {
     /*
@@ -191,6 +201,59 @@ static GICv5PendingIrq gic_hppi(CPUARMState *env, GICv5Domain domain)
     if (best.prio == PRIO_IDLE ||
         best.prio > env->gicv5_cpuif.icc_pcr[domain] ||
         best.prio >= gic_running_prio(env, domain)) {
+        return GICV5_PENDING_IRQ_NONE;
+    }
+    return best;
+}
+
+static GICv5PendingIrq gic_virt_hppi(CPUARMState *env)
+{
+    /*
+     * Return the current highest priority pending interrupt for the
+     * virtual interrupt domain, if it has sufficient priority to
+     * preempt.  If there is no interrupt that can preempt we signal
+     * this by returning a struct with prio == PRIO_IDLE.
+     */
+    GICv5PendingIrq best, irs_hppi;
+
+    /*
+     * R_ZKPVN: No virtual HPPI if EL2 is not implemented and enabled
+     * in the Security state identified by SCR_EL3.{NSE,NS}, or if the
+     * enable bits in ICV_CR0_EL1 (stored in VMCR_EL2) or
+     * ICH_VCTLR_EL2 are 0.
+     */
+    if (!arm_is_el2_enabled(env) ||
+        !(env->gicv5_cpuif.ich_vctlr_el2 & R_ICH_VCTLR_EL2_EN_MASK) ||
+        !(env->gicv5_cpuif.ich_vmcr_el2 & R_ICH_VMCR_EL2_EN_MASK)) {
+        return GICV5_PENDING_IRQ_NONE;
+    }
+
+    /*
+     * TODO: When we implement ICH_CONTEXTR_EL2, we need to check
+     * IRICHPPIDS and if it is 0 get the IRS candidate HPPI.  For now,
+     * set irs_hppi to "no candidate".
+     */
+    irs_hppi = GICV5_PENDING_IRQ_NONE;
+
+    /*
+     * If the best PPI and the best interrupt from the IRS have the
+     * same priority, it's IMPDEF which we pick (R_VVBPS). We choose
+     * the PPI.
+     */
+    if (env->gicv5_cpuif.virt_ppi_hppi.prio <= irs_hppi.prio) {
+        best = env->gicv5_cpuif.virt_ppi_hppi;
+    } else {
+        best = irs_hppi;
+    }
+
+    /*
+     * D_MSQKF: an interrupt has sufficient priority if its priority
+     * is higher than the current running priority and equal to or
+     * higher than the priority mask.
+     */
+    if (best.prio == PRIO_IDLE ||
+        best.prio > FIELD_EX64(env->gicv5_cpuif.ich_vmcr_el2, ICH_VMCR_EL2, VMPR) ||
+        best.prio >= gic_virt_running_prio(env)) {
         return GICV5_PENDING_IRQ_NONE;
     }
     return best;
@@ -844,8 +907,14 @@ static void gic_icc_pcr_el1_reset(CPUARMState *env, const ARMCPRegInfo *ri)
 
 static uint64_t gic_icc_hppir_el1_read(CPUARMState *env, const ARMCPRegInfo *ri)
 {
-    GICv5Domain domain = gicv5_logical_domain(env);
-    GICv5PendingIrq hppi = gic_hppi(env, domain);
+    GICv5PendingIrq hppi;
+
+    if (gicv5_icv_access(env)) {
+        hppi = gic_virt_hppi(env);
+    } else {
+        GICv5Domain domain = gicv5_logical_domain(env);
+        hppi = gic_hppi(env, domain);
+    }
 
     if (hppi.prio == PRIO_IDLE) {
         /* No valid interrupt */
