@@ -463,11 +463,28 @@ static void gic_ppi_spend_write(CPUARMState *env, const ARMCPRegInfo *ri,
     gic_recalc_ppi_hppi(env);
 }
 
+static uint64_t gic_ppi_enable_read(CPUARMState *env, const ARMCPRegInfo *ri)
+{
+    if (gicv5_icv_access(env)) {
+        uint64_t r = env->gicv5_cpuif.ich_ppi_enable[ri->opc2 & 1];
+
+        r &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
+        return r;
+    } else {
+        return raw_read(env, ri);
+    }
+}
+
 static void gic_ppi_enable_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                  uint64_t value)
 {
-    raw_write(env, ri, value);
-    gic_recalc_ppi_hppi(env);
+    if (gicv5_icv_access(env)) {
+        value &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
+        env->gicv5_cpuif.ich_ppi_enable[ri->opc2 & 1] = value;
+    } else {
+        raw_write(env, ri, value);
+        gic_recalc_ppi_hppi(env);
+    }
 }
 
 static void gic_ppi_priority_write(CPUARMState *env, const ARMCPRegInfo *ri,
@@ -998,6 +1015,7 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
         .access = PL1_RW, .type = ARM_CP_IO | ARM_CP_NO_RAW,
         .fgt = FGT_ICC_PPI_ENABLERN_EL1,
         .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ppi_enable[0]),
+        .readfn = gic_ppi_enable_read,
         .writefn = gic_ppi_enable_write,
     },
     {   .name = "ICC_PPI_ENABLER1_EL1", .state = ARM_CP_STATE_AA64,
