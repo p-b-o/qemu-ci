@@ -495,7 +495,7 @@ static void irs_recalc_hppi(GICv5 *s, GICv5Domain domain, uint32_t iaffid)
      *    the cpuif asks for the current HPPI when it needs it
      *  - the cpuif does not cache the HPPI on its end
      */
-    gicv5_forward_interrupt(cpu, domain);
+    gicv5_forward_interrupt(cpu, domain, false);
 }
 
 static void irs_recalc_hppi_all_cpus(GICv5 *s, GICv5Domain domain)
@@ -526,16 +526,24 @@ static void irs_recall_hppis(GICv5 *s, GICv5Domain domain)
 
     for (int i = 0; i < cs->num_cpus; i++) {
         s->hppi[domain][i] = GICV5_PENDING_IRQ_NONE;
-        gicv5_forward_interrupt(cs->cpus[i], domain);
+        gicv5_forward_interrupt(cs->cpus[i], domain, false);
     }
 }
 
 GICv5PendingIrq gicv5_get_hppi(GICv5Common *cs, GICv5Domain domain,
-                               uint32_t cpuidx)
+                               bool virtual, uint32_t cpuidx)
 {
     GICv5 *s = ARM_GICV5(cs);
 
     assert(cpuidx < cs->num_cpus);
+
+    if (virtual) {
+        /*
+         * Until we implement virtualization there is never
+         * an available virtual HPPI candidate.
+         */
+         return GICV5_PENDING_IRQ_NONE;
+    }
     return s->hppi[domain][cpuidx];
 }
 

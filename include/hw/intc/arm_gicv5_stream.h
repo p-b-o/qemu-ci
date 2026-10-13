@@ -180,6 +180,7 @@ void gicv5_activate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
  * gicv5_forward_interrupt
  * @cpu: CPU interface to forward interrupt to
  * @domain: domain this interrupt is for
+ * @virtual: true if this is a virtual interrupt for the resident VPE
  *
  * Tell the CPU interface that the highest priority pending interrupt
  * that the IRS has available for it has changed.  This is the
@@ -198,12 +199,13 @@ void gicv5_activate(GICv5Common *cs, uint32_t id, GICv5Domain domain,
  * HPPI info via a function call, so we do not need to pass it across
  * here.
  */
-void gicv5_forward_interrupt(ARMCPU *cpu, GICv5Domain domain);
+void gicv5_forward_interrupt(ARMCPU *cpu, GICv5Domain domain, bool virtual);
 
 /**
  * gicv5_get_hppi
  * @cs: GIC IRS to query
  * @domain: interrupt domain to act on
+ * @virtual: true to ask for the virtual HPPI for the resident VPE
  * @cpuidx: IRS CPU index of this CPU interface
  *
  * Ask the IRS for the highest priority pending interrupt that it has
@@ -211,7 +213,7 @@ void gicv5_forward_interrupt(ARMCPU *cpu, GICv5Domain domain);
  * protocol is the outstanding interrupt sent with a Forward packet.
  */
 GICv5PendingIrq gicv5_get_hppi(GICv5Common *cs, GICv5Domain domain,
-                               uint32_t cpuidx);
+                               bool virtual, uint32_t cpuidx);
 
 /**
  * gicv5_deactivate

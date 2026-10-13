@@ -170,7 +170,7 @@ static GICv5PendingIrq gic_hppi(CPUARMState *env, GICv5Domain domain)
         return GICV5_PENDING_IRQ_NONE;
     }
 
-    irs_hppi = gicv5_get_hppi(gic, domain, env->gicv5.cpuidx);
+    irs_hppi = gicv5_get_hppi(gic, domain, false, env->gicv5.cpuidx);
 
     /*
      * If the best PPI and the best interrupt from the IRS have the
@@ -337,13 +337,18 @@ static void gic_recalc_virt_ppi_hppi(CPUARMState *env)
                                      env->gicv5_cpuif.virt_ppi_hppi.prio);
 }
 
-void gicv5_forward_interrupt(ARMCPU *cpu, GICv5Domain domain)
+void gicv5_forward_interrupt(ARMCPU *cpu, GICv5Domain domain, bool virtual)
 {
     /*
      * IRS HPPI has changed: recalculate the IRQ/FIQ levels by
      * combining the IRS HPPI with the PPI HPPI.
+     * If this is a virtual interrupt, do similarly for VIRQ/VFIQ.
      */
-    gicv5_update_irq_fiq(&cpu->env);
+    if (virtual) {
+        /* Here we will eventually update the VIRQ/VFIQ state */
+    } else {
+        gicv5_update_irq_fiq(&cpu->env);
+    }
 }
 
 void gicv5_update_ppi_state(CPUARMState *env, int ppi, bool level)
