@@ -127,6 +127,8 @@ struct GICv5Common {
     uint32_t spi_base;
     uint32_t spi_irs_range;
     uint32_t spi_range;
+
+    bool has_virt;
 };
 
 struct GICv5CommonClass {

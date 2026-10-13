@@ -16,6 +16,12 @@
 
 typedef struct GICv5Common GICv5Common;
 
+typedef enum GICv5CPUIFStatus {
+    GICV5_CPUIF_MISSING, /* CPU does not have GICv5 cpuif support */
+    GICV5_CPUIF_PRESENT, /* CPU has GICv5 cpuif */
+    GICV5_CPUIF_NEEDS_VIRT, /* CPU has GICv5, and needs virt support in IRS */
+} GICv5CPUIFStatus;
+
 /**
  * gicv5_set_gicv5state
  * @cpu: CPU object to tell about its IRS
@@ -27,11 +33,12 @@ typedef struct GICv5Common GICv5Common;
  * IRS must call this when it is realized, for each CPU it is
  * connected to.
  *
- * Returns true on success, false if the CPU doesn't implement the
- * GICv5 CPU interface.
+ * The return value indicates whether the CPU has a GICv5 CPU
+ * interface, and if it does whether it needs virtualization support
+ * from the IRS.
  */
-bool gicv5_set_gicv5state(ARMCPU *cpu, GICv5Common *cs, uint32_t iaffid,
-                          uint32_t cpuidx);
+GICv5CPUIFStatus gicv5_set_gicv5state(ARMCPU *cpu, GICv5Common *cs,
+                                      uint32_t iaffid, uint32_t cpuidx);
 
 /*
  * The architected Stream Protocol is asynchronous; commands can be

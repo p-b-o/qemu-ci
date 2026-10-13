@@ -1215,20 +1215,25 @@ static void arm_cpu_dump_state(CPUState *cs, FILE *f, int flags)
 }
 
 #ifndef CONFIG_USER_ONLY
-bool gicv5_set_gicv5state(ARMCPU *cpu, GICv5Common *cs, uint32_t iaffid,
-                          uint32_t cpuidx)
+GICv5CPUIFStatus gicv5_set_gicv5state(ARMCPU *cpu, GICv5Common *cs,
+                                      uint32_t iaffid, uint32_t cpuidx)
 {
     /*
-     * Set this CPU's gicv5state pointer to point to the GIC that we are
-     * connected to, and record our IAFFID and CPU index.
+     * Set this CPU's gicv5state pointer to point to the GIC that we
+     * are connected to, record our IAFFID and cpuidx, and let the IRS
+     * know if it needs to implement virtualization support.
      */
     if (!cpu_isar_feature(aa64_gcie, cpu)) {
-        return false;
+        return GICV5_CPUIF_MISSING;
     }
     cpu->env.gicv5.gicv5state = cs;
     cpu->env.gicv5.iaffid = iaffid;
     cpu->env.gicv5.cpuidx = cpuidx;
-    return true;
+    if (arm_feature(&cpu->env, ARM_FEATURE_EL2)) {
+        return GICV5_CPUIF_NEEDS_VIRT;
+    } else {
+        return GICV5_CPUIF_PRESENT;
+    }
 }
 #endif
 

@@ -176,11 +176,18 @@ static void gicv5_common_realize(DeviceState *dev, Error **errp)
     }
 
     for (int i = 0; i < cs->num_cpus; i++) {
-        if (!gicv5_set_gicv5state(cs->cpus[i], cs, cs->cpu_iaffids[i], i)) {
+        switch (gicv5_set_gicv5state(cs->cpus[i], cs, cs->cpu_iaffids[i], i)) {
+        case GICV5_CPUIF_MISSING:
             error_setg(errp,
                        "CPU %d (IAFFID 0x%x) does not implement GICv5 CPU interface",
                        i, cs->cpu_iaffids[i]);
             return;
+        case GICV5_CPUIF_PRESENT:
+            break;
+        case GICV5_CPUIF_NEEDS_VIRT:
+            /* R_KDSPG: IRS must implement virtualization if any CPU has EL2 */
+            cs->has_virt = true;
+            break;
         }
     }
 
