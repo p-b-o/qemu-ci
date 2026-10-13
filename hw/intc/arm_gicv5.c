@@ -641,6 +641,8 @@ static const GICv5ISTConfig *ist_for_vint(GICv5 *s,
     }
 
 DEF_SET_FIELD_FOR_IST(priority, uint8_t, PRIORITY)
+DEF_SET_FIELD_FOR_IST(enabled, bool, ENABLE)
+DEF_SET_FIELD_FOR_IST(handling, bool, HM)
 
 void gicv5_set_priority(GICv5Common *cs, uint32_t id, uint8_t priority,
                         GICv5Domain domain, GICv5IntType type, bool virtual,
@@ -707,8 +709,12 @@ void gicv5_set_enabled(GICv5Common *cs, uint32_t id, bool enabled,
     trace_gicv5_set_enabled(domain_name[domain], inttype_name(type), virtual,
                             id, enabled);
     if (virtual) {
-        qemu_log_mask(LOG_GUEST_ERROR, "gicv5_set_enabled: tried to set "
-                      "enable state of a virtual interrupt\n");
+        const GICv5ISTConfig *cfg = ist_for_vint(s, cs, domain, type, cpuidx);
+
+        if (!set_enabled_for_ist(cs, cfg, id, enabled, &iaffid)) {
+            return;
+        }
+        irs_recalc_vhppi(s, s->res_vpe[cpuidx]->vmte, iaffid);
         return;
     }
 
@@ -716,15 +722,10 @@ void gicv5_set_enabled(GICv5Common *cs, uint32_t id, bool enabled,
     case GICV5_LPI:
     {
         const GICv5ISTConfig *cfg = &s->phys_lpi_config[domain];
-        L2_ISTE_Handle h;
-        uint32_t *l2_iste_p = get_l2_iste(cs, cfg, id, &h);
 
-        if (!l2_iste_p) {
+        if (!set_enabled_for_ist(cs, cfg, id, enabled, &iaffid)) {
             return;
         }
-        *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, ENABLE, enabled);
-        iaffid = FIELD_EX32(*l2_iste_p, L2_ISTE, IAFFID);
-        put_l2_iste(cs, cfg, &h);
         break;
     }
     case GICV5_SPI:
@@ -812,8 +813,11 @@ void gicv5_set_handling(GICv5Common *cs, uint32_t id,
     trace_gicv5_set_handling(domain_name[domain], inttype_name(type), virtual,
                             id, handling);
     if (virtual) {
-        qemu_log_mask(LOG_GUEST_ERROR, "gicv5_set_handling: tried to set "
-                      "handling mode of a virtual interrupt\n");
+        const GICv5ISTConfig *cfg = ist_for_vint(s, cs, domain, type, cpuidx);
+
+        if (!set_handling_for_ist(cs, cfg, id, handling, NULL)) {
+            return;
+        }
         return;
     }
 
@@ -821,14 +825,10 @@ void gicv5_set_handling(GICv5Common *cs, uint32_t id,
     case GICV5_LPI:
     {
         const GICv5ISTConfig *cfg = &s->phys_lpi_config[domain];
-        L2_ISTE_Handle h;
-        uint32_t *l2_iste_p = get_l2_iste(cs, cfg, id, &h);
 
-        if (!l2_iste_p) {
+        if (!set_handling_for_ist(cs, cfg, id, handling, NULL)) {
             return;
         }
-        *l2_iste_p = FIELD_DP32(*l2_iste_p, L2_ISTE, HM, handling);
-        put_l2_iste(cs, cfg, &h);
         break;
     }
     case GICV5_SPI:
