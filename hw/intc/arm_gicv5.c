@@ -340,12 +340,41 @@ static void irs_recall_hppis(GICv5 *s, GICv5Domain domain)
     }
 }
 
+static void irs_resend_vhppis(GICv5 *s, GICv5Domain domain)
+{
+    /*
+     * The IRS was enabled or disabled for this domain. In hardware
+     * this makes the IRS either forward or recall any pending vHPPI
+     * it had for a VPE resident on the CPU. For QEMU, we tell the CPU
+     * interface that it needs to ask the IRS about the status of
+     * virtual interrupts for any VPE that is currently resident
+     * (which will return either "none" or "here's the new one").
+     */
+    GICv5Common *cs = ARM_GICV5_COMMON(s);
+
+    if (!gicv5_domain_has_virt(cs, domain)) {
+        return;
+    }
+
+    for (int i = 0; i < cs->num_cpus; i++) {
+        VPE *vpe = s->res_vpe[i];
+
+        if (vpe && vpe->vmte->domain == domain) {
+            gicv5_forward_interrupt(cs->cpus[i], domain, true);
+        }
+    }
+}
+
 GICv5PendingIrq gicv5_get_hppi(GICv5Common *cs, GICv5Domain domain,
                                bool virtual, uint32_t cpuidx)
 {
     GICv5 *s = ARM_GICV5(cs);
 
     assert(cpuidx < cs->num_cpus);
+
+    if (!FIELD_EX32(cs->irs_cr0[domain], IRS_CR0, IRSEN)) {
+        return GICV5_PENDING_IRQ_NONE;
+    }
 
     if (virtual) {
         VPE *vpe = s->res_vpe[cpuidx];
@@ -2738,6 +2767,8 @@ static bool config_readl(GICv5 *s, GICv5Domain domain, hwaddr offset,
         } else {
             irs_recall_hppis(s, domain);
         }
+        /* IRSEN affects whether we should forward vHPPIs */
+        irs_resend_vhppis(s, domain);
         return true;
     case A_IRS_CR1:
         *data = cs->irs_cr1[domain];
