@@ -480,26 +480,50 @@ static void gic_ppi_sactive_write(CPUARMState *env, const ARMCPRegInfo *ri,
     }
 }
 
+static uint64_t gic_ppi_pend_read(CPUARMState *env, const ARMCPRegInfo *ri)
+{
+    if (gicv5_icv_access(env)) {
+        uint64_t value = env->gicv5_cpuif.ich_ppi_pend[ri->opc2 & 1];
+
+        value &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
+        return value;
+    } else {
+        return raw_read(env, ri);
+    }
+}
+
 static void gic_ppi_cpend_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                 uint64_t value)
 {
-    uint64_t old = raw_read(env, ri);
     /* If ICC_PPI_HMR_EL1[n].HM is 1, PEND bits are RO */
     uint64_t hm = env->gicv5_cpuif.ppi_hm[ri->opc2 & 1];
     value &= ~hm;
-    raw_write(env, ri, old & ~value);
-    gic_recalc_ppi_hppi(env);
+
+    if (gicv5_icv_access(env)) {
+        value &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
+        env->gicv5_cpuif.ich_ppi_pend[ri->opc2 & 1] &= ~value;
+    } else {
+        uint64_t old = raw_read(env, ri);
+        raw_write(env, ri, old & ~value);
+        gic_recalc_ppi_hppi(env);
+    }
 }
 
 static void gic_ppi_spend_write(CPUARMState *env, const ARMCPRegInfo *ri,
                                 uint64_t value)
 {
-    uint64_t old = raw_read(env, ri);
     /* If ICC_PPI_HMR_EL1[n].HM is 1, PEND bits are RO */
     uint64_t hm = env->gicv5_cpuif.ppi_hm[ri->opc2 & 1];
     value &= ~hm;
-    raw_write(env, ri, old | value);
-    gic_recalc_ppi_hppi(env);
+
+    if (gicv5_icv_access(env)) {
+        value &= ~env->gicv5_cpuif.ich_ppi_hvi[ri->opc2 & 1];
+        env->gicv5_cpuif.ich_ppi_pend[ri->opc2 & 1] |= value;
+    } else {
+        uint64_t old = raw_read(env, ri);
+        raw_write(env, ri, old | value);
+        gic_recalc_ppi_hppi(env);
+    }
 }
 
 static uint64_t gic_ppi_enable_read(CPUARMState *env, const ARMCPRegInfo *ri)
@@ -1134,6 +1158,7 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
         .access = PL1_RW, .type = ARM_CP_ALIAS | ARM_CP_IO | ARM_CP_NO_RAW,
         .fgt = FGT_ICC_PPI_PENDRN_EL1,
         .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ppi_pend[0]),
+        .readfn = gic_ppi_pend_read,
         .writefn = gic_ppi_cpend_write,
     },
     {   .name = "ICC_PPI_CPENDR1_EL1", .state = ARM_CP_STATE_AA64,
@@ -1141,6 +1166,7 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
         .access = PL1_RW, .type = ARM_CP_ALIAS | ARM_CP_IO | ARM_CP_NO_RAW,
         .fgt = FGT_ICC_PPI_PENDRN_EL1,
         .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ppi_pend[1]),
+        .readfn = gic_ppi_pend_read,
         .writefn = gic_ppi_cpend_write,
     },
     {   .name = "ICC_PPI_SPENDR0_EL1", .state = ARM_CP_STATE_AA64,
@@ -1148,6 +1174,7 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
         .access = PL1_RW, .type = ARM_CP_IO | ARM_CP_NO_RAW,
         .fgt = FGT_ICC_PPI_PENDRN_EL1,
         .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ppi_pend[0]),
+        .readfn = gic_ppi_pend_read,
         .writefn = gic_ppi_spend_write,
     },
     {   .name = "ICC_PPI_SPENDR0_EL1", .state = ARM_CP_STATE_AA64,
@@ -1155,6 +1182,7 @@ static const ARMCPRegInfo gicv5_cpuif_reginfo[] = {
         .access = PL1_RW, .type = ARM_CP_IO | ARM_CP_NO_RAW,
         .fgt = FGT_ICC_PPI_PENDRN_EL1,
         .fieldoffset = offsetof(CPUARMState, gicv5_cpuif.ppi_pend[1]),
+        .readfn = gic_ppi_pend_read,
         .writefn = gic_ppi_spend_write,
     },
     {   .name = "ICC_APR_EL1", .state = ARM_CP_STATE_AA64,
