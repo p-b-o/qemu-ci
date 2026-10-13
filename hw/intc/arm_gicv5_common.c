@@ -9,6 +9,7 @@
 #include "qemu/osdep.h"
 #include "hw/intc/arm_gicv5_common.h"
 #include "hw/intc/arm_gicv5_stream.h"
+#include "hw/intc/arm_gicv5_regs.h"
 #include "hw/core/qdev-properties.h"
 #include "qapi/error.h"
 #include "trace.h"
@@ -113,6 +114,11 @@ static void gicv5_common_reset_hold(Object *obj, ResetType type)
         memset(cs->irs_vmap_vistr, 0, sizeof(cs->irs_vmap_vistr));
         memset(cs->irs_vmap_l2_vistr, 0, sizeof(cs->irs_vmap_l2_vistr));
         memset(cs->irs_vmap_vper, 0, sizeof(cs->irs_vmap_vper));
+        memset(cs->irs_vpe_selr, 0, sizeof(cs->irs_vpe_selr));
+
+        for (int i = 0; i < NUM_GICV5_DOMAINS; i++) {
+            cs->irs_vpe_statusr[i] = R_IRS_VPE_STATUSR_IDLE_MASK;
+        }
     }
 }
 
