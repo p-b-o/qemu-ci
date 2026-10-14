@@ -1028,9 +1028,13 @@ static void gen_call(DisasContext *ctx, int pc_off)
 
 static void gen_callr(DisasContext *ctx, TCGv new_pc)
 {
+    TCGv target = tcg_temp_new();
     TCGv lr = get_result_gpr(ctx, HEX_REG_LR);
+
+    /* Preserve the target when callr uses LR as its source register. */
+    tcg_gen_mov_tl(target, new_pc);
     tcg_gen_movi_tl(lr, ctx->next_PC);
-    gen_write_new_pc_addr(ctx, new_pc, TCG_COND_ALWAYS, NULL);
+    gen_write_new_pc_addr(ctx, target, TCG_COND_ALWAYS, NULL);
 }
 
 static void gen_cond_call(DisasContext *ctx, TCGv pred,
