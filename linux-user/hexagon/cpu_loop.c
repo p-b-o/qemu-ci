@@ -73,6 +73,10 @@ void cpu_loop(CPUHexagonState *env)
                 force_sig_fault(TARGET_SIGSEGV, TARGET_SEGV_MAPERR,
                                 env->gpr[HEX_REG_PC]);
                 break;
+            case HEX_CAUSE_VECTOR_STACK_OVERFLOW:
+                force_sig_fault(TARGET_SIGSEGV, TARGET_SEGV_BNDERR,
+                                env->gpr[HEX_REG_PC]);
+                break;
             case HEX_CAUSE_PRIV_USER_NO_GINSN:
             case HEX_CAUSE_PRIV_USER_NO_SINSN:
             case HEX_CAUSE_INVALID_PACKET:

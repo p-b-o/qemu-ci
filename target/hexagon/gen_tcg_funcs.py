@@ -86,7 +86,9 @@ def gen_tcg_func(f, tag, regs, imms):
     if "A_HVX_IEEE_FP" in hex_common.attribdict[tag]:
         gen_disabled_ieee_insn(f, tag, regs)
 
-    if hex_common.is_idef_parser_enabled(tag):
+    if (hex_common.is_idef_parser_enabled(tag) and tag not in {
+            "V2_vallocframe_imm", "V2_vallocframe_reg",
+            "V2_vdeallocframe_imm", "V2_vdeallocframe_reg"}):
         gpr_operands = [
             hex_common.get_register(tag, regtype, regid)
             for regtype, regid in regs
