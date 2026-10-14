@@ -721,6 +721,11 @@ int decode_packet(DisasContext *ctx, int max_words, const uint32_t *words,
             /* Invalid instruction encoding */
             return 0;
         }
+        /* Bit 7 of L4_loadw_phys became reserved in v83. */
+        if (ctx->hex_def->hex_version >= HEX_VER_V83 &&
+            insn->opcode == L4_loadw_phys && (encoding32 & 0x80)) {
+            return 0;
+        }
         /*
          * If we saw an extender, mark next word extended so immediate
          * decode works
