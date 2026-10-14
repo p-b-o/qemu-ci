@@ -5904,7 +5904,11 @@ static RISCVException read_jvt(CPURISCVState *env, int csrno,
 static RISCVException write_jvt(CPURISCVState *env, int csrno,
                                 target_ulong val, uintptr_t ra)
 {
-    env->jvt = val;
+    /*
+     * jvt.mode is WARL and only mode 0 is implemented, so drop the
+     * reserved mode encodings instead of storing them.
+     */
+    env->jvt = val & JVT_BASE;
     return RISCV_EXCP_NONE;
 }
 

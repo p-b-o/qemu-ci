@@ -61,6 +61,15 @@ tests += {
   }
 }
 
+# Zcmt is incompatible with the Zcd extension, so the default rv64 CPU
+# cannot be used here.
+tests += {
+  'test-jvt-warl.S': {
+    'cflags': cflags + ['-march=rv64gc_zicsr'],
+    'qemu_args': ['-cpu', 'rv64,zcmt=true,zcd=false', qemu_args],
+  }
+}
+
 if 'qemu-system-riscv64' in emulators
   tcg_tests += {
     'riscv64-softmmu': {
