@@ -1,0 +1,41 @@
+Looking up 20261014053433.24564-1-sarunkod@amd.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/8] amd_iommu: Assign ioapic_as only when interrupt remapping is supported.
+    + Link: https://lore.kernel.org/qemu-devel/20261014053433.24564-2-sarunkod@amd.com
+  [32m✓[0m [PATCH 2/8] x86-iommu: Introduce x86_iommu_device_get() for x86-iommu retrieval
+    + Link: https://lore.kernel.org/qemu-devel/20261014053433.24564-3-sarunkod@amd.com
+  [32m✓[0m [PATCH 3/8] amd_iommu: Add support for get_x86_iommu callback
+    + Link: https://lore.kernel.org/qemu-devel/20261014053433.24564-4-sarunkod@amd.com
+  [32m✓[0m [PATCH 4/8] intel_iommu: Add support for get_x86_iommu callback
+    + Link: https://lore.kernel.org/qemu-devel/20261014053433.24564-5-sarunkod@amd.com
+  [32m✓[0m [PATCH 5/8] i386/kvm: Use x86_iommu_device_get() for per-device IOMMU lookup
+    + Link: https://lore.kernel.org/qemu-devel/20261014053433.24564-6-sarunkod@amd.com
+  [32m✓[0m [PATCH 6/8] amd_iommu: Introduce root bus
+    + Link: https://lore.kernel.org/qemu-devel/20261014053433.24564-7-sarunkod@amd.com
+  [32m✓[0m [PATCH 7/8] acpi-build: Create PCI topology using amd iommu root bus
+    + Link: https://lore.kernel.org/qemu-devel/20261014053433.24564-8-sarunkod@amd.com
+  [32m✓[0m [PATCH 8/8] amd_iommu: Allow IOMMU to attachment on non-system (pcie.0) bus
+    + Link: https://lore.kernel.org/qemu-devel/20261014053433.24564-9-sarunkod@amd.com
+  ---
+  [32m✓[0m Signed: DKIM/amd.com
+---
+Total patches: 8
+---
+Applying: amd_iommu: Assign ioapic_as only when interrupt remapping is supported.
+Applying: x86-iommu: Introduce x86_iommu_device_get() for x86-iommu retrieval
+Applying: amd_iommu: Add support for get_x86_iommu callback
+Applying: intel_iommu: Add support for get_x86_iommu callback
+Patch failed at 0004 intel_iommu: Add support for get_x86_iommu callback
+error: patch failed: hw/i386/intel_iommu.c:5461
+error: hw/i386/intel_iommu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
