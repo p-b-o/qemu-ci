@@ -1,0 +1,61 @@
+Looking up 20261015213236.157767-1-pierrick.bouvier@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 24 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 20 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/19] hw/core/sysemu-cpu-ops: add get_dump_info
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-2-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 2/19] target/arm: implement get_dump_info sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-3-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 3/19] target/i386: implement get_dump_info sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-4-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 4/19] target/ppc/cpu: constify cpu parameter for ppc_interrupts_little_endian
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-5-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 5/19] target/ppc: implement get_dump_info sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-6-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 6/19] target/riscv: implement get_dump_info sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-7-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 7/19] target/s390x: implement get_dump_info sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-8-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 8/19] target/loongarch: implement get_dump_info sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-9-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 9/19] dump: use get_dump_info sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-10-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 10/19] dump: remove cpu_get_dump_info
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-11-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 11/19] hw/core/sysemu-cpu-ops: add get_note_size
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-12-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 12/19] target/arm: implement get_note_size sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-13-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 13/19] target/i386: implement get_note_size sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-14-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 14/19] target/ppc: implement get_note_size sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-15-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 15/19] target/riscv: implement get_note_size sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-16-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 16/19] target/s390x: implement get_note_size sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-17-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 17/19] target/loongarch: implement get_note_size sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-18-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 18/19] dump: use get_note_size sysemu op
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-19-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH v2 19/19] dump: remove cpu_get_note_size
+    + Link: https://lore.kernel.org/qemu-devel/20261015213236.157767-20-pierrick.bouvier@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 19
+---
+Applying: hw/core/sysemu-cpu-ops: add get_dump_info
+Applying: target/arm: implement get_dump_info sysemu op
+Patch failed at 0002 target/arm: implement get_dump_info sysemu op
+error: patch failed: target/arm/internals.h:438
+error: target/arm/internals.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
