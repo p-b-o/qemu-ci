@@ -39,6 +39,7 @@
 #include "qemu/option.h"
 #include "qemu/base-arch-defs.h"
 #include "qemu/target-info.h"
+#include "qemu/target-ops.h"
 #include "qemu/units.h"
 #include "qapi/error.h"
 #include "qom/object_interfaces.h"
@@ -56,6 +57,30 @@ MonitorHMP *monitor_cur_hmp(void)
                                                  TYPE_MONITOR_HMP);
     }
     return NULL;
+}
+
+void hmp_info_mem(MonitorHMP *hmp, const QDict *qdict)
+{
+    const TargetOps *ops = target_ops();
+
+    if (ops->info_mem) {
+        ops->info_mem(hmp, qdict);
+    } else {
+        monitor_hmp_printf(hmp,
+                           "info mem is not supported on this architecture\n");
+    }
+}
+
+void hmp_info_tlb(MonitorHMP *hmp, const QDict *qdict)
+{
+    const TargetOps *ops = target_ops();
+
+    if (ops->info_tlb) {
+        ops->info_tlb(hmp, qdict);
+    } else {
+        monitor_hmp_printf(hmp,
+                           "info tlb is not supported on this architecture\n");
+    }
 }
 
 static void monitor_hmp_finalize(Object *obj)

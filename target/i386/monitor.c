@@ -26,6 +26,7 @@
 #include "cpu.h"
 #include "monitor/monitor.h"
 #include "monitor/hmp.h"
+#include "qemu/target-ops.h"
 #include "qobject/qdict.h"
 #include "qapi/error.h"
 #include "qapi/qapi-commands-misc.h"
@@ -211,7 +212,7 @@ static void tlb_info_la57(MonitorHMP *hmp, CPUArchState *env, AddressSpace *as)
 }
 #endif /* TARGET_X86_64 */
 
-void hmp_info_tlb(MonitorHMP *hmp, const QDict *qdict)
+static void hmp_info_tlb_i386(MonitorHMP *hmp, const QDict *qdict)
 {
     CPUArchState *env;
     AddressSpace *as;
@@ -537,7 +538,7 @@ static void mem_info_la57(MonitorHMP *hmp, CPUArchState *env, AddressSpace *as)
 }
 #endif /* TARGET_X86_64 */
 
-void hmp_info_mem(MonitorHMP *hmp, const QDict *qdict)
+static void hmp_info_mem_i386(MonitorHMP *hmp, const QDict *qdict)
 {
     CPUArchState *env;
     AddressSpace *as;
@@ -570,6 +571,9 @@ void hmp_info_mem(MonitorHMP *hmp, const QDict *qdict)
         mem_info_32(hmp, env, as);
     }
 }
+
+TARGET_OPS_REGISTER(QEMU_ARCH_I386, info_tlb, hmp_info_tlb_i386);
+TARGET_OPS_REGISTER(QEMU_ARCH_I386, info_mem, hmp_info_mem_i386);
 
 void hmp_mce(MonitorHMP *hmp, const QDict *qdict)
 {

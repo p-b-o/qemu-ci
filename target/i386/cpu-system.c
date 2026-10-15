@@ -29,6 +29,7 @@
 #include "qapi/qapi-commands-machine.h"
 
 #include "cpu-internal.h"
+#include "qemu/target-ops.h"
 
 /* Return a QDict containing keys for all properties that can be included
  * in static expansion of CPU models. All properties set by x86_cpu_load_model()
@@ -188,10 +189,10 @@ out:
     return xc;
 }
 
-CpuModelExpansionInfo *
-qmp_query_cpu_model_expansion(CpuModelExpansionType type,
-                                                      CpuModelInfo *model,
-                                                      Error **errp)
+static CpuModelExpansionInfo *
+x86_query_cpu_model_expansion(CpuModelExpansionType type,
+                              CpuModelInfo *model,
+                              Error **errp)
 {
     X86CPU *xc = NULL;
     Error *err = NULL;
@@ -240,6 +241,9 @@ out:
     }
     return ret;
 }
+
+TARGET_OPS_REGISTER(QEMU_ARCH_I386, query_cpu_model_expansion,
+                    x86_query_cpu_model_expansion);
 
 void cpu_clear_apic_feature(CPUX86State *env)
 {

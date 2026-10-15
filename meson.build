@@ -3853,6 +3853,7 @@ if have_block
 endif
 
 common_ss.add(files('cpu-common.c'))
+common_ss.add(files('target-ops.c'))
 user_ss.add(files('cpu-target.c'))
 system_ss.add(files('cpu-target.c'))
 

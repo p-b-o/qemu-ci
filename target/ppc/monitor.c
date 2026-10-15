@@ -9,10 +9,11 @@
 #include "qemu/osdep.h"
 #include "monitor/monitor.h"
 #include "monitor/hmp.h"
+#include "qemu/target-ops.h"
 #include "cpu.h"
 
 #ifdef CONFIG_HMP
-void hmp_info_tlb(MonitorHMP *hmp, const QDict *qdict)
+static void hmp_info_tlb_ppc(MonitorHMP *hmp, const QDict *qdict)
 {
     CPUArchState *env1 = monitor_hmp_get_cpu_env(hmp);
 
@@ -22,4 +23,5 @@ void hmp_info_tlb(MonitorHMP *hmp, const QDict *qdict)
     }
     dump_mmu(env1);
 }
+TARGET_OPS_REGISTER(QEMU_ARCH_PPC, info_tlb, hmp_info_tlb_ppc);
 #endif

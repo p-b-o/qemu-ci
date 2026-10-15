@@ -26,6 +26,7 @@
 #include "cpu_bits.h"
 #include "monitor/monitor.h"
 #include "monitor/hmp.h"
+#include "qemu/target-ops.h"
 #include "system/memory.h"
 #include "internals.h"
 
@@ -217,7 +218,7 @@ static void mem_info_svxx(MonitorHMP *hmp, CPUArchState *env)
               last_paddr + last_size - pbase, last_attr);
 }
 
-void hmp_info_mem(MonitorHMP *hmp, const QDict *qdict)
+static void hmp_info_mem_riscv(MonitorHMP *hmp, const QDict *qdict)
 {
     CPUArchState *env;
 
@@ -246,6 +247,7 @@ void hmp_info_mem(MonitorHMP *hmp, const QDict *qdict)
 
     mem_info_svxx(hmp, env);
 }
+TARGET_OPS_REGISTER(QEMU_ARCH_RISCV, info_mem, hmp_info_mem_riscv);
 #endif /* CONFIG_HMP */
 
 #ifdef CONFIG_TCG

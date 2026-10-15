@@ -22,6 +22,7 @@
 #include "qapi/type-helpers.h"
 #include "qemu/uuid.h"
 #include "qemu/target-info.h"
+#include "qemu/target-ops.h"
 #include "qemu/target-info-qapi.h"
 #include "qom/qom-qobject.h"
 #include "system/hostmem.h"
@@ -454,4 +455,30 @@ void qmp_dump_skeys(const char *filename, Error **errp)
 void qmp_inject_nmi(Error **errp)
 {
     nmi_inject(errp);
+}
+
+CpuDefinitionInfoList *qmp_query_cpu_definitions(Error **errp)
+{
+    const TargetOps *ops = target_ops();
+
+    if (!ops->query_cpu_definitions) {
+        error_setg(errp,
+                   "CPU model definitions are not supported on this target");
+        return NULL;
+    }
+    return ops->query_cpu_definitions(errp);
+}
+
+CpuModelExpansionInfo *qmp_query_cpu_model_expansion(CpuModelExpansionType type,
+                                                     CpuModelInfo *model,
+                                                     Error **errp)
+{
+    const TargetOps *ops = target_ops();
+
+    if (!ops->query_cpu_model_expansion) {
+        error_setg(errp,
+                   "CPU model expansion is not supported on this target");
+        return NULL;
+    }
+    return ops->query_cpu_model_expansion(type, model, errp);
 }
