@@ -15,6 +15,7 @@
 
 #include "qemu/osdep.h"
 #include "qapi/error.h"
+#include "qapi/visitor.h"
 #include "scsi/constants.h"
 #include "hw/core/irq.h"
 #include "trace.h"
@@ -743,6 +744,66 @@ static bool ufs_mcq_delete_cq(UfsHc *u, uint8_t qid)
     return true;
 }
 
+static void ufs_fault_inject_init(UfsHc *u)
+{
+    u->active_fault_inject_tag = u->params.fault_inject_tag;
+    u->held_req = NULL;
+}
+
+static void ufs_fault_inject_hce_reset(UfsHc *u)
+{
+    if (u->held_req) {
+        u->held_req = NULL;
+        u->active_fault_inject_tag = UFS_FAULT_INJECT_TAG_NONE;
+        u->params.fault_inject_tag = UFS_FAULT_INJECT_TAG_NONE;
+    } else {
+        u->active_fault_inject_tag = u->params.fault_inject_tag;
+    }
+}
+
+static bool ufs_fault_inject_exec_req(UfsRequest *req)
+{
+    UfsHc *u = req->hc;
+
+    if (likely(u->active_fault_inject_tag == UFS_FAULT_INJECT_TAG_NONE) ||
+        u->held_req != NULL ||
+        req->req_upiu.header.trans_type != UFS_UPIU_TRANSACTION_COMMAND) {
+        return false;
+    }
+
+    if (u->active_fault_inject_tag == UFS_FAULT_INJECT_TAG_ANY) {
+        uint8_t op = req->req_upiu.sc.cdb[0];
+
+        if (op == READ_10 || op == WRITE_10) {
+            /*
+             * In 10-byte SCSI read/write commands (SBC-4), bytes 2..5
+             * encode the 32-bit Logical Block Address (LBA) in
+             * big-endian.
+             */
+            uint32_t lba = ldl_be_p(&req->req_upiu.sc.cdb[2]);
+
+            /*
+             * Only intercept target I/O targeting LBA >=
+             * UFS_FAULT_INJECT_MIN_LBA. Skips guest boot-time partition
+             * table and superblock scanning.
+             */
+            if (lba >= UFS_FAULT_INJECT_MIN_LBA) {
+                u->active_fault_inject_tag = req->req_upiu.header.task_tag;
+                u->held_req = req;
+                trace_ufs_fault_inject_hold_req(
+                    req->req_upiu.header.task_tag, lba);
+                return true;
+            }
+        }
+    } else if (req->req_upiu.header.task_tag == u->active_fault_inject_tag) {
+        u->held_req = req;
+        trace_ufs_fault_inject_hold_req(req->req_upiu.header.task_tag, 0);
+        return true;
+    }
+
+    return false;
+}
+
 static void ufs_hce_reset(UfsHc *u)
 {
     int i;
@@ -818,6 +879,8 @@ static void ufs_hce_reset(UfsHc *u)
         }
         memset(u->mcq_op_reg, 0, sizeof(u->mcq_op_reg));
     }
+
+    ufs_fault_inject_hce_reset(u);
 
     u->resetting = false;
 
@@ -2397,6 +2460,10 @@ static void ufs_exec_req(UfsRequest *req)
         return;
     }
 
+    if (ufs_fault_inject_exec_req(req)) {
+        return;
+    }
+
     switch (req->req_upiu.header.trans_type) {
     case UFS_UPIU_TRANSACTION_NOP_OUT:
         req_result = ufs_exec_nop_cmd(req);
@@ -3017,7 +3084,165 @@ static void ufs_init_hc(UfsHc *u)
 
     timer_init_ms(&u->idle_timer, QEMU_CLOCK_VIRTUAL_RT, ufs_idle_timer_cb, u);
     timer_mod(&u->idle_timer, now + UFS_IDLE_TIMER_TICK);
+
+    ufs_fault_inject_init(u);
 }
+
+static bool ufs_fault_inject_parse_mode(const char *str,
+                                        UfsFaultInjectMode *mode,
+                                        Error **errp)
+{
+    if (!str || g_strcmp0(str, "abort-success") == 0) {
+        *mode = UFS_FAULT_INJECT_ABORT_SUCCESS;
+    } else if (g_strcmp0(str, "abort-failed") == 0) {
+        *mode = UFS_FAULT_INJECT_ABORT_FAILED;
+    } else if (g_strcmp0(str, "in-transition") == 0) {
+        *mode = UFS_FAULT_INJECT_IN_TRANSITION;
+    } else if (g_strcmp0(str, "timeout") == 0) {
+        *mode = UFS_FAULT_INJECT_TIMEOUT;
+    } else {
+        error_setg(errp, "invalid x-fault-inject-mode: %s", str);
+        return false;
+    }
+    return true;
+}
+
+static bool ufs_fault_inject_realize(UfsHc *u, Error **errp)
+{
+    return ufs_fault_inject_parse_mode(u->params.fault_inject_mode,
+                                       &u->fault_inject_mode, errp);
+}
+
+static void ufs_prop_get_fault_inject_tag(Object *obj, Visitor *v,
+                                          const char *name, void *opaque,
+                                          Error **errp)
+{
+    Property *prop = opaque;
+    uint32_t *ptr = object_field_prop_ptr(obj, prop);
+    UfsParams *params = container_of(ptr, UfsParams, fault_inject_tag);
+    UfsHc *u = container_of(params, UfsHc, params);
+
+    visit_type_uint32(v, name, &u->active_fault_inject_tag, errp);
+}
+
+static void ufs_prop_set_fault_inject_tag(Object *obj, Visitor *v,
+                                          const char *name, void *opaque,
+                                          Error **errp)
+{
+    Property *prop = opaque;
+    uint32_t *ptr = object_field_prop_ptr(obj, prop);
+    UfsParams *params = container_of(ptr, UfsParams, fault_inject_tag);
+    UfsHc *u = container_of(params, UfsHc, params);
+    uint32_t val;
+
+    if (!visit_type_uint32(v, name, &val, errp)) {
+        return;
+    }
+
+    if (u->held_req != NULL) {
+        error_setg(errp,
+                   "cannot change %s while a request (tag %u) is held",
+                   name, u->held_req->req_upiu.header.task_tag);
+        return;
+    }
+
+    *ptr = val;
+    u->active_fault_inject_tag = val;
+    trace_ufs_fault_inject_set_tag(val);
+}
+
+static void ufs_prop_set_default_fault_inject_tag(ObjectProperty *op,
+                                                  const Property *prop)
+{
+    object_property_set_default_uint(op, prop->defval.u);
+}
+
+const PropertyInfo ufs_prop_fault_inject_tag = {
+    .type = "uint32",
+    .description = "Task tag to hold for fault injection",
+    .get = ufs_prop_get_fault_inject_tag,
+    .set = ufs_prop_set_fault_inject_tag,
+    .set_default_value = ufs_prop_set_default_fault_inject_tag,
+    .realized_set_allowed = true,
+};
+
+static void ufs_prop_get_fault_inject_mode(Object *obj, Visitor *v,
+                                           const char *name, void *opaque,
+                                           Error **errp)
+{
+    Property *prop = opaque;
+    char **ptr = object_field_prop_ptr(obj, prop);
+    UfsParams *params = container_of(ptr, UfsParams, fault_inject_mode);
+    UfsHc *u = container_of(params, UfsHc, params);
+    const char *str;
+    char *val;
+
+    switch (u->fault_inject_mode) {
+    case UFS_FAULT_INJECT_ABORT_FAILED:
+        str = "abort-failed";
+        break;
+    case UFS_FAULT_INJECT_IN_TRANSITION:
+        str = "in-transition";
+        break;
+    case UFS_FAULT_INJECT_TIMEOUT:
+        str = "timeout";
+        break;
+    case UFS_FAULT_INJECT_ABORT_SUCCESS:
+    default:
+        str = "abort-success";
+        break;
+    }
+
+    val = g_strdup(str);
+    visit_type_str(v, name, &val, errp);
+    g_free(val);
+}
+
+static void ufs_prop_set_fault_inject_mode(Object *obj, Visitor *v,
+                                           const char *name, void *opaque,
+                                           Error **errp)
+{
+    Property *prop = opaque;
+    char **ptr = object_field_prop_ptr(obj, prop);
+    UfsParams *params = container_of(ptr, UfsParams, fault_inject_mode);
+    UfsHc *u = container_of(params, UfsHc, params);
+    char *str;
+    UfsFaultInjectMode mode;
+
+    if (!visit_type_str(v, name, &str, errp)) {
+        return;
+    }
+
+    if (!ufs_fault_inject_parse_mode(str, &mode, errp)) {
+        g_free(str);
+        return;
+    }
+
+    g_free(*ptr);
+    *ptr = str;
+    u->fault_inject_mode = mode;
+    trace_ufs_fault_inject_set_mode(str);
+}
+
+static void ufs_prop_release_fault_inject_mode(Object *obj, const char *name,
+                                               void *opaque)
+{
+    Property *prop = opaque;
+    char **ptr = object_field_prop_ptr(obj, prop);
+
+    g_free(*ptr);
+    *ptr = NULL;
+}
+
+const PropertyInfo ufs_prop_fault_inject_mode = {
+    .type = "str",
+    .description = "Fault injection mode: abort-success, abort-failed, "
+                   "in-transition, timeout",
+    .get = ufs_prop_get_fault_inject_mode,
+    .set = ufs_prop_set_fault_inject_mode,
+    .release = ufs_prop_release_fault_inject_mode,
+    .realized_set_allowed = true,
+};
 
 bool ufs_realize(UfsHc *u, DeviceState *dev, AddressSpace *dma_as, Error **errp)
 {
@@ -3025,6 +3250,10 @@ bool ufs_realize(UfsHc *u, DeviceState *dev, AddressSpace *dma_as, Error **errp)
     u->dma_as = dma_as;
 
     if (!ufs_check_constraints(u, errp)) {
+        return false;
+    }
+
+    if (!ufs_fault_inject_realize(u, errp)) {
         return false;
     }
 

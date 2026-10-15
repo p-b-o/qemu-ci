@@ -72,6 +72,12 @@ static const Property ufs_pci_props[] = {
                        0x400),
     DEFINE_PROP_UINT32("wb-min-size", UfsPciState, ufs.params.wb_min_size,
                        0x100),
+    DEFINE_PROP_UNSIGNED("x-fault-inject-tag", UfsPciState,
+                         ufs.params.fault_inject_tag, UFS_FAULT_INJECT_TAG_NONE,
+                         ufs_prop_fault_inject_tag, uint32_t),
+    DEFINE_PROP("x-fault-inject-mode", UfsPciState,
+                ufs.params.fault_inject_mode, ufs_prop_fault_inject_mode,
+                char *),
 };
 
 static const VMStateDescription ufs_pci_vmstate = {
