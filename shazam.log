@@ -1,0 +1,47 @@
+Looking up 20261015031804.2406055-1-portias@oss.tenstorrent.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 13 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/12] hw/riscv/atlantis: Set valid_cpu_types for Atlantis machine
+    + Link: https://lore.kernel.org/qemu-devel/20261015031804.2406055-2-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 2/12] hw/riscv/atlantis: Update fdt functions to take generic parameters
+    + Link: https://lore.kernel.org/qemu-devel/20261015031804.2406055-3-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 3/12] hw/riscv/atlantis: Move Ascalon into cluster struct
+    + Link: https://lore.kernel.org/qemu-devel/20261015031804.2406055-4-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 4/12] hw/riscv/atlantis: Store Ascalon memory in cluster struct
+    + Link: https://lore.kernel.org/qemu-devel/20261015031804.2406055-5-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 5/12] hw/riscv/atlantis: Create CPU cluster for Atlantis cpus
+    + Link: https://lore.kernel.org/qemu-devel/20261015031804.2406055-6-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 6/12] target/riscv: Add Tenstorrent Real-time CPU
+    + Link: https://lore.kernel.org/qemu-devel/20261015031804.2406055-7-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 7/12] machine: Support extra board CPUs outside -smp
+    + Link: https://lore.kernel.org/qemu-devel/20261015031804.2406055-8-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 8/12] hw/riscv/atlantis: Add the RCPU to the Atlantis SoC
+    + Link: https://lore.kernel.org/qemu-devel/20261015031804.2406055-9-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 9/12] hw/riscv/atlantis: Back RCPU memory region by unimplemented device
+    + Link: https://lore.kernel.org/qemu-devel/20261015031804.2406055-10-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 10/12] hw/riscv/atlantis: Load the RCPU bootrom
+    + Link: https://lore.kernel.org/qemu-devel/20261015031804.2406055-11-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 11/12] tests/functional/riscv64: Add rcpu to tt-atlantis tests
+    + Link: https://lore.kernel.org/qemu-devel/20261015031804.2406055-12-portias@oss.tenstorrent.com
+  [32m✓[0m [PATCH 12/12] docs/atlantis: Update Atlantis documentation to include the RCPU
+    + Link: https://lore.kernel.org/qemu-devel/20261015031804.2406055-13-portias@oss.tenstorrent.com
+  ---
+  [32m✓[0m Signed: DKIM/tenstorrent.com (From: portias@oss.tenstorrent.com)
+---
+Total patches: 12
+---
+Applying: hw/riscv/atlantis: Set valid_cpu_types for Atlantis machine
+Applying: hw/riscv/atlantis: Update fdt functions to take generic parameters
+Patch failed at 0002 hw/riscv/atlantis: Update fdt functions to take generic parameters
+error: patch failed: hw/riscv/tt_atlantis.c:370
+error: hw/riscv/tt_atlantis.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
