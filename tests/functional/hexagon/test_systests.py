@@ -108,5 +108,8 @@ class SysTestsStandaloneTests(QemuSystemTest):
     def test_standalone_vec(self):
         self.run_exit_zero("standalone_vec")
 
+    def test_single_step(self):
+        self.run_exit_zero("single_step")
+
 if __name__ == "__main__":
     QemuSystemTest.main()
