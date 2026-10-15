@@ -1,0 +1,56 @@
+Looking up 20261015055642.106204-1-jamin_lin@aspeedtech.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 16 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v1 1/14] hw/ssi/aspeed_smc: Fix AST2700 segment end address decoding
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 2/14] hw/ssi/aspeed_smc: Fix AST2700 DMA flash address mask
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-3-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 3/14] hw/block/m25p80: Rename w25q32dw to w25q33pw
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-4-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 4/14] hw/block/m25p80: Add SFDP table for Winbond W25Q33PW flash
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-5-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 5/14] hw/misc/aspeed_scu: Correct AST1040 A0 revision ID
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-6-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 6/14] hw/ssi/aspeed_smc: Add AST1040 FMC and SPI controllers
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-7-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 7/14] hw/arm/aspeed_ast1040: Add FMC and SPI controllers
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-8-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 8/14] hw/arm/aspeed_ast1040: Add FMC and SPI filters as unimplemented devices
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-9-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 9/14] hw/arm/aspeed_ast1040: Add OTP as an unimplemented device
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-10-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 10/14] hw/arm/aspeed_ast1040: Add Anti-Tamper Controller (ATC) as an unimplemented device
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-11-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 11/14] hw/arm/aspeed_ast1040: Add I3C as an unimplemented device
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-12-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 12/14] hw/arm/aspeed_ast1040: Add Caliptra as an unimplemented device
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-13-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 13/14] tests/qtest/aspeed_smc: Add AST1040 SMC tests
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-14-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 14/14] tests/functional/arm/test_aspeed_ast1040: Update AST1040 image to aspeed-mcu-fw-hub v01.00
+    + Link: https://lore.kernel.org/qemu-devel/20261015055642.106204-15-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 14
+---
+Applying: hw/ssi/aspeed_smc: Fix AST2700 segment end address decoding
+Applying: hw/ssi/aspeed_smc: Fix AST2700 DMA flash address mask
+Applying: hw/block/m25p80: Rename w25q32dw to w25q33pw
+Applying: hw/block/m25p80: Add SFDP table for Winbond W25Q33PW flash
+Applying: hw/misc/aspeed_scu: Correct AST1040 A0 revision ID
+Applying: hw/ssi/aspeed_smc: Add AST1040 FMC and SPI controllers
+Applying: hw/arm/aspeed_ast1040: Add FMC and SPI controllers
+Patch failed at 0007 hw/arm/aspeed_ast1040: Add FMC and SPI controllers
+error: patch failed: hw/arm/aspeed_ast1040.c:132
+error: hw/arm/aspeed_ast1040.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
