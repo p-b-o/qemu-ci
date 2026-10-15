@@ -1,0 +1,40 @@
+Looking up 20261015063625.186708-1-jamin_lin@aspeedtech.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 10 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v1 1/9] hw/arm/aspeed_ast1040: Add common init function for AST1040/AST1080 SoCs
+    + Link: https://lore.kernel.org/qemu-devel/20261015063625.186708-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 2/9] hw/arm/aspeed_ast1040: Add common realize function for AST1040/AST1080 SoCs
+    + Link: https://lore.kernel.org/qemu-devel/20261015063625.186708-3-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 3/9] hw/misc/aspeed_scu: Add AST1080 A0 silicon revision definition
+    + Link: https://lore.kernel.org/qemu-devel/20261015063625.186708-4-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 4/9] hw/arm/aspeed_ast1040: Add AST1080 SoC support
+    + Link: https://lore.kernel.org/qemu-devel/20261015063625.186708-5-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 5/9] hw/arm/aspeed_ast1040: Add AST1080 QSPI filters as unimplemented device
+    + Link: https://lore.kernel.org/qemu-devel/20261015063625.186708-6-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 6/9] hw/arm/aspeed_ast1040: Add AST1080 I2C filter as an unimplemented device
+    + Link: https://lore.kernel.org/qemu-devel/20261015063625.186708-7-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 7/9] hw/arm/aspeed_ast1040_evb: Add AST1080 EVB machine support
+    + Link: https://lore.kernel.org/qemu-devel/20261015063625.186708-8-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 8/9] tests/functional/arm/aspeed: Add AST1080 test with ASPEED MCU FW Hub v01.00
+    + Link: https://lore.kernel.org/qemu-devel/20261015063625.186708-9-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v1 9/9] docs/system/arm/aspeed: Add AST1080 Platform Root of Trust evaluation board
+    + Link: https://lore.kernel.org/qemu-devel/20261015063625.186708-10-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 9
+---
+Applying: hw/arm/aspeed_ast1040: Add common init function for AST1040/AST1080 SoCs
+Patch failed at 0001 hw/arm/aspeed_ast1040: Add common init function for AST1040/AST1080 SoCs
+error: patch failed: hw/arm/aspeed_ast1040.c:81
+error: hw/arm/aspeed_ast1040.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
