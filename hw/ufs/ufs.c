@@ -761,6 +761,87 @@ static void ufs_fault_inject_hce_reset(UfsHc *u)
     }
 }
 
+static void ufs_fault_inject_complete_held_req(UfsRequest *hreq)
+{
+    uint16_t data_seg_len = sizeof(hreq->rsp_upiu.sr.sense_data_len);
+
+    hreq->rsp_upiu.sr.sense_data_len = 0;
+    hreq->rsp_upiu.sr.residual_transfer_count = 0;
+    ufs_build_upiu_header(hreq, UFS_UPIU_TRANSACTION_RESPONSE, 0,
+                          UFS_COMMAND_RESULT_SUCCESS, 0, data_seg_len);
+    ufs_complete_req(hreq, UFS_REQUEST_SUCCESS);
+}
+
+static bool ufs_fault_inject_tmr(UfsHc *u, uint8_t tm_func, uint8_t lun,
+                                 uint32_t task_tag, uint8_t *tm_resp,
+                                 bool *skip_completion)
+{
+    UfsRequest *hreq = u->held_req;
+
+    *skip_completion = false;
+    if (!hreq || task_tag != u->active_fault_inject_tag ||
+        hreq->req_upiu.header.lun != lun) {
+        return false;
+    }
+
+    if (tm_func == UFS_QUERY_TASK) {
+        if (u->fault_inject_mode == UFS_FAULT_INJECT_IN_TRANSITION) {
+            u->held_req = NULL;
+            u->active_fault_inject_tag = UFS_FAULT_INJECT_TAG_NONE;
+            u->params.fault_inject_tag = UFS_FAULT_INJECT_TAG_NONE;
+            *tm_resp = UFS_UPIU_TASK_MANAGEMENT_FUNC_COMPL;
+            ufs_fault_inject_complete_held_req(hreq);
+        } else {
+            *tm_resp = UFS_UPIU_TASK_MANAGEMENT_FUNC_SUCCEEDED;
+        }
+        return true;
+    }
+
+    if (tm_func == UFS_ABORT_TASK) {
+        if (u->fault_inject_mode == UFS_FAULT_INJECT_ABORT_FAILED) {
+            *tm_resp = UFS_UPIU_TASK_MANAGEMENT_FUNC_FAILED;
+        } else if (u->fault_inject_mode == UFS_FAULT_INJECT_TIMEOUT) {
+            *skip_completion = true;
+        } else if (u->fault_inject_mode == UFS_FAULT_INJECT_IN_TRANSITION) {
+            u->held_req = NULL;
+            u->active_fault_inject_tag = UFS_FAULT_INJECT_TAG_NONE;
+            u->params.fault_inject_tag = UFS_FAULT_INJECT_TAG_NONE;
+            *tm_resp = UFS_UPIU_TASK_MANAGEMENT_FUNC_COMPL;
+            ufs_fault_inject_complete_held_req(hreq);
+        } else {
+            /* UFS_FAULT_INJECT_ABORT_SUCCESS or default */
+            u->held_req = NULL;
+            if (ufs_mcq_req(hreq)) {
+                if (hreq->sreq != NULL) {
+                    SCSIRequest *sreq = hreq->sreq;
+                    hreq->sreq = NULL;
+                    scsi_req_cancel(sreq);
+                }
+                hreq->state = UFS_REQUEST_ERROR;
+            } else {
+                ufs_clear_req(hreq);
+                hreq->state = UFS_REQUEST_IDLE;
+                u->reg.utrldbr &= ~(1 << hreq->slot);
+            }
+            u->active_fault_inject_tag = UFS_FAULT_INJECT_TAG_NONE;
+            u->params.fault_inject_tag = UFS_FAULT_INJECT_TAG_NONE;
+            *tm_resp = UFS_UPIU_TASK_MANAGEMENT_FUNC_COMPL;
+        }
+        return true;
+    }
+
+    return false;
+}
+
+static void ufs_fault_inject_sq_cleanup(UfsHc *u, UfsRequest *req)
+{
+    if (u->held_req == req) {
+        u->held_req = NULL;
+        u->active_fault_inject_tag = UFS_FAULT_INJECT_TAG_NONE;
+        u->params.fault_inject_tag = UFS_FAULT_INJECT_TAG_NONE;
+    }
+}
+
 static bool ufs_fault_inject_exec_req(UfsRequest *req)
 {
     UfsHc *u = req->hc;
@@ -933,6 +1014,7 @@ static void ufs_process_tmr(UfsHc *u, uint32_t val)
             UtpTaskReqDesc desc;
             uint8_t tm_func, tm_resp, lun;
             uint32_t task_tag;
+            bool skip_completion = false;
 
             if (ufs_addr_read(u, desc_addr, &desc, sizeof(desc))) {
                 continue;
@@ -942,7 +1024,12 @@ static void ufs_process_tmr(UfsHc *u, uint32_t val)
             lun = desc.upiu_req.req_header.lun;
             task_tag = be32_to_cpu(desc.upiu_req.input_param2);
 
-            if (tm_func == UFS_QUERY_TASK) {
+            if (ufs_fault_inject_tmr(u, tm_func, lun, task_tag, &tm_resp,
+                                     &skip_completion)) {
+                if (skip_completion) {
+                    continue;
+                }
+            } else if (tm_func == UFS_QUERY_TASK) {
                 UfsRequest *req = ufs_find_req_by_tag(u, lun, task_tag);
 
                 if (req) {
@@ -1210,6 +1297,7 @@ static void ufs_mcq_sq_cleanup(UfsHc *u, uint8_t qid)
         }
 
         if (req) {
+            ufs_fault_inject_sq_cleanup(u, req);
             if (req->sreq != NULL) {
                 SCSIRequest *sreq = req->sreq;
                 req->sreq = NULL;
