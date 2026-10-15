@@ -3322,14 +3322,32 @@ static RISCVException read_senvcfg(CPURISCVState *env, int csrno,
     }
 
     *val = env->senvcfg;
+
+    if (env_archcpu(env)->cfg.ext_zicfiss) {
+        if (!(env->menvcfg & MENVCFG_SSE) ||
+            (env->virt_enabled && !(env->henvcfg & HENVCFG_SSE))) {
+            *val &= ~SENVCFG_SSE;
+        }
+    }
+
     return RISCV_EXCP_NONE;
 }
 
 static RISCVException write_senvcfg(CPURISCVState *env, int csrno,
                                     target_ulong val, uintptr_t ra)
 {
-    uint64_t mask = SENVCFG_FIOM | SENVCFG_CBIE | SENVCFG_CBCFE | SENVCFG_CBZE;
+    uint64_t mask = SENVCFG_FIOM;
     RISCVException ret;
+
+    /* CBIE/CBCFE are read-only zero when Zicbom is not implemented. */
+    if (env_archcpu(env)->cfg.ext_zicbom) {
+        mask |= SENVCFG_CBIE | SENVCFG_CBCFE;
+    }
+
+    /* CBZE is read-only zero when Zicboz is not implemented. */
+    if (env_archcpu(env)->cfg.ext_zicboz) {
+        mask |= SENVCFG_CBZE;
+    }
     /* Update PMM field only if the value is valid according to Zjpm v1.0 */
     if (env_archcpu(env)->cfg.ext_ssnpm &&
         riscv_cpu_mxl(env) == MXL_RV64 &&
