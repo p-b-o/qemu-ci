@@ -1,0 +1,60 @@
+Looking up 20261014234605.209084-1-pierrick.bouvier@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 20 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/19] hw/core/cpu: declare dump ops
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-2-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 2/19] target/arm: implement get_dump_info dump op
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-3-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 3/19] target/i386: implement get_dump_info dump op
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-4-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 4/19] target/ppc/cpu: constify cpu parameter for ppc_interrupts_little_endian
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-5-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 5/19] target/ppc: implement get_dump_info dump op
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-6-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 6/19] target/riscv: implement get_dump_info dump op
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-7-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 7/19] target/s390x: implement get_dump_info dump op
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-8-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 8/19] target/loongarch: implement get_dump_info dump op
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-9-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 9/19] dump: use get_dump_info cpu dump op
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-10-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 10/19] dump: remove cpu_get_dump_info
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-11-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 11/19] hw/core/cpu: add get_note_size to dump ops
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-12-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 12/19] target/arm: implement get_note_size dump op
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-13-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 13/19] target/i386: implement get_note_size dump op
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-14-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 14/19] target/ppc: implement get_note_size dump op
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-15-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 15/19] target/riscv: implement get_note_size dump op
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-16-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 16/19] target/s390x: implement get_note_size dump op
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-17-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 17/19] target/loongarch: implement get_note_size dump op
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-18-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 18/19] dump: use new dump ops for note size
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-19-pierrick.bouvier@oss.qualcomm.com
+  [32m✓[0m [PATCH 19/19] dump: remove cpu_get_note_size
+    + Link: https://lore.kernel.org/qemu-devel/20261014234605.209084-20-pierrick.bouvier@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 19
+---
+Applying: hw/core/cpu: declare dump ops
+Patch failed at 0001 hw/core/cpu: declare dump ops
+error: patch failed: include/hw/core/cpu.h:98
+error: include/hw/core/cpu.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
