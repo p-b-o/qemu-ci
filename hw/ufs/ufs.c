@@ -845,6 +845,7 @@ static void ufs_fault_inject_sq_cleanup(UfsHc *u, UfsRequest *req)
 static bool ufs_fault_inject_exec_req(UfsRequest *req)
 {
     UfsHc *u = req->hc;
+    uint8_t op;
 
     if (likely(u->active_fault_inject_tag == UFS_FAULT_INJECT_TAG_NONE) ||
         u->held_req != NULL ||
@@ -852,9 +853,21 @@ static bool ufs_fault_inject_exec_req(UfsRequest *req)
         return false;
     }
 
-    if (u->active_fault_inject_tag == UFS_FAULT_INJECT_TAG_ANY) {
-        uint8_t op = req->req_upiu.sc.cdb[0];
+    op = req->req_upiu.sc.cdb[0];
+    if (u->fault_inject_mode == UFS_FAULT_INJECT_SSU_TIMEOUT) {
+        if (op == START_STOP &&
+            req->req_upiu.header.lun == UFS_UPIU_UFS_DEVICE_WLUN &&
+            (u->active_fault_inject_tag == UFS_FAULT_INJECT_TAG_ANY ||
+             req->req_upiu.header.task_tag == u->active_fault_inject_tag)) {
+            u->active_fault_inject_tag = req->req_upiu.header.task_tag;
+            u->held_req = req;
+            trace_ufs_fault_inject_hold_req(req->req_upiu.header.task_tag, 0);
+            return true;
+        }
+        return false;
+    }
 
+    if (u->active_fault_inject_tag == UFS_FAULT_INJECT_TAG_ANY) {
         if (op == READ_10 || op == WRITE_10) {
             /*
              * In 10-byte SCSI read/write commands (SBC-4), bytes 2..5
@@ -3188,6 +3201,8 @@ static bool ufs_fault_inject_parse_mode(const char *str,
         *mode = UFS_FAULT_INJECT_IN_TRANSITION;
     } else if (g_strcmp0(str, "timeout") == 0) {
         *mode = UFS_FAULT_INJECT_TIMEOUT;
+    } else if (g_strcmp0(str, "ssu-timeout") == 0) {
+        *mode = UFS_FAULT_INJECT_SSU_TIMEOUT;
     } else {
         error_setg(errp, "invalid x-fault-inject-mode: %s", str);
         return false;
@@ -3275,6 +3290,9 @@ static void ufs_prop_get_fault_inject_mode(Object *obj, Visitor *v,
     case UFS_FAULT_INJECT_TIMEOUT:
         str = "timeout";
         break;
+    case UFS_FAULT_INJECT_SSU_TIMEOUT:
+        str = "ssu-timeout";
+        break;
     case UFS_FAULT_INJECT_ABORT_SUCCESS:
     default:
         str = "abort-success";
@@ -3325,7 +3343,7 @@ static void ufs_prop_release_fault_inject_mode(Object *obj, const char *name,
 const PropertyInfo ufs_prop_fault_inject_mode = {
     .type = "str",
     .description = "Fault injection mode: abort-success, abort-failed, "
-                   "in-transition, timeout",
+                   "in-transition, timeout, ssu-timeout",
     .get = ufs_prop_get_fault_inject_mode,
     .set = ufs_prop_set_fault_inject_mode,
     .release = ufs_prop_release_fault_inject_mode,
