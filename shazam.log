@@ -1,0 +1,76 @@
+Looking up 20261015112044.1999748-1-berrange@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 26 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 81 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/21] osdep: add 'ignore_value(x)' macro
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-2-berrange@redhat.com
+  [32m✓[0m [PATCH 2/21] system: move SIGBUS signal handling to signal.c
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-3-berrange@redhat.com
+  [32m✓[0m [PATCH 3/21] system: rename qemu_init_sigbus to qemu_init_crash_signals
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-4-berrange@redhat.com
+  [32m✓[0m [PATCH 4/21] system: run SIGBUS handler on alternate signal stack
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-5-berrange@redhat.com
+  [32m✓[0m [PATCH 5/21] util: expand alternate signal stack to all threads
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-6-berrange@redhat.com
+  [32m✓[0m [PATCH 6/21] osdep: provide dummy siginfo_t definition
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-7-berrange@redhat.com
+  [32m✓[0m [PATCH 7/21] util: introduce 'tldr', a system data recorder for crash handling
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-8-berrange@redhat.com
+  [32m✓[0m [PATCH 8/21] qapi: add 'tldr-dump' command for on-demand data recorder output
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-9-berrange@redhat.com
+  [32m✓[0m [PATCH 9/21] system: trigger TLDR crash dump on unhandled SIGBUS
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-10-berrange@redhat.com
+  [32m✓[0m [PATCH 10/21] system: simplify signal handler logic
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-11-berrange@redhat.com
+  [32m✓[0m [PATCH 11/21] main: allow SIGBUS in the main loop
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-12-berrange@redhat.com
+  [32m✓[0m [PATCH 12/21] system: enable SIGBUS handling on non-Linux platforms
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-13-berrange@redhat.com
+  [32m✓[0m [PATCH 13/21] system: enable crash dumps on SIGSEGV, SIGILL, SIGFPE and SIGABRT
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-14-berrange@redhat.com
+  [32m✓[0m [PATCH 14/21] util: introduce capture of textual messages in data recorder
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-15-berrange@redhat.com
+  [32m✓[0m [PATCH 15/21] util: capture warnings and errors in the data recorder
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-16-berrange@redhat.com
+  [32m✓[0m [PATCH 16/21] monitor: remove obsolete/redundant exports
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-17-berrange@redhat.com
+  [32m✓[0m [PATCH 17/21] monitor: capture monitor commands and events in data recorder
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-18-berrange@redhat.com
+  [32m✓[0m [PATCH 18/21] log: enable directing log messages to data recorder
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-19-berrange@redhat.com
+  [32m✓[0m [PATCH 19/21] tests/qtest: add API to declare an expected crash signal
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-20-berrange@redhat.com
+  [32m✓[0m [PATCH 20/21] qtest: add 'crash' command to generate 'authentic' process crashes
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-21-berrange@redhat.com
+  [32m✓[0m [PATCH 21/21] tests/qtest: add test to validate data recorder on crashes
+    + Link: https://lore.kernel.org/qemu-devel/20261015112044.1999748-22-berrange@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 21
+---
+Applying: osdep: add 'ignore_value(x)' macro
+Applying: system: move SIGBUS signal handling to signal.c
+Applying: system: rename qemu_init_sigbus to qemu_init_crash_signals
+Applying: system: run SIGBUS handler on alternate signal stack
+Applying: util: expand alternate signal stack to all threads
+Applying: osdep: provide dummy siginfo_t definition
+Applying: util: introduce 'tldr', a system data recorder for crash handling
+Applying: qapi: add 'tldr-dump' command for on-demand data recorder output
+Applying: system: trigger TLDR crash dump on unhandled SIGBUS
+Applying: system: simplify signal handler logic
+Applying: main: allow SIGBUS in the main loop
+Patch failed at 0011 main: allow SIGBUS in the main loop
+error: patch failed: util/main-loop.c:99
+error: util/main-loop.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
