@@ -1,0 +1,185 @@
+Looking up 20261016010237.1102834-1-alistair.francis@wdc.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 51 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 546 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/50] target/riscv: check G-stage write permission for VS-stage A/D updates
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-2-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 2/50] target/riscv: Restore LCOFI handling in interrupt CSRs
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-3-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 3/50] disas/riscv: Fix csrrs decode
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-4-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 4/50] target/riscv: stop translating after WFI
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-5-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 5/50] targetriscv: svinval instructions raise virtual instruction exception
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-6-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 6/50] target/riscv/kvm: Preserve FCSR across migration
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-7-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 7/50] target/riscv/kvm: Reject migration with a different timer frequency
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-8-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 8/50] target/riscv/kvm: Preserve VCSR across migration
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-9-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 9/50] hw/char: Add dw8250 UART
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-10-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 10/50] hw/misc: Add Sophgo CV1800B clock controller
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-11-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 11/50] hw/riscv: Add Sophgo CV1800B SoC support
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-12-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 12/50] hw/riscv: Add Milk-V Duo board support
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-13-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 13/50] tests/qtest: Add qtest for Milk-V Duo board
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-14-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 14/50] tests/functional/riscv64: Add boot test for Milk-V Duo board
+    + Acked-by: Alistair Francis <alistair.francis@wdc.com> ([31m✗[0m DKIM/wdc.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-15-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 15/50] docs/system/riscv: Add Milk-V Duo board documentation
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-16-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 16/50] target/riscv: Document riscv_cpu_update_mip()
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-17-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 17/50] target/riscv: Document kvm_riscv_set_irq()
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-18-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 18/50] target/riscv: Clarify riscv_accel_set_irq() arguments
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-19-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 19/50] target/riscv: Have riscv_cpu_set_mode() call riscv_cpu_interrupt()
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-20-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 20/50] target/riscv: Add riscv_cpu_get_mip()
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-21-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 21/50] target/riscv: Access MIP atomically
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-22-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 22/50] target/riscv: add sdext debug CSRs state
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-23-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 23/50] target/riscv: add sdext Debug Mode helpers
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-24-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 24/50] target/riscv: add dret instruction
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-25-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 25/50] target/riscv: add sdext enter Debug Mode on ebreak
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-26-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 26/50] target/riscv: add sdext single-step support
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-27-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 27/50] target/riscv: add sdtrig trigger action=debug mode
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-28-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 28/50] tests/tcg/riscv64: add sdext "not on Debug mode" sigill tests
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-29-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 29/50] target/riscv: Add cfg property for SiFive int8 matmul extensions
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-30-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 30/50] target/riscv/cpu: List one implied-ext rule per line
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-31-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 31/50] target/riscv/cpu: Add SiFive custom int8 matmul extension implied rules
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-32-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 32/50] target/riscv: rvv: Add SiFive custom int8 matmul instructions
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-33-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 33/50] disas/riscv: Add disassembler support for Xsfvqmaccdod/Xsfvqmaccqoq
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-34-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 34/50] tests/tcg/riscv64: Add tests for SiFive int8 matmul extensions
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-35-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 35/50] target/riscv/cpu.c: remove 'bare' condition for .profile
+    + Reviewed-by: Joel Stanley <joel@jms.id.au> ([31m✗[0m DKIM/jms.id.au)
+    + Reviewed-by: Chao Liu <chao.liu.zevorn@gmail.com> ([31m✗[0m DKIM/gmail.com)
+    + Tested-by: Chao Liu <chao.liu.riscv@isrc.iscas.ac.cn>
+    + Reviewed-by: Andrew Jones <ajones@ventanamicro.com> ([31m✗[0m DKIM/ventanamicro.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-36-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 36/50] target/riscv: add riscv-server-ref CPU
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-37-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 37/50] hw/riscv: server platform reference machine
+    + Reviewed-by: Alistair Francis <alistair.francis@wdc.com> ([31m✗[0m DKIM/wdc.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-38-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 38/50] tests/functional/riscv64: add riscv-server-ref tests
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-39-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 39/50] docs: add riscv-server-ref.rst
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-40-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 40/50] Revert "linux-user/riscv: invalidate reservations after stores"
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-41-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 41/50] tests/qtest/bios-tables-test: Allow changes to riscv64 virt SPCR
+    + Reviewed-by: Igor Mammedov <imammedo@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Reviewed-by: Sunil V L <sunilvl@ventanamicro.com> ([31m✗[0m DKIM/ventanamicro.com)
+    + Acked-by: Alistair Francis <alistair.francis@wdc.com> ([31m✗[0m DKIM/gmail.com)
+    + Reviewed-by: Sunil V L <sunilvl@oss.qualcomm.com> ([32m✓[0m DKIM/qualcomm.com)
+    + Reviewed-by: Michael S. Tsirkin <mst@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-42-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 42/50] hw/riscv/virt-acpi-build: Fix the UART register width in SPCR
+    + Reviewed-by: Sunil V L <sunilvl@oss.qualcomm.com> ([32m✓[0m DKIM/qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-43-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 43/50] tests/qtest/bios-tables-test: Update riscv64 virt SPCR golden reference
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-44-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 44/50] target/riscv: Check Svnapot PTE before updating A/D bits
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-45-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 45/50] hw/misc: Add Tenstorrent Atlantis PRCM model
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-46-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 46/50] hw/riscv/tt-atlantis: Add PRCMs to tt-atlantis model
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-47-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 47/50] hw/riscv/tt-atlantis: Update UART and I2C to use clk from PRCM
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-48-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 48/50] target/riscv: fix RV32 fixed counter accesses
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-49-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 49/50] target/riscv: write back fsgnjn.h and fsgnjx.h results
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-50-alistair.francis@wdc.com
+  [32m✓[0m [PATCH v2 50/50] target/riscv: normalize Zcmt jvt.mode on writes
+    + Link: https://lore.kernel.org/qemu-devel/20261016010237.1102834-51-alistair.francis@wdc.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 50
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+     Msg From: Alistair <alistair@alistair23.me>
+    ! Trailer: Acked-by: Alistair Francis <alistair.francis@wdc.com>
+     Msg From: Alistair <alistair@alistair23.me>
+    ! Trailer: Reviewed-by: Daniel Henrique Barboza <daniel.barboza@oss.qualcomm.com>
+     Msg From: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: target/riscv: check G-stage write permission for VS-stage A/D updates
+Applying: target/riscv: Restore LCOFI handling in interrupt CSRs
+Applying: disas/riscv: Fix csrrs decode
+Applying: target/riscv: stop translating after WFI
+Applying: targetriscv: svinval instructions raise virtual instruction exception
+Applying: target/riscv/kvm: Preserve FCSR across migration
+Applying: target/riscv/kvm: Reject migration with a different timer frequency
+Applying: target/riscv/kvm: Preserve VCSR across migration
+Applying: hw/char: Add dw8250 UART
+Applying: hw/misc: Add Sophgo CV1800B clock controller
+Applying: hw/riscv: Add Sophgo CV1800B SoC support
+Applying: hw/riscv: Add Milk-V Duo board support
+Applying: tests/qtest: Add qtest for Milk-V Duo board
+Applying: tests/functional/riscv64: Add boot test for Milk-V Duo board
+Applying: docs/system/riscv: Add Milk-V Duo board documentation
+Applying: target/riscv: Document riscv_cpu_update_mip()
+Applying: target/riscv: Document kvm_riscv_set_irq()
+Applying: target/riscv: Clarify riscv_accel_set_irq() arguments
+Applying: target/riscv: Have riscv_cpu_set_mode() call riscv_cpu_interrupt()
+Applying: target/riscv: Add riscv_cpu_get_mip()
+Applying: target/riscv: Access MIP atomically
+Applying: target/riscv: add sdext debug CSRs state
+Applying: target/riscv: add sdext Debug Mode helpers
+Applying: target/riscv: add dret instruction
+Applying: target/riscv: add sdext enter Debug Mode on ebreak
+Applying: target/riscv: add sdext single-step support
+Applying: target/riscv: add sdtrig trigger action=debug mode
+Applying: tests/tcg/riscv64: add sdext "not on Debug mode" sigill tests
+Applying: target/riscv: Add cfg property for SiFive int8 matmul extensions
+Applying: target/riscv/cpu: List one implied-ext rule per line
+Applying: target/riscv/cpu: Add SiFive custom int8 matmul extension implied rules
+Applying: target/riscv: rvv: Add SiFive custom int8 matmul instructions
+Applying: disas/riscv: Add disassembler support for Xsfvqmaccdod/Xsfvqmaccqoq
+Applying: tests/tcg/riscv64: Add tests for SiFive int8 matmul extensions
+Applying: target/riscv/cpu.c: remove 'bare' condition for .profile
+Applying: target/riscv: add riscv-server-ref CPU
+Applying: hw/riscv: server platform reference machine
+Applying: tests/functional/riscv64: add riscv-server-ref tests
+Applying: docs: add riscv-server-ref.rst
+Applying: Revert "linux-user/riscv: invalidate reservations after stores"
+Applying: tests/qtest/bios-tables-test: Allow changes to riscv64 virt SPCR
+Applying: hw/riscv/virt-acpi-build: Fix the UART register width in SPCR
+Applying: tests/qtest/bios-tables-test: Update riscv64 virt SPCR golden reference
+Patch failed at 0043 tests/qtest/bios-tables-test: Update riscv64 virt SPCR golden reference
+error: cannot apply binary patch to 'tests/data/acpi/riscv64/virt/SPCR' without full index line
+error: tests/data/acpi/riscv64/virt/SPCR: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
