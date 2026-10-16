@@ -1,0 +1,23 @@
+Looking up 20261016034759.54-1-wangyang25@otcaix.iscas.ac.cn
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Will use the latest revision: v1
+You can pick other revisions using the -vN flag
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH 1/1] tests/tcg/riscv: test jvt.mode WARL normalization
+    + Link: https://lore.kernel.org/qemu-devel/20261016041715.749-2-wangyang25@otcaix.iscas.ac.cn
+---
+Total patches: 1
+---
+Applying: tests/tcg/riscv: test jvt.mode WARL normalization
+Patch failed at 0001 tests/tcg/riscv: test jvt.mode WARL normalization
+error: tests/tcg/riscv32/system/meson.build: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
