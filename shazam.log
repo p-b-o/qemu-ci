@@ -1,0 +1,180 @@
+Looking up qemu-stable-11.1.3-20261017220607@cover.tls.msk.ru
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 74 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 1477 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/73] target/arm: Fix PMSAv8 shareability decode for R-profile MPU regions
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-1-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 2/73] target/arm: Fix next timer tick when the offset puts the count ahead
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-2-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 3/73] target/arm: Fix WFxT timeouts when the offset puts the count ahead
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-3-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 4/73] hw/usb/hcd-xhci: Limit DMA transfers to plain memory
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-4-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 5/73] virtio-ccw: Limit ISC to MAX_ISC
+    + Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com> ([32m✓[0m DKIM/ibm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-5-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 6/73] virtio-ccw: Do not overwrite existing indicators
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-6-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 7/73] virtio-ccw: Fix rc check in read configuration path
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-7-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 8/73] vfio/ap: Clear error object pointer after non-fatal errors
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-8-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 9/73] hw/intc/s390x: Fix check after g_try_realloc
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-9-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 10/73] s390x/css: Use datastream pointer for checking no-data CCWs
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-10-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 11/73] s390x/sclp: Reject short headers in PV case
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-11-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 12/73] s390x/pci: Fix frame stepping in rpcit_service_call()
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-12-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 13/73] s390x/pci: Use qemu_log_mask() for guest-triggered errors in reg_ioat()
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-13-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 14/73] s390x/pci: Reject apertures beyond IOAT capacity in translation mode
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-14-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 15/73] hw/usb/dev-smartcard-reader: validate interrupt transfer length
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-15-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 16/73] hw/usb/dev-smartcard-reader: fix OOB read from pending bulk-in ring
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-16-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 17/73] hw/usb/dev-smartcard-reader: fix assert on pending answers overflow
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-17-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 18/73] hw/usb/dev-smartcard-reader: decode bulk-out length as little-endian
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-18-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 19/73] hw/usb/dev-smartcard-reader: validate migrated fields in post_load
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-19-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 20/73] virtio-gpu: disable blob scanouts on mapping cleanup
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-20-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 21/73] migration: Introduce VMStateStructMember
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-21-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 22/73] hw/display/qxl: factor out qxl_guest_phys2virt()
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-22-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 23/73] hw/display/qxl: validate replayed commands in qxl_post_load
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-23-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 24/73] hw/display/qxl: trace skipped stale loadvm commands
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-24-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 25/73] block/nbd: clear reply.cookie when the reply is rejected
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-25-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 26/73] block/nbd: never index requests[] with an unchecked cookie
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-26-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 27/73] block/nbd: clear reply.cookie under receive_mutex
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-27-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 28/73] hw/nvme: fix assertion failure on sr-iov capable nvme controller removal
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-28-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 29/73] hw/nvme: fix memory leak on sr-iov capable nvme controller removal
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-29-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 30/73] plugins: fix register handle encoding to reserve NULL as invalid
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-30-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 31/73] target/i386/tcg: raise #GP(0) on null SS load with RPL != CPL
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-31-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 32/73] target/i386: Migrate error code only with an exception
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-32-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 33/73] target/i386: clear C1 for all x87 compare instructions
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-33-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 34/73] target/i386: Don't clear C1 for FCOMI/FCOMIP/FUCOMI/FUCOMIP
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-34-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 35/73] system: fix buffer overflow in tdx_parse_panic_message
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-35-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 36/73] accel/kvm: protect kvm_resample_fd_list with a mutex
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-36-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 37/73] accel/kvm: coalesced mmio: check lenght of the MMIO write entry
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-37-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 38/73] target/i386/tcg: ignore VEX.L for unary scalar instructions
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-38-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 39/73] hw/usb: Fix USB MTP Use-After-Free in usb_mtp_deletefn List Iteration
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-39-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 40/73] io: prevent unbounded read of websocket data from client
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-40-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 41/73] block/throttle-groups: fix crash when enabling I/O limits on a busy disk
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-41-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 42/73] iotests: cover inactivating a read-only node
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-42-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 43/73] block: fix bdrv_next() skipping monitor-owned nodes
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-43-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 44/73] file-posix: add statx(STATX_DIOALIGN) support
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-44-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 45/73] qcow2: do not clear the dirty bit when reopening a read-only node
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-45-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 46/73] block: reject a reopen of an unusable node instead of crashing
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-46-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 47/73] block: Fix corruption from broken RMW atomicity
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-47-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 48/73] block: Remove now redundant bdrv_wait_serialising_requests() calls
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-48-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 49/73] io: cork TLS writes to avoid small TLS records
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-49-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 50/73] tpm_emulator: Reject sending commands smaller than the request header
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-50-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 51/73] hw/tpm: crb: Do not clear internal buffers when backend is busy
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-51-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 52/73] hw/display/vga: fix OOB writes after external surface resize
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-52-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 53/73] tcg/optimize: Do not derive s_mask from rotated s_mask
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-53-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 54/73] tests/tcg: Add tests for sign extension after rotate
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-54-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 55/73] target/i386/tcg: zero FXSAVE FOP and reserved slot bytes
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-55-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 56/73] target/i386: fix immediate stack adjustment for RET and RETF
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-56-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 57/73] tcg/riscv64: Remove vector min/max ops with immediates
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-57-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 58/73] target/arm: Clear TTBR[5:0] from a 52-bit table base address
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-58-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 59/73] tests/tcg/aarch64: Add a test for a two-entry 52-bit TTBR table
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-59-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 60/73] target/arm: Use the 52-bit TTBR base address layout when TCR.DS is set
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-60-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 61/73] tests/tcg/aarch64: Test the TTBR layout with TCR.DS and a 48-bit OA
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-61-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 62/73] hw/intc/arm_gicv5: Make IRS_IDR0 reads return actual value, not 0
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-62-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 63/73] target/riscv: check G-stage write permission for VS-stage A/D updates
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-63-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 64/73] target/riscv: Restore LCOFI handling in interrupt CSRs
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-64-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 65/73] target/riscv: stop translating after WFI
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-65-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 66/73] targetriscv: svinval instructions raise virtual instruction exception
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-66-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 67/73] target/riscv/kvm: Preserve FCSR across migration
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-67-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 68/73] target/riscv/kvm: Reject migration with a different timer frequency
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-68-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 69/73] target/riscv/kvm: Preserve VCSR across migration
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-69-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 70/73] tests/qtest/bios-tables-test: Allow changes to riscv64 virt SPCR
+    + Reviewed-by: Igor Mammedov <imammedo@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Reviewed-by: Sunil V L <sunilvl@ventanamicro.com> ([31m✗[0m DKIM/ventanamicro.com)
+    + Acked-by: Alistair Francis <alistair.francis@wdc.com> ([31m✗[0m DKIM/gmail.com)
+    + Reviewed-by: Sunil V L <sunilvl@oss.qualcomm.com> ([32m✓[0m DKIM/qualcomm.com)
+    + Reviewed-by: Michael S. Tsirkin <mst@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-70-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 71/73] hw/riscv/virt-acpi-build: Fix the UART register width in SPCR
+    + Reviewed-by: Sunil V L <sunilvl@oss.qualcomm.com> ([32m✓[0m DKIM/qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-71-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 72/73] tests/qtest/bios-tables-test: Update riscv64 virt SPCR golden reference
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-72-mjt@tls.msk.ru
+  [32m✓[0m [PATCH 73/73] target/riscv: Check Svnapot PTE before updating A/D bits
+    + Link: https://lore.kernel.org/qemu-devel/20261017202638.728621-73-mjt@tls.msk.ru
+  ---
+  [32m✓[0m Signed: DKIM/tls.msk.ru
+---
+Total patches: 73
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+     Msg From: Alistair <alistair@alistair23.me>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: target/arm: Fix PMSAv8 shareability decode for R-profile MPU regions
+Patch failed at 0001 target/arm: Fix PMSAv8 shareability decode for R-profile MPU regions
+error: patch failed: target/arm/ptw.c:3085
+error: target/arm/ptw.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
