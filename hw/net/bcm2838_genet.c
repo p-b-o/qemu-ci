@@ -17,6 +17,7 @@
 #include "system/dma.h"
 #include "hw/core/registerfields.h"
 #include "hw/core/resettable.h"
+#include "migration/vmstate.h"
 #include "hw/net/bcm2838_genet.h"
 #include "trace.h"
 
@@ -1129,6 +1130,37 @@ static const Property genet_properties[] = {
     DEFINE_NIC_PROPERTIES(BCM2838GenetState, nic_conf),
 };
 
+static int bcm2838_genet_post_load(void *opaque, int version_id)
+{
+    BCM2838GenetState *s = opaque;
+
+    /* The interrupt outputs are derived from the register state */
+    bcm2838_genet_set_irq_default(s);
+    bcm2838_genet_set_irq_prio(s);
+
+    return 0;
+}
+
+static const VMStateDescription vmstate_bcm2838_genet = {
+    .name = "bcm2838-genet",
+    .version_id = 1,
+    .minimum_version_id = 1,
+    .post_load = bcm2838_genet_post_load,
+    .fields = (const VMStateField[]) {
+        VMSTATE_BUFFER_UNSAFE(regs, BCM2838GenetState, 0,
+                              sizeof(BCM2838GenetRegs)),
+        VMSTATE_BUFFER_UNSAFE(phy_regs, BCM2838GenetState, 0,
+                              sizeof(BCM2838GenetPhyRegs)),
+        VMSTATE_BUFFER_UNSAFE(phy_shd_regs, BCM2838GenetState, 0,
+                              sizeof(BCM2838GenetPhyShdRegs)),
+        VMSTATE_BUFFER_UNSAFE(phy_aux_ctl_shd_regs, BCM2838GenetState, 0,
+                              sizeof(BCM2838GenetPhyAuxShdRegs)),
+        VMSTATE_BUFFER_UNSAFE(phy_exp_shd_regs, BCM2838GenetState, 0,
+                              sizeof(BCM2838GenetPhyExpShdRegs)),
+        VMSTATE_END_OF_LIST()
+    }
+};
+
 static void bcm2838_genet_class_init(ObjectClass *class, const void *data)
 {
     static ResettablePhases unused_parent_phases;
@@ -1136,6 +1168,7 @@ static void bcm2838_genet_class_init(ObjectClass *class, const void *data)
     ResettableClass *rc = RESETTABLE_CLASS(class);
 
     dc->realize = bcm2838_genet_realize;
+    dc->vmsd = &vmstate_bcm2838_genet;
     resettable_class_set_parent_phases(rc, NULL, bcm2838_genet_reset, NULL,
                                        &unused_parent_phases);
     device_class_set_props(dc, genet_properties);
