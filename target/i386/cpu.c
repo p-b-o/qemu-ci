@@ -1469,7 +1469,7 @@ FeatureWordInfo feature_word_info[FEATURE_WORDS] = {
     [FEAT_8000_0022_EAX] = {
         .type = CPUID_FEATURE_WORD,
         .feat_names = {
-            "perfmon-v2", "lbrext-v2", NULL, NULL,
+            "perfmon-v2", "lbrext-v2", "lbr-pmc-freeze", NULL,
             NULL, NULL, NULL, NULL,
             NULL, NULL, NULL, NULL,
             NULL, NULL, NULL, NULL,
@@ -2052,6 +2052,10 @@ static FeatureDep feature_dependencies[] = {
     {
         .from = { FEAT_8000_0022_EAX,       CPUID_8000_0022_EAX_PERFMON_V2 },
         .to = { FEAT_8000_0022_EAX,         CPUID_8000_0022_EAX_LBREXT_V2 },
+    },
+    {
+        .from = { FEAT_8000_0022_EAX,       CPUID_8000_0022_EAX_LBREXT_V2 },
+        .to = { FEAT_8000_0022_EAX,         CPUID_8000_0022_EAX_LBR_PMC_FREEZE },
     },
 };
 
@@ -9324,6 +9328,10 @@ void cpu_x86_cpuid(CPUX86State *env, uint32_t index, uint32_t count,
             *eax |= CPUID_8000_0022_EAX_LBREXT_V2;
             *ebx |= kvm_arch_get_supported_cpuid(cs->kvm_state, index, count,
                                                  R_EBX) & 0x3f0; /* EBX[9:4] */
+        }
+        /* Dependency LBREXT_V2 => LBRPMC_FREEZE enforced via feature_dependencies[] */
+        if (env->features[FEAT_8000_0022_EAX] & CPUID_8000_0022_EAX_LBR_PMC_FREEZE) {
+            *eax |= CPUID_8000_0022_EAX_LBR_PMC_FREEZE;
         }
         break;
     case 0xC0000000:
