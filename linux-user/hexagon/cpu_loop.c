@@ -77,6 +77,12 @@ void cpu_loop(CPUHexagonState *env)
                 force_sig_fault(TARGET_SIGSEGV, TARGET_SEGV_BNDERR,
                                 env->gpr[HEX_REG_PC]);
                 break;
+            case HEX_CAUSE_CFI_VIOLATION:
+                env->cfi_active = 0;
+                env->cfi_updated = 0;
+                force_sig_fault(TARGET_SIGILL, TARGET_ILL_ILLOPC,
+                                env->gpr[HEX_REG_PC]);
+                break;
             case HEX_CAUSE_PRIV_USER_NO_GINSN:
             case HEX_CAUSE_PRIV_USER_NO_SINSN:
             case HEX_CAUSE_INVALID_PACKET:
