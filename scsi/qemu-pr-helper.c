@@ -571,13 +571,17 @@ static bool multipathd_cmd(int fd, const char *cmd, Error **errp)
         free(reply);
         return false;
     }
-    free(reply);
     if (ret == -1) {
+        /*
+         * reply is not freed because the documentation only defines it when
+         * the function returns success.
+         */
         error_setg_errno(errp, last_errno,
                          "mpath_process_cmd(%d, \"%s\") failed",
                          fd, cmd);
         return false;
     }
+    free(reply);
     return true;
 }
 
