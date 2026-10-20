@@ -30,10 +30,16 @@ struct kvm_run;
  *            #MemTxAttrs to use for handling MMIO exits.
  *            May be NULL if the target does not require post-run handling,
  *            in which case MEMTXATTRS_UNSPECIFIED is assumed.
+ * @handle_exit: Mandatory callback executed to handle target-specific VM
+ *               exits from KVM_RUN that are not handled by common KVM code
+ *               (or unhandled sub-cases of KVM_EXIT_SYSTEM_EVENT).
+ *               Returns 0 to continue execution, or an EXCP_* code (or negative
+ *               error code) to exit the CPU execution loop.
  */
 typedef struct KVMCPUOps {
     void (*pre_run)(CPUState *cpu, struct kvm_run *run);
     MemTxAttrs (*post_run)(CPUState *cpu, struct kvm_run *run);
+    int (*handle_exit)(CPUState *cpu, struct kvm_run *run);
 } KVMCPUOps;
 
 #define TYPE_KVM_ACCEL_CPU "kvm-accel-cpu"

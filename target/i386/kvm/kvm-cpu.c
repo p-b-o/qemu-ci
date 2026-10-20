@@ -237,6 +237,7 @@ static void kvm_cpu_instance_init(CPUState *cs)
 static const KVMCPUOps x86_kvm_cpu_ops = {
     .pre_run = x86_kvm_pre_run,
     .post_run = x86_kvm_post_run,
+    .handle_exit = x86_kvm_handle_exit,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

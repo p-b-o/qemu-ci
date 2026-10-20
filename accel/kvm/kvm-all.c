@@ -3616,7 +3616,7 @@ int kvm_cpu_exec(CPUState *cpu)
                 ret = 0;
                 break;
             default:
-                ret = kvm_arch_handle_exit(cpu, run);
+                ret = ops->handle_exit(cpu, run);
                 break;
             }
             break;
@@ -3634,7 +3634,7 @@ int kvm_cpu_exec(CPUState *cpu)
                                      run->memory_fault.flags & KVM_MEMORY_EXIT_FLAG_PRIVATE);
             break;
         default:
-            ret = kvm_arch_handle_exit(cpu, run);
+            ret = ops->handle_exit(cpu, run);
             break;
         }
     } while (ret == 0);

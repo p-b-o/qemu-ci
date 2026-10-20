@@ -1590,7 +1590,7 @@ static bool kvm_arm_handle_debug(ARMCPU *cpu,
     return false;
 }
 
-int kvm_arch_handle_exit(CPUState *cs, struct kvm_run *run)
+static int arm_kvm_handle_exit(CPUState *cs, struct kvm_run *run)
 {
     ARMCPU *cpu = ARM_CPU(cs);
     int ret = 0;
@@ -2668,6 +2668,7 @@ void arm_gic_cap_kvm_probe(GICCapability *v2, GICCapability *v3)
 static const KVMCPUOps arm_kvm_cpu_ops = {
     .pre_run = arm_kvm_pre_run,
     .post_run = arm_kvm_post_run,
+    .handle_exit = arm_kvm_handle_exit,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

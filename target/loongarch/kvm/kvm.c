@@ -1590,7 +1590,7 @@ static bool kvm_loongarch_handle_debug(CPUState *cs, struct kvm_run *run)
     return false;
 }
 
-int kvm_arch_handle_exit(CPUState *cs, struct kvm_run *run)
+static int loongarch_kvm_handle_exit(CPUState *cs, struct kvm_run *run)
 {
     int ret = 0;
     CPULoongArchState *env = cpu_env(cs);
@@ -1643,6 +1643,7 @@ void kvm_arch_accel_class_init(ObjectClass *oc)
 }
 
 static const KVMCPUOps loongarch_kvm_cpu_ops = {
+    .handle_exit = loongarch_kvm_handle_exit,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)
