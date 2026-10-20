@@ -3022,6 +3022,21 @@ static TCGv do_rdstrand_status(DisasContext *dc, TCGv dst)
 
 TRANS(RDSTRAND_STATUS, HYPV, do_rd_special, true, a->rd, do_rdstrand_status)
 
+/* CFR bits (OSA 2011, 5.5.11) */
+#define CFR_AES         (1 << 0)
+#define CFR_SHA1        (1 << 5)
+#define CFR_SHA256      (1 << 6)
+#define CFR_SHA512      (1 << 7)
+#define CFR_CRC32C      (1 << 11)
+
+static TCGv do_rdcfr(DisasContext *dc, TCGv dst)
+{
+    return tcg_constant_tl(CFR_AES | CFR_SHA1 | CFR_SHA256 |
+                           CFR_SHA512 | CFR_CRC32C);
+}
+
+TRANS(RDCFR, CRYPTO, do_rd_special, true, a->rd, do_rdcfr)
+
 static TCGv do_rdpsr(DisasContext *dc, TCGv dst)
 {
     gen_helper_rdpsr(dst, tcg_env);
