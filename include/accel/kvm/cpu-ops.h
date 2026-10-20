@@ -101,6 +101,11 @@ struct kvm_run;
  *                           execution should stop.
  *                           Returns true to stop the VM, or false to dump state
  *                           and continue. If NULL, defaults to true.
+ * @on_sigbus_vcpu: Optional callback executed when a SIGBUS signal is received
+ *                  to inject an architecture-specific hardware memory error
+ *                  (e.g. MCE on x86 or SEA on ARM) into the guest.
+ *                  May be NULL if the target does not support hardware error
+ *                  injection.
  */
 typedef struct KVMCPUOps {
     int (*pre_create_vcpu)(CPUState *cpu, Error **errp);
@@ -122,6 +127,7 @@ typedef struct KVMCPUOps {
                                 GdbBreakpointType type);
     void (*remove_all_hw_breakpoints)(CPUState *cpu);
     bool (*stop_on_emulation_error)(CPUState *cpu);
+    void (*on_sigbus_vcpu)(CPUState *cpu, int code, void *addr);
 } KVMCPUOps;
 
 #define TYPE_KVM_ACCEL_CPU "kvm-accel-cpu"

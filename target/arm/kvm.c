@@ -2486,7 +2486,7 @@ static int arm_kvm_get_registers(CPUState *cs, Error **errp)
     return ret;
 }
 
-void kvm_arch_on_sigbus_vcpu(CPUState *c, int code, void *addr)
+static void arm_kvm_on_sigbus_vcpu(CPUState *c, int code, void *addr)
 {
     ram_addr_t ram_addr;
     hwaddr paddr;
@@ -2656,6 +2656,7 @@ static const KVMCPUOps arm_kvm_cpu_ops = {
     .insert_hw_breakpoint = arm_kvm_insert_hw_breakpoint,
     .remove_hw_breakpoint = arm_kvm_remove_hw_breakpoint,
     .remove_all_hw_breakpoints = arm_kvm_remove_all_hw_breakpoints,
+    .on_sigbus_vcpu = arm_kvm_on_sigbus_vcpu,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

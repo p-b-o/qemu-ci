@@ -114,5 +114,6 @@ Design Details
      kernel, on receiving notification, guest APEI driver could read the CPER error
      and take appropriate action.
 
-(11) kvm_arch_on_sigbus_vcpu() reports RAS errors via a SEA notifications,
+
+(11) The KVMCPUops::on_sigbus_vcpu callback reports RAS errors via a SEA notifications,
      when a SIGBUS event is triggered.

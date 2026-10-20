@@ -252,6 +252,7 @@ static const KVMCPUOps x86_kvm_cpu_ops = {
     .remove_hw_breakpoint = x86_kvm_remove_hw_breakpoint,
     .remove_all_hw_breakpoints = x86_kvm_remove_all_hw_breakpoints,
     .stop_on_emulation_error = x86_kvm_stop_on_emulation_error,
+    .on_sigbus_vcpu = x86_kvm_on_sigbus_vcpu,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

@@ -3535,8 +3535,10 @@ int kvm_cpu_exec(CPUState *cpu)
 #ifdef KVM_HAVE_MCE_INJECTION
         if (unlikely(have_sigbus_pending)) {
             bql_lock();
-            kvm_arch_on_sigbus_vcpu(cpu, pending_sigbus_code,
+            if (ops->on_sigbus_vcpu) {
+                ops->on_sigbus_vcpu(cpu, pending_sigbus_code,
                                     pending_sigbus_addr);
+            }
             have_sigbus_pending = false;
             bql_unlock();
         }
@@ -4080,6 +4082,11 @@ void kvm_init_cpu_signals(CPUState *cpu)
 int kvm_on_sigbus_vcpu(CPUState *cpu, int code, void *addr)
 {
 #ifdef KVM_HAVE_MCE_INJECTION
+    const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
+
+    if (!ops || !ops->on_sigbus_vcpu) {
+        return 1;
+    }
     if (have_sigbus_pending) {
         return 1;
     }
@@ -4097,13 +4104,19 @@ int kvm_on_sigbus_vcpu(CPUState *cpu, int code, void *addr)
 int kvm_on_sigbus(int code, void *addr)
 {
 #ifdef KVM_HAVE_MCE_INJECTION
+    const KVMCPUOps *ops;
+
     /* Action required MCE kills the process if SIGBUS is blocked.  Because
      * that's what happens in the I/O thread, where we handle MCE via signalfd,
      * we can only get action optional here.
      */
     assert(code != BUS_MCEERR_AR);
-    kvm_arch_on_sigbus_vcpu(first_cpu, code, addr);
-    return 0;
+    ops = kvm_get_cpu_ops(first_cpu);
+    if (ops && ops->on_sigbus_vcpu) {
+        ops->on_sigbus_vcpu(first_cpu, code, addr);
+        return 0;
+    }
+    return 1;
 #else
     return 1;
 #endif
