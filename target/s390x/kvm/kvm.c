@@ -902,7 +902,7 @@ static int insert_hw_breakpoint(vaddr addr, int len, int type)
     return 0;
 }
 
-int kvm_arch_insert_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
+static int s390x_kvm_insert_hw_breakpoint(CPUState *cs, vaddr addr, vaddr len,
                                           GdbBreakpointType type)
 {
     switch (type) {
@@ -921,7 +921,7 @@ int kvm_arch_insert_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
     return insert_hw_breakpoint(addr, len, type);
 }
 
-int kvm_arch_remove_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
+static int s390x_kvm_remove_hw_breakpoint(CPUState *cs, vaddr addr, vaddr len,
                                           GdbBreakpointType type)
 {
     int size;
@@ -951,7 +951,7 @@ int kvm_arch_remove_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
     return 0;
 }
 
-void kvm_arch_remove_all_gdbstub_hw_breakpoints(void)
+static void s390x_kvm_remove_all_hw_breakpoints(CPUState *cs)
 {
     nb_hw_breakpoints = 0;
     g_free(hw_breakpoints);
@@ -2653,6 +2653,9 @@ static const KVMCPUOps s390x_kvm_cpu_ops = {
     .update_guest_debug = s390x_kvm_update_guest_debug,
     .insert_sw_breakpoint = s390x_kvm_insert_sw_breakpoint,
     .remove_sw_breakpoint = s390x_kvm_remove_sw_breakpoint,
+    .insert_hw_breakpoint = s390x_kvm_insert_hw_breakpoint,
+    .remove_hw_breakpoint = s390x_kvm_remove_hw_breakpoint,
+    .remove_all_hw_breakpoints = s390x_kvm_remove_all_hw_breakpoints,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

@@ -3917,7 +3917,12 @@ int kvm_insert_gdbstub_breakpoint(CPUState *cpu, GdbBreakpointType type,
 
         QTAILQ_INSERT_HEAD(&cpu->kvm_state->kvm_sw_breakpoints, bp, entry);
     } else {
-        err = kvm_arch_insert_gdbstub_hw_breakpoint(addr, len, type);
+        const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
+
+        if (!ops || !ops->insert_hw_breakpoint) {
+            return -ENOSYS;
+        }
+        err = ops->insert_hw_breakpoint(cpu, addr, len, type);
         if (err) {
             return err;
         }
@@ -3937,9 +3942,9 @@ int kvm_remove_gdbstub_breakpoint(CPUState *cpu, GdbBreakpointType type,
 {
     struct kvm_sw_breakpoint *bp;
     int err;
+    const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
 
     if (type == GDB_BREAKPOINT_SW) {
-        const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
 
         bp = kvm_find_sw_breakpoint(cpu, addr);
         if (!bp) {
@@ -3963,7 +3968,10 @@ int kvm_remove_gdbstub_breakpoint(CPUState *cpu, GdbBreakpointType type,
         QTAILQ_REMOVE(&cpu->kvm_state->kvm_sw_breakpoints, bp, entry);
         g_free(bp);
     } else {
-        err = kvm_arch_remove_gdbstub_hw_breakpoint(addr, len, type);
+        if (!ops || !ops->remove_hw_breakpoint) {
+            return -ENOSYS;
+        }
+        err = ops->remove_hw_breakpoint(cpu, addr, len, type);
         if (err) {
             return err;
         }
@@ -4005,7 +4013,9 @@ void kvm_remove_all_gdbstub_breakpoints(CPUState *cpu)
         QTAILQ_REMOVE(&s->kvm_sw_breakpoints, bp, entry);
         g_free(bp);
     }
-    kvm_arch_remove_all_gdbstub_hw_breakpoints();
+    if (ops && ops->remove_all_hw_breakpoints) {
+        ops->remove_all_hw_breakpoints(cpu);
+    }
 
     CPU_FOREACH(cpu) {
         kvm_update_guest_debug(cpu, 0);

@@ -46,6 +46,11 @@ int x86_kvm_process_async_events(CPUState *cs);
 void x86_kvm_update_guest_debug(CPUState *cpu, struct kvm_guest_debug *dbg);
 int x86_kvm_insert_sw_breakpoint(CPUState *cs, struct kvm_sw_breakpoint *bp);
 int x86_kvm_remove_sw_breakpoint(CPUState *cs, struct kvm_sw_breakpoint *bp);
+int x86_kvm_insert_hw_breakpoint(CPUState *cs, vaddr addr, vaddr len,
+                                 GdbBreakpointType type);
+int x86_kvm_remove_hw_breakpoint(CPUState *cs, vaddr addr, vaddr len,
+                                 GdbBreakpointType type);
+void x86_kvm_remove_all_hw_breakpoints(CPUState *cs);
 void kvm_arch_after_reset_vcpu(X86CPU *cpu);
 void kvm_arch_do_init_vcpu(X86CPU *cs);
 uint32_t kvm_arch_get_supported_cpuid(KVMState *env, uint32_t function,

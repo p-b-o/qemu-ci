@@ -1551,22 +1551,6 @@ static int loongarch_kvm_remove_sw_breakpoint(CPUState *cs,
     return 0;
 }
 
-int kvm_arch_insert_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
-                                          GdbBreakpointType type)
-{
-    return -ENOSYS;
-}
-
-int kvm_arch_remove_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
-                                          GdbBreakpointType type)
-{
-    return -ENOSYS;
-}
-
-void kvm_arch_remove_all_gdbstub_hw_breakpoints(void)
-{
-}
-
 static bool kvm_loongarch_handle_debug(CPUState *cs, struct kvm_run *run)
 {
     LoongArchCPU *cpu = LOONGARCH_CPU(cs);

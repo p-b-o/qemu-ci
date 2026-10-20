@@ -1438,8 +1438,8 @@ static int find_hw_watchpoint(target_ulong addr, int *flag)
     return -1;
 }
 
-int kvm_arch_insert_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
-                                          GdbBreakpointType type)
+static int ppc_kvm_insert_hw_breakpoint(CPUState *cs, vaddr addr, vaddr len,
+                                         GdbBreakpointType type)
 {
     const unsigned breakpoint_index = nb_hw_breakpoint + nb_hw_watchpoint;
     if (breakpoint_index >= ARRAY_SIZE(hw_debug_points)) {
@@ -1483,8 +1483,8 @@ int kvm_arch_insert_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
     return 0;
 }
 
-int kvm_arch_remove_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
-                                          GdbBreakpointType type)
+static int ppc_kvm_remove_hw_breakpoint(CPUState *cs, vaddr addr, vaddr len,
+                                         GdbBreakpointType type)
 {
     int n;
 
@@ -1512,7 +1512,7 @@ int kvm_arch_remove_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
     return 0;
 }
 
-void kvm_arch_remove_all_gdbstub_hw_breakpoints(void)
+static void ppc_kvm_remove_all_hw_breakpoints(CPUState *cs)
 {
     nb_hw_breakpoint = nb_hw_watchpoint = 0;
 }
@@ -3075,6 +3075,9 @@ static const KVMCPUOps ppc_kvm_cpu_ops = {
     .update_guest_debug = ppc_kvm_update_guest_debug,
     .insert_sw_breakpoint = ppc_kvm_insert_sw_breakpoint,
     .remove_sw_breakpoint = ppc_kvm_remove_sw_breakpoint,
+    .insert_hw_breakpoint = ppc_kvm_insert_hw_breakpoint,
+    .remove_hw_breakpoint = ppc_kvm_remove_hw_breakpoint,
+    .remove_all_hw_breakpoints = ppc_kvm_remove_all_hw_breakpoints,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

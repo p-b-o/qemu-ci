@@ -85,6 +85,16 @@ struct kvm_run;
  *                        software breakpoint, restoring @bp->saved_insn at
  *                        @bp->pc.
  *                        Returns 0 on success, or a negative errno on failure.
+ * @insert_hw_breakpoint: Optional callback to insert an architecture-specific
+ *                        hardware breakpoint or watchpoint at address @addr
+ *                        with length @len and type @type.
+ *                        Returns 0 on success, or a negative errno on failure.
+ * @remove_hw_breakpoint: Optional callback to remove an architecture-specific
+ *                        hardware breakpoint or watchpoint at address @addr
+ *                        with length @len and type @type.
+ *                        Returns 0 on success, or a negative errno on failure.
+ * @remove_all_hw_breakpoints: Optional callback to remove all architecture-
+ *                             specific hardware breakpoints and watchpoints.
  */
 typedef struct KVMCPUOps {
     int (*pre_create_vcpu)(CPUState *cpu, Error **errp);
@@ -100,6 +110,11 @@ typedef struct KVMCPUOps {
     void (*update_guest_debug)(CPUState *cpu, struct kvm_guest_debug *dbg);
     int (*insert_sw_breakpoint)(CPUState *cpu, struct kvm_sw_breakpoint *bp);
     int (*remove_sw_breakpoint)(CPUState *cpu, struct kvm_sw_breakpoint *bp);
+    int (*insert_hw_breakpoint)(CPUState *cpu, vaddr addr, vaddr len,
+                                GdbBreakpointType type);
+    int (*remove_hw_breakpoint)(CPUState *cpu, vaddr addr, vaddr len,
+                                GdbBreakpointType type);
+    void (*remove_all_hw_breakpoints)(CPUState *cpu);
 } KVMCPUOps;
 
 #define TYPE_KVM_ACCEL_CPU "kvm-accel-cpu"

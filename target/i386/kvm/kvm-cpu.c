@@ -248,6 +248,9 @@ static const KVMCPUOps x86_kvm_cpu_ops = {
     .update_guest_debug = x86_kvm_update_guest_debug,
     .insert_sw_breakpoint = x86_kvm_insert_sw_breakpoint,
     .remove_sw_breakpoint = x86_kvm_remove_sw_breakpoint,
+    .insert_hw_breakpoint = x86_kvm_insert_hw_breakpoint,
+    .remove_hw_breakpoint = x86_kvm_remove_hw_breakpoint,
+    .remove_all_hw_breakpoints = x86_kvm_remove_all_hw_breakpoints,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

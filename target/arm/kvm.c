@@ -1821,8 +1821,8 @@ void kvm_arch_accel_class_init(ObjectClass *oc)
         "Eager Page Split chunk size for hugepages. (default: 0, disabled)");
 }
 
-int kvm_arch_insert_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
-                                          GdbBreakpointType type)
+static int arm_kvm_insert_hw_breakpoint(CPUState *cs, vaddr addr, vaddr len,
+                                         GdbBreakpointType type)
 {
     switch (type) {
     case GDB_BREAKPOINT_HW:
@@ -1837,8 +1837,8 @@ int kvm_arch_insert_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
     }
 }
 
-int kvm_arch_remove_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
-                                          GdbBreakpointType type)
+static int arm_kvm_remove_hw_breakpoint(CPUState *cs, vaddr addr, vaddr len,
+                                         GdbBreakpointType type)
 {
     switch (type) {
     case GDB_BREAKPOINT_HW:
@@ -1852,7 +1852,7 @@ int kvm_arch_remove_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
     }
 }
 
-void kvm_arch_remove_all_gdbstub_hw_breakpoints(void)
+static void arm_kvm_remove_all_hw_breakpoints(CPUState *cs)
 {
     if (cur_hw_wps > 0) {
         g_array_remove_range(hw_watchpoints, 0, cur_hw_wps);
@@ -2658,6 +2658,9 @@ static const KVMCPUOps arm_kvm_cpu_ops = {
     .update_guest_debug = arm_kvm_update_guest_debug,
     .insert_sw_breakpoint = arm_kvm_insert_sw_breakpoint,
     .remove_sw_breakpoint = arm_kvm_remove_sw_breakpoint,
+    .insert_hw_breakpoint = arm_kvm_insert_hw_breakpoint,
+    .remove_hw_breakpoint = arm_kvm_remove_hw_breakpoint,
+    .remove_all_hw_breakpoints = arm_kvm_remove_all_hw_breakpoints,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

@@ -2279,25 +2279,6 @@ static int riscv_kvm_remove_sw_breakpoint(CPUState *cs,
     return 0;
 }
 
-int kvm_arch_insert_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
-                                          GdbBreakpointType type)
-{
-    /* TODO; To be implemented later. */
-    return -EINVAL;
-}
-
-int kvm_arch_remove_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
-                                          GdbBreakpointType type)
-{
-    /* TODO; To be implemented later. */
-    return -EINVAL;
-}
-
-void kvm_arch_remove_all_gdbstub_hw_breakpoints(void)
-{
-    /* TODO; To be implemented later. */
-}
-
 static void riscv_kvm_update_guest_debug(CPUState *cs,
                                          struct kvm_guest_debug *dbg)
 {
