@@ -50,6 +50,7 @@
 #include "system/kvm_int.h"
 #include "system/kvm.h"
 #include "accel/accel-cpu-target.h"
+#include "accel/kvm/cpu-ops.h"
 
 #include CONFIG_DEVICES
 
@@ -3080,17 +3081,22 @@ void kvm_arch_accel_class_init(ObjectClass *oc)
 {
 }
 
+static const KVMCPUOps ppc_kvm_cpu_ops = {
+};
+
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)
 {
     AccelCPUClass *acc = ACCEL_CPU_CLASS(oc);
+    KVMAccelCPUClass *kacc = KVM_ACCEL_CPU_CLASS(oc);
 
     acc->cpu_target_realize = kvmppc_cpu_realize;
+    kacc->cpu_ops = &ppc_kvm_cpu_ops;
 }
 
 static const TypeInfo kvm_cpu_accel_type_info = {
     .name = ACCEL_CPU_NAME("kvm"),
 
-    .parent = TYPE_ACCEL_CPU,
+    .parent = TYPE_KVM_ACCEL_CPU,
     .class_init = kvm_cpu_accel_class_init,
     .abstract = true,
 };
