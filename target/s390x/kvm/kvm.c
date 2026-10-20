@@ -1935,11 +1935,6 @@ static int s390x_kvm_handle_exit(CPUState *cs, struct kvm_run *run)
     return ret;
 }
 
-bool kvm_arch_stop_on_emulation_error(CPUState *cpu)
-{
-    return true;
-}
-
 void kvm_s390_enable_css_support(S390CPU *cpu)
 {
     int r;

@@ -3183,8 +3183,14 @@ static int kvm_handle_internal_error(CPUState *cpu, struct kvm_run *run)
                 i, (uint64_t)run->internal.data[i]);
     }
     if (run->internal.suberror == KVM_INTERNAL_ERROR_EMULATION) {
+        const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
+        bool stop = true;
+
         fprintf(stderr, "emulation failure\n");
-        if (!kvm_arch_stop_on_emulation_error(cpu)) {
+        if (ops && ops->stop_on_emulation_error) {
+            stop = ops->stop_on_emulation_error(cpu);
+        }
+        if (!stop) {
             cpu_dump_state(cpu, stderr, CPU_DUMP_CODE);
             return EXCP_INTERRUPT;
         }

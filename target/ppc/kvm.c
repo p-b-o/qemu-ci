@@ -2840,11 +2840,6 @@ int kvmppc_load_htab_chunk(QEMUFile *f, int fd, uint32_t index,
     return 0;
 }
 
-bool kvm_arch_stop_on_emulation_error(CPUState *cpu)
-{
-    return true;
-}
-
 void kvm_arch_init_irq_routing(KVMState *s)
 {
 }

@@ -6661,7 +6661,7 @@ int x86_kvm_handle_exit(CPUState *cs, struct kvm_run *run)
     return ret;
 }
 
-bool kvm_arch_stop_on_emulation_error(CPUState *cs)
+bool x86_kvm_stop_on_emulation_error(CPUState *cs)
 {
     X86CPU *cpu = X86_CPU(cs);
     CPUX86State *env = &cpu->env;

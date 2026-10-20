@@ -1513,11 +1513,6 @@ static int loongarch_kvm_process_async_events(CPUState *cs)
     return cs->halted;
 }
 
-bool kvm_arch_stop_on_emulation_error(CPUState *cs)
-{
-    return true;
-}
-
 static void loongarch_kvm_update_guest_debug(CPUState *cpu,
                                              struct kvm_guest_debug *dbg)
 {

@@ -95,6 +95,12 @@ struct kvm_run;
  *                        Returns 0 on success, or a negative errno on failure.
  * @remove_all_hw_breakpoints: Optional callback to remove all architecture-
  *                             specific hardware breakpoints and watchpoints.
+ * @stop_on_emulation_error: Optional callback executed when KVM encounters an
+ *                           internal emulation failure (such as
+ *                           KVM_INTERNAL_ERROR_EMULATION) to decide whether
+ *                           execution should stop.
+ *                           Returns true to stop the VM, or false to dump state
+ *                           and continue. If NULL, defaults to true.
  */
 typedef struct KVMCPUOps {
     int (*pre_create_vcpu)(CPUState *cpu, Error **errp);
@@ -115,6 +121,7 @@ typedef struct KVMCPUOps {
     int (*remove_hw_breakpoint)(CPUState *cpu, vaddr addr, vaddr len,
                                 GdbBreakpointType type);
     void (*remove_all_hw_breakpoints)(CPUState *cpu);
+    bool (*stop_on_emulation_error)(CPUState *cpu);
 } KVMCPUOps;
 
 #define TYPE_KVM_ACCEL_CPU "kvm-accel-cpu"

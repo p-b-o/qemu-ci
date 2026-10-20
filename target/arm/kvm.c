@@ -1609,11 +1609,6 @@ static int arm_kvm_handle_exit(CPUState *cs, struct kvm_run *run)
     return ret;
 }
 
-bool kvm_arch_stop_on_emulation_error(CPUState *cs)
-{
-    return true;
-}
-
 /**
  * kvm_arm_hw_debug_active:
  * @cpu: ARMCPU
