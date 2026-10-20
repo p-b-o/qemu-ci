@@ -18,6 +18,7 @@
 #include "qemu/main-loop.h"
 #include "exec/cpu-common.h"
 #include "accel/accel-cpu-ops.h"
+#include "accel/kvm/cpu-ops.h"
 #include "system/kvm.h"
 #include "system/kvm_int.h"
 #include "system/runstate.h"
@@ -121,8 +122,16 @@ static const TypeInfo kvm_accel_ops_type = {
     .abstract = true,
 };
 
+static const TypeInfo kvm_accel_cpu_type = {
+    .name = TYPE_KVM_ACCEL_CPU,
+    .parent = TYPE_ACCEL_CPU,
+    .class_size = sizeof(KVMAccelCPUClass),
+    .abstract = true,
+};
+
 static void kvm_accel_ops_register_types(void)
 {
     type_register_static(&kvm_accel_ops_type);
+    type_register_static(&kvm_accel_cpu_type);
 }
 type_init(kvm_accel_ops_register_types);
