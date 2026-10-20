@@ -455,11 +455,7 @@ static void kvm_create_vcpu_internal(CPUState *cpu, KVMState *s, int kvm_fd)
 unsigned long kvm_vcpu_id(CPUState *cpu)
 {
     const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
-
-    if (ops && ops->vcpu_id) {
-        return ops->vcpu_id(cpu);
-    }
-    return cpu->cpu_index;
+    return ops->vcpu_id ? ops->vcpu_id(cpu) : cpu->cpu_index;
 }
 
 static int kvm_rebind_vcpus(Error **errp)
@@ -3190,7 +3186,7 @@ static int kvm_handle_internal_error(CPUState *cpu, struct kvm_run *run)
         bool stop = true;
 
         fprintf(stderr, "emulation failure\n");
-        if (ops && ops->stop_on_emulation_error) {
+        if (ops->stop_on_emulation_error) {
             stop = ops->stop_on_emulation_error(cpu);
         }
         if (!stop) {
@@ -4004,7 +4000,7 @@ void kvm_remove_all_gdbstub_breakpoints(CPUState *cpu)
     QTAILQ_FOREACH_SAFE(bp, &s->kvm_sw_breakpoints, entry, next) {
         int ret = -ENOENT;
 
-        if (ops && ops->remove_sw_breakpoint) {
+        if (ops->remove_sw_breakpoint) {
             ret = ops->remove_sw_breakpoint(cpu, bp);
         }
         if (ret != 0) {
@@ -4021,7 +4017,7 @@ void kvm_remove_all_gdbstub_breakpoints(CPUState *cpu)
         QTAILQ_REMOVE(&s->kvm_sw_breakpoints, bp, entry);
         g_free(bp);
     }
-    if (ops && ops->remove_all_hw_breakpoints) {
+    if (ops->remove_all_hw_breakpoints) {
         ops->remove_all_hw_breakpoints(cpu);
     }
 
@@ -4116,7 +4112,7 @@ int kvm_on_sigbus(int code, void *addr)
     assert(code != BUS_MCEERR_AR);
     assert(first_cpu);
     ops = kvm_get_cpu_ops(first_cpu);
-    if (ops && ops->on_sigbus_vcpu) {
+    if (ops->on_sigbus_vcpu) {
         ops->on_sigbus_vcpu(first_cpu, code, addr);
         return 0;
     }
