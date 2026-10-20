@@ -1994,7 +1994,7 @@ static int kvm_arm_sve_set_vls(ARMCPU *cpu)
 
 #define ARM_CPU_ID_MPIDR       3, 0, 0, 0, 5
 
-int kvm_arch_init_vcpu(CPUState *cs)
+static int arm_kvm_init_vcpu(CPUState *cs)
 {
     int ret;
     uint64_t mpidr;
@@ -2656,6 +2656,7 @@ void arm_gic_cap_kvm_probe(GICCapability *v2, GICCapability *v3)
 }
 
 static const KVMCPUOps arm_kvm_cpu_ops = {
+    .init_vcpu = arm_kvm_init_vcpu,
     .get_registers = arm_kvm_get_registers,
     .put_registers = arm_kvm_put_registers,
     .pre_run = arm_kvm_pre_run,

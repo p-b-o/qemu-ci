@@ -177,7 +177,7 @@ static void loongarch_set_lsx(Object *obj, bool value, Error **errp)
     }
 
     if (kvm_enabled()) {
-        /* kvm feature detection in function kvm_arch_init_vcpu */
+        /* kvm feature detection in loongarch_kvm_init_vcpu */
         return;
     }
 
@@ -213,7 +213,7 @@ static void loongarch_set_lasx(Object *obj, bool value, Error **errp)
     }
 
     if (kvm_enabled()) {
-        /* kvm feature detection in function kvm_arch_init_vcpu */
+        /* kvm feature detection in loongarch_kvm_init_vcpu */
         return;
     }
 
@@ -241,7 +241,7 @@ static void loongarch_set_msgint(Object *obj, bool value, Error **errp)
     cpu->msgint = value ? ON_OFF_AUTO_ON : ON_OFF_AUTO_OFF;
 
     if (kvm_enabled()) {
-        /* kvm feature detection in function kvm_arch_init_vcpu */
+        /* kvm feature detection in loongarch_kvm_init_vcpu */
         return;
     }
 
@@ -260,7 +260,7 @@ static void loongarch_set_ptw(Object *obj, bool value, Error **errp)
     cpu->ptw = value ? ON_OFF_AUTO_ON : ON_OFF_AUTO_OFF;
 
     if (kvm_enabled()) {
-        /* kvm feature detection in function kvm_arch_init_vcpu */
+        /* kvm feature detection in loongarch_kvm_init_vcpu */
         return;
     }
 

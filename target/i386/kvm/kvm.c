@@ -2218,7 +2218,7 @@ static void kvm_init_pmu_info(struct kvm_cpuid2 *cpuid, X86CPU *cpu)
     }
 }
 
-int kvm_arch_init_vcpu(CPUState *cs)
+int x86_kvm_init_vcpu(CPUState *cs)
 {
     struct {
         struct kvm_cpuid2 cpuid;
