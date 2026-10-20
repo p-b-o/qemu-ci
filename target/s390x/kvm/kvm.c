@@ -984,11 +984,6 @@ void kvm_arch_update_guest_debug(CPUState *cpu, struct kvm_guest_debug *dbg)
     }
 }
 
-MemTxAttrs kvm_arch_post_run(CPUState *cs, struct kvm_run *run)
-{
-    return MEMTXATTRS_UNSPECIFIED;
-}
-
 int kvm_arch_process_async_events(CPUState *cs)
 {
     return cs->halted;

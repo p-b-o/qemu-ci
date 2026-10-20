@@ -3500,7 +3500,11 @@ int kvm_cpu_exec(CPUState *cpu)
          * as true, cpu->exit_request will always read as true.
          */
 
-        attrs = kvm_arch_post_run(cpu, run);
+        if (ops->post_run) {
+            attrs = ops->post_run(cpu, run);
+        } else {
+            attrs = MEMTXATTRS_UNSPECIFIED;
+        }
 
 #ifdef KVM_HAVE_MCE_INJECTION
         if (unlikely(have_sigbus_pending)) {

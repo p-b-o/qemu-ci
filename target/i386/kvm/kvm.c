@@ -5995,7 +5995,7 @@ static void kvm_rate_limit_on_bus_lock(void)
     }
 }
 
-MemTxAttrs kvm_arch_post_run(CPUState *cpu, struct kvm_run *run)
+MemTxAttrs x86_kvm_post_run(CPUState *cpu, struct kvm_run *run)
 {
     X86CPU *x86_cpu = X86_CPU(cpu);
     CPUX86State *env = &x86_cpu->env;

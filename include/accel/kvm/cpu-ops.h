@@ -23,9 +23,17 @@ struct kvm_run;
  *           that need to inject pending events (e.g. x86 NMI/SMI) or verify
  *           injected exceptions (e.g. ARM external data aborts).
  *           May be NULL if the target does not require pre-run handling.
+ * @post_run: Optional callback executed immediately after the KVM_RUN ioctl
+ *            returns in the vCPU thread loop. Used by architectures to
+ *            inspect or process hardware registers/flags (e.g. x86 APIC/TPR
+ *            or ARM timer interrupt synchronization) and return the
+ *            #MemTxAttrs to use for handling MMIO exits.
+ *            May be NULL if the target does not require post-run handling,
+ *            in which case MEMTXATTRS_UNSPECIFIED is assumed.
  */
 typedef struct KVMCPUOps {
     void (*pre_run)(CPUState *cpu, struct kvm_run *run);
+    MemTxAttrs (*post_run)(CPUState *cpu, struct kvm_run *run);
 } KVMCPUOps;
 
 #define TYPE_KVM_ACCEL_CPU "kvm-accel-cpu"
