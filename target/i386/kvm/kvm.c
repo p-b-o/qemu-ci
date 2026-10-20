@@ -6040,7 +6040,7 @@ MemTxAttrs x86_kvm_post_run(CPUState *cpu, struct kvm_run *run)
     return cpu_get_mem_attrs(env);
 }
 
-int kvm_arch_process_async_events(CPUState *cs)
+int x86_kvm_process_async_events(CPUState *cs)
 {
     X86CPU *cpu = X86_CPU(cs);
     CPUX86State *env = &cpu->env;

@@ -1619,11 +1619,6 @@ bool kvm_arch_stop_on_emulation_error(CPUState *cs)
     return true;
 }
 
-int kvm_arch_process_async_events(CPUState *cs)
-{
-    return 0;
-}
-
 /**
  * kvm_arm_hw_debug_active:
  * @cpu: ARMCPU

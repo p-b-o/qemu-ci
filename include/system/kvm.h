@@ -333,8 +333,6 @@ extern const KVMCapabilityInfo kvm_arch_required_capabilities[];
 
 void kvm_arch_accel_class_init(ObjectClass *oc);
 
-int kvm_arch_process_async_events(CPUState *cpu);
-
 int kvm_arch_get_registers(CPUState *cpu, Error **errp);
 
 typedef enum kvm_put_state {

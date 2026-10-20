@@ -1336,7 +1336,7 @@ int kvmppc_set_interrupt(PowerPCCPU *cpu, int irq, int level)
     return 0;
 }
 
-int kvm_arch_process_async_events(CPUState *cs)
+static int ppc_kvm_process_async_events(CPUState *cs)
 {
     return cs->halted;
 }
@@ -3074,6 +3074,7 @@ void kvm_arch_accel_class_init(ObjectClass *oc)
 
 static const KVMCPUOps ppc_kvm_cpu_ops = {
     .handle_exit = ppc_kvm_handle_exit,
+    .process_async_events = ppc_kvm_process_async_events,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

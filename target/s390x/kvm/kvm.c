@@ -984,7 +984,7 @@ void kvm_arch_update_guest_debug(CPUState *cpu, struct kvm_guest_debug *dbg)
     }
 }
 
-int kvm_arch_process_async_events(CPUState *cs)
+static int s390x_kvm_process_async_events(CPUState *cs)
 {
     return cs->halted;
 }
@@ -2651,6 +2651,7 @@ void kvm_arch_accel_class_init(ObjectClass *oc)
 
 static const KVMCPUOps s390x_kvm_cpu_ops = {
     .handle_exit = s390x_kvm_handle_exit,
+    .process_async_events = s390x_kvm_process_async_events,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

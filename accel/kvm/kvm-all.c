@@ -3459,7 +3459,7 @@ int kvm_cpu_exec(CPUState *cpu)
 
     trace_kvm_cpu_exec();
 
-    if (kvm_arch_process_async_events(cpu)) {
+    if (ops->process_async_events && ops->process_async_events(cpu)) {
         return EXCP_HLT;
     }
 

@@ -35,11 +35,20 @@ struct kvm_run;
  *               (or unhandled sub-cases of KVM_EXIT_SYSTEM_EVENT).
  *               Returns 0 to continue execution, or an EXCP_* code (or negative
  *               error code) to exit the CPU execution loop.
+ * @process_async_events: Optional callback executed at the start of
+ *                        kvm_cpu_exec() while holding the BQL to process
+ *                        pending asynchronous events (such as interrupts,
+ *                        resets, or MCEs). Returns non-zero (typically
+ *                        cpu->halted) if the vCPU should not run and should
+ *                        return EXCP_HLT, or 0 if execution can proceed.
+ *                        May be NULL if the target does not require event
+ *                        processing before execution.
  */
 typedef struct KVMCPUOps {
     void (*pre_run)(CPUState *cpu, struct kvm_run *run);
     MemTxAttrs (*post_run)(CPUState *cpu, struct kvm_run *run);
     int (*handle_exit)(CPUState *cpu, struct kvm_run *run);
+    int (*process_async_events)(CPUState *cpu);
 } KVMCPUOps;
 
 #define TYPE_KVM_ACCEL_CPU "kvm-accel-cpu"
