@@ -2198,7 +2198,7 @@ static int kvm_arch_put_sve(CPUState *cs, uint32_t vq, bool have_ffr)
     return 0;
 }
 
-int kvm_arch_put_registers(CPUState *cs, KvmPutState level, Error **errp)
+static int arm_kvm_put_registers(CPUState *cs, KvmPutState level, Error **errp)
 {
     uint64_t val;
     uint32_t fpr;
@@ -2383,7 +2383,7 @@ static int kvm_arch_get_sve(CPUState *cs, uint32_t vq, bool have_ffr)
     return 0;
 }
 
-int kvm_arch_get_registers(CPUState *cs, Error **errp)
+static int arm_kvm_get_registers(CPUState *cs, Error **errp)
 {
     uint64_t val;
     unsigned int el;
@@ -2661,6 +2661,8 @@ void arm_gic_cap_kvm_probe(GICCapability *v2, GICCapability *v3)
 }
 
 static const KVMCPUOps arm_kvm_cpu_ops = {
+    .get_registers = arm_kvm_get_registers,
+    .put_registers = arm_kvm_put_registers,
     .pre_run = arm_kvm_pre_run,
     .post_run = arm_kvm_post_run,
     .handle_exit = arm_kvm_handle_exit,

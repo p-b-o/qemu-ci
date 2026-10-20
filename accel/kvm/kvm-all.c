@@ -3214,8 +3214,9 @@ void kvm_flush_coalesced_mmio_buffer(void)
 static void do_kvm_cpu_synchronize_state(CPUState *cpu, run_on_cpu_data arg)
 {
     if (!cpu->vcpu_dirty && !kvm_state->guest_state_protected) {
+        const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
         Error *err = NULL;
-        int ret = kvm_arch_get_registers(cpu, &err);
+        int ret = ops->get_registers(cpu, &err);
         if (ret) {
             if (err) {
                 error_reportf_err(err, "Failed to synchronize CPU state: ");
@@ -3241,8 +3242,9 @@ void kvm_cpu_synchronize_state(CPUState *cpu)
 static bool kvm_cpu_synchronize_put(CPUState *cpu, KvmPutState state,
                                     const char *desc)
 {
+    const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
     Error *err = NULL;
-    int ret = kvm_arch_put_registers(cpu, state, &err);
+    int ret = ops->put_registers(cpu, state, &err);
     if (ret) {
         if (err) {
             error_reportf_err(err, "Restoring resisters %s: ", desc);

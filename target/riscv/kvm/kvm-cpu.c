@@ -1389,7 +1389,7 @@ const KVMCapabilityInfo kvm_arch_required_capabilities[] = {
     KVM_CAP_LAST_INFO
 };
 
-int kvm_arch_get_registers(CPUState *cs, Error **errp)
+static int riscv_kvm_get_registers(CPUState *cs, Error **errp)
 {
     int ret = 0;
 
@@ -1444,7 +1444,8 @@ static int kvm_riscv_put_mp_state(CPUState *cs)
     return kvm_vcpu_ioctl(cs, KVM_SET_MP_STATE, &mp_state);
 }
 
-int kvm_arch_put_registers(CPUState *cs, KvmPutState level, Error **errp)
+static int riscv_kvm_put_registers(CPUState *cs, KvmPutState level,
+                                   Error **errp)
 {
     int ret = 0;
 
@@ -2183,6 +2184,8 @@ void riscv_kvm_cpu_finalize_features(RISCVCPU *cpu, Error **errp)
 }
 
 static const KVMCPUOps riscv_kvm_cpu_ops = {
+    .get_registers = riscv_kvm_get_registers,
+    .put_registers = riscv_kvm_put_registers,
     .handle_exit = riscv_kvm_handle_exit,
 };
 

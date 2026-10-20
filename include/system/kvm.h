@@ -333,8 +333,6 @@ extern const KVMCapabilityInfo kvm_arch_required_capabilities[];
 
 void kvm_arch_accel_class_init(ObjectClass *oc);
 
-int kvm_arch_get_registers(CPUState *cpu, Error **errp);
-
 typedef enum kvm_put_state {
     /* state subset only touched by the VCPU itself during runtime */
     KVM_PUT_RUNTIME_STATE = 1,
@@ -343,8 +341,6 @@ typedef enum kvm_put_state {
     /* full state set, modified during initialization or on vmload */
     KVM_PUT_FULL_STATE = 3,
 } KvmPutState;
-
-int kvm_arch_put_registers(CPUState *cpu, KvmPutState level, Error **errp);
 
 int kvm_arch_get_default_type(MachineState *ms);
 

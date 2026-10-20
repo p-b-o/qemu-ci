@@ -12,12 +12,21 @@
 #include "qom/object.h"
 #include "hw/core/cpu.h"
 #include "accel/accel-cpu-target.h"
+#include "system/kvm.h"
 
 struct kvm_run;
 
 /**
  * struct KVMCPUOps - Target-specific per-vCPU operations for KVM
  *
+ * @get_registers: Mandatory callback to synchronize architecture-specific
+ *                 vCPU register state from KVM into QEMU's CPUState.
+ *                 Returns 0 on success, or a negative errno on failure.
+ * @put_registers: Mandatory callback to synchronize architecture-specific
+ *                 vCPU register state from QEMU's CPUState into KVM.
+ *                 The @level parameter specifies whether to write runtime,
+ *                 reset, or full state.
+ *                 Returns 0 on success, or a negative errno on failure.
  * @pre_run: Optional callback executed immediately prior to entering the
  *           KVM_RUN ioctl in the vCPU thread loop. Used by architectures
  *           that need to inject pending events (e.g. x86 NMI/SMI) or verify
@@ -45,6 +54,8 @@ struct kvm_run;
  *                        processing before execution.
  */
 typedef struct KVMCPUOps {
+    int (*get_registers)(CPUState *cpu, Error **errp);
+    int (*put_registers)(CPUState *cpu, KvmPutState level, Error **errp);
     void (*pre_run)(CPUState *cpu, struct kvm_run *run);
     MemTxAttrs (*post_run)(CPUState *cpu, struct kvm_run *run);
     int (*handle_exit)(CPUState *cpu, struct kvm_run *run);

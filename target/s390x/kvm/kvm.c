@@ -471,7 +471,8 @@ static int can_sync_regs(CPUState *cs, int regs)
                                 KVM_SYNC_CRS | KVM_SYNC_PREFIX | \
                                 KVM_SYNC_PFAULT)
 
-int kvm_arch_put_registers(CPUState *cs, KvmPutState level, Error **errp)
+static int s390x_kvm_put_registers(CPUState *cs, KvmPutState level,
+                                   Error **errp)
 {
     CPUS390XState *env = cpu_env(cs);
     struct kvm_fpu fpu = {};
@@ -582,7 +583,7 @@ int kvm_arch_put_registers(CPUState *cs, KvmPutState level, Error **errp)
     return 0;
 }
 
-int kvm_arch_get_registers(CPUState *cs, Error **errp)
+static int s390x_kvm_get_registers(CPUState *cs, Error **errp)
 {
     CPUS390XState *env = cpu_env(cs);
     struct kvm_fpu fpu;
@@ -2650,6 +2651,8 @@ void kvm_arch_accel_class_init(ObjectClass *oc)
 }
 
 static const KVMCPUOps s390x_kvm_cpu_ops = {
+    .get_registers = s390x_kvm_get_registers,
+    .put_registers = s390x_kvm_put_registers,
     .handle_exit = s390x_kvm_handle_exit,
     .process_async_events = s390x_kvm_process_async_events,
 };
