@@ -357,7 +357,7 @@ static inline void kvm_arch_reset_parked_vcpu(unsigned long vcpu_id, int kvm_fd)
 bool kvm_vcpu_id_is_valid(int vcpu_id);
 
 /* Returns VCPU ID to be used on KVM_CREATE_VCPU ioctl() */
-unsigned long kvm_arch_vcpu_id(CPUState *cpu);
+unsigned long kvm_vcpu_id(CPUState *cpu);
 
 void kvm_arch_on_sigbus_vcpu(CPUState *cpu, int code, void *addr);
 

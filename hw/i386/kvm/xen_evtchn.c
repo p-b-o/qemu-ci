@@ -575,7 +575,7 @@ static int assign_kernel_port(uint16_t type, evtchn_port_t port,
     ha.u.evtchn.type = type;
     ha.u.evtchn.flags = 0;
     ha.u.evtchn.deliver.port.port = port;
-    ha.u.evtchn.deliver.port.vcpu = kvm_arch_vcpu_id(cpu);
+    ha.u.evtchn.deliver.port.vcpu = kvm_vcpu_id(cpu);
     ha.u.evtchn.deliver.port.priority = KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL;
 
     return kvm_vm_ioctl(kvm_state, KVM_XEN_HVM_SET_ATTR, &ha);
@@ -937,7 +937,7 @@ static int set_port_pending(XenEvtchnState *s, evtchn_port_t port)
         }
 
         evt.port = port;
-        evt.vcpu = kvm_arch_vcpu_id(cpu);
+        evt.vcpu = kvm_vcpu_id(cpu);
         evt.priority = KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL;
 
         return kvm_vm_ioctl(kvm_state, KVM_XEN_HVM_EVTCHN_SEND, &evt);
@@ -1815,7 +1815,7 @@ int xen_evtchn_translate_pirq_msi(struct kvm_irq_routing_entry *route,
 
     route->type = KVM_IRQ_ROUTING_XEN_EVTCHN;
     route->u.xen_evtchn.port = port;
-    route->u.xen_evtchn.vcpu = kvm_arch_vcpu_id(cpu);
+    route->u.xen_evtchn.vcpu = kvm_vcpu_id(cpu);
     route->u.xen_evtchn.priority = KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL;
 
     return 0; /* Handled */

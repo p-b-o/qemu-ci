@@ -33,6 +33,11 @@ struct kvm_run;
  *                state change handlers).
  *                May be NULL if no architecture-specific cleanup is required.
  *                Returns 0 on success, or a negative errno on failure.
+ * @vcpu_id: Optional callback returning the architecture-specific KVM vCPU ID
+ *           to be passed to KVM_CREATE_VCPU and associated ioctls (such as
+ *           the APIC ID on x86 or the PPC vcpu_id).
+ *           May be NULL if the target uses cpu->cpu_index directly as the
+ *           vCPU ID.
  * @get_registers: Mandatory callback to synchronize architecture-specific
  *                 vCPU register state from KVM into QEMU's CPUState.
  *                 Returns 0 on success, or a negative errno on failure.
@@ -71,6 +76,7 @@ typedef struct KVMCPUOps {
     int (*pre_create_vcpu)(CPUState *cpu, Error **errp);
     int (*init_vcpu)(CPUState *cpu);
     int (*destroy_vcpu)(CPUState *cpu);
+    unsigned long (*vcpu_id)(CPUState *cpu);
     int (*get_registers)(CPUState *cpu, Error **errp);
     int (*put_registers)(CPUState *cpu, KvmPutState level, Error **errp);
     void (*pre_run)(CPUState *cpu, struct kvm_run *run);

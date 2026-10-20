@@ -40,7 +40,7 @@ static QLIST_HEAD(, KVMEnabledCPU)
 static bool kvm_cpu_is_enabled(CPUState *cs)
 {
     KVMEnabledCPU *enabled_cpu;
-    unsigned long vcpu_id = kvm_arch_vcpu_id(cs);
+    unsigned long vcpu_id = kvm_vcpu_id(cs);
 
     QLIST_FOREACH(enabled_cpu, &kvm_enabled_cpus, node) {
         if (enabled_cpu->vcpu_id == vcpu_id) {
@@ -53,7 +53,7 @@ static bool kvm_cpu_is_enabled(CPUState *cs)
 static void kvm_cpu_enable(CPUState *cs)
 {
     KVMEnabledCPU *enabled_cpu;
-    unsigned long vcpu_id = kvm_arch_vcpu_id(cs);
+    unsigned long vcpu_id = kvm_vcpu_id(cs);
 
     enabled_cpu = g_malloc(sizeof(*enabled_cpu));
     enabled_cpu->vcpu_id = vcpu_id;
@@ -89,7 +89,7 @@ int kvmppc_xive_cpu_set_state(XiveTCTX *tctx, Error **errp)
     if (ret != 0) {
         error_setg_errno(errp, -ret,
                          "XIVE: could not restore KVM state of CPU %ld",
-                         kvm_arch_vcpu_id(tctx->cs));
+                         kvm_vcpu_id(tctx->cs));
         return ret;
     }
 
@@ -108,7 +108,7 @@ int kvmppc_xive_cpu_get_state(XiveTCTX *tctx, Error **errp)
     if (ret != 0) {
         error_setg_errno(errp, -ret,
                          "XIVE: could not capture KVM state of CPU %ld",
-                         kvm_arch_vcpu_id(tctx->cs));
+                         kvm_vcpu_id(tctx->cs));
         return ret;
     }
 
@@ -162,7 +162,7 @@ int kvmppc_xive_cpu_connect(XiveTCTX *tctx, Error **errp)
         return 0;
     }
 
-    vcpu_id = kvm_arch_vcpu_id(tctx->cs);
+    vcpu_id = kvm_vcpu_id(tctx->cs);
 
     trace_kvm_xive_cpu_connect(vcpu_id);
 

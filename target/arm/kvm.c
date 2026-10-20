@@ -708,11 +708,6 @@ int kvm_arch_init(MachineState *ms, KVMState *s)
     return 0;
 }
 
-unsigned long kvm_arch_vcpu_id(CPUState *cpu)
-{
-    return cpu->cpu_index;
-}
-
 /* We track all the KVM devices which need their memory addresses
  * passing to the kernel in a list of these structures.
  * When board init is complete we run through the list and

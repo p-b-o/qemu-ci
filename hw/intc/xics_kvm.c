@@ -80,7 +80,7 @@ void icp_get_kvm_state(ICPState *icp)
     ret = kvm_get_one_reg(icp->cs, KVM_REG_PPC_ICP_STATE, &state);
     if (ret != 0) {
         error_report("Unable to retrieve KVM interrupt controller state"
-                " for CPU %ld: %s", kvm_arch_vcpu_id(icp->cs), strerror(errno));
+                " for CPU %ld: %s", kvm_vcpu_id(icp->cs), strerror(errno));
         exit(1);
     }
 
@@ -127,7 +127,7 @@ int icp_set_kvm_state(ICPState *icp, Error **errp)
         error_setg_errno(errp, -ret,
                          "Unable to restore KVM interrupt controller state (0x%"
                          PRIx64 ") for CPU %ld", state,
-                         kvm_arch_vcpu_id(icp->cs));
+                         kvm_vcpu_id(icp->cs));
         return ret;
     }
 
@@ -148,7 +148,7 @@ void icp_kvm_realize(DeviceState *dev, Error **errp)
     }
 
     cs = icp->cs;
-    vcpu_id = kvm_arch_vcpu_id(cs);
+    vcpu_id = kvm_vcpu_id(cs);
 
     /*
      * If we are reusing a parked vCPU fd corresponding to the CPU

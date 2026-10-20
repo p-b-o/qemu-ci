@@ -862,7 +862,7 @@ static void cpu_update_state(void *opaque, bool running, RunState state)
     }
 }
 
-unsigned long kvm_arch_vcpu_id(CPUState *cs)
+unsigned long x86_kvm_vcpu_id(CPUState *cs)
 {
     X86CPU *cpu = X86_CPU(cs);
     return cpu->apic_id;
@@ -3046,7 +3046,7 @@ static void *kvm_msr_energy_thread(void *data)
                     thd_stat[i].is_vcpu = true;
                     thd_stat[i].vcpu_id = cpu->cpu_index;
                     pkg_stat[thd_stat[i].pkg_id].nb_vcpu++;
-                    thd_stat[i].acpi_id = kvm_arch_vcpu_id(cpu);
+                    thd_stat[i].acpi_id = kvm_vcpu_id(cpu);
                     break;
                 }
             }

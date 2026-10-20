@@ -188,7 +188,7 @@ static int kvm_openpic_handle_vmfd_change(NotifierWithReturn *notifier,
 
     CPU_FOREACH(cs) {
         ret = kvm_vcpu_enable_cap(cs, KVM_CAP_IRQ_MPIC, 0, opp->fd,
-                                   kvm_arch_vcpu_id(cs));
+                                   kvm_vcpu_id(cs));
         if (ret < 0) {
             return ret;
         }
@@ -322,7 +322,7 @@ int kvm_openpic_connect_vcpu(DeviceState *d, CPUState *cs)
     KVMOpenPICState *opp = KVM_OPENPIC(d);
 
     return kvm_vcpu_enable_cap(cs, KVM_CAP_IRQ_MPIC, 0, opp->fd,
-                               kvm_arch_vcpu_id(cs));
+                               kvm_vcpu_id(cs));
 }
 
 static const Property kvm_openpic_properties[] = {

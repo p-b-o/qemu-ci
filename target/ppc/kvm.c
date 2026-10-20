@@ -443,7 +443,7 @@ void kvm_check_mmu(PowerPCCPU *cpu, Error **errp)
 }
 #endif /* !defined (TARGET_PPC64) */
 
-unsigned long kvm_arch_vcpu_id(CPUState *cpu)
+static unsigned long ppc_kvm_vcpu_id(CPUState *cpu)
 {
     return POWERPC_CPU(cpu)->vcpu_id;
 }
@@ -3064,6 +3064,7 @@ void kvm_arch_accel_class_init(ObjectClass *oc)
 
 static const KVMCPUOps ppc_kvm_cpu_ops = {
     .init_vcpu = ppc_kvm_init_vcpu,
+    .vcpu_id = ppc_kvm_vcpu_id,
     .get_registers = ppc_kvm_get_registers,
     .put_registers = ppc_kvm_put_registers,
     .handle_exit = ppc_kvm_handle_exit,

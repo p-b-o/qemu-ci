@@ -1445,11 +1445,6 @@ static int loongarch_kvm_destroy_vcpu(CPUState *cs)
     return 0;
 }
 
-unsigned long kvm_arch_vcpu_id(CPUState *cs)
-{
-    return cs->cpu_index;
-}
-
 int kvm_arch_release_virq_post(int virq)
 {
     return 0;

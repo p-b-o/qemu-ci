@@ -395,11 +395,6 @@ int kvm_arch_irqchip_create(KVMState *s)
     return 0;
 }
 
-unsigned long kvm_arch_vcpu_id(CPUState *cpu)
-{
-    return cpu->cpu_index;
-}
-
 static int s390x_kvm_init_vcpu(CPUState *cs)
 {
     unsigned int max_cpus = MACHINE(qdev_get_machine())->smp.max_cpus;

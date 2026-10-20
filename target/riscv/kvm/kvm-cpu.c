@@ -1512,11 +1512,6 @@ int kvm_arch_fixup_msi_route(struct kvm_irq_routing_entry *route,
     return 0;
 }
 
-unsigned long kvm_arch_vcpu_id(CPUState *cpu)
-{
-    return cpu->cpu_index;
-}
-
 static void kvm_riscv_vm_state_change(void *opaque, bool running,
                                       RunState state)
 {
@@ -1806,7 +1801,7 @@ void kvm_riscv_reset_vcpu(RISCVCPU *cpu)
         env->gpr[i] = 0;
     }
     env->pc = cpu->env.kernel_addr;
-    env->gpr[10] = kvm_arch_vcpu_id(CPU(cpu)); /* a0 */
+    env->gpr[10] = kvm_vcpu_id(CPU(cpu)); /* a0 */
     env->gpr[11] = cpu->env.fdt_addr;          /* a1 */
 
     kvm_riscv_reset_regs_csr(env);

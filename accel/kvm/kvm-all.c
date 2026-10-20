@@ -452,6 +452,16 @@ static void kvm_create_vcpu_internal(CPUState *cpu, KVMState *s, int kvm_fd)
     return;
 }
 
+unsigned long kvm_vcpu_id(CPUState *cpu)
+{
+    const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
+
+    if (ops && ops->vcpu_id) {
+        return ops->vcpu_id(cpu);
+    }
+    return cpu->cpu_index;
+}
+
 static int kvm_rebind_vcpus(Error **errp)
 {
     CPUState *cpu;
@@ -462,7 +472,7 @@ static int kvm_rebind_vcpus(Error **errp)
     CPU_FOREACH(cpu) {
         const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
 
-        vcpu_id = kvm_arch_vcpu_id(cpu);
+        vcpu_id = kvm_vcpu_id(cpu);
 
         if (cpu->kvm_fd) {
             close(cpu->kvm_fd);
@@ -533,10 +543,10 @@ static void kvm_park_vcpu(CPUState *cpu)
 {
     struct KVMParkedVcpu *vcpu;
 
-    trace_kvm_park_vcpu(cpu->cpu_index, kvm_arch_vcpu_id(cpu));
+    trace_kvm_park_vcpu(cpu->cpu_index, kvm_vcpu_id(cpu));
 
     vcpu = g_malloc0(sizeof(*vcpu));
-    vcpu->vcpu_id = kvm_arch_vcpu_id(cpu);
+    vcpu->vcpu_id = kvm_vcpu_id(cpu);
     vcpu->kvm_fd = cpu->kvm_fd;
     QLIST_INSERT_HEAD(&kvm_state->kvm_parked_vcpus, vcpu, node);
 }
@@ -577,7 +587,7 @@ static void kvm_reset_parked_vcpus(KVMState *s)
  */
 static int kvm_create_vcpu(CPUState *cpu)
 {
-    unsigned long vcpu_id = kvm_arch_vcpu_id(cpu);
+    unsigned long vcpu_id = kvm_vcpu_id(cpu);
     KVMState *s = kvm_state;
     int kvm_fd;
 
@@ -653,7 +663,7 @@ static int do_kvm_destroy_vcpu(CPUState *cpu)
     KVMState *s = kvm_state;
     int ret = 0;
 
-    trace_kvm_destroy_vcpu(cpu->cpu_index, kvm_arch_vcpu_id(cpu));
+    trace_kvm_destroy_vcpu(cpu->cpu_index, kvm_vcpu_id(cpu));
 
     if (ops->destroy_vcpu) {
         ret = ops->destroy_vcpu(cpu);
@@ -702,7 +712,7 @@ static int map_kvm_run(KVMState *s, CPUState *cpu, Error **errp)
         ret = -errno;
         error_setg_errno(errp, ret,
                          "kvm_init_vcpu: mmap'ing vcpu state failed (%lu)",
-                         kvm_arch_vcpu_id(cpu));
+                         kvm_vcpu_id(cpu));
         goto err;
     }
 
@@ -736,7 +746,7 @@ int kvm_init_vcpu(CPUState *cpu, Error **errp)
     KVMState *s = kvm_state;
     int ret;
 
-    trace_kvm_init_vcpu(cpu->cpu_index, kvm_arch_vcpu_id(cpu));
+    trace_kvm_init_vcpu(cpu->cpu_index, kvm_vcpu_id(cpu));
 
     if (ops->pre_create_vcpu) {
         ret = ops->pre_create_vcpu(cpu, errp);
@@ -749,7 +759,7 @@ int kvm_init_vcpu(CPUState *cpu, Error **errp)
     if (ret < 0) {
         error_setg_errno(errp, -ret,
                          "kvm_init_vcpu: kvm_create_vcpu failed (%lu)",
-                         kvm_arch_vcpu_id(cpu));
+                         kvm_vcpu_id(cpu));
         goto err;
     }
 
@@ -769,7 +779,7 @@ int kvm_init_vcpu(CPUState *cpu, Error **errp)
     if (ret < 0) {
         error_setg_errno(errp, -ret,
                          "kvm_init_vcpu: init_vcpu failed (%lu)",
-                         kvm_arch_vcpu_id(cpu));
+                         kvm_vcpu_id(cpu));
     }
     cpu->kvm_vcpu_stats_fd = kvm_vcpu_ioctl(cpu, KVM_GET_STATS_FD, NULL);
 

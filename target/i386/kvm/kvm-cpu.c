@@ -238,6 +238,7 @@ static const KVMCPUOps x86_kvm_cpu_ops = {
     .pre_create_vcpu = x86_kvm_pre_create_vcpu,
     .init_vcpu = x86_kvm_init_vcpu,
     .destroy_vcpu = x86_kvm_destroy_vcpu,
+    .vcpu_id = x86_kvm_vcpu_id,
     .get_registers = x86_kvm_get_registers,
     .put_registers = x86_kvm_put_registers,
     .pre_run = x86_kvm_pre_run,
