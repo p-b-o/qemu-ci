@@ -524,11 +524,6 @@ static int ppc_kvm_init_vcpu(CPUState *cs)
     return ret;
 }
 
-int kvm_arch_destroy_vcpu(CPUState *cs)
-{
-    return 0;
-}
-
 static void kvm_sw_tlb_put(PowerPCCPU *cpu)
 {
     CPUPPCState *env = &cpu->env;

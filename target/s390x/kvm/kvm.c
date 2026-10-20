@@ -409,7 +409,7 @@ static int s390x_kvm_init_vcpu(CPUState *cs)
     return 0;
 }
 
-int kvm_arch_destroy_vcpu(CPUState *cs)
+static int s390x_kvm_destroy_vcpu(CPUState *cs)
 {
     S390CPU *cpu = S390_CPU(cs);
 
@@ -2647,6 +2647,7 @@ void kvm_arch_accel_class_init(ObjectClass *oc)
 
 static const KVMCPUOps s390x_kvm_cpu_ops = {
     .init_vcpu = s390x_kvm_init_vcpu,
+    .destroy_vcpu = s390x_kvm_destroy_vcpu,
     .get_registers = s390x_kvm_get_registers,
     .put_registers = s390x_kvm_put_registers,
     .handle_exit = s390x_kvm_handle_exit,

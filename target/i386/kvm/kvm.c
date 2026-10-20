@@ -2533,7 +2533,7 @@ int x86_kvm_init_vcpu(CPUState *cs)
     return r;
 }
 
-int kvm_arch_destroy_vcpu(CPUState *cs)
+int x86_kvm_destroy_vcpu(CPUState *cs)
 {
     X86CPU *cpu = X86_CPU(cs);
     CPUX86State *env = &cpu->env;

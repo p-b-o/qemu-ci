@@ -1437,7 +1437,7 @@ void kvm_loongarch_cpu_post_init(LoongArchCPU *cpu)
                                     "Set off to disable KVM steal time.");
 }
 
-int kvm_arch_destroy_vcpu(CPUState *cs)
+static int loongarch_kvm_destroy_vcpu(CPUState *cs)
 {
     LoongArchCPU *cpu = LOONGARCH_CPU(cs);
 
@@ -1640,6 +1640,7 @@ void kvm_arch_accel_class_init(ObjectClass *oc)
 
 static const KVMCPUOps loongarch_kvm_cpu_ops = {
     .init_vcpu = loongarch_kvm_init_vcpu,
+    .destroy_vcpu = loongarch_kvm_destroy_vcpu,
     .get_registers = loongarch_kvm_get_registers,
     .put_registers = loongarch_kvm_put_registers,
     .handle_exit = loongarch_kvm_handle_exit,

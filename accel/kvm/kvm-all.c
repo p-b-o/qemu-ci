@@ -468,9 +468,11 @@ static int kvm_rebind_vcpus(Error **errp)
             close(cpu->kvm_fd);
         }
 
-        ret = kvm_arch_destroy_vcpu(cpu);
-        if (ret < 0) {
-            goto err;
+        if (ops->destroy_vcpu) {
+            ret = ops->destroy_vcpu(cpu);
+            if (ret < 0) {
+                goto err;
+            }
         }
 
         if (s->coalesced_mmio_ring == (void *)cpu->kvm_run + PAGE_SIZE) {
@@ -647,14 +649,17 @@ static int vcpu_unmap_regions(KVMState *s, CPUState *cpu)
 
 static int do_kvm_destroy_vcpu(CPUState *cpu)
 {
+    const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
     KVMState *s = kvm_state;
     int ret = 0;
 
     trace_kvm_destroy_vcpu(cpu->cpu_index, kvm_arch_vcpu_id(cpu));
 
-    ret = kvm_arch_destroy_vcpu(cpu);
-    if (ret < 0) {
-        goto err;
+    if (ops->destroy_vcpu) {
+        ret = ops->destroy_vcpu(cpu);
+        if (ret < 0) {
+            goto err;
+        }
     }
 
     /* If I am the CPU that created coalesced_mmio_ring, then discard it */

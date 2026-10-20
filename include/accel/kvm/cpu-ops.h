@@ -28,6 +28,11 @@ struct kvm_run;
  * @init_vcpu: Mandatory callback executed to perform architecture-specific
  *             initialization of a newly created KVM vCPU.
  *             Returns 0 on success, or a negative errno on failure.
+ * @destroy_vcpu: Optional callback executed when destroying a KVM vCPU
+ *                (e.g. to free architecture-specific buffers or deregister
+ *                state change handlers).
+ *                May be NULL if no architecture-specific cleanup is required.
+ *                Returns 0 on success, or a negative errno on failure.
  * @get_registers: Mandatory callback to synchronize architecture-specific
  *                 vCPU register state from KVM into QEMU's CPUState.
  *                 Returns 0 on success, or a negative errno on failure.
@@ -65,6 +70,7 @@ struct kvm_run;
 typedef struct KVMCPUOps {
     int (*pre_create_vcpu)(CPUState *cpu, Error **errp);
     int (*init_vcpu)(CPUState *cpu);
+    int (*destroy_vcpu)(CPUState *cpu);
     int (*get_registers)(CPUState *cpu, Error **errp);
     int (*put_registers)(CPUState *cpu, KvmPutState level, Error **errp);
     void (*pre_run)(CPUState *cpu, struct kvm_run *run);

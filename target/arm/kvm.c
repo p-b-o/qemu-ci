@@ -2093,11 +2093,6 @@ static int arm_kvm_init_vcpu(CPUState *cs)
     return kvm_arm_init_cpreg_list(cpu);
 }
 
-int kvm_arch_destroy_vcpu(CPUState *cs)
-{
-    return 0;
-}
-
 /* Callers must hold the iothread mutex lock */
 static void kvm_inject_arm_sea(CPUState *c)
 {
