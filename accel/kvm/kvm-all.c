@@ -746,6 +746,9 @@ int kvm_init_vcpu(CPUState *cpu, Error **errp)
     KVMState *s = kvm_state;
     int ret;
 
+    assert(ops);
+    cpu->kvm_cpu_ops = ops;
+
     trace_kvm_init_vcpu(cpu->cpu_index, kvm_vcpu_id(cpu));
 
     if (ops->pre_create_vcpu) {
@@ -4111,6 +4114,7 @@ int kvm_on_sigbus(int code, void *addr)
      * we can only get action optional here.
      */
     assert(code != BUS_MCEERR_AR);
+    assert(first_cpu);
     ops = kvm_get_cpu_ops(first_cpu);
     if (ops && ops->on_sigbus_vcpu) {
         ops->on_sigbus_vcpu(first_cpu, code, addr);

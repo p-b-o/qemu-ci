@@ -156,11 +156,16 @@ DECLARE_CLASS_CHECKERS(KVMAccelCPUClass, KVM_ACCEL_CPU, TYPE_KVM_ACCEL_CPU)
  */
 static inline const KVMCPUOps *kvm_get_cpu_ops(const CPUState *cpu)
 {
-    if (cpu->cc->accel_cpu) {
-        KVMAccelCPUClass *kacc = KVM_ACCEL_CPU_CLASS(cpu->cc->accel_cpu);
-        return kacc->cpu_ops;
+    if (cpu) {
+        if (cpu->kvm_cpu_ops) {
+            return cpu->kvm_cpu_ops;
+        }
+        if (cpu->cc->accel_cpu) {
+            KVMAccelCPUClass *kacc = KVM_ACCEL_CPU_CLASS(cpu->cc->accel_cpu);
+            return kacc->cpu_ops;
+        }
     }
-    return NULL;
+    g_assert_not_reached();
 }
 
 #endif /* ACCEL_KVM_CPU_OPS_H */
