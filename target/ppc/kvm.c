@@ -1336,10 +1336,6 @@ int kvmppc_set_interrupt(PowerPCCPU *cpu, int irq, int level)
     return 0;
 }
 
-void kvm_arch_pre_run(CPUState *cs, struct kvm_run *run)
-{
-}
-
 MemTxAttrs kvm_arch_post_run(CPUState *cs, struct kvm_run *run)
 {
     return MEMTXATTRS_UNSPECIFIED;

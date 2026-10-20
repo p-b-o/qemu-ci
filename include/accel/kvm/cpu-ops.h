@@ -13,10 +13,19 @@
 #include "hw/core/cpu.h"
 #include "accel/accel-cpu-target.h"
 
+struct kvm_run;
+
 /**
  * struct KVMCPUOps - Target-specific per-vCPU operations for KVM
+ *
+ * @pre_run: Optional callback executed immediately prior to entering the
+ *           KVM_RUN ioctl in the vCPU thread loop. Used by architectures
+ *           that need to inject pending events (e.g. x86 NMI/SMI) or verify
+ *           injected exceptions (e.g. ARM external data aborts).
+ *           May be NULL if the target does not require pre-run handling.
  */
 typedef struct KVMCPUOps {
+    void (*pre_run)(CPUState *cpu, struct kvm_run *run);
 } KVMCPUOps;
 
 #define TYPE_KVM_ACCEL_CPU "kvm-accel-cpu"
@@ -25,6 +34,8 @@ typedef struct KVMCPUOps {
  * struct KVMAccelCPUClass - KVM-specific accelerator CPU class
  *
  * @parent_class: The parent #AccelCPUClass
+ * @cpu_ops: Target-specific KVM operations table. Must be non-NULL when
+ *           KVM acceleration is initialized for the target CPU.
  */
 typedef struct KVMAccelCPUClass {
     AccelCPUClass parent_class;

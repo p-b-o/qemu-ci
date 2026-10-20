@@ -1377,7 +1377,7 @@ static bool kvm_arm_verify_ext_dabt_pending(ARMCPU *cpu)
     return false;
 }
 
-void kvm_arch_pre_run(CPUState *cs, struct kvm_run *run)
+static void arm_kvm_pre_run(CPUState *cs, struct kvm_run *run)
 {
     ARMCPU *cpu = ARM_CPU(cs);
     CPUARMState *env = &cpu->env;
@@ -2666,6 +2666,7 @@ void arm_gic_cap_kvm_probe(GICCapability *v2, GICCapability *v3)
 }
 
 static const KVMCPUOps arm_kvm_cpu_ops = {
+    .pre_run = arm_kvm_pre_run,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

@@ -1640,10 +1640,6 @@ int kvm_arch_process_async_events(CPUState *cs)
     return 0;
 }
 
-void kvm_arch_pre_run(CPUState *cs, struct kvm_run *run)
-{
-}
-
 MemTxAttrs kvm_arch_post_run(CPUState *cs, struct kvm_run *run)
 {
     return MEMTXATTRS_UNSPECIFIED;

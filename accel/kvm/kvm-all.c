@@ -55,6 +55,8 @@
 
 #include "hw/core/boards.h"
 #include "system/stats.h"
+#include "accel/accel-cpu-target.h"
+#include "accel/kvm/cpu-ops.h"
 
 /* This check must be after config-host.h is included */
 #ifdef CONFIG_EVENTFD
@@ -3451,6 +3453,7 @@ out_unref:
 
 int kvm_cpu_exec(CPUState *cpu)
 {
+    const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
     struct kvm_run *run = cpu->kvm_run;
     int ret, run_ret;
 
@@ -3474,7 +3477,9 @@ int kvm_cpu_exec(CPUState *cpu)
             }
         }
 
-        kvm_arch_pre_run(cpu, run);
+        if (ops->pre_run) {
+            ops->pre_run(cpu, run);
+        }
         /* Corresponding store-release is in cpu_exit. */
         if (qatomic_load_acquire(&cpu->exit_request)) {
             trace_kvm_interrupt_exit_request();

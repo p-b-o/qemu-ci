@@ -758,7 +758,7 @@ void tcg_kick_vcpu_thread(CPUState *cpu)
      * Ensure cpu_exec will see the reason why the exit request was set.
      * FIXME: this is not always needed.  Other accelerators instead
      * read interrupt_request and set exit_request on demand from the
-     * CPU thread; see kvm_arch_pre_run() for example.
+     * CPU thread; see KVMCPUOps::pre_run for example.
      */
     qatomic_store_release(&cpu->exit_request, true);
 
