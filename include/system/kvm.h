@@ -229,7 +229,7 @@ void kvm_irqchip_change_notify(void);
  * @reinject_trap: KVM trap injection control
  *
  * There are usually per-arch specifics which will be handled by
- * calling down to kvm_arch_update_guest_debug after the generic
+ * calling down to the KVMCPUOps::update_guest_debug callback after the generic
  * fields have been set.
  */
 #ifdef TARGET_KVM_HAVE_GUEST_DEBUG
@@ -394,17 +394,11 @@ struct kvm_sw_breakpoint *kvm_find_sw_breakpoint(CPUState *cpu,
 
 int kvm_sw_breakpoints_active(CPUState *cpu);
 
-int kvm_arch_insert_sw_breakpoint(CPUState *cpu,
-                                  struct kvm_sw_breakpoint *bp);
-int kvm_arch_remove_sw_breakpoint(CPUState *cpu,
-                                  struct kvm_sw_breakpoint *bp);
 int kvm_arch_insert_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
                                           GdbBreakpointType type);
 int kvm_arch_remove_gdbstub_hw_breakpoint(vaddr addr, vaddr len,
                                           GdbBreakpointType type);
 void kvm_arch_remove_all_gdbstub_hw_breakpoints(void);
-
-void kvm_arch_update_guest_debug(CPUState *cpu, struct kvm_guest_debug *dbg);
 
 bool kvm_arch_stop_on_emulation_error(CPUState *cpu);
 

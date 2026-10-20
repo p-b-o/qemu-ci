@@ -1518,14 +1518,16 @@ bool kvm_arch_stop_on_emulation_error(CPUState *cs)
     return true;
 }
 
-void kvm_arch_update_guest_debug(CPUState *cpu, struct kvm_guest_debug *dbg)
+static void loongarch_kvm_update_guest_debug(CPUState *cpu,
+                                             struct kvm_guest_debug *dbg)
 {
     if (kvm_sw_breakpoints_active(cpu)) {
         dbg->control |= KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_USE_SW_BP;
     }
 }
 
-int kvm_arch_insert_sw_breakpoint(CPUState *cs, struct kvm_sw_breakpoint *bp)
+static int loongarch_kvm_insert_sw_breakpoint(CPUState *cs,
+                                              struct kvm_sw_breakpoint *bp)
 {
     if (cpu_memory_rw_debug(cs, bp->pc, (uint8_t *)&bp->saved_insn, 4, 0) ||
         cpu_memory_rw_debug(cs, bp->pc, (uint8_t *)&brk_insn, 4, 1)) {
@@ -1535,7 +1537,8 @@ int kvm_arch_insert_sw_breakpoint(CPUState *cs, struct kvm_sw_breakpoint *bp)
     return 0;
 }
 
-int kvm_arch_remove_sw_breakpoint(CPUState *cs, struct kvm_sw_breakpoint *bp)
+static int loongarch_kvm_remove_sw_breakpoint(CPUState *cs,
+                                              struct kvm_sw_breakpoint *bp)
 {
     static uint32_t brk;
 
@@ -1640,6 +1643,9 @@ static const KVMCPUOps loongarch_kvm_cpu_ops = {
     .put_registers = loongarch_kvm_put_registers,
     .handle_exit = loongarch_kvm_handle_exit,
     .process_async_events = loongarch_kvm_process_async_events,
+    .update_guest_debug = loongarch_kvm_update_guest_debug,
+    .insert_sw_breakpoint = loongarch_kvm_insert_sw_breakpoint,
+    .remove_sw_breakpoint = loongarch_kvm_remove_sw_breakpoint,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

@@ -245,6 +245,9 @@ static const KVMCPUOps x86_kvm_cpu_ops = {
     .post_run = x86_kvm_post_run,
     .handle_exit = x86_kvm_handle_exit,
     .process_async_events = x86_kvm_process_async_events,
+    .update_guest_debug = x86_kvm_update_guest_debug,
+    .insert_sw_breakpoint = x86_kvm_insert_sw_breakpoint,
+    .remove_sw_breakpoint = x86_kvm_remove_sw_breakpoint,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

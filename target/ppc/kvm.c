@@ -1366,7 +1366,8 @@ static int kvmppc_handle_dcr_write(CPUPPCState *env,
     return 0;
 }
 
-int kvm_arch_insert_sw_breakpoint(CPUState *cs, struct kvm_sw_breakpoint *bp)
+static int ppc_kvm_insert_sw_breakpoint(CPUState *cs,
+                                        struct kvm_sw_breakpoint *bp)
 {
     /* Mixed endian case is not handled */
     uint32_t sc = debug_inst_opcode;
@@ -1380,7 +1381,8 @@ int kvm_arch_insert_sw_breakpoint(CPUState *cs, struct kvm_sw_breakpoint *bp)
     return 0;
 }
 
-int kvm_arch_remove_sw_breakpoint(CPUState *cs, struct kvm_sw_breakpoint *bp)
+static int ppc_kvm_remove_sw_breakpoint(CPUState *cs,
+                                        struct kvm_sw_breakpoint *bp)
 {
     uint32_t sc;
 
@@ -1515,7 +1517,8 @@ void kvm_arch_remove_all_gdbstub_hw_breakpoints(void)
     nb_hw_breakpoint = nb_hw_watchpoint = 0;
 }
 
-void kvm_arch_update_guest_debug(CPUState *cs, struct kvm_guest_debug *dbg)
+static void ppc_kvm_update_guest_debug(CPUState *cs,
+                                       struct kvm_guest_debug *dbg)
 {
     int n;
 
@@ -3069,6 +3072,9 @@ static const KVMCPUOps ppc_kvm_cpu_ops = {
     .put_registers = ppc_kvm_put_registers,
     .handle_exit = ppc_kvm_handle_exit,
     .process_async_events = ppc_kvm_process_async_events,
+    .update_guest_debug = ppc_kvm_update_guest_debug,
+    .insert_sw_breakpoint = ppc_kvm_insert_sw_breakpoint,
+    .remove_sw_breakpoint = ppc_kvm_remove_sw_breakpoint,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)

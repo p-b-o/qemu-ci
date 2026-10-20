@@ -2168,11 +2168,21 @@ void riscv_kvm_cpu_finalize_features(RISCVCPU *cpu, Error **errp)
     kvm_riscv_destroy_scratch_vcpu(&kvmcpu);
 }
 
+static int riscv_kvm_insert_sw_breakpoint(CPUState *cs,
+                                          struct kvm_sw_breakpoint *bp);
+static int riscv_kvm_remove_sw_breakpoint(CPUState *cs,
+                                          struct kvm_sw_breakpoint *bp);
+static void riscv_kvm_update_guest_debug(CPUState *cs,
+                                         struct kvm_guest_debug *dbg);
+
 static const KVMCPUOps riscv_kvm_cpu_ops = {
     .init_vcpu = riscv_kvm_init_vcpu,
     .get_registers = riscv_kvm_get_registers,
     .put_registers = riscv_kvm_put_registers,
     .handle_exit = riscv_kvm_handle_exit,
+    .update_guest_debug = riscv_kvm_update_guest_debug,
+    .insert_sw_breakpoint = riscv_kvm_insert_sw_breakpoint,
+    .remove_sw_breakpoint = riscv_kvm_remove_sw_breakpoint,
 };
 
 static void kvm_cpu_accel_class_init(ObjectClass *oc, const void *data)
@@ -2225,7 +2235,8 @@ DEFINE_TYPES(riscv_kvm_cpu_type_infos)
 static const uint32_t ebreak_insn = 0x00100073;
 static const uint16_t c_ebreak_insn = 0x9002;
 
-int kvm_arch_insert_sw_breakpoint(CPUState *cs, struct kvm_sw_breakpoint *bp)
+static int riscv_kvm_insert_sw_breakpoint(CPUState *cs,
+                                          struct kvm_sw_breakpoint *bp)
 {
     if (cpu_memory_rw_debug(cs, bp->pc, (uint8_t *)&bp->saved_insn, 2, 0)) {
         return -EINVAL;
@@ -2245,7 +2256,8 @@ int kvm_arch_insert_sw_breakpoint(CPUState *cs, struct kvm_sw_breakpoint *bp)
     return 0;
 }
 
-int kvm_arch_remove_sw_breakpoint(CPUState *cs, struct kvm_sw_breakpoint *bp)
+static int riscv_kvm_remove_sw_breakpoint(CPUState *cs,
+                                          struct kvm_sw_breakpoint *bp)
 {
     uint32_t ebreak;
     uint16_t c_ebreak;
@@ -2286,7 +2298,8 @@ void kvm_arch_remove_all_gdbstub_hw_breakpoints(void)
     /* TODO; To be implemented later. */
 }
 
-void kvm_arch_update_guest_debug(CPUState *cs, struct kvm_guest_debug *dbg)
+static void riscv_kvm_update_guest_debug(CPUState *cs,
+                                         struct kvm_guest_debug *dbg)
 {
     if (kvm_sw_breakpoints_active(cs)) {
         dbg->control |= KVM_GUESTDBG_ENABLE;

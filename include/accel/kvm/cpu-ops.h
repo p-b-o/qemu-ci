@@ -71,6 +71,20 @@ struct kvm_run;
  *                        return EXCP_HLT, or 0 if execution can proceed.
  *                        May be NULL if the target does not require event
  *                        processing before execution.
+ * @update_guest_debug: Optional callback executed when updating KVM guest
+ *                      debug structures for the vCPU. Used to configure
+ *                      architecture-specific debug control flags and hardware
+ *                      or software breakpoint descriptors in @dbg.
+ *                      May be NULL if the target does not require
+ *                      architecture-specific guest debug setup.
+ * @insert_sw_breakpoint: Optional callback to insert an architecture-specific
+ *                        software breakpoint instruction at @bp->pc and save
+ *                        the overwritten instruction in @bp->saved_insn.
+ *                        Returns 0 on success, or a negative errno on failure.
+ * @remove_sw_breakpoint: Optional callback to remove an architecture-specific
+ *                        software breakpoint, restoring @bp->saved_insn at
+ *                        @bp->pc.
+ *                        Returns 0 on success, or a negative errno on failure.
  */
 typedef struct KVMCPUOps {
     int (*pre_create_vcpu)(CPUState *cpu, Error **errp);
@@ -83,6 +97,9 @@ typedef struct KVMCPUOps {
     MemTxAttrs (*post_run)(CPUState *cpu, struct kvm_run *run);
     int (*handle_exit)(CPUState *cpu, struct kvm_run *run);
     int (*process_async_events)(CPUState *cpu);
+    void (*update_guest_debug)(CPUState *cpu, struct kvm_guest_debug *dbg);
+    int (*insert_sw_breakpoint)(CPUState *cpu, struct kvm_sw_breakpoint *bp);
+    int (*remove_sw_breakpoint)(CPUState *cpu, struct kvm_sw_breakpoint *bp);
 } KVMCPUOps;
 
 #define TYPE_KVM_ACCEL_CPU "kvm-accel-cpu"
