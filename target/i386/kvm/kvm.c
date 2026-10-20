@@ -2056,7 +2056,7 @@ full:
     abort();
 }
 
-int kvm_arch_pre_create_vcpu(CPUState *cpu, Error **errp)
+int x86_kvm_pre_create_vcpu(CPUState *cpu, Error **errp)
 {
     static bool first = true;
     int ret;

@@ -19,6 +19,12 @@ struct kvm_run;
 /**
  * struct KVMCPUOps - Target-specific per-vCPU operations for KVM
  *
+ * @pre_create_vcpu: Optional callback executed before creating the KVM vCPU
+ *                   (via KVM_CREATE_VCPU). Used by architectures that need
+ *                   to configure VM-level capabilities or features before
+ *                   vCPUs are created (e.g. x86 PMU disable or TDX).
+ *                   May be NULL if the target does not require pre-creation
+ *                   handling.
  * @get_registers: Mandatory callback to synchronize architecture-specific
  *                 vCPU register state from KVM into QEMU's CPUState.
  *                 Returns 0 on success, or a negative errno on failure.
@@ -54,6 +60,7 @@ struct kvm_run;
  *                        processing before execution.
  */
 typedef struct KVMCPUOps {
+    int (*pre_create_vcpu)(CPUState *cpu, Error **errp);
     int (*get_registers)(CPUState *cpu, Error **errp);
     int (*put_registers)(CPUState *cpu, KvmPutState level, Error **errp);
     void (*pre_run)(CPUState *cpu, struct kvm_run *run);

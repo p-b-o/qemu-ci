@@ -460,6 +460,8 @@ static int kvm_rebind_vcpus(Error **errp)
     int kvm_fd, ret = 0;
 
     CPU_FOREACH(cpu) {
+        const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
+
         vcpu_id = kvm_arch_vcpu_id(cpu);
 
         if (cpu->kvm_fd) {
@@ -480,9 +482,11 @@ static int kvm_rebind_vcpus(Error **errp)
             goto err;
         }
 
-        ret = kvm_arch_pre_create_vcpu(cpu, errp);
-        if (ret < 0) {
-            goto err;
+        if (ops->pre_create_vcpu) {
+            ret = ops->pre_create_vcpu(cpu, errp);
+            if (ret < 0) {
+                goto err;
+            }
         }
 
         kvm_fd = kvm_vm_ioctl(s, KVM_CREATE_VCPU, vcpu_id);
@@ -723,14 +727,17 @@ static int map_kvm_dirty_gfns(KVMState *s, CPUState *cpu, Error **errp)
 
 int kvm_init_vcpu(CPUState *cpu, Error **errp)
 {
+    const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
     KVMState *s = kvm_state;
     int ret;
 
     trace_kvm_init_vcpu(cpu->cpu_index, kvm_arch_vcpu_id(cpu));
 
-    ret = kvm_arch_pre_create_vcpu(cpu, errp);
-    if (ret < 0) {
-        goto err;
+    if (ops->pre_create_vcpu) {
+        ret = ops->pre_create_vcpu(cpu, errp);
+        if (ret < 0) {
+            goto err;
+        }
     }
 
     ret = kvm_create_vcpu(cpu);
