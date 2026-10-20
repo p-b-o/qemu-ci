@@ -2964,9 +2964,7 @@ static int kvm_init(AccelState *as, MachineState *ms)
     s->sigmask_len = 8;
     accel_blocker_init();
 
-#ifdef TARGET_KVM_HAVE_GUEST_DEBUG
     QTAILQ_INIT(&s->kvm_sw_breakpoints);
-#endif
     QLIST_INIT(&s->kvm_parked_vcpus);
     s->fd = qemu_open_old(s->device ?: "/dev/kvm", O_RDWR);
     if (s->fd == -1) {
@@ -3077,7 +3075,6 @@ static int kvm_init(AccelState *as, MachineState *ms)
     kvm_vm_attributes_allowed =
         (kvm_check_extension(s, KVM_CAP_VM_ATTRIBUTES) > 0);
 
-#ifdef TARGET_KVM_HAVE_GUEST_DEBUG
     if (kvm_check_extension(s, KVM_CAP_SET_GUEST_DEBUG) > 0) {
         as->gdbstub.sstep_flags = SSTEP_ENABLE;
 
@@ -3088,7 +3085,6 @@ static int kvm_init(AccelState *as, MachineState *ms)
             as->gdbstub.sstep_flags |= SSTEP_NOIRQ;
         }
     }
-#endif
 
     kvm_state = s;
 
@@ -3832,7 +3828,6 @@ bool kvm_arm_supports_user_irq(void)
     return kvm_check_extension(kvm_state, KVM_CAP_ARM_USER_IRQ);
 }
 
-#ifdef TARGET_KVM_HAVE_GUEST_DEBUG
 struct kvm_sw_breakpoint *kvm_find_sw_breakpoint(CPUState *cpu, vaddr pc)
 {
     struct kvm_sw_breakpoint *bp;
@@ -3869,6 +3864,10 @@ int kvm_update_guest_debug(CPUState *cpu, unsigned long reinject_trap)
     const KVMCPUOps *ops = kvm_get_cpu_ops(cpu);
     struct kvm_set_guest_debug_data data;
 
+    if (!ops || !ops->update_guest_debug) {
+        return -EINVAL;
+    }
+
     data.dbg.control = reinject_trap;
 
     if (cpu_single_stepping(cpu)) {
@@ -3878,9 +3877,7 @@ int kvm_update_guest_debug(CPUState *cpu, unsigned long reinject_trap)
             data.dbg.control |= KVM_GUESTDBG_BLOCKIRQ;
         }
     }
-    if (ops && ops->update_guest_debug) {
-        ops->update_guest_debug(cpu, &data.dbg);
-    }
+    ops->update_guest_debug(cpu, &data.dbg);
 
     run_on_cpu(cpu, kvm_invoke_set_guest_debug,
                RUN_ON_CPU_HOST_PTR(&data));
@@ -4021,8 +4018,6 @@ void kvm_remove_all_gdbstub_breakpoints(CPUState *cpu)
         kvm_update_guest_debug(cpu, 0);
     }
 }
-
-#endif /* !TARGET_KVM_HAVE_GUEST_DEBUG */
 
 static int kvm_set_signal_mask(CPUState *cpu, const sigset_t *sigset)
 {

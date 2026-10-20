@@ -86,12 +86,10 @@ static bool kvm_cpus_are_resettable(void)
     return !kvm_enabled() || !kvm_state->guest_state_protected;
 }
 
-#ifdef TARGET_KVM_HAVE_GUEST_DEBUG
 static void kvm_update_guest_debug_ops(CPUState *cpu)
 {
     kvm_update_guest_debug(cpu, 0);
 }
-#endif
 
 static void kvm_accel_ops_class_init(ObjectClass *oc, const void *data)
 {
@@ -106,12 +104,10 @@ static void kvm_accel_ops_class_init(ObjectClass *oc, const void *data)
     ops->synchronize_pre_loadvm = kvm_cpu_synchronize_pre_loadvm;
     ops->handle_interrupt = generic_handle_interrupt;
 
-#ifdef TARGET_KVM_HAVE_GUEST_DEBUG
     ops->update_guest_debug = kvm_update_guest_debug_ops;
     ops->insert_gdbstub_breakpoint = kvm_insert_gdbstub_breakpoint;
     ops->remove_gdbstub_breakpoint = kvm_remove_gdbstub_breakpoint;
     ops->remove_all_gdbstub_breakpoints = kvm_remove_all_gdbstub_breakpoints;
-#endif
 }
 
 static const TypeInfo kvm_accel_ops_type = {
