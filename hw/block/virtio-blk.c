@@ -219,6 +219,7 @@ static inline void submit_requests(VirtIOBlock *s, MultiReqBuffer *mrb,
     QEMUIOVector *qiov = &mrb->reqs[start]->qiov;
     int64_t sector_num = mrb->reqs[start]->sector_num;
     bool is_write = mrb->is_write;
+    bool is_fua = mrb->is_fua;
     BdrvRequestFlags flags = 0;
 
     if (num_reqs > 1) {
@@ -255,6 +256,9 @@ static inline void submit_requests(VirtIOBlock *s, MultiReqBuffer *mrb,
     }
 
     if (is_write) {
+        if (is_fua) {
+            flags |= BDRV_REQ_FUA;
+        }
         blk_aio_pwritev(blk, sector_num << BDRV_SECTOR_BITS, qiov,
                         flags, virtio_blk_rw_complete,
                         mrb->reqs[start]);
@@ -829,6 +833,7 @@ out:
 static int virtio_blk_handle_request(VirtIOBlockReq *req, MultiReqBuffer *mrb)
 {
     uint32_t type;
+    uint32_t flags;
     struct iovec *in_iov = req->elem.in_sg;
     struct iovec *out_iov = req->elem.out_sg;
     unsigned in_num = req->elem.in_num;
@@ -865,6 +870,7 @@ static int virtio_blk_handle_request(VirtIOBlockReq *req, MultiReqBuffer *mrb)
                               &req->inhdr_undo);
 
     type = virtio_ldl_p(vdev, &req->out.type);
+    flags = virtio_ldl_p(vdev, &req->out.flags);
 
     /* VIRTIO_BLK_T_OUT defines the command direction. VIRTIO_BLK_T_BARRIER
      * is an optional flag. Although a guest should not send this flag if
@@ -873,6 +879,9 @@ static int virtio_blk_handle_request(VirtIOBlockReq *req, MultiReqBuffer *mrb)
     case VIRTIO_BLK_T_IN:
     {
         bool is_write = type & VIRTIO_BLK_T_OUT;
+        bool is_fua = is_write &&
+            virtio_vdev_has_feature(vdev, VIRTIO_BLK_F_REQ_FLAGS_OUT_FUA) &&
+            (flags & (1U << VIRTIO_BLK_REQ_FLAG_OUT_FUA));
         req->sector_num = virtio_ldq_p(vdev, &req->out.sector);
 
         if (is_write) {
@@ -900,6 +909,7 @@ static int virtio_blk_handle_request(VirtIOBlockReq *req, MultiReqBuffer *mrb)
          * changes */
         if (mrb->num_reqs > 0 && (mrb->num_reqs == VIRTIO_BLK_MAX_MERGE_REQS ||
                                   is_write != mrb->is_write ||
+                                  is_fua != mrb->is_fua ||
                                   !s->conf.request_merging)) {
             virtio_blk_submit_multireq(s, mrb);
         }
@@ -907,6 +917,7 @@ static int virtio_blk_handle_request(VirtIOBlockReq *req, MultiReqBuffer *mrb)
         assert(mrb->num_reqs < VIRTIO_BLK_MAX_MERGE_REQS);
         mrb->reqs[mrb->num_reqs++] = req;
         mrb->is_write = is_write;
+        mrb->is_fua = is_fua;
         break;
     }
     case VIRTIO_BLK_T_FLUSH:
@@ -1283,6 +1294,10 @@ static uint64_t virtio_blk_get_features(VirtIODevice *vdev, uint64_t features,
     /* Firstly sync all virtio-blk possible supported features */
     features |= s->host_features;
 
+    if (virtio_has_feature(features, VIRTIO_BLK_F_REQ_FLAGS_OUT_FUA)) {
+        virtio_add_feature(&features, VIRTIO_BLK_F_REQ_FLAGS);
+    }
+
     virtio_add_feature(&features, VIRTIO_BLK_F_SEG_MAX);
     virtio_add_feature(&features, VIRTIO_BLK_F_GEOMETRY);
     virtio_add_feature(&features, VIRTIO_BLK_F_TOPOLOGY);
@@ -1306,6 +1321,15 @@ static uint64_t virtio_blk_get_features(VirtIODevice *vdev, uint64_t features,
     }
 
     return features;
+}
+
+static int virtio_blk_validate_features(VirtIODevice *vdev)
+{
+    if (virtio_vdev_has_feature(vdev, VIRTIO_BLK_F_REQ_FLAGS_OUT_FUA) &&
+        !virtio_vdev_has_feature(vdev, VIRTIO_BLK_F_REQ_FLAGS)) {
+        return -EINVAL;
+    }
+    return 0;
 }
 
 static int virtio_blk_set_status(VirtIODevice *vdev, uint8_t status)
@@ -1925,6 +1949,8 @@ static const Property virtio_blk_properties[] = {
                        conf.max_discard_sectors, BDRV_REQUEST_MAX_SECTORS),
     DEFINE_PROP_UINT32("max-write-zeroes-sectors", VirtIOBlock,
                        conf.max_write_zeroes_sectors, BDRV_REQUEST_MAX_SECTORS),
+    DEFINE_PROP_BIT64("fua", VirtIOBlock, host_features,
+                      VIRTIO_BLK_F_REQ_FLAGS_OUT_FUA, true),
     DEFINE_PROP_BOOL("x-enable-wce-if-config-wce", VirtIOBlock,
                      conf.x_enable_wce_if_config_wce, true),
 };
@@ -1942,6 +1968,7 @@ static void virtio_blk_class_init(ObjectClass *klass, const void *data)
     vdc->get_config = virtio_blk_update_config;
     vdc->set_config = virtio_blk_set_config;
     vdc->get_features = virtio_blk_get_features;
+    vdc->validate_features = virtio_blk_validate_features;
     vdc->set_status = virtio_blk_set_status;
     vdc->reset = virtio_blk_reset;
     vdc->save = virtio_blk_save_device;

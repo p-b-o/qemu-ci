@@ -171,6 +171,10 @@ static const qmp_virtio_feature_map_t virtio_blk_feature_map[] = {
             "VIRTIO_BLK_F_SECURE_ERASE: Secure erase supported"),
     FEATURE_ENTRY(VIRTIO_BLK_F_ZONED, \
             "VIRTIO_BLK_F_ZONED: Zoned block devices"),
+    FEATURE_ENTRY(VIRTIO_BLK_F_REQ_FLAGS, \
+            "VIRTIO_BLK_F_REQ_FLAGS: Request flags supported"),
+    FEATURE_ENTRY(VIRTIO_BLK_F_REQ_FLAGS_OUT_FUA, \
+            "VIRTIO_BLK_F_REQ_FLAGS_OUT_FUA: FUA flag for OUT requests"),
     FEATURE_ENTRY(VIRTIO_BLK_F_BARRIER, \
             "VIRTIO_BLK_F_BARRIER: Request barriers supported"),
     FEATURE_ENTRY(VIRTIO_BLK_F_SCSI, \
