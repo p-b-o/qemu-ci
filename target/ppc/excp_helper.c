@@ -33,9 +33,8 @@
 
 /*****************************************************************************/
 /* Exception processing */
-#ifndef CONFIG_USER_ONLY
 
-static const char *powerpc_excp_name(int excp)
+const char *powerpc_excp_name(int excp)
 {
     switch (excp) {
     case POWERPC_EXCP_CRITICAL: return "CRITICAL";
@@ -106,6 +105,8 @@ static const char *powerpc_excp_name(int excp)
         g_assert_not_reached();
     }
 }
+
+#ifndef CONFIG_USER_ONLY
 
 static void dump_syscall(CPUPPCState *env)
 {
