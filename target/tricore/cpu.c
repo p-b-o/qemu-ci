@@ -36,6 +36,23 @@ static const gchar *tricore_gdb_arch_name(CPUState *cs)
     return "tricore";
 }
 
+const char *tricore_trap_name(int trap)
+{
+    static const char * const trap_names[] = {
+        [TRAPC_MMU]         = "mmu",
+        [TRAPC_PROT]        = "prot",
+        [TRAPC_INSN_ERR]    = "insn err",
+        [TRAPC_CTX_MNG]     = "ctx mng",
+        [TRAPC_SYSBUS]      = "sysbus",
+        [TRAPC_ASSERT]      = "assert",
+        [TRAPC_SYSCALL]     = "syscall",
+        [TRAPC_NMI]         = "NMI",
+        [TRAPC_IRQ]         = "IRQ",
+    };
+
+    return ARRAY_ELEM_OR_NULL(trap_names, trap) ?: "unknown";
+}
+
 static void tricore_disas_set_info(const CPUState *cpu, disassemble_info *info)
 {
     CPUTriCoreState *env = cpu_env((CPUState *)cpu);
@@ -240,6 +257,7 @@ static void tricore_cpu_class_init(ObjectClass *c, const void *data)
     resettable_class_set_parent_phases(rc, NULL, tricore_cpu_reset_hold, NULL,
                                        &mcc->parent_phases);
     cc->class_by_name = tricore_cpu_class_by_name;
+    cc->exception_name = tricore_trap_name;
 
     cc->gdb_read_register = tricore_cpu_gdb_read_register;
     cc->gdb_write_register = tricore_cpu_gdb_write_register;

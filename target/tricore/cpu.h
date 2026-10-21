@@ -178,6 +178,8 @@ enum {
     TRAPC_IRQ      = 8
 };
 
+const char *tricore_trap_name(int trap);
+
 /* Class 0 TIN */
 enum {
     TIN0_VAF = 0,
