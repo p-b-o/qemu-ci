@@ -533,6 +533,18 @@ void QEMU_ERROR("code path is reachable")
                        QEMU_BUILD_BUG_ON_ZERO(!QEMU_IS_ARRAY(x)))
 #endif
 
+/**
+ * ARRAY_ELEM_OR_NULL() - Return an array element, or NULL if out of bounds
+ * @array: array to index
+ * @index: index of the element to return
+ *
+ * Return @array[@index] if @index is a valid index (negative indices
+ * also yield NULL), otherwise return NULL. Useful to look up entries
+ * in enum-indexed tables without a prior bounds check.
+ */
+#define ARRAY_ELEM_OR_NULL(array, index) \
+    ((index) < 0 || (index) >= ARRAY_SIZE(array) ? NULL : (array)[index])
+
 int qemu_daemon(int nochdir, int noclose);
 void *qemu_anon_ram_alloc(size_t size, uint64_t *align, bool shared,
                           bool noreserve);
