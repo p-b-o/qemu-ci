@@ -106,7 +106,7 @@ static const char *qemu_excp_name(int excp)
     if ((excp < ARRAY_SIZE(excp_name)) && excp_name[excp]) {
         return excp_name[excp];
     }
-    return "undocumented";
+    return "unknown";
 }
 
 static void log_raise_exception(const CPUState *cpu, int excp)
@@ -117,6 +117,12 @@ static void log_raise_exception(const CPUState *cpu, int excp)
     if (excp >= EXCP_QEMU_INTERNAL) {
         qemu_log_mask(CPU_LOG_INT, "raise exception: 0x%x (internal: %s)\n",
                                    excp, qemu_excp_name(excp));
+    } else {
+        const CPUClass *cc = cpu->cc;
+        const char *name = cc->exception_name ? cc->exception_name(excp)
+                                              : "unknown";
+
+        qemu_log_mask(CPU_LOG_INT, "raise exception: %d (%s)\n", excp, name);
     }
 }
 
