@@ -1,5 +1,5 @@
 TARGET_ARCH=i386
 TARGET_SYSTBL_ABI=i386
 TARGET_SYSTBL=syscall_32.tbl
-TARGET_XML_FILES= i386-32bit.xml i386-32bit-sse.xml i386-32bit-linux.xml
+TARGET_XML_FILES= i386-32bit.xml i386-32bit-sse.xml i386-32bit-avx.xml i386-32bit-avx512.xml i386-32bit-linux.xml
 TARGET_LONG_BITS=32

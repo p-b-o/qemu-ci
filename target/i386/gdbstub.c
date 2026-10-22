@@ -422,6 +422,141 @@ static int x86_gdb_write_sse(CPUState *cs, uint8_t *buf, int n)
     return 0;
 }
 
+/*
+ * AVX feature (org.gnu.gdb.i386.avx) — YMM upper halves.
+ *
+ * Register layout: ymm0h..ymm(N-1)h, each 128-bit.
+ * N = CPU_NB_REGS (8 for 32-bit, 16 for 64-bit).
+ */
+static int x86_gdb_read_avx(CPUState *cs, GByteArray *buf, int n)
+{
+    CPUX86State *env = cpu_env(cs);
+
+    if (n < 0 || n >= CPU_NB_REGS) {
+        return 0;
+    }
+    return gdb_get_reg128(buf,
+                          env->xmm_regs[n].ZMM_Q(3),
+                          env->xmm_regs[n].ZMM_Q(2));
+}
+
+static int x86_gdb_write_avx(CPUState *cs, uint8_t *buf, int n)
+{
+    CPUX86State *env = cpu_env(cs);
+
+    if (n < 0 || n >= CPU_NB_REGS) {
+        return 0;
+    }
+    env->xmm_regs[n].ZMM_Q(2) = ldq_p(buf);
+    env->xmm_regs[n].ZMM_Q(3) = ldq_p(buf + 8);
+    return 16;
+}
+
+/*
+ * AVX-512 feature (org.gnu.gdb.i386.avx512).
+ *
+ * 32-bit layout (CPU_NB_REGS == 8):
+ *   n = 0..7   k0..k7          (64-bit opmask)
+ *   n = 8..15  zmm0h..zmm7h    (256-bit ZMM upper halves)
+ *
+ * 64-bit layout (CPU_NB_REGS == 16):
+ *   n = 0..15  xmm16..xmm31    (128-bit)
+ *   n = 16..31 ymm16h..ymm31h  (128-bit)
+ *   n = 32..39 k0..k7          (64-bit opmask)
+ *   n = 40..71 zmm0h..zmm31h   (256-bit ZMM upper halves)
+ */
+#ifdef TARGET_X86_64
+enum {
+    X86_GDB_AVX512_XMM16_FIRST  = 0,
+    X86_GDB_AVX512_YMM16H_FIRST = 16,
+    X86_GDB_AVX512_OPMASK_FIRST = 32,
+    X86_GDB_AVX512_ZMM_FIRST    = 40,
+    X86_GDB_AVX512_COUNT        = 72,
+};
+#else
+enum {
+    X86_GDB_AVX512_OPMASK_FIRST = 0,
+    X86_GDB_AVX512_ZMM_FIRST    = NB_OPMASK_REGS,
+    X86_GDB_AVX512_COUNT        = NB_OPMASK_REGS + CPU_NB_REGS,
+};
+#endif
+
+static int x86_gdb_read_avx512(CPUState *cs, GByteArray *buf, int n)
+{
+    CPUX86State *env = cpu_env(cs);
+    int reg;
+
+    if (n < 0 || n >= X86_GDB_AVX512_COUNT) {
+        return 0;
+    }
+
+#ifdef TARGET_X86_64
+    if (n < X86_GDB_AVX512_YMM16H_FIRST) {
+        /* xmm16..xmm31: lower 128 bits */
+        reg = 16 + n;
+        return gdb_get_reg128(buf,
+                              env->xmm_regs[reg].ZMM_Q(1),
+                              env->xmm_regs[reg].ZMM_Q(0));
+    }
+    if (n < X86_GDB_AVX512_OPMASK_FIRST) {
+        /* ymm16h..ymm31h: upper 128 bits of YMM */
+        reg = 16 + (n - X86_GDB_AVX512_YMM16H_FIRST);
+        return gdb_get_reg128(buf,
+                              env->xmm_regs[reg].ZMM_Q(3),
+                              env->xmm_regs[reg].ZMM_Q(2));
+    }
+#endif
+    if (n < X86_GDB_AVX512_ZMM_FIRST) {
+        /* k0..k7: opmask registers */
+        return gdb_get_reg64(buf,
+                             env->opmask_regs[n - X86_GDB_AVX512_OPMASK_FIRST]);
+    }
+    /* zmm0h..zmm(N-1)h: upper 256 bits of ZMM */
+    reg = n - X86_GDB_AVX512_ZMM_FIRST;
+    for (int i = 4; i < 8; i++) {
+        gdb_get_reg64(buf, env->xmm_regs[reg].ZMM_Q(i));
+    }
+    return 32;
+}
+
+static int x86_gdb_write_avx512(CPUState *cs, uint8_t *buf, int n)
+{
+    CPUX86State *env = cpu_env(cs);
+    int reg;
+
+    if (n < 0 || n >= X86_GDB_AVX512_COUNT) {
+        return 0;
+    }
+
+#ifdef TARGET_X86_64
+    if (n < X86_GDB_AVX512_YMM16H_FIRST) {
+        /* xmm16..xmm31 */
+        reg = 16 + n;
+        env->xmm_regs[reg].ZMM_Q(0) = ldq_p(buf);
+        env->xmm_regs[reg].ZMM_Q(1) = ldq_p(buf + 8);
+        return 16;
+    }
+    if (n < X86_GDB_AVX512_OPMASK_FIRST) {
+        /* ymm16h..ymm31h */
+        reg = 16 + (n - X86_GDB_AVX512_YMM16H_FIRST);
+        env->xmm_regs[reg].ZMM_Q(2) = ldq_p(buf);
+        env->xmm_regs[reg].ZMM_Q(3) = ldq_p(buf + 8);
+        return 16;
+    }
+#endif
+    if (n < X86_GDB_AVX512_ZMM_FIRST) {
+        /* k0..k7 */
+        env->opmask_regs[n - X86_GDB_AVX512_OPMASK_FIRST] = ldq_p(buf);
+        return 8;
+    }
+    /* zmm0h..zmm(N-1)h */
+    reg = n - X86_GDB_AVX512_ZMM_FIRST;
+    for (int i = 0; i < 4; i++) {
+        env->xmm_regs[reg].ZMM_Q(4 + i) = ldq_p(buf + i * 8);
+    }
+    return 32;
+}
+
 #ifdef CONFIG_LINUX_USER
 
 #define IDX_ORIG_AX 0
@@ -644,15 +779,32 @@ static int x86_gdb_write_system(CPUState *cs, uint8_t *buf, int n)
 
 void x86_cpu_gdb_init(CPUState *cs)
 {
+    CPUX86State *env = cpu_env(cs);
 #ifdef TARGET_X86_64
-    CPUX86State *env = &X86_CPU(cs)->env;
     const char *sse_xml = "i386-64bit-sse.xml";
+    const char *avx_xml = "i386-64bit-avx.xml";
+    const char *avx512_xml = "i386-64bit-avx512.xml";
 #else
     const char *sse_xml = "i386-32bit-sse.xml";
+    const char *avx_xml = "i386-32bit-avx.xml";
+    const char *avx512_xml = "i386-32bit-avx512.xml";
 #endif
 
     gdb_register_coprocessor(cs, x86_gdb_read_sse, x86_gdb_write_sse,
                              gdb_find_static_feature(sse_xml));
+
+    if (env->features[FEAT_1_ECX] & CPUID_EXT_AVX) {
+        const GDBFeature *avx = gdb_find_static_feature(avx_xml);
+        g_assert(avx->num_regs == CPU_NB_REGS);
+        gdb_register_coprocessor(cs, x86_gdb_read_avx,
+                                 x86_gdb_write_avx, avx);
+    }
+    if (env->features[FEAT_7_0_EBX] & CPUID_7_0_EBX_AVX512F) {
+        const GDBFeature *avx512 = gdb_find_static_feature(avx512_xml);
+        g_assert(avx512->num_regs == X86_GDB_AVX512_COUNT);
+        gdb_register_coprocessor(cs, x86_gdb_read_avx512,
+                                 x86_gdb_write_avx512, avx512);
+    }
 
 #ifdef TARGET_X86_64
     if (env->features[FEAT_7_1_EDX] & CPUID_7_1_EDX_APXF) {

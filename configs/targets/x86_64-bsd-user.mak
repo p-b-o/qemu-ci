@@ -1,4 +1,4 @@
 TARGET_ARCH=x86_64
 TARGET_BASE_ARCH=i386
-TARGET_XML_FILES= i386-64bit.xml i386-64bit-sse.xml i386-64bit-apx.xml
+TARGET_XML_FILES= i386-64bit.xml i386-64bit-sse.xml i386-64bit-avx.xml i386-64bit-avx512.xml i386-64bit-apx.xml
 TARGET_LONG_BITS=64
