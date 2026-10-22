@@ -1,0 +1,42 @@
+Looking up 20261022134601.1207204-1-junjie.cao@linux.dev
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v1 1/7] tests/qtest/usb-hcd-ehci: Test a control transfer
+    + Link: https://lore.kernel.org/qemu-devel/20261022134601.1207204-2-junjie.cao@linux.dev
+  [31m✗[0m [PATCH v1 2/7] tests/qtest/usb-hcd-ehci: Cover isochronous IN to EP0
+    + Link: https://lore.kernel.org/qemu-devel/20261022134601.1207204-3-junjie.cao@linux.dev
+  [31m✗[0m [PATCH v1 3/7] tests/qtest/usb-hcd-ehci: Cover isochronous OUT to EP0
+    + Link: https://lore.kernel.org/qemu-devel/20261022134601.1207204-4-junjie.cao@linux.dev
+  [31m✗[0m [PATCH v1 4/7] tests/qtest/usb-hcd-uhci: Test interrupt NAK retries
+    + Link: https://lore.kernel.org/qemu-devel/20261022134601.1207204-5-junjie.cao@linux.dev
+  [31m✗[0m [PATCH v1 5/7] tests/qtest/usb-hcd-uhci: Test isochronous NAK completion
+    + Link: https://lore.kernel.org/qemu-devel/20261022134601.1207204-6-junjie.cao@linux.dev
+  [31m✗[0m [PATCH v1 6/7] tests/qtest/usb-hcd-uhci: Test a successful isochronous transfer
+    + Link: https://lore.kernel.org/qemu-devel/20261022134601.1207204-7-junjie.cao@linux.dev
+  [31m✗[0m [PATCH v1 7/7] tests/qtest/usb-hcd-xhci: Test a successful isochronous transfer
+    + Link: https://lore.kernel.org/qemu-devel/20261022134601.1207204-8-junjie.cao@linux.dev
+  ---
+  [31m✗[0m BADSIG: DKIM/linux.dev
+---
+Total patches: 7
+---
+Applying: tests/qtest/usb-hcd-ehci: Test a control transfer
+Applying: tests/qtest/usb-hcd-ehci: Cover isochronous IN to EP0
+Applying: tests/qtest/usb-hcd-ehci: Cover isochronous OUT to EP0
+Applying: tests/qtest/usb-hcd-uhci: Test interrupt NAK retries
+Applying: tests/qtest/usb-hcd-uhci: Test isochronous NAK completion
+Applying: tests/qtest/usb-hcd-uhci: Test a successful isochronous transfer
+Applying: tests/qtest/usb-hcd-xhci: Test a successful isochronous transfer
+Patch failed at 0007 tests/qtest/usb-hcd-xhci: Test a successful isochronous transfer
+error: patch failed: tests/qtest/usb-hcd-xhci-test.c:42
+error: tests/qtest/usb-hcd-xhci-test.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
