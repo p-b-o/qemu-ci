@@ -16,6 +16,7 @@
 #include "qemu/log.h"
 #include "qemu/main-loop.h"
 #include "system/tcg.h"
+#include "system/hw_accel.h"
 #include "target/arm/multiprocessing.h"
 #include "trace.h"
 
@@ -80,6 +81,7 @@ static void arm_set_cpu_on_async_work(CPUState *target_cpu_state,
 
     /* Start the new CPU at the requested address */
     cpu_set_pc(target_cpu_state, info->entry);
+    cpu_synchronize_post_reset(target_cpu_state);
 
     g_free(info);
 
@@ -189,6 +191,7 @@ static void arm_set_cpu_on_and_reset_async_work(CPUState *target_cpu_state,
 
     /* Initialize the cpu we are turning on */
     cpu_reset(target_cpu_state);
+    cpu_synchronize_post_reset(target_cpu_state);
     target_cpu_state->halted = 0;
 
     /* Finally set the power status */
