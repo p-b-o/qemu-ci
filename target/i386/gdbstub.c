@@ -186,7 +186,7 @@ int x86_cpu_gdb_read_register(CPUState *cs, GByteArray *mem_buf, int n)
             return gdb_get_reg32(mem_buf, (env->fpus & ~0x3800) |
                                           (env->fpstt & 0x7) << 11);
         case IDX_FP_REGS + 10:
-            return gdb_get_reg32(mem_buf, 0); /* ftag */
+            return gdb_get_reg32(mem_buf, cpu_compute_fptag(env));
         case IDX_FP_REGS + 11:
             return gdb_get_reg32(mem_buf, 0); /* fiseg */
         case IDX_FP_REGS + 12:

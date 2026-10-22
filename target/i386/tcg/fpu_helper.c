@@ -2459,30 +2459,10 @@ void helper_fxam_ST0(CPUX86State *env)
 static void do_fstenv(X86Access *ac, target_ulong ptr, int data32)
 {
     CPUX86State *env = ac->env;
-    int fpus, fptag, exp, i;
-    uint64_t mant;
-    CPU_LDoubleU tmp;
+    int fpus, fptag;
 
     fpus = (env->fpus & ~0x3800) | (env->fpstt & 0x7) << 11;
-    fptag = 0;
-    for (i = 7; i >= 0; i--) {
-        fptag <<= 2;
-        if (env->fptags[i]) {
-            fptag |= 3;
-        } else {
-            tmp.d = env->fpregs[i].d;
-            exp = EXPD(tmp);
-            mant = MANTD(tmp);
-            if (exp == 0 && mant == 0) {
-                /* zero */
-                fptag |= 1;
-            } else if (exp == 0 || exp == MAXEXPD
-                       || (mant & (1LL << 63)) == 0) {
-                /* NaNs, infinity, denormal */
-                fptag |= 2;
-            }
-        }
-    }
+    fptag = cpu_compute_fptag(env);
     if (data32) {
         /* 32 bit */
         access_stl(ac, ptr, env->fpuc);

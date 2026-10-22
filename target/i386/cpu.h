@@ -2989,6 +2989,15 @@ static inline void cpu_set_mxcsr(CPUX86State *env, uint32_t mxcsr)
     }
 }
 
+/**
+ * cpu_compute_fptag - Compute the full 16-bit x87 FPU tag word.
+ *
+ * Reconstructs the 16-bit tag word from the fpregs and fptags arrays.
+ * Each of the 8 physical registers gets a 2-bit tag in bits [2*i+1 : 2*i]:
+ *   0 = valid, 1 = zero, 2 = special (NaN/Inf/denormal), 3 = empty.
+ */
+uint16_t cpu_compute_fptag(CPUX86State *env);
+
 static inline void cpu_set_fpuc(CPUX86State *env, uint16_t fpuc)
 {
      env->fpuc = fpuc;

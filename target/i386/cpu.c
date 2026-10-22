@@ -9372,6 +9372,34 @@ static bool cpuid_has_xsave_feature(CPUX86State *env, const ExtSaveArea *esa)
     return false;
 }
 
+uint16_t cpu_compute_fptag(CPUX86State *env)
+{
+    uint16_t fptag = 0;
+
+    for (int i = 0; i < 8; i++) {
+        unsigned tag;
+
+        if (env->fptags[i]) {
+            tag = 3; /* empty */
+        } else {
+            floatx80 f = env->fpregs[i].d;
+            uint16_t exponent = f.high & 0x7fff;
+            uint64_t mantissa = f.low;
+
+            if (exponent == 0 && mantissa == 0) {
+                tag = 1; /* zero */
+            } else if (exponent == 0 || exponent == 0x7fff ||
+                       !(mantissa & (1ULL << 63))) {
+                tag = 2; /* NaNs, infinity, denormal */
+            } else {
+                tag = 0; /* valid */
+            }
+        }
+        fptag |= tag << (2 * i);
+    }
+    return fptag;
+}
+
 static void x86_cpu_reset_hold(Object *obj, ResetType type)
 {
     CPUState *cs = CPU(obj);
