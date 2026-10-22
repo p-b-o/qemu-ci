@@ -603,7 +603,27 @@ static void hvf_gicv3_set_irq(void *opaque, int irq, int level)
     if (irq > s->num_irq) {
         return;
     }
+
     hv_gic_set_spi(GIC_INTERNAL + irq, !!level);
+
+    if (level) {
+        /* Fetching state from the vGIC */
+        hvf_dist_get_edge_trigger(s, HV_GIC_DISTRIBUTOR_REG_GICD_ICFGR0,
+            s->edge_trigger);
+
+        /*
+         * 0->1 edges latch the pending bit for edge-triggered interrupts.
+         *
+         * Hypervisor.framework does not seem to do this for us as expected.
+         */
+        if (gicv3_gicd_edge_trigger_test(s, GIC_INTERNAL + irq)) {
+            hvf_dist_getbmp(s, HV_GIC_DISTRIBUTOR_REG_GICD_ISPENDR0,
+                s->pending);
+            gicv3_gicd_pending_set(s, GIC_INTERNAL + irq);
+            hvf_dist_putbmp(s, HV_GIC_DISTRIBUTOR_REG_GICD_ISPENDR0,
+                HV_GIC_DISTRIBUTOR_REG_GICD_ICPENDR0, s->pending);
+        }
+    }
 }
 
 static void hvf_gicv3_icc_reset(CPUARMState *env, const ARMCPRegInfo *ri)
