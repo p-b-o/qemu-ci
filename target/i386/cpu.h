@@ -2998,6 +2998,22 @@ static inline void cpu_set_mxcsr(CPUX86State *env, uint32_t mxcsr)
  */
 uint16_t cpu_compute_fptag(CPUX86State *env);
 
+/**
+ * x86_fptags_to_abridged - Pack fptags[] into the 8-bit abridged tag word.
+ *
+ * Returns the FXSAVE/XSAVE-style tag byte: bit i is 1 when ST(i) is
+ * nonempty (fptags[i] == 0) and 0 when empty (fptags[i] == 1).
+ */
+static inline uint8_t x86_fptags_to_abridged(const CPUX86State *env)
+{
+    uint8_t ftw = 0;
+
+    for (int i = 0; i < 8; i++) {
+        ftw |= (!env->fptags[i]) << i;
+    }
+    return ftw;
+}
+
 static inline void cpu_set_fpuc(CPUX86State *env, uint16_t fpuc)
 {
      env->fpuc = fpuc;

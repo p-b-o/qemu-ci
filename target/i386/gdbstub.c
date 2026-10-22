@@ -510,21 +510,135 @@ static int i386_cpu_gdb_set_egprs(CPUState *cs, uint8_t *mem_buf, int n)
 #endif
 
 #ifndef CONFIG_USER_ONLY
+enum {
+    /* Segment limits: cs, ds, es, ss, fs, gs (6 × 32-bit) */
+    X86_GDB_SEG_LIMIT_FIRST,
+    X86_GDB_SEG_LIMIT_LAST = X86_GDB_SEG_LIMIT_FIRST + 5,
+    /* Segment bases: cs, ds, es, ss (4 × 64-bit; fs/gs in core regs) */
+    X86_GDB_SEG_BASE_FIRST,
+    X86_GDB_SEG_BASE_LAST = X86_GDB_SEG_BASE_FIRST + 3,
+    /* Segment flags: cs, ds, es, ss, fs, gs (6 × 32-bit) */
+    X86_GDB_SEG_FLAGS_FIRST,
+    X86_GDB_SEG_FLAGS_LAST = X86_GDB_SEG_FLAGS_FIRST + 5,
+    /* Descriptor tables */
+    X86_GDB_GDT_BASE,
+    X86_GDB_GDT_LIMIT,
+    X86_GDB_IDT_BASE,
+    X86_GDB_IDT_LIMIT,
+    X86_GDB_LDT_SELECTOR,
+    X86_GDB_LDT_BASE,
+    X86_GDB_LDT_LIMIT,
+    X86_GDB_LDT_FLAGS,
+    X86_GDB_TR_SELECTOR,
+    X86_GDB_TR_BASE,
+    X86_GDB_TR_LIMIT,
+    X86_GDB_TR_FLAGS,
+    /* Debug registers: dr0-dr3, dr6, dr7 (6 × 64-bit) */
+    X86_GDB_DR0,
+    X86_GDB_DR1,
+    X86_GDB_DR2,
+    X86_GDB_DR3,
+    X86_GDB_DR6,
+    X86_GDB_DR7,
+    /* CPU status */
+    X86_GDB_CPL,
+    X86_GDB_II,
+    X86_GDB_A20,
+    X86_GDB_SMM,
+    X86_GDB_HLT,
+    X86_GDB_XCR0,
+    X86_GDB_FTW,
+    X86_GDB_SYSTEM_COUNT,
+};
+
 static int x86_gdb_read_system(CPUState *cs, GByteArray *buf, int n)
 {
     CPUX86State *env = cpu_env(cs);
     static const int segments[] = { R_CS, R_DS, R_ES, R_SS, R_FS, R_GS };
 
-    if (n < 0 || n >= ARRAY_SIZE(segments)) {
+    switch (n) {
+    case X86_GDB_SEG_LIMIT_FIRST ... X86_GDB_SEG_LIMIT_LAST:
+        return gdb_get_reg32(buf,
+                             env->segs[segments[n - X86_GDB_SEG_LIMIT_FIRST]].limit);
+    case X86_GDB_SEG_BASE_FIRST ... X86_GDB_SEG_BASE_LAST:
+        return gdb_get_reg64(buf,
+                             env->segs[segments[n - X86_GDB_SEG_BASE_FIRST]].base);
+    case X86_GDB_SEG_FLAGS_FIRST ... X86_GDB_SEG_FLAGS_LAST:
+        return gdb_get_reg32(buf,
+                             env->segs[segments[n - X86_GDB_SEG_FLAGS_FIRST]].flags);
+    case X86_GDB_GDT_BASE:
+        return gdb_get_reg64(buf, env->gdt.base);
+    case X86_GDB_GDT_LIMIT:
+        return gdb_get_reg32(buf, env->gdt.limit);
+    case X86_GDB_IDT_BASE:
+        return gdb_get_reg64(buf, env->idt.base);
+    case X86_GDB_IDT_LIMIT:
+        return gdb_get_reg32(buf, env->idt.limit);
+    case X86_GDB_LDT_SELECTOR:
+        return gdb_get_reg32(buf, env->ldt.selector);
+    case X86_GDB_LDT_BASE:
+        return gdb_get_reg64(buf, env->ldt.base);
+    case X86_GDB_LDT_LIMIT:
+        return gdb_get_reg32(buf, env->ldt.limit);
+    case X86_GDB_LDT_FLAGS:
+        return gdb_get_reg32(buf, env->ldt.flags);
+    case X86_GDB_TR_SELECTOR:
+        return gdb_get_reg32(buf, env->tr.selector);
+    case X86_GDB_TR_BASE:
+        return gdb_get_reg64(buf, env->tr.base);
+    case X86_GDB_TR_LIMIT:
+        return gdb_get_reg32(buf, env->tr.limit);
+    case X86_GDB_TR_FLAGS:
+        return gdb_get_reg32(buf, env->tr.flags);
+    case X86_GDB_DR0 ... X86_GDB_DR3:
+        return gdb_get_reg64(buf, env->dr[n - X86_GDB_DR0]);
+    case X86_GDB_DR6:
+        return gdb_get_reg64(buf, env->dr[6]);
+    case X86_GDB_DR7:
+        return gdb_get_reg64(buf, env->dr[7]);
+    case X86_GDB_CPL:
+        return gdb_get_reg32(buf, env->hflags & HF_CPL_MASK);
+    case X86_GDB_II:
+        return gdb_get_reg32(buf, !!(env->hflags & HF_INHIBIT_IRQ_MASK));
+    case X86_GDB_A20:
+        return gdb_get_reg32(buf, (env->a20_mask >> 20) & 1);
+    case X86_GDB_SMM:
+        return gdb_get_reg32(buf, !!(env->hflags & HF_SMM_MASK));
+    case X86_GDB_HLT:
+        return gdb_get_reg32(buf, cs->halted);
+    case X86_GDB_XCR0:
+        return gdb_get_reg64(buf, env->xcr0);
+    case X86_GDB_FTW:
+        return gdb_get_reg8(buf, x86_fptags_to_abridged(env));
+    default:
         return 0;
     }
-    return gdb_get_reg32(buf, env->segs[segments[n]].limit);
 }
 
 static int x86_gdb_write_system(CPUState *cs, uint8_t *buf, int n)
 {
-    /* Segment caches are exposed for inspection only. Ignore writes. */
-    return 4;
+    /* System registers are exposed for inspection only. Ignore writes. */
+    static const uint8_t sizes[X86_GDB_SYSTEM_COUNT] = {
+        [X86_GDB_SEG_LIMIT_FIRST ... X86_GDB_SEG_LIMIT_LAST] = 4,
+        [X86_GDB_SEG_BASE_FIRST  ... X86_GDB_SEG_BASE_LAST]  = 8,
+        [X86_GDB_SEG_FLAGS_FIRST ... X86_GDB_SEG_FLAGS_LAST] = 4,
+        [X86_GDB_GDT_BASE] = 8, [X86_GDB_GDT_LIMIT] = 4,
+        [X86_GDB_IDT_BASE] = 8, [X86_GDB_IDT_LIMIT] = 4,
+        [X86_GDB_LDT_SELECTOR] = 4, [X86_GDB_LDT_BASE] = 8,
+        [X86_GDB_LDT_LIMIT] = 4, [X86_GDB_LDT_FLAGS] = 4,
+        [X86_GDB_TR_SELECTOR] = 4, [X86_GDB_TR_BASE] = 8,
+        [X86_GDB_TR_LIMIT] = 4, [X86_GDB_TR_FLAGS] = 4,
+        [X86_GDB_DR0 ... X86_GDB_DR7] = 8,
+        [X86_GDB_CPL] = 4, [X86_GDB_II] = 4,
+        [X86_GDB_A20] = 4, [X86_GDB_SMM] = 4,
+        [X86_GDB_HLT] = 4, [X86_GDB_XCR0] = 8,
+        [X86_GDB_FTW] = 1,
+    };
+
+    if (n < 0 || n >= X86_GDB_SYSTEM_COUNT) {
+        return 0;
+    }
+    return sizes[n];
 }
 #endif
 
@@ -559,9 +673,11 @@ void x86_cpu_gdb_init(CPUState *cs)
 #endif
 #endif
 #ifndef CONFIG_USER_ONLY
-    gdb_register_internal_coprocessor(
-        cs, x86_gdb_read_system,
-        x86_gdb_write_system,
-        gdb_find_static_feature("i386-system.xml"));
+    {
+        const GDBFeature *sysregs = gdb_find_static_feature("i386-system.xml");
+        g_assert(sysregs->num_regs == X86_GDB_SYSTEM_COUNT);
+        gdb_register_internal_coprocessor(cs, x86_gdb_read_system,
+                                          x86_gdb_write_system, sysregs);
+    }
 #endif
 }

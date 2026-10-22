@@ -3,7 +3,7 @@
   SPDX-License-Identifier: GPL-2.0-or-later
 -->
 <!DOCTYPE feature SYSTEM "gdb-target.dtd">
-<!-- Segment-cache values are read-only; writes are ignored. -->
+<!-- System-register values are read-only; writes are ignored. -->
 <feature name="org.qemu.gdb.i386.system">
   <reg name="cs.limit" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
   <reg name="ds.limit" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
@@ -11,4 +11,43 @@
   <reg name="ss.limit" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
   <reg name="fs.limit" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
   <reg name="gs.limit" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <!-- fs/gs in core regs -->
+  <reg name="cs.base" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <reg name="ds.base" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <reg name="es.base" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <reg name="ss.base" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <reg name="cs.flags" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="ds.flags" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="es.flags" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="ss.flags" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="fs.flags" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="gs.flags" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="gdt.base" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <reg name="gdt.limit" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="idt.base" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <reg name="idt.limit" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="ldt.selector" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="ldt.base" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <reg name="ldt.limit" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="ldt.flags" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="tr.selector" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="tr.base" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <reg name="tr.limit" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="tr.flags" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="dr0" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <reg name="dr1" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <reg name="dr2" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <reg name="dr3" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <reg name="dr6" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <reg name="dr7" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <!-- CPU status values, matching the fields printed by info registers. -->
+  <reg name="cpl" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <!-- ii: interrupt inhibit -->
+  <reg name="ii" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="a20" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="smm" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="hlt" bitsize="32" type="uint32" group="qemu-debug" save-restore="no"/>
+  <reg name="xcr0" bitsize="64" type="uint64" group="qemu-debug" save-restore="no"/>
+  <!-- Abridged x87 tag word: one bit per physical register, 1 = nonempty. -->
+  <reg name="ftw" bitsize="8" type="uint8" group="qemu-debug" save-restore="no"/>
 </feature>
