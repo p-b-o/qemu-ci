@@ -57,9 +57,8 @@ static const int gpr_map32[8] = { 0, 1, 2, 3, 4, 5, 6, 7 };
 /*
  * fpu regs ----------> 8 or 16
  */
-#define IDX_NB_MXCSR    1
 /*
- *          total ----> 8+1+1+9+6+16+8+1=50 or 16+1+1+9+6+16+16+1=66
+ *          total ----> 8+1+1+9+6+16=41 or 16+1+1+9+6+16=49
  */
 
 #define IDX_IP_REG      CPU_NB_REGS
@@ -67,8 +66,6 @@ static const int gpr_map32[8] = { 0, 1, 2, 3, 4, 5, 6, 7 };
 #define IDX_SEG_REGS    (IDX_FLAGS_REG + IDX_NB_FLAGS)
 #define IDX_CTL_REGS    (IDX_SEG_REGS + IDX_NB_SEG)
 #define IDX_FP_REGS     (IDX_CTL_REGS + IDX_NB_CTL)
-#define IDX_XMM_REGS    (IDX_FP_REGS + IDX_NB_FP)
-#define IDX_MXCSR_REG   (IDX_XMM_REGS + CPU_NB_REGS)
 
 #define IDX_CTL_CR0_REG     (IDX_CTL_REGS + 0)
 #define IDX_CTL_CR2_REG     (IDX_CTL_REGS + 1)
@@ -139,13 +136,6 @@ int x86_cpu_gdb_read_register(CPUState *cs, GByteArray *mem_buf, int n)
         int len = gdb_get_reg64(mem_buf, cpu_to_le64(fp->low));
         len += gdb_get_reg16(mem_buf, cpu_to_le16(fp->high));
         return len;
-    } else if (n >= IDX_XMM_REGS && n < IDX_XMM_REGS + CPU_NB_REGS) {
-        n -= IDX_XMM_REGS;
-        if (n < CPU_NB_REGS32 || TARGET_LONG_BITS == 64) {
-            return gdb_get_reg128(mem_buf,
-                                  env->xmm_regs[n].ZMM_Q(1),
-                                  env->xmm_regs[n].ZMM_Q(0));
-        }
     } else {
         switch (n) {
         case IDX_IP_REG:
@@ -197,10 +187,6 @@ int x86_cpu_gdb_read_register(CPUState *cs, GByteArray *mem_buf, int n)
             return gdb_get_reg32(mem_buf, 0); /* fooff */
         case IDX_FP_REGS + 15:
             return gdb_get_reg32(mem_buf, 0); /* fop */
-
-        case IDX_MXCSR_REG:
-            update_mxcsr_from_sse_status(env);
-            return gdb_get_reg32(mem_buf, env->mxcsr);
 
         case IDX_CTL_CR0_REG:
             return gdb_read_reg_cs64(env->hflags, mem_buf, env->cr[0]);
@@ -300,13 +286,6 @@ int x86_cpu_gdb_write_register(CPUState *cs, uint8_t *mem_buf, int n)
         fp->low = le64_to_cpu(* (uint64_t *) mem_buf);
         fp->high = le16_to_cpu(* (uint16_t *) (mem_buf + 8));
         return 10;
-    } else if (n >= IDX_XMM_REGS && n < IDX_XMM_REGS + CPU_NB_REGS) {
-        n -= IDX_XMM_REGS;
-        if (n < CPU_NB_REGS32 || TARGET_LONG_BITS == 64) {
-            env->xmm_regs[n].ZMM_Q(0) = ldq_p(mem_buf);
-            env->xmm_regs[n].ZMM_Q(1) = ldq_p(mem_buf + 8);
-            return 16;
-        }
     } else {
         switch (n) {
         case IDX_IP_REG:
@@ -358,10 +337,6 @@ int x86_cpu_gdb_write_register(CPUState *cs, uint8_t *mem_buf, int n)
         case IDX_FP_REGS + 15: /* fop */
             return 4;
 
-        case IDX_MXCSR_REG:
-            cpu_set_mxcsr(env, ldl_p(mem_buf));
-            return 4;
-
         case IDX_CTL_CR0_REG:
             len = gdb_write_reg_cs64(env->hflags, mem_buf, &tmp);
 #ifndef CONFIG_USER_ONLY
@@ -406,6 +381,44 @@ int x86_cpu_gdb_write_register(CPUState *cs, uint8_t *mem_buf, int n)
         }
     }
     /* Unrecognised register.  */
+    return 0;
+}
+
+/*
+ * SSE feature (org.gnu.gdb.i386.sse) — XMM registers + mxcsr.
+ *
+ * Register layout: xmm0..xmm(N-1), mxcsr.
+ * N = CPU_NB_REGS (8 for 32-bit, 16 for 64-bit).
+ */
+static int x86_gdb_read_sse(CPUState *cs, GByteArray *buf, int n)
+{
+    CPUX86State *env = cpu_env(cs);
+
+    if (n < CPU_NB_REGS) {
+        return gdb_get_reg128(buf,
+                              env->xmm_regs[n].ZMM_Q(1),
+                              env->xmm_regs[n].ZMM_Q(0));
+    }
+    if (n == CPU_NB_REGS) {
+        update_mxcsr_from_sse_status(env);
+        return gdb_get_reg32(buf, env->mxcsr);
+    }
+    return 0;
+}
+
+static int x86_gdb_write_sse(CPUState *cs, uint8_t *buf, int n)
+{
+    CPUX86State *env = cpu_env(cs);
+
+    if (n < CPU_NB_REGS) {
+        env->xmm_regs[n].ZMM_Q(0) = ldq_p(buf);
+        env->xmm_regs[n].ZMM_Q(1) = ldq_p(buf + 8);
+        return 16;
+    }
+    if (n == CPU_NB_REGS) {
+        cpu_set_mxcsr(env, ldl_p(buf));
+        return 4;
+    }
     return 0;
 }
 
@@ -519,11 +532,20 @@ void x86_cpu_gdb_init(CPUState *cs)
 {
 #ifdef TARGET_X86_64
     CPUX86State *env = &X86_CPU(cs)->env;
+    const char *sse_xml = "i386-64bit-sse.xml";
+#else
+    const char *sse_xml = "i386-32bit-sse.xml";
+#endif
 
+    gdb_register_coprocessor(cs, x86_gdb_read_sse, x86_gdb_write_sse,
+                             gdb_find_static_feature(sse_xml));
+
+#ifdef TARGET_X86_64
     if (env->features[FEAT_7_1_EDX] & CPUID_7_1_EDX_APXF) {
         gdb_register_coprocessor(cs, i386_cpu_gdb_get_egprs,
                                  i386_cpu_gdb_set_egprs,
-                                 gdb_find_static_feature("i386-64bit-apx.xml"));
+                                 gdb_find_static_feature(
+                                     "i386-64bit-apx.xml"));
     }
 #endif
 
