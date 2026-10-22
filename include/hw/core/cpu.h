@@ -455,7 +455,8 @@ struct qemu_work_item;
  * @as: Pointer to the first AddressSpace, for the convenience of targets which
  *      only have a single AddressSpace
  * @gdb_regs: Additional GDB registers.
- * @gdb_num_regs: Number of total registers accessible to GDB.
+ * @gdb_next_base_reg: Next register number after registered GDB features,
+ *                     including numbering gaps and internal registers.
  * @gdb_num_g_regs: Number of registers in GDB 'g' packets.
  * @node: QTAILQ of CPUs sharing TB cache.
  * @opaque: User data.
@@ -529,7 +530,7 @@ struct CPUState {
     struct CPUJumpCache *tb_jmp_cache;
 
     GArray *gdb_regs;
-    int gdb_num_regs;
+    int gdb_next_base_reg;
     int gdb_num_g_regs;
     QTAILQ_ENTRY(CPUState) node;
 
