@@ -908,6 +908,14 @@ Use ``multifd-channels`` instead.
 
 Use ``multifd-compression`` instead.
 
+``$pc`` register alias on x86 (removed in 11.2)
+'''''''''''''''''''''''''''''''''''''''''''''''
+
+The ``$pc`` alias (the linear instruction pointer) is no longer
+recognized in HMP expressions. Use ``$rip`` or ``$eip`` (depending
+on the target) instead, adding ``$cs.base`` when the linear address
+is needed.
+
 Host Architectures
 ------------------
 

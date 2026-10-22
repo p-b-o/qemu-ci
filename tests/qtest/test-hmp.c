@@ -58,7 +58,6 @@ static const char *hmp_cmds[] = {
     "object_del mem1",
     "one-insn-per-tb on",
     "pmemsave 0 4096 \"/dev/null\"",
-    "p $pc + 8",
     "qom-list /",
     "qom-set /machine initrd test",
     "qom-get /machine initrd",
