@@ -397,6 +397,64 @@ build-user-hexagon:
     CONFIGURE_ARGS: --disable-tools --disable-docs --enable-debug-tcg
     MAKE_CHECK_ARGS: check-tcg
 
+build-user-hexagon-noidefparser:
+  extends: .native_build_job_template
+  needs:
+    - job: hexagon-cross-container
+  variables:
+    IMAGE: debian-hexagon-cross
+    TARGETS: hexagon-linux-user
+    CONFIGURE_ARGS: --disable-tools --disable-docs --enable-debug-tcg
+      --disable-hexagon-idef-parser
+    MAKE_CHECK_ARGS: check-tcg
+
+build-hexagon-ubsan:
+  extends:
+    - .native_build_job_template
+    - .native_build_artifact_template
+  needs:
+    - job: hexagon-cross-container
+  variables:
+    IMAGE: debian-hexagon-cross
+    TARGETS: hexagon-linux-user hexagon-softmmu
+    CONFIGURE_ARGS: --cc=clang --cxx=clang++ --disable-tools --disable-docs
+      --enable-debug-tcg --enable-ubsan
+      --extra-cflags=-fno-sanitize-recover=undefined
+    MAKE_CHECK_ARGS: check-tcg
+
+functional-hexagon-ubsan:
+  extends: .functional_test_job_template
+  needs:
+    - job: build-hexagon-ubsan
+      artifacts: true
+  variables:
+    IMAGE: debian-hexagon-cross
+    MAKE_CHECK_ARGS: check-functional
+
+build-hexagon-asan:
+  extends:
+    - .native_build_job_template
+    - .native_build_artifact_template
+  needs:
+    - job: hexagon-cross-container
+  variables:
+    IMAGE: debian-hexagon-cross
+    TARGETS: hexagon-linux-user hexagon-softmmu
+    CONFIGURE_ARGS: --cc=clang --cxx=clang++ --disable-tools --disable-docs
+      --enable-debug-tcg --enable-asan
+    MAKE_CHECK_ARGS: check-tcg
+    ASAN_OPTIONS: detect_leaks=0
+
+functional-hexagon-asan:
+  extends: .functional_test_job_template
+  needs:
+    - job: build-hexagon-asan
+      artifacts: true
+  variables:
+    IMAGE: debian-hexagon-cross
+    MAKE_CHECK_ARGS: check-functional
+    ASAN_OPTIONS: detect_leaks=0
+
 # Build the softmmu targets we have check-tcg tests and compilers in
 # our omnibus all-test-cross container. Those targets that haven't got
 # Debian cross compiler support need to use special containers.
