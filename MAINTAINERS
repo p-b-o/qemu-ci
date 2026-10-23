@@ -1383,6 +1383,8 @@ F: configs/devices/hexagon-softmmu/default.mak
 F: docs/system/hexagon/
 F: tests/functional/hexagon/
 F: docs/devel/hexagon-sys.rst
+F: pc-bios/hexagon*
+F: roms/hexagon-hypervisor
 
 LoongArch Machines
 ------------------
