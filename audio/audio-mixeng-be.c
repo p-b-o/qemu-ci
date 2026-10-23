@@ -1480,8 +1480,8 @@ static void audio_mixeng_backend_init(Object *obj)
     s->vmse_start = qemu_add_vm_change_state_handler(
         audio_vm_change_state_start, s);
     assert(s->vmse_start != NULL);
-    s->vmse_stop = qemu_add_vm_change_state_handler(
-        audio_vm_change_state_stop, s);
+    s->vmse_stop = qemu_add_vm_change_state_handler_prio(
+        audio_vm_change_state_stop, s, VM_CHANGE_STATE_PRI_HIGH);
     assert(s->vmse_stop != NULL);
 
     vmstate_register_any(NULL, &vmstate_audio, s);

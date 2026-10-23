@@ -59,6 +59,13 @@ VMChangeStateEntry *qemu_add_vm_change_state_handler(VMChangeStateHandler *cb,
     return (VMChangeStateEntry *)&dummy_vmse;
 }
 
+VMChangeStateEntry *qemu_add_vm_change_state_handler_prio(
+    VMChangeStateHandler *cb, void *opaque,
+    VMChangeStateHandlerPri priority)
+{
+    return qemu_add_vm_change_state_handler(cb, opaque);
+}
+
 void qemu_del_vm_change_state_handler(VMChangeStateEntry *e)
 {
 }
