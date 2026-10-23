@@ -1,0 +1,38 @@
+Looking up 20261023113830.3368902-1-stanleyjhu@google.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 26 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/8] hw/ufs: Add experimental fault injection properties for holding requests
+    + Link: https://lore.kernel.org/qemu-devel/20261023113830.3368902-2-stanleyjhu@google.com
+  [32m✓[0m [PATCH v3 2/8] hw/ufs: Handle task management requests for fault-injected held requests
+    + Link: https://lore.kernel.org/qemu-devel/20261023113830.3368902-3-stanleyjhu@google.com
+  [32m✓[0m [PATCH v3 3/8] hw/ufs: Add ssu-timeout mode for power management recovery testing
+    + Link: https://lore.kernel.org/qemu-devel/20261023113830.3368902-4-stanleyjhu@google.com
+  [32m✓[0m [PATCH v3 4/8] docs/system/ufs: Update task management request support status
+    + Link: https://lore.kernel.org/qemu-devel/20261023113830.3368902-5-stanleyjhu@google.com
+  [32m✓[0m [PATCH v3 5/8] tests/qtest/ufs-test: Add TMR and async MCQ SCSI submission helpers
+    + Link: https://lore.kernel.org/qemu-devel/20261023113830.3368902-6-stanleyjhu@google.com
+  [32m✓[0m [PATCH v3 6/8] tests/qtest/ufs-test: Add HCE reset unit test
+    + Link: https://lore.kernel.org/qemu-devel/20261023113830.3368902-7-stanleyjhu@google.com
+  [32m✓[0m [PATCH v3 7/8] tests/qtest/ufs-test: Add MCQ runtime register and TMR handling test
+    + Link: https://lore.kernel.org/qemu-devel/20261023113830.3368902-8-stanleyjhu@google.com
+  [32m✓[0m [PATCH v3 8/8] tests/qtest/ufs-test: Add QOM fault injection task abort test
+    + Link: https://lore.kernel.org/qemu-devel/20261023113830.3368902-9-stanleyjhu@google.com
+  ---
+  [32m✓[0m Signed: DKIM/google.com
+---
+Total patches: 8
+---
+Applying: hw/ufs: Add experimental fault injection properties for holding requests
+Patch failed at 0001 hw/ufs: Add experimental fault injection properties for holding requests
+error: patch failed: hw/ufs/ufs.h:133
+error: hw/ufs/ufs.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
