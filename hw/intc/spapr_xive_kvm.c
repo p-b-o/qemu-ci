@@ -498,39 +498,51 @@ static int kvmppc_xive_get_queues(SpaprXive *xive, Error **errp)
  * runs again. If an interrupt was queued while the VM was stopped,
  * simply generate a trigger.
  */
-static void kvmppc_xive_change_state_handler(void *opaque, bool running,
-                                             RunState state)
+static void kvmppc_xive_change_state_start(void *opaque, bool running,
+                                           RunState state)
+{
+    SpaprXive *xive = opaque;
+    XiveSource *xsrc = &xive->source;
+    int i;
+
+    if (!running) {
+        return;
+    }
+
+    /*
+     * Restore the sources to their initial state. This is called when
+     * the VM resumes after a stop or a migration.
+     */
+    for (i = 0; i < xsrc->nr_irqs; i++) {
+        uint8_t pq;
+        uint8_t old_pq;
+
+        if (!xive_eas_is_valid(&xive->eat[i])) {
+            continue;
+        }
+
+        pq = xive_source_esb_get(xsrc, i);
+        old_pq = xive_esb_read(xsrc, i, XIVE_ESB_SET_PQ_00 + (pq << 8));
+
+        /*
+         * An interrupt was queued while the VM was stopped,
+         * generate a trigger.
+         */
+        if (pq == XIVE_ESB_RESET && old_pq == XIVE_ESB_QUEUED) {
+            kvmppc_xive_esb_trigger(xsrc, i);
+        }
+    }
+}
+
+static void kvmppc_xive_change_state_stop(void *opaque, bool running,
+                                          RunState state)
 {
     SpaprXive *xive = opaque;
     XiveSource *xsrc = &xive->source;
     Error *local_err = NULL;
     int i;
 
-    /*
-     * Restore the sources to their initial state. This is called when
-     * the VM resumes after a stop or a migration.
-     */
     if (running) {
-        for (i = 0; i < xsrc->nr_irqs; i++) {
-            uint8_t pq;
-            uint8_t old_pq;
-
-            if (!xive_eas_is_valid(&xive->eat[i])) {
-                continue;
-            }
-
-            pq = xive_source_esb_get(xsrc, i);
-            old_pq = xive_esb_read(xsrc, i, XIVE_ESB_SET_PQ_00 + (pq << 8));
-
-            /*
-             * An interrupt was queued while the VM was stopped,
-             * generate a trigger.
-             */
-            if (pq == XIVE_ESB_RESET && old_pq == XIVE_ESB_QUEUED) {
-                kvmppc_xive_esb_trigger(xsrc, i);
-            }
-        }
-
         return;
     }
 
@@ -570,6 +582,16 @@ static void kvmppc_xive_change_state_handler(void *opaque, bool running,
     if (local_err) {
         error_report_err(local_err);
         return;
+    }
+}
+
+static void kvmppc_xive_change_state_handler(void *opaque, bool running,
+                                             RunState state)
+{
+    if (running) {
+        kvmppc_xive_change_state_start(opaque, running, state);
+    } else {
+        kvmppc_xive_change_state_stop(opaque, running, state);
     }
 }
 
