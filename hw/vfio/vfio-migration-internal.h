@@ -40,6 +40,8 @@ typedef struct VFIOMigration {
     struct VFIODevice *vbasedev;
     VMChangeStateEntry *vm_state_prepare;
     VMChangeStateEntry *vm_state;
+    QemuThread vm_state_thread;
+    bool vm_state_thread_running;
     NotifierWithReturn migration_state;
     uint32_t device_state;
     int data_fd;

@@ -1081,6 +1081,202 @@ static void vfio_vmstate_change(void *opaque, bool running, RunState state)
                               mig_state_to_str(new_state));
 }
 
+typedef struct VMStateChangeThreadData {
+    VFIODevice *vbasedev;
+    VFIOVMStateChangeSync *sync;
+    bool running;
+    RunState state;
+} VMStateChangeThreadData;
+
+struct VFIOVMStateChangeSync {
+    VMChangeStateEntry *vm_state;
+
+    /* Only counts devices with parallel state change ON */
+    unsigned int device_count;
+    unsigned int thread_count;
+
+    unsigned int p2p_done_count;
+    QemuEvent p2p_all_done;
+    QemuEvent final_transition_start;
+};
+
+static void vfio_vmstate_change_sync_handler(void *opaque, bool running,
+                                             RunState state)
+{
+    VFIOVMStateChangeSync *sync = opaque;
+
+    assert(qatomic_read(&sync->thread_count) ==
+           qatomic_read(&sync->device_count));
+
+    trace_vfio_vmstate_change_sync_wait();
+    qemu_event_wait(&sync->p2p_all_done);
+
+    trace_vfio_vmstate_change_sync_done();
+    qemu_event_set(&sync->final_transition_start);
+}
+
+static VFIOVMStateChangeSync **
+vfio_vmstate_change_sync_ptr(VFIODevice *vbasedev)
+{
+    VFIOPCIDevice *vdev = vfio_pci_from_vfio_device(vbasedev);
+    VFIOPCIDeviceClass *vpc;
+
+    assert(vdev);
+    vpc = VFIO_PCI_DEVICE_GET_CLASS(vdev);
+    assert(vpc);
+    assert(vpc->vm_state_change_sync);
+
+    return vpc->vm_state_change_sync;
+}
+
+static VFIOVMStateChangeSync *
+vfio_vmstate_change_sync_ref(VFIODevice *vbasedev)
+{
+    VFIOVMStateChangeSync **syncp = vfio_vmstate_change_sync_ptr(vbasedev);
+    VFIOVMStateChangeSync *sync = *syncp;
+
+    if (!sync) {
+        sync = g_new0(VFIOVMStateChangeSync, 1);
+        qemu_event_init(&sync->p2p_all_done, false);
+        qemu_event_init(&sync->final_transition_start, false);
+
+        sync->vm_state = qemu_add_vm_change_state_handler_prio(
+            vfio_vmstate_change_sync_handler, sync,
+            VM_CHANGE_STATE_PRI_SYNC);
+
+        *syncp = sync;
+    }
+
+    qatomic_fetch_inc(&sync->device_count);
+
+    return sync;
+}
+
+static void vfio_vmstate_change_sync_unref(VFIODevice *vbasedev)
+{
+    VFIOVMStateChangeSync **syncp = vfio_vmstate_change_sync_ptr(vbasedev);
+    VFIOVMStateChangeSync *sync = *syncp;
+    unsigned int device_count;
+
+    assert(sync);
+
+    device_count = qatomic_fetch_dec(&sync->device_count);
+    assert(device_count > 0);
+
+    if (device_count != 1) {
+        return;
+    }
+
+    assert(qatomic_read(&sync->thread_count) == 0);
+
+    qemu_del_vm_change_state_handler(sync->vm_state);
+    qemu_event_destroy(&sync->final_transition_start);
+    qemu_event_destroy(&sync->p2p_all_done);
+
+    g_clear_pointer(syncp, g_free);
+}
+
+static VFIOVMStateChangeSync *
+vfio_vmstate_change_sync_get(VFIODevice *vbasedev)
+{
+    VFIOVMStateChangeSync *sync = *vfio_vmstate_change_sync_ptr(vbasedev);
+
+    assert(sync);
+
+    return sync;
+}
+
+static void
+vfio_vmstate_change_sync_thread_pre_start(VFIOVMStateChangeSync *sync)
+{
+    if (qatomic_fetch_inc(&sync->thread_count) == 0) {
+        /*
+         * Reset the sync data at the first thread launch time since
+         * the whole struct survives VM start/stop sequence.
+         */
+        qatomic_set(&sync->p2p_done_count, 0);
+        qemu_event_reset(&sync->p2p_all_done);
+        qemu_event_reset(&sync->final_transition_start);
+    }
+}
+
+static void
+vfio_vmstate_change_sync_p2p_done(VFIOVMStateChangeSync *sync)
+{
+    unsigned int done;
+
+    done = qatomic_fetch_inc(&sync->p2p_done_count) + 1;
+    if (done == qatomic_read(&sync->device_count)) {
+        qemu_event_set(&sync->p2p_all_done);
+    }
+
+    qemu_event_wait(&sync->final_transition_start);
+}
+
+static void
+vfio_vmstate_change_sync_thread_finished(VFIOVMStateChangeSync *sync)
+{
+    unsigned int thread_count;
+
+    thread_count = qatomic_fetch_dec(&sync->thread_count);
+    assert(thread_count > 0);
+}
+
+static void *vfio_vmstate_change_thread(void *opaque)
+{
+    g_autofree VMStateChangeThreadData *data = opaque;
+    VFIOMigration *migration = data->vbasedev->migration;
+
+    if (migration->mig_flags & VFIO_MIGRATION_P2P) {
+        vfio_vmstate_change_prepare(data->vbasedev, data->running, data->state);
+    }
+
+    vfio_vmstate_change_sync_p2p_done(data->sync);
+
+    vfio_vmstate_change(data->vbasedev, data->running, data->state);
+
+    return NULL;
+}
+
+static void vfio_vmstate_change_thread_launch(void *opaque, bool running,
+                                              RunState state)
+{
+    VFIODevice *vbasedev = opaque;
+    VFIOMigration *migration = vbasedev->migration;
+    VMStateChangeThreadData *data = g_new(VMStateChangeThreadData, 1);
+    VFIOVMStateChangeSync *sync = vfio_vmstate_change_sync_get(vbasedev);
+
+    data->vbasedev = vbasedev;
+    data->sync = sync;
+    data->running = running;
+    data->state = state;
+
+    assert(!migration->vm_state_thread_running);
+    migration->vm_state_thread_running = true;
+
+    vfio_vmstate_change_sync_thread_pre_start(sync);
+
+    qemu_thread_create(&migration->vm_state_thread,
+                       "vfio_vmstate_change",
+                       vfio_vmstate_change_thread, data,
+                       QEMU_THREAD_JOINABLE);
+}
+
+static void vfio_vmstate_change_thread_join(void *opaque, bool running,
+                                            RunState state)
+{
+    VFIODevice *vbasedev = opaque;
+    VFIOMigration *migration = vbasedev->migration;
+    VFIOVMStateChangeSync *sync = vfio_vmstate_change_sync_get(vbasedev);
+
+    assert(migration->vm_state_thread_running);
+
+    qemu_thread_join(&migration->vm_state_thread);
+    migration->vm_state_thread_running = false;
+
+    vfio_vmstate_change_sync_thread_finished(sync);
+}
+
 static int vfio_migration_state_notifier(NotifierWithReturn *notifier,
                                          MigrationEvent *e, Error **errp)
 {
@@ -1097,6 +1293,8 @@ static int vfio_migration_state_notifier(NotifierWithReturn *notifier,
          * MigrationNotifyFunc may not return an error code and an Error
          * object for MIG_EVENT_FAILED. Hence, report the error
          * locally and ignore the errp argument.
+         * This state change is not parallelized as it is not expected to be
+         * performance critical.
          */
         ret = vfio_migration_set_state_or_reset(vbasedev,
                                                 VFIO_DEVICE_STATE_RUNNING,
@@ -1237,13 +1435,25 @@ static bool vfio_migration_init(VFIODevice *vbasedev, Error **errp)
     register_savevm_live(id, VMSTATE_INSTANCE_ID_ANY, 1, &savevm_vfio_handlers,
                          vbasedev);
 
-    if (migration->mig_flags & VFIO_MIGRATION_P2P) {
-        migration->vm_state_prepare = qdev_add_vm_change_state_handler_full(
-            vbasedev->dev, vfio_vmstate_change_prepare, NULL, vbasedev,
-            VM_CHANGE_STATE_PRI_HIGH);
+    if (vbasedev->migration_parallel_states) {
+        vfio_vmstate_change_sync_ref(vbasedev);
+        migration->vm_state_prepare =
+            qdev_add_vm_change_state_handler_full(
+                vbasedev->dev, vfio_vmstate_change_thread_launch, NULL,
+                vbasedev, VM_CHANGE_STATE_PRI_HIGH);
+        migration->vm_state = qdev_add_vm_change_state_handler(
+            vbasedev->dev, vfio_vmstate_change_thread_join, NULL, vbasedev);
+    } else {
+        if (migration->mig_flags & VFIO_MIGRATION_P2P) {
+            migration->vm_state_prepare =
+                qdev_add_vm_change_state_handler_full(
+                    vbasedev->dev, vfio_vmstate_change_prepare, NULL,
+                    vbasedev, VM_CHANGE_STATE_PRI_HIGH);
+        }
+        migration->vm_state = qdev_add_vm_change_state_handler(
+            vbasedev->dev, vfio_vmstate_change, NULL, vbasedev);
     }
-    migration->vm_state = qdev_add_vm_change_state_handler(
-        vbasedev->dev, vfio_vmstate_change, NULL, vbasedev);
+
     migration_add_notifier(&migration->migration_state,
                            vfio_migration_state_notifier);
 
@@ -1320,6 +1530,12 @@ static void vfio_migration_deinit(VFIODevice *vbasedev)
     migration_remove_notifier(&migration->migration_state);
     qemu_del_vm_change_state_handler(migration->vm_state_prepare);
     qemu_del_vm_change_state_handler(migration->vm_state);
+
+    if (vbasedev->migration_parallel_states) {
+        assert(!migration->vm_state_thread_running);
+        vfio_vmstate_change_sync_unref(vbasedev);
+    }
+
     unregister_savevm(VMSTATE_IF(vbasedev->dev), "vfio", vbasedev);
     vfio_migration_free(vbasedev);
     vfio_unblock_multiple_devices_migration();
