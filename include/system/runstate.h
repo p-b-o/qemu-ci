@@ -16,6 +16,7 @@ typedef int VMChangeStateHandlerWithRet(void *opaque, bool running, RunState sta
 
 typedef enum VMChangeStateHandlerPri {
     VM_CHANGE_STATE_PRI_HIGH,
+    VM_CHANGE_STATE_PRI_SYNC,
     VM_CHANGE_STATE_PRI_NORMAL,
     VM_CHANGE_STATE_PRI_MAX,
 } VMChangeStateHandlerPri;
@@ -163,4 +164,3 @@ void qemu_system_guest_pvshutdown(void);
 bool qemu_system_dump_in_progress(void);
 
 #endif
-

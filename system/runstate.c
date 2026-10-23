@@ -313,6 +313,9 @@ static VMChangeStateHead vm_change_state_head[VM_CHANGE_STATE_PRI_MAX] = {
     [VM_CHANGE_STATE_PRI_HIGH] =
         QTAILQ_HEAD_INITIALIZER(
             vm_change_state_head[VM_CHANGE_STATE_PRI_HIGH]),
+    [VM_CHANGE_STATE_PRI_SYNC] =
+        QTAILQ_HEAD_INITIALIZER(
+            vm_change_state_head[VM_CHANGE_STATE_PRI_SYNC]),
     [VM_CHANGE_STATE_PRI_NORMAL] =
         QTAILQ_HEAD_INITIALIZER(
             vm_change_state_head[VM_CHANGE_STATE_PRI_NORMAL]),
