@@ -64,7 +64,8 @@
 # define CONFIG_NET_BRIDGE
 #endif
 
-static VMChangeStateEntry *net_change_state_entry;
+static VMChangeStateEntry *net_change_state_start_entry;
+static VMChangeStateEntry *net_change_state_stop_entry;
 NetClientStateList net_clients;
 
 typedef struct NetdevQueueEntry {
@@ -1729,24 +1730,40 @@ void qmp_set_link(const char *name, bool up, Error **errp)
     net_client_set_link(ncs, queues, up);
 }
 
-static void net_vm_change_state_handler(void *opaque, bool running,
-                                        RunState state)
+static void net_vm_change_state_start(void *opaque, bool running,
+                                      RunState state)
 {
     NetClientState *nc;
     NetClientState *tmp;
 
+    if (!running) {
+        return;
+    }
+
     QTAILQ_FOREACH_SAFE(nc, &net_clients, next, tmp) {
-        if (running) {
-            /* Flush queued packets and wake up backends. */
-            if (nc->peer && qemu_can_send_packet(nc)) {
-                qemu_flush_queued_packets(nc->peer);
-            }
-        } else {
-            /* Complete all queued packets, to guarantee we don't modify
-             * state later when VM is not running.
-             */
-            qemu_flush_or_purge_queued_packets(nc, true);
+        /* Flush queued packets and wake up backends. */
+        if (nc->peer && qemu_can_send_packet(nc)) {
+            qemu_flush_queued_packets(nc->peer);
         }
+    }
+}
+
+static void net_vm_change_state_stop(void *opaque, bool running,
+                                     RunState state)
+{
+    NetClientState *nc;
+    NetClientState *tmp;
+
+    if (running) {
+        return;
+    }
+
+    QTAILQ_FOREACH_SAFE(nc, &net_clients, next, tmp) {
+        /*
+         * Complete all queued packets, to guarantee we don't modify
+         * state later when VM is not running.
+         */
+        qemu_flush_or_purge_queued_packets(nc, true);
     }
 }
 
@@ -1799,7 +1816,8 @@ void net_cleanup(void)
         }
     }
 
-    qemu_del_vm_change_state_handler(net_change_state_entry);
+    qemu_del_vm_change_state_handler(net_change_state_start_entry);
+    qemu_del_vm_change_state_handler(net_change_state_stop_entry);
 }
 
 void net_check_clients(void)
@@ -1957,8 +1975,10 @@ static void netdev_init_modern(void)
 
 void net_init_clients(void)
 {
-    net_change_state_entry =
-        qemu_add_vm_change_state_handler(net_vm_change_state_handler, NULL);
+    net_change_state_start_entry =
+        qemu_add_vm_change_state_handler(net_vm_change_state_start, NULL);
+    net_change_state_stop_entry =
+        qemu_add_vm_change_state_handler(net_vm_change_state_stop, NULL);
 
     QTAILQ_INIT(&net_clients);
 
