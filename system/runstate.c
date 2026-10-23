@@ -304,24 +304,24 @@ struct VMChangeStateEntry {
     VMChangeStateHandlerWithRet *cb_ret;
     void *opaque;
     QTAILQ_ENTRY(VMChangeStateEntry) entries;
-    int priority;
+    int depth;
 };
 
 static QTAILQ_HEAD(, VMChangeStateEntry) vm_change_state_head =
     QTAILQ_HEAD_INITIALIZER(vm_change_state_head);
 
 VMChangeStateEntry *qemu_add_vm_change_state_handler_prio(
-        VMChangeStateHandler *cb, void *opaque, int priority)
+        VMChangeStateHandler *cb, void *opaque, int depth)
 {
     return qemu_add_vm_change_state_handler_prio_full(cb, NULL, NULL,
-                                                      opaque, priority);
+                                                      opaque, depth);
 }
 
 VMChangeStateEntry *
 qemu_add_vm_change_state_handler_prio_full(VMChangeStateHandler *cb,
                                            VMChangeStateHandler *prepare_cb,
                                            VMChangeStateHandlerWithRet *cb_ret,
-                                           void *opaque, int priority)
+                                           void *opaque, int depth)
 {
     VMChangeStateEntry *e;
     VMChangeStateEntry *other;
@@ -331,11 +331,11 @@ qemu_add_vm_change_state_handler_prio_full(VMChangeStateHandler *cb,
     e->prepare_cb = prepare_cb;
     e->cb_ret = cb_ret;
     e->opaque = opaque;
-    e->priority = priority;
+    e->depth = depth;
 
-    /* Keep list sorted in ascending priority order */
+    /* Keep list sorted in ascending depth order */
     QTAILQ_FOREACH(other, &vm_change_state_head, entries) {
-        if (priority < other->priority) {
+        if (depth < other->depth) {
             QTAILQ_INSERT_BEFORE(other, e, entries);
             return e;
         }

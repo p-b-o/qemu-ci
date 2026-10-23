@@ -30,8 +30,8 @@ VMChangeStateEntry *qemu_add_vm_change_state_handler(VMChangeStateHandler *cb,
  * qemu_add_vm_change_state_handler_prio:
  * @cb: the callback to invoke
  * @opaque: user data passed to the callback
- * @priority: low priorities execute first when the vm runs and the reverse is
- *            true when the vm stops
+ * @depth: low depths execute first when the vm runs and the reverse is true
+ *         when the vm stops
  *
  * Register a callback function that is invoked when the vm starts or stops
  * running.
@@ -39,7 +39,7 @@ VMChangeStateEntry *qemu_add_vm_change_state_handler(VMChangeStateHandler *cb,
  * Returns: an entry to be freed using qemu_del_vm_change_state_handler()
  */
 VMChangeStateEntry *qemu_add_vm_change_state_handler_prio(
-        VMChangeStateHandler *cb, void *opaque, int priority);
+        VMChangeStateHandler *cb, void *opaque, int depth);
 VMChangeStateEntry *
 /**
  * qemu_add_vm_change_state_handler_prio_full:
@@ -47,8 +47,8 @@ VMChangeStateEntry *
  * @prepare_cb: a callback to invoke before the main callback
  * @cb_ret: the main callback to invoke with return value
  * @opaque: user data passed to the callbacks
- * @priority: low priorities execute first when the vm runs and the reverse is
- *            true when the vm stops
+ * @depth: low depths execute first when the vm runs and the reverse is true
+ *         when the vm stops
  *
  * Register a main callback function and an optional prepare callback function
  * that are invoked when the vm starts or stops running. The main callback and
@@ -62,7 +62,7 @@ VMChangeStateEntry *
 qemu_add_vm_change_state_handler_prio_full(VMChangeStateHandler *cb,
                                            VMChangeStateHandler *prepare_cb,
                                            VMChangeStateHandlerWithRet *cb_ret,
-                                           void *opaque, int priority);
+                                           void *opaque, int depth);
 VMChangeStateEntry *qdev_add_vm_change_state_handler(DeviceState *dev,
                                                      VMChangeStateHandler *cb,
                                                      VMChangeStateHandlerWithRet *cb_ret,
