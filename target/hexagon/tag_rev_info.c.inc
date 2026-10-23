@@ -663,6 +663,7 @@ static const struct tag_rev_info tag_rev_info[XX_LAST_OPCODE] = {
         .introduced = HEX_VER_V79, .removed = HEX_VER_NONE
     },
     [V6_set_qfext] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
+    [V6_vabs_f8] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vabs_qf16_hf] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vabs_qf16_qf16] = {
         .introduced = HEX_VER_V79, .removed = HEX_VER_NONE
@@ -671,6 +672,7 @@ static const struct tag_rev_info tag_rev_info[XX_LAST_OPCODE] = {
         .introduced = HEX_VER_V79, .removed = HEX_VER_NONE
     },
     [V6_vabs_qf32_sf] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
+    [V6_vadd_hf_f8] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vconv_bf_qf32] = { .introduced = HEX_VER_V81, .removed = HEX_VER_NONE },
     [V6_vconv_qf16_hf] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vconv_qf16_qf16] = {
@@ -684,11 +686,20 @@ static const struct tag_rev_info tag_rev_info[XX_LAST_OPCODE] = {
     [V6_vcvt2_hf_b] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vcvt2_hf_ub] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vcvt2_ub_hf] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
+    [V6_vcvt_f8_hf] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
+    [V6_vcvt_hf_f8] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
+    [V6_vfmax_f8] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
+    [V6_vfmin_f8] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
+    [V6_vfneg_f8] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vilog2_hf] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vilog2_qf16] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vilog2_qf32] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vilog2_sf] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vmerge_qf] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
+    [V6_vmpy_hf_f8] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
+    [V6_vmpy_hf_f8_acc] = {
+        .introduced = HEX_VER_V79, .removed = HEX_VER_NONE
+    },
     [V6_vmpy_rt_hf] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vmpy_rt_qf16] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vmpy_rt_sf] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
@@ -700,6 +711,7 @@ static const struct tag_rev_info tag_rev_info[XX_LAST_OPCODE] = {
         .introduced = HEX_VER_V79, .removed = HEX_VER_NONE
     },
     [V6_vneg_qf32_sf] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
+    [V6_vsub_hf_f8] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vsub_hf_mix] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_vsub_sf_mix] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
 };
