@@ -120,7 +120,11 @@ typedef struct VFIOMSIXInfo {
     MemoryRegion *pba_region;
 } VFIOMSIXInfo;
 
-OBJECT_DECLARE_SIMPLE_TYPE(VFIOPCIDevice, VFIO_PCI_DEVICE)
+OBJECT_DECLARE_TYPE(VFIOPCIDevice, VFIOPCIDeviceClass, VFIO_PCI_DEVICE)
+
+struct VFIOPCIDeviceClass {
+    PCIDeviceClass parent_class;
+};
 
 struct VFIOPCIDevice {
     PCIDevice parent_obj;
