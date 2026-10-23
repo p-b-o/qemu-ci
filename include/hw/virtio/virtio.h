@@ -191,7 +191,8 @@ struct VirtIODevice
     bool start_on_kick; /* when virtio 1.0 feature has not been negotiated */
     bool disable_legacy_check;
     bool vhost_started;
-    VMChangeStateEntry *vmstate;
+    VMChangeStateEntry *vmstate_start;
+    VMChangeStateEntry *vmstate_stop;
     char *bus_name;
     uint8_t device_endian;
     /**

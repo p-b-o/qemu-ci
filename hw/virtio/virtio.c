@@ -3733,12 +3733,12 @@ virtio_load(VirtIODevice *vdev, QEMUFile *f, int version_id)
 
 void virtio_cleanup(VirtIODevice *vdev)
 {
-    qemu_del_vm_change_state_handler(vdev->vmstate);
+    qemu_del_vm_change_state_handler(vdev->vmstate_start);
+    qemu_del_vm_change_state_handler(vdev->vmstate_stop);
 }
 
-static int virtio_vmstate_change(void *opaque, bool running, RunState state)
+static int virtio_vmstate_change(VirtIODevice *vdev, bool running)
 {
-    VirtIODevice *vdev = opaque;
     BusState *qbus = qdev_get_parent_bus(DEVICE(vdev));
     VirtioBusClass *k = VIRTIO_BUS_GET_CLASS(qbus);
     bool backend_run = running && virtio_device_started(vdev, vdev->status);
@@ -3759,6 +3759,26 @@ static int virtio_vmstate_change(void *opaque, bool running, RunState state)
         }
     }
     return 0;
+}
+
+static int virtio_vmstate_change_start(void *opaque, bool running,
+                                     RunState state)
+{
+    if (!running) {
+        return 0;
+    }
+
+    return virtio_vmstate_change(opaque, true);
+}
+
+static int virtio_vmstate_change_stop(void *opaque, bool running,
+                                    RunState state)
+{
+    if (running) {
+        return 0;
+    }
+
+    return virtio_vmstate_change(opaque, false);
 }
 
 void virtio_instance_init_common(Object *proxy_obj, void *data,
@@ -3809,8 +3829,10 @@ void virtio_init(VirtIODevice *vdev, uint16_t device_id, size_t config_size)
     } else {
         vdev->config = NULL;
     }
-    vdev->vmstate = qdev_add_vm_change_state_handler(DEVICE(vdev),
-            NULL, virtio_vmstate_change, vdev);
+    vdev->vmstate_start = qdev_add_vm_change_state_handler(DEVICE(vdev),
+            NULL, virtio_vmstate_change_start, vdev);
+    vdev->vmstate_stop = qdev_add_vm_change_state_handler(DEVICE(vdev),
+            NULL, virtio_vmstate_change_stop, vdev);
     vdev->device_endian = virtio_default_endian();
     vdev->use_guest_notifier_mask = true;
     QSIMPLEQ_INIT(&vdev->shmem_list);
