@@ -1177,7 +1177,6 @@ static bool vfio_migration_init(VFIODevice *vbasedev, Error **errp)
     g_autofree char *path = NULL, *oid = NULL;
     uint64_t mig_flags = 0;
     bool precopy_info_v2_used = false;
-    VMChangeStateHandler *prepare_cb;
 
     if (!vbasedev->ops->vfio_get_object) {
         error_setg(errp, "no vfio_get_object handler");
@@ -1238,11 +1237,13 @@ static bool vfio_migration_init(VFIODevice *vbasedev, Error **errp)
     register_savevm_live(id, VMSTATE_INSTANCE_ID_ANY, 1, &savevm_vfio_handlers,
                          vbasedev);
 
-    prepare_cb = migration->mig_flags & VFIO_MIGRATION_P2P ?
-                     vfio_vmstate_change_prepare :
-                     NULL;
-    migration->vm_state = qdev_add_vm_change_state_handler_full(
-        vbasedev->dev, vfio_vmstate_change, prepare_cb, NULL, vbasedev);
+    if (migration->mig_flags & VFIO_MIGRATION_P2P) {
+        migration->vm_state_prepare = qdev_add_vm_change_state_handler_full(
+            vbasedev->dev, vfio_vmstate_change_prepare, NULL, vbasedev,
+            VM_CHANGE_STATE_PRI_HIGH);
+    }
+    migration->vm_state = qdev_add_vm_change_state_handler(
+        vbasedev->dev, vfio_vmstate_change, NULL, vbasedev);
     migration_add_notifier(&migration->migration_state,
                            vfio_migration_state_notifier);
 
@@ -1317,6 +1318,7 @@ static void vfio_migration_deinit(VFIODevice *vbasedev)
     VFIOMigration *migration = vbasedev->migration;
 
     migration_remove_notifier(&migration->migration_state);
+    qemu_del_vm_change_state_handler(migration->vm_state_prepare);
     qemu_del_vm_change_state_handler(migration->vm_state);
     unregister_savevm(VMSTATE_IF(vbasedev->dev), "vfio", vbasedev);
     vfio_migration_free(vbasedev);

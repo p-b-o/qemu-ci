@@ -14,6 +14,12 @@ void runstate_replay_enable(void);
 typedef void VMChangeStateHandler(void *opaque, bool running, RunState state);
 typedef int VMChangeStateHandlerWithRet(void *opaque, bool running, RunState state);
 
+typedef enum VMChangeStateHandlerPri {
+    VM_CHANGE_STATE_PRI_HIGH,
+    VM_CHANGE_STATE_PRI_NORMAL,
+    VM_CHANGE_STATE_PRI_MAX,
+} VMChangeStateHandlerPri;
+
 /**
  * qemu_add_vm_change_state_handler:
  * @cb: the callback to invoke
@@ -30,8 +36,7 @@ VMChangeStateEntry *qemu_add_vm_change_state_handler(VMChangeStateHandler *cb,
  * qemu_add_vm_change_state_handler_prio:
  * @cb: the callback to invoke
  * @opaque: user data passed to the callback
- * @depth: low depths execute first when the vm runs and the reverse is true
- *         when the vm stops
+ * @priority: priority at which to invoke the callback
  *
  * Register a callback function that is invoked when the vm starts or stops
  * running.
@@ -39,37 +44,38 @@ VMChangeStateEntry *qemu_add_vm_change_state_handler(VMChangeStateHandler *cb,
  * Returns: an entry to be freed using qemu_del_vm_change_state_handler()
  */
 VMChangeStateEntry *qemu_add_vm_change_state_handler_prio(
-        VMChangeStateHandler *cb, void *opaque, int depth);
+    VMChangeStateHandler *cb, void *opaque,
+    VMChangeStateHandlerPri priority);
 VMChangeStateEntry *
 /**
  * qemu_add_vm_change_state_handler_prio_full:
- * @cb: the main callback to invoke
- * @prepare_cb: a callback to invoke before the main callback
- * @cb_ret: the main callback to invoke with return value
+ * @cb: the callback to invoke
+ * @cb_ret: the callback to invoke with return value
  * @opaque: user data passed to the callbacks
+ * @priority: priority at which to invoke the callback
  * @depth: low depths execute first when the vm runs and the reverse is true
  *         when the vm stops
  *
- * Register a main callback function and an optional prepare callback function
- * that are invoked when the vm starts or stops running. The main callback and
- * the prepare callback are called in two separate phases: First all prepare
- * callbacks are called and only then all main callbacks are called. As its
- * name suggests, the prepare callback can be used to do some preparatory work
- * before invoking the main callback.
+ * Register a callback function that is invoked when the vm starts or stops
+ * running. All higher priority notifications are completed before calling any
+ * lower priority ones. In addition to that, depth ordering is maintained within
+ * each priority level.
  *
  * Returns: an entry to be freed using qemu_del_vm_change_state_handler()
  */
 qemu_add_vm_change_state_handler_prio_full(VMChangeStateHandler *cb,
-                                           VMChangeStateHandler *prepare_cb,
                                            VMChangeStateHandlerWithRet *cb_ret,
-                                           void *opaque, int depth);
+                                           void *opaque,
+                                           VMChangeStateHandlerPri priority,
+                                           int depth);
 VMChangeStateEntry *qdev_add_vm_change_state_handler(DeviceState *dev,
                                                      VMChangeStateHandler *cb,
                                                      VMChangeStateHandlerWithRet *cb_ret,
                                                      void *opaque);
 VMChangeStateEntry *qdev_add_vm_change_state_handler_full(
-    DeviceState *dev, VMChangeStateHandler *cb, VMChangeStateHandler *prepare_cb,
-    VMChangeStateHandlerWithRet *cb_ret, void *opaque);
+    DeviceState *dev, VMChangeStateHandler *cb,
+    VMChangeStateHandlerWithRet *cb_ret, void *opaque,
+    VMChangeStateHandlerPri priority);
 void qemu_del_vm_change_state_handler(VMChangeStateEntry *e);
 /**
  * vm_state_notify: Notify the state of the VM

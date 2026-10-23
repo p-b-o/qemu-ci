@@ -300,55 +300,71 @@ void qemu_system_vmstop_request(RunState state)
 }
 struct VMChangeStateEntry {
     VMChangeStateHandler *cb;
-    VMChangeStateHandler *prepare_cb;
     VMChangeStateHandlerWithRet *cb_ret;
     void *opaque;
     QTAILQ_ENTRY(VMChangeStateEntry) entries;
+    VMChangeStateHandlerPri priority;
     int depth;
 };
 
-static QTAILQ_HEAD(, VMChangeStateEntry) vm_change_state_head =
-    QTAILQ_HEAD_INITIALIZER(vm_change_state_head);
+typedef QTAILQ_HEAD(VMChangeStateHead, VMChangeStateEntry) VMChangeStateHead;
+
+static VMChangeStateHead vm_change_state_head[VM_CHANGE_STATE_PRI_MAX] = {
+    [VM_CHANGE_STATE_PRI_HIGH] =
+        QTAILQ_HEAD_INITIALIZER(
+            vm_change_state_head[VM_CHANGE_STATE_PRI_HIGH]),
+    [VM_CHANGE_STATE_PRI_NORMAL] =
+        QTAILQ_HEAD_INITIALIZER(
+            vm_change_state_head[VM_CHANGE_STATE_PRI_NORMAL]),
+};
 
 VMChangeStateEntry *qemu_add_vm_change_state_handler_prio(
-        VMChangeStateHandler *cb, void *opaque, int depth)
+    VMChangeStateHandler *cb, void *opaque,
+    VMChangeStateHandlerPri priority)
 {
-    return qemu_add_vm_change_state_handler_prio_full(cb, NULL, NULL,
-                                                      opaque, depth);
+    return qemu_add_vm_change_state_handler_prio_full(
+        cb, NULL, opaque, priority, 0);
 }
 
 VMChangeStateEntry *
 qemu_add_vm_change_state_handler_prio_full(VMChangeStateHandler *cb,
-                                           VMChangeStateHandler *prepare_cb,
                                            VMChangeStateHandlerWithRet *cb_ret,
-                                           void *opaque, int depth)
+                                           void *opaque,
+                                           VMChangeStateHandlerPri priority,
+                                           int depth)
 {
     VMChangeStateEntry *e;
     VMChangeStateEntry *other;
+    VMChangeStateHead *head;
+
+    assert(priority >= 0 && priority < VM_CHANGE_STATE_PRI_MAX);
+    assert(!cb || !cb_ret);
 
     e = g_malloc0(sizeof(*e));
     e->cb = cb;
-    e->prepare_cb = prepare_cb;
     e->cb_ret = cb_ret;
     e->opaque = opaque;
+    e->priority = priority;
     e->depth = depth;
 
+    head = &vm_change_state_head[priority];
     /* Keep list sorted in ascending depth order */
-    QTAILQ_FOREACH(other, &vm_change_state_head, entries) {
+    QTAILQ_FOREACH(other, head, entries) {
         if (depth < other->depth) {
             QTAILQ_INSERT_BEFORE(other, e, entries);
             return e;
         }
     }
 
-    QTAILQ_INSERT_TAIL(&vm_change_state_head, e, entries);
+    QTAILQ_INSERT_TAIL(head, e, entries);
     return e;
 }
 
 VMChangeStateEntry *qemu_add_vm_change_state_handler(VMChangeStateHandler *cb,
                                                      void *opaque)
 {
-    return qemu_add_vm_change_state_handler_prio(cb, opaque, 0);
+    return qemu_add_vm_change_state_handler_prio(
+        cb, opaque, VM_CHANGE_STATE_PRI_NORMAL);
 }
 
 void qemu_del_vm_change_state_handler(VMChangeStateEntry *e)
@@ -356,54 +372,48 @@ void qemu_del_vm_change_state_handler(VMChangeStateEntry *e)
     if (!e) {
         return;
     }
-    QTAILQ_REMOVE(&vm_change_state_head, e, entries);
+    QTAILQ_REMOVE(&vm_change_state_head[e->priority], e, entries);
     g_free(e);
 }
 
 int vm_state_notify(bool running, RunState state)
 {
     VMChangeStateEntry *e, *next;
+    int pri;
     int ret = 0;
 
     trace_vm_state_notify(running, state, RunState_str(state));
 
-    if (running) {
-        QTAILQ_FOREACH_SAFE(e, &vm_change_state_head, entries, next) {
-            if (e->prepare_cb) {
-                e->prepare_cb(e->opaque, running, state);
-            }
-        }
+    for (pri = VM_CHANGE_STATE_PRI_HIGH;
+         pri < VM_CHANGE_STATE_PRI_MAX; pri++) {
+        VMChangeStateHead *head = &vm_change_state_head[pri];
 
-        QTAILQ_FOREACH_SAFE(e, &vm_change_state_head, entries, next) {
-            if (e->cb) {
-                e->cb(e->opaque, running, state);
-            } else if (e->cb_ret) {
-                /*
-                 * Here ignore the return value of cb_ret because
-                 * we only care about the stopping the device during
-                 * the VM live migration to indicate whether the
-                 * connection between qemu and backend is normal.
-                 */
-                e->cb_ret(e->opaque, running, state);
+        if (running) {
+            QTAILQ_FOREACH_SAFE(e, head, entries, next) {
+                if (e->cb) {
+                    e->cb(e->opaque, running, state);
+                } else if (e->cb_ret) {
+                    /*
+                     * Here ignore the return value of cb_ret because
+                     * we only care about stopping the device during
+                     * the VM live migration to indicate whether the
+                     * connection between qemu and backend is normal.
+                     */
+                    e->cb_ret(e->opaque, running, state);
+                }
             }
-        }
-    } else {
-        QTAILQ_FOREACH_REVERSE_SAFE(e, &vm_change_state_head, entries, next) {
-            if (e->prepare_cb) {
-                e->prepare_cb(e->opaque, running, state);
-            }
-        }
-
-        QTAILQ_FOREACH_REVERSE_SAFE(e, &vm_change_state_head, entries, next) {
-            if (e->cb) {
-                e->cb(e->opaque, running, state);
-            } else if (e->cb_ret) {
-                /*
-                 * We should execute all registered callbacks even if
-                 * one of them returns failure, otherwise, some cleanup
-                 * work of the device will be skipped.
-                 */
-                ret |= e->cb_ret(e->opaque, running, state);
+        } else {
+            QTAILQ_FOREACH_REVERSE_SAFE(e, head, entries, next) {
+                if (e->cb) {
+                    e->cb(e->opaque, running, state);
+                } else if (e->cb_ret) {
+                    /*
+                     * We should execute all registered callbacks even if
+                     * one of them returns failure, otherwise, some cleanup
+                     * work of the device will be skipped.
+                     */
+                    ret |= e->cb_ret(e->opaque, running, state);
+                }
             }
         }
     }

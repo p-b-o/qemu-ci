@@ -61,20 +61,22 @@ VMChangeStateEntry *qdev_add_vm_change_state_handler(DeviceState *dev,
                                                      void *opaque)
 {
     assert(!cb || !cb_ret);
-    return qdev_add_vm_change_state_handler_full(dev, cb, NULL, cb_ret, opaque);
+    return qdev_add_vm_change_state_handler_full(
+        dev, cb, cb_ret, opaque, VM_CHANGE_STATE_PRI_NORMAL);
 }
 
 /*
- * Exactly like qdev_add_vm_change_state_handler() but passes a prepare_cb
- * and the cb_ret arguments too.
+ * Exactly like qdev_add_vm_change_state_handler() but allows selecting the
+ * notification priority.
  */
 VMChangeStateEntry *qdev_add_vm_change_state_handler_full(
-    DeviceState *dev, VMChangeStateHandler *cb, VMChangeStateHandler *prepare_cb,
-    VMChangeStateHandlerWithRet *cb_ret, void *opaque)
+    DeviceState *dev, VMChangeStateHandler *cb,
+    VMChangeStateHandlerWithRet *cb_ret, void *opaque,
+    VMChangeStateHandlerPri priority)
 {
     int depth = qdev_get_dev_tree_depth(dev);
 
     assert(!cb || !cb_ret);
-    return qemu_add_vm_change_state_handler_prio_full(cb, prepare_cb, cb_ret,
-                                                      opaque, depth);
+    return qemu_add_vm_change_state_handler_prio_full(cb, cb_ret, opaque,
+                                                      priority, depth);
 }
