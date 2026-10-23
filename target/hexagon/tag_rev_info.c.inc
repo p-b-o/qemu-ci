@@ -657,6 +657,8 @@ static const struct tag_rev_info tag_rev_info[XX_LAST_OPCODE] = {
     [V6_vconv_h_hf_rnd] = {
         .introduced = HEX_VER_V81, .removed = HEX_VER_NONE
     },
+    [V6_vconv_f8_qf16] = { .introduced = HEX_VER_V81, .removed = HEX_VER_NONE },
+    [V6_vconv_qf16_f8] = { .introduced = HEX_VER_V81, .removed = HEX_VER_NONE },
 
     [V6_get_qfext] = { .introduced = HEX_VER_V79, .removed = HEX_VER_NONE },
     [V6_get_qfext_oracc] = {
