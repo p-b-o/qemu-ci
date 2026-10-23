@@ -67,6 +67,7 @@
 #define SYSCON_POWEROFF                        0x2
 
 #define RVSERVER_PLATFORM_BUS_NUM_IRQS         8
+#define RVSERVER_IOMMU_HPM_COUNTERS            4
 
 #define TYPE_RISCV_SERVER_REF_MACHINE MACHINE_TYPE_NAME("riscv-server-ref")
 OBJECT_DECLARE_SIMPLE_TYPE(RISCVServerRefMachineState, RISCV_SERVER_REF_MACHINE)
@@ -639,6 +640,9 @@ static void rvserver_ref_machine_init(MachineState *machine)
     iommu_sys = riscv_create_iommu_sys(mmio_irqchip,
                                        s->memmap[RVSERVER_IOMMU_SYS].base,
                                        IOMMU_SYS_IRQ, false);
+
+    object_property_set_int(OBJECT(iommu_sys), "hpm-counters",
+                            RVSERVER_IOMMU_HPM_COUNTERS, &error_abort);
     sysbus_realize_and_unref(SYS_BUS_DEVICE(iommu_sys), &error_fatal);
 
     s->machine_done.notify = rvserver_ref_machine_done;
