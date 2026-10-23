@@ -48,7 +48,8 @@ typedef struct SpaprXive {
     int           fd;
     void          *tm_mmap;
     MemoryRegion  tm_mmio_kvm;
-    VMChangeStateEntry *change;
+    VMChangeStateEntry *change_start;
+    VMChangeStateEntry *change_stop;
 
     uint8_t       hv_prio;
 } SpaprXive;

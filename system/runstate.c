@@ -326,7 +326,7 @@ VMChangeStateEntry *qemu_add_vm_change_state_handler_prio(
     VMChangeStateHandlerPri priority)
 {
     return qemu_add_vm_change_state_handler_prio_full(
-        cb, NULL, opaque, priority, 0);
+        cb, NULL, opaque, priority, VM_CHANGE_STATE_DEPTH_DEFAULT);
 }
 
 VMChangeStateEntry *

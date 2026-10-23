@@ -21,6 +21,17 @@ typedef enum VMChangeStateHandlerPri {
     VM_CHANGE_STATE_PRI_MAX,
 } VMChangeStateHandlerPri;
 
+typedef enum VMChangeStateHandlerDepth {
+    VM_CHANGE_STATE_DEPTH_GICV3 = -3,
+    VM_CHANGE_STATE_DEPTH_GICV3_ITS = -2,
+
+    VM_CHANGE_STATE_DEPTH_APIC = -1,
+    VM_CHANGE_STATE_DEPTH_XIVE = -1,
+
+    /* qdev tree depths start here */
+    VM_CHANGE_STATE_DEPTH_DEFAULT = 0,
+} VMChangeStateHandlerDepth;
+
 /**
  * qemu_add_vm_change_state_handler:
  * @cb: the callback to invoke

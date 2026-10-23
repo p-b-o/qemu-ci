@@ -119,7 +119,9 @@ static void kvm_arm_its_realize(DeviceState *dev, Error **errp)
             return;
         }
     } else {
-        qemu_add_vm_change_state_handler(vm_change_state_handler, s);
+        qemu_add_vm_change_state_handler_prio_full(
+            vm_change_state_handler, NULL, s, VM_CHANGE_STATE_PRI_NORMAL,
+            VM_CHANGE_STATE_DEPTH_GICV3_ITS);
     }
 
     kvm_msi_use_devid = true;

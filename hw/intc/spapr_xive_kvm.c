@@ -585,16 +585,6 @@ static void kvmppc_xive_change_state_stop(void *opaque, bool running,
     }
 }
 
-static void kvmppc_xive_change_state_handler(void *opaque, bool running,
-                                             RunState state)
-{
-    if (running) {
-        kvmppc_xive_change_state_start(opaque, running, state);
-    } else {
-        kvmppc_xive_change_state_stop(opaque, running, state);
-    }
-}
-
 void kvmppc_xive_synchronize_state(SpaprXive *xive, Error **errp)
 {
     assert(xive->fd != -1);
@@ -813,8 +803,12 @@ int kvmppc_xive_connect(SpaprInterruptController *intc, uint32_t nr_servers,
     memory_region_add_subregion_overlap(&xive->tm_mmio, 0,
                                         &xive->tm_mmio_kvm, 1);
 
-    xive->change = qemu_add_vm_change_state_handler(
-        kvmppc_xive_change_state_handler, xive);
+    xive->change_start = qemu_add_vm_change_state_handler_prio_full(
+        kvmppc_xive_change_state_start, NULL, xive,
+        VM_CHANGE_STATE_PRI_HIGH, VM_CHANGE_STATE_DEPTH_XIVE);
+    xive->change_stop = qemu_add_vm_change_state_handler_prio_full(
+        kvmppc_xive_change_state_stop, NULL, xive,
+        VM_CHANGE_STATE_PRI_NORMAL, VM_CHANGE_STATE_DEPTH_XIVE);
 
     /* Connect the presenters to the initial VCPUs of the machine */
     CPU_FOREACH(cs) {
@@ -884,8 +878,8 @@ void kvmppc_xive_disconnect(SpaprInterruptController *intc)
     kvm_cpu_disable_all();
 
     /* VM Change state handler is not needed anymore */
-    if (xive->change) {
-        qemu_del_vm_change_state_handler(xive->change);
-        xive->change = NULL;
-    }
+    qemu_del_vm_change_state_handler(xive->change_start);
+    xive->change_start = NULL;
+    qemu_del_vm_change_state_handler(xive->change_stop);
+    xive->change_stop = NULL;
 }

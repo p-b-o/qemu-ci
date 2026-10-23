@@ -822,8 +822,9 @@ static int vapic_post_load(void *opaque, int version_id)
     }
 
     if (!s->vmsentry) {
-        s->vmsentry =
-            qemu_add_vm_change_state_handler(vapic_vm_state_change, s);
+        s->vmsentry = qemu_add_vm_change_state_handler_prio_full(
+            vapic_vm_state_change, NULL, s, VM_CHANGE_STATE_PRI_HIGH,
+            VM_CHANGE_STATE_DEPTH_APIC);
     }
     return 0;
 }
