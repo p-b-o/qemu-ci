@@ -940,8 +940,13 @@ static void virt_machine_init(MachineState *machine)
     }
 
     if (virt_is_iommu_sys_enabled(s)) {
-        riscv_create_iommu_sys(mmio_irqchip, s->memmap[VIRT_IOMMU_SYS].base,
-                               IOMMU_SYS_IRQ, riscv_is_32bit(&s->soc[0]));
+        DeviceState *iommu_sys;
+
+        iommu_sys = riscv_create_iommu_sys(mmio_irqchip,
+                                           s->memmap[VIRT_IOMMU_SYS].base,
+                                           IOMMU_SYS_IRQ,
+                                           riscv_is_32bit(&s->soc[0]));
+        sysbus_realize_and_unref(SYS_BUS_DEVICE(iommu_sys), &error_fatal);
     }
 
     s->machine_done.notify = virt_machine_done;

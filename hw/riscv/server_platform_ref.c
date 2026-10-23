@@ -481,6 +481,7 @@ static void rvserver_ref_machine_init(MachineState *machine)
     MemoryRegion *mask_rom = g_new(MemoryRegion, 1);
     MemoryRegion *reset_syscon_io = g_new(MemoryRegion, 1);
     DeviceState *mmio_irqchip, *pcie_irqchip;
+    DeviceState *iommu_sys;
     int i, base_hartid, hart_count;
     int socket_count = riscv_socket_count(machine);
     int imsic_bits;
@@ -635,8 +636,10 @@ static void rvserver_ref_machine_init(MachineState *machine)
         create_fdt(s, memmap);
     }
 
-    riscv_create_iommu_sys(mmio_irqchip, s->memmap[RVSERVER_IOMMU_SYS].base,
-                           IOMMU_SYS_IRQ, false);
+    iommu_sys = riscv_create_iommu_sys(mmio_irqchip,
+                                       s->memmap[RVSERVER_IOMMU_SYS].base,
+                                       IOMMU_SYS_IRQ, false);
+    sysbus_realize_and_unref(SYS_BUS_DEVICE(iommu_sys), &error_fatal);
 
     s->machine_done.notify = rvserver_ref_machine_done;
     qemu_add_machine_init_done_notifier(&s->machine_done);

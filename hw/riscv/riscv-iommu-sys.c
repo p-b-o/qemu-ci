@@ -217,6 +217,7 @@ static void riscv_iommu_sys_init(Object *obj)
     riscv_iommu_set_cap_igs(iommu, RISCV_IOMMU_CAP_IGS_BOTH);
 }
 
+/* Note: the returned iommu_sys device needs to be realized.  */
 DeviceState *riscv_create_iommu_sys(DeviceState *mmio_irqchip,
                                     hwaddr addr, int base_irq,
                                     bool is_32_bit)
@@ -236,8 +237,6 @@ DeviceState *riscv_create_iommu_sys(DeviceState *mmio_irqchip,
     object_property_set_uint(OBJECT(iommu_sys), "pas-bits",
                              is_32_bit ? 34 : 56,
                              &error_fatal);
-
-    sysbus_realize_and_unref(SYS_BUS_DEVICE(iommu_sys), &error_fatal);
 
     return iommu_sys;
 }
