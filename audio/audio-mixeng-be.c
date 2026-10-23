@@ -1381,10 +1381,8 @@ static bool audio_mixeng_backend_realize(AudioBackend *abe,
     return true;
 }
 
-static void audio_vm_change_state_handler (void *opaque, bool running,
-                                           RunState state)
+static void audio_vm_change_state(AudioMixengBackend *s, bool running)
 {
-    AudioMixengBackend *s = opaque;
     AudioMixengBackendClass *k = AUDIO_MIXENG_BACKEND_GET_CLASS(s);
     HWVoiceOut *hwo = NULL;
     HWVoiceIn *hwi = NULL;
@@ -1401,6 +1399,26 @@ static void audio_vm_change_state_handler (void *opaque, bool running,
         }
     }
     audio_reset_timer (s);
+}
+
+static void audio_vm_change_state_start(void *opaque, bool running,
+                                       RunState state)
+{
+    if (!running) {
+        return;
+    }
+
+    audio_vm_change_state(opaque, true);
+}
+
+static void audio_vm_change_state_stop(void *opaque, bool running,
+                                      RunState state)
+{
+    if (running) {
+        return;
+    }
+
+    audio_vm_change_state(opaque, false);
 }
 
 static const VMStateDescription vmstate_audio;
@@ -1459,8 +1477,12 @@ static void audio_mixeng_backend_init(Object *obj)
     s->ts = timer_new_ns(QEMU_CLOCK_VIRTUAL, audio_timer, s);
     s->run_timer = g_timer_new();
 
-    s->vmse = qemu_add_vm_change_state_handler(audio_vm_change_state_handler, s);
-    assert(s->vmse != NULL);
+    s->vmse_start = qemu_add_vm_change_state_handler(
+        audio_vm_change_state_start, s);
+    assert(s->vmse_start != NULL);
+    s->vmse_stop = qemu_add_vm_change_state_handler(
+        audio_vm_change_state_stop, s);
+    assert(s->vmse_stop != NULL);
 
     vmstate_register_any(NULL, &vmstate_audio, s);
 }
@@ -1511,9 +1533,13 @@ static void audio_mixeng_backend_finalize(Object *obj)
 
     g_clear_pointer(&s->run_timer, g_timer_destroy);
 
-    if (s->vmse) {
-        qemu_del_vm_change_state_handler(s->vmse);
-        s->vmse = NULL;
+    if (s->vmse_start) {
+        qemu_del_vm_change_state_handler(s->vmse_start);
+        s->vmse_start = NULL;
+    }
+    if (s->vmse_stop) {
+        qemu_del_vm_change_state_handler(s->vmse_stop);
+        s->vmse_stop = NULL;
     }
 
     vmstate_unregister(NULL, &vmstate_audio, s);

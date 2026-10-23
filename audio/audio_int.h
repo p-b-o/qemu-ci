@@ -229,7 +229,8 @@ struct AudioMixengBackend {
 
     bool timer_running;
     uint64_t timer_last;
-    VMChangeStateEntry *vmse;
+    VMChangeStateEntry *vmse_start;
+    VMChangeStateEntry *vmse_stop;
 };
 
 extern const struct mixeng_volume nominal_volume;
