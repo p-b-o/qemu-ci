@@ -1,0 +1,28 @@
+Looking up 20261023021237.486091-1-wang.yechao255@zte.com.cn
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 5 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH v4 1/4] target/riscv/kvm: create kvm_riscv_aia_access_reg
+    + Link: https://lore.kernel.org/qemu-devel/20261023021237.486091-2-wang.yechao255@zte.com.cn
+  [PATCH v4 2/4] hw/intc/riscv_aplic: Add in-kernel aplic save and restore function
+    + Link: https://lore.kernel.org/qemu-devel/20261023021237.486091-3-wang.yechao255@zte.com.cn
+  [PATCH v4 3/4] hw/intc/imsic: Add in-kernel imsic save and restore function
+    + Link: https://lore.kernel.org/qemu-devel/20261023021237.486091-4-wang.yechao255@zte.com.cn
+  [PATCH v4 4/4] target/riscv: Only save vmstate_debug when TCG is enabled
+    + Link: https://lore.kernel.org/qemu-devel/20261023021237.486091-5-wang.yechao255@zte.com.cn
+---
+Total patches: 4
+---
+Applying: target/riscv/kvm: create kvm_riscv_aia_access_reg
+Patch failed at 0001 target/riscv/kvm: create kvm_riscv_aia_access_reg
+error: patch failed: target/riscv/kvm/kvm-cpu.c:58
+error: target/riscv/kvm/kvm-cpu.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
