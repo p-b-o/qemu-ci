@@ -18,7 +18,7 @@ tests_ppc64_system_quick = [
 
 tests_ppc64_system_thorough = [
   'e500',
-  'fadump',
+  #'fadump', # timeout on aarch64 host
   'hv',
   'mac99',
   'openbsd',
