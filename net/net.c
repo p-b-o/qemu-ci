@@ -1977,8 +1977,8 @@ void net_init_clients(void)
 {
     net_change_state_start_entry =
         qemu_add_vm_change_state_handler(net_vm_change_state_start, NULL);
-    net_change_state_stop_entry =
-        qemu_add_vm_change_state_handler(net_vm_change_state_stop, NULL);
+    net_change_state_stop_entry = qemu_add_vm_change_state_handler_prio(
+        net_vm_change_state_stop, NULL, VM_CHANGE_STATE_PRI_HIGH);
 
     QTAILQ_INIT(&net_clients);
 
