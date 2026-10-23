@@ -3831,8 +3831,8 @@ void virtio_init(VirtIODevice *vdev, uint16_t device_id, size_t config_size)
     }
     vdev->vmstate_start = qdev_add_vm_change_state_handler(DEVICE(vdev),
             NULL, virtio_vmstate_change_start, vdev);
-    vdev->vmstate_stop = qdev_add_vm_change_state_handler(DEVICE(vdev),
-            NULL, virtio_vmstate_change_stop, vdev);
+    vdev->vmstate_stop = qdev_add_vm_change_state_handler_full(DEVICE(vdev),
+            NULL, virtio_vmstate_change_stop, vdev, VM_CHANGE_STATE_PRI_HIGH);
     vdev->device_endian = virtio_default_endian();
     vdev->use_guest_notifier_mask = true;
     QSIMPLEQ_INIT(&vdev->shmem_list);
