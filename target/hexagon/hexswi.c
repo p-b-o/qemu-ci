@@ -473,28 +473,34 @@ static void sim_handle_trap0(CPUHexagonState *env)
 
     case HEX_SYS_OPEN:
     {
-        char *filename;
+        char filename[BUFSIZ];
         target_ulong physical_filename_addr;
         unsigned int filemode;
-        uint32_t filename_len;
-        size_t filename_size;
+        uint32_t length;
         int real_openmode;
         int ret, err = 0;
+        int i = 0;
 
         if (get_user_u32(physical_filename_addr, swi_info) ||
             get_user_u32(filemode, swi_info + 4) ||
-            get_user_u32(filename_len, swi_info + 8)) {
+            get_user_u32(length, swi_info + 8)) {
             goto do_fault;
         }
 
-        /* The ABI length excludes the filename's terminating NUL. */
-        filename_size = (size_t)filename_len + 1;
-        filename = lock_user(VERIFY_READ, physical_filename_addr,
-                             filename_size, true);
-        if (!filename || filename[filename_len] != '\0') {
-            unlock_user(filename, physical_filename_addr, 0);
-            goto do_fault;
+        if (length >= BUFSIZ) {
+            qemu_log_mask(LOG_GUEST_ERROR,
+                          "%s: filename too large (%" PRIu32 ")\n",
+                          __func__, length);
+            semi_cb(cs, -1, ENAMETOOLONG);
+            break;
         }
+
+        do {
+            if (get_user_u8(filename[i], physical_filename_addr + i)) {
+                goto do_fault;
+            }
+            i++;
+        } while (filename[i - 1]);
 
         /* convert ARM ANGEL filemode into host filemode */
         if (filemode < ARRAY_SIZE(angel_to_host_filemode_table)) {
@@ -503,7 +509,6 @@ static void sim_handle_trap0(CPUHexagonState *env)
             qemu_log_mask(LOG_GUEST_ERROR,
                           "%s: invalid OPEN mode: %u\n",
                           __func__, filemode);
-            unlock_user(filename, physical_filename_addr, 0);
             semi_cb(cs, -1, EINVAL);
             break;
         }
@@ -523,7 +528,6 @@ static void sim_handle_trap0(CPUHexagonState *env)
                 ret = guestfd;
             }
         }
-        unlock_user(filename, physical_filename_addr, 0);
         semi_cb(cs, ret, err);
     }
     break;
@@ -568,7 +572,7 @@ static void sim_handle_trap0(CPUHexagonState *env)
         struct stat st_buf;
         uint8_t *st_bufptr = (uint8_t *)&sys_stat;
         int rc, err = 0;
-        char *filename;
+        char filename[BUFSIZ];
         target_ulong physical_filename_addr;
         target_ulong statBufferAddr;
         if (get_user_u32(physical_filename_addr, swi_info) ||
@@ -577,14 +581,15 @@ static void sim_handle_trap0(CPUHexagonState *env)
         }
 
         if (what_swi == HEX_SYS_STAT) {
-            filename = lock_user_string(physical_filename_addr);
-            if (!filename) {
-                semi_cb(cs, -1, EFAULT);
-                break;
-            }
+            int i = 0;
+            do {
+                if (get_user_u8(filename[i], physical_filename_addr + i)) {
+                    goto do_fault;
+                }
+                i++;
+            } while ((i < BUFSIZ) && filename[i - 1]);
             rc = stat(filename, &st_buf);
             err = errno;
-            unlock_user(filename, physical_filename_addr, 0);
         } else {
             int fd = physical_filename_addr;
             GuestFD *gf = get_guestfd(fd);
@@ -630,24 +635,26 @@ static void sim_handle_trap0(CPUHexagonState *env)
 
     case HEX_SYS_ACCESS:
     {
-        char *filename;
+        char filename[BUFSIZ];
         uint32_t FileNameAddr;
         uint32_t BufferMode;
-        int rc, err;
+        int rc;
+
+        int i = 0;
 
         if (get_user_u32(FileNameAddr, swi_info) ||
             get_user_u32(BufferMode, swi_info + 4)) {
             goto do_fault;
         }
-        filename = lock_user_string(FileNameAddr);
-        if (!filename) {
-            semi_cb(cs, -1, EFAULT);
-            break;
-        }
+        do {
+            if (get_user_u8(filename[i], FileNameAddr + i)) {
+                goto do_fault;
+            }
+            i++;
+        } while ((i < BUFSIZ) && (filename[i - 1]));
+        filename[i] = 0;
         rc = access(filename, BufferMode);
-        err = errno;
-        unlock_user(filename, FileNameAddr, 0);
-        semi_cb(cs, rc,  rc == 0 ? 0 : err);
+        semi_cb(cs, rc,  rc == 0 ? 0 : errno);
     }
     break;
 
