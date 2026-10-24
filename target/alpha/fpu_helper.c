@@ -88,6 +88,16 @@ void helper_fp_exc_raise_s(CPUAlphaState *env, uint32_t ignore, uint32_t regno)
 {
     uint32_t exc = env->error_code & ~ignore;
     if (exc) {
+#ifdef CONFIG_USER_ONLY
+        /*
+         * An integer overflow that is not ignored traps for software
+         * completion. The kernel's emulation reports it as invalid and
+         * drops the inexact that the hardware recorded with it.
+         */
+        if (exc & FPCR_IOV) {
+            exc = (exc & ~FPCR_INE) | FPCR_INV;
+        }
+#endif
         env->fpcr |= exc;
         exc &= env->fpcr_exc_enable;
         /*

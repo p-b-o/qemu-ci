@@ -56,9 +56,9 @@ int main (void)
         {  1.5,  1, FPCR_INE },
         {  0x1.0p32,   0x0000000100000000ul, 0 },
         { -0x1.0p63,   0x8000000000000000ul, 0 },
-        {  0x1.0p63,   0x8000000000000000ul, FPCR_IOV | FPCR_INE },
-        {  0x1.0p64,   0x0000000000000000ul, FPCR_IOV | FPCR_INE },
-        {  0x1.cccp64, 0xccc0000000000000ul, FPCR_IOV | FPCR_INE },
+        {  0x1.0p63,   0x8000000000000000ul, FPCR_IOV | FPCR_INV },
+        {  0x1.0p64,   0x0000000000000000ul, FPCR_IOV | FPCR_INV },
+        {  0x1.cccp64, 0xccc0000000000000ul, FPCR_IOV | FPCR_INV },
         { __builtin_inf(), 0, FPCR_INV },
         { __builtin_nan(""), 0, FPCR_INV },
     };
