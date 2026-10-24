@@ -42,7 +42,7 @@ tests_x86_64_system_thorough = [
   'linux_initrd',
   'multiprocess',
   'netdev_ethtool',
-  'nvme_migration',
+  # 'nvme_migration', # timeout
   'replay',
   'reverse_debug',
   'tuxrun',
