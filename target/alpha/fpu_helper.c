@@ -38,7 +38,11 @@ void helper_setflushzero(CPUAlphaState *env, uint32_t val)
 #define CONVERT_BIT(X, SRC, DST) \
     (SRC > DST ? (X) / (SRC / DST) & (DST) : ((X) & SRC) * (DST / SRC))
 
-static uint32_t soft_to_fpcr_exc(CPUAlphaState *env)
+/*
+ * NORMAL is whether the delivered result is normal. Operations that
+ * cannot underflow pass false.
+ */
+static uint32_t soft_to_fpcr_exc(CPUAlphaState *env, bool normal)
 {
     FloatExceptionFlags exc = get_float_exception_flags(&FP_STATUS);
     uint32_t ret = 0;
@@ -48,8 +52,24 @@ static uint32_t soft_to_fpcr_exc(CPUAlphaState *env)
         ret |= CONVERT_BIT(exc, float_flag_invalid, FPCR_INV);
         ret |= CONVERT_BIT(exc, float_flag_divbyzero, FPCR_DZE);
         ret |= CONVERT_BIT(exc, float_flag_overflow, FPCR_OVF);
-        ret |= CONVERT_BIT(exc, float_flag_underflow, FPCR_UNF);
         ret |= CONVERT_BIT(exc, float_flag_inexact, FPCR_INE);
+
+        /*
+         * Alpha raises no underflow when the delivered result is normal.
+         * softfloat does when that result was rounded up to the smallest
+         * normal, so drop it. In user mode, a denormal operand means the
+         * result is the one the kernel's software completion would compute,
+         * and that does raise underflow.
+         */
+        if (exc & float_flag_underflow) {
+            bool tiny = !normal;
+#ifdef CONFIG_USER_ONLY
+            tiny |= exc & float_flag_input_denormal_used;
+#endif
+            if (tiny) {
+                ret |= FPCR_UNF;
+            }
+        }
     }
 
     return ret;
@@ -237,7 +257,7 @@ uint64_t helper_adds(CPUAlphaState *env, uint64_t a, uint64_t b)
     fa = s_to_float32(a);
     fb = s_to_float32(b);
     fr = float32_add(fa, fb, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, float32_is_normal(fr));
 
     return float32_to_s(fr);
 }
@@ -249,7 +269,7 @@ uint64_t helper_subs(CPUAlphaState *env, uint64_t a, uint64_t b)
     fa = s_to_float32(a);
     fb = s_to_float32(b);
     fr = float32_sub(fa, fb, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, float32_is_normal(fr));
 
     return float32_to_s(fr);
 }
@@ -261,7 +281,7 @@ uint64_t helper_muls(CPUAlphaState *env, uint64_t a, uint64_t b)
     fa = s_to_float32(a);
     fb = s_to_float32(b);
     fr = float32_mul(fa, fb, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, float32_is_normal(fr));
 
     return float32_to_s(fr);
 }
@@ -273,7 +293,7 @@ uint64_t helper_alpha_divs(CPUAlphaState *env, uint64_t a, uint64_t b)
     fa = s_to_float32(a);
     fb = s_to_float32(b);
     fr = float32_div(fa, fb, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, float32_is_normal(fr));
 
     return float32_to_s(fr);
 }
@@ -284,7 +304,7 @@ uint64_t helper_sqrts(CPUAlphaState *env, uint64_t a)
 
     fa = s_to_float32(a);
     fr = float32_sqrt(fa, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, false);
 
     return float32_to_s(fr);
 }
@@ -314,7 +334,7 @@ uint64_t helper_addt(CPUAlphaState *env, uint64_t a, uint64_t b)
     fa = t_to_float64(a);
     fb = t_to_float64(b);
     fr = float64_add(fa, fb, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, float64_is_normal(fr));
 
     return float64_to_t(fr);
 }
@@ -326,7 +346,7 @@ uint64_t helper_subt(CPUAlphaState *env, uint64_t a, uint64_t b)
     fa = t_to_float64(a);
     fb = t_to_float64(b);
     fr = float64_sub(fa, fb, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, float64_is_normal(fr));
 
     return float64_to_t(fr);
 }
@@ -338,7 +358,7 @@ uint64_t helper_mult(CPUAlphaState *env, uint64_t a, uint64_t b)
     fa = t_to_float64(a);
     fb = t_to_float64(b);
     fr = float64_mul(fa, fb, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, float64_is_normal(fr));
 
     return float64_to_t(fr);
 }
@@ -350,7 +370,7 @@ uint64_t helper_divt(CPUAlphaState *env, uint64_t a, uint64_t b)
     fa = t_to_float64(a);
     fb = t_to_float64(b);
     fr = float64_div(fa, fb, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, float64_is_normal(fr));
 
     return float64_to_t(fr);
 }
@@ -361,7 +381,7 @@ uint64_t helper_sqrtt(CPUAlphaState *env, uint64_t a)
 
     fa = t_to_float64(a);
     fr = float64_sqrt(fa, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, false);
 
     return float64_to_t(fr);
 }
@@ -378,7 +398,7 @@ uint64_t helper_cmptun(CPUAlphaState *env, uint64_t a, uint64_t b)
     if (float64_unordered_quiet(fa, fb, &FP_STATUS)) {
         ret = 0x4000000000000000ULL;
     }
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, false);
 
     return ret;
 }
@@ -394,7 +414,7 @@ uint64_t helper_cmpteq(CPUAlphaState *env, uint64_t a, uint64_t b)
     if (float64_eq_quiet(fa, fb, &FP_STATUS)) {
         ret = 0x4000000000000000ULL;
     }
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, false);
 
     return ret;
 }
@@ -410,7 +430,7 @@ uint64_t helper_cmptle(CPUAlphaState *env, uint64_t a, uint64_t b)
     if (float64_le(fa, fb, &FP_STATUS)) {
         ret = 0x4000000000000000ULL;
     }
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, false);
 
     return ret;
 }
@@ -426,7 +446,7 @@ uint64_t helper_cmptlt(CPUAlphaState *env, uint64_t a, uint64_t b)
     if (float64_lt(fa, fb, &FP_STATUS)) {
         ret = 0x4000000000000000ULL;
     }
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, false);
 
     return ret;
 }
@@ -439,7 +459,7 @@ uint64_t helper_cvtts(CPUAlphaState *env, uint64_t a)
 
     fa = t_to_float64(a);
     fr = float64_to_float32(fa, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, float32_is_normal(fr));
 
     return float32_to_s(fr);
 }
@@ -451,7 +471,7 @@ uint64_t helper_cvtst(CPUAlphaState *env, uint64_t a)
 
     fa = s_to_float32(a);
     fr = float32_to_float64(fa, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, false);
 
     return float64_to_t(fr);
 }
@@ -459,7 +479,7 @@ uint64_t helper_cvtst(CPUAlphaState *env, uint64_t a)
 uint64_t helper_cvtqs(CPUAlphaState *env, uint64_t a)
 {
     float32 fr = int64_to_float32(a, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, false);
 
     return float32_to_s(fr);
 }
@@ -514,7 +534,7 @@ uint64_t helper_cvttq_c(CPUAlphaState *env, uint64_t a)
 uint64_t helper_cvtqt(CPUAlphaState *env, uint64_t a)
 {
     float64 fr = int64_to_float64(a, &FP_STATUS);
-    env->error_code = soft_to_fpcr_exc(env);
+    env->error_code = soft_to_fpcr_exc(env, false);
     return float64_to_t(fr);
 }
 
