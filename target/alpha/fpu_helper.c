@@ -86,7 +86,7 @@ void helper_fp_exc_raise(CPUAlphaState *env, uint32_t ignore, uint32_t regno)
 /* Raise exceptions for ieee fp insns with software completion.  */
 void helper_fp_exc_raise_s(CPUAlphaState *env, uint32_t ignore, uint32_t regno)
 {
-    uint32_t exc = env->error_code & ~ignore;
+    uint32_t exc = env->error_code;
     if (exc) {
 #ifdef CONFIG_USER_ONLY
         /*
@@ -94,11 +94,19 @@ void helper_fp_exc_raise_s(CPUAlphaState *env, uint32_t ignore, uint32_t regno)
          * completion. The kernel's emulation reports it as invalid and
          * drops the inexact that the hardware recorded with it.
          */
-        if (exc & FPCR_IOV) {
+        if (exc & ~ignore & FPCR_IOV) {
             exc = (exc & ~FPCR_INE) | FPCR_INV;
         }
 #endif
+        /*
+         * The qualifiers can suppress the raising of exceptions,
+         * but real hardware still records that they occurred.
+         */
         env->fpcr |= exc;
+        exc &= ~ignore;
+        if (!exc) {
+            return;
+        }
         exc &= env->fpcr_exc_enable;
         /*
          * In system mode, the software handler gets invoked
