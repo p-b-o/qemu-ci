@@ -108,11 +108,132 @@ static void test_qf32_bf_conversion(void)
     check_output_h(__LINE__, 1);
 }
 
+/*
+ * The conversions between FP8 and qf16 read the FP8 encoding with exponent
+ * bias 7, unlike the v79 vcvt instructions which use bias 8.  Zero is 0 and
+ * 0x80 is the only NaN.
+ */
+#define F8_NAN 0x80
+#define QF16_NAN 0x801f
+
+/* The qf16 encoding of an FP8 value: 11-bit significand, 5-bit exponent */
+static void f8_to_qf16_parts(uint8_t f8, int *sig11, int *exp)
+{
+    int e = (f8 >> 3) & 0xf;
+    int sig = e ? 8 | (f8 & 7) : f8 & 7;
+    int p = 31 - __builtin_clz(sig);
+
+    /* The value is sig * 2^(e - 7 - 3), with the smallest e shared */
+    *exp = p + (e ? e : 1) - 10;
+    *sig11 = sig << (9 - p);
+}
+
+static uint16_t ref_f8_to_qf16(uint8_t f8)
+{
+    int sig11, exp;
+
+    if (f8 == 0) {
+        return 0;
+    }
+    if (f8 == F8_NAN) {
+        return QF16_NAN;
+    }
+    f8_to_qf16_parts(f8, &sig11, &exp);
+    /* Negative numbers hold the complement of the significand */
+    if (f8 & 0x80) {
+        sig11 = ~sig11 & 0x7ff;
+    }
+    return sig11 << 5 | (exp + 15);
+}
+
+#define WIDEN_VEC(I) ((I) % 2)
+#define WIDEN_IDX(I) (2 * ((I) / 4) + (((I) % 4) / 2))
+
+static void test_vconv_qf16_f8(void)
+{
+    for (int blk = 0; blk < 2; blk++) {
+        MMVector input;
+
+        for (int i = 0; i < MAX_VEC_SIZE_BYTES; i++) {
+            input.ub[i] = blk * MAX_VEC_SIZE_BYTES + i;
+            expect[WIDEN_VEC(i)].uh[WIDEN_IDX(i)] = ref_f8_to_qf16(input.ub[i]);
+        }
+        asm volatile(
+            "v2 = vmemu(%[in])\n"
+            "v1:0.qf16 = v2.f8\n"
+            "vmemu(%[out0]) = v0\n"
+            "vmemu(%[out1]) = v1\n"
+            :
+            : [in] "r"(&input), [out0] "r"(&output[0]),
+              [out1] "r"(&output[1])
+            : "v0", "v1", "v2", "memory");
+        check_output_uh(__LINE__, 2);
+    }
+}
+
+/* Round a half precision value to FP8, to nearest even, with no saturation */
+static uint8_t ref_hf_to_f8(uint16_t hf)
+{
+    _Float16 h;
+    double x, ax;
+    int sign = hf >> 15;
+    int code;
+
+    memcpy(&h, &hf, sizeof(h));
+    x = h;
+    if (x != x || __builtin_isinf(x)) {
+        return F8_NAN;
+    }
+    ax = __builtin_fabs(x);
+    if (ax < 1.0 / 64) {
+        /* Subnormal, in units of 2^-9 */
+        code = __builtin_rint(ax * 512);
+    } else {
+        int e = __builtin_ilogb(ax);
+        int m = __builtin_rint(__builtin_scalbn(ax, 3 - e));
+
+        code = (e + 7) * 8 + m - 8;
+    }
+    if (code > 0x7f) {
+        return F8_NAN;
+    }
+    /* There's no negative zero */
+    return code ? sign << 7 | code : 0;
+}
+
+/*
+ * Add zero to get a qf16 from every half precision value, which for a
+ * non-NaN input stays exactly that value.
+ */
+static void test_vconv_f8_qf16(void)
+{
+    for (int base = 0; base < 0x10000; base += MAX_VEC_SIZE_BYTES / 2) {
+        MMVector input;
+
+        for (int i = 0; i < MAX_VEC_SIZE_BYTES / 2; i++) {
+            input.uh[i] = base + i;
+            expect[0].uh[i] = ref_hf_to_f8(base + i);
+        }
+        asm volatile(
+            "v2 = vmemu(%[in])\n"
+            "v3 = vxor(v3, v3)\n"
+            "v0.qf16 = vadd(v2.hf, v3.hf)\n"
+            "v1.f8 = v0.qf16\n"
+            "vmemu(%[out]) = v1\n"
+            :
+            : [in] "r"(&input), [out] "r"(&output[0])
+            : "v0", "v1", "v2", "v3", "memory");
+        check_output_uh(__LINE__, 1);
+    }
+}
+
 int main()
 {
     test_qf16();
     test_qf32();
     test_qf32_bf_conversion();
+    test_vconv_qf16_f8();
+    test_vconv_f8_qf16();
 
     puts(err ? "FAIL" : "PASS");
     return err ? 1 : 0;
