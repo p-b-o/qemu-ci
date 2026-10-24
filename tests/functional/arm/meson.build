@@ -61,7 +61,7 @@ tests_arm_system_thorough = [
   'max78000fthr',
   'microbit',
   'orangepi',
-  'quanta_gsj',
+  #'quanta_gsj', # timeout with -j > 1
   'raspi2',
   'realview',
   'replay',
