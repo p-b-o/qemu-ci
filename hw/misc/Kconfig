@@ -273,3 +273,6 @@ config RENESAS_RX_CRC
 
 config RENESAS_RX_ROMCACHE
     bool
+
+config RENESAS_RX_FCU
+    bool
