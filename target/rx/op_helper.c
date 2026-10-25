@@ -18,6 +18,7 @@
 
 #include "qemu/osdep.h"
 #include "qemu/bitops.h"
+#include "qemu/log.h"
 #include "cpu.h"
 #include "exec/helper-proto.h"
 #include "accel/tcg/cpu-ldst.h"
@@ -151,6 +152,160 @@ FLOATOP(rx_fadd, float32_add)
 FLOATOP(rx_fsub, float32_sub)
 FLOATOP(rx_fmul, float32_mul)
 FLOATOP(rx_fdiv, float32_div)
+
+/*
+ * RXv3 double-precision FPU helpers.
+ *
+ * The DPFPU has its own status word: "The single-precision floating-point
+ * status word (FPSW) is neither referred to nor updated in double-precision
+ * floating-point arithmetic operations." DPSW carries its own rounding mode
+ * (DRM) and denormal handling (DDN), so double precision runs on a separate
+ * softfloat state rather than sharing fp_status. The PSW is not touched
+ * either; DCMP records its answer in DCMR and MVFDR moves it to PSW.Z.
+ */
+#define SET_DPSW(b)                                                     \
+    do {                                                                \
+        dpsw = FIELD_DP32(dpsw, DPSW, DC ## b, 1);                      \
+        if (!FIELD_EX32(dpsw, DPSW, DE ## b)) {                         \
+            dpsw = FIELD_DP32(dpsw, DPSW, DF ## b, 1);                  \
+        }                                                               \
+    } while (0)
+
+/* Apply DPSW's rounding mode and clear the sticky softfloat flags. */
+static void dp_begin(CPURXState *env)
+{
+    static const int roundmode[] = {
+        float_round_nearest_even,
+        float_round_to_zero,
+        float_round_up,
+        float_round_down,
+    };
+    uint32_t dpsw = env->dcr[RX_DCR_DPSW];
+
+    set_float_rounding_mode(roundmode[FIELD_EX32(dpsw, DPSW, DRM)],
+                            &env->dp_status);
+    set_float_exception_flags(0, &env->dp_status);
+}
+
+/*
+ * Record the outcome of a DP arithmetic instruction in DPSW. Every such
+ * instruction except DABS and DNEG recomputes the DC* cause bits, so they
+ * are cleared first; the DF* flags accumulate and are only set while the
+ * matching DE* enable is clear.
+ */
+static void update_dpsw(CPURXState *env)
+{
+    uint32_t decnt = env->dcr[RX_DCR_DECNT];
+    uint32_t dpsw = env->dcr[RX_DCR_DPSW];
+    int xcpt = get_float_exception_flags(&env->dp_status);
+    int cause, enable;
+
+    /* DPSW and DEPC stop updating while exception info is preserved. */
+    if (FIELD_EX32(decnt, DECNT, EHM) && FIELD_EX32(decnt, DECNT, EHS)) {
+        return;
+    }
+
+    dpsw = FIELD_DP32(dpsw, DPSW, CAUSE, 0);
+
+    if (xcpt & float_flag_invalid) {
+        SET_DPSW(V);
+    }
+    if (xcpt & float_flag_divbyzero) {
+        SET_DPSW(Z);
+    }
+    if (xcpt & float_flag_overflow) {
+        SET_DPSW(O);
+    }
+    if (xcpt & float_flag_underflow) {
+        SET_DPSW(U);
+    }
+    if (xcpt & float_flag_inexact) {
+        SET_DPSW(X);
+    }
+    /*
+     * A denormal the DPFPU cannot handle is an unimplemented processing
+     * exception, which is reported only while DDN says denormals are to be
+     * treated as denormals.
+     */
+    if ((xcpt & (float_flag_input_denormal_flushed
+                 | float_flag_output_denormal_flushed))
+        && !FIELD_EX32(dpsw, DPSW, DDN)) {
+        dpsw = FIELD_DP32(dpsw, DPSW, DCE, 1);
+    }
+
+    dpsw = FIELD_DP32(dpsw, DPSW, DFS,
+                      FIELD_EX32(dpsw, DPSW, FLAGS) != 0);
+    env->dcr[RX_DCR_DPSW] = dpsw;
+
+    /*
+     * An enabled DP exception is delivered as an interrupt request to the
+     * interrupt controller rather than as a CPU exception, and suppresses
+     * the write to the destination register. Neither is modelled: the cause
+     * and flag bits above are correct, but the interrupt is not raised and
+     * the destination is written regardless.
+     */
+    cause = FIELD_EX32(dpsw, DPSW, CAUSE);
+    enable = FIELD_EX32(dpsw, DPSW, ENABLE);
+    if (cause & enable) {
+        qemu_log_mask(LOG_UNIMP,
+                      "rx: enabled DPFPU exception (DPSW=0x%08x) does not "
+                      "raise an interrupt\n", dpsw);
+    }
+}
+
+#define FLOATOP64(op, func)                                             \
+    float64 helper_##op(CPURXState *env, float64 t0, float64 t1)        \
+    {                                                                   \
+        float64 ret;                                                    \
+        dp_begin(env);                                                  \
+        ret = func(t0, t1, &env->dp_status);                            \
+        update_dpsw(env);                                               \
+        return ret;                                                     \
+    }
+
+FLOATOP64(dadd, float64_add)
+FLOATOP64(dsub, float64_sub)
+FLOATOP64(dmul, float64_mul)
+FLOATOP64(ddiv, float64_div)
+
+/*
+ * dcmp<cm> src, src2 -- compare src2 against src as directed by cm and
+ * record the answer in DCMR.RES.
+ *
+ * Mind the operand order: the manual defines every relation as src2 REL
+ * src, so LT is true when the *second* operand is the smaller one. src is
+ * the first encoded register (drs1) and src2 the second (drs2).
+ *
+ * The PSW is left alone -- C, Z, S and O are all listed as unchanged --
+ * which is why MVFDR exists to move DCMR.RES into PSW.Z.
+ *
+ * The condition field is a mask of the relations that make RES true, which
+ * is why LE (6) is LT (4) | EQ (2); it agrees with the manual on all four
+ * documented conditions. UN is defined as isNaN(src) || isNaN(src2), which
+ * is exactly what an unordered comparison reports. The comparison is quiet
+ * because testing for unordered is one of the conditions on offer.
+ */
+void helper_dcmp(CPURXState *env, uint32_t cm, float64 src, float64 src2)
+{
+    int st;
+    bool res = false;
+
+    dp_begin(env);
+    st = float64_compare_quiet(src2, src, &env->dp_status);
+
+    if ((cm & RX_DCMP_UN) && st == float_relation_unordered) {
+        res = true;
+    }
+    if ((cm & RX_DCMP_EQ) && st == float_relation_equal) {
+        res = true;
+    }
+    if ((cm & RX_DCMP_LT) && st == float_relation_less) {
+        res = true;
+    }
+    env->dcr[RX_DCR_DCMR] = deposit32(env->dcr[RX_DCR_DCMR],
+                                      RX_DCMR_RES_BIT, 1, res);
+    update_dpsw(env);
+}
 
 void helper_rx_fcmp(CPURXState *env, float32 t0, float32 t1)
 {

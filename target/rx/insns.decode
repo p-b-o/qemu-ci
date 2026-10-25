@@ -29,6 +29,9 @@
 &mi		rs ld mi imm
 &mr		rs ld mi rs2
 &mcnd		ld sz rd cd
+# RXv3 DPFPU argument types
+&drrr		drd drs1 drs2
+&dcmpd		drs1 drs2 cd
 ########
 %b1_bdsp	24:3 !function=bdsp_s
 
@@ -628,3 +631,15 @@ XOR_ir		1111 1101 0111 ..00 1101 ....		@b3_rd_li
 XOR_mr		1111 1100 0011 01.. .... ....		@b3_rd_ld_ub
 # XOR dsp[rs], rd
 XOR_mr		0000 0110 ..10 00.. 0000 1101 .... ....	@b4_rd_ldmi
+
+########
+# RXv2 DPFPU instructions
+# All 4-byte register-to-register ops use prefix 0x76 0x90
+#
+# Binary ops: 0111 0110 1001 0000 drs2:4 op:4 drd:4 drs1:4
+# Result: DRdrd = DRdrs1 op DRdrs2
+DADD		0111 0110 1001 0000 drs2:4 0000 drd:4 drs1:4	&drrr
+DSUB		0111 0110 1001 0000 drs2:4 0001 drd:4 drs1:4	&drrr
+DMUL		0111 0110 1001 0000 drs2:4 0010 drd:4 drs1:4	&drrr
+DDIV		0111 0110 1001 0000 drs2:4 0101 drd:4 drs1:4	&drrr
+DCMP		0111 0110 1001 0000 drs2:4 1000 cd:4  drs1:4	&dcmpd

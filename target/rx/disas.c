@@ -133,6 +133,9 @@ static const char cond[][4] = {
     "eq", "ne", "c", "nc", "gtu", "leu", "pz", "n",
     "ge", "lt", "gt", "le", "o", "no", "ra", "f"
 };
+static const char dcmp_cond[8][3] = {
+    "", "un", "eq", "", "lt", "", "le", ""
+};
 static const char psw[] = {
     'c', 'z', 's', 'o', 0, 0, 0, 0,
     'i', 'u', 0, 0, 0, 0, 0, 0,
@@ -1206,6 +1209,37 @@ static bool trans_ITOF(DisasContext *ctx, arg_ITOF *a)
 static bool trans_UTOF(DisasContext *ctx, arg_UTOF *a)
 {
     prt_ldmi(ctx, "utof", a->ld, a->mi, a->rs, a->rd);
+    return true;
+}
+
+/* RXv2 DPFPU disassembly */
+static bool trans_DADD(DisasContext *ctx, arg_DADD *a)
+{
+    prt("dadd\tdr%d, dr%d, dr%d", a->drs1, a->drs2, a->drd);
+    return true;
+}
+
+static bool trans_DSUB(DisasContext *ctx, arg_DSUB *a)
+{
+    prt("dsub\tdr%d, dr%d, dr%d", a->drs1, a->drs2, a->drd);
+    return true;
+}
+
+static bool trans_DMUL(DisasContext *ctx, arg_DMUL *a)
+{
+    prt("dmul\tdr%d, dr%d, dr%d", a->drs1, a->drs2, a->drd);
+    return true;
+}
+
+static bool trans_DDIV(DisasContext *ctx, arg_DDIV *a)
+{
+    prt("ddiv\tdr%d, dr%d, dr%d", a->drs1, a->drs2, a->drd);
+    return true;
+}
+
+static bool trans_DCMP(DisasContext *ctx, arg_DCMP *a)
+{
+    prt("dcmp%s\tdr%d, dr%d", dcmp_cond[a->cd & 7], a->drs1, a->drs2);
     return true;
 }
 

@@ -1949,6 +1949,84 @@ static bool trans_UTOF(DisasContext *ctx, arg_UTOF * a)
     return true;
 }
 
+/*
+ * RXv3 DPFPU register access. DR0-DR15 are dedicated 64-bit registers,
+ * architecturally distinct from the general purpose registers; DRHn and
+ * DRLn name the high and low 32-bit halves of DRn.
+ */
+static TCGv_i64 dr_read(int n)
+{
+    return cpu_dregs[n];
+}
+
+static void dr_write(int n, TCGv_i64 val)
+{
+    tcg_gen_mov_i64(cpu_dregs[n], val);
+}
+
+/* dadd DRdrs1, DRdrd, DRdrs2  (DRdrd = DRdrs1 + DRdrs2) */
+static bool trans_DADD(DisasContext *ctx, arg_DADD *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    TCGv_i64 s1 = dr_read(a->drs1);
+    TCGv_i64 s2 = dr_read(a->drs2);
+    TCGv_i64 d  = tcg_temp_new_i64();
+    gen_helper_dadd(d, tcg_env, s1, s2);
+    dr_write(a->drd, d);
+    return true;
+}
+
+static bool trans_DSUB(DisasContext *ctx, arg_DSUB *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    TCGv_i64 s1 = dr_read(a->drs1);
+    TCGv_i64 s2 = dr_read(a->drs2);
+    TCGv_i64 d  = tcg_temp_new_i64();
+    gen_helper_dsub(d, tcg_env, s1, s2);
+    dr_write(a->drd, d);
+    return true;
+}
+
+static bool trans_DMUL(DisasContext *ctx, arg_DMUL *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    TCGv_i64 s1 = dr_read(a->drs1);
+    TCGv_i64 s2 = dr_read(a->drs2);
+    TCGv_i64 d  = tcg_temp_new_i64();
+    gen_helper_dmul(d, tcg_env, s1, s2);
+    dr_write(a->drd, d);
+    return true;
+}
+
+static bool trans_DDIV(DisasContext *ctx, arg_DDIV *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    TCGv_i64 s1 = dr_read(a->drs1);
+    TCGv_i64 s2 = dr_read(a->drs2);
+    TCGv_i64 d  = tcg_temp_new_i64();
+    gen_helper_ddiv(d, tcg_env, s1, s2);
+    dr_write(a->drd, d);
+    return true;
+}
+
+static bool trans_DCMP(DisasContext *ctx, arg_DCMP *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    gen_helper_dcmp(tcg_env, tcg_constant_i32(a->cd),
+                    cpu_dregs[a->drs1], cpu_dregs[a->drs2]);
+    return true;
+}
+
 static void rx_bsetm(DisasContext *ctx, TCGv_i32 mem, TCGv_i32 mask)
 {
     TCGv_i32 val;
