@@ -30,6 +30,7 @@
 &mr		rs ld mi rs2
 &mcnd		ld sz rd cd
 # RXv3 DPFPU argument types
+&drr		drd drs
 &drrr		drd drs1 drs2
 &dcmpd		drs1 drs2 cd
 ########
@@ -643,3 +644,12 @@ DSUB		0111 0110 1001 0000 drs2:4 0001 drd:4 drs1:4	&drrr
 DMUL		0111 0110 1001 0000 drs2:4 0010 drd:4 drs1:4	&drrr
 DDIV		0111 0110 1001 0000 drs2:4 0101 drd:4 drs1:4	&drrr
 DCMP		0111 0110 1001 0000 drs2:4 1000 cd:4  drs1:4	&dcmpd
+
+# Unary ops group A (1100): DMOV, DABS, DNEG
+DMOV		0111 0110 1001 0000 drs:4 1100 drd:4 0000	&drr
+DABS		0111 0110 1001 0000 drs:4 1100 drd:4 0001	&drr
+DNEG		0111 0110 1001 0000 drs:4 1100 drd:4 0010	&drr
+
+# Unary ops group B (1101): DSQRT, DROUND
+DSQRT		0111 0110 1001 0000 drs:4 1101 drd:4 0000	&drr
+DROUND		0111 0110 1001 0000 drs:4 1101 drd:4 1101	&drr

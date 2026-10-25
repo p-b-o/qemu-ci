@@ -1243,6 +1243,36 @@ static bool trans_DCMP(DisasContext *ctx, arg_DCMP *a)
     return true;
 }
 
+static bool trans_DMOV(DisasContext *ctx, arg_DMOV *a)
+{
+    prt("dmov\tdr%d, dr%d", a->drs, a->drd);
+    return true;
+}
+
+static bool trans_DABS(DisasContext *ctx, arg_DABS *a)
+{
+    prt("dabs\tdr%d, dr%d", a->drs, a->drd);
+    return true;
+}
+
+static bool trans_DNEG(DisasContext *ctx, arg_DNEG *a)
+{
+    prt("dneg\tdr%d, dr%d", a->drs, a->drd);
+    return true;
+}
+
+static bool trans_DSQRT(DisasContext *ctx, arg_DSQRT *a)
+{
+    prt("dsqrt\tdr%d, dr%d", a->drs, a->drd);
+    return true;
+}
+
+static bool trans_DROUND(DisasContext *ctx, arg_DROUND *a)
+{
+    prt("dround\tdr%d, dr%d", a->drs, a->drd);
+    return true;
+}
+
 #define BOP_IM(name, reg)                                       \
     do {                                                        \
         char dsp[8];                                            \

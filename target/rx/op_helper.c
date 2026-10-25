@@ -307,6 +307,41 @@ void helper_dcmp(CPURXState *env, uint32_t cm, float64 src, float64 src2)
     update_dpsw(env);
 }
 
+/*
+ * DABS and DNEG only change the sign bit. They cannot raise an exception,
+ * and are the two DP arithmetic instructions that leave the DC* cause bits
+ * as they were rather than recomputing them.
+ */
+float64 helper_dabs(CPURXState *env, float64 t0)
+{
+    return float64_abs(t0);
+}
+
+float64 helper_dneg(CPURXState *env, float64 t0)
+{
+    return float64_chs(t0);
+}
+
+float64 helper_dsqrt(CPURXState *env, float64 t0)
+{
+    float64 ret;
+
+    dp_begin(env);
+    ret = float64_sqrt(t0, &env->dp_status);
+    update_dpsw(env);
+    return ret;
+}
+
+float64 helper_dround(CPURXState *env, float64 t0)
+{
+    float64 ret;
+
+    dp_begin(env);
+    ret = float64_round_to_int(t0, &env->dp_status);
+    update_dpsw(env);
+    return ret;
+}
+
 void helper_rx_fcmp(CPURXState *env, float32 t0, float32 t1)
 {
     int st;

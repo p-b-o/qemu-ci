@@ -2027,6 +2027,64 @@ static bool trans_DCMP(DisasContext *ctx, arg_DCMP *a)
     return true;
 }
 
+static bool trans_DMOV(DisasContext *ctx, arg_DMOV *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    TCGv_i64 s = dr_read(a->drs);
+    dr_write(a->drd, s);
+    return true;
+}
+
+static bool trans_DABS(DisasContext *ctx, arg_DABS *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    TCGv_i64 s = dr_read(a->drs);
+    TCGv_i64 d = tcg_temp_new_i64();
+    gen_helper_dabs(d, tcg_env, s);
+    dr_write(a->drd, d);
+    return true;
+}
+
+static bool trans_DNEG(DisasContext *ctx, arg_DNEG *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    TCGv_i64 s = dr_read(a->drs);
+    TCGv_i64 d = tcg_temp_new_i64();
+    gen_helper_dneg(d, tcg_env, s);
+    dr_write(a->drd, d);
+    return true;
+}
+
+static bool trans_DSQRT(DisasContext *ctx, arg_DSQRT *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    TCGv_i64 s = dr_read(a->drs);
+    TCGv_i64 d = tcg_temp_new_i64();
+    gen_helper_dsqrt(d, tcg_env, s);
+    dr_write(a->drd, d);
+    return true;
+}
+
+static bool trans_DROUND(DisasContext *ctx, arg_DROUND *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    TCGv_i64 s = dr_read(a->drs);
+    TCGv_i64 d = tcg_temp_new_i64();
+    gen_helper_dround(d, tcg_env, s);
+    dr_write(a->drd, d);
+    return true;
+}
+
 static void rx_bsetm(DisasContext *ctx, TCGv_i32 mem, TCGv_i32 mask)
 {
     TCGv_i32 val;
