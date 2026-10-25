@@ -1833,6 +1833,76 @@ static bool trans_MVTACLO(DisasContext *ctx, arg_MVTACLO *a)
     return true;
 }
 
+/* RXv2 accumulator moves used by interrupt context save/restore. */
+static bool rx_acc_move(DisasContext *ctx, int reg, int acc,
+                        int part, bool write)
+{
+    TCGv_i64 value;
+    int offset;
+
+    if (!require_isa(ctx, RX_ISA_V2)) {
+        return false;
+    }
+    if (part == 2) {
+        offset = offsetof(CPURXState, acc_guard) + acc * sizeof(uint32_t);
+        if (write) {
+            TCGv_i32 guard = tcg_temp_new_i32();
+            tcg_gen_ext8s_i32(guard, cpu_regs[reg]);
+            tcg_gen_st_i32(guard, tcg_env, offset);
+        } else {
+            tcg_gen_ld_i32(cpu_regs[reg], tcg_env, offset);
+        }
+        return true;
+    }
+    value = acc ? tcg_temp_new_i64() : cpu_acc;
+    if (acc) {
+        tcg_gen_ld_i64(value, tcg_env, offsetof(CPURXState, acc1));
+    }
+    if (write) {
+        TCGv_i64 src = tcg_temp_new_i64();
+        tcg_gen_extu_i32_i64(src, cpu_regs[reg]);
+        tcg_gen_deposit_i64(value, value, src, part * 32, 32);
+        if (acc) {
+            tcg_gen_st_i64(value, tcg_env, offsetof(CPURXState, acc1));
+        }
+    } else if (part) {
+        tcg_gen_extrh_i64_i32(cpu_regs[reg], value);
+    } else {
+        tcg_gen_extrl_i64_i32(cpu_regs[reg], value);
+    }
+    return true;
+}
+
+static bool trans_MVTACHI_A1(DisasContext *ctx, arg_MVTACHI_A1 *a)
+{
+    return rx_acc_move(ctx, a->r, 1, 1, true);
+}
+
+static bool trans_MVTACLO_A1(DisasContext *ctx, arg_MVTACLO_A1 *a)
+{
+    return rx_acc_move(ctx, a->r, 1, 0, true);
+}
+
+static bool trans_MVTACGU(DisasContext *ctx, arg_MVTACGU *a)
+{
+    return rx_acc_move(ctx, a->r, a->a, 2, true);
+}
+
+static bool trans_MVFACHI_A1(DisasContext *ctx, arg_MVFACHI_A1 *a)
+{
+    return rx_acc_move(ctx, a->r, 1, 1, false);
+}
+
+static bool trans_MVFACLO(DisasContext *ctx, arg_MVFACLO *a)
+{
+    return rx_acc_move(ctx, a->r, a->a, 0, false);
+}
+
+static bool trans_MVFACGU(DisasContext *ctx, arg_MVFACGU *a)
+{
+    return rx_acc_move(ctx, a->r, a->a, 2, false);
+}
+
 /* racw #imm */
 static bool trans_RACW(DisasContext *ctx, arg_RACW *a)
 {

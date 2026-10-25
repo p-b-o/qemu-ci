@@ -207,6 +207,8 @@ typedef struct CPUArchState {
     uint32_t fintv;
     uint32_t fpsw;
     uint64_t acc;
+    uint64_t acc1;
+    uint32_t acc_guard[2]; /* Sign-extended 8-bit RXv2 guard fields. */
 
     /* RXv3 double-precision FPU (DPFPU) */
     uint64_t dr[NUM_DREGS];     /* DR0-DR15 */

@@ -1077,6 +1077,42 @@ static bool trans_MVTACLO(DisasContext *ctx, arg_MVTACLO *a)
     return true;
 }
 
+static bool trans_MVTACHI_A1(DisasContext *ctx, arg_MVTACHI_A1 *a)
+{
+    prt("mvtachi\tr%d, a%d", a->r, 1);
+    return true;
+}
+
+static bool trans_MVTACLO_A1(DisasContext *ctx, arg_MVTACLO_A1 *a)
+{
+    prt("mvtaclo\tr%d, a%d", a->r, 1);
+    return true;
+}
+
+static bool trans_MVTACGU(DisasContext *ctx, arg_MVTACGU *a)
+{
+    prt("mvtacgu\tr%d, a%d", a->r, a->a);
+    return true;
+}
+
+static bool trans_MVFACHI_A1(DisasContext *ctx, arg_MVFACHI_A1 *a)
+{
+    prt("mvfachi\t#0, a%d, r%d", 1, a->r);
+    return true;
+}
+
+static bool trans_MVFACLO(DisasContext *ctx, arg_MVFACLO *a)
+{
+    prt("mvfaclo\t#0, a%d, r%d", a->a, a->r);
+    return true;
+}
+
+static bool trans_MVFACGU(DisasContext *ctx, arg_MVFACGU *a)
+{
+    prt("mvfacgu\t#0, a%d, r%d", a->a, a->r);
+    return true;
+}
+
 /* racw #imm */
 static bool trans_RACW(DisasContext *ctx, arg_RACW *a)
 {
