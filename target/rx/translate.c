@@ -2323,6 +2323,44 @@ static bool trans_DMOV_drhr(DisasContext *ctx, arg_DMOV_drhr *a)
     return true;
 }
 
+/* mvfdc DCRs, rd */
+static bool trans_MVFDC(DisasContext *ctx, arg_MVFDC *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    tcg_gen_mov_i32(cpu_regs[a->rd], cpu_dcregs[a->dcrs]);
+    return true;
+}
+
+/* mvtdc rs, DCRd -- see helper_mvtdc for the per-register write rules */
+static bool trans_MVTDC(DisasContext *ctx, arg_MVTDC *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    gen_helper_mvtdc(tcg_env, tcg_constant_i32(a->dcrd), cpu_regs[a->rs]);
+    return true;
+}
+
+/*
+ * mvfdr -- Z = DCMR.RES. Moves the result of the last DCMP into the PSW Z
+ * flag so it can be branched on; no other flag and no DPSW bit changes.
+ *
+ * psw_z holds the inverse of the architectural Z flag (Z is set when psw_z
+ * reads zero), so the RES bit is inverted on the way in.
+ */
+static bool trans_MVFDR(DisasContext *ctx, arg_MVFDR *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    tcg_gen_extract_i32(cpu_psw_z, cpu_dcregs[RX_DCR_DCMR],
+                        RX_DCMR_RES_BIT, 1);
+    tcg_gen_xori_i32(cpu_psw_z, cpu_psw_z, 1);
+    return true;
+}
+
 static void rx_bsetm(DisasContext *ctx, TCGv_i32 mem, TCGv_i32 mask)
 {
     TCGv_i32 val;

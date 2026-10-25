@@ -403,6 +403,37 @@ float64 helper_ftod(CPURXState *env, float32 t0)
     return ret;
 }
 
+/*
+ * mvtdc rs, DCRd. Not a plain register write: the DC* cause bits in DPSW
+ * clear on a written 0 and keep their value on a written 1, DFS is a
+ * read-only summary, DCMR holds only RES, and DEPC is read-only.
+ */
+void helper_mvtdc(CPURXState *env, uint32_t reg, uint32_t val)
+{
+    uint32_t old, dpsw;
+
+    switch (reg) {
+    case RX_DCR_DPSW:
+        old = env->dcr[RX_DCR_DPSW];
+        dpsw = val & RX_DPSW_WRITE_MASK;
+        dpsw = (dpsw & ~RX_DPSW_CAUSE_MASK)
+             | (old & val & RX_DPSW_CAUSE_MASK);
+        dpsw = FIELD_DP32(dpsw, DPSW, DFS,
+                          FIELD_EX32(dpsw, DPSW, FLAGS) != 0);
+        env->dcr[RX_DCR_DPSW] = dpsw;
+        break;
+    case RX_DCR_DCMR:
+        env->dcr[RX_DCR_DCMR] = val & RX_DCMR_WRITE_MASK;
+        break;
+    case RX_DCR_DECNT:
+        env->dcr[RX_DCR_DECNT] = val & (R_DECNT_EHM_MASK | R_DECNT_EHS_MASK);
+        break;
+    default:
+        /* DEPC is read-only. */
+        break;
+    }
+}
+
 void helper_rx_fcmp(CPURXState *env, float32 t0, float32 t1)
 {
     int st;

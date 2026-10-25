@@ -1368,6 +1368,24 @@ static bool trans_DMOV_drhr(DisasContext *ctx, arg_DMOV_drhr *a)
     return true;
 }
 
+static bool trans_MVFDC(DisasContext *ctx, arg_MVFDC *a)
+{
+    prt("mvfdc\t%s, r%d", dcrname[a->dcrs & 3], a->rd);
+    return true;
+}
+
+static bool trans_MVTDC(DisasContext *ctx, arg_MVTDC *a)
+{
+    prt("mvtdc\tr%d, %s", a->rs, dcrname[a->dcrd & 3]);
+    return true;
+}
+
+static bool trans_MVFDR(DisasContext *ctx, arg_MVFDR *a)
+{
+    prt("mvfdr");
+    return true;
+}
+
 #define BOP_IM(name, reg)                                       \
     do {                                                        \
         char dsp[8];                                            \
