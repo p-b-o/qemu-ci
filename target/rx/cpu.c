@@ -105,6 +105,8 @@ static void rx_cpu_reset_hold(Object *obj, ResetType type)
     env->regs[0] = env->isp = env->usp = 0;
     env->extb = 0xffffff80;
     env->fpsw = 0;
+    /* DECNT comes out of reset with EHM set; the rest of DPSW is zero. */
+    env->dcr[RX_DCR_DECNT] = RX_DECNT_RESET;
     set_flush_to_zero(1, &env->fp_status);
     set_flush_inputs_to_zero(1, &env->fp_status);
     /*
@@ -124,6 +126,17 @@ static void rx_cpu_reset_hold(Object *obj, ResetType type)
      * be the correct setting.
      */
     set_float_ftz_detection(float_ftz_before_rounding, &env->fp_status);
+
+    /*
+     * The DPFPU keeps its own softfloat state: DPSW carries a separate
+     * rounding mode (DRM) and denormal setting (DDN) from the FPSW. The
+     * NaN and denormal conventions match the single-precision unit.
+     */
+    set_flush_to_zero(1, &env->dp_status);
+    set_flush_inputs_to_zero(1, &env->dp_status);
+    set_float_2nan_prop_rule(float_2nan_prop_x87, &env->dp_status);
+    set_float_default_nan_pattern(0b01000000, &env->dp_status);
+    set_float_ftz_detection(float_ftz_before_rounding, &env->dp_status);
 }
 
 static ObjectClass *rx_cpu_class_by_name(const char *cpu_model)

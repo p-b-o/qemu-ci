@@ -70,6 +70,9 @@ static TCGv_i32 cpu_psw_i, cpu_psw_pm, cpu_psw_u, cpu_psw_ipl;
 static TCGv_i32 cpu_usp, cpu_fpsw, cpu_bpsw, cpu_bpc, cpu_isp;
 static TCGv_i32 cpu_fintv, cpu_intb, cpu_extb, cpu_pc;
 static TCGv_i64 cpu_acc;
+/* RXv3 DPFPU state */
+static TCGv_i64 cpu_dregs[NUM_DREGS];
+static TCGv_i32 cpu_dcregs[NUM_DCREGS];
 
 #define cpu_sp cpu_regs[0]
 
@@ -151,6 +154,15 @@ void rx_cpu_dump_state(CPUState *cs, FILE *f, int flags)
         qemu_fprintf(f, "r%d=0x%08x r%d=0x%08x r%d=0x%08x r%d=0x%08x\n",
                      i, env->regs[i], i + 1, env->regs[i + 1],
                      i + 2, env->regs[i + 2], i + 3, env->regs[i + 3]);
+    }
+    if (RX_CPU_GET_CLASS(cs)->isa_version >= RX_ISA_V3) {
+        for (i = 0; i < NUM_DREGS; i += 2) {
+            qemu_fprintf(f, "dr%d=0x%016" PRIx64 " dr%d=0x%016" PRIx64 "\n",
+                         i, env->dr[i], i + 1, env->dr[i + 1]);
+        }
+        qemu_fprintf(f, "dpsw=0x%08x dcmr=0x%08x decnt=0x%08x depc=0x%08x\n",
+                     env->dcr[RX_DCR_DPSW], env->dcr[RX_DCR_DCMR],
+                     env->dcr[RX_DCR_DECNT], env->dcr[RX_DCR_DEPC]);
     }
 }
 
@@ -2317,4 +2329,19 @@ void rx_translate_init(void)
     ALLOC_REGISTER(extb, "EXTB");
     cpu_acc = tcg_global_mem_new_i64(tcg_env,
                                      offsetof(CPURXState, acc), "ACC");
+
+    for (i = 0; i < NUM_DREGS; i++) {
+        g_autofree char *name = g_strdup_printf("DR%d", i);
+        cpu_dregs[i] = tcg_global_mem_new_i64(tcg_env,
+                                              offsetof(CPURXState, dr[i]),
+                                              name);
+    }
+    for (i = 0; i < NUM_DCREGS; i++) {
+        static const char * const dcrnames[NUM_DCREGS] = {
+            "DPSW", "DCMR", "DECNT", "DEPC"
+        };
+        cpu_dcregs[i] = tcg_global_mem_new_i32(tcg_env,
+                                               offsetof(CPURXState, dcr[i]),
+                                               dcrnames[i]);
+    }
 }
