@@ -276,3 +276,6 @@ config RENESAS_RX_ROMCACHE
 
 config RENESAS_RX_FCU
     bool
+
+config RX65N_SYSCLK
+    bool

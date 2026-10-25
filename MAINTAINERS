@@ -3089,6 +3089,7 @@ F: hw/intc/rx_icu.c
 F: hw/misc/renesas_rx_*.c
 F: hw/misc/renesas_rx_romcache.c
 F: hw/misc/renesas_rx_fcu.c
+F: hw/misc/rx65n_sysclk.c
 F: hw/rtc/renesas_rx_rtc.c
 F: hw/rx/
 F: hw/ssi/renesas_rspi.c
@@ -3101,6 +3102,7 @@ F: include/hw/intc/rx_icu.h
 F: include/hw/misc/renesas_rx_*.h
 F: include/hw/misc/renesas_rx_romcache.h
 F: include/hw/misc/renesas_rx_fcu.h
+F: include/hw/misc/rx65n_sysclk.h
 F: include/hw/rtc/renesas_rx_rtc.h
 F: include/hw/rx/
 F: include/hw/ssi/renesas_rspi.h
