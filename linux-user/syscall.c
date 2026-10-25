@@ -3093,8 +3093,13 @@ static struct iovec *lock_iovec(int type, abi_ulong target_addr,
     bool bad_address = false;
 
     if (count == 0) {
-        errno = 0;
-        return NULL;
+        /*
+         * The kernel validates the file descriptor before it looks at the
+         * vector, so readv(fd, NULL, 0) on a read-only fd fails with EBADF
+         * rather than returning 0.  Hand back an empty vector so that the
+         * caller issues the syscall and the host reports the real error.
+         */
+        return g_new0(struct iovec, 1);
     }
     if (count > IOV_MAX) {
         errno = EINVAL;
