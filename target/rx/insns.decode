@@ -42,6 +42,8 @@
 &rdcr		rd dcrs
 &dcrr		dcrd rs
 &dmovi		drd imm
+&dmovst		rd ld
+&dmovld		rs ld
 ########
 %b1_bdsp	24:3 !function=bdsp_s
 
@@ -705,3 +707,9 @@ DMOV_drhr	1111 1101 0111 0101 1000 rd:4 drs:4 0010	&rdrh
 MVFDC		1111 1101 0111 0101 1000 rd:4 dcrs:4 0100	&rdcr
 MVTDC		1111 1101 0111 0111 1000 rs:4 dcrd:4 0100	&dcrr
 MVFDR		0111 0101 1001 0000 0001 1011
+
+# DMOV.D DRs, dsp[Rd] / DMOV.D dsp[Rs], DRd.
+# The DR register is supplied by a trailing post-byte that follows the
+# displacement, so it is read during translation rather than by decodetree.
+DMOV_mst	1111 1100 0111 10 ld:2 rd:4 1000		&dmovst
+DMOV_mld	1111 1100 1100 10 ld:2 rs:4 1000		&dmovld

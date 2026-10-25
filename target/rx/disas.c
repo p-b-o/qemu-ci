@@ -1410,6 +1410,65 @@ static bool trans_DMOVD_irh(DisasContext *ctx, arg_DMOVD_irh *a)
     return true;
 }
 
+/* Fetch n more instruction bytes into the dump buffer and return them. */
+static uint32_t disas_fetch(DisasContext *ctx, int n)
+{
+    uint32_t addr = ctx->addr;
+    uintptr_t len = ctx->len;
+    uint32_t val = 0;
+    int i;
+
+    g_assert(len + n <= ARRAY_SIZE(ctx->bytes));
+    ctx->addr += n;
+    ctx->len += n;
+    ctx->dis->read_memory_func(addr, ctx->bytes + len, n, ctx->dis);
+    for (i = n - 1; i >= 0; i--) {
+        val = (val << 8) | ctx->bytes[len + i];
+    }
+    return val;
+}
+
+/*
+ * DMOV.D displacements are scaled by 4 (see the note in translate.c), which
+ * rx_index_addr() cannot express, so decode them here.
+ */
+static void dmov_index_addr(DisasContext *ctx, char out[12], int ld)
+{
+    if (ld == 0) {
+        out[0] = '\0';
+        return;
+    }
+    snprintf(out, 12, "%u", disas_fetch(ctx, ld) << 2);
+}
+
+/* The DR operand of the DMOV.D memory forms sits in a trailing post-byte. */
+static int dmov_postbyte(DisasContext *ctx)
+{
+    return disas_fetch(ctx, 1) >> 4;
+}
+
+static bool trans_DMOV_mst(DisasContext *ctx, arg_DMOV_mst *a)
+{
+    char dsp[12];
+    int dr;
+
+    dmov_index_addr(ctx, dsp, a->ld);
+    dr = dmov_postbyte(ctx);
+    prt("dmov.d\tdr%d, %s[r%d]", dr, dsp, a->rd);
+    return true;
+}
+
+static bool trans_DMOV_mld(DisasContext *ctx, arg_DMOV_mld *a)
+{
+    char dsp[12];
+    int dr;
+
+    dmov_index_addr(ctx, dsp, a->ld);
+    dr = dmov_postbyte(ctx);
+    prt("dmov.d\t%s[r%d], dr%d", dsp, a->rs, dr);
+    return true;
+}
+
 #define BOP_IM(name, reg)                                       \
     do {                                                        \
         char dsp[8];                                            \
