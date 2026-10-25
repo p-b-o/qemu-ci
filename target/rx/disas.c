@@ -1309,6 +1309,35 @@ static bool trans_FTOD(DisasContext *ctx, arg_FTOD *a)
     return true;
 }
 
+static bool trans_DPUSHM(DisasContext *ctx, arg_DPUSHM *a)
+{
+    prt("dpushm.d\tdr%d-dr%d", a->drd, a->drd + a->rnum);
+    return true;
+}
+
+static bool trans_DPOPM(DisasContext *ctx, arg_DPOPM *a)
+{
+    prt("dpopm.d\tdr%d-dr%d", a->drd, a->drd + a->rnum);
+    return true;
+}
+
+/* RXv3 disassembly: remaining DPFPU, bit field and register bank ops */
+static const char dcrname[][6] = { "dpsw", "dcmr", "decnt", "depc" };
+
+static bool trans_DPUSHM_l(DisasContext *ctx, arg_DPUSHM_l *a)
+{
+    prt("dpushm.l\t%s-%s", dcrname[a->dcrd & 3],
+        dcrname[(a->dcrd + a->rnum) & 3]);
+    return true;
+}
+
+static bool trans_DPOPM_l(DisasContext *ctx, arg_DPOPM_l *a)
+{
+    prt("dpopm.l\t%s-%s", dcrname[a->dcrd & 3],
+        dcrname[(a->dcrd + a->rnum) & 3]);
+    return true;
+}
+
 #define BOP_IM(name, reg)                                       \
     do {                                                        \
         char dsp[8];                                            \

@@ -2175,6 +2175,81 @@ static bool trans_FTOD(DisasContext *ctx, arg_FTOD *a)
     return true;
 }
 
+/*
+ * dpushm.d DRn-DRm / dpopm.d DRn-DRm.
+ * The encoded rnum field holds (last - first), so the range covers
+ * rnum + 1 registers. Pushes run from the highest register down so that
+ * the lowest-numbered register ends up at the lowest address.
+ */
+static bool trans_DPUSHM(DisasContext *ctx, arg_DPUSHM *a)
+{
+    int i;
+
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    for (i = a->drd + a->rnum; i >= a->drd; i--) {
+        TCGv_i32 hi = tcg_temp_new_i32();
+        TCGv_i32 lo = tcg_temp_new_i32();
+        tcg_gen_extr_i64_i32(lo, hi, cpu_dregs[i & (NUM_DREGS - 1)]);
+        tcg_gen_subi_i32(cpu_sp, cpu_sp, 4);
+        rx_gen_st(ctx, MO_32, hi, cpu_sp);
+        tcg_gen_subi_i32(cpu_sp, cpu_sp, 4);
+        rx_gen_st(ctx, MO_32, lo, cpu_sp);
+    }
+    return true;
+}
+
+static bool trans_DPOPM(DisasContext *ctx, arg_DPOPM *a)
+{
+    int i;
+
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    for (i = a->drd; i <= a->drd + a->rnum; i++) {
+        TCGv_i64 dr = tcg_temp_new_i64();
+        TCGv_i32 hi = tcg_temp_new_i32();
+        TCGv_i32 lo = tcg_temp_new_i32();
+        rx_gen_ld(ctx, MO_32, lo, cpu_sp);
+        tcg_gen_addi_i32(cpu_sp, cpu_sp, 4);
+        rx_gen_ld(ctx, MO_32, hi, cpu_sp);
+        tcg_gen_addi_i32(cpu_sp, cpu_sp, 4);
+        tcg_gen_concat_i32_i64(dr, lo, hi);
+        tcg_gen_mov_i64(cpu_dregs[i & (NUM_DREGS - 1)], dr);
+    }
+    return true;
+}
+
+/* dpushm.l DCRn-DCRm / dpopm.l DCRn-DCRm (DPFPU control registers) */
+static bool trans_DPUSHM_l(DisasContext *ctx, arg_DPUSHM_l *a)
+{
+    int i;
+
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    for (i = a->dcrd + a->rnum; i >= a->dcrd; i--) {
+        tcg_gen_subi_i32(cpu_sp, cpu_sp, 4);
+        rx_gen_st(ctx, MO_32, cpu_dcregs[i & (NUM_DCREGS - 1)], cpu_sp);
+    }
+    return true;
+}
+
+static bool trans_DPOPM_l(DisasContext *ctx, arg_DPOPM_l *a)
+{
+    int i;
+
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    for (i = a->dcrd; i <= a->dcrd + a->rnum; i++) {
+        rx_gen_ld(ctx, MO_32, cpu_dcregs[i & (NUM_DCREGS - 1)], cpu_sp);
+        tcg_gen_addi_i32(cpu_sp, cpu_sp, 4);
+    }
+    return true;
+}
+
 static void rx_bsetm(DisasContext *ctx, TCGv_i32 mem, TCGv_i32 mask)
 {
     TCGv_i32 val;

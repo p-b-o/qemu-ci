@@ -34,6 +34,8 @@
 &drrr		drd drs1 drs2
 &dcmpd		drs1 drs2 cd
 &idr		rs drd
+&dppm		drd rnum
+&dcppm		dcrd rnum
 ########
 %b1_bdsp	24:3 !function=bdsp_s
 
@@ -665,3 +667,10 @@ DTOF		0111 0110 1001 0000 drs:4 1101 drd:4 1100	&drr
 ITOD		1111 1101 0111 0111 1000 rs:4 drd:4 1001	&idr
 FTOD		1111 1101 0111 0111 1000 rs:4 drd:4 1010	&idr
 UTOD		1111 1101 0111 0111 1000 rs:4 drd:4 1101	&idr
+
+# DPUSHM.D/DPOPM.D: push/pop range of DR registers (3-byte: 0x75 prefix)
+DPUSHM		0111 0101 1011 0000 drd:4 rnum:4		&dppm
+DPOPM		0111 0101 1011 1000 drd:4 rnum:4		&dppm
+# DPUSHM.L/DPOPM.L: same, for the DPFPU control registers
+DPUSHM_l	0111 0101 1010 0000 dcrd:4 rnum:4		&dcppm
+DPOPM_l		0111 0101 1010 1000 dcrd:4 rnum:4		&dcppm
