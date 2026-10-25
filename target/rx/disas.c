@@ -1386,6 +1386,30 @@ static bool trans_MVFDR(DisasContext *ctx, arg_MVFDR *a)
     return true;
 }
 
+static bool trans_DMOVL_irl(DisasContext *ctx, arg_DMOVL_irl *a)
+{
+    uint32_t imm = li(ctx, 0);
+
+    prt("dmov.l\t#0x%08x, drl%d", imm, a->drd);
+    return true;
+}
+
+static bool trans_DMOVL_irh(DisasContext *ctx, arg_DMOVL_irh *a)
+{
+    uint32_t imm = li(ctx, 0);
+
+    prt("dmov.l\t#0x%08x, drh%d", imm, a->drd);
+    return true;
+}
+
+static bool trans_DMOVD_irh(DisasContext *ctx, arg_DMOVD_irh *a)
+{
+    uint32_t imm = li(ctx, 0);
+
+    prt("dmov.d\t#0x%08x, drh%d", imm, a->drd);
+    return true;
+}
+
 #define BOP_IM(name, reg)                                       \
     do {                                                        \
         char dsp[8];                                            \

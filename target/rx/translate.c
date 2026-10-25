@@ -2361,6 +2361,36 @@ static bool trans_MVFDR(DisasContext *ctx, arg_MVFDR *a)
     return true;
 }
 
+/* dmov.l #imm32, DRLd */
+static bool trans_DMOVL_irl(DisasContext *ctx, arg_DMOVL_irl *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    drl_write(a->drd, tcg_constant_i32(li(ctx, 0)));
+    return true;
+}
+
+/* dmov.l #imm32, DRHd */
+static bool trans_DMOVL_irh(DisasContext *ctx, arg_DMOVL_irh *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    drh_write(a->drd, tcg_constant_i32(li(ctx, 0)));
+    return true;
+}
+
+/* dmov.d #imm32, DRHd -- set the high half, clear the low half */
+static bool trans_DMOVD_irh(DisasContext *ctx, arg_DMOVD_irh *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    tcg_gen_movi_i64(cpu_dregs[a->drd], (uint64_t)li(ctx, 0) << 32);
+    return true;
+}
+
 static void rx_bsetm(DisasContext *ctx, TCGv_i32 mem, TCGv_i32 mask)
 {
     TCGv_i32 val;
