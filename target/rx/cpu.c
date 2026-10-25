@@ -103,6 +103,7 @@ static void rx_cpu_reset_hold(Object *obj, ResetType type)
     }
     rx_cpu_unpack_psw(env, 0, 1);
     env->regs[0] = env->isp = env->usp = 0;
+    env->extb = 0xffffff80;
     env->fpsw = 0;
     set_flush_to_zero(1, &env->fp_status);
     set_flush_inputs_to_zero(1, &env->fp_status);

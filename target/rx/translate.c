@@ -50,7 +50,7 @@ const char *rx_crname(uint8_t cr)
 {
     static const char *cr_names[] = {
         "psw", "pc", "usp", "fpsw", "", "", "", "",
-        "bpsw", "bpc", "isp", "fintv", "intb", "", "", ""
+        "bpsw", "bpc", "isp", "fintv", "intb", "extb", "", ""
     };
     if (cr >= ARRAY_SIZE(cr_names)) {
         return "illegal";
@@ -68,7 +68,7 @@ static TCGv_i32 cpu_regs[16];
 static TCGv_i32 cpu_psw_o, cpu_psw_s, cpu_psw_z, cpu_psw_c;
 static TCGv_i32 cpu_psw_i, cpu_psw_pm, cpu_psw_u, cpu_psw_ipl;
 static TCGv_i32 cpu_usp, cpu_fpsw, cpu_bpsw, cpu_bpc, cpu_isp;
-static TCGv_i32 cpu_fintv, cpu_intb, cpu_pc;
+static TCGv_i32 cpu_fintv, cpu_intb, cpu_extb, cpu_pc;
 static TCGv_i64 cpu_acc;
 
 #define cpu_sp cpu_regs[0]
@@ -361,6 +361,9 @@ static void move_from_cr(DisasContext *ctx, TCGv_i32 ret, int cr, uint32_t pc)
     case 12:    /* INTB */
         tcg_gen_mov_i32(ret, cpu_intb);
         break;
+    case 13:    /* EXTB */
+        tcg_gen_mov_i32(ret, cpu_extb);
+        break;
     default:
         qemu_log_mask(LOG_GUEST_ERROR, "Unimplement control register %d", cr);
         /* Unimplement registers return 0 */
@@ -414,6 +417,9 @@ static void move_to_cr(DisasContext *ctx, TCGv_i32 val, int cr)
         break;
     case 12:    /* INTB */
         tcg_gen_mov_i32(cpu_intb, val);
+        break;
+    case 13:    /* EXTB */
+        tcg_gen_mov_i32(cpu_extb, val);
         break;
     default:
         qemu_log_mask(LOG_GUEST_ERROR,
@@ -2308,6 +2314,7 @@ void rx_translate_init(void)
     ALLOC_REGISTER(isp, "ISP");
     ALLOC_REGISTER(fintv, "FINTV");
     ALLOC_REGISTER(intb, "INTB");
+    ALLOC_REGISTER(extb, "EXTB");
     cpu_acc = tcg_global_mem_new_i64(tcg_env,
                                      offsetof(CPURXState, acc), "ACC");
 }

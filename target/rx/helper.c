@@ -120,7 +120,7 @@ void rx_cpu_do_interrupt(CPUState *cs)
         if (vec >= RX_EXCP_TRAP_BASE) {
             env->pc = cpu_ldl_le_data(env, env->intb + (vec & 0xff) * 4);
         } else {
-            env->pc = cpu_ldl_le_data(env, 0xffffff80 + vec * 4);
+            env->pc = cpu_ldl_le_data(env, env->extb + vec * 4);
         }
 
         if (vec == RX_EXCP_NMI) {

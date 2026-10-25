@@ -112,6 +112,7 @@ typedef struct CPUArchState {
     uint32_t usp;               /* vector base register */
     uint32_t pc;                /* program counter */
     uint32_t intb;              /* interrupt vector */
+    uint32_t extb;              /* exception vector table base */
     uint32_t fintv;
     uint32_t fpsw;
     uint64_t acc;
