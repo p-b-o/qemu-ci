@@ -2501,6 +2501,48 @@ static bool trans_BFMOVZ(DisasContext *ctx, arg_BFMOVZ *a)
     return bfmov_common(ctx, a->rd, a->rs, true);
 }
 
+/*
+ * save / rstr -- the RXv3 register bank save function. A bank holds R1-R15,
+ * the USP, the FPSW and the accumulator; the banks are internal CPU state
+ * that nothing but these two instructions can reach, so no memory traffic
+ * is involved.
+ */
+static bool trans_SAVE_i(DisasContext *ctx, arg_SAVE_i *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    gen_helper_save(tcg_env, tcg_constant_i32(a->imm));
+    return true;
+}
+
+static bool trans_SAVE_r(DisasContext *ctx, arg_SAVE_r *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    gen_helper_save(tcg_env, cpu_regs[a->rs]);
+    return true;
+}
+
+static bool trans_RSTR_i(DisasContext *ctx, arg_RSTR_i *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    gen_helper_rstr(tcg_env, tcg_constant_i32(a->imm));
+    return true;
+}
+
+static bool trans_RSTR_r(DisasContext *ctx, arg_RSTR_r *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    gen_helper_rstr(tcg_env, cpu_regs[a->rs]);
+    return true;
+}
+
 static void rx_bsetm(DisasContext *ctx, TCGv_i32 mem, TCGv_i32 mask)
 {
     TCGv_i32 val;

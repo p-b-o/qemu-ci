@@ -121,6 +121,65 @@ static void update_fpsw(CPURXState *env, float32 ret, uintptr_t retaddr)
     }
 }
 
+/*
+ * RXv3 register bank save function. SAVE copies R1-R15, the USP, the FPSW
+ * and the accumulator into the selected save register bank; RSTR copies them
+ * back. R0 is deliberately excluded: the stack pointer is not banked.
+ *
+ * The banks are internal CPU state that only these two instructions can
+ * reach, so there is no memory layout to model. How many banks a part
+ * provides is implementation defined and comes from the CPU model.
+ */
+static RXSaveBank *rx_save_bank(CPURXState *env, uint32_t bank,
+                                const char *insn)
+{
+    uint32_t n = RX_CPU_GET_CLASS(env_cpu(env))->num_save_banks;
+
+    if (bank >= n) {
+        qemu_log_mask(LOG_GUEST_ERROR,
+                      "rx: %s with out of range bank %u (this CPU has %u)\n",
+                      insn, bank, n);
+        return NULL;
+    }
+    return &env->bank[bank];
+}
+
+void helper_save(CPURXState *env, uint32_t bank)
+{
+    RXSaveBank *b = rx_save_bank(env, bank, "save");
+    int i;
+
+    if (!b) {
+        return;
+    }
+    for (i = 1; i < NUM_REGS; i++) {
+        b->regs[i] = env->regs[i];
+    }
+    b->usp = env->psw_u ? env->regs[0] : env->usp;
+    b->fpsw = env->fpsw;
+    b->acc = env->acc;
+}
+
+void helper_rstr(CPURXState *env, uint32_t bank)
+{
+    RXSaveBank *b = rx_save_bank(env, bank, "rstr");
+    int i;
+
+    if (!b) {
+        return;
+    }
+    for (i = 1; i < NUM_REGS; i++) {
+        env->regs[i] = b->regs[i];
+    }
+    if (env->psw_u) {
+        env->regs[0] = b->usp;
+    } else {
+        env->usp = b->usp;
+    }
+    env->fpsw = b->fpsw;
+    env->acc = b->acc;
+}
+
 void helper_set_fpsw(CPURXState *env, uint32_t val)
 {
     static const int roundmode[] = {

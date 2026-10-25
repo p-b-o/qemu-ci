@@ -46,6 +46,9 @@
 &dmovld		rs ld
 # RXv3 bit field move
 &bfm		rd rs
+# RXv3 register bank save/restore
+&svr		rs
+&svi		imm
 ########
 %b1_bdsp	24:3 !function=bdsp_s
 
@@ -720,3 +723,10 @@ DMOV_mld	1111 1100 1100 10 ld:2 rs:4 1000		&dmovld
 # RXv3: bit field move. The 16-bit field descriptor follows the opcode.
 BFMOVZ		1111 1100 0101 1010 rs:4 rd:4			&bfm
 BFMOV		1111 1100 0101 1110 rs:4 rd:4			&bfm
+
+########
+# RXv3: register bank save and restore
+SAVE_r		1111 1101 0111 0110 1100 rs:4 0000 0000		&svr
+RSTR_r		1111 1101 0111 0110 1101 rs:4 0000 0000		&svr
+SAVE_i		1111 1101 0111 0110 1110 0000 imm:8		&svi
+RSTR_i		1111 1101 0111 0110 1111 0000 imm:8		&svi

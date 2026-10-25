@@ -116,6 +116,15 @@ enum {
     NUM_DREGS = 16,
     /* RXv3 DPFPU control registers: DPSW, DCMR, DECNT, DEPC. */
     NUM_DCREGS = 4,
+    /*
+     * RXv3 register bank save function. The banks are internal CPU state
+     * reachable only through the SAVE and RSTR instructions, so no memory
+     * layout is involved. How many banks exist is implementation defined,
+     * so the per-model count lives in RXCPUClass::num_save_banks and this
+     * is only the storage ceiling. RX72M/RX72N/RX72T provide 16, selected
+     * by bank numbers 0-15.
+     */
+    RX_MAX_SAVE_BANKS = 16,
 };
 
 #define RX_EXCP_TRAP_COUNT          0x100
@@ -165,6 +174,18 @@ typedef enum RXISAVersion {
     RX_ISA_V3 = 3,
 } RXISAVersion;
 
+/*
+ * One save register bank, written by SAVE and read back by RSTR. A bank
+ * holds R1-R15 (R0/SP is excluded), the USP, the FPSW and the accumulators.
+ * QEMU models a single accumulator, so only ACC0 is covered here.
+ */
+typedef struct RXSaveBank {
+    uint32_t regs[NUM_REGS];    /* [0] unused: R0 is not banked */
+    uint32_t usp;
+    uint32_t fpsw;
+    uint64_t acc;
+} RXSaveBank;
+
 typedef struct CPUArchState {
     /* CPU registers */
     uint32_t regs[NUM_REGS];    /* general registers */
@@ -190,6 +211,9 @@ typedef struct CPUArchState {
     /* RXv3 double-precision FPU (DPFPU) */
     uint64_t dr[NUM_DREGS];     /* DR0-DR15 */
     uint32_t dcr[NUM_DCREGS];   /* DPSW, DCMR, DECNT, DEPC */
+
+    /* RXv3 register bank save function (SAVE/RSTR) */
+    RXSaveBank bank[RX_MAX_SAVE_BANKS];
 
     /* Fields up to this point are cleared by a CPU reset */
     struct {} end_reset_fields;

@@ -1495,6 +1495,30 @@ static bool trans_BFMOVZ(DisasContext *ctx, arg_BFMOVZ *a)
     return true;
 }
 
+static bool trans_SAVE_r(DisasContext *ctx, arg_SAVE_r *a)
+{
+    prt("save\tr%d", a->rs);
+    return true;
+}
+
+static bool trans_SAVE_i(DisasContext *ctx, arg_SAVE_i *a)
+{
+    prt("save\t#%d", a->imm);
+    return true;
+}
+
+static bool trans_RSTR_r(DisasContext *ctx, arg_RSTR_r *a)
+{
+    prt("rstr\tr%d", a->rs);
+    return true;
+}
+
+static bool trans_RSTR_i(DisasContext *ctx, arg_RSTR_i *a)
+{
+    prt("rstr\t#%d", a->imm);
+    return true;
+}
+
 #define BOP_IM(name, reg)                                       \
     do {                                                        \
         char dsp[8];                                            \
