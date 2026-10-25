@@ -3083,8 +3083,10 @@ R: Yoshinori Sato <yoshinori.sato@nifty.com>
 S: Orphan
 F: hw/intc/rx_icu.c
 F: hw/rx/
+F: hw/timer/renesas_mtu3.c
 F: include/hw/intc/rx_icu.h
 F: include/hw/rx/
+F: include/hw/timer/renesas_mtu3.h
 
 CAN bus subsystem and hardware
 M: Pavel Pisa <pisa@cmp.felk.cvut.cz>
