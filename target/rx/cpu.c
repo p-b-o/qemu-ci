@@ -256,6 +256,32 @@ static void rx_cpu_class_init(ObjectClass *klass, const void *data)
 
     cc->gdb_core_xml_file = "rx-core.xml";
     cc->tcg_ops = &rx_tcg_ops;
+
+    /*
+     * Base of the hierarchy: the abstract type is never instantiated, so
+     * this only provides a conservative default for models that forget to
+     * declare their revision.
+     */
+    rcc->isa_version = RX_ISA_V1;
+}
+
+static void rx62n_cpu_class_init(ObjectClass *klass, const void *data)
+{
+    RX_CPU_CLASS(klass)->isa_version = RX_ISA_V1;
+}
+
+static void rx65n_cpu_class_init(ObjectClass *klass, const void *data)
+{
+    RX_CPU_CLASS(klass)->isa_version = RX_ISA_V2;
+}
+
+static void rx72m_cpu_class_init(ObjectClass *klass, const void *data)
+{
+    RXCPUClass *rcc = RX_CPU_CLASS(klass);
+
+    rcc->isa_version = RX_ISA_V3;
+    /* RX72M provides 16 save register banks, selected by bank numbers 0-15. */
+    rcc->num_save_banks = 16;
 }
 
 static const TypeInfo rx_cpu_info = {
@@ -272,12 +298,27 @@ static const TypeInfo rx_cpu_info = {
 static const TypeInfo rx62n_rx_cpu_info = {
     .name = TYPE_RX62N_CPU,
     .parent = TYPE_RX_CPU,
+    .class_init = rx62n_cpu_class_init,
+};
+
+static const TypeInfo rx65n_rx_cpu_info = {
+    .name = TYPE_RX65N_CPU,
+    .parent = TYPE_RX_CPU,
+    .class_init = rx65n_cpu_class_init,
+};
+
+static const TypeInfo rx72m_rx_cpu_info = {
+    .name = TYPE_RX72M_CPU,
+    .parent = TYPE_RX_CPU,
+    .class_init = rx72m_cpu_class_init,
 };
 
 static void rx_cpu_register_types(void)
 {
     type_register_static(&rx_cpu_info);
     type_register_static(&rx62n_rx_cpu_info);
+    type_register_static(&rx65n_rx_cpu_info);
+    type_register_static(&rx72m_rx_cpu_info);
 }
 
 type_init(rx_cpu_register_types)

@@ -84,6 +84,17 @@ enum {
 
 #define RX_EXCP_COUNT   (RX_EXCP_TRAP_BASE + RX_EXCP_TRAP_COUNT)
 
+/*
+ * Instruction set architecture revision implemented by a CPU model.
+ * Later revisions are supersets of earlier ones, so instruction gating is a
+ * simple >= comparison.
+ */
+typedef enum RXISAVersion {
+    RX_ISA_V1 = 1,
+    RX_ISA_V2 = 2,
+    RX_ISA_V3 = 3,
+} RXISAVersion;
+
 typedef struct CPUArchState {
     /* CPU registers */
     uint32_t regs[NUM_REGS];    /* general registers */
@@ -142,6 +153,15 @@ struct RXCPUClass {
 
     DeviceRealize parent_realize;
     ResettablePhases parent_phases;
+
+    /* Instruction set revision this model implements. */
+    RXISAVersion isa_version;
+
+    /*
+     * Number of save register banks reachable by SAVE/RSTR, or 0 on models
+     * without the register bank save function.
+     */
+    uint32_t num_save_banks;
 };
 
 #define CPU_RESOLVING_TYPE TYPE_RX_CPU

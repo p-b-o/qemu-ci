@@ -37,6 +37,7 @@ typedef struct DisasContext {
     CPURXState *env;
     uint32_t pc;
     uint32_t tb_flags;
+    RXISAVersion isa_version;
 } DisasContext;
 
 typedef struct DisasCompare {
@@ -2206,6 +2207,7 @@ static void rx_tr_init_disas_context(DisasContextBase *dcbase, CPUState *cs)
     DisasContext *ctx = container_of(dcbase, DisasContext, base);
     ctx->env = cpu_env(cs);
     ctx->tb_flags = ctx->base.tb->flags;
+    ctx->isa_version = RX_CPU_GET_CLASS(cs)->isa_version;
 }
 
 static void rx_tr_tb_start(DisasContextBase *dcbase, CPUState *cs)
