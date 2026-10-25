@@ -36,3 +36,6 @@ config K230_GSDMA
 
 config RENESAS_RX_DMAC
     bool
+
+config RENESAS_RX_DTC
+    bool
