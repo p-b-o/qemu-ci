@@ -1964,6 +1964,21 @@ static void dr_write(int n, TCGv_i64 val)
     tcg_gen_mov_i64(cpu_dregs[n], val);
 }
 
+/* Write val into the high or low 32-bit half of DRn, preserving the other. */
+static void drh_write(int n, TCGv_i32 val)
+{
+    TCGv_i64 t = tcg_temp_new_i64();
+    tcg_gen_extu_i32_i64(t, val);
+    tcg_gen_deposit_i64(cpu_dregs[n], cpu_dregs[n], t, 32, 32);
+}
+
+static void drl_write(int n, TCGv_i32 val)
+{
+    TCGv_i64 t = tcg_temp_new_i64();
+    tcg_gen_extu_i32_i64(t, val);
+    tcg_gen_deposit_i64(cpu_dregs[n], cpu_dregs[n], t, 0, 32);
+}
+
 /* dadd DRdrs1, DRdrd, DRdrs2  (DRdrd = DRdrs1 + DRdrs2) */
 static bool trans_DADD(DisasContext *ctx, arg_DADD *a)
 {
@@ -2247,6 +2262,64 @@ static bool trans_DPOPM_l(DisasContext *ctx, arg_DPOPM_l *a)
         rx_gen_ld(ctx, MO_32, cpu_dcregs[i & (NUM_DCREGS - 1)], cpu_sp);
         tcg_gen_addi_i32(cpu_sp, cpu_sp, 4);
     }
+    return true;
+}
+
+/* dmov.l rs, DRLd  -- write the low half of DRd, preserving the high half */
+static bool trans_DMOV_rdrl(DisasContext *ctx, arg_DMOV_rdrl *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    drl_write(a->drd, cpu_regs[a->rs]);
+    return true;
+}
+
+/* dmov.l rs, DRHd -- write the high half of DRd, preserving the low half */
+static bool trans_DMOV_rdrh(DisasContext *ctx, arg_DMOV_rdrh *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    drh_write(a->drd, cpu_regs[a->rs]);
+    return true;
+}
+
+/*
+ * dmov.d rs, DRHd -- write the high half of DRd and clear the low half.
+ * This is the single-instruction way to materialise a double whose low
+ * word is zero, which covers the common literals (1.0, 0.5, 2.0, ...).
+ */
+static bool trans_DMOVD_rdrh(DisasContext *ctx, arg_DMOVD_rdrh *a)
+{
+    TCGv_i64 t;
+
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    t = tcg_temp_new_i64();
+    tcg_gen_extu_i32_i64(t, cpu_regs[a->rs]);
+    tcg_gen_shli_i64(cpu_dregs[a->drd], t, 32);
+    return true;
+}
+
+/* dmov.l DRLs, rd */
+static bool trans_DMOV_drlr(DisasContext *ctx, arg_DMOV_drlr *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    tcg_gen_extrl_i64_i32(cpu_regs[a->rd], cpu_dregs[a->drs]);
+    return true;
+}
+
+/* dmov.l DRHs, rd */
+static bool trans_DMOV_drhr(DisasContext *ctx, arg_DMOV_drhr *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    tcg_gen_extrh_i64_i32(cpu_regs[a->rd], cpu_dregs[a->drs]);
     return true;
 }
 

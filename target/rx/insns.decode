@@ -36,6 +36,9 @@
 &idr		rs drd
 &dppm		drd rnum
 &dcppm		dcrd rnum
+# RXv3 DPFPU: GPR/control-register/memory/immediate transfers
+&rdrh		rd drs
+&drhr		drd rs
 ########
 %b1_bdsp	24:3 !function=bdsp_s
 
@@ -674,3 +677,15 @@ DPOPM		0111 0101 1011 1000 drd:4 rnum:4		&dppm
 # DPUSHM.L/DPOPM.L: same, for the DPFPU control registers
 DPUSHM_l	0111 0101 1010 0000 dcrd:4 rnum:4		&dcppm
 DPOPM_l		0111 0101 1010 1000 dcrd:4 rnum:4		&dcppm
+
+########
+# RXv3: remaining DPFPU transfers
+#
+# GPR -> DR half (0xFD 0x77 prefix): byte3 low nibble is the source GPR,
+# byte4 high nibble the destination DR.
+DMOV_rdrl	1111 1101 0111 0111 1000 rs:4 drd:4 0000	&drhr
+DMOV_rdrh	1111 1101 0111 0111 1000 rs:4 drd:4 0010	&drhr
+DMOVD_rdrh	1111 1101 0111 0111 1000 rs:4 drd:4 0011	&drhr
+# DR half -> GPR (0xFD 0x75 prefix): byte3 low nibble is the destination GPR.
+DMOV_drlr	1111 1101 0111 0101 1000 rd:4 drs:4 0000	&rdrh
+DMOV_drhr	1111 1101 0111 0101 1000 rd:4 drs:4 0010	&rdrh

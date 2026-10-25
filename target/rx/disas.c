@@ -1338,6 +1338,36 @@ static bool trans_DPOPM_l(DisasContext *ctx, arg_DPOPM_l *a)
     return true;
 }
 
+static bool trans_DMOV_rdrl(DisasContext *ctx, arg_DMOV_rdrl *a)
+{
+    prt("dmov.l\tr%d, drl%d", a->rs, a->drd);
+    return true;
+}
+
+static bool trans_DMOV_rdrh(DisasContext *ctx, arg_DMOV_rdrh *a)
+{
+    prt("dmov.l\tr%d, drh%d", a->rs, a->drd);
+    return true;
+}
+
+static bool trans_DMOVD_rdrh(DisasContext *ctx, arg_DMOVD_rdrh *a)
+{
+    prt("dmov.d\tr%d, drh%d", a->rs, a->drd);
+    return true;
+}
+
+static bool trans_DMOV_drlr(DisasContext *ctx, arg_DMOV_drlr *a)
+{
+    prt("dmov.l\tdrl%d, r%d", a->drs, a->rd);
+    return true;
+}
+
+static bool trans_DMOV_drhr(DisasContext *ctx, arg_DMOV_drhr *a)
+{
+    prt("dmov.l\tdrh%d, r%d", a->drs, a->rd);
+    return true;
+}
+
 #define BOP_IM(name, reg)                                       \
     do {                                                        \
         char dsp[8];                                            \
