@@ -32,3 +32,7 @@ config PNV_SPI
 config ALLWINNER_A10_SPI
     bool
     select SSI
+
+config RENESAS_RSPI
+    bool
+    select SSI
