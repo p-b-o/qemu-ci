@@ -2441,6 +2441,66 @@ static bool trans_DMOV_mld(DisasContext *ctx, arg_DMOV_mld *a)
     return true;
 }
 
+/*
+ * bfmov / bfmovz. The 16-bit field descriptor that follows the opcode packs
+ *   bits  4:0  (dlsb - slsb), as a signed 5-bit value
+ *   bits  9:5  dlsb
+ *   bits 14:10 dlsb + width
+ * BFMOV leaves the bits outside the destination field untouched; BFMOVZ
+ * clears them.
+ */
+static bool bfmov_common(DisasContext *ctx, int rd, int rs, bool zero)
+{
+    unsigned bf, dlsb, msb, width;
+    int delta, slsb;
+    TCGv_i32 tmp;
+
+    bf = translator_lduw_end(ctx->env, &ctx->base, ctx->base.pc_next, MO_LE);
+    ctx->base.pc_next += 2;
+
+    dlsb = (bf >> 5) & 0x1f;
+    msb = (bf >> 10) & 0x1f;
+    delta = bf & 0x1f;
+    if (delta >= 0x10) {
+        delta -= 0x20;
+    }
+    slsb = dlsb - delta;
+
+    if (msb <= dlsb || slsb < 0 || slsb > 31) {
+        /* Empty or out-of-range field: architecturally undefined. */
+        return false;
+    }
+    width = msb - dlsb;
+    if (slsb + width > 32) {
+        width = 32 - slsb;
+    }
+
+    tmp = tcg_temp_new_i32();
+    tcg_gen_extract_i32(tmp, cpu_regs[rs], slsb, width);
+    if (zero) {
+        tcg_gen_shli_i32(cpu_regs[rd], tmp, dlsb);
+    } else {
+        tcg_gen_deposit_i32(cpu_regs[rd], cpu_regs[rd], tmp, dlsb, width);
+    }
+    return true;
+}
+
+static bool trans_BFMOV(DisasContext *ctx, arg_BFMOV *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    return bfmov_common(ctx, a->rd, a->rs, false);
+}
+
+static bool trans_BFMOVZ(DisasContext *ctx, arg_BFMOVZ *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    return bfmov_common(ctx, a->rd, a->rs, true);
+}
+
 static void rx_bsetm(DisasContext *ctx, TCGv_i32 mem, TCGv_i32 mask)
 {
     TCGv_i32 val;

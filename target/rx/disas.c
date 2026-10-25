@@ -1469,6 +1469,32 @@ static bool trans_DMOV_mld(DisasContext *ctx, arg_DMOV_mld *a)
     return true;
 }
 
+static void prt_bfmov(DisasContext *ctx, const char *name, int rs, int rd)
+{
+    unsigned bf = disas_fetch(ctx, 2);
+    unsigned dlsb = (bf >> 5) & 0x1f;
+    unsigned msb = (bf >> 10) & 0x1f;
+    int delta = bf & 0x1f;
+
+    if (delta >= 0x10) {
+        delta -= 0x20;
+    }
+    prt("%s\t#%d, #%d, #%d, r%d, r%d", name,
+        (int)dlsb - delta, dlsb, (int)msb - (int)dlsb, rs, rd);
+}
+
+static bool trans_BFMOV(DisasContext *ctx, arg_BFMOV *a)
+{
+    prt_bfmov(ctx, "bfmov", a->rs, a->rd);
+    return true;
+}
+
+static bool trans_BFMOVZ(DisasContext *ctx, arg_BFMOVZ *a)
+{
+    prt_bfmov(ctx, "bfmovz", a->rs, a->rd);
+    return true;
+}
+
 #define BOP_IM(name, reg)                                       \
     do {                                                        \
         char dsp[8];                                            \
