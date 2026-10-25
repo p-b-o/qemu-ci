@@ -373,6 +373,36 @@ float32 helper_dtof(CPURXState *env, float64 t0)
     return ret;
 }
 
+float64 helper_itod(CPURXState *env, uint32_t t0)
+{
+    float64 ret;
+
+    dp_begin(env);
+    ret = int32_to_float64((int32_t)t0, &env->dp_status);
+    update_dpsw(env);
+    return ret;
+}
+
+float64 helper_utod(CPURXState *env, uint32_t t0)
+{
+    float64 ret;
+
+    dp_begin(env);
+    ret = uint32_to_float64(t0, &env->dp_status);
+    update_dpsw(env);
+    return ret;
+}
+
+float64 helper_ftod(CPURXState *env, float32 t0)
+{
+    float64 ret;
+
+    dp_begin(env);
+    ret = float32_to_float64(t0, &env->dp_status);
+    update_dpsw(env);
+    return ret;
+}
+
 void helper_rx_fcmp(CPURXState *env, float32 t0, float32 t1)
 {
     int st;

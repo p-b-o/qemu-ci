@@ -1291,6 +1291,24 @@ static bool trans_DTOF(DisasContext *ctx, arg_DTOF *a)
     return true;
 }
 
+static bool trans_ITOD(DisasContext *ctx, arg_ITOD *a)
+{
+    prt("itod\tr%d, dr%d", a->rs, a->drd);
+    return true;
+}
+
+static bool trans_UTOD(DisasContext *ctx, arg_UTOD *a)
+{
+    prt("utod\tr%d, dr%d", a->rs, a->drd);
+    return true;
+}
+
+static bool trans_FTOD(DisasContext *ctx, arg_FTOD *a)
+{
+    prt("ftod\tr%d, dr%d", a->rs, a->drd);
+    return true;
+}
+
 #define BOP_IM(name, reg)                                       \
     do {                                                        \
         char dsp[8];                                            \

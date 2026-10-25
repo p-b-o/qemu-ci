@@ -2139,6 +2139,42 @@ static bool trans_DTOF(DisasContext *ctx, arg_DTOF *a)
     return true;
 }
 
+/* itod rs, DRdrd -- convert signed int32 to double */
+static bool trans_ITOD(DisasContext *ctx, arg_ITOD *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    TCGv_i64 d = tcg_temp_new_i64();
+    gen_helper_itod(d, tcg_env, cpu_regs[a->rs]);
+    dr_write(a->drd, d);
+    return true;
+}
+
+/* utod rs, DRdrd -- convert unsigned int32 to double */
+static bool trans_UTOD(DisasContext *ctx, arg_UTOD *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    TCGv_i64 d = tcg_temp_new_i64();
+    gen_helper_utod(d, tcg_env, cpu_regs[a->rs]);
+    dr_write(a->drd, d);
+    return true;
+}
+
+/* ftod rs, DRdrd -- convert float32 to double */
+static bool trans_FTOD(DisasContext *ctx, arg_FTOD *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    TCGv_i64 d = tcg_temp_new_i64();
+    gen_helper_ftod(d, tcg_env, cpu_regs[a->rs]);
+    dr_write(a->drd, d);
+    return true;
+}
+
 static void rx_bsetm(DisasContext *ctx, TCGv_i32 mem, TCGv_i32 mask)
 {
     TCGv_i32 val;

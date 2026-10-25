@@ -33,6 +33,7 @@
 &drr		drd drs
 &drrr		drd drs1 drs2
 &dcmpd		drs1 drs2 cd
+&idr		rs drd
 ########
 %b1_bdsp	24:3 !function=bdsp_s
 
@@ -658,3 +659,9 @@ DROUND		0111 0110 1001 0000 drs:4 1101 drd:4 1101	&drr
 DTOI		0111 0110 1001 0000 drs:4 1101 drd:4 1000	&drr
 DTOU		0111 0110 1001 0000 drs:4 1101 drd:4 1001	&drr
 DTOF		0111 0110 1001 0000 drs:4 1101 drd:4 1100	&drr
+
+# GPR/float-to-DR conversions using 0xFD 0x77 prefix
+# Note: 0xFD 0x77 with byte2 in 0x00-0x0F is MVTC_i (li=01); no conflict with 0x8x
+ITOD		1111 1101 0111 0111 1000 rs:4 drd:4 1001	&idr
+FTOD		1111 1101 0111 0111 1000 rs:4 drd:4 1010	&idr
+UTOD		1111 1101 0111 0111 1000 rs:4 drd:4 1101	&idr
