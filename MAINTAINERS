@@ -3087,6 +3087,7 @@ F: hw/dma/renesas_rx_dtc.c
 F: hw/gpio/renesas_rx_gpio.c
 F: hw/intc/rx_icu.c
 F: hw/misc/renesas_rx_*.c
+F: hw/misc/renesas_rx_romcache.c
 F: hw/rtc/renesas_rx_rtc.c
 F: hw/rx/
 F: hw/ssi/renesas_rspi.c
@@ -3097,6 +3098,7 @@ F: include/hw/dma/renesas_rx_dtc.h
 F: include/hw/gpio/renesas_rx_gpio.h
 F: include/hw/intc/rx_icu.h
 F: include/hw/misc/renesas_rx_*.h
+F: include/hw/misc/renesas_rx_romcache.h
 F: include/hw/rtc/renesas_rx_rtc.h
 F: include/hw/rx/
 F: include/hw/ssi/renesas_rspi.h

@@ -182,3 +182,4 @@ system_ss.add(when: 'CONFIG_LASI', if_true: files('lasi.c'))
 
 system_ss.add(when: 'CONFIG_AXIADO_CLK', if_true: files('axiado_clk.c'))
 system_ss.add(when: 'CONFIG_RENESAS_RX_CRC', if_true: files('renesas_rx_crc.c'))
+system_ss.add(when: 'CONFIG_RENESAS_RX_ROMCACHE', if_true: files('renesas_rx_romcache.c'))

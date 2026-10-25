@@ -270,3 +270,6 @@ source macio/Kconfig
 
 config RENESAS_RX_CRC
     bool
+
+config RENESAS_RX_ROMCACHE
+    bool
