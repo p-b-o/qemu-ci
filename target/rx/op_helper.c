@@ -180,6 +180,14 @@ uint32_t helper_ftoi(CPURXState *env, float32 t0)
     return ret;
 }
 
+uint32_t helper_ftou(CPURXState *env, float32 t0)
+{
+    uint32_t ret;
+    ret = float32_to_uint32_round_to_zero(t0, &env->fp_status);
+    update_fpsw(env, ret, GETPC());
+    return ret;
+}
+
 uint32_t helper_round(CPURXState *env, float32 t0)
 {
     uint32_t ret;
@@ -192,6 +200,14 @@ float32 helper_itof(CPURXState *env, uint32_t t0)
 {
     float32 ret;
     ret = int32_to_float32(t0, &env->fp_status);
+    update_fpsw(env, ret, GETPC());
+    return ret;
+}
+
+float32 helper_utof(CPURXState *env, uint32_t t0)
+{
+    float32 ret;
+    ret = uint32_to_float32(t0, &env->fp_status);
     update_fpsw(env, ret, GETPC());
     return ret;
 }

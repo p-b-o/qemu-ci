@@ -40,6 +40,17 @@ typedef struct DisasContext {
     RXISAVersion isa_version;
 } DisasContext;
 
+/*
+ * Instructions introduced after RXv1 are only valid on CPU models that
+ * implement the corresponding revision. Returning false from a trans_
+ * handler makes decode() fail, which raises an illegal instruction
+ * exception exactly as an unknown encoding would.
+ */
+static bool require_isa(DisasContext *ctx, RXISAVersion version)
+{
+    return ctx->isa_version >= version;
+}
+
 typedef struct DisasCompare {
     TCGv_i32 value;
     TCGv_i32 temp;
@@ -1873,10 +1884,13 @@ static bool trans_SATR(DisasContext *ctx, arg_SATR *a)
         return true;                                                    \
     }
 
-#define FCONVOP(name, op)                                       \
+#define FCONVOP(name, op, isa)                                  \
     static bool trans_##name(DisasContext *ctx, arg_##name * a) \
     {                                                           \
         TCGv_i32 val, mem;                                      \
+        if (!require_isa(ctx, isa)) {                           \
+            return false;                                       \
+        }                                                       \
         mem = tcg_temp_new_i32();                               \
         val = rx_load_source(ctx, mem, a->ld, MO_32, a->rs);    \
         gen_helper_##op(cpu_regs[a->rd], tcg_env, val);         \
@@ -1907,8 +1921,9 @@ static bool trans_FCMP_mr(DisasContext *ctx, arg_FCMP_mr *a)
     return true;
 }
 
-FCONVOP(FTOI, ftoi)
-FCONVOP(ROUND, round)
+FCONVOP(FTOI, ftoi, RX_ISA_V1)
+FCONVOP(FTOU, ftou, RX_ISA_V2)
+FCONVOP(ROUND, round, RX_ISA_V1)
 
 /* itof rs, rd */
 /* itof dsp[rs], rd */
@@ -1918,6 +1933,19 @@ static bool trans_ITOF(DisasContext *ctx, arg_ITOF * a)
     mem = tcg_temp_new_i32();
     val = rx_load_source(ctx, mem, a->ld, a->mi, a->rs);
     gen_helper_itof(cpu_regs[a->rd], tcg_env, val);
+    return true;
+}
+
+/* utof dsp[rs], rd  (RXv2) */
+static bool trans_UTOF(DisasContext *ctx, arg_UTOF * a)
+{
+    TCGv_i32 val, mem;
+    if (!require_isa(ctx, RX_ISA_V2)) {
+        return false;
+    }
+    mem = tcg_temp_new_i32();
+    val = rx_load_source(ctx, mem, a->ld, a->mi, a->rs);
+    gen_helper_utof(cpu_regs[a->rd], tcg_env, val);
     return true;
 }
 

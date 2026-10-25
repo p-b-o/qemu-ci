@@ -1148,6 +1148,14 @@ static bool trans_FTOI(DisasContext *ctx, arg_FTOI *a)
     return true;
 }
 
+/* ftou dsp[rs], rd */
+/* ftou rs, rd */
+static bool trans_FTOU(DisasContext *ctx, arg_FTOU *a)
+{
+    prt_ldmi(ctx, "ftou", a->ld, RX_IM_LONG, a->rs, a->rd);
+    return true;
+}
+
 /* fmul #imm, rd */
 static bool trans_FMUL_ir(DisasContext *ctx, arg_FMUL_ir *a)
 {
@@ -1191,6 +1199,13 @@ static bool trans_ROUND(DisasContext *ctx, arg_ROUND *a)
 static bool trans_ITOF(DisasContext *ctx, arg_ITOF *a)
 {
     prt_ldmi(ctx, "itof", a->ld, RX_IM_LONG, a->rs, a->rd);
+    return true;
+}
+
+/* utof dsp[rs], rd */
+static bool trans_UTOF(DisasContext *ctx, arg_UTOF *a)
+{
+    prt_ldmi(ctx, "utof", a->ld, a->mi, a->rs, a->rd);
     return true;
 }
 
