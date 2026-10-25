@@ -3081,12 +3081,14 @@ F: include/hw/timer/renesas_*.h
 Renesas RX peripherals
 R: Yoshinori Sato <yoshinori.sato@nifty.com>
 S: Orphan
+F: hw/adc/renesas_s12ad.c
 F: hw/dma/renesas_rx_*.c
 F: hw/dma/renesas_rx_dtc.c
 F: hw/gpio/renesas_rx_gpio.c
 F: hw/intc/rx_icu.c
 F: hw/rx/
 F: hw/timer/renesas_mtu3.c
+F: include/hw/adc/renesas_s12ad.h
 F: include/hw/dma/renesas_rx_*.h
 F: include/hw/dma/renesas_rx_dtc.h
 F: include/hw/gpio/renesas_rx_gpio.h
