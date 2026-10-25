@@ -653,3 +653,8 @@ DNEG		0111 0110 1001 0000 drs:4 1100 drd:4 0010	&drr
 # Unary ops group B (1101): DSQRT, DROUND
 DSQRT		0111 0110 1001 0000 drs:4 1101 drd:4 0000	&drr
 DROUND		0111 0110 1001 0000 drs:4 1101 drd:4 1101	&drr
+# DTOI/DTOU/DTOF convert within the DPFPU: the result lands in a DR register
+# and is moved out to a GPR with DMOV.L DRLn, Rd.
+DTOI		0111 0110 1001 0000 drs:4 1101 drd:4 1000	&drr
+DTOU		0111 0110 1001 0000 drs:4 1101 drd:4 1001	&drr
+DTOF		0111 0110 1001 0000 drs:4 1101 drd:4 1100	&drr

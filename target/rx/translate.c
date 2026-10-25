@@ -2085,6 +2085,60 @@ static bool trans_DROUND(DisasContext *ctx, arg_DROUND *a)
     return true;
 }
 
+/*
+ * dtoi / dtou / dtof convert within the DPFPU: the 32-bit result is written
+ * to the low half of the destination DR register, from where DMOV.L moves it
+ * out to a GPR. The high half is cleared.
+ */
+static void dr_write_low32(int n, TCGv_i32 val)
+{
+    TCGv_i64 t = tcg_temp_new_i64();
+    tcg_gen_extu_i32_i64(t, val);
+    tcg_gen_mov_i64(cpu_dregs[n], t);
+}
+
+/* dtoi DRdrs, DRdrd -- convert double to signed int32 */
+static bool trans_DTOI(DisasContext *ctx, arg_DTOI *a)
+{
+    TCGv_i32 res;
+
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    res = tcg_temp_new_i32();
+    gen_helper_dtoi(res, tcg_env, dr_read(a->drs));
+    dr_write_low32(a->drd, res);
+    return true;
+}
+
+/* dtou DRdrs, DRdrd -- convert double to unsigned int32 */
+static bool trans_DTOU(DisasContext *ctx, arg_DTOU *a)
+{
+    TCGv_i32 res;
+
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    res = tcg_temp_new_i32();
+    gen_helper_dtou(res, tcg_env, dr_read(a->drs));
+    dr_write_low32(a->drd, res);
+    return true;
+}
+
+/* dtof DRdrs, DRdrd -- convert double to float32 */
+static bool trans_DTOF(DisasContext *ctx, arg_DTOF *a)
+{
+    TCGv_i32 res;
+
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    res = tcg_temp_new_i32();
+    gen_helper_dtof(res, tcg_env, dr_read(a->drs));
+    dr_write_low32(a->drd, res);
+    return true;
+}
+
 static void rx_bsetm(DisasContext *ctx, TCGv_i32 mem, TCGv_i32 mask)
 {
     TCGv_i32 val;

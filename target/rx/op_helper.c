@@ -342,6 +342,37 @@ float64 helper_dround(CPURXState *env, float64 t0)
     return ret;
 }
 
+uint32_t helper_dtoi(CPURXState *env, float64 t0)
+{
+    uint32_t ret;
+
+    dp_begin(env);
+    ret = float64_to_int32_round_to_zero(t0, &env->dp_status);
+    update_dpsw(env);
+    return ret;
+}
+
+uint32_t helper_dtou(CPURXState *env, float64 t0)
+{
+    uint32_t ret;
+
+    dp_begin(env);
+    ret = float64_to_uint32_round_to_zero(t0, &env->dp_status);
+    update_dpsw(env);
+    return ret;
+}
+
+/* dtof narrows to single precision but is a DPFPU instruction: DPSW. */
+float32 helper_dtof(CPURXState *env, float64 t0)
+{
+    float32 ret;
+
+    dp_begin(env);
+    ret = float64_to_float32(t0, &env->dp_status);
+    update_dpsw(env);
+    return ret;
+}
+
 void helper_rx_fcmp(CPURXState *env, float32 t0, float32 t1)
 {
     int st;

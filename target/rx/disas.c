@@ -1273,6 +1273,24 @@ static bool trans_DROUND(DisasContext *ctx, arg_DROUND *a)
     return true;
 }
 
+static bool trans_DTOI(DisasContext *ctx, arg_DTOI *a)
+{
+    prt("dtoi\tdr%d, dr%d", a->drs, a->drd);
+    return true;
+}
+
+static bool trans_DTOU(DisasContext *ctx, arg_DTOU *a)
+{
+    prt("dtou\tdr%d, dr%d", a->drs, a->drd);
+    return true;
+}
+
+static bool trans_DTOF(DisasContext *ctx, arg_DTOF *a)
+{
+    prt("dtof\tdr%d, dr%d", a->drs, a->drd);
+    return true;
+}
+
 #define BOP_IM(name, reg)                                       \
     do {                                                        \
         char dsp[8];                                            \
