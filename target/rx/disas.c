@@ -1519,6 +1519,12 @@ static bool trans_RSTR_i(DisasContext *ctx, arg_RSTR_i *a)
     return true;
 }
 
+static bool trans_XOR_rrr(DisasContext *ctx, arg_XOR_rrr *a)
+{
+    prt("xor\tr%d, r%d, r%d", a->rs, a->rs2, a->rd);
+    return true;
+}
+
 #define BOP_IM(name, reg)                                       \
     do {                                                        \
         char dsp[8];                                            \

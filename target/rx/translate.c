@@ -2543,6 +2543,16 @@ static bool trans_RSTR_r(DisasContext *ctx, arg_RSTR_r *a)
     return true;
 }
 
+/* xor rs, rs2, rd */
+static bool trans_XOR_rrr(DisasContext *ctx, arg_XOR_rrr *a)
+{
+    if (!require_isa(ctx, RX_ISA_V3)) {
+        return false;
+    }
+    rx_gen_op_rrr(rx_xor, a->rd, a->rs, a->rs2);
+    return true;
+}
+
 static void rx_bsetm(DisasContext *ctx, TCGv_i32 mem, TCGv_i32 mask)
 {
     TCGv_i32 val;
