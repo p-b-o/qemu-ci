@@ -71,3 +71,4 @@ if have_hmp
 endif
 
 subdir('can')
+system_ss.add(when: 'CONFIG_RENESAS_ETHERC', if_true: files('renesas_etherc.c'))
