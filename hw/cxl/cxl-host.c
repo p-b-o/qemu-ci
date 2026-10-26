@@ -689,10 +689,35 @@ static int cxl_fmws_mmio_map(Object *obj, void *opaque)
     return 0;
 }
 
+static int cxl_c3_mmio_map(Object *obj, void *opaque)
+{
+    uint64_t base, size;
+    CXLType3Dev *c3d;
+
+    if (!object_dynamic_cast(obj, TYPE_CXL_TYPE3)) {
+        return 0;
+    }
+    c3d = CXL_TYPE3(obj);
+
+    if (!c3d->program_hdm_decoder) {
+        return 0;
+    }
+
+    ct3_type3_get_hpm_range(c3d, &base, &size);
+    cxl_c3_add_memory_map(base, size);
+
+    return 0;
+}
+
 void cxl_fmws_update_mmio(void)
 {
     /* Ordering is not required for this */
     object_child_foreach_recursive(object_get_root(), cxl_fmws_mmio_map, NULL);
+}
+
+void cxl_c3_update_mmio(void)
+{
+    object_child_foreach_recursive(object_get_root(), cxl_c3_mmio_map, NULL);
 }
 
 hwaddr cxl_fmws_set_memmap(hwaddr base, hwaddr max_addr)
