@@ -732,9 +732,39 @@ static void cxl_destroy_dc_regions(CXLType3Dev *ct3d)
     }
 }
 
+
+static CXLHost *ct3d_to_cxl_pxb(DeviceState *dev)
+{
+    BusState *bus = dev->parent_bus;
+
+    DeviceState *cxl_rp_dev = NULL;
+    if (bus && bus->parent) {
+        cxl_rp_dev = bus->parent;
+    }
+    assert(cxl_rp_dev);
+
+    DeviceState *cxl_host_dev = NULL;
+    if (cxl_rp_dev) {
+        BusState *rp_bus = cxl_rp_dev->parent_bus;
+        if (rp_bus && rp_bus->parent) {
+            cxl_host_dev = rp_bus->parent;
+        }
+    }
+    assert(cxl_host_dev);
+
+    if (cxl_host_dev &&
+        object_dynamic_cast(OBJECT(cxl_host_dev), TYPE_PXB_CXL_HOST)) {
+        CXLHost *host = PXB_CXL_HOST(cxl_host_dev);
+        return host;
+    }
+
+    return NULL;
+}
+
 static bool cxl_setup_memory(CXLType3Dev *ct3d, Error **errp)
 {
     DeviceState *ds = DEVICE(ct3d);
+    CXLHost *host = ct3d_to_cxl_pxb(ds);
 
     if (!ct3d->hostmem && !ct3d->hostvmem && !ct3d->hostpmem
         && !ct3d->dc.num_regions) {
@@ -814,6 +844,13 @@ static bool cxl_setup_memory(CXLType3Dev *ct3d, Error **errp)
         ct3d->cxl_dstate.pmem_size = memory_region_size(pmr);
         ct3d->cxl_dstate.static_mem_size += memory_region_size(pmr);
         g_free(p_name);
+    }
+
+    if (ct3d->program_hdm_decoder) {
+        ct3d->hpa_offset = host->unused_hpa_offset;
+        ct3d->idx = host->unused_dev_num;
+        host->unused_hpa_offset += ct3d->cxl_dstate.static_mem_size;
+        host->unused_dev_num++;
     }
 
     ct3d->dc.total_capacity = 0;

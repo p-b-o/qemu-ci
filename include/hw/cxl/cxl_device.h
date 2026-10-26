@@ -778,6 +778,8 @@ struct CXLType3Dev {
     bool hdmdb;
 
     bool program_hdm_decoder;
+    hwaddr hpa_offset;
+    int idx;
 
     struct dynamic_capacity {
         HostMemoryBackend *host_dc;

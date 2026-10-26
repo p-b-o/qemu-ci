@@ -67,6 +67,8 @@ struct CXLHost {
 
     CXLComponentState cxl_cstate;
     bool passthrough;
+    hwaddr unused_hpa_offset;
+    int unused_dev_num;
 };
 
 #define TYPE_PXB_CXL_HOST "pxb-cxl-host"
