@@ -1358,6 +1358,46 @@ MemTxResult cxl_type3_write(PCIDevice *d, hwaddr host_addr, uint64_t data,
     return address_space_write(as, dpa_offset, attrs, &data, size);
 }
 
+static uint64_t c3t_addr_size(DeviceState *dev)
+{
+    CXLType3Dev *ct3d = CXL_TYPE3(dev);
+    MemoryRegion *vmr = host_memory_backend_get_memory(ct3d->hostvmem);
+
+    return memory_region_size(vmr);
+}
+
+static uint64_t c3t_hpa_base(DeviceState *dev)
+{
+    GSList *cfmws_list, *iter;
+
+    cfmws_list = cxl_fmws_get_all_sorted();
+    for (iter = cfmws_list; iter; iter = iter->next) {
+        struct CXLFixedWindow *fw;
+
+        if (!object_dynamic_cast(iter->data, TYPE_CXL_FMW)) {
+            continue;
+        }
+        fw = CXL_FMW(iter->data);
+
+        PXBCXLDev *pxb = fw->target_hbs[0];
+        if (ct3d_to_cxl_pxb(dev) != pxb->cxl_host_bridge) {
+            continue;
+        }
+
+        g_slist_free(cfmws_list);
+        return fw->base;
+    }
+    g_slist_free(cfmws_list);
+
+    return 0;
+}
+
+void ct3_type3_get_hpm_range(CXLType3Dev *dev, uint64_t *base, uint64_t *size)
+{
+    *base = c3t_hpa_base(DEVICE(dev)) + dev->hpa_offset;
+    *size = c3t_addr_size(DEVICE(dev));
+}
+
 static void ct3d_reset(DeviceState *dev)
 {
     CXLType3Dev *ct3d = CXL_TYPE3(dev);
