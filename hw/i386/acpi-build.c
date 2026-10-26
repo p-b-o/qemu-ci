@@ -51,6 +51,7 @@
 #include "hw/rtc/mc146818rtc_regs.h"
 #include "migration/vmstate.h"
 #include "hw/mem/memory-device.h"
+#include "hw/mem/cxl_type3.h"
 #include "hw/mem/nvdimm.h"
 #include "hw/mem/sp-mem.h"
 #include "system/numa.h"
@@ -1460,6 +1461,7 @@ build_srat(GArray *table_data, BIOSLinker *linker, MachineState *machine)
     uint64_t mem_len, mem_base, next_base;
     MachineClass *mc = MACHINE_GET_CLASS(machine);
     X86MachineState *x86ms = X86_MACHINE(machine);
+    PCMachineState *pcms = PC_MACHINE(machine);
     const CPUArchIdList *apic_ids = mc->possible_cpu_arch_ids(machine);
     int nb_numa_nodes = machine->numa_state->num_nodes;
     NodeInfo *numa_info = machine->numa_state->nodes;
@@ -1582,6 +1584,11 @@ build_srat(GArray *table_data, BIOSLinker *linker, MachineState *machine)
      */
     if (machine->device_memory) {
         build_srat_device_memory(table_data, machine);
+    }
+
+    if (pcms->cxl_devices_state.is_enabled) {
+        object_child_foreach_recursive(object_get_root(),
+                                       cxl_type3_build_srat, table_data);
     }
 
     acpi_table_end(linker, &table);
