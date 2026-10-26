@@ -121,7 +121,7 @@ static int qtest_socket_accept(QTestState *s, int sock)
 {
     struct sockaddr_un addr;
     socklen_t addrlen;
-    int ret;
+    int ret = -1;
     size_t i;
 #ifndef _WIN32
     struct timeval timeout = { .tv_sec = 0,
