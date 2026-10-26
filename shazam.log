@@ -1,0 +1,43 @@
+Looking up 20261026121259.3354561-1-cassel@kernel.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v15 1/7] docs/qcow2: add the zoned format feature
+    + Link: https://lore.kernel.org/qemu-devel/20261026121259.3354561-2-cassel@kernel.org
+  [32m✓[0m [PATCH v15 2/7] qcow2: add configurations for zoned format extension
+    + Link: https://lore.kernel.org/qemu-devel/20261026121259.3354561-3-cassel@kernel.org
+  [32m✓[0m [PATCH v15 3/7] block: define errnos for zone protocol errors
+    + Link: https://lore.kernel.org/qemu-devel/20261026121259.3354561-4-cassel@kernel.org
+  [32m✓[0m [PATCH v15 4/7] qcow2: add zoned emulation capability
+    + Link: https://lore.kernel.org/qemu-devel/20261026121259.3354561-5-cassel@kernel.org
+  [32m✓[0m [PATCH v15 5/7] iotests: test the zoned format feature for qcow2 file
+    + Link: https://lore.kernel.org/qemu-devel/20261026121259.3354561-6-cassel@kernel.org
+  [32m✓[0m [PATCH v15 6/7] qcow2: validate the write pointer table when opening an image
+    + Link: https://lore.kernel.org/qemu-devel/20261026121259.3354561-7-cassel@kernel.org
+  [32m✓[0m [PATCH v15 7/7] virtio-blk: report zone errors with their zone status codes
+    + Link: https://lore.kernel.org/qemu-devel/20261026121259.3354561-8-cassel@kernel.org
+  ---
+  [32m✓[0m Signed: DKIM/kernel.org
+---
+Total patches: 7
+---
+Applying: docs/qcow2: add the zoned format feature
+Applying: qcow2: add configurations for zoned format extension
+Patch failed at 0002 qcow2: add configurations for zoned format extension
+error: patch failed: block/io.c:3400
+error: block/io.c: patch does not apply
+error: patch failed: hw/block/block.c:238
+error: hw/block/block.c: patch does not apply
+error: patch failed: include/block/block-io.h:134
+error: include/block/block-io.h: patch does not apply
+error: patch failed: include/block/block_int-common.h:911
+error: include/block/block_int-common.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
