@@ -777,6 +777,8 @@ struct CXLType3Dev {
     /* BI flows */
     bool hdmdb;
 
+    bool program_hdm_decoder;
+
     struct dynamic_capacity {
         HostMemoryBackend *host_dc;
         AddressSpace host_dc_as;
