@@ -19,6 +19,7 @@ void cxl_hook_up_pxb_registers(PCIBus *bus, CXLState *state, Error **errp);
 hwaddr cxl_fmws_set_memmap(hwaddr base, hwaddr max_addr);
 void cxl_fmws_update_mmio(void);
 void cxl_c3_update_mmio(void);
+void setup_cxl_numa_node(MachineState *machine);
 void cxl_c3_add_memory_map(hwaddr base, hwaddr size);
 GSList *cxl_fmws_get_all_sorted(void);
 

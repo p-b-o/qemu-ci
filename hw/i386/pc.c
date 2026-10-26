@@ -534,6 +534,7 @@ void pc_machine_done(Notifier *notifier, void *data)
 
     if (pcms->cxl_devices_state.is_enabled) {
         cxl_fmws_link_targets(&error_fatal);
+        setup_cxl_numa_node(MACHINE(pcms));
         cxl_c3_update_mmio();
     }
 

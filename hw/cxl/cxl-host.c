@@ -720,6 +720,44 @@ void cxl_c3_update_mmio(void)
     object_child_foreach_recursive(object_get_root(), cxl_c3_mmio_map, NULL);
 }
 
+static int setup_cxl_numa_node_inner(Object *obj, void *opaque)
+{
+    MachineState *machine = opaque;
+    DeviceState *dev;
+    CXLType3Dev *c3d;
+    int node_id;
+
+    if (!object_dynamic_cast(obj, TYPE_CXL_TYPE3)) {
+        return 0;
+    }
+
+    dev = DEVICE(obj);
+    c3d = CXL_TYPE3(dev);
+    node_id = machine->numa_state->num_nodes;
+
+    if (!c3d->program_hdm_decoder) {
+        return 0;
+    }
+
+    NumaOptions option = {
+        .type = NUMA_OPTIONS_TYPE_NODE,
+        .u.node = {
+            .has_nodeid = true,
+            .nodeid = node_id,
+        },
+    };
+
+    set_numa_options(machine, &option, &error_fatal);
+    c3d->node = node_id;
+    return 0;
+}
+
+void setup_cxl_numa_node(MachineState *machine)
+{
+    object_child_foreach_recursive(object_get_root(),
+                                   setup_cxl_numa_node_inner, machine);
+}
+
 hwaddr cxl_fmws_set_memmap(hwaddr base, hwaddr max_addr)
 {
     GSList *cfmws_list, *iter;
