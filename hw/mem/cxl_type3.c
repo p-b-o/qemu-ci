@@ -19,6 +19,9 @@
 #include "hw/pci/pci.h"
 #include "hw/core/qdev-properties.h"
 #include "hw/core/qdev-properties-system.h"
+#include "hw/pci/pci_bridge.h"
+#include "hw/pci/pcie_port.h"
+#include "hw/cxl/cxl_host.h"
 #include "qapi/error.h"
 #include "qemu/log.h"
 #include "qemu/module.h"
@@ -1358,6 +1361,59 @@ MemTxResult cxl_type3_write(PCIDevice *d, hwaddr host_addr, uint64_t data,
     return address_space_write(as, dpa_offset, attrs, &data, size);
 }
 
+static void __update_hdm_decoder_n(uint32_t *cache_mem, int which,
+                                   uint32_t ctrl, uint64_t base,
+                                   uint64_t size)
+{
+    int hdm_inc = R_CXL_HDM_DECODER1_BASE_LO - R_CXL_HDM_DECODER0_BASE_LO;
+
+    stl_le_p(cache_mem + R_CXL_HDM_DECODER0_BASE_LO + which * hdm_inc,
+             base & 0xffffffff);
+    stl_le_p(cache_mem + R_CXL_HDM_DECODER0_BASE_HI + which * hdm_inc,
+             base >> 32);
+    stl_le_p(cache_mem + R_CXL_HDM_DECODER0_SIZE_LO + which * hdm_inc,
+             size & 0xffffffff);
+    stl_le_p(cache_mem + R_CXL_HDM_DECODER0_SIZE_HI + which * hdm_inc,
+             size >> 32);
+    stl_le_p(cache_mem + R_CXL_HDM_DECODER0_CTRL + which * hdm_inc, ctrl);
+}
+
+static void update_hdm_decoder_endpoint(uint32_t *cache_mem, int which,
+                                        uint32_t ctrl, uint64_t base,
+                                        uint64_t size)
+{
+    return __update_hdm_decoder_n(cache_mem, which, ctrl, base, size);
+}
+
+static void update_hdm_decoder_pxb(uint32_t *cache_mem, int which,
+                                   uint64_t tl, uint32_t ctrl,
+                                   uint64_t base, uint64_t size)
+{
+    int hdm_inc = R_CXL_HDM_DECODER1_BASE_LO - R_CXL_HDM_DECODER0_BASE_LO;
+
+    stl_le_p(cache_mem +
+             R_CXL_HDM_DECODER0_TARGET_LIST_LO + which * hdm_inc,
+             tl & 0xffffffff);
+    stl_le_p(cache_mem +
+             R_CXL_HDM_DECODER0_TARGET_LIST_HI + which * hdm_inc,
+             tl >> 32);
+
+    __update_hdm_decoder_n(cache_mem, which, ctrl, base, size);
+}
+
+static uint8_t ct3d_root_port_number(DeviceState *dev)
+{
+    BusState *bus = dev->parent_bus;
+    DeviceState *rp_dev;
+
+    assert(bus);
+    rp_dev = bus->parent;
+    assert(rp_dev);
+    assert(object_dynamic_cast(OBJECT(rp_dev), TYPE_PCIE_ROOT_PORT));
+
+    return PCIE_PORT(rp_dev)->port;
+}
+
 static uint64_t c3t_addr_size(DeviceState *dev)
 {
     CXLType3Dev *ct3d = CXL_TYPE3(dev);
@@ -1398,6 +1454,42 @@ void ct3_type3_get_hpm_range(CXLType3Dev *dev, uint64_t *base, uint64_t *size)
     *size = c3t_addr_size(DEVICE(dev));
 }
 
+static void program_pxb_hdm_decoder(DeviceState *dev)
+{
+    CXLHost *cxl = ct3d_to_cxl_pxb(dev);
+    CXLType3Dev *ct3d = CXL_TYPE3(dev);
+    int hdm_num = ct3d->idx;
+    int order = ct3d_root_port_number(dev);
+    assert(cxl);
+    uint64_t base, size;
+    ct3_type3_get_hpm_range(ct3d, &base, &size);
+
+    CXLComponentState *cxl_cstate = &cxl->cxl_cstate;
+    uint32_t *cache_mem = cxl_cstate->crb.cache_mem_registers;
+
+    uint32_t ctrl = R_CXL_HDM_DECODER0_CTRL_COMMIT_MASK |
+                    R_CXL_HDM_DECODER0_CTRL_COMMITTED_MASK |
+                    R_CXL_HDM_DECODER0_CTRL_TYPE_MASK;
+
+    update_hdm_decoder_pxb(cache_mem, hdm_num, order, ctrl, base, size);
+}
+
+static void program_hdm_decoder(DeviceState *dev)
+{
+    CXLType3Dev *ct3d = CXL_TYPE3(dev);
+    uint64_t base, size;
+    ComponentRegisters *cregs = &ct3d->cxl_cstate.crb;
+    uint32_t *cache_mem = cregs->cache_mem_registers;
+
+    ct3_type3_get_hpm_range(ct3d, &base, &size);
+
+    uint32_t ctrl = R_CXL_HDM_DECODER0_CTRL_COMMIT_MASK |
+                    R_CXL_HDM_DECODER0_CTRL_COMMITTED_MASK |
+                    R_CXL_HDM_DECODER0_CTRL_TYPE_MASK;
+
+    update_hdm_decoder_endpoint(cache_mem, 0, ctrl, base, size);
+}
+
 static void ct3d_reset(DeviceState *dev)
 {
     CXLType3Dev *ct3d = CXL_TYPE3(dev);
@@ -1408,6 +1500,12 @@ static void ct3d_reset(DeviceState *dev)
                               ct3d->flitmode);
     cxl_component_register_init_common(reg_state, write_msk,
                                        CXL2_TYPE3_DEVICE, ct3d->hdmdb);
+
+    if (ct3d->program_hdm_decoder) {
+        program_hdm_decoder(dev);
+        program_pxb_hdm_decoder(dev);
+    }
+
     cxl_device_register_init_t3(ct3d, CXL_T3_MSIX_MBOX);
 
     /*
