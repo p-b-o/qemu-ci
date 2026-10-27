@@ -8,6 +8,7 @@
 
 #include "qemu/osdep.h"
 #include "qapi/error.h"
+#include "qemu/module.h"
 #include "qom/object.h"
 #include "qemu/target-info-def.h"
 #include "qemu/target-info-init.h"
@@ -34,6 +35,29 @@ static const TypeInfo target_info_parent_type = {
 DEFINE_TARGET_INFO_TYPE(target_info_parent_type)
 
 static const TargetInfo *target_info_ptr;
+static GSList *target_info_classes;
+static bool target_info_initialized;
+
+void target_info_qom_init(void)
+{
+    if (target_info_initialized) {
+        return;
+    }
+
+    module_call_init(MODULE_INIT_TARGET_INFO);
+    /*
+     * Avoid enumerating target-info classes during QOM registration,
+     * which can leave unrelated types incomplete.
+     */
+    target_info_classes = object_class_get_list(TYPE_TARGET_INFO, false);
+    target_info_initialized = true;
+}
+
+GSList *target_info_qom_get_targets(void)
+{
+    assert(target_info_initialized);
+    return target_info_classes;
+}
 
 const TargetInfo *target_info(void)
 {
@@ -42,7 +66,7 @@ const TargetInfo *target_info(void)
 
 void target_info_qom_set_target(void)
 {
-    g_autoptr(GSList) targets = object_class_get_list(TYPE_TARGET_INFO, false);
+    GSList *targets = target_info_qom_get_targets();
 
     size_t num_found = g_slist_length(targets);
     if (num_found != 1) {

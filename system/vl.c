@@ -2914,7 +2914,7 @@ void qemu_init(int argc, char **argv)
 
     os_setup_limits();
 
-    module_call_init(MODULE_INIT_TARGET_INFO);
+    target_info_qom_init();
     target_info_qom_set_target();
 
     module_init_info(qemu_modinfo);

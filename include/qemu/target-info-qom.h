@@ -25,6 +25,10 @@ typedef struct TargetInfoQomClass {
 
 OBJECT_DECLARE_TYPE(TargetInfoQom, TargetInfoQomClass, TARGET_INFO)
 
+/* Initialize before MODULE_INIT_QOM; cache is owned by this module. */
+void target_info_qom_init(void);
+GSList *target_info_qom_get_targets(void);
+
 void target_info_qom_set_target(void);
 void target_info_qom_set_target_info(const TargetInfo *ti);
 

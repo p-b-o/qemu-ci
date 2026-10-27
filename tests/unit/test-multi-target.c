@@ -30,23 +30,29 @@
 /* stub for system/main.c */
 int (*qemu_main)(void);
 
+static GSList *targets;
+
 static void test_qom_types_are_unique(void)
 {
-    module_call_init(MODULE_INIT_TARGET_INFO);
-    g_autoptr(GSList) targets = object_class_get_list(TYPE_TARGET_INFO, false);
     g_assert(targets);
-    const TargetInfo *first_ti = TARGET_INFO_CLASS(targets->data)->target_info;
-    target_info_qom_set_target_info(first_ti);
-
-    /* register all types */
-    module_call_init(MODULE_INIT_QOM);
     /* trigger type_initialize for all types */
     object_class_get_list("", false);
+
+    g_assert_true(targets == target_info_qom_get_targets());
 }
 
 int main(int argc, char **argv)
 {
     g_test_init(&argc, &argv, NULL);
+    target_info_qom_init();
+    targets = target_info_qom_get_targets();
+
+    const TargetInfo *first_ti = TARGET_INFO_CLASS(targets->data)->target_info;
+    target_info_qom_set_target_info(first_ti);
+
+    /* register all types */
+    module_call_init(MODULE_INIT_QOM);
+
     g_test_add_func("/multi-targets/qom-types-are-unique",
                    test_qom_types_are_unique);
     return g_test_run();
