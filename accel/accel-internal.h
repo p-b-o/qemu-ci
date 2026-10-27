@@ -13,5 +13,6 @@
 #include "qemu/accel.h"
 
 void accel_init_ops_interfaces(AccelClass *ac);
+void accel_register_cpu_type(const char *cpu_type);
 
 #endif /* ACCEL_SYSTEM_H */

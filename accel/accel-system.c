@@ -25,6 +25,8 @@
 
 #include "qemu/osdep.h"
 #include "qemu/accel.h"
+#include "qemu/target-info-def.h"
+#include "qemu/target-info-qom.h"
 #include "qom/compat-properties.h"
 #include "qapi/qapi-commands-accelerator.h"
 #include "monitor/monitor.h"
@@ -32,6 +34,7 @@
 #include "hw/core/boards.h"
 #include "hw/core/cpu.h"
 #include "accel/accel-ops.h"
+#include "accel/accel-cpu.h"
 #include "accel/accel-cpu-ops.h"
 #include "system/cpus.h"
 #include "qemu/error-report.h"
@@ -124,6 +127,27 @@ static const TypeInfo accel_ops_type_info = {
 
 static void accel_system_register_types(void)
 {
+    GSList *targets = target_info_qom_get_targets();
+    const TargetInfo *ti, *prev_ti;
+
     type_register_static(&accel_ops_type_info);
+
+    for (GSList *l = targets; l; l = l->next) {
+        bool duplicate = false;
+
+        ti = TARGET_INFO_CLASS(l->data)->target_info;
+        for (GSList *prev = targets; prev != l; prev = prev->next) {
+            prev_ti = TARGET_INFO_CLASS(prev->data)->target_info;
+            if (g_str_equal(prev_ti->cpu_type, ti->cpu_type)) {
+                duplicate = true;
+                break;
+            }
+        }
+        if (duplicate) {
+            continue;
+        }
+
+        accel_register_cpu_type(ti->cpu_type);
+    }
 }
 type_init(accel_system_register_types);

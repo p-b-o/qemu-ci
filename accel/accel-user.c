@@ -9,7 +9,14 @@
 
 #include "qemu/osdep.h"
 #include "qemu/accel.h"
+#include "qemu/target-info.h"
 #include "accel-internal.h"
+
+static void register_accel_target_type(void)
+{
+    accel_register_cpu_type(target_cpu_type());
+}
+type_init(register_accel_target_type);
 
 void accel_init_ops_interfaces(AccelClass *ac)
 {

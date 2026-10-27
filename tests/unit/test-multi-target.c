@@ -15,6 +15,7 @@
 #include "qemu/osdep.h"
 #include "qemu/module.h"
 #include "qemu/target-info.h"
+#include "qemu/target-info-def.h"
 #include "qemu/target-info-qom.h"
 #include "qom/object.h"
 
@@ -41,6 +42,18 @@ static void test_qom_types_are_unique(void)
     g_assert_true(targets == target_info_qom_get_targets());
 }
 
+static void test_accel_cpu_parent_per_target(void)
+{
+    g_assert(targets);
+
+    for (GSList *l = targets; l; l = l->next) {
+        const TargetInfo *ti = TARGET_INFO_CLASS(l->data)->target_info;
+        g_autofree char *name = g_strconcat("accel-", ti->cpu_type, NULL);
+
+        g_assert_nonnull(object_class_by_name(name));
+    }
+}
+
 int main(int argc, char **argv)
 {
     g_test_init(&argc, &argv, NULL);
@@ -55,5 +68,7 @@ int main(int argc, char **argv)
 
     g_test_add_func("/multi-targets/qom-types-are-unique",
                    test_qom_types_are_unique);
+    g_test_add_func("/multi-targets/accel-cpu-parent-per-target",
+                    test_accel_cpu_parent_per_target);
     return g_test_run();
 }
