@@ -7,6 +7,8 @@ int main()
     int ach = 5, acl = 5;
     int resulth, resultl, resultdsp;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     rs      = 0xBC0123AD;
     rt      = 0x01643721;
     resulth = 0x00BD3A22;

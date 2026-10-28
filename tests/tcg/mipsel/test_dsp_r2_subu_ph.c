@@ -6,6 +6,8 @@ int main()
     int rd, rs, rt, dsp;
     int result, resultdsp;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     rs = 0x87654321;
     rt = 0x11111111;
     result    = 0x76543210;

@@ -8,6 +8,8 @@ int main()
     int acho, aclo;
     int resulth, resultl;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     achi = 0x05;
     acli = 0xB4CB;
     rs  = 0x01;

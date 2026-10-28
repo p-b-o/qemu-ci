@@ -6,6 +6,8 @@ int main()
     int input, result, dsp;
     int hope;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     input = 0x701BA35E;
     hope  = 0x701B5D5E;
 

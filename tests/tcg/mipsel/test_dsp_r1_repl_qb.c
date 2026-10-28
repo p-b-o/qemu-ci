@@ -5,6 +5,8 @@ int main()
 {
     int rd, result;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     result = 0xBFBFBFBF;
     __asm
         ("repl.qb %0, 0xBF\n\t"

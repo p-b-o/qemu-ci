@@ -6,6 +6,8 @@ int main()
     int dsp, sum;
     int result;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     dsp =  0x20;
     sum = 0x01;
     result = 0x02;

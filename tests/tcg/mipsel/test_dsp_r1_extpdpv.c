@@ -6,6 +6,8 @@ int main()
     int rt, rs, ach, acl, dsp, pos, efi;
     int result;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     ach = 0x05;
     acl = 0xB4CB;
     dsp = 0x07;

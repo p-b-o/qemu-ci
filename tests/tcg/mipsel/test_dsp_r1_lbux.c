@@ -8,6 +8,8 @@ int main(void)
     unsigned long addr, index;
     int result;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     value  = 0xBCDEF389;
     p = &value;
     addr = (unsigned long)p;

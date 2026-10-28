@@ -7,6 +7,8 @@ int main()
     int rd, rt;
     int result;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     rt     = 0x10017EFD;
     result = 0x10017EFD;
 

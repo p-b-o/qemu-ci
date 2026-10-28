@@ -6,6 +6,8 @@ int main()
     int achi, acho;
     int result;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     achi   = 0x004433;
     result = 0x004433;
 

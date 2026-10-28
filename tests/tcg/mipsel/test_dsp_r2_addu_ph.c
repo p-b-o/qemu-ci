@@ -7,6 +7,8 @@ int main()
     int dsp;
     int result;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     rs     = 0x00FF00FF;
     rt     = 0x00010001;
     result = 0x01000100;

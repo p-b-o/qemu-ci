@@ -7,6 +7,8 @@ int main()
     int ccond_i, outflag_i, efi_i, c_i, scount_i, pos_i;
     int ccond_o, outflag_o, efi_o, c_o, scount_o, pos_o;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     ccond_i   = 0x000000BC;  /* 4 */
     outflag_i = 0x0000001B;  /* 3 */
     efi_i     = 0x00000001;  /* 5 */

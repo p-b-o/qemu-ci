@@ -7,6 +7,8 @@ int main()
     int acho, aclo;
     int resulth, resultl;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     rs      = 0x00BBAACC;
     rt      = 0x0B1C3D2F;
     achi    = 0x00004433;

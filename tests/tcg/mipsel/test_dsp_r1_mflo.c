@@ -6,6 +6,8 @@ int main()
     int acli, aclo;
     int result;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     acli   = 0x004433;
     result = 0x004433;
 

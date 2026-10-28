@@ -10,6 +10,8 @@ int main()
     int resulth, resultl;
     int resdsp;
 
+    __asm("wrdsp $zero, 0x3f\n\t");
+
     achi = 0x00000000;
     acli = 0x0000B4CB;
     rs  = 0x0000FF06;
