@@ -1,0 +1,39 @@
+Looking up 20261027060153.1842910-1-stanleyjhu@google.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/7] include/scsi, block/ufs: Add security protocol and RPMB definitions
+    + Link: https://lore.kernel.org/qemu-devel/20261027060153.1842910-2-stanleyjhu@google.com
+  [32m✓[0m [PATCH 2/7] hw/ufs: Add RPMB unit descriptor and SECURITY PROTOCOL IN/OUT dispatch
+    + Link: https://lore.kernel.org/qemu-devel/20261027060153.1842910-3-stanleyjhu@google.com
+  [32m✓[0m [PATCH 3/7] tests/qtest/ufs-test: Add RPMB descriptor and CDB validation test
+    + Link: https://lore.kernel.org/qemu-devel/20261027060153.1842910-4-stanleyjhu@google.com
+  [32m✓[0m [PATCH 4/7] hw/ufs: Add RPMB key programming and write counter read handling
+    + Link: https://lore.kernel.org/qemu-devel/20261027060153.1842910-5-stanleyjhu@google.com
+  [32m✓[0m [PATCH 5/7] tests/qtest/ufs-test: Add RPMB key programming and write counter test
+    + Link: https://lore.kernel.org/qemu-devel/20261027060153.1842910-6-stanleyjhu@google.com
+  [32m✓[0m [PATCH 6/7] hw/ufs: Add RPMB authenticated data write and read handling
+    + Link: https://lore.kernel.org/qemu-devel/20261027060153.1842910-7-stanleyjhu@google.com
+  [32m✓[0m [PATCH 7/7] tests/qtest/ufs-test: Add RPMB authenticated data read and write test
+    + Link: https://lore.kernel.org/qemu-devel/20261027060153.1842910-8-stanleyjhu@google.com
+  ---
+  [32m✓[0m Signed: DKIM/google.com
+---
+Total patches: 7
+---
+Applying: include/scsi, block/ufs: Add security protocol and RPMB definitions
+Applying: hw/ufs: Add RPMB unit descriptor and SECURITY PROTOCOL IN/OUT dispatch
+Patch failed at 0002 hw/ufs: Add RPMB unit descriptor and SECURITY PROTOCOL IN/OUT dispatch
+error: patch failed: hw/ufs/trace-events:67
+error: hw/ufs/trace-events: patch does not apply
+error: patch failed: hw/ufs/ufs.h:412
+error: hw/ufs/ufs.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
