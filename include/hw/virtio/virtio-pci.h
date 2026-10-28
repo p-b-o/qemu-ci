@@ -236,6 +236,7 @@ typedef struct VirtioPCIDeviceTypeInfo {
     void (*instance_init)(Object *obj);
     void (*instance_finalize)(Object *obj);
     void (*class_init)(ObjectClass *klass, const void *data);
+    bool (*is_available)(void);
     const InterfaceInfo *interfaces;
 } VirtioPCIDeviceTypeInfo;
 
