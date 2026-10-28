@@ -1,0 +1,40 @@
+Looking up 20261028182651.5950-1-deller@kernel.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 19 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/9] target/hppa: restore lazy FPU context isolation
+    + Link: https://lore.kernel.org/qemu-devel/20261028182651.5950-2-deller@kernel.org
+  [32m✓[0m [PATCH 2/9] target/hppa: Use 15 bit protection IDs on PA1.1 CPUs
+    + Link: https://lore.kernel.org/qemu-devel/20261028182651.5950-3-deller@kernel.org
+  [32m✓[0m [PATCH 3/9] target/hppa: Only allow 8 BTLB entries for HP-UX 9.05
+    + Link: https://lore.kernel.org/qemu-devel/20261028182651.5950-4-deller@kernel.org
+  [32m✓[0m [PATCH 4/9] target/hppa: Implement local broadcast I/O space
+    + Link: https://lore.kernel.org/qemu-devel/20261028182651.5950-5-deller@kernel.org
+  [32m✓[0m [PATCH 5/9] target/hppa: Preload I/O-space BTLB entries for LASI and the central bus
+    + Link: https://lore.kernel.org/qemu-devel/20261028182651.5950-6-deller@kernel.org
+  [32m✓[0m [PATCH 6/9] artist: Redraw screen on colormap changes
+    + Link: https://lore.kernel.org/qemu-devel/20261028182651.5950-7-deller@kernel.org
+  [32m✓[0m [PATCH 7/9] hw/misc/lasi: LASI Harmony Audio presence emulation
+    + Link: https://lore.kernel.org/qemu-devel/20261028182651.5950-8-deller@kernel.org
+  [32m✓[0m [PATCH 8/9] target/hppa: Map CPUs at same addresses as on physical machines
+    + Link: https://lore.kernel.org/qemu-devel/20261028182651.5950-9-deller@kernel.org
+  [32m✓[0m [PATCH 9/9] target/hppa: Update SeaBIOS-hppa to version 27
+    + Link: https://lore.kernel.org/qemu-devel/20261028182651.5950-10-deller@kernel.org
+  ---
+  [32m✓[0m Signed: DKIM/kernel.org
+---
+Total patches: 9
+---
+Applying: target/hppa: restore lazy FPU context isolation
+Patch failed at 0001 target/hppa: restore lazy FPU context isolation
+error: patch failed: target/hppa/helper.h:82
+error: target/hppa/helper.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
