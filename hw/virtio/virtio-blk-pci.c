@@ -22,6 +22,7 @@
 #include "hw/virtio/virtio-pci.h"
 #include "qapi/error.h"
 #include "qemu/module.h"
+#include "qemu/target-info.h"
 #include "qom/object.h"
 
 typedef struct VirtIOBlkPCI VirtIOBlkPCI;
@@ -71,7 +72,6 @@ static void virtio_blk_pci_class_init(ObjectClass *klass, const void *data)
 
     set_bit(DEVICE_CATEGORY_STORAGE, dc->categories);
     device_class_set_props(dc, virtio_blk_pci_properties);
-    pci_qdev_property_add_specifics(dc);
     k->realize = virtio_blk_pci_realize;
     pcidev_k->vendor_id = PCI_VENDOR_ID_REDHAT_QUMRANET;
     pcidev_k->device_id = PCI_DEVICE_ID_VIRTIO_BLOCK;
@@ -89,6 +89,13 @@ static void virtio_blk_pci_instance_init(Object *obj)
                               "bootindex");
 }
 
+static void virtio_blk_pci_s390x_class_init(ObjectClass *klass,
+                                            const void *data)
+{
+    virtio_blk_pci_class_init(klass, data);
+    pci_qdev_property_add_specifics(DEVICE_CLASS(klass));
+}
+
 static const VirtioPCIDeviceTypeInfo virtio_blk_pci_info = {
     .base_name              = TYPE_VIRTIO_BLK_PCI,
     .generic_name           = "virtio-blk-pci",
@@ -97,11 +104,24 @@ static const VirtioPCIDeviceTypeInfo virtio_blk_pci_info = {
     .instance_size = sizeof(VirtIOBlkPCI),
     .instance_init = virtio_blk_pci_instance_init,
     .class_init    = virtio_blk_pci_class_init,
+    .is_available  = target_not_s390x,
+};
+
+static const VirtioPCIDeviceTypeInfo virtio_blk_pci_s390x_info = {
+    .base_name              = TYPE_VIRTIO_BLK_PCI,
+    .generic_name           = "virtio-blk-pci",
+    .transitional_name      = "virtio-blk-pci-transitional",
+    .non_transitional_name  = "virtio-blk-pci-non-transitional",
+    .instance_size = sizeof(VirtIOBlkPCI),
+    .instance_init = virtio_blk_pci_instance_init,
+    .class_init    = virtio_blk_pci_s390x_class_init,
+    .is_available  = target_s390x,
 };
 
 static void virtio_blk_pci_register(void)
 {
     virtio_pci_types_register(&virtio_blk_pci_info);
+    virtio_pci_types_register(&virtio_blk_pci_s390x_info);
 }
 
 type_init(virtio_blk_pci_register)

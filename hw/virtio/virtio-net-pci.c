@@ -22,6 +22,7 @@
 #include "hw/virtio/virtio-pci.h"
 #include "qapi/error.h"
 #include "qemu/module.h"
+#include "qemu/target-info.h"
 #include "qom/object.h"
 
 typedef struct VirtIONetPCI VirtIONetPCI;
@@ -77,7 +78,6 @@ static void virtio_net_pci_class_init(ObjectClass *klass, const void *data)
     k->sriov_vf_user_creatable = true;
     set_bit(DEVICE_CATEGORY_NETWORK, dc->categories);
     device_class_set_props(dc, virtio_net_properties);
-    pci_qdev_property_add_specifics(dc);
     vpciklass->realize = virtio_net_pci_realize;
 }
 
@@ -91,6 +91,13 @@ static void virtio_net_pci_instance_init(Object *obj)
                               "bootindex");
 }
 
+static void virtio_net_pci_s390x_class_init(ObjectClass *klass,
+                                            const void *data)
+{
+    virtio_net_pci_class_init(klass, data);
+    pci_qdev_property_add_specifics(DEVICE_CLASS(klass));
+}
+
 static const VirtioPCIDeviceTypeInfo virtio_net_pci_info = {
     .base_name             = TYPE_VIRTIO_NET_PCI,
     .generic_name          = "virtio-net-pci",
@@ -99,11 +106,24 @@ static const VirtioPCIDeviceTypeInfo virtio_net_pci_info = {
     .instance_size = sizeof(VirtIONetPCI),
     .instance_init = virtio_net_pci_instance_init,
     .class_init    = virtio_net_pci_class_init,
+    .is_available  = target_not_s390x,
+};
+
+static const VirtioPCIDeviceTypeInfo virtio_net_pci_s390x_info = {
+    .base_name             = TYPE_VIRTIO_NET_PCI,
+    .generic_name          = "virtio-net-pci",
+    .transitional_name     = "virtio-net-pci-transitional",
+    .non_transitional_name = "virtio-net-pci-non-transitional",
+    .instance_size = sizeof(VirtIONetPCI),
+    .instance_init = virtio_net_pci_instance_init,
+    .class_init    = virtio_net_pci_s390x_class_init,
+    .is_available  = target_s390x,
 };
 
 static void virtio_net_pci_register(void)
 {
     virtio_pci_types_register(&virtio_net_pci_info);
+    virtio_pci_types_register(&virtio_net_pci_s390x_info);
 }
 
 type_init(virtio_net_pci_register)
