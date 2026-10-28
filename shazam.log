@@ -1,0 +1,26 @@
+Looking up 20261028144539.691098-1-clement.mathieu--drif@bull.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/2] pcie_sriov: Rework the assert statements checking region numbers
+    + Link: https://lore.kernel.org/qemu-devel/20261028144539.691098-1-clement.mathieu--drif@bull.com
+  [32m✓[0m [PATCH 2/2] pcie_sriov: Adapt bar type array size to the number of regions
+    + Link: https://lore.kernel.org/qemu-devel/20261028144539.691098-2-clement.mathieu--drif@bull.com
+  ---
+  [32m✓[0m Signed: DKIM/bull.com
+---
+Total patches: 2
+---
+Applying: pcie_sriov: Rework the assert statements checking region numbers
+Patch failed at 0001 pcie_sriov: Rework the assert statements checking region numbers
+error: patch failed: hw/pci/pcie_sriov.c:230
+error: hw/pci/pcie_sriov.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
