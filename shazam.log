@@ -1,0 +1,239 @@
+Looking up cover.1793207602.git.mst@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 80 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 784 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/78] libvhost-user: protect against OOB memory table access
+    + Link: https://lore.kernel.org/qemu-devel/d033951e563397b3f6a7162e3de6bd90dcc770e9.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 2/78] vhost-user: fix SET_MEM_TABLE number of regions
+    + Link: https://lore.kernel.org/qemu-devel/82b5c5d4b7514f96cd2e652180219fe833071e59.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 3/78] hw/virtio/vhost-shadow-virtqueue: fix range boundary in SVQ translation
+    + Fixes: 34e3c94edaef ("vdpa: Add custom IOTLB translations to SVQ"). ([32m✓[0m DKIM/rsg.ci.i.u-tokyo.ac.jp)
+    + Link: https://lore.kernel.org/qemu-devel/b80a3c287c50357198f125581dffa5bef93ade37.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 4/78] tests/functional: add test_tap_migration
+    + Link: https://lore.kernel.org/qemu-devel/5464efb40194a7ba887363307693e203f9fd8b9d.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 5/78] net/tap: tap_post_load(): poll only on success
+    + Link: https://lore.kernel.org/qemu-devel/02c1873aaab76e53ec47f52ba1275a1b7449a4cf.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 6/78] hw/net: finish backend initialization earler for local migration
+    + Link: https://lore.kernel.org/qemu-devel/8b6638b507e1183c4d646e44b75e1575a9ae0f95.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 7/78] net/tap: move vmstate initialization to new_tap()
+    + Link: https://lore.kernel.org/qemu-devel/13c5f0e2120290425d7b5137d061b90a58f41420.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 8/78] net/tap: net_init_tap_one(): fix failure path
+    + Link: https://lore.kernel.org/qemu-devel/c7dbedd5a02bb667f9f143a32097ec77e9051aa8.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 9/78] Revert 9696846600ca ("multiboot: Prevent loading of x86_64 images")
+    + Link: https://lore.kernel.org/qemu-devel/9c590ba3ee4002b6911cc9c88bf58240529a4287.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 10/78] migration/cpr: forbid saving duplicate CprFds into hash table
+    + Link: https://lore.kernel.org/qemu-devel/07939e8724bf9fa88ae2daf7054eb0cf8c14db59.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 11/78] tests/unit: add test for duplicate keys in CPR FD table
+    + Link: https://lore.kernel.org/qemu-devel/9d3a7aff6fd014b58cbdd4506596c1ee336bb5af.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 12/78] migration: forbid snapshots in CPR migration modes
+    + Link: https://lore.kernel.org/qemu-devel/7d806e21fb37cb5c573e62218b9238391a78807d.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 13/78] migration: forbid snapshots under Xen
+    + Link: https://lore.kernel.org/qemu-devel/416567d0efd86e52e1e959905721b6a14706fe9d.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 14/78] tests/qtest/migration: add test for snapshot rejection in CPR modes
+    + Link: https://lore.kernel.org/qemu-devel/6c10bab556a6017af4c54d946322b72d98e904fd.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 15/78] vhost-vsock: block CPR migration modes
+    + Link: https://lore.kernel.org/qemu-devel/dd80bd57bdfb4ec813ff465aca4acd85ff3bff82.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 16/78] vhost: add vhost_reset_owner op
+    + Link: https://lore.kernel.org/qemu-devel/fbba41b890d7c65b82fe611cf26ac6631a464703.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 17/78] vhost-vsock: don't reset connections during CPR
+    + Link: https://lore.kernel.org/qemu-devel/4d206dd0ff6e949cedde265bc487e0e350edd1a2.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 18/78] vhost-vsock: fix FD leak in realize()
+    + Link: https://lore.kernel.org/qemu-devel/8aca0dd40310650960b28143657ac75b4685514c.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 19/78] vhost-vsock: preserve vhost FD during CPR
+    + Link: https://lore.kernel.org/qemu-devel/194a0afc851d071eae6b783d4e344bd6b2da5e63.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 20/78] vhost: factor out vhost_dev_init_backend()
+    + Link: https://lore.kernel.org/qemu-devel/0d3f5df94f23ea2858793abe054af09b38527b22.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 21/78] vhost: make vhost_dev_cleanup() safe on a partially initialized device
+    + Link: https://lore.kernel.org/qemu-devel/ca9dafcef36ba44115097111fa581ea92d55dbe0.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 22/78] vhost: add vhost_dev_set_owner() / vhost_dev_reset_owner() helpers
+    + Link: https://lore.kernel.org/qemu-devel/b52ef58c684ae481ee5ccc4166a63f816c0fde77.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 23/78] vhost: add vhost_dev_is_initialized() helper
+    + Link: https://lore.kernel.org/qemu-devel/c6f0c17d1617f9869caf80f0b9b08099f369a042.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 24/78] vhost: release ownership in vhost_dev_cleanup()
+    + Link: https://lore.kernel.org/qemu-devel/207854552170f0129b2fbd0895856d48674095d5.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 25/78] migration: add MIG_EVENT_INCOMING_FAILED
+    + Link: https://lore.kernel.org/qemu-devel/d5527772b0229c4cbd6d7ba6c9b33378ced2920d.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 26/78] vhost: release ownership when the incoming migration fails
+    + Link: https://lore.kernel.org/qemu-devel/7db39afff601ec66d92ba692441901067f96b6f1.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 27/78] vhost: release ownership on exit
+    + Link: https://lore.kernel.org/qemu-devel/30e26e913be83667e501eb2ed1a09b0ca90874ce.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 28/78] vhost-vsock: hand off device ownership across CPR
+    + Link: https://lore.kernel.org/qemu-devel/7382a381bb037f88cecc6dc185a42cea3a963cc8.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 29/78] tests/qtest/migration: add vhost-vsock tests for cpr-transfer and cpr-exec
+    + Link: https://lore.kernel.org/qemu-devel/a67b8d3710f6bb48cae913a9aa2bada621eb15ed.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 30/78] tests/functional: add vhost-vsock CPR test with a live guest
+    + Link: https://lore.kernel.org/qemu-devel/f0fd5fb114402a34a182a66964c0ea929b8b8993.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 31/78] tests/functional: cover a cpr-transfer target going away with vhost-vsock
+    + Link: https://lore.kernel.org/qemu-devel/51759e2f7c0030b7d0aa1373e3b4d6d20fa4ea24.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 32/78] qapi/virtio: Restore backend features in x-query-virtio-status
+    + Link: https://lore.kernel.org/qemu-devel/31afb9ef5e9c0589b880f3c6e90f67b8ee70bb7a.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 33/78] qapi/monitor: Handle missing vhost-user protocol features
+    + Link: https://lore.kernel.org/qemu-devel/7d09b0224d2794dfcd3e00956dd8563945a8ff51.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 34/78] hw/cxl: destroy primary CCI before re-initialization on reset
+    + Link: https://lore.kernel.org/qemu-devel/ae32a69fabebf1f0805786085fe98d6cf32f8946.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 35/78] hw/cxl: convert cxl-type3 to three-phase reset
+    + Link: https://lore.kernel.org/qemu-devel/a59e80eb792ade6efc48aac5bf0589587e02a5e6.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 36/78] hw/cxl: add cxl_destroy_mailbox_t3() as the mailbox teardown counterpart
+    + Link: https://lore.kernel.org/qemu-devel/a900c591ce1d3d5a017044f34d658b5b632000db.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 37/78] hw/cxl: discard in-flight sanitize state on mailbox teardown
+    + Link: https://lore.kernel.org/qemu-devel/1f5103eb7b2a24e8b5340052ff860ce17dbe59e8.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 38/78] hw/cxl: clear event logs, scan media and interrupt policy on reset
+    + Link: https://lore.kernel.org/qemu-devel/a82f0c08fd564fb1e6195849e560b335996b5b97.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 39/78] hw/cxl: clear poison lists and feature transfer state on reset
+    + Link: https://lore.kernel.org/qemu-devel/4ec0aba480960b90cd0acf2ff08ebbcb71b1973e.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 40/78] pcie_sriov: register user created virtual function before realizing it
+    + Link: https://lore.kernel.org/qemu-devel/ca7c24b7c8f69c13fef24a31660e1b6ea73686d3.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 41/78] hw/pci-bridge: Add generic PCIe switch upstream and downstream ports
+    + Link: https://lore.kernel.org/qemu-devel/f90f7eb8d98298e2d8ab5e75cdd665becdbe536d.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 42/78] hw/pci-bridge: Make speed and width for PCIe ports non-experimental
+    + Link: https://lore.kernel.org/qemu-devel/c827e3d2c5dad9964373361ad1b6a341cf2b841e.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 43/78] hw/pci-bridge: Default the generic PCIe root port as Gen6 capable
+    + Link: https://lore.kernel.org/qemu-devel/f3cad4828e5145974a49b4a5420131320e2edf73.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 44/78] hw/pci: Ensure PCIe link speed/width is consistent between both ends
+    + Link: https://lore.kernel.org/qemu-devel/2e5892e8cccc009de0e8e5cef3260f4497a9cf36.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 45/78] vdpa-dev: implement guest_notifier_mask/pending
+    + Link: https://lore.kernel.org/qemu-devel/3cacd08dccf2cdefb23cb75b182fa653bcd66323.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 46/78] vhost-user: remove shared object entries during cleanup
+    + Link: https://lore.kernel.org/qemu-devel/05b213ca8e2b63ba56e978fdb252549909e1f635.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 47/78] vhost: fix off-by-one in vhost_svq_next_desc with IN_ORDER
+    + Link: https://lore.kernel.org/qemu-devel/e3b0a9e63b954a09e4673d2f42f715ae2040b140.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 48/78] pcie_sriov: fix wrong write width and off-by-one in pf_reset
+    + Link: https://lore.kernel.org/qemu-devel/1482c4bfad87d5ca741706ff5c9ea677dfd152e1.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 49/78] util/event_notifier: more strict API
+    + Link: https://lore.kernel.org/qemu-devel/05f5ab90ea52b0151958fd2506c15858e3e80442.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 50/78] virtio-qmp: Fix out-of-bounds vqs index in vhost queue status
+    + Link: https://lore.kernel.org/qemu-devel/95253c9a9e210c58ea8349644f173c807f2213c5.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 51/78] contrib/vhost-user-bridge: Use stderr for debug output
+    + Link: https://lore.kernel.org/qemu-devel/00c714b33b5ee1b0ced551ab72971191d8b928f6.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 52/78] tests/functional/x86_64/test_vhost_user_bridge: Eliminate stdbuf usage
+    + Link: https://lore.kernel.org/qemu-devel/fe9cf95d2434342b6ded5e3a12569ec221b71c21.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 53/78] pcie_aer: fix pci_set_long overflow into PCI_EXP_LNKCAP
+    + Link: https://lore.kernel.org/qemu-devel/17c8a60aed5560e482d56ae834e46563346212d5.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 54/78] MAINTAINERS: Update Junjie Cao's email address
+    + Link: https://lore.kernel.org/qemu-devel/da093584c2e0036984bb707dbc584f87279129d2.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 55/78] hw/arm: remove pci-bridge/pci_expander_bridge.h from virt.c
+    + Link: https://lore.kernel.org/qemu-devel/2011fb7a587da19e6e9f64e39ce0647698985f64.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 56/78] hw/pci-bridge: split CXL PXB into separate file
+    + Link: https://lore.kernel.org/qemu-devel/e6b0101a30025ed22deb99f6c956be33d842be16.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 57/78] vhost-user: add missing stub for vhost_user_has_protocol_feature()
+    + Fixes: 5eb2347867 ("vhost-user: add skip_drain param to do_vhost_virtqueue_stop") ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/3fae3d54fdd73fb50872a3c78ce098738aca354b.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 58/78] vhost: move skip-drain feature check to vhost-user
+    + Link: https://lore.kernel.org/qemu-devel/1272a3d91519108ebcb9e5a8f5f1b838ea2ecb24.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 59/78] virtio-snd: don't use virtio_snd_pcm_get_stream() in virtio_snd_post_load()
+    + Link: https://lore.kernel.org/qemu-devel/ae5f9909fb755a05c5e4d9ae319610c8a6f389f9.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 60/78] vhost-user: add dedicated mailing list
+    + Link: https://lore.kernel.org/qemu-devel/f5992d68d3dff73e17f65264d5e443ac40d546ad.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 61/78] amd_iommu: Assign ioapic_as only when interrupt remapping is supported.
+    + Link: https://lore.kernel.org/qemu-devel/6d5e16d4b2f580355f89596c50868aefb8e14ba9.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 62/78] x86-iommu: Introduce x86_iommu_device_get() for x86-iommu retrieval
+    + Link: https://lore.kernel.org/qemu-devel/095eef807ad24a3d388a9c4cb2144657a0f71166.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 63/78] amd_iommu: Add support for get_x86_iommu callback
+    + Link: https://lore.kernel.org/qemu-devel/a854025985c5ba82e61104904cb4efefd23efb0c.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 64/78] intel_iommu: Add support for get_x86_iommu callback
+    + Link: https://lore.kernel.org/qemu-devel/637dfc409e1f0f5c33651e3d1f0d6a4a719fc50a.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 65/78] i386/kvm: Use x86_iommu_device_get() for per-device IOMMU lookup
+    + Link: https://lore.kernel.org/qemu-devel/70c046b180c8f85c5199d691c51715dd42a65efb.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 66/78] amd_iommu: Introduce root bus
+    + Link: https://lore.kernel.org/qemu-devel/eb46c65c1fcb9ba2c172fd29763c64f50ba82065.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 67/78] acpi-build: Create PCI topology using amd iommu root bus
+    + Link: https://lore.kernel.org/qemu-devel/30ce0dcb3276b064d37df46f2a8bf866b8e35e5a.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 68/78] amd_iommu: Allow IOMMU to attachment on non-system (pcie.0) bus
+    + Link: https://lore.kernel.org/qemu-devel/297f7526a65aaf84fa713868263f6ed6921415b8.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 69/78] intel_iommu_accel: Guard VTDAccelPASIDCacheEntry definition
+    + Link: https://lore.kernel.org/qemu-devel/bb741be54f53e7e562b0b34364f1603da6df3638.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 70/78] backends/iommufd: Introduce iommufd_backend_alloc_faultq
+    + Link: https://lore.kernel.org/qemu-devel/fb57097733fb0b6198f908fc9c0753df054c6b5a.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 71/78] backends/iommufd: Extend iommufd_backend_alloc_hwpt() with fault_id
+    + Link: https://lore.kernel.org/qemu-devel/1ea8e7ec0d6e27154ac8d2147623860d6a11efba.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 72/78] intel_iommu_accel: Add PRQ injection for passthrough device
+    + Link: https://lore.kernel.org/qemu-devel/8180373621fe869aaed82278e5803887ca95e23b.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 73/78] intel_iommu_accel: Accept PRQ response for passthrough device
+    + Link: https://lore.kernel.org/qemu-devel/fc656e7e186956261eb3b2f599a5f00098fa0de2.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 74/78] intel_iommu_accel: Teardown FAULTQ resources in bottom half
+    + Link: https://lore.kernel.org/qemu-devel/7ce51564c3365930d145ed31786ff2dac6f9b7be.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 75/78] hw/virtio/virtio-mem: Fix error message on invalid NUMA node
+    + Link: https://lore.kernel.org/qemu-devel/3650cf4f7c7cdd013bb801d5945e57899da195d4.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 76/78] net/tap: add tap_fd_get_mtu() to query host tap MTU
+    + Link: https://lore.kernel.org/qemu-devel/c9595f36f1bd8daa40fd3e49f92b8b793223f9ec.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 77/78] net: add generic get_mtu NetClientInfo callback
+    + Link: https://lore.kernel.org/qemu-devel/d3c5277cc401ff656d2ddf81779b15b171044a66.1793207602.git.mst@redhat.com
+  [32m✓[0m [PATCH 78/78] virtio-net: add mtu-from-tap property for automatic MTU detection
+    + Link: https://lore.kernel.org/qemu-devel/c155e7e9e025b60ce17e26a7c382d86f3f9c9fee.1793207602.git.mst@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 78
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Reported-by: Clément Chigot <chigot@adacore.com>
+     Msg From: Stefano Garzarella <sgarzare@redhat.com>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: libvhost-user: protect against OOB memory table access
+Applying: vhost-user: fix SET_MEM_TABLE number of regions
+Applying: hw/virtio/vhost-shadow-virtqueue: fix range boundary in SVQ translation
+Applying: tests/functional: add test_tap_migration
+Applying: net/tap: tap_post_load(): poll only on success
+Applying: hw/net: finish backend initialization earler for local migration
+Applying: net/tap: move vmstate initialization to new_tap()
+Applying: net/tap: net_init_tap_one(): fix failure path
+Applying: Revert 9696846600ca ("multiboot: Prevent loading of x86_64 images")
+Applying: migration/cpr: forbid saving duplicate CprFds into hash table
+Applying: tests/unit: add test for duplicate keys in CPR FD table
+Applying: migration: forbid snapshots in CPR migration modes
+Applying: migration: forbid snapshots under Xen
+Applying: tests/qtest/migration: add test for snapshot rejection in CPR modes
+Applying: vhost-vsock: block CPR migration modes
+Applying: vhost: add vhost_reset_owner op
+Applying: vhost-vsock: don't reset connections during CPR
+Applying: vhost-vsock: fix FD leak in realize()
+Applying: vhost-vsock: preserve vhost FD during CPR
+Applying: vhost: factor out vhost_dev_init_backend()
+Applying: vhost: make vhost_dev_cleanup() safe on a partially initialized device
+Applying: vhost: add vhost_dev_set_owner() / vhost_dev_reset_owner() helpers
+Applying: vhost: add vhost_dev_is_initialized() helper
+Applying: vhost: release ownership in vhost_dev_cleanup()
+Applying: migration: add MIG_EVENT_INCOMING_FAILED
+Applying: vhost: release ownership when the incoming migration fails
+Applying: vhost: release ownership on exit
+Applying: vhost-vsock: hand off device ownership across CPR
+Applying: tests/qtest/migration: add vhost-vsock tests for cpr-transfer and cpr-exec
+Applying: tests/functional: add vhost-vsock CPR test with a live guest
+Applying: tests/functional: cover a cpr-transfer target going away with vhost-vsock
+Applying: qapi/virtio: Restore backend features in x-query-virtio-status
+Applying: qapi/monitor: Handle missing vhost-user protocol features
+Applying: hw/cxl: destroy primary CCI before re-initialization on reset
+Applying: hw/cxl: convert cxl-type3 to three-phase reset
+Applying: hw/cxl: add cxl_destroy_mailbox_t3() as the mailbox teardown counterpart
+Applying: hw/cxl: discard in-flight sanitize state on mailbox teardown
+Applying: hw/cxl: clear event logs, scan media and interrupt policy on reset
+Applying: hw/cxl: clear poison lists and feature transfer state on reset
+Applying: pcie_sriov: register user created virtual function before realizing it
+Applying: hw/pci-bridge: Add generic PCIe switch upstream and downstream ports
+Applying: hw/pci-bridge: Make speed and width for PCIe ports non-experimental
+Applying: hw/pci-bridge: Default the generic PCIe root port as Gen6 capable
+Applying: hw/pci: Ensure PCIe link speed/width is consistent between both ends
+Applying: vdpa-dev: implement guest_notifier_mask/pending
+Applying: vhost-user: remove shared object entries during cleanup
+Applying: vhost: fix off-by-one in vhost_svq_next_desc with IN_ORDER
+Applying: pcie_sriov: fix wrong write width and off-by-one in pf_reset
+Applying: util/event_notifier: more strict API
+Applying: virtio-qmp: Fix out-of-bounds vqs index in vhost queue status
+Applying: contrib/vhost-user-bridge: Use stderr for debug output
+Applying: tests/functional/x86_64/test_vhost_user_bridge: Eliminate stdbuf usage
+Applying: pcie_aer: fix pci_set_long overflow into PCI_EXP_LNKCAP
+Applying: MAINTAINERS: Update Junjie Cao's email address
+Applying: hw/arm: remove pci-bridge/pci_expander_bridge.h from virt.c
+Patch failed at 0055 hw/arm: remove pci-bridge/pci_expander_bridge.h from virt.c
+error: patch failed: hw/arm/virt.c:58
+error: hw/arm/virt.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
