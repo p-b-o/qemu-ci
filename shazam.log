@@ -1,0 +1,59 @@
+Looking up 20261027111216.392-1-luoyonggang@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 19 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 124 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/17] hw/riscv/virt: move virt TypeInfo into its type_init
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-2-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 2/17] hw/arm/virt: move virt TypeInfo into its type_init
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-3-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 3/17] hw/or1k/virt: move virt TypeInfo into its type_init
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-4-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 4/17] hw/hexagon/virt: move virt TypeInfo into its type_init
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-5-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 5/17] hw/loongarch/virt: move virt TypeInfo into its type_init
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-6-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 6/17] hw/m68k/virt: move virt TypeInfo into its type_init
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-7-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 7/17] hw/xtensa/virt: move virt TypeInfo into its type_init
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-8-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 8/17] machine: allow -M name to differ from QOM type
+    + Reviewed-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-9-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 9/17] hw/riscv/virt: use unique QOM name
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-10-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 10/17] hw/arm/virt: use unique QOM name
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-11-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 11/17] hw/or1k/virt: use unique QOM name
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-12-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 12/17] hw/hexagon/virt: use unique QOM name
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-13-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 13/17] hw/loongarch/virt: use unique QOM name
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-14-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 14/17] hw/m68k/virt: use unique QOM name
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-15-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 15/17] hw/xtensa/virt: use unique QOM name
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-16-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 16/17] qapi: return MachineInfo typename from query-machines
+    + Acked-by: Markus Armbruster <armbru@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Reviewed-by: Zhao Liu <zhao1.liu@intel.com> ([32m✓[0m DKIM/intel.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-17-luoyonggang@gmail.com
+  [32m✓[0m [PATCH v4 17/17] machine: match the versioned virt example to arm virt
+    + Link: https://lore.kernel.org/qemu-devel/20261027111216.392-18-luoyonggang@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 17
+---
+Applying: hw/riscv/virt: move virt TypeInfo into its type_init
+Patch failed at 0001 hw/riscv/virt: move virt TypeInfo into its type_init
+error: patch failed: hw/riscv/virt.c:1196
+error: hw/riscv/virt.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
