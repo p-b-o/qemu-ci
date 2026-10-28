@@ -29,6 +29,7 @@
 #include "qapi/error.h"
 #include "system/reset.h"
 #include "hw/core/boards.h"
+#include "qemu/target-info.h"
 #include "hw/core/loader.h"
 #include "hw/pci-host/gpex.h"
 #include "net/net.h"
@@ -124,4 +125,22 @@ static void xtensa_virt_machine_init(MachineClass *mc)
     mc->default_nic = "virtio-net-pci";
 }
 
-DEFINE_MACHINE("virt", xtensa_virt_machine_init)
+static void xtensa_virt_machine_class_init(ObjectClass *oc, const void *data)
+{
+    xtensa_virt_machine_init(MACHINE_CLASS(oc));
+}
+
+static const TypeInfo xtensa_virt_machine_info = {
+    .name = MACHINE_TYPE_NAME("virt"),
+    .parent = TYPE_MACHINE,
+    .class_init = xtensa_virt_machine_class_init,
+    .instance_size = sizeof(MachineState),
+    .is_available = target_xtensa,
+};
+
+static void xtensa_virt_machine_register_types(void)
+{
+    type_register_static(&xtensa_virt_machine_info);
+}
+
+type_init(xtensa_virt_machine_register_types)
