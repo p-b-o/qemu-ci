@@ -87,9 +87,14 @@ if __name__ == '__main__':
 
     if "system" in args.qemu:
         # for system mode we assume qargs has set-up for binary if
-        # indeed we have set one.
+        # indeed we have set one, either ending with an option taking
+        # it (e.g. -kernel) or using the @BINARY@ placeholder.
         if args.binary:
-            qemu_cmd.append(args.binary)
+            if any("@BINARY@" in arg for arg in qemu_cmd):
+                qemu_cmd = [arg.replace("@BINARY@", args.binary)
+                            for arg in qemu_cmd]
+            else:
+                qemu_cmd.append(args.binary)
         if not args.no_suspend:
             qemu_cmd.append("-S")
         qemu_cmd.extend(["-gdb", f"unix:path={socket_name},server=on"])
