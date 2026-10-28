@@ -3221,14 +3221,11 @@ static void scsi_property_add_specifics(DeviceClass *dc)
 {
     ObjectClass *oc = OBJECT_CLASS(dc);
 
-    /* The loadparm property is only supported on s390x */
-    if (target_s390x()) {
-        object_class_property_add_str(oc, "loadparm",
-                                      scsi_property_get_loadparm,
-                                      scsi_property_set_loadparm);
-        object_class_property_set_description(oc, "loadparm",
-                                              "load parameter (s390x only)");
-    }
+    object_class_property_add_str(oc, "loadparm",
+                                  scsi_property_get_loadparm,
+                                  scsi_property_set_loadparm);
+    object_class_property_set_description(oc, "loadparm",
+                                          "load parameter (s390x only)");
 }
 
 static void scsi_disk_base_class_initfn(ObjectClass *klass, const void *data)
@@ -3362,14 +3359,26 @@ static void scsi_hd_class_initfn(ObjectClass *klass, const void *data)
     dc->desc = "virtual SCSI disk";
     device_class_set_props(dc, scsi_hd_properties);
     dc->vmsd  = &vmstate_scsi_disk_state;
+}
 
-    scsi_property_add_specifics(dc);
+static void scsi_hd_s390x_class_initfn(ObjectClass *klass, const void *data)
+{
+    scsi_hd_class_initfn(klass, data);
+    scsi_property_add_specifics(DEVICE_CLASS(klass));
 }
 
 static const TypeInfo scsi_hd_info = {
     .name          = "scsi-hd",
     .parent        = TYPE_SCSI_DISK_BASE,
     .class_init    = scsi_hd_class_initfn,
+    .is_available  = target_not_s390x,
+};
+
+static const TypeInfo scsi_hd_s390x_info = {
+    .name          = "scsi-hd",
+    .parent        = TYPE_SCSI_DISK_BASE,
+    .class_init    = scsi_hd_s390x_class_initfn,
+    .is_available  = target_s390x,
 };
 
 static const Property scsi_cd_properties[] = {
@@ -3405,14 +3414,26 @@ static void scsi_cd_class_initfn(ObjectClass *klass, const void *data)
     dc->desc = "virtual SCSI CD-ROM";
     device_class_set_props(dc, scsi_cd_properties);
     dc->vmsd  = &vmstate_scsi_disk_state;
+}
 
-    scsi_property_add_specifics(dc);
+static void scsi_cd_s390x_class_initfn(ObjectClass *klass, const void *data)
+{
+    scsi_cd_class_initfn(klass, data);
+    scsi_property_add_specifics(DEVICE_CLASS(klass));
 }
 
 static const TypeInfo scsi_cd_info = {
     .name          = "scsi-cd",
     .parent        = TYPE_SCSI_DISK_BASE,
     .class_init    = scsi_cd_class_initfn,
+    .is_available  = target_not_s390x,
+};
+
+static const TypeInfo scsi_cd_s390x_info = {
+    .name          = "scsi-cd",
+    .parent        = TYPE_SCSI_DISK_BASE,
+    .class_init    = scsi_cd_s390x_class_initfn,
+    .is_available  = target_s390x,
 };
 
 #ifdef __linux__
@@ -3462,7 +3483,9 @@ static void scsi_disk_register_types(void)
 {
     type_register_static(&scsi_disk_base_info);
     type_register_static(&scsi_hd_info);
+    type_register_static(&scsi_hd_s390x_info);
     type_register_static(&scsi_cd_info);
+    type_register_static(&scsi_cd_s390x_info);
 #ifdef __linux__
     type_register_static(&scsi_block_info);
 #endif
