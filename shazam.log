@@ -1,0 +1,28 @@
+Looking up CAEq2Q90UbCK2=7SFGQErviup1=u0AYVf=n90NaJvo1M9N=_BUA@mail.gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+  Added from v2: 3 patches
+Analyzing 4 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v2 1/2] target/riscv: do not raise the no-PMP-rule access fault from mret
+    + Link: https://lore.kernel.org/qemu-devel/fbeadd5b2fe5ccfd20b52dbccd4e5856f215ede0.1793217528.git.tewaro@theorem.dev
+  [32m✓[0m [PATCH v2 2/2] tests/tcg/riscv64: add test for mret to S-mode with no PMP entry
+    + Link: https://lore.kernel.org/qemu-devel/e6710bc2fb2759f2272ba037a6019374293f7aa9.1793217528.git.tewaro@theorem.dev
+  ---
+  [32m✓[0m Signed: DKIM/theorem-dev.20260707.gappssmtp.com (From: tewaro@theorem.dev)
+---
+Total patches: 2
+---
+Applying: target/riscv: do not raise the no-PMP-rule access fault from mret
+Applying: tests/tcg/riscv64: add test for mret to S-mode with no PMP entry
+Patch failed at 0002 tests/tcg/riscv64: add test for mret to S-mode with no PMP entry
+error: patch failed: tests/tcg/riscv64/system/meson.build:25
+error: tests/tcg/riscv64/system/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
