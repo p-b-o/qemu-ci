@@ -72,23 +72,10 @@ bool compat_policy_check_security(const CompatPolicy *policy,
         return true;
     }
 
-    switch (policy->insecure_input) {
-    case COMPAT_POLICY_SECURITY_ACCEPT:
-        return true;
-
-    case COMPAT_POLICY_SECURITY_REJECT:
-        error_setg(errp, "Type '%s' does not provide a security boundary "
-                   "to protect against untrusted data or actions", typename);
-        return false;
-
-    case COMPAT_POLICY_SECURITY_WARN:
-        warn_report("Type '%s' does not provide a security boundary "
-                    "to protect against untrusted data or actions", typename);
-        return true;
-
-    default:
-        g_assert_not_reached();
-    }
+    return compat_policy_input_ok1(policy->insecure_input,
+                                   "Insecure",
+                                   ERROR_CLASS_GENERIC_ERROR,
+                                   "QOM type", typename, errp);
 }
 
 
