@@ -58,6 +58,20 @@ bool target_heterogeneous(void);
 bool target_base_arm(void);
 
 /**
+ * target_base_i386:
+ *
+ * Returns whether the target architecture is i386 or x86_64.
+ */
+bool target_base_i386(void);
+
+/**
+ * target_not_base_i386:
+ *
+ * Returns whether the target architecture is not i386 or x86_64.
+ */
+bool target_not_base_i386(void);
+
+/**
  * target_arm:
  *
  * Returns whether the target architecture is ARM (32-bit, not Aarch64).
