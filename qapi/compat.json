@@ -17,10 +17,12 @@
 #
 # @crash: abort() the process
 #
+# @warn: Accept with a warning printed to stderr (Since: 11.2)
+#
 # Since: 6.0
 ##
 { 'enum': 'CompatPolicyInput',
-  'data': [ 'accept', 'reject', 'crash' ] }
+  'data': [ 'accept', 'reject', 'crash', 'warn' ] }
 
 ##
 # @CompatPolicyOutput:
