@@ -126,6 +126,11 @@ bool target_s390x(void)
     return target_arch() == SYS_EMU_TARGET_S390X;
 }
 
+bool target_not_s390x(void)
+{
+    return !target_s390x();
+}
+
 bool target_base_riscv(void)
 {
     switch (target_arch()) {
