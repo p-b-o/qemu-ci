@@ -89,6 +89,17 @@ bool target_loongarch(void)
     return target_arch() == SYS_EMU_TARGET_LOONGARCH64;
 }
 
+bool target_xtensa(void)
+{
+    switch (target_arch()) {
+    case SYS_EMU_TARGET_XTENSA:
+    case SYS_EMU_TARGET_XTENSAEB:
+        return true;
+    default:
+        return false;
+    }
+}
+
 bool target_base_ppc(void)
 {
     switch (target_arch()) {
