@@ -602,6 +602,8 @@ static void mips_cpu_realizefn(DeviceState *dev, Error **errp)
         return;
     }
 
+    mips_cpu_register_gdb_regs(cs);
+
     env->exception_base = (int32_t)0xBFC00000;
 
 #if defined(CONFIG_TCG) && !defined(CONFIG_USER_ONLY)
@@ -774,6 +776,8 @@ static void mips_cpu_cpudef_class_init(ObjectClass *oc, const void *data)
 {
     MIPSCPUClass *mcc = MIPS_CPU_CLASS(oc);
     mcc->cpu_def = data;
+
+    mips_cpu_gdb_class_init_xml(CPU_CLASS(oc));
 }
 
 static void mips_register_cpudef_type(const struct mips_def_t *def)
