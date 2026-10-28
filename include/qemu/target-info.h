@@ -93,6 +93,13 @@ bool target_hexagon(void);
 bool target_or1k(void);
 
 /**
+ * target_loongarch:
+ *
+ * Returns whether the target architecture is LoongArch.
+ */
+bool target_loongarch(void);
+
+/**
  * target_base_ppc:
  *
  * Returns whether the target architecture is PowerPC 32-bit or 64-bit.
