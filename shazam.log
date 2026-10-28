@@ -1,0 +1,62 @@
+Looking up 20261027143036.44973-1-marcelomanzo@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 18 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 610 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v6 1/17] hw/arm/bcm2838_pcie: add BCM2838 PCIe Root Complex
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-2-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 2/17] hw/arm/bcm2838_pcie: add BCM2838 PCIe host
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-3-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 3/17] hw/arm/bcm2838: enable BCM2838 PCIe host bridge
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-4-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 4/17] hw/net/bcm2838_genet: add GENET stub device
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-5-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 5/17] hw/net/bcm2838_genet: add GENET register structs, part 1/4
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-6-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 6/17] hw/net/bcm2838_genet: add GENET register structs, part 2/4
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-7-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 7/17] hw/net/bcm2838_genet: add GENET register structs, part 3/4
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-8-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 8/17] hw/net/bcm2838_genet: add GENET register structs, part 4/4
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-9-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 9/17] hw/net/bcm2838_genet: add GENET register access macros
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-10-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 10/17] hw/net/bcm2838_genet: implement GENET register ops
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-11-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 11/17] hw/net/bcm2838_genet: implement GENET MDIO
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-12-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 12/17] hw/net/bcm2838_genet: implement GENET TX path
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-13-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 13/17] hw/net/bcm2838_genet: implement GENET RX path
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-14-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 14/17] hw/net/bcm2838_genet: add migration state
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-15-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 15/17] hw/arm/bcm2838: enable BCM2838 GENET controller
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-16-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 16/17] docs/system/arm/raspi: move PCIe/GENET from missing to implemented
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-17-marcelomanzo@gmail.com
+  [32m✓[0m [PATCH v6 17/17] tests/functional/aarch64: add raspi4b GENET networking test
+    + Link: https://lore.kernel.org/qemu-devel/20261027143036.44973-18-marcelomanzo@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 17
+---
+Applying: hw/arm/bcm2838_pcie: add BCM2838 PCIe Root Complex
+Applying: hw/arm/bcm2838_pcie: add BCM2838 PCIe host
+Applying: hw/arm/bcm2838: enable BCM2838 PCIe host bridge
+Patch failed at 0003 hw/arm/bcm2838: enable BCM2838 PCIe host bridge
+error: patch failed: hw/arm/bcm2838_peripherals.c:35
+error: hw/arm/bcm2838_peripherals.c: patch does not apply
+error: patch failed: hw/arm/raspi4b.c:63
+error: hw/arm/raspi4b.c: patch does not apply
+error: patch failed: include/hw/arm/bcm2838_peripherals.h:10
+error: include/hw/arm/bcm2838_peripherals.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
