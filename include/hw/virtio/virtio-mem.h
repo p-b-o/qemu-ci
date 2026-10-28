@@ -134,6 +134,8 @@ struct VirtIOMEMClass {
     VirtioDeviceClass parent_class;
 
     /* public */
+    bool has_legacy_guests;
+
     void (*fill_device_info)(const VirtIOMEM *vmen, VirtioMEMDeviceInfo *vi);
     MemoryRegion *(*get_memory_region)(VirtIOMEM *vmem, Error **errp);
     void (*decide_memslots)(VirtIOMEM *vmem, unsigned int limit);

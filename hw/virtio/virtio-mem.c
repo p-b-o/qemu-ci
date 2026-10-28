@@ -15,6 +15,7 @@
 #include "qemu/cutils.h"
 #include "qemu/error-report.h"
 #include "qemu/units.h"
+#include "qemu/target-info.h"
 #include "qemu/target-info-qapi.h"
 #include "system/memory.h"
 #include "system/numa.h"
@@ -34,22 +35,6 @@
 #include "trace.h"
 
 static const VMStateDescription vmstate_virtio_mem_device_early;
-
-static bool virtio_mem_has_legacy_guests(void)
-{
-    /*
-     * We only had legacy x86 guests that did not support
-     * VIRTIO_MEM_F_UNPLUGGED_INACCESSIBLE. Other targets don't have
-     * legacy guests.
-     */
-    switch (target_arch()) {
-    case SYS_EMU_TARGET_I386:
-    case SYS_EMU_TARGET_X86_64:
-        return true;
-    default:
-        return false;
-    }
-}
 
 /*
  * Let's not allow blocks smaller than 1 MiB, for example, to keep the tracking
@@ -859,7 +844,7 @@ static void virtio_mem_device_realize(DeviceState *dev, Error **errp)
     rb = vmem->memdev->mr.ram_block;
     page_size = qemu_ram_pagesize(rb);
 
-    if (virtio_mem_has_legacy_guests()) {
+    if (VIRTIO_MEM_GET_CLASS(vmem)->has_legacy_guests) {
         switch (vmem->unplugged_inaccessible) {
         case ON_OFF_AUTO_AUTO:
             if (virtio_mem_has_shared_zeropage(rb)) {
@@ -1635,9 +1620,6 @@ static void virtio_mem_class_init(ObjectClass *klass, const void *data)
     RamDiscardSourceClass *rdsc = RAM_DISCARD_SOURCE_CLASS(klass);
 
     device_class_set_props(dc, virtio_mem_properties);
-    if (virtio_mem_has_legacy_guests()) {
-        device_class_set_props(dc, virtio_mem_legacy_guests_properties);
-    }
     dc->vmsd = &vmstate_virtio_mem;
 
     set_bit(DEVICE_CATEGORY_MISC, dc->categories);
@@ -1660,6 +1642,14 @@ static void virtio_mem_class_init(ObjectClass *klass, const void *data)
     rdsc->is_populated = virtio_mem_rds_is_populated;
 }
 
+static void virtio_mem_legacy_class_init(ObjectClass *klass, const void *data)
+{
+    virtio_mem_class_init(klass, data);
+    device_class_set_props(DEVICE_CLASS(klass),
+                           virtio_mem_legacy_guests_properties);
+    VIRTIO_MEM_CLASS(klass)->has_legacy_guests = true;
+}
+
 static const TypeInfo virtio_mem_info = {
     .name = TYPE_VIRTIO_MEM,
     .parent = TYPE_VIRTIO_DEVICE,
@@ -1668,6 +1658,22 @@ static const TypeInfo virtio_mem_info = {
     .instance_finalize = virtio_mem_instance_finalize,
     .class_init = virtio_mem_class_init,
     .class_size = sizeof(VirtIOMEMClass),
+    .is_available = target_not_base_i386,
+    .interfaces = (const InterfaceInfo[]) {
+        { TYPE_RAM_DISCARD_SOURCE },
+        { }
+    },
+};
+
+static const TypeInfo virtio_mem_legacy_info = {
+    .name = TYPE_VIRTIO_MEM,
+    .parent = TYPE_VIRTIO_DEVICE,
+    .instance_size = sizeof(VirtIOMEM),
+    .instance_init = virtio_mem_instance_init,
+    .instance_finalize = virtio_mem_instance_finalize,
+    .class_init = virtio_mem_legacy_class_init,
+    .class_size = sizeof(VirtIOMEMClass),
+    .is_available = target_base_i386,
     .interfaces = (const InterfaceInfo[]) {
         { TYPE_RAM_DISCARD_SOURCE },
         { }
@@ -1677,6 +1683,7 @@ static const TypeInfo virtio_mem_info = {
 static void virtio_register_types(void)
 {
     type_register_static(&virtio_mem_info);
+    type_register_static(&virtio_mem_legacy_info);
 }
 
 type_init(virtio_register_types)
