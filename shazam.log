@@ -1,0 +1,39 @@
+Looking up 20261028054141.2933271-1-bin.meng@processmission.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/2] qemu: arm: Rename QEMU arm* defconfig files
+    + Link: https://lore.kernel.org/qemu-devel/20261028054141.2933271-1-bin.meng@processmission.com
+  [32m✓[0m [PATCH v3 2/2] qemu: arm: sbsa: Rename sbsa defconfig to arm64
+    + Link: https://lore.kernel.org/qemu-devel/20261028054141.2933271-2-bin.meng@processmission.com
+  ---
+  [32m✓[0m Signed: DKIM/processmission.com
+---
+Total patches: 2
+---
+Applying: qemu: arm: Rename QEMU arm* defconfig files
+Patch failed at 0001 qemu: arm: Rename QEMU arm* defconfig files
+error: .azure-pipelines.yml: does not exist in index
+error: patch failed: .gitlab-ci.yml:37
+error: .gitlab-ci.yml: patch does not apply
+error: patch failed: MAINTAINERS:1330
+error: MAINTAINERS: patch does not apply
+error: arch/arm/dts/qemu-arm64.dts: does not exist in index
+error: board/emulation/qemu-arm/MAINTAINERS: does not exist in index
+error: configs/qemu_arm64_acpi_defconfig: does not exist in index
+error: configs/qemu_arm64_defconfig: does not exist in index
+error: configs/qemu_arm64_lwip_defconfig: does not exist in index
+error: configs/qemu_arm_defconfig: does not exist in index
+error: doc/board/emulation/qemu-arm.rst: does not exist in index
+error: doc/develop/driver-model/virtio.rst: does not exist in index
+error: doc/develop/uefi/uefi.rst: does not exist in index
+error: tools/docker/Dockerfile: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
