@@ -1,0 +1,124 @@
+Looking up 20261027032927.3055166-1-brian.cain@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+  Added from v4: 43 patches
+Analyzing 88 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 331 code-review messages
+Will use the latest revision: v4
+You can pick other revisions using the -vN flag
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/42] hw/hexagon: add V73NC_1 machine
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-2-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 2/42] target/hexagon: fix allocframe FRAMEKEY scrambling
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-3-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 3/42] target/hexagon: implement SSR.SS single-step
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-4-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 4/42] target/hexagon: sort tag_rev_info entries by version
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-5-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 5/42] Hexagon: add v85 CPU model
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-6-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 6/42] hw/hexagon: add v85 machines
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-7-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 7/42] linux-user/hexagon: report ISA HWCAP through v85
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-8-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 8/42] target/hexagon: add v85 scalar atomics
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-9-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 9/42] target/hexagon: add v83 trap2 and vector stack instructions
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-10-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 10/42] target/hexagon: reject reserved L4_loadw_phys encoding from v83
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-11-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 11/42] target/hexagon: preserve callr target when Rs is LR
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-12-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 12/42] target/hexagon: implement control flow integrity (CFI)
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-13-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 13/42] target/hexagon: add vsf* instructions
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-14-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 14/42] tests/tcg/hexagon: add v85 scalar tests
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-15-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 15/42] target/hexagon: use get_user*() for semihosting arguments
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-16-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 16/42] target/hexagon: fix semihosting OPEN filename handling
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-17-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 17/42] target/hexagon: fix semihosting STAT filename handling
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-18-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 18/42] target/hexagon: fix semihosting ACCESS filename handling
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-19-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 19/42] hw/hexagon: let a machine place its DDR
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-20-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 20/42] hw/hexagon: introduce hex-board abstraction
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-21-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 21/42] hw/hexagon: convert virt board to hex-board
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-22-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 22/42] hw/misc: add the QDSP6SS PLL, RCG
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-23-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 23/42] hw/hexagon: add the QCS6490 CDSP machine
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-24-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 24/42] hw/hexagon: add the SA8775P CDSP machine
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-25-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 25/42] hw/hexagon: add the SC8480XP NSP0 machine
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-26-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 26/42] hw/hexagon: add the SA8797P NSP0 machine
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-27-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 27/42] hw/hexagon: add the SM8975 NSP machine
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-28-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 28/42] hw/hexagon: add v79NA1 machine
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-29-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 29/42] hw/hexagon: serialize config table as little endian
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-30-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 30/42] hw/hexagon: add subsystem-base property
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-31-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 31/42] tests/functional/hexagon: boot DSP firmware
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-32-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 32/42] target/hexagon: acquire BQL before reading interrupt state
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-33-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 33/42] target/hexagon: check exception_index in has_work
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-34-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 34/42] target/hexagon: drop a pending HALT when resuming
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-35-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 35/42] hw/intc: ciad should forward its mask to l2vic
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-36-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 36/42] target/hexagon: assert qfloat shift
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-37-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 37/42] target/hexagon: reset implicit USR write state
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-38-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 38/42] target/hexagon: avoid negative slot shift
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-39-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 39/42] target/hexagon: flush the softtlb once per tlbinvasid
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-40-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 40/42] target/hexagon: only flush the softtlb when SSR.ASID changes
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-41-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 41/42] hw/intc/hex-l2vic: find the next pending irq a word at a time
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-42-brian.cain@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 42/42] scripts/clean_functional_cache: tolerate missing .stamp files
+    + Reviewed-by: Thomas Huth <thuth@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261027143721.4125584-43-brian.cain@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 42
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Reviewed-by: Anton Johansson <anjo@rev.ng>
+     Msg From: Anton Johansson via qemu development <qemu-devel@nongnu.org>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: hw/hexagon: add V73NC_1 machine
+Applying: target/hexagon: fix allocframe FRAMEKEY scrambling
+Applying: target/hexagon: implement SSR.SS single-step
+Applying: target/hexagon: sort tag_rev_info entries by version
+Applying: Hexagon: add v85 CPU model
+Applying: hw/hexagon: add v85 machines
+Applying: linux-user/hexagon: report ISA HWCAP through v85
+Applying: target/hexagon: add v85 scalar atomics
+Applying: target/hexagon: add v83 trap2 and vector stack instructions
+Patch failed at 0009 target/hexagon: add v83 trap2 and vector stack instructions
+error: patch failed: target/hexagon/translate.c:136
+error: target/hexagon/translate.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
