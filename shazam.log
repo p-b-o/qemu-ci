@@ -1,0 +1,50 @@
+Looking up 20261029161310.2065290-1-alex.bennee@linaro.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 26 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/8] scripts/checkpatch: validate fixes against origin/master
+    + Link: https://lore.kernel.org/qemu-devel/20261029161310.2065290-2-alex.bennee@linaro.org
+  [32m✓[0m [PATCH 2/8] tests/functional: fix call to common_tuxrun_gdb
+    + Link: https://lore.kernel.org/qemu-devel/20261029161310.2065290-3-alex.bennee@linaro.org
+  [32m✓[0m [PATCH 3/8] target/arm: hold bql when SEV sets the event_register
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20261029161310.2065290-4-alex.bennee@linaro.org
+  [32m✓[0m [PATCH 4/8] target/arm: don't pass env to the sev helper
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20261029161310.2065290-5-alex.bennee@linaro.org
+  [32m✓[0m [PATCH 5/8] target/arm: simplify wfxt_timer_cb to only trigger cpu_interrupt
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20261029161310.2065290-6-alex.bennee@linaro.org
+  [32m✓[0m [PATCH 6/8] tests/tcg: import arm wfe test cases for #4670
+    + Link: https://lore.kernel.org/qemu-devel/20261029161310.2065290-7-alex.bennee@linaro.org
+  [32m✓[0m [PATCH 7/8] tests/functional: remove @skipSlowTest from quanta_gsj test
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Reviewed-by: Thomas Huth <thuth@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261029161310.2065290-8-alex.bennee@linaro.org
+  [32m✓[0m [PATCH 8/8] target/arm: fix bcm2835 migration issue
+    + Reviewed-by: Peter Maydell <peter.maydell@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20261029161310.2065290-9-alex.bennee@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 8
+---
+Applying: scripts/checkpatch: validate fixes against origin/master
+Applying: tests/functional: fix call to common_tuxrun_gdb
+Applying: target/arm: hold bql when SEV sets the event_register
+Applying: target/arm: don't pass env to the sev helper
+Applying: target/arm: simplify wfxt_timer_cb to only trigger cpu_interrupt
+Applying: tests/tcg: import arm wfe test cases for #4670
+Applying: tests/functional: remove @skipSlowTest from quanta_gsj test
+Applying: target/arm: fix bcm2835 migration issue
+Patch failed at 0008 target/arm: fix bcm2835 migration issue
+error: patch fragment without header at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:9: @@ -0,0 +1,109 @@
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
