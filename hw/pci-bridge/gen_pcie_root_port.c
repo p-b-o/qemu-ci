@@ -28,6 +28,7 @@ OBJECT_DECLARE_SIMPLE_TYPE(GenPCIERootPort, GEN_PCIE_ROOT_PORT)
         (GEN_PCIE_ROOT_PORT_AER_OFFSET + PCI_ERR_SIZEOF)
 #define GEN_PCIE_ROOT_PORT_ACS_END \
         (GEN_PCIE_ROOT_PORT_ACS_OFFSET + PCI_ACS_SIZEOF)
+
 #define GEN_PCIE_ROOT_PORT_MSIX_NR_VECTOR       1
 #define GEN_PCIE_ROOT_DEFAULT_IO_RANGE          4096
 
@@ -65,6 +66,39 @@ static int gen_rp_interrupts_init(PCIDevice *d, Error **errp)
 static void gen_rp_interrupts_uninit(PCIDevice *d)
 {
     msix_uninit_exclusive_bar(d);
+}
+
+static uint32_t add_rme_dvsec_capability(PCIDevice *device, uint32_t offset)
+{
+    /*
+     * dvsec rme-da
+     * https://developer.arm.com/documentation/den0129/latest/
+     * Arm RME System Architecture
+     * 0x0000 RMEDA_ECH See B3.2.6.2.1 RME-DA Extended Capability Header
+     * 0x0004 RMEDA_HEAD1 See B3.2.6.2.2 RME-DA DVSEC Header 1
+     * 0x0008 RMEDA_HEAD2 See B3.2.6.2.3 RME-DA DVSEC Header 2
+     * 0x000C RMEDA_CTL1 See B3.2.6.2.4 RME-DA Control register 1
+     * 0x0010 RMEDA_CTL2 See B3.2.6.2.5 RME-DA Control register 2
+     */
+    const uint32_t ARM_PCI_VID = 0x13b5;
+    const uint32_t RME_DA_DVSEC_ID = 0;
+    pcie_add_dvsec_capability(device, PCI_EXT_CAP_ID_DVSEC, 1, offset,
+                              PCI_RME_DVSEC_SIZE, ARM_PCI_VID,
+                              PCI_RME_DVSEC_VER, RME_DA_DVSEC_ID);
+    const uint32_t ctl1 = 0x1; /* support tdisp */
+    const uint32_t ctl2 = 0x0; /* unlocked */
+    pci_set_long(device->config + offset + 0xC, ctl1);
+    pci_set_long(device->config + offset + 0x10, ctl2);
+    device->wmask[offset + 0xC] = 0xff;
+    device->wmask[offset + 0xC + 1] = 0xff;
+    device->wmask[offset + 0xC + 2] = 0xff;
+    device->wmask[offset + 0xC + 3] = 0xff;
+    device->wmask[offset + 0x10] = 0xff;
+    device->wmask[offset + 0x10 + 1] = 0xff;
+    device->wmask[offset + 0x10 + 2] = 0xff;
+    device->wmask[offset + 0x10 + 3] = 0xff;
+    offset += PCI_RME_DVSEC_SIZE;
+    return offset;
 }
 
 static void gen_rp_realize(DeviceState *dev, Error **errp)
@@ -106,6 +140,7 @@ static void gen_rp_realize(DeviceState *dev, Error **errp)
     }
 
     if (grp->rme_caps) {
+        next_cap_offset = add_rme_dvsec_capability(d, next_cap_offset);
         pcie_ide_init(d, next_cap_offset);
 
         /* Unused value, but may be useful for the next capability */
