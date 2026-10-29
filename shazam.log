@@ -1,0 +1,40 @@
+Looking up 20261029151317.19170-1-philmd@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 14 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v6 1/6] target/mips: Expand TRANS_DF_iv() macro for MSA Load/Store
+    + Link: https://lore.kernel.org/qemu-devel/20261029151317.19170-2-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v6 2/6] target/mips: Convert MSA LD/ST.B (Byte Vector)
+    + Link: https://lore.kernel.org/qemu-devel/20261029151317.19170-3-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v6 3/6] target/mips: Convert MSA LD/ST.H (Halfword Vector)
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20261029151317.19170-4-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v6 4/6] target/mips: Convert MSA LD/ST.W (Word Vector)
+    + Link: https://lore.kernel.org/qemu-devel/20261029151317.19170-5-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v6 5/6] target/mips: Convert MSA LD/ST.D (Doubleword Vector)
+    + Reviewed-by: Richard Henderson <richard.henderson@linaro.org> ([32m✓[0m DKIM/linaro.org)
+    + Link: https://lore.kernel.org/qemu-devel/20261029151317.19170-6-philmd@oss.qualcomm.com
+  [32m✓[0m [PATCH v6 6/6] accel/tcg: Remove non-explicit endian cpu_ld/st*_data*() helpers
+    + Link: https://lore.kernel.org/qemu-devel/20261029151317.19170-7-philmd@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 6
+---
+Applying: target/mips: Expand TRANS_DF_iv() macro for MSA Load/Store
+Applying: target/mips: Convert MSA LD/ST.B (Byte Vector)
+Applying: target/mips: Convert MSA LD/ST.H (Halfword Vector)
+Applying: target/mips: Convert MSA LD/ST.W (Word Vector)
+Applying: target/mips: Convert MSA LD/ST.D (Doubleword Vector)
+Patch failed at 0005 target/mips: Convert MSA LD/ST.D (Doubleword Vector)
+error: patch failed: target/mips/tcg/msa_helper.c:8219
+error: target/mips/tcg/msa_helper.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
