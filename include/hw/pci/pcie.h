@@ -133,6 +133,10 @@ uint16_t pcie_find_capability(PCIDevice *dev, uint16_t cap_id);
 void pcie_add_capability(PCIDevice *dev,
                          uint16_t cap_id, uint8_t cap_ver,
                          uint16_t offset, uint16_t size);
+void pcie_add_dvsec_capability(PCIDevice *device, uint16_t capability_id,
+                               uint8_t version, uint32_t offset,
+                               uint16_t size_bytes, uint16_t vendor_id,
+                               uint8_t dvsec_version, uint16_t dvsec_id);
 bool pcie_insert_capability(PCIDevice *dev, uint16_t cap_id, uint8_t cap_ver,
                             uint16_t offset, uint16_t size);
 void pcie_sync_bridge_lnk(PCIDevice *dev);

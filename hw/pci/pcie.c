@@ -1158,6 +1158,22 @@ void pcie_add_capability(PCIDevice *dev,
 }
 
 /*
+ * Add a DVSEC capability. As per pcie_add_capability, the caller must
+ * ensure (offset, size) does not overlap any other capability or extend
+ * past the extended configuration space.
+ */
+void pcie_add_dvsec_capability(PCIDevice *device, uint16_t capability_id,
+                               uint8_t version, uint32_t offset,
+                               uint16_t size_bytes, uint16_t vendor_id,
+                               uint8_t dvsec_version, uint16_t dvsec_id)
+{
+    const uint32_t header1 = size_bytes << 20 | version << 16 | vendor_id;
+    pcie_add_capability(device, capability_id, version, offset, size_bytes);
+    pci_set_long(device->config + offset + 0x4, header1);
+    pci_set_word(device->config + offset + 0x8, dvsec_id);
+}
+
+/*
  * Sync the PCIe Link Status negotiated speed and width of a bridge with the
  * downstream device.  If downstream device is not present, re-write with the
  * Link Capability fields.  If downstream device reports invalid width or
