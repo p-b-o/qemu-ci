@@ -1017,12 +1017,15 @@ bool pcie_cap_is_arifwd_enabled(const PCIDevice *dev)
  * uint16_t ext_cap_size
  */
 
+/* Looks through the capability list and finds one matching the cap_id */
+
 /* Passing a cap_id value > 0xffff will return 0 and put end of list in prev */
 static uint16_t pcie_find_capability_list(PCIDevice *dev, uint32_t cap_id,
                                           uint16_t *prev_p)
 {
     uint16_t prev = 0;
     uint16_t next;
+    /* Find the first header, after the main 'config' (legacy) space */
     uint32_t header = pci_get_long(dev->config + PCI_CONFIG_SPACE_SIZE);
 
     if (!header) {
@@ -1030,6 +1033,8 @@ static uint16_t pcie_find_capability_list(PCIDevice *dev, uint32_t cap_id,
         next = 0;
         goto out;
     }
+
+    /* Iterate through the PCIe config space, using the next cap offset */
     for (next = PCI_CONFIG_SPACE_SIZE; next;
          prev = next, next = PCI_EXT_CAP_NEXT(header)) {
 
@@ -1049,11 +1054,19 @@ out:
     return next;
 }
 
+/*
+ * As above, but ignoring the 'prev' parameter.
+ * Returns offset of that capability in the config space.
+ */
 uint16_t pcie_find_capability(PCIDevice *dev, uint16_t cap_id)
 {
     return pcie_find_capability_list(dev, cap_id, NULL);
 }
 
+/*
+ * Given a capability at position pos, set that's capability's
+ * next capability offset to 'next'.
+ */
 static void pcie_ext_cap_set_next(PCIDevice *dev, uint16_t pos, uint16_t next)
 {
     uint32_t header = pci_get_long(dev->config + pos);
@@ -1083,6 +1096,7 @@ static void pcie_ext_cap_set_next(PCIDevice *dev, uint16_t pos, uint16_t next)
 bool pcie_insert_capability(PCIDevice *dev, uint16_t cap_id, uint8_t cap_ver,
                             uint16_t offset, uint16_t size)
 {
+    /* Start at the PCI Extended configuration space */
     uint16_t pos = PCI_CONFIG_SPACE_SIZE, prev = 0;
     uint32_t header;
 
