@@ -863,7 +863,8 @@ static void gen_start_packet(DisasContext *ctx)
 
     if (ctx->pkt.pkt_has_hmx) {
         for (i = 0; i < ctx->pkt.num_insns; i++) {
-            if (GET_ATTRIB(ctx->pkt.insn[i].opcode, A_HMX)) {
+            if (GET_ATTRIB(ctx->pkt.insn[i].opcode, A_HMX) &&
+                ctx->pkt.insn[i].opcode != M8_mxclracc) {
                 qemu_log_mask(LOG_UNIMP, "'%s' is not implemented\n",
                               opcode_names[ctx->pkt.insn[i].opcode]);
             }
