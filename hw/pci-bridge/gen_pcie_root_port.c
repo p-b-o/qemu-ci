@@ -26,13 +26,16 @@ OBJECT_DECLARE_SIMPLE_TYPE(GenPCIERootPort, GEN_PCIE_ROOT_PORT)
 #define GEN_PCIE_ROOT_PORT_AER_OFFSET           0x100
 #define GEN_PCIE_ROOT_PORT_ACS_OFFSET \
         (GEN_PCIE_ROOT_PORT_AER_OFFSET + PCI_ERR_SIZEOF)
-
+#define GEN_PCIE_ROOT_PORT_ACS_END \
+        (GEN_PCIE_ROOT_PORT_ACS_OFFSET + PCI_ACS_SIZEOF)
 #define GEN_PCIE_ROOT_PORT_MSIX_NR_VECTOR       1
 #define GEN_PCIE_ROOT_DEFAULT_IO_RANGE          4096
 
 struct GenPCIERootPort {
     /*< private >*/
     PCIESlot parent_obj;
+    bool     rme_caps;
+
     /*< public >*/
 
     /* additional resources to reserve */
@@ -71,6 +74,7 @@ static void gen_rp_realize(DeviceState *dev, Error **errp)
     GenPCIERootPort *grp = GEN_PCIE_ROOT_PORT(d);
     PCIERootPortClass *rpc = PCIE_ROOT_PORT_GET_CLASS(d);
     Error *local_err = NULL;
+    uint32_t next_cap_offset = GEN_PCIE_ROOT_PORT_ACS_END;
 
     rpc->parent_realize(dev, &local_err);
     if (local_err) {
@@ -99,6 +103,19 @@ static void gen_rp_realize(DeviceState *dev, Error **errp)
                                      PCI_COMMAND_IO);
         d->wmask[PCI_IO_BASE] = 0;
         d->wmask[PCI_IO_LIMIT] = 0;
+    }
+
+    if (grp->rme_caps) {
+        pcie_ide_init(d, next_cap_offset);
+
+        /* Unused value, but may be useful for the next capability */
+        next_cap_offset += PCI_IDE_SIZEOF;
+
+        /*
+         * Set up TEE (in the legacy config space, not an extended
+         * capability)
+         */
+        pcie_cap_tee_init(d);
     }
 }
 
@@ -133,6 +150,8 @@ static const Property gen_rp_props[] = {
                                 speed, PCIE_LINK_SPEED_16),
     DEFINE_PROP_PCIE_LINK_WIDTH("x-width", PCIESlot,
                                 width, PCIE_LINK_WIDTH_32),
+    DEFINE_PROP_BOOL("rme-caps", GenPCIERootPort,
+                     rme_caps, false),
 };
 
 static void gen_rp_dev_class_init(ObjectClass *klass, const void *data)
