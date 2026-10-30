@@ -125,10 +125,23 @@ struct IPOctalState {
     uint8_t irq_vector;
 };
 
+static int scc2698_channel_post_load(void *opaque, int version_id)
+{
+    SCC2698Channel *ch = opaque;
+
+    if (ch->mr_idx >= ARRAY_SIZE(ch->mr) ||
+        ch->rhr_idx >= RX_FIFO_SIZE ||
+        ch->rx_pending > RX_FIFO_SIZE) {
+        return -EINVAL;
+    }
+    return 0;
+}
+
 static const VMStateDescription vmstate_scc2698_channel = {
     .name = "scc2698_channel",
     .version_id = 1,
     .minimum_version_id = 1,
+    .post_load = scc2698_channel_post_load,
     .fields = (const VMStateField[]) {
         VMSTATE_BOOL(rx_enabled, SCC2698Channel),
         VMSTATE_UINT8_ARRAY(mr, SCC2698Channel, 2),
