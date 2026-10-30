@@ -35,11 +35,18 @@ static void unparent_vfs(PCIDevice *dev, uint16_t total_vfs)
 static void register_vfs(PCIDevice *dev)
 {
     uint16_t num_vfs;
+    uint16_t total_vfs;
     uint16_t i;
     uint16_t sriov_cap = dev->exp.sriov_cap;
 
     assert(sriov_cap > 0);
     num_vfs = pci_get_word(dev->config + sriov_cap + PCI_SRIOV_NUM_VF);
+    total_vfs = pci_get_word(dev->config + sriov_cap + PCI_SRIOV_TOTAL_VF);
+
+    if (num_vfs > total_vfs) {
+        num_vfs = total_vfs;
+        pci_set_word(dev->config + sriov_cap + PCI_SRIOV_NUM_VF, num_vfs);
+    }
 
     trace_sriov_register_vfs(dev->name, PCI_SLOT(dev->devfn),
                              PCI_FUNC(dev->devfn), num_vfs);
