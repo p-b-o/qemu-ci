@@ -58,8 +58,10 @@
 #define CC_SUCCESS              1
 
 #define EP_TYPE_ISOCH_OUT       1
+#define EP_TYPE_BULK_OUT        2
 #define EP_TYPE_CONTROL         4
 #define EP_TYPE_ISOCH_IN        5
+#define EP_TYPE_BULK_IN         6
 #define EP_TYPE_INTR_IN         7
 
 #define XHCI_RING_TRBS          64
@@ -467,6 +469,91 @@ static void test_xhci_isoch_ep_type_mismatch(void)
     xhci_test_end(&x);
 }
 
+/*
+ * usb-storage parks the CSW packet while the SCSI request is in flight and
+ * sends it when the request completes. With the data TD and the CSW TD of
+ * one command on the bulk IN ring and a single doorbell, the CSW packet is
+ * queued behind the async data packet.
+ */
+static void test_xhci_msd_chained_csw(void)
+{
+    /* TEST UNIT READY: clears the reset unit attention */
+    static const uint8_t tur[31] = {
+        'U', 'S', 'B', 'C', 1, 0, 0, 0, 0, 0, 0, 0, 0x00, 0, 6,
+    };
+    /* READ(10), LBA 0, 1 block: 512 bytes IN */
+    static const uint8_t read10[31] = {
+        'U', 'S', 'B', 'C', 2, 0, 0, 0, 0x00, 0x02, 0, 0, 0x80, 0, 10,
+        0x28, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+    };
+    static const uint8_t zeroes[512];
+    uint8_t data[512], csw[13];
+    uint32_t status, control;
+    uint64_t ring_in, ring_out, buf;
+    XHCITest x;
+
+    if (!xhci_test_supported("usb-storage")) {
+        return;
+    }
+
+    /*
+     * A blkdebug breakpoint holds the read until both TDs are on the
+     * ring, as they are when a host controller runs a prepared schedule.
+     */
+    xhci_test_start(&x, "-drive if=none,id=stick,format=raw,"
+                        "file.driver=blkdebug,file.image.driver=null-co,"
+                        "file.image.read-zeroes=on "
+                        "-device usb-storage,drive=stick");
+    qtest_qemu_io(x.qts, "stick", "break read_aio A");
+    ring_in = xhci_configure_ep(&x, 3, EP_TYPE_BULK_IN, 0, 512);
+    ring_out = xhci_configure_ep(&x, 4, EP_TYPE_BULK_OUT, 0, 512);
+    buf = xhci_alloc_page(&x);
+
+    qtest_memwrite(x.qts, buf, tur, sizeof(tur));
+    xhci_write_trb(&x, ring_out, buf, sizeof(tur),
+                   TRB_TYPE(TR_NORMAL) | TRB_TR_IOC | TRB_C);
+    xhci_writel(&x, x.doorbell + 4 * x.slot, 4);
+    g_assert_true(xhci_next_event(&x, &status, &control));
+    g_assert_cmpuint(TRB_GET_TYPE(control), ==, ER_TRANSFER);
+    g_assert_cmpuint(TRB_GET_CCODE(status), ==, CC_SUCCESS);
+    xhci_write_trb(&x, ring_in, buf + 0x800, sizeof(csw),
+                   TRB_TYPE(TR_NORMAL) | TRB_TR_IOC | TRB_C);
+    xhci_writel(&x, x.doorbell + 4 * x.slot, 3);
+    g_assert_true(xhci_next_event(&x, &status, &control));
+    g_assert_cmpuint(TRB_GET_CCODE(status), ==, CC_SUCCESS);
+
+    qtest_memwrite(x.qts, buf + 0x40, read10, sizeof(read10));
+    xhci_write_trb(&x, ring_out + 16, buf + 0x40, sizeof(read10),
+                   TRB_TYPE(TR_NORMAL) | TRB_TR_IOC | TRB_C);
+    xhci_writel(&x, x.doorbell + 4 * x.slot, 4);
+    g_assert_true(xhci_next_event(&x, &status, &control));
+    g_assert_cmpuint(TRB_GET_CCODE(status), ==, CC_SUCCESS);
+
+    /* data TD and CSW TD, one doorbell, the read still held */
+    xhci_write_trb(&x, ring_in + 16, buf + 0x200, sizeof(data),
+                   TRB_TYPE(TR_NORMAL) | TRB_TR_IOC | TRB_C);
+    xhci_write_trb(&x, ring_in + 32, buf + 0x800, sizeof(csw),
+                   TRB_TYPE(TR_NORMAL) | TRB_TR_IOC | TRB_C);
+    xhci_writel(&x, x.doorbell + 4 * x.slot, 3);
+    g_assert_false(xhci_next_event(&x, NULL, NULL));
+
+    qtest_qemu_io(x.qts, "stick", "resume A");
+    g_assert_true(xhci_next_event(&x, &status, &control));
+    g_assert_cmpuint(TRB_GET_TYPE(control), ==, ER_TRANSFER);
+    g_assert_cmpuint(TRB_GET_CCODE(status), ==, CC_SUCCESS);
+    g_assert_true(xhci_next_event(&x, &status, &control));
+    g_assert_cmpuint(TRB_GET_CCODE(status), ==, CC_SUCCESS);
+    qtest_memread(x.qts, buf + 0x200, data, sizeof(data));
+    g_assert_cmpmem(data, sizeof(data), zeroes, sizeof(zeroes));
+    qtest_memread(x.qts, buf + 0x800, csw, sizeof(csw));
+    g_assert_cmpmem(csw, 4, "USBS", 4);
+    g_assert_cmpmem(csw + 4, 4, read10 + 4, 4);
+    g_assert_cmpmem(csw + 8, 4, zeroes, 4);
+    g_assert_cmpuint(csw[12], ==, 0);
+
+    xhci_test_end(&x);
+}
+
 int main(int argc, char **argv)
 {
     int ret;
@@ -487,6 +574,8 @@ int main(int argc, char **argv)
                    test_xhci_intr_mfindex_32bit);
     qtest_add_func("/xhci/pci/isoch/ep-type-mismatch",
                    test_xhci_isoch_ep_type_mismatch);
+    qtest_add_func("/xhci/pci/bulk/msd-chained-csw",
+                   test_xhci_msd_chained_csw);
 
     qtest_start("-device nec-usb-xhci,id=xhci"
                 " -drive id=drive0,if=none,file=null-co://,"
