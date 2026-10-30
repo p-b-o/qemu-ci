@@ -214,10 +214,25 @@ petalogix_ml605_init(MachineState *machine)
 
 }
 
-static void petalogix_ml605_machine_init(MachineClass *mc)
+static void petalogix_ml605_machine_class_init(ObjectClass *oc,
+                                               const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "PetaLogix linux refdesign for xilinx ml605 (little endian)";
     mc->init = petalogix_ml605_init;
 }
 
-DEFINE_MACHINE("petalogix-ml605", petalogix_ml605_machine_init)
+static const TypeInfo petalogix_ml605_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("petalogix-ml605"),
+    .parent     = TYPE_MACHINE,
+    .class_init = petalogix_ml605_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void petalogix_ml605_machine_register_types(void)
+{
+    type_register_static(&petalogix_ml605_machine_typeinfo);
+}
+
+type_init(petalogix_ml605_machine_register_types)

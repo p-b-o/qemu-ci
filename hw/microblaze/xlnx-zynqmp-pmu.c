@@ -179,10 +179,25 @@ static void xlnx_zynqmp_pmu_init(MachineState *machine)
                            NULL);
 }
 
-static void xlnx_zynqmp_pmu_machine_init(MachineClass *mc)
+static void xlnx_zynqmp_pmu_machine_class_init(ObjectClass *oc,
+                                               const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "Xilinx ZynqMP PMU machine (little endian)";
     mc->init = xlnx_zynqmp_pmu_init;
 }
 
-DEFINE_MACHINE("xlnx-zynqmp-pmu", xlnx_zynqmp_pmu_machine_init)
+static const TypeInfo xlnx_zynqmp_pmu_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("xlnx-zynqmp-pmu"),
+    .parent     = TYPE_MACHINE,
+    .class_init = xlnx_zynqmp_pmu_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void xlnx_zynqmp_pmu_machine_register_types(void)
+{
+    type_register_static(&xlnx_zynqmp_pmu_machine_typeinfo);
+}
+
+type_init(xlnx_zynqmp_pmu_machine_register_types)
