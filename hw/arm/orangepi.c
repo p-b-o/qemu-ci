@@ -111,8 +111,9 @@ static void orangepi_init(MachineState *machine)
     arm_load_kernel(&h3->cpus[0], machine, &opms->bootinfo);
 }
 
-static void orangepi_machine_init(MachineClass *mc)
+static void orangepi_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
     static const char * const valid_cpu_types[] = {
         ARM_CPU_TYPE_NAME("cortex-a7"),
         NULL
@@ -132,6 +133,16 @@ static void orangepi_machine_init(MachineClass *mc)
     mc->auto_create_sdcard = true;
 }
 
-DEFINE_MACHINE_EXTENDED("orangepi-pc", MACHINE, OrangePiMachineState,
-                        orangepi_machine_init, false, false,
-                        NULL)
+static const TypeInfo orangepi_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("orangepi-pc"),
+    .parent     = TYPE_MACHINE,
+    .class_init = orangepi_machine_class_init,
+    .instance_size = sizeof(OrangePiMachineState),
+};
+
+static void orangepi_machine_register_types(void)
+{
+    type_register_static(&orangepi_machine_typeinfo);
+}
+
+type_init(orangepi_machine_register_types)

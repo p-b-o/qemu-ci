@@ -691,8 +691,10 @@ static void integratorcp_init(MachineState *machine)
     arm_load_kernel(cpu, machine, &icms->bootinfo);
 }
 
-static void integratorcp_machine_init(MachineClass *mc)
+static void integratorcp_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "ARM Integrator/CP (ARM926EJ-S)";
     mc->init = integratorcp_init;
     mc->ignore_memory_transaction_failures = true;
@@ -703,9 +705,12 @@ static void integratorcp_machine_init(MachineClass *mc)
     machine_add_audiodev_property(mc);
 }
 
-DEFINE_MACHINE_EXTENDED("integratorcp", MACHINE, IntegratorcpMachineState,
-                        integratorcp_machine_init, false, false,
-                        NULL)
+static const TypeInfo integratorcp_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("integratorcp"),
+    .parent     = TYPE_MACHINE,
+    .class_init = integratorcp_machine_class_init,
+    .instance_size = sizeof(IntegratorcpMachineState),
+};
 
 static const Property core_properties[] = {
     DEFINE_PROP_UINT32("memsz", IntegratorCMState, memsz, 0),
@@ -760,6 +765,7 @@ static const TypeInfo icp_ctrl_regs_info = {
 
 static void integratorcp_register_types(void)
 {
+    type_register_static(&integratorcp_machine_typeinfo);
     type_register_static(&icp_pic_info);
     type_register_static(&core_info);
     type_register_static(&icp_ctrl_regs_info);

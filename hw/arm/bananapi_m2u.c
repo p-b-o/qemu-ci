@@ -133,8 +133,9 @@ static void bpim2u_init(MachineState *machine)
     arm_load_kernel(&r40->cpus[0], machine, &bpms->bootinfo);
 }
 
-static void bpim2u_machine_init(MachineClass *mc)
+static void bpim2u_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
     static const char * const valid_cpu_types[] = {
         ARM_CPU_TYPE_NAME("cortex-a7"),
         NULL
@@ -152,5 +153,16 @@ static void bpim2u_machine_init(MachineClass *mc)
     mc->auto_create_sdcard = true;
 }
 
-DEFINE_MACHINE_EXTENDED("bpim2u", MACHINE, Bpim2uMachineState,
-                        bpim2u_machine_init, false, false, NULL)
+static const TypeInfo bpim2u_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("bpim2u"),
+    .parent     = TYPE_MACHINE,
+    .class_init = bpim2u_machine_class_init,
+    .instance_size = sizeof(Bpim2uMachineState),
+};
+
+static void bpim2u_machine_register_types(void)
+{
+    type_register_static(&bpim2u_machine_typeinfo);
+}
+
+type_init(bpim2u_machine_register_types)

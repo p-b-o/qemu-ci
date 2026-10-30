@@ -52,8 +52,9 @@ static void netduino2_init(MachineState *machine)
                        0, FLASH_SIZE);
 }
 
-static void netduino2_machine_init(MachineClass *mc)
+static void netduino2_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
     static const char * const valid_cpu_types[] = {
         ARM_CPU_TYPE_NAME("cortex-m3"),
         NULL
@@ -65,4 +66,16 @@ static void netduino2_machine_init(MachineClass *mc)
     mc->ignore_memory_transaction_failures = true;
 }
 
-DEFINE_MACHINE("netduino2", netduino2_machine_init)
+static const TypeInfo netduino2_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("netduino2"),
+    .parent     = TYPE_MACHINE,
+    .class_init = netduino2_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void netduino2_machine_register_types(void)
+{
+    type_register_static(&netduino2_machine_typeinfo);
+}
+
+type_init(netduino2_machine_register_types)

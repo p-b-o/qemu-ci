@@ -140,8 +140,10 @@ static void imx25_pdk_init(MachineState *machine)
     }
 }
 
-static void imx25_pdk_machine_init(MachineClass *mc)
+static void imx25_pdk_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "ARM i.MX25 PDK board (ARM926)";
     mc->init = imx25_pdk_init;
     mc->ignore_memory_transaction_failures = true;
@@ -149,4 +151,16 @@ static void imx25_pdk_machine_init(MachineClass *mc)
     mc->auto_create_sdcard = true;
 }
 
-DEFINE_MACHINE("imx25-pdk", imx25_pdk_machine_init)
+static const TypeInfo imx25_pdk_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("imx25-pdk"),
+    .parent     = TYPE_MACHINE,
+    .class_init = imx25_pdk_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void imx25_pdk_machine_register_types(void)
+{
+    type_register_static(&imx25_pdk_machine_typeinfo);
+}
+
+type_init(imx25_pdk_machine_register_types)

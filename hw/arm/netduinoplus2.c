@@ -53,8 +53,9 @@ static void netduinoplus2_init(MachineState *machine)
                        0, FLASH_SIZE);
 }
 
-static void netduinoplus2_machine_init(MachineClass *mc)
+static void netduinoplus2_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
     static const char * const valid_cpu_types[] = {
         ARM_CPU_TYPE_NAME("cortex-m4"),
         NULL
@@ -65,4 +66,16 @@ static void netduinoplus2_machine_init(MachineClass *mc)
     mc->valid_cpu_types = valid_cpu_types;
 }
 
-DEFINE_MACHINE("netduinoplus2", netduinoplus2_machine_init)
+static const TypeInfo netduinoplus2_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("netduinoplus2"),
+    .parent     = TYPE_MACHINE,
+    .class_init = netduinoplus2_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void netduinoplus2_machine_register_types(void)
+{
+    type_register_static(&netduinoplus2_machine_typeinfo);
+}
+
+type_init(netduinoplus2_machine_register_types)

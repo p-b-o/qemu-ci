@@ -35,8 +35,9 @@ static void max78000_init(MachineState *machine)
                        0x00000000, FLASH_SIZE);
 }
 
-static void max78000_machine_init(MachineClass *mc)
+static void max78000_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
     static const char * const valid_cpu_types[] = {
         ARM_CPU_TYPE_NAME("cortex-m4"),
         NULL
@@ -47,4 +48,16 @@ static void max78000_machine_init(MachineClass *mc)
     mc->valid_cpu_types = valid_cpu_types;
 }
 
-DEFINE_MACHINE("max78000fthr", max78000_machine_init)
+static const TypeInfo max78000_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("max78000fthr"),
+    .parent     = TYPE_MACHINE,
+    .class_init = max78000_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void max78000_machine_register_types(void)
+{
+    type_register_static(&max78000_machine_typeinfo);
+}
+
+type_init(max78000_machine_register_types)

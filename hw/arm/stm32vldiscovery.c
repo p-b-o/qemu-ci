@@ -56,8 +56,10 @@ static void stm32vldiscovery_init(MachineState *machine)
                        0, FLASH_SIZE);
 }
 
-static void stm32vldiscovery_machine_init(MachineClass *mc)
+static void stm32vldiscovery_machine_class_init(ObjectClass *oc,
+                                                const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
     static const char * const valid_cpu_types[] = {
         ARM_CPU_TYPE_NAME("cortex-m3"),
         NULL
@@ -68,4 +70,16 @@ static void stm32vldiscovery_machine_init(MachineClass *mc)
     mc->valid_cpu_types = valid_cpu_types;
 }
 
-DEFINE_MACHINE("stm32vldiscovery", stm32vldiscovery_machine_init)
+static const TypeInfo stm32vldiscovery_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("stm32vldiscovery"),
+    .parent     = TYPE_MACHINE,
+    .class_init = stm32vldiscovery_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void stm32vldiscovery_machine_register_types(void)
+{
+    type_register_static(&stm32vldiscovery_machine_typeinfo);
+}
+
+type_init(stm32vldiscovery_machine_register_types)

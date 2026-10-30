@@ -68,8 +68,10 @@ static void mcimx6ul_evk_init(MachineState *machine)
     }
 }
 
-static void mcimx6ul_evk_machine_init(MachineClass *mc)
+static void mcimx6ul_evk_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "Freescale i.MX6UL Evaluation Kit (Cortex-A7)";
     mc->init = mcimx6ul_evk_init;
     mc->max_cpus = FSL_IMX6UL_NUM_CPUS;
@@ -78,4 +80,16 @@ static void mcimx6ul_evk_machine_init(MachineClass *mc)
     mc->auto_create_sdcard = true;
 }
 
-DEFINE_MACHINE("mcimx6ul-evk", mcimx6ul_evk_machine_init)
+static const TypeInfo mcimx6ul_evk_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("mcimx6ul-evk"),
+    .parent     = TYPE_MACHINE,
+    .class_init = mcimx6ul_evk_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void mcimx6ul_evk_machine_register_types(void)
+{
+    type_register_static(&mcimx6ul_evk_machine_typeinfo);
+}
+
+type_init(mcimx6ul_evk_machine_register_types)

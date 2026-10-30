@@ -96,8 +96,9 @@ static void emcraft_sf2_s2s010_init(MachineState *machine)
                        0, soc->envm_size);
 }
 
-static void emcraft_sf2_machine_init(MachineClass *mc)
+static void emcraft_sf2_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
     static const char * const valid_cpu_types[] = {
         ARM_CPU_TYPE_NAME("cortex-m3"),
         NULL
@@ -108,4 +109,16 @@ static void emcraft_sf2_machine_init(MachineClass *mc)
     mc->valid_cpu_types = valid_cpu_types;
 }
 
-DEFINE_MACHINE("emcraft-sf2", emcraft_sf2_machine_init)
+static const TypeInfo emcraft_sf2_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("emcraft-sf2"),
+    .parent     = TYPE_MACHINE,
+    .class_init = emcraft_sf2_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void emcraft_sf2_machine_register_types(void)
+{
+    type_register_static(&emcraft_sf2_machine_typeinfo);
+}
+
+type_init(emcraft_sf2_machine_register_types)

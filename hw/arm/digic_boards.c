@@ -136,8 +136,10 @@ static void canon_a1100_init(MachineState *machine)
     digic4_board_init(machine, &digic4_board_canon_a1100);
 }
 
-static void canon_a1100_machine_init(MachineClass *mc)
+static void canon_a1100_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "Canon PowerShot A1100 IS (ARM946)";
     mc->init = &canon_a1100_init;
     mc->ignore_memory_transaction_failures = true;
@@ -145,4 +147,16 @@ static void canon_a1100_machine_init(MachineClass *mc)
     mc->default_ram_id = "ram";
 }
 
-DEFINE_MACHINE("canon-a1100", canon_a1100_machine_init)
+static const TypeInfo canon_a1100_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("canon-a1100"),
+    .parent     = TYPE_MACHINE,
+    .class_init = canon_a1100_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void canon_a1100_machine_register_types(void)
+{
+    type_register_static(&canon_a1100_machine_typeinfo);
+}
+
+type_init(canon_a1100_machine_register_types)

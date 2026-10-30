@@ -56,8 +56,10 @@ static void olimex_stm32_h405_init(MachineState *machine)
                        0, FLASH_SIZE);
 }
 
-static void olimex_stm32_h405_machine_init(MachineClass *mc)
+static void olimex_stm32_h405_machine_class_init(ObjectClass *oc,
+                                                 const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
     static const char * const valid_cpu_types[] = {
         ARM_CPU_TYPE_NAME("cortex-m4"),
         NULL
@@ -71,4 +73,16 @@ static void olimex_stm32_h405_machine_init(MachineClass *mc)
     mc->default_ram_size = 0;
 }
 
-DEFINE_MACHINE("olimex-stm32-h405", olimex_stm32_h405_machine_init)
+static const TypeInfo olimex_stm32_h405_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("olimex-stm32-h405"),
+    .parent     = TYPE_MACHINE,
+    .class_init = olimex_stm32_h405_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void olimex_stm32_h405_machine_register_types(void)
+{
+    type_register_static(&olimex_stm32_h405_machine_typeinfo);
+}
+
+type_init(olimex_stm32_h405_machine_register_types)

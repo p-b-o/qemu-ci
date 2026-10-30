@@ -76,8 +76,10 @@ static void mcimx7d_sabre_init(MachineState *machine)
     }
 }
 
-static void mcimx7d_sabre_machine_init(MachineClass *mc)
+static void mcimx7d_sabre_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "Freescale i.MX7 DUAL SABRE (Cortex-A7)";
     mc->init = mcimx7d_sabre_init;
     mc->max_cpus = FSL_IMX7_NUM_CPUS;
@@ -87,6 +89,16 @@ static void mcimx7d_sabre_machine_init(MachineClass *mc)
     mc->auto_create_sdcard = true;
 }
 
-DEFINE_MACHINE_EXTENDED("mcimx7d-sabre", MACHINE, Mcimx7dSabreMachineState,
-                        mcimx7d_sabre_machine_init, false, false,
-                        NULL)
+static const TypeInfo mcimx7d_sabre_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("mcimx7d-sabre"),
+    .parent     = TYPE_MACHINE,
+    .class_init = mcimx7d_sabre_machine_class_init,
+    .instance_size = sizeof(Mcimx7dSabreMachineState),
+};
+
+static void mcimx7d_sabre_machine_register_types(void)
+{
+    type_register_static(&mcimx7d_sabre_machine_typeinfo);
+}
+
+type_init(mcimx7d_sabre_machine_register_types)
