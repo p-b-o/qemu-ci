@@ -15,6 +15,7 @@
 #include "qemu/osdep.h"
 #include "migration/vmstate.h"
 #include "qemu/fifo8.h"
+#include "qemu/error-report.h"
 
 void fifo8_reset(Fifo8 *fifo)
 {
@@ -177,10 +178,24 @@ uint32_t fifo8_num_used(const Fifo8 *fifo)
     return fifo->num;
 }
 
+static int fifo8_post_load(void *opaque, int version_id)
+{
+    Fifo8 *fifo = opaque;
+
+    if (fifo->head >= fifo->capacity || fifo->num > fifo->capacity) {
+        error_report("fifo8: invalid state from migration stream "
+                     "(head=%u num=%u capacity=%u)",
+                     fifo->head, fifo->num, fifo->capacity);
+        return -EINVAL;
+    }
+    return 0;
+}
+
 const VMStateDescription vmstate_fifo8 = {
     .name = "Fifo8",
     .version_id = 1,
     .minimum_version_id = 1,
+    .post_load = fifo8_post_load,
     .fields = (const VMStateField[]) {
         VMSTATE_VBUFFER_UINT32(data, Fifo8, 1, NULL, capacity),
         VMSTATE_UINT32(head, Fifo8),
