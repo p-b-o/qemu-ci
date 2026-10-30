@@ -42,8 +42,10 @@ static void machine_none_init(MachineState *mch)
     }
 }
 
-static void machine_none_machine_init(MachineClass *mc)
+static void machine_none_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "empty machine";
     mc->init = machine_none_init;
     mc->max_cpus = 1;
@@ -55,4 +57,16 @@ static void machine_none_machine_init(MachineClass *mc)
     mc->no_cdrom = 1;
 }
 
-DEFINE_MACHINE("none", machine_none_machine_init)
+static const TypeInfo machine_none_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("none"),
+    .parent     = TYPE_MACHINE,
+    .class_init = machine_none_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void machine_none_machine_register_types(void)
+{
+    type_register_static(&machine_none_machine_typeinfo);
+}
+
+type_init(machine_none_machine_register_types)
