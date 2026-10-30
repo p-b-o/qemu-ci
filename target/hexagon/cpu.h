@@ -30,12 +30,15 @@
 typedef struct HexagonTLBState HexagonTLBState;
 typedef struct HexagonGlobalRegState HexagonGlobalRegState;
 typedef struct HexagonHVXContextState HexagonHVXContextState;
+typedef struct HexagonHMXContextState HexagonHMXContextState;
 
 #include "cpu-qom.h"
 #include "exec/cpu-common.h"
 #include "exec/target_long.h"
 #include "hex_regs.h"
 #include "mmvec/mmvec.h"
+#include "hmx_config.h"
+#include "hmx_state.h"
 #include "hw/core/registerfields.h"
 #include "qemu/bitmap.h"
 
@@ -197,6 +200,8 @@ typedef struct CPUArchState {
     target_ulong vstore_pending[VSTORES_MAX];
     bool vtcm_pending;
     VTCMStoreLog vtcm_log;
+
+    HmxState *hmx_state;
 } CPUHexagonState;
 
 typedef struct HexagonCPUClass {
@@ -217,12 +222,15 @@ struct ArchCPU {
     HexagonCPUConfig cfg;
 #ifndef CONFIG_USER_ONLY
     HexagonHVXContextState *hvx_ctx[HVX_CONTEXTS_MAX];
+    HexagonHMXContextState *hmx_ctx;
     HexagonTLBState *tlb;
     uint32_t boot_addr;
     HexagonGlobalRegState *globalregs;
     uint32_t htid;
     HexL2VicInterface *l2vic;
 #endif
+    HmxState *hmx;
+    HmxConfig hmx_cfg;
 };
 
 static inline HexagonHVXContext *hex_hvx(CPUHexagonState *env)
