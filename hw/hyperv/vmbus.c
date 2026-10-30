@@ -2607,11 +2607,23 @@ static bool vmbus_rx_queue_needed(void *opaque)
     return vmbus->rx_queue_size;
 }
 
+static int vmbus_rx_queue_post_load(void *opaque, int version_id)
+{
+    VMBus *vmbus = VMBUS(opaque);
+
+    if (vmbus->rx_queue_head >= HV_MSG_QUEUE_LEN ||
+        vmbus->rx_queue_size > HV_MSG_QUEUE_LEN) {
+        return -EINVAL;
+    }
+    return 0;
+}
+
 static const VMStateDescription vmstate_rx_queue = {
     .name = "vmbus/rx_queue",
     .version_id = 0,
     .minimum_version_id = 0,
     .needed = vmbus_rx_queue_needed,
+    .post_load = vmbus_rx_queue_post_load,
     .fields = (const VMStateField[]) {
         VMSTATE_UINT8(rx_queue_head, VMBus),
         VMSTATE_UINT8(rx_queue_size, VMBus),
