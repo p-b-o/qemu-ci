@@ -328,8 +328,10 @@ static void mips_fuloong2e_init(MachineState *machine)
     network_init(pci_bus);
 }
 
-static void mips_fuloong2e_machine_init(MachineClass *mc)
+static void mips_fuloong2e_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "Fuloong 2e mini pc";
     mc->init = mips_fuloong2e_init;
     mc->block_default_type = IF_IDE;
@@ -339,4 +341,16 @@ static void mips_fuloong2e_machine_init(MachineClass *mc)
     machine_add_audiodev_property(mc);
 }
 
-DEFINE_MACHINE("fuloong2e", mips_fuloong2e_machine_init)
+static const TypeInfo mips_fuloong2e_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("fuloong2e"),
+    .parent     = TYPE_MACHINE,
+    .class_init = mips_fuloong2e_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void mips_fuloong2e_machine_register_types(void)
+{
+    type_register_static(&mips_fuloong2e_machine_typeinfo);
+}
+
+type_init(mips_fuloong2e_machine_register_types)

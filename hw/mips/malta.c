@@ -1285,8 +1285,10 @@ GlobalProperty malta_compat[] = {
 };
 const size_t malta_compat_len = G_N_ELEMENTS(malta_compat);
 
-static void mips_malta_machine_init(MachineClass *mc)
+static void mips_malta_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "MIPS Malta Core LV";
     mc->init = mips_malta_init;
     mc->block_default_type = IF_IDE;
@@ -1301,11 +1303,17 @@ static void mips_malta_machine_init(MachineClass *mc)
     compat_props_add(mc->compat_props, malta_compat, malta_compat_len);
 }
 
-DEFINE_MACHINE("malta", mips_malta_machine_init)
+static const TypeInfo mips_malta_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("malta"),
+    .parent     = TYPE_MACHINE,
+    .class_init = mips_malta_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
 
 static void mips_malta_register_types(void)
 {
     type_register_static(&mips_malta_device);
+    type_register_static(&mips_malta_machine_typeinfo);
 }
 
 type_init(mips_malta_register_types)
