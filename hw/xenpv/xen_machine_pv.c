@@ -61,12 +61,26 @@ static void xen_init_pv(MachineState *machine)
     atexit(xen_config_cleanup);
 }
 
-static void xenpv_machine_init(MachineClass *mc)
+static void xenpv_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "Xen Para-virtualized PC";
     mc->init = xen_init_pv;
     mc->max_cpus = 1;
     mc->default_machine_opts = "accel=xen";
 }
 
-DEFINE_MACHINE("xenpv", xenpv_machine_init)
+static const TypeInfo xenpv_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("xenpv"),
+    .parent     = TYPE_MACHINE,
+    .class_init = xenpv_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void xenpv_machine_register_types(void)
+{
+    type_register_static(&xenpv_machine_typeinfo);
+}
+
+type_init(xenpv_machine_register_types)
