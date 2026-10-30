@@ -531,10 +531,21 @@ void vmbus_unmap_sgl(VMBusChanReq *req, DMADirection dir, struct iovec *iov,
     }
 }
 
+static int vmbus_gpadl_post_load(void *opaque, int version_id)
+{
+    VMBusGpadl *gpadl = opaque;
+
+    if (gpadl->seen_gfns > gpadl->num_gfns) {
+        return -EINVAL;
+    }
+    return 0;
+}
+
 static const VMStateDescription vmstate_gpadl = {
     .name = "vmbus/gpadl",
     .version_id = 0,
     .minimum_version_id = 0,
+    .post_load = vmbus_gpadl_post_load,
     .fields = (const VMStateField[]) {
         VMSTATE_UINT32(id, VMBusGpadl),
         VMSTATE_UINT32(child_relid, VMBusGpadl),
