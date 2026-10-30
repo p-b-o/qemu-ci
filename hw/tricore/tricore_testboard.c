@@ -106,11 +106,25 @@ static void tricoreboard_init(MachineState *machine)
     tricore_testboard_init(machine, 0x183);
 }
 
-static void ttb_machine_init(MachineClass *mc)
+static void ttb_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "a minimal TriCore board";
     mc->init = tricoreboard_init;
     mc->default_cpu_type = TRICORE_CPU_TYPE_NAME("tc1796");
 }
 
-DEFINE_MACHINE("tricore_testboard", ttb_machine_init)
+static const TypeInfo ttb_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("tricore_testboard"),
+    .parent     = TYPE_MACHINE,
+    .class_init = ttb_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void ttb_machine_register_types(void)
+{
+    type_register_static(&ttb_machine_typeinfo);
+}
+
+type_init(ttb_machine_register_types)
