@@ -10,6 +10,7 @@
 #include "hw/hexagon/hex-subsys.h"
 #include "hw/hexagon/hexagon_globalreg.h"
 #include "hw/hexagon/hexagon_hvx_context.h"
+#include "hw/hexagon/hexagon_hmx_context.h"
 #include "hw/hexagon/hexagon_tlb.h"
 #include "hw/intc/hex-l2vic.h"
 #include "hw/timer/qct-qtimer.h"
@@ -120,6 +121,20 @@ static void hvx_contexts_create(HexagonCommonMachineState *hms,
     hms->num_hvx_ctx = n;
 }
 
+static void hmx_context_create(HexagonCommonMachineState *hms,
+                               const struct hexagon_machine_config *m_cfg)
+{
+    DeviceState *ctx;
+
+    if (!HEXAGON_CFGTABLE_HAS_HMX(&m_cfg->cfgtable)) {
+        return;
+    }
+
+    ctx = qdev_new(TYPE_HEXAGON_HMX_CONTEXT);
+    object_property_add_child(OBJECT(hms), "hmx-context", OBJECT(ctx));
+    sysbus_realize_and_unref(SYS_BUS_DEVICE(ctx), &error_fatal);
+}
+
 static DeviceState *cluster_create(HexagonCommonMachineState *hms)
 {
     DeviceState *cluster = qdev_new(TYPE_CPU_CLUSTER);
@@ -167,6 +182,7 @@ void hex_subsys_create(HexagonCommonMachineState *hms,
     hms->glob_regs = globalreg_create(hms, m_cfg, rev);
     hms->tlb = tlb_create(hms, m_cfg);
     hvx_contexts_create(hms, m_cfg);
+    hmx_context_create(hms, m_cfg);
 }
 
 void hex_subsys_add_cpu(HexagonCommonMachineState *hms, DeviceState *cpu)
