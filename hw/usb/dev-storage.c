@@ -273,6 +273,14 @@ void usb_msd_command_complete(SCSIRequest *req, size_t resid)
     s->csw.residue = cpu_to_le32(s->data_len);
     s->csw.status = req->status != 0;
 
+    /*
+     * Drop it before completing the packet.
+     * usb_packet_complete() may synchronously run a CSW packet queued
+     * behind it, which must not see the request as still in flight.
+     */
+    scsi_req_unref(req);
+    s->req = NULL;
+
     if (s->packet) {
         if (s->data_len == 0 && s->mode == USB_MSDM_DATAOUT) {
             /* A deferred packet with no write data remaining must be
@@ -300,8 +308,6 @@ void usb_msd_command_complete(SCSIRequest *req, size_t resid)
     } else if (s->data_len == 0) {
         s->mode = USB_MSDM_CSW;
     }
-    scsi_req_unref(req);
-    s->req = NULL;
 }
 
 void usb_msd_request_cancelled(SCSIRequest *req)
