@@ -90,6 +90,9 @@ class SysTestsStandaloneTests(QemuSystemTest):
     def test_semihost(self):
         self.run_console_pattern("semihost", "PASS", "-append", "arg1", "arg2")
 
+    def test_invalid_hmx(self):
+        self.run_exit_zero("invalid_hmx")
+
     def test_dtg_interrupt(self):
         self.run_exit_zero("dtg_interrupt")
 

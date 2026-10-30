@@ -101,6 +101,8 @@ typedef struct DisasContext {
     TCGv dczero_addr;
     bool hvx_coproc_enabled;
     bool hvx_check_emitted;
+    bool hmx_coproc_enabled;
+    bool hmx_check_emitted;
 } DisasContext;
 
 bool is_gather_store_insn(DisasContext *ctx);
