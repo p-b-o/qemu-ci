@@ -281,12 +281,26 @@ static void virtex_init(MachineState *machine)
     env->load_info = &boot_info;
 }
 
-static void virtex_machine_init(MachineClass *mc)
+static void virtex_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "Xilinx Virtex ML507 reference design";
     mc->init = virtex_init;
     mc->default_cpu_type = POWERPC_CPU_TYPE_NAME("440-xilinx");
     mc->default_ram_id = "ram";
 }
 
-DEFINE_MACHINE("virtex-ml507", virtex_machine_init)
+static const TypeInfo virtex_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("virtex-ml507"),
+    .parent     = TYPE_MACHINE,
+    .class_init = virtex_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void virtex_machine_register_types(void)
+{
+    type_register_static(&virtex_machine_typeinfo);
+}
+
+type_init(virtex_machine_register_types)

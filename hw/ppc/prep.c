@@ -441,8 +441,10 @@ static void ibm_40p_init(MachineState *machine)
     }
 }
 
-static void ibm_40p_machine_init(MachineClass *mc)
+static void ibm_40p_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "IBM RS/6000 7020 (40p)",
     mc->init = ibm_40p_init;
     mc->max_cpus = 1;
@@ -456,4 +458,16 @@ static void ibm_40p_machine_init(MachineClass *mc)
     machine_add_audiodev_property(mc);
 }
 
-DEFINE_MACHINE("40p", ibm_40p_machine_init)
+static const TypeInfo ibm_40p_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("40p"),
+    .parent     = TYPE_MACHINE,
+    .class_init = ibm_40p_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void ibm_40p_machine_register_types(void)
+{
+    type_register_static(&ibm_40p_machine_typeinfo);
+}
+
+type_init(ibm_40p_machine_register_types)

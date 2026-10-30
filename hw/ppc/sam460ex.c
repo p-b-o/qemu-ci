@@ -509,8 +509,10 @@ static void sam460ex_init(MachineState *machine)
     boot_info->entry = entry;
 }
 
-static void sam460ex_machine_init(MachineClass *mc)
+static void sam460ex_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "aCube Sam460ex";
     mc->init = sam460ex_init;
     mc->block_default_type = IF_IDE;
@@ -519,4 +521,16 @@ static void sam460ex_machine_init(MachineClass *mc)
     mc->default_ram_id = "ppc4xx.sdram";
 }
 
-DEFINE_MACHINE("sam460ex", sam460ex_machine_init)
+static const TypeInfo sam460ex_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("sam460ex"),
+    .parent     = TYPE_MACHINE,
+    .class_init = sam460ex_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void sam460ex_machine_register_types(void)
+{
+    type_register_static(&sam460ex_machine_typeinfo);
+}
+
+type_init(sam460ex_machine_register_types)

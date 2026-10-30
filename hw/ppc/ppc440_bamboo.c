@@ -256,8 +256,10 @@ static void bamboo_init(MachineState *machine)
     }
 }
 
-static void bamboo_machine_init(MachineClass *mc)
+static void bamboo_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "bamboo";
     mc->init = bamboo_init;
     mc->default_cpu_type = POWERPC_CPU_TYPE_NAME("440epb");
@@ -265,4 +267,16 @@ static void bamboo_machine_init(MachineClass *mc)
     mc->default_nic = "e1000";
 }
 
-DEFINE_MACHINE("bamboo", bamboo_machine_init)
+static const TypeInfo bamboo_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("bamboo"),
+    .parent     = TYPE_MACHINE,
+    .class_init = bamboo_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void bamboo_machine_register_types(void)
+{
+    type_register_static(&bamboo_machine_typeinfo);
+}
+
+type_init(bamboo_machine_register_types)

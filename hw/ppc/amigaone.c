@@ -416,8 +416,10 @@ static void amigaone_init(MachineState *machine)
     }
 }
 
-static void amigaone_machine_init(MachineClass *mc)
+static void amigaone_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "Eyetech AmigaOne/Mai Logic Teron";
     mc->init = amigaone_init;
     mc->block_default_type = IF_IDE;
@@ -427,4 +429,16 @@ static void amigaone_machine_init(MachineClass *mc)
     mc->default_ram_size = 512 * MiB;
 }
 
-DEFINE_MACHINE("amigaone", amigaone_machine_init)
+static const TypeInfo amigaone_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("amigaone"),
+    .parent     = TYPE_MACHINE,
+    .class_init = amigaone_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void amigaone_machine_register_types(void)
+{
+    type_register_static(&amigaone_machine_typeinfo);
+}
+
+type_init(amigaone_machine_register_types)

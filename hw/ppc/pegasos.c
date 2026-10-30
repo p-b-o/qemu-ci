@@ -732,8 +732,9 @@ static bool pegasos_setprop(MachineState *ms, const char *path,
     return true;
 }
 
-static void pegasos_machine_init(MachineClass *mc)
+static void pegasos_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
     PPCVirtualHypervisorClass *vhc = PPC_VIRTUAL_HYPERVISOR_CLASS(mc);
     VofMachineIfClass *vmc = VOF_MACHINE_CLASS(mc);
 
@@ -787,13 +788,19 @@ static void pegasos2_machine_class_init(ObjectClass *oc, const void *data)
     mc->default_cpu_type = POWERPC_CPU_TYPE_NAME("7457_v1.2");
 }
 
-DEFINE_MACHINE_EXTENDED("pegasos", MACHINE, PegasosMachineState,
-                        pegasos_machine_init, true, false,
-                        (const InterfaceInfo[]) {
-                        { TYPE_PPC_VIRTUAL_HYPERVISOR },
-                        { TYPE_VOF_MACHINE_IF }, { } })
-
 static const TypeInfo pegasos_machine_types[] = {
+    {
+        .name          = MACHINE_TYPE_NAME("pegasos"),
+        .parent        = TYPE_MACHINE,
+        .class_init    = pegasos_machine_class_init,
+        .instance_size = sizeof(PegasosMachineState),
+        .abstract      = true,
+        .interfaces    = (const InterfaceInfo[]) {
+            { TYPE_PPC_VIRTUAL_HYPERVISOR },
+            { TYPE_VOF_MACHINE_IF },
+            { }
+        },
+    },
     {
         .name          = MACHINE_TYPE_NAME("pegasos1"),
         .parent        = TYPE_PEGASOS_MACHINE,
