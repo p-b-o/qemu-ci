@@ -434,8 +434,10 @@ static void leon3_generic_hw_init(MachineState *machine)
                             LEON3_UART_IRQ, GRLIB_APBIO_AREA);
 }
 
-static void leon3_generic_machine_init(MachineClass *mc)
+static void leon3_generic_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "Leon-3 generic";
     mc->init = leon3_generic_hw_init;
     mc->default_cpu_type = SPARC_CPU_TYPE_NAME("LEON3");
@@ -443,4 +445,16 @@ static void leon3_generic_machine_init(MachineClass *mc)
     mc->max_cpus = MAX_CPUS;
 }
 
-DEFINE_MACHINE("leon3_generic", leon3_generic_machine_init)
+static const TypeInfo leon3_generic_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("leon3_generic"),
+    .parent     = TYPE_MACHINE,
+    .class_init = leon3_generic_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void leon3_generic_machine_register_types(void)
+{
+    type_register_static(&leon3_generic_machine_typeinfo);
+}
+
+type_init(leon3_generic_machine_register_types)
