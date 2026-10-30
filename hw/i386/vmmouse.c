@@ -320,6 +320,10 @@ static int vmmouse_post_load(void *opaque, int version_id)
 {
     VMMouseState *s = opaque;
 
+    if (s->nb_queue > VMMOUSE_QUEUE_SIZE) {
+        return -EINVAL;
+    }
+
     vmmouse_remove_handler(s);
     vmmouse_update_handler(s, s->absolute);
     return 0;
