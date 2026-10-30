@@ -761,9 +761,19 @@ static const VMStateDescription vmstate_hda_audio_stream_buf = {
     }
 };
 
+static int hda_audio_stream_post_load(void *opaque, int version_id)
+{
+    HDAAudioStream *st = opaque;
+
+    st->stream &= 0x0f;
+    st->channel &= 0x0f;
+    return 0;
+}
+
 static const VMStateDescription vmstate_hda_audio_stream = {
     .name = "hda-audio-stream",
     .version_id = 1,
+    .post_load = hda_audio_stream_post_load,
     .fields = (const VMStateField[]) {
         VMSTATE_UINT32(stream, HDAAudioStream),
         VMSTATE_UINT32(channel, HDAAudioStream),
