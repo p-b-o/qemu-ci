@@ -62,12 +62,10 @@ static int run(const char *name, binary_op_32 op, ref_op_32 ref)
 
 int main(void)
 {
-    int ret = 0;
-
     TAP_START();
-    ret |= run("SLLV", do_mips32r6_SLLV, ref_sllv);
-    ret |= run("SRLV", do_mips32r6_SRLV, ref_srlv);
-    ret |= run("SRAV", do_mips32r6_SRAV, ref_srav);
+    run("SLLV", do_mips32r6_SLLV, ref_sllv);
+    run("SRLV", do_mips32r6_SRLV, ref_srlv);
+    run("SRAV", do_mips32r6_SRAV, ref_srav);
 
     return tap_done();
 }
