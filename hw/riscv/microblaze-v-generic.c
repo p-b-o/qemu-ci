@@ -176,8 +176,10 @@ static void mb_v_generic_init(MachineState *machine)
     create_unimplemented_device("qspi", QSPI_BASEADDR, 0x10000);
 }
 
-static void mb_v_generic_machine_init(MachineClass *mc)
+static void mb_v_generic_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "AMD Microblaze-V generic platform";
     mc->init = mb_v_generic_init;
     mc->min_cpus = 1;
@@ -186,4 +188,16 @@ static void mb_v_generic_machine_init(MachineClass *mc)
     mc->default_cpus = 1;
 }
 
-DEFINE_MACHINE("amd-microblaze-v-generic", mb_v_generic_machine_init)
+static const TypeInfo mb_v_generic_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("amd-microblaze-v-generic"),
+    .parent     = TYPE_MACHINE,
+    .class_init = mb_v_generic_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void mb_v_generic_machine_register_types(void)
+{
+    type_register_static(&mb_v_generic_machine_typeinfo);
+}
+
+type_init(mb_v_generic_machine_register_types)
