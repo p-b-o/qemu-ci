@@ -201,8 +201,10 @@ static void clipper_init(MachineState *machine)
     }
 }
 
-static void clipper_machine_init(MachineClass *mc)
+static void clipper_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "Alpha DP264/CLIPPER";
     mc->init = clipper_init;
     mc->block_default_type = IF_IDE;
@@ -213,4 +215,16 @@ static void clipper_machine_init(MachineClass *mc)
     mc->default_nic = "e1000";
 }
 
-DEFINE_MACHINE("clipper", clipper_machine_init)
+static const TypeInfo clipper_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("clipper"),
+    .parent     = TYPE_MACHINE,
+    .class_init = clipper_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void clipper_machine_register_types(void)
+{
+    type_register_static(&clipper_machine_typeinfo);
+}
+
+type_init(clipper_machine_register_types)
