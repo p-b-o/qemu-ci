@@ -378,8 +378,10 @@ static void r2d_init(MachineState *machine)
                        SDRAM_BASE + BOOT_PARAMS_OFFSET);
 }
 
-static void r2d_machine_init(MachineClass *mc)
+static void r2d_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "r2d-plus board";
     mc->init = r2d_init;
     mc->block_default_type = IF_IDE;
@@ -387,4 +389,16 @@ static void r2d_machine_init(MachineClass *mc)
     mc->default_nic = "rtl8139";
 }
 
-DEFINE_MACHINE("r2d", r2d_machine_init)
+static const TypeInfo r2d_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("r2d"),
+    .parent     = TYPE_MACHINE,
+    .class_init = r2d_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void r2d_machine_register_types(void)
+{
+    type_register_static(&r2d_machine_typeinfo);
+}
+
+type_init(r2d_machine_register_types)
