@@ -389,8 +389,10 @@ static void mcf5208evb_init(MachineState *machine)
     env->pc = entry;
 }
 
-static void mcf5208evb_machine_init(MachineClass *mc)
+static void mcf5208evb_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "MCF5208EVB";
     mc->init = mcf5208evb_init;
     mc->is_default = true;
@@ -398,4 +400,16 @@ static void mcf5208evb_machine_init(MachineClass *mc)
     mc->default_ram_id = "mcf5208.ram";
 }
 
-DEFINE_MACHINE("mcf5208evb", mcf5208evb_machine_init)
+static const TypeInfo mcf5208evb_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("mcf5208evb"),
+    .parent     = TYPE_MACHINE,
+    .class_init = mcf5208evb_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void mcf5208evb_machine_register_types(void)
+{
+    type_register_static(&mcf5208evb_machine_typeinfo);
+}
+
+type_init(mcf5208evb_machine_register_types)

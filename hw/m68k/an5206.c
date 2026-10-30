@@ -93,12 +93,26 @@ static void an5206_init(MachineState *machine)
     env->pc = entry;
 }
 
-static void an5206_machine_init(MachineClass *mc)
+static void an5206_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "Arnewsh 5206";
     mc->init = an5206_init;
     mc->default_cpu_type = M68K_CPU_TYPE_NAME("m5206");
     mc->default_ram_id = "an5206.ram";
 }
 
-DEFINE_MACHINE("an5206", an5206_machine_init)
+static const TypeInfo an5206_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("an5206"),
+    .parent     = TYPE_MACHINE,
+    .class_init = an5206_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void an5206_machine_register_types(void)
+{
+    type_register_static(&an5206_machine_typeinfo);
+}
+
+type_init(an5206_machine_register_types)
