@@ -121,8 +121,10 @@ static void xtensa_sim_init(MachineState *machine)
     xtensa_sim_load_kernel(cpu, machine);
 }
 
-static void xtensa_sim_machine_init(MachineClass *mc)
+static void xtensa_sim_machine_class_init(ObjectClass *oc, const void *data)
 {
+    MachineClass *mc = MACHINE_CLASS(oc);
+
     mc->desc = "sim machine (" XTENSA_DEFAULT_CPU_MODEL ")";
     mc->is_default = true;
     mc->init = xtensa_sim_init;
@@ -131,4 +133,16 @@ static void xtensa_sim_machine_init(MachineClass *mc)
     mc->default_cpu_type = XTENSA_DEFAULT_CPU_TYPE;
 }
 
-DEFINE_MACHINE("sim", xtensa_sim_machine_init)
+static const TypeInfo xtensa_sim_machine_typeinfo = {
+    .name       = MACHINE_TYPE_NAME("sim"),
+    .parent     = TYPE_MACHINE,
+    .class_init = xtensa_sim_machine_class_init,
+    .instance_size = sizeof(MachineState),
+};
+
+static void xtensa_sim_machine_register_types(void)
+{
+    type_register_static(&xtensa_sim_machine_typeinfo);
+}
+
+type_init(xtensa_sim_machine_register_types)
