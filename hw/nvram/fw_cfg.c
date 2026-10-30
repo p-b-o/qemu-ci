@@ -36,6 +36,7 @@
 #include "migration/vmstate.h"
 #include "trace.h"
 #include "qemu/error-report.h"
+#include "qemu/log.h"
 #include "qemu/option.h"
 #include "qemu/config-file.h"
 #include "qemu/cutils.h"
@@ -676,10 +677,27 @@ static const VMStateDescription vmstate_fw_cfg_acpi_mr = {
     },
 };
 
+static int fw_cfg_post_load(void *opaque, int version_id)
+{
+    FWCfgState *s = opaque;
+
+    if (s->cur_entry != FW_CFG_INVALID &&
+        (s->cur_entry & FW_CFG_ENTRY_MASK) >= fw_cfg_max_entry(s)) {
+        qemu_log_mask(LOG_GUEST_ERROR,
+                      "fw_cfg: vmstate transfer received bad entry value 0x%x\n",
+                      s->cur_entry);
+        s->cur_entry = FW_CFG_INVALID;
+        s->cur_offset = 0;
+    }
+
+    return 0;
+}
+
 static const VMStateDescription vmstate_fw_cfg = {
     .name = "fw_cfg",
     .version_id = 2,
     .minimum_version_id = 1,
+    .post_load = fw_cfg_post_load,
     .fields = (const VMStateField[]) {
         VMSTATE_UINT16(cur_entry, FWCfgState),
         VMSTATE_UINT16_HACK(cur_offset, FWCfgState, is_version_1),
