@@ -84,6 +84,11 @@ bool target_or1k(void)
     return target_arch() == SYS_EMU_TARGET_OR1K;
 }
 
+bool target_loongarch(void)
+{
+    return target_arch() == SYS_EMU_TARGET_LOONGARCH64;
+}
+
 bool target_base_ppc(void)
 {
     switch (target_arch()) {
