@@ -121,10 +121,18 @@ void aarch32_max_v8_tcg_initfn(Object *obj)
 
 static void cpu_max_v8_register_type(void)
 {
-    static const ARMCPUInfo max_v8[2] = {
-        { .name = "max-v8", .initfn = aarch32_max_v8_tcg_initfn },
-        { .name = "max-v8", .initfn = aarch64_max_v8_tcg_initfn },
+    static const ARMCPUInfo max_v8_aarch32 = {
+        .name = "max-v8",
+        .initfn = aarch32_max_v8_tcg_initfn,
+        .is_available = target_arm,
     };
-    arm_cpu_register(&max_v8[target_aarch64()]);
+    static const ARMCPUInfo max_v8_aarch64 = {
+        .name = "max-v8",
+        .initfn = aarch64_max_v8_tcg_initfn,
+        .is_available = target_aarch64,
+    };
+
+    arm_cpu_register(&max_v8_aarch32);
+    arm_cpu_register(&max_v8_aarch64);
 }
 type_init(cpu_max_v8_register_type)
