@@ -100,6 +100,13 @@ bool target_or1k(void);
 bool target_loongarch(void);
 
 /**
+ * target_xtensa:
+ *
+ * Returns whether the target architecture is Xtensa.
+ */
+bool target_xtensa(void);
+
+/**
  * target_base_ppc:
  *
  * Returns whether the target architecture is PowerPC 32-bit or 64-bit.
