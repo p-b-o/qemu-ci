@@ -1,0 +1,184 @@
+Looking up 20261101201717.3911097-1-armbru@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 57 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 621 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v8 1/56] qapi/schema: Rename .lookup_entity() and tighten return type
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-2-armbru@redhat.com
+  [32m✓[0m [PATCH v8 2/56] qapi: Ease access to introspection names
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-3-armbru@redhat.com
+  [32m✓[0m [PATCH v8 3/56] qapi/introspect: Simplify masked name comment emission slighly
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-4-armbru@redhat.com
+  [32m✓[0m [PATCH v8 4/56] qapi/introspect: Don't elide types
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-5-armbru@redhat.com
+  [32m✓[0m [PATCH v8 5/56] qapi: QAPISchemaVisitor.visit_needed() is now unused, drop
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-6-armbru@redhat.com
+  [32m✓[0m [PATCH v8 6/56] qapi/introspect: Tweak integer type masking
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-7-armbru@redhat.com
+  [32m✓[0m [PATCH v8 7/56] qapi: add QAPITypeInfo struct definition
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-8-armbru@redhat.com
+  [32m✓[0m [PATCH v8 8/56] qapi/gen: fix _module_basename for multi-dash 'what' parameters
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-9-armbru@redhat.com
+  [32m✓[0m [PATCH v8 9/56] qapi: add type-infos generator
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-10-armbru@redhat.com
+  [32m✓[0m [PATCH v8 10/56] qom: add qapi_type field to ObjectProperty
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-11-armbru@redhat.com
+  [32m✓[0m [PATCH v8 11/56] qapi/qom: add qapi-type to qom-list, qom-list-properties, qom-list-get
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-12-armbru@redhat.com
+  [32m✓[0m [PATCH v8 12/56] qom/qmp: populate qapi-type in QMP handlers
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-13-armbru@redhat.com
+  [32m✓[0m [PATCH v8 13/56] qom/qmp: populate description & default-value in qom_property_info()
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-14-armbru@redhat.com
+  [32m✓[0m [PATCH v8 14/56] qom: New object_property_add() etc. parameter @qapi_type
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-15-armbru@redhat.com
+  [32m✓[0m [PATCH v8 15/56] qom/object: Move enum property code so it is together
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-16-armbru@redhat.com
+  [32m✓[0m [PATCH v8 16/56] qom: New object_property_add_enum() etc. parameter @qapi_type
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-17-armbru@redhat.com
+  [32m✓[0m [PATCH v8 17/56] tests: update check-qom-proplist for QAPI-aware property registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-18-armbru@redhat.com
+  [32m✓[0m [PATCH v8 18/56] qom: convert QAPI enum properties to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-19-armbru@redhat.com
+  [32m✓[0m [PATCH v8 19/56] qom: convert struct properties to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-20-armbru@redhat.com
+  [32m✓[0m [PATCH v8 20/56] x86: convert OnOffAuto properties to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-21-armbru@redhat.com
+  [32m✓[0m [PATCH v8 21/56] microvm: convert OnOffAuto properties to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-22-armbru@redhat.com
+  [32m✓[0m [PATCH v8 22/56] pc: convert OnOffAuto vmport property to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-23-armbru@redhat.com
+  [32m✓[0m [PATCH v8 23/56] arm/virt: convert OnOffAuto acpi property to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-24-armbru@redhat.com
+  [32m✓[0m [PATCH v8 24/56] riscv/virt: convert OnOffAuto properties to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-25-armbru@redhat.com
+  [32m✓[0m [PATCH v8 25/56] loongarch/virt: convert OnOffAuto properties to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-26-armbru@redhat.com
+  [32m✓[0m [PATCH v8 26/56] hostmem: convert OnOffAuto rom property to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-27-armbru@redhat.com
+  [32m✓[0m [PATCH v8 27/56] sev: convert OnOffAuto legacy-vm-type property to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-28-armbru@redhat.com
+  [32m✓[0m [PATCH v8 28/56] whpx: convert OnOffAuto hyperv property to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-29-armbru@redhat.com
+  [32m✓[0m [PATCH v8 29/56] whpx: convert OnOffAuto arch properties to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-30-armbru@redhat.com
+  [32m✓[0m [PATCH v8 30/56] accel/kvm: convert OnOffSplit property to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-31-armbru@redhat.com
+  [32m✓[0m [PATCH v8 31/56] whpx: convert OnOffSplit property to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-32-armbru@redhat.com
+  [32m✓[0m [PATCH v8 32/56] ppc/spapr-caps: convert to QAPI-aware property registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-33-armbru@redhat.com
+  [32m✓[0m [PATCH v8 33/56] net/colo-compare: fix compare_timeout setter visitor type
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-34-armbru@redhat.com
+  [32m✓[0m [PATCH v8 34/56] net/colo-compare: fix max_queue_size setter visitor type
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-35-armbru@redhat.com
+  [32m✓[0m [PATCH v8 35/56] hw/misc/xlnx-versal-trng: add missing getter for fips-fault-events
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-36-armbru@redhat.com
+  [32m✓[0m [PATCH v8 36/56] qom: convert scalar properties to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-37-armbru@redhat.com
+  [32m✓[0m [PATCH v8 37/56] i386/cpu: convert strList property to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-38-armbru@redhat.com
+  [32m✓[0m [PATCH v8 38/56] accel/hvf: convert OnOffSplit property to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-39-armbru@redhat.com
+  [32m✓[0m [PATCH v8 39/56] i386/x86: convert SgxEPCList property to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-40-armbru@redhat.com
+  [32m✓[0m [PATCH v8 40/56] virtio-balloon: convert guest-stats property to QAPI type
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-41-armbru@redhat.com
+  [32m✓[0m [PATCH v8 41/56] qom: replace object_property_add_tm with StructTm QAPI type
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-42-armbru@redhat.com
+  [32m✓[0m [PATCH v8 42/56] hw/nvdimm: convert UUID property to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-43-armbru@redhat.com
+  [32m✓[0m [PATCH v8 43/56] hw/s390-virtio-ccw: convert loadparm property to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-44-armbru@redhat.com
+  [32m✓[0m [PATCH v8 44/56] hw/ppc/spapr_drc: convert fdt property to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-45-armbru@redhat.com
+  [32m✓[0m [PATCH v8 45/56] hw/s390x: convert BootCertificatesList to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-46-armbru@redhat.com
+  [32m✓[0m [PATCH v8 46/56] qdev: add qapi_type field to PropertyInfo with fallback registration
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-47-armbru@redhat.com
+  [32m✓[0m [PATCH v8 47/56] qdev: convert core PropertyInfo definitions to use qapi_type
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-48-armbru@redhat.com
+  [32m✓[0m [PATCH v8 48/56] qdev: convert system PropertyInfo definitions to use qapi_type
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-49-armbru@redhat.com
+  [32m✓[0m [PATCH v8 49/56] hw: convert device-local PropertyInfo definitions to use qapi_type
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-50-armbru@redhat.com
+  [32m✓[0m [PATCH v8 50/56] target/riscv: convert PropertyInfo definitions to use qapi_type
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-51-armbru@redhat.com
+  [32m✓[0m [PATCH v8 51/56] qdev: convert PropertyInfo definitions to use qapi_type
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-52-armbru@redhat.com
+  [32m✓[0m [PATCH v8 52/56] qdev: PropertyInfo.enum_table is no longer used, drop
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-53-armbru@redhat.com
+  [32m✓[0m [PATCH v8 53/56] hw/i386: convert PCSouthBridgeOption to QAPI enum
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-54-armbru@redhat.com
+  [32m✓[0m [PATCH v8 54/56] qom: Drop object_property_add_enum() parameter @lookup
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-55-armbru@redhat.com
+  [32m✓[0m [PATCH v8 55/56] qom: use QAPITypeInfo in object_property_get_enum
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-56-armbru@redhat.com
+  [32m✓[0m [PATCH v8 56/56] tests/qmp-cmd-test: assert qapi-type resolves in query-qmp-schema
+    + Link: https://lore.kernel.org/qemu-devel/20261101201717.3911097-57-armbru@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 56
+---
+Applying: qapi/schema: Rename .lookup_entity() and tighten return type
+Applying: qapi: Ease access to introspection names
+Applying: qapi/introspect: Simplify masked name comment emission slighly
+Applying: qapi/introspect: Don't elide types
+Applying: qapi: QAPISchemaVisitor.visit_needed() is now unused, drop
+Applying: qapi/introspect: Tweak integer type masking
+Applying: qapi: add QAPITypeInfo struct definition
+Applying: qapi/gen: fix _module_basename for multi-dash 'what' parameters
+Applying: qapi: add type-infos generator
+Applying: qom: add qapi_type field to ObjectProperty
+Applying: qapi/qom: add qapi-type to qom-list, qom-list-properties, qom-list-get
+Applying: qom/qmp: populate qapi-type in QMP handlers
+Applying: qom/qmp: populate description & default-value in qom_property_info()
+Applying: qom: New object_property_add() etc. parameter @qapi_type
+Applying: qom/object: Move enum property code so it is together
+Applying: qom: New object_property_add_enum() etc. parameter @qapi_type
+Applying: tests: update check-qom-proplist for QAPI-aware property registration
+Applying: qom: convert QAPI enum properties to QAPI-aware registration
+Applying: qom: convert struct properties to QAPI-aware registration
+Applying: x86: convert OnOffAuto properties to QAPI-aware registration
+Applying: microvm: convert OnOffAuto properties to QAPI-aware registration
+Applying: pc: convert OnOffAuto vmport property to QAPI-aware registration
+Applying: arm/virt: convert OnOffAuto acpi property to QAPI-aware registration
+Applying: riscv/virt: convert OnOffAuto properties to QAPI-aware registration
+Applying: loongarch/virt: convert OnOffAuto properties to QAPI-aware registration
+Applying: hostmem: convert OnOffAuto rom property to QAPI-aware registration
+Applying: sev: convert OnOffAuto legacy-vm-type property to QAPI-aware registration
+Applying: whpx: convert OnOffAuto hyperv property to QAPI-aware registration
+Applying: whpx: convert OnOffAuto arch properties to QAPI-aware registration
+Applying: accel/kvm: convert OnOffSplit property to QAPI-aware registration
+Applying: whpx: convert OnOffSplit property to QAPI-aware registration
+Applying: ppc/spapr-caps: convert to QAPI-aware property registration
+Applying: net/colo-compare: fix compare_timeout setter visitor type
+Applying: net/colo-compare: fix max_queue_size setter visitor type
+Applying: hw/misc/xlnx-versal-trng: add missing getter for fips-fault-events
+Applying: qom: convert scalar properties to QAPI-aware registration
+Applying: i386/cpu: convert strList property to QAPI-aware registration
+Applying: accel/hvf: convert OnOffSplit property to QAPI-aware registration
+Applying: i386/x86: convert SgxEPCList property to QAPI-aware registration
+Applying: virtio-balloon: convert guest-stats property to QAPI type
+Applying: qom: replace object_property_add_tm with StructTm QAPI type
+Applying: hw/nvdimm: convert UUID property to QAPI-aware registration
+Applying: hw/s390-virtio-ccw: convert loadparm property to QAPI-aware registration
+Applying: hw/ppc/spapr_drc: convert fdt property to QAPI-aware registration
+Applying: hw/s390x: convert BootCertificatesList to QAPI-aware registration
+Applying: qdev: add qapi_type field to PropertyInfo with fallback registration
+Applying: qdev: convert core PropertyInfo definitions to use qapi_type
+Applying: qdev: convert system PropertyInfo definitions to use qapi_type
+Applying: hw: convert device-local PropertyInfo definitions to use qapi_type
+Applying: target/riscv: convert PropertyInfo definitions to use qapi_type
+Applying: qdev: convert PropertyInfo definitions to use qapi_type
+Patch failed at 0051 qdev: convert PropertyInfo definitions to use qapi_type
+error: patch failed: migration/options.c:37
+error: migration/options.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
