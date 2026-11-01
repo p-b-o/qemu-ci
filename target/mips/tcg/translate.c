@@ -5461,6 +5461,19 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
             ctx->base.is_jmp = DISAS_EXIT;
             register_name = "Count";
             break;
+        case CP0_REG09__CVMCOUNT:
+            CP0_CHECK(ctx->insn_flags & INSN_OCTEON);
+            translator_io_start(&ctx->base);
+            gen_helper_mfc0_cvmcount(arg, tcg_env);
+            tcg_gen_ext32s_tl(arg, arg);
+            register_name = "CvmCount";
+            break;
+        case CP0_REG09__CVMCTL:
+            CP0_CHECK(ctx->insn_flags & INSN_OCTEON);
+            tcg_gen_ld_tl(arg, tcg_env, offsetof(CPUMIPSState, CP0_CvmCtl));
+            tcg_gen_ext32s_tl(arg, arg);
+            register_name = "CvmCtl";
+            break;
         default:
             goto cp0_unimplemented;
         }
@@ -5481,6 +5494,13 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         case CP0_REG11__COMPARE:
             gen_mfc0_load32(arg, offsetof(CPUMIPSState, CP0_Compare));
             register_name = "Compare";
+            break;
+        case CP0_REG11__CVMMEMCTL:
+            CP0_CHECK(ctx->insn_flags & INSN_OCTEON);
+            tcg_gen_ld_tl(arg, tcg_env,
+                          offsetof(CPUMIPSState, CP0_CvmMemCtl));
+            tcg_gen_ext32s_tl(arg, arg);
+            register_name = "CvmMemCtl";
             break;
         /* 6,7 are implementation dependent */
         default:
@@ -6177,6 +6197,11 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
             gen_helper_mtc0_count(tcg_env, arg);
             register_name = "Count";
             break;
+        case CP0_REG09__CVMCTL:
+            CP0_CHECK(ctx->insn_flags & INSN_OCTEON);
+            tcg_gen_st_tl(arg, tcg_env, offsetof(CPUMIPSState, CP0_CvmCtl));
+            register_name = "CvmCtl";
+            break;
         default:
             goto cp0_unimplemented;
         }
@@ -6196,6 +6221,13 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         case CP0_REG11__COMPARE:
             gen_helper_mtc0_compare(tcg_env, arg);
             register_name = "Compare";
+            break;
+        case CP0_REG11__CVMMEMCTL:
+            CP0_CHECK(ctx->insn_flags & INSN_OCTEON);
+            tcg_gen_st_tl(arg, tcg_env,
+                          offsetof(CPUMIPSState, CP0_CvmMemCtl));
+            ctx->base.is_jmp = DISAS_STOP;
+            register_name = "CvmMemCtl";
             break;
         /* 6,7 are implementation dependent */
         default:
@@ -6941,6 +6973,17 @@ static void gen_dmfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
             ctx->base.is_jmp = DISAS_EXIT;
             register_name = "Count";
             break;
+        case CP0_REG09__CVMCOUNT:
+            CP0_CHECK(ctx->insn_flags & INSN_OCTEON);
+            translator_io_start(&ctx->base);
+            gen_helper_mfc0_cvmcount(arg, tcg_env);
+            register_name = "CvmCount";
+            break;
+        case CP0_REG09__CVMCTL:
+            CP0_CHECK(ctx->insn_flags & INSN_OCTEON);
+            tcg_gen_ld_tl(arg, tcg_env, offsetof(CPUMIPSState, CP0_CvmCtl));
+            register_name = "CvmCtl";
+            break;
         default:
             goto cp0_unimplemented;
         }
@@ -6960,6 +7003,12 @@ static void gen_dmfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         case CP0_REG11__COMPARE:
             gen_mfc0_load32(arg, offsetof(CPUMIPSState, CP0_Compare));
             register_name = "Compare";
+            break;
+        case CP0_REG11__CVMMEMCTL:
+            CP0_CHECK(ctx->insn_flags & INSN_OCTEON);
+            tcg_gen_ld_tl(arg, tcg_env,
+                          offsetof(CPUMIPSState, CP0_CvmMemCtl));
+            register_name = "CvmMemCtl";
             break;
         /* 6,7 are implementation dependent */
         default:
@@ -7643,6 +7692,11 @@ static void gen_dmtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
             gen_helper_mtc0_count(tcg_env, arg);
             register_name = "Count";
             break;
+        case CP0_REG09__CVMCTL:
+            CP0_CHECK(ctx->insn_flags & INSN_OCTEON);
+            tcg_gen_st_tl(arg, tcg_env, offsetof(CPUMIPSState, CP0_CvmCtl));
+            register_name = "CvmCtl";
+            break;
         default:
             goto cp0_unimplemented;
         }
@@ -7664,6 +7718,12 @@ static void gen_dmtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         case CP0_REG11__COMPARE:
             gen_helper_mtc0_compare(tcg_env, arg);
             register_name = "Compare";
+            break;
+        case CP0_REG11__CVMMEMCTL:
+            CP0_CHECK(ctx->insn_flags & INSN_OCTEON);
+            tcg_gen_st_tl(arg, tcg_env,
+                          offsetof(CPUMIPSState, CP0_CvmMemCtl));
+            register_name = "CvmMemCtl";
             break;
         /* 6,7 are implementation dependent */
         default:
