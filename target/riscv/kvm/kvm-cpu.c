@@ -47,7 +47,7 @@
 #include "sbi_ecall_interface.h"
 #include "chardev/char-fe.h"
 #include "system/runstate.h"
-#include "hw/riscv/numa.h"
+#include "hw/riscv/aia.h"
 
 #define PR_RISCV_V_SET_CONTROL            69
 #define PR_RISCV_V_VSTATE_CTRL_ON          2
@@ -1925,7 +1925,8 @@ void kvm_arch_accel_class_init(ObjectClass *oc)
                                     "auto");
 }
 
-void kvm_riscv_aia_create(MachineState *machine, uint64_t group_shift,
+void kvm_riscv_aia_create(const RISCVAIASocket *sockets,
+                          uint32_t socket_count, uint64_t group_shift,
                           uint64_t aia_irq_num, uint64_t aia_msi_num,
                           uint64_t aplic_base, uint64_t imsic_base,
                           uint64_t guest_num)
@@ -1933,7 +1934,6 @@ void kvm_riscv_aia_create(MachineState *machine, uint64_t group_shift,
     int ret, i;
     int aia_fd = -1;
     uint64_t default_aia_mode;
-    uint64_t socket_count = riscv_socket_count(machine);
     uint64_t max_hart_per_socket = 0;
     uint64_t socket, base_hart, hart_count, socket_imsic_base, imsic_addr;
     uint64_t socket_bits, hart_bits, guest_bits;
@@ -2034,8 +2034,8 @@ void kvm_riscv_aia_create(MachineState *machine, uint64_t group_shift,
 
     for (socket = 0; socket < socket_count; socket++) {
         socket_imsic_base = imsic_base + socket * (1U << group_shift);
-        hart_count = riscv_socket_hart_count(machine, socket);
-        base_hart = riscv_socket_first_hartid(machine, socket);
+        hart_count = sockets[socket].num_harts;
+        base_hart = sockets[socket].hartid_base;
 
         if (max_hart_per_socket < hart_count) {
             max_hart_per_socket = hart_count;
