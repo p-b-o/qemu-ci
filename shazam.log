@@ -1,0 +1,25 @@
+Looking up cover.1793613972.genet-ring-fixes-v1.git.lorandmarton.dev@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 4 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/2] hw/net/bcm2838_genet: wrap the TX consumer index at 16 bits
+    + Link: https://lore.kernel.org/qemu-devel/0bd9bd85fd70c12f7e9ad77ad92a0ac1a778a29e.1793613972.git.lorandmarton.dev@gmail.com
+  [32m✓[0m [PATCH 2/2] hw/net/bcm2838_genet: hold RX frames while the ring is full
+    + Link: https://lore.kernel.org/qemu-devel/fdaf96319d81b2b6602822fd5881a5b5a72e5daa.1793613972.git.lorandmarton.dev@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 2
+---
+Applying: hw/net/bcm2838_genet: wrap the TX consumer index at 16 bits
+Patch failed at 0001 hw/net/bcm2838_genet: wrap the TX consumer index at 16 bits
+error: hw/net/bcm2838_genet.c: does not exist in index
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
