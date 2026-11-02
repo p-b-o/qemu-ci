@@ -1,0 +1,50 @@
+Looking up 20261102083159.3383468-1-subrahmanya.lingappa@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 11 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 99 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v13 1/10] build: add optional librpmi dependency
+    + Link: https://lore.kernel.org/qemu-devel/20261102083159.3383468-2-subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v13 2/10] hw/misc: add RISC-V RPMI transport and Base support
+    + Link: https://lore.kernel.org/qemu-devel/20261102083159.3383468-3-subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v13 3/10] hw/riscv: add RPMI FDT helpers
+    + Link: https://lore.kernel.org/qemu-devel/20261102083159.3383468-4-subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v13 4/10] hw/riscv/virt: add opt-in RPMI base support
+    + Link: https://lore.kernel.org/qemu-devel/20261102083159.3383468-5-subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v13 5/10] riscv: add RPMI system reset service
+    + Link: https://lore.kernel.org/qemu-devel/20261102083159.3383468-6-subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v13 6/10] riscv: add RPMI HSM service
+    + Link: https://lore.kernel.org/qemu-devel/20261102083159.3383468-7-subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v13 7/10] riscv: add RPMI system suspend service
+    + Link: https://lore.kernel.org/qemu-devel/20261102083159.3383468-8-subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v13 8/10] docs/system/riscv: document initial virt RPMI support
+    + Link: https://lore.kernel.org/qemu-devel/20261102083159.3383468-9-subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v13 9/10] tests/qtest: cover initial RISC-V RPMI services
+    + Link: https://lore.kernel.org/qemu-devel/20261102083159.3383468-10-subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v13 10/10] tests/functional: add initial RPMI virt guest smoke
+    + Link: https://lore.kernel.org/qemu-devel/20261102083159.3383468-11-subrahmanya.lingappa@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 10
+---
+NOTE: some trailers ignored due to from/email mismatches:
+    ! Trailer: Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+     Msg From: Alistair <alistair@alistair23.me>
+NOTE: Rerun with -S to apply them anyway
+---
+Applying: build: add optional librpmi dependency
+Applying: hw/misc: add RISC-V RPMI transport and Base support
+Patch failed at 0002 hw/misc: add RISC-V RPMI transport and Base support
+error: patch failed: hw/misc/Kconfig:267
+error: hw/misc/Kconfig: patch does not apply
+error: patch failed: hw/misc/meson.build:181
+error: hw/misc/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
