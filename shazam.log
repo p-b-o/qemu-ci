@@ -1,0 +1,71 @@
+Looking up 20261102092201.1729245-1-jamin_lin@aspeedtech.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 33 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 92 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v8 1/18] hw/usb/bus: Add an auto-hub flag to the USB bus
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 2/18] hw/usb/hcd-xhci: Add an auto-hub property and leave it off
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-3-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 3/18] hw/usb/hcd-ehci: Add an auto-hub property and leave it off
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-4-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 4/18] hw/usb/hcd-uhci: Add an auto-hub property and leave it off
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-5-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 5/18] hw/usb/hcd-ohci: Add an auto-hub property and leave it off
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-6-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 6/18] hw/usb/hcd-dwc2: Add an auto-hub property and leave it off
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-7-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 7/18] hw/usb/xen-usb: Do not insert an automatic hub
+    + Acked-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-8-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 8/18] hw/usb/bus: Turn off the automatic hub by default
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-9-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 9/18] hw/arm/npcm7xx: Keep the automatic hub
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-10-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 10/18] docs/system/devices/usb: Note the automatic hub change
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-11-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 11/18] hw/usb/redirect-server: Add a usbredir server device
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-12-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 12/18] hw/usb/redirect-server: Connect usbredirparser to a chardev
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-13-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 13/18] hw/usb/redirect-server: Announce the exported device
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-14-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 14/18] hw/usb/redirect-server: Implement control transfers
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-15-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 15/18] hw/usb/redirect-server: Implement bulk and interrupt transfers
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-16-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 16/18] hw/usb/redirect-server: Stream interrupt IN endpoints
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-17-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 17/18] hw/usb/redirect-server: Implement isochronous OUT transfers
+    + Reviewed-by: Marc-André Lureau <marcandre.lureau@redhat.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-18-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v8 18/18] hw/arm/aspeed: Enable the usbredir server transport
+    + Link: https://lore.kernel.org/qemu-devel/20261102092201.1729245-19-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 18
+---
+Applying: hw/usb/bus: Add an auto-hub flag to the USB bus
+Applying: hw/usb/hcd-xhci: Add an auto-hub property and leave it off
+Patch failed at 0002 hw/usb/hcd-xhci: Add an auto-hub property and leave it off
+error: patch failed: hw/core/machine.c:43
+error: hw/core/machine.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
