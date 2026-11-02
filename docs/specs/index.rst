@@ -11,6 +11,7 @@ guest hardware that is specific to QEMU.
    pci-ids
    pci-serial
    pci-testdev
+   pci-fixed-bars
    ppc-xive
    ppc-spapr-xive
    ppc-spapr-numa
