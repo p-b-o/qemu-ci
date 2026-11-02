@@ -1,0 +1,57 @@
+Looking up 20261102194826.1298-1-luoyonggang@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Server returned an error.
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/1] hw: set DEFINE_MACHINE target masks
+    + Link: https://lore.kernel.org/qemu-devel/20261102194826.1298-1-luoyonggang@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 1
+---
+Applying: hw: set DEFINE_MACHINE target masks
+Patch failed at 0001 hw: set DEFINE_MACHINE target masks
+error: patch failed: hw/alpha/dp264.c:213
+error: hw/alpha/dp264.c: patch does not apply
+error: patch failed: hw/arm/digic_boards.c:145
+error: hw/arm/digic_boards.c: patch does not apply
+error: patch failed: hw/arm/imx25_pdk.c:149
+error: hw/arm/imx25_pdk.c: patch does not apply
+error: patch failed: hw/arm/kzm.c:137
+error: hw/arm/kzm.c: patch does not apply
+error: patch failed: hw/arm/max78000fthr.c:47
+error: hw/arm/max78000fthr.c: patch does not apply
+error: patch failed: hw/arm/mcimx6ul-evk.c:78
+error: hw/arm/mcimx6ul-evk.c: patch does not apply
+error: patch failed: hw/arm/msf2-som.c:108
+error: hw/arm/msf2-som.c: patch does not apply
+error: patch failed: hw/arm/netduino2.c:65
+error: hw/arm/netduino2.c: patch does not apply
+error: patch failed: hw/arm/netduinoplus2.c:65
+error: hw/arm/netduinoplus2.c: patch does not apply
+error: patch failed: hw/arm/olimex-stm32-h405.c:72
+error: hw/arm/olimex-stm32-h405.c: patch does not apply
+error: patch failed: hw/arm/stm32vldiscovery.c:68
+error: hw/arm/stm32vldiscovery.c: patch does not apply
+error: patch failed: hw/m68k/an5206.c:101
+error: hw/m68k/an5206.c: patch does not apply
+error: patch failed: hw/m68k/mcf5208.c:398
+error: hw/m68k/mcf5208.c: patch does not apply
+error: patch failed: hw/microblaze/petalogix_ml605_mmu.c:220
+error: hw/microblaze/petalogix_ml605_mmu.c: patch does not apply
+error: patch failed: hw/microblaze/xlnx-zynqmp-pmu.c:185
+error: hw/microblaze/xlnx-zynqmp-pmu.c: patch does not apply
+error: patch failed: hw/riscv/microblaze-v-generic.c:187
+error: hw/riscv/microblaze-v-generic.c: patch does not apply
+error: patch failed: hw/tricore/tricore_testboard.c:113
+error: hw/tricore/tricore_testboard.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
