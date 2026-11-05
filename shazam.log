@@ -1,0 +1,26 @@
+Looking up 20261104050650.776580-1-subrahmanya.lingappa@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 3 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/2] hw/riscv: add RPMI support for server reference platform
+    + Link: https://lore.kernel.org/qemu-devel/20261104050650.776580-2-subrahmanya.lingappa@oss.qualcomm.com
+  [32m✓[0m [PATCH v4 2/2] tests/qtest: cover server reference platform RPMI
+    + Link: https://lore.kernel.org/qemu-devel/20261104050650.776580-3-subrahmanya.lingappa@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 2
+---
+Applying: hw/riscv: add RPMI support for server reference platform
+Patch failed at 0001 hw/riscv: add RPMI support for server reference platform
+error: patch failed: hw/riscv/server_platform_ref.c:307
+error: hw/riscv/server_platform_ref.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
