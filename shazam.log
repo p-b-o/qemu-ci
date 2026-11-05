@@ -1,0 +1,19 @@
+Looking up CADm+htGRv+NLDnP-CPQmeJqZU2RkyWPoAGR1Dk8kghhFVUVOew@mail.gmail.com
+Analyzing 1 messages in the thread
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] scsi-block migrate-pr: destination loses its own multipath registrations when the guest holds a reservation
+    + Link: https://lore.kernel.org/qemu-devel/CADm+htGRv+NLDnP-CPQmeJqZU2RkyWPoAGR1Dk8kghhFVUVOew@mail.gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 1
+---
+Applying: scsi-block migrate-pr: destination loses its own multipath registrations when the guest holds a reservation
+Patch failed at 0001 scsi-block migrate-pr: destination loses its own multipath registrations when the guest holds a reservation
+error: No valid patches in input (allow with "--allow-empty")
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
