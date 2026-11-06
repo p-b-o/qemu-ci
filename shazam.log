@@ -1,0 +1,38 @@
+Looking up 20261106110440.3552588-1-armbru@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/8] hw/gpio/pca9552: Convert pin and led properties to class properties
+    + Link: https://lore.kernel.org/qemu-devel/20261106110440.3552588-2-armbru@redhat.com
+  [32m✓[0m [PATCH 2/8] hw/gpio/pca9554: Move most code from .h to .c
+    + Link: https://lore.kernel.org/qemu-devel/20261106110440.3552588-3-armbru@redhat.com
+  [32m✓[0m [PATCH 3/8] hw/gpio/pca9554: Simplify QOM type creation
+    + Link: https://lore.kernel.org/qemu-devel/20261106110440.3552588-4-armbru@redhat.com
+  [32m✓[0m [PATCH 4/8] hw/gpio/pca9554: New abstract base "pca9554-base"
+    + Link: https://lore.kernel.org/qemu-devel/20261106110440.3552588-5-armbru@redhat.com
+  [32m✓[0m [PATCH 5/8] hw/gpio/pca9554: Convert pin properties to class properties
+    + Link: https://lore.kernel.org/qemu-devel/20261106110440.3552588-6-armbru@redhat.com
+  [32m✓[0m [PATCH 6/8] hw/gpio/pca955x: use QAPI enums for led and pin properties
+    + Link: https://lore.kernel.org/qemu-devel/20261106110440.3552588-7-armbru@redhat.com
+  [32m✓[0m [PATCH 7/8] hw/gpio/pca955x: Improve @qapi-type reported by qom-list etc.
+    + Link: https://lore.kernel.org/qemu-devel/20261106110440.3552588-8-armbru@redhat.com
+  [32m✓[0m [PATCH 8/8] hw/gpio/pca955x: Simplify pin and led getters and setters
+    + Link: https://lore.kernel.org/qemu-devel/20261106110440.3552588-9-armbru@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 8
+---
+Applying: hw/gpio/pca9552: Convert pin and led properties to class properties
+Patch failed at 0001 hw/gpio/pca9552: Convert pin and led properties to class properties
+error: patch failed: hw/gpio/pca9552.c:568
+error: hw/gpio/pca9552.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
