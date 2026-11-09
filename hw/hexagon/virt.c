@@ -7,11 +7,13 @@
 
 #include "qemu/osdep.h"
 #include "qapi/error.h"
+#include "elf.h"
 #include "hw/hexagon/virt.h"
 #include "hw/hexagon/hexagon.h"
 #include "hw/hexagon/hex-board.h"
 #include "hw/hexagon/hex-subsys.h"
 #include "hw/core/loader.h"
+#include "qemu/datadir.h"
 #include "qemu/error-report.h"
 #include "qemu/target-info.h"
 #include "qemu/units.h"
@@ -22,6 +24,8 @@ enum {
     VIRT_UART0,
     VIRT_MMIO,
     VIRT_FDT,
+    VIRT_BOOT,
+    VIRT_GPT,
 };
 
 /*
@@ -30,11 +34,17 @@ enum {
  */
 static const int VIRTIO_IRQ_BASE = 16;
 static const int VIRT_UART0_IRQ = 15;
+static const int VIRT_GPT_IRQ = 12;
+
+/* Where a guest kernel loaded through the Hexagon VM host is placed. */
+#define VIRT_KERNEL_ADDR 0xa0000000
 
 static const MemMapEntry base_memmap[] = {
-    [VIRT_UART0] = { 0x10000000, 0x00000200 },
+    [VIRT_UART0] = { 0x10000000, 0x00001000 },
     [VIRT_MMIO] = { 0x11000000, 0x00001000 },
     [VIRT_FDT] = { 0x99800000, 0x00400000 },
+    [VIRT_BOOT] = { 0x99c00000, 0x00000200 },
+    [VIRT_GPT] = { 0xab000000, 0x00001000 },
 };
 
 
@@ -43,20 +53,35 @@ static uint64_t load_kernel(const HexagonVirtMachineState *vms)
     return hex_board_load_elf(MACHINE(vms)->kernel_filename, NULL, NULL, NULL);
 }
 
-static uint64_t load_bios(HexagonVirtMachineState *vms)
+static bool is_elf(const char *filename)
 {
-    MachineState *ms = MACHINE(vms);
-    uint64_t bios_addr = 0x0;  /* Load BIOS at reset vector address 0x0 */
-    int bios_size;
+    uint8_t magic[SELFMAG];
+    int fd = qemu_open_old(filename, O_RDONLY | O_BINARY);
+    bool elf;
 
-    bios_size = load_image_targphys(ms->firmware ?: "",
-                                    bios_addr, 64 * 1024, NULL);
-    if (bios_size < 0) {
-        error_report("Could not load BIOS '%s'", ms->firmware ?: "");
+    if (fd < 0) {
+        return false;
+    }
+    elf = read(fd, magic, sizeof(magic)) == sizeof(magic) &&
+          memcmp(magic, ELFMAG, SELFMAG) == 0;
+    qemu_close(fd);
+    return elf;
+}
+
+/*
+ * An ELF firmware starts at its entry point.  Any other firmware is a raw
+ * image that starts at the reset vector, address zero, where it is loaded.
+ */
+static uint64_t load_bios(MachineState *ms, const char *filename)
+{
+    if (is_elf(filename)) {
+        return hex_board_load_elf(filename, NULL, NULL, NULL);
+    }
+    if (load_image_targphys(filename, 0, ms->ram_size, NULL) < 0) {
+        error_report("Could not load BIOS '%s'", filename);
         exit(1);
     }
-
-    return bios_addr;  /* Return entry point at address 0x0 */
+    return 0;
 }
 
 static void virt_init(MachineState *ms)
@@ -66,9 +91,23 @@ static void virt_init(MachineState *ms)
     int32_t l2vic_phandle;
     uint64_t start = 0;
     bool have_start = false;
+    hwaddr fdt_addr = base_memmap[VIRT_FDT].base;
+    g_autofree char *firmware = NULL;
+    bool vm_guest;
+
+    if (ms->firmware) {
+        firmware = qemu_find_file(QEMU_FILE_TYPE_BIOS, ms->firmware);
+        if (!firmware) {
+            error_report("Could not find BIOS '%s'", ms->firmware);
+            exit(1);
+        }
+    }
+    hex_board_check_initrd(ms, firmware);
+    vm_guest = ms->kernel_filename && firmware;
 
     hex_board_create_fdt(ms, "hexagon-virt,qemu", "qcom,sm8150",
                          &vms->fdt_size);
+    qemu_fdt_setprop_string(ms->fdt, "/soc", "compatible", "simple-bus");
     qemu_fdt_setprop_string(ms->fdt, "/chosen", "bootargs", ms->kernel_cmdline);
 
     hex_subsys_create(&vms->parent_obj, m_cfg, v68_rev);
@@ -80,11 +119,21 @@ static void virt_init(MachineState *ms)
                             base_memmap[VIRT_MMIO].size, VIRTIO_IRQ_BASE,
                             VIRTIO_DEV_COUNT, l2vic_phandle);
 
-    if (ms->kernel_filename) {
+    if (vm_guest) {
+        start = hex_board_load_vm_guest(ms, firmware, 0, VIRT_KERNEL_ADDR,
+                                        base_memmap[VIRT_BOOT].base,
+                                        vms->fdt_size, &fdt_addr);
+        hex_board_fdt_add_memory(ms, VIRT_KERNEL_ADDR,
+                                 MIN(ms->ram_size - VIRT_KERNEL_ADDR,
+                                     HEX_BOARD_MAX_KERNEL_RAM));
+        hex_board_fdt_add_vm_timer(ms, base_memmap[VIRT_GPT].base,
+                                   base_memmap[VIRT_GPT].size, VIRT_GPT_IRQ);
+        have_start = true;
+    } else if (ms->kernel_filename) {
         start = load_kernel(vms);
         have_start = true;
-    } else if (ms->firmware) {
-        start = load_bios(vms);
+    } else if (firmware) {
+        start = load_bios(ms, firmware);
         have_start = true;
     }
     hex_board_create_cpus(ms, have_start, start);
@@ -94,7 +143,7 @@ static void virt_init(MachineState *ms)
                           base_memmap[VIRT_UART0].size, VIRT_UART0_IRQ,
                           l2vic_phandle);
 
-    hex_board_load_fdt(ms, vms->fdt_size, base_memmap[VIRT_FDT].base);
+    hex_board_load_fdt(ms, vms->fdt_size, fdt_addr);
 }
 
 
