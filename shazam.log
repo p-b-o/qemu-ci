@@ -1,0 +1,24 @@
+Looking up 20261109142319.73878-1-philmd@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] target/arm: Kick the other vCPUs on SEV under TCG round-robin
+    + Link: https://lore.kernel.org/qemu-devel/20261109142319.73878-1-philmd@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 1
+---
+Applying: target/arm: Kick the other vCPUs on SEV under TCG round-robin
+Patch failed at 0001 target/arm: Kick the other vCPUs on SEV under TCG round-robin
+error: patch failed: target/arm/tcg/op_helper.c:470
+error: target/arm/tcg/op_helper.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
