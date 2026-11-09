@@ -1,0 +1,25 @@
+Looking up 20261109121401.973836-1-clg@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] vfio/pci: Fix crash when BAR has zero size
+    + Reviewed-by: Philippe Mathieu-Daudé <philmd@oss.qualcomm.com> ([32m✓[0m DKIM/oss.qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261109121401.973836-1-clg@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 1
+---
+Applying: vfio/pci: Fix crash when BAR has zero size
+Patch failed at 0001 vfio/pci: Fix crash when BAR has zero size
+error: patch failed: hw/vfio/pci.c:1852
+error: hw/vfio/pci.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
