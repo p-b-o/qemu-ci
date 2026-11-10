@@ -1,0 +1,55 @@
+Looking up 20261110082917.240329-1-jamin_lin@aspeedtech.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 13 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 44 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/12] hw/usb/aspeed-udc: Make the SETUP buffer byte addressable
+    + Link: https://lore.kernel.org/qemu-devel/20261110082917.240329-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v3 2/12] hw/usb/aspeed-udc: Finish an EP0 IN transfer at the status stage
+    + Link: https://lore.kernel.org/qemu-devel/20261110082917.240329-3-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v3 3/12] hw/usb/aspeed-udc: Mask the reserved bits on register writes
+    + Link: https://lore.kernel.org/qemu-devel/20261110082917.240329-4-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v3 4/12] hw/usb/aspeed-udc: Clear EP_POOL_ACK when no endpoint ack is left
+    + Link: https://lore.kernel.org/qemu-devel/20261110082917.240329-5-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v3 5/12] hw/usb/aspeed-udc: Rename the transfer helpers after their DMA mode
+    + Link: https://lore.kernel.org/qemu-devel/20261110082917.240329-6-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v3 6/12] hw/usb/aspeed-udc: Store the EP_DMA_STS write first
+    + Link: https://lore.kernel.org/qemu-devel/20261110082917.240329-7-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v3 7/12] hw/usb/aspeed-udc: Pick the EP_DMA_STS path by direction
+    + Link: https://lore.kernel.org/qemu-devel/20261110082917.240329-8-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v3 8/12] hw/usb/aspeed-udc: Support single-stage IN transfers
+    + Link: https://lore.kernel.org/qemu-devel/20261110082917.240329-9-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v3 9/12] hw/usb/aspeed-udc: Use the endpoint max packet size for OUT transfers
+    + Link: https://lore.kernel.org/qemu-devel/20261110082917.240329-10-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v3 10/12] hw/usb/aspeed-udc: Add trace events for the transfer paths
+    + Link: https://lore.kernel.org/qemu-devel/20261110082917.240329-11-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v3 11/12] hw/arm/aspeed_ast10x0: Add the USB device controller
+    + Link: https://lore.kernel.org/qemu-devel/20261110082917.240329-12-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v3 12/12] tests/functional/arm/test_aspeed_ast1030: Test the usbredir server transport
+    + Link: https://lore.kernel.org/qemu-devel/20261110082917.240329-13-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 12
+---
+Applying: hw/usb/aspeed-udc: Make the SETUP buffer byte addressable
+Applying: hw/usb/aspeed-udc: Finish an EP0 IN transfer at the status stage
+Applying: hw/usb/aspeed-udc: Mask the reserved bits on register writes
+Applying: hw/usb/aspeed-udc: Clear EP_POOL_ACK when no endpoint ack is left
+Applying: hw/usb/aspeed-udc: Rename the transfer helpers after their DMA mode
+Applying: hw/usb/aspeed-udc: Store the EP_DMA_STS write first
+Applying: hw/usb/aspeed-udc: Pick the EP_DMA_STS path by direction
+Applying: hw/usb/aspeed-udc: Support single-stage IN transfers
+Applying: hw/usb/aspeed-udc: Use the endpoint max packet size for OUT transfers
+Applying: hw/usb/aspeed-udc: Add trace events for the transfer paths
+Patch failed at 0010 hw/usb/aspeed-udc: Add trace events for the transfer paths
+error: patch failed: hw/usb/trace-events:395
+error: hw/usb/trace-events: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
