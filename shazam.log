@@ -1,0 +1,75 @@
+Looking up 20261109223110.1619504-1-mathieu.poirier@linaro.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 24 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 222 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v6 1/23] linux-headers: Add RME related definitions
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-2-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 2/23] target/arm: Add confidential guest support
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-3-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 3/23] target/arm/kvm-rme: Add mechanic to initialize realms
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-4-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 4/23] target/arm/kvm: Split kvm_arch_get/put_registers
+    + Based-on: <20260528000416.8161-1-michael.roth@amd.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-5-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 5/23] target/arm/kvm-rme: Initialize vCPU
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-6-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 6/23] target/arm/kvm: Create scratch Realm VM when requested
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-7-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 7/23] target/arm/kvm: Use kvm_vm_check_extension() where necessary
+    + Based-on: <20260528000416.8161-1-michael.roth@amd.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-8-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 8/23] target/arm/kvm: Add support for PSCI 0.2 to 'features' flag
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-9-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 9/23] target/arm/kvm-rme: Keep track of images loaded in Realm memory
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-10-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 10/23] target/arm/kvm-rme: Populate Realm with runtime images
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-11-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 11/23] target/arm/cpu: Set number of breakpoints and watchpoints in KVM
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-12-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 12/23] target/arm/cpu: Set number of PMU counters in KVM
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-13-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 13/23] target/arm/cpu: Don't read Realm registers
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-14-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 14/23] hw/arm/virt: Set proper conduit method for Realms
+    + Based-on: <20260528000416.8161-1-michael.roth@amd.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-15-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 15/23] hw/arm/virt: Embed Realm VM type with IPA address space
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-16-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 16/23] hw/arm/virt: Reserve one bit of guest physical address for RME
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-17-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 17/23] hw/arm/virt: Disable DTB randomness for confidential VMs
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-18-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 18/23] hw/arm/virt: Move virt_flash_create() to machvirt_init()
+    + Based-on: <20260528000416.8161-1-michael.roth@amd.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-19-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 19/23] hw/arm/virt: Use RAM instead of flash for confidential guest firmware
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-20-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 20/23] target/arm/kvm-rme: Add DMA remapping for the shared memory region
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-21-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 21/23] docs/interop/firmware.json: Add arm-rme firmware feature
+    + Based-on: <20260528000416.8161-1-michael.roth@amd.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-22-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 22/23] hw/arm/boot: Load DTB as is for confidential VMs
+    + Based-on: <20260528000416.8161-1-michael.roth@amd.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-23-mathieu.poirier@linaro.org
+  [32m✓[0m [PATCH v6 23/23] hw/arm/boot: Skip bootloader for confidential guests
+    + Based-on: <20260528000416.8161-1-michael.roth@amd.com> ([32m✓[0m DKIM/redhat.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261109223110.1619504-24-mathieu.poirier@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 23
+---
+Applying: linux-headers: Add RME related definitions
+Patch failed at 0001 linux-headers: Add RME related definitions
+error: patch failed: linux-headers/linux/kvm.h:988
+error: linux-headers/linux/kvm.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
