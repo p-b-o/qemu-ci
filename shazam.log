@@ -1,0 +1,61 @@
+Looking up 20261110072818.2883349-1-jamin_lin@aspeedtech.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 20 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 143 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v9 1/19] hw/usb/bus: Add an auto-hub flag to the USB bus
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-2-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 2/19] hw/usb/hcd-xhci: Add an auto-hub property and leave it off
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-3-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 3/19] hw/usb/hcd-ehci: Add an auto-hub property and leave it off
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-4-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 4/19] hw/usb/hcd-uhci: Add an auto-hub property and leave it off
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-5-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 5/19] hw/usb/hcd-ohci: Add an auto-hub property and leave it off
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-6-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 6/19] hw/usb/hcd-dwc2: Add an auto-hub property and leave it off
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-7-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 7/19] hw/usb/xen-usb: Do not insert an automatic hub
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-8-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 8/19] hw/arm/npcm7xx: Keep the automatic hub
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-9-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 9/19] hw/usb/bus: Turn off the automatic hub by default
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-10-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 10/19] docs/system/devices/usb: Note the automatic hub change
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-11-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 11/19] hw/usb/redirect-server: Add a usbredir server device
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-12-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 12/19] hw/usb/redirect-server: Connect usbredirparser to a chardev
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-13-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 13/19] hw/usb/redirect-server: Announce the exported device
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-14-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 14/19] hw/usb/redirect-server: Implement control transfers
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-15-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 15/19] hw/usb/redirect-server: Send device and interface information
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-16-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 16/19] hw/usb/redirect-server: Implement bulk and interrupt transfers
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-17-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 17/19] hw/usb/redirect-server: Stream interrupt IN endpoints
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-18-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 18/19] hw/usb/redirect-server: Implement isochronous OUT transfers
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-19-jamin_lin@aspeedtech.com
+  [32m✓[0m [PATCH v9 19/19] hw/arm/aspeed: Enable the usbredir server transport
+    + Link: https://lore.kernel.org/qemu-devel/20261110072818.2883349-20-jamin_lin@aspeedtech.com
+  ---
+  [32m✓[0m Signed: DKIM/aspeedtech.com
+---
+Total patches: 19
+---
+Applying: hw/usb/bus: Add an auto-hub flag to the USB bus
+Applying: hw/usb/hcd-xhci: Add an auto-hub property and leave it off
+Patch failed at 0002 hw/usb/hcd-xhci: Add an auto-hub property and leave it off
+error: patch failed: hw/core/machine.c:43
+error: hw/core/machine.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
