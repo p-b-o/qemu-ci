@@ -1,0 +1,40 @@
+Looking up 20261111-riscv-ssqosid-cbqri-v8-0-121f6dcfb573@kernel.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 7 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 27 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v8 1/6] riscv: implement Ssqosid extension and srmcfg CSR
+    + Link: https://lore.kernel.org/qemu-devel/20261111-riscv-ssqosid-cbqri-v8-1-121f6dcfb573@kernel.org
+  [31m✗[0m [PATCH v8 2/6] hw/riscv: define capabilities of CBQRI controllers
+    + Link: https://lore.kernel.org/qemu-devel/20261111-riscv-ssqosid-cbqri-v8-2-121f6dcfb573@kernel.org
+  [31m✗[0m [PATCH v8 3/6] hw/riscv: implement CBQRI capacity controller
+    + Link: https://lore.kernel.org/qemu-devel/20261111-riscv-ssqosid-cbqri-v8-3-121f6dcfb573@kernel.org
+  [31m✗[0m [PATCH v8 4/6] hw/riscv: implement CBQRI bandwidth controller
+    + Link: https://lore.kernel.org/qemu-devel/20261111-riscv-ssqosid-cbqri-v8-4-121f6dcfb573@kernel.org
+  [31m✗[0m [PATCH v8 5/6] hw/riscv: add CBQRI to Kconfig and build if enabled
+    + Link: https://lore.kernel.org/qemu-devel/20261111-riscv-ssqosid-cbqri-v8-5-121f6dcfb573@kernel.org
+  [31m✗[0m [PATCH v8 6/6] hw/riscv: add CBQRI controllers to virt machine
+    + Link: https://lore.kernel.org/qemu-devel/20261111-riscv-ssqosid-cbqri-v8-6-121f6dcfb573@kernel.org
+  ---
+  [31m✗[0m No key: openpgp/fustini@kernel.org
+  [32m✓[0m Signed: DKIM/kernel.org
+---
+Total patches: 6
+---
+Applying: riscv: implement Ssqosid extension and srmcfg CSR
+Applying: hw/riscv: define capabilities of CBQRI controllers
+Applying: hw/riscv: implement CBQRI capacity controller
+Applying: hw/riscv: implement CBQRI bandwidth controller
+Applying: hw/riscv: add CBQRI to Kconfig and build if enabled
+Applying: hw/riscv: add CBQRI controllers to virt machine
+Patch failed at 0006 hw/riscv: add CBQRI controllers to virt machine
+error: patch failed: hw/riscv/virt.c:57
+error: hw/riscv/virt.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
