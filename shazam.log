@@ -1,0 +1,24 @@
+Looking up 20261112163242.509864-1-daniel.barboza@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/1] target/riscv: do not write SXL < UXL [GL4821]
+    + Link: https://lore.kernel.org/qemu-devel/20261112163242.509864-2-daniel.barboza@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 1
+---
+Applying: target/riscv: do not write SXL < UXL [GL4821]
+Patch failed at 0001 target/riscv: do not write SXL < UXL [GL4821]
+error: patch failed: target/riscv/tcg/csr.c:2118
+error: target/riscv/tcg/csr.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
