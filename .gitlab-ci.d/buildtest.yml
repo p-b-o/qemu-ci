@@ -92,6 +92,64 @@ functional-system-debian:
     IMAGE: debian
     MAKE_CHECK_ARGS: check-functional
 
+build-rpmi-opensbi:
+  extends: .base_job_template
+  stage: build
+  image: $CI_REGISTRY_IMAGE/qemu/debian-riscv64-cross:$QEMU_CI_CONTAINER_TAG
+  needs:
+    - job: riscv64-debian-cross-container
+  script:
+    - sh scripts/ci/build-rpmi-deps.sh opensbi "$CI_PROJECT_DIR/rpmi-deps"
+  artifacts:
+    expire_in: 2 days
+    paths:
+      - rpmi-deps/opensbi-build/platform/generic/firmware/fw_jump.bin
+
+build-system-rpmi:
+  extends:
+    - .native_build_job_template
+    - .native_build_artifact_template
+  needs:
+    - job: amd64-debian-container
+  variables:
+    IMAGE: debian
+    TARGETS: riscv64-softmmu
+    CONFIGURE_ARGS: --enable-librpmi
+    MAKE_CHECK_ARGS: check-build
+  before_script:
+    - !reference [.base_meson_job_template, before_script]
+    - sh scripts/ci/build-rpmi-deps.sh librpmi "$CI_PROJECT_DIR/rpmi-deps"
+    - export PKG_CONFIG_PATH="$CI_PROJECT_DIR/rpmi-deps/librpmi-install/lib/pkgconfig"
+    - export LD_LIBRARY_PATH="$CI_PROJECT_DIR/rpmi-deps/librpmi-install/lib"
+  artifacts:
+    paths:
+      - build
+      - rpmi-deps/librpmi-install
+      - .git-submodule-status
+      - ci-runner-env
+
+functional-system-rpmi:
+  extends: .functional_test_job_template
+  needs:
+    - job: build-system-rpmi
+      artifacts: true
+    - job: build-rpmi-opensbi
+      artifacts: true
+  variables:
+    IMAGE: debian
+  before_script:
+    - !reference [.functional_test_job_template, before_script]
+    - export QEMU_TEST_RPMI_OPENSBI="$CI_PROJECT_DIR/rpmi-deps/opensbi-build/platform/generic/firmware/fw_jump.bin"
+    - export LD_LIBRARY_PATH="$CI_PROJECT_DIR/rpmi-deps/librpmi-install/lib"
+  script:
+    - cd build
+    - pyvenv/bin/meson test --no-rebuild --print-errorlogs
+        --logbase rpmi-qtest qemu:qtest-riscv64/riscv-rpmi-test
+    - pyvenv/bin/meson test --no-rebuild --print-errorlogs
+        --logbase rpmi-guests --suite qemu:func-riscv64-thorough
+        qemu:func-riscv64-rpmi_virt
+    - python3 ../scripts/ci/check-rpmi-guests.py meson-logs/rpmi-guests.json
+
 crash-test-debian:
   extends: .native_test_job_template
   needs:
