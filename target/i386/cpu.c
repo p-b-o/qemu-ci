@@ -6961,6 +6961,16 @@ static const X86CPUDefinition builtin_x86_defs[] = {
                 },
                 .cache_info = &epyc_milan_v3_cache_info
             },
+            {
+                .version = 5,
+                .props = (PropValue[]) {
+                    { "verw-clear", "on" },
+                    { "model-id",
+                      "AMD EPYC-Milan-v5 Processor" },
+                    { /* end of list */ }
+                },
+                .cache_info = &epyc_milan_v3_cache_info
+            },
             { /* end of list */ }
         }
     },
