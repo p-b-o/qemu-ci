@@ -7078,6 +7078,16 @@ static const X86CPUDefinition builtin_x86_defs[] = {
                 },
                 .cache_info = &epyc_genoa_v2_cache_info
             },
+            {
+                .version = 4,
+                .props = (PropValue[]) {
+                    { "verw-clear", "on" },
+                    { "model-id",
+                      "AMD EPYC-Genoa-v4 Processor" },
+                    { /* end of list */ }
+                },
+                .cache_info = &epyc_genoa_v2_cache_info
+            },
             { /* end of list */ }
         }
     },
