@@ -1456,7 +1456,7 @@ FeatureWordInfo feature_word_info[FEATURE_WORDS] = {
         .type = CPUID_FEATURE_WORD,
         .feat_names = {
             NULL, "tsa-sq-no", "tsa-l1-no", NULL,
-            NULL, NULL, NULL, NULL,
+            NULL, NULL, NULL, "tsa-fill-no",
             NULL, NULL, NULL, NULL,
             NULL, NULL, NULL, NULL,
             NULL, NULL, NULL, NULL,

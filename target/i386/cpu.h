@@ -1230,6 +1230,8 @@ uint64_t x86_cpu_get_supported_feature_word(X86CPU *cpu, FeatureWord w);
 #define CPUID_8000_0021_ECX_TSA_SQ_NO  (1U << 1)
 /* CPU is not vulnerable TSA SA-L1 attack */
 #define CPUID_8000_0021_ECX_TSA_L1_NO  (1U << 2)
+/* CPU is not vulnerable TSA FILL attack */
+#define CPUID_8000_0021_ECX_TSA_FILL_NO (1U << 7)
 
 /* Performance Monitoring Version 2 */
 #define CPUID_8000_0022_EAX_PERFMON_V2  (1U << 0)
