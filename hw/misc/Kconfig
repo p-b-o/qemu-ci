@@ -303,3 +303,7 @@ source macio/Kconfig
 
 config QCOM_QDSP6SS_CLK
     bool
+
+config RISCV_RPMI
+    bool
+    depends on LIBRPMI
