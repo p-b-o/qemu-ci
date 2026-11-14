@@ -1,0 +1,45 @@
+Looking up 20261113-riscv-rqsc-v2-0-34d47fa4141e@kernel.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v2 1/2] hw/riscv: add cache_level and node properties to CBQRI controllers
+    + Link: https://lore.kernel.org/qemu-devel/20261113-riscv-rqsc-v2-1-34d47fa4141e@kernel.org
+  [31m✗[0m [PATCH v2 2/2] hw/riscv: add support for ACPI RQSC table
+    + Link: https://lore.kernel.org/qemu-devel/20261113-riscv-rqsc-v2-2-34d47fa4141e@kernel.org
+  ---
+  [31m✗[0m No key: openpgp/fustini@kernel.org
+  [32m✓[0m Signed: DKIM/kernel.org
+---
+Total patches: 2
+---
+ Deps: looking for dependencies matching 11 patch-ids
+Grabbing search results from lore.kernel.org
+ Deps: Applying prerequisite patch: [PATCH v8 1/6] riscv: implement Ssqosid extension and srmcfg CSR
+ Deps: Applying prerequisite patch: [PATCH v8 2/6] hw/riscv: define capabilities of CBQRI controllers
+ Deps: Applying prerequisite patch: [PATCH v8 3/6] hw/riscv: implement CBQRI capacity controller
+ Deps: Applying prerequisite patch: [PATCH v8 4/6] hw/riscv: implement CBQRI bandwidth controller
+ Deps: Applying prerequisite patch: [PATCH v6 5/6] hw/riscv: add CBQRI to Kconfig and build if enabled
+ Deps: Applying prerequisite patch: [PATCH v6 6/6] hw/riscv: add CBQRI controllers to virt machine
+ Deps: Applying prerequisite patch: [PATCH 1/4] tests/qtest/bios-tables-test: Allow PPTT for RISC-V
+ Deps: Applying prerequisite patch: [PATCH v2 2/4] hw/riscv/virt: Add ACPI PPTT table
+ Deps: Applying prerequisite patch: [PATCH 3/4] tests/qtest/bios-tables-test: Update riscv64 virt PPTT golden reference
+ Deps: Applying prerequisite patch: [PATCH] MAINTAINERS: Update Sunil's email address
+ Deps: Applying prerequisite patch: [PATCH 04/37] hw/acpi: Build PPTT rev 3 with cache IDs for MPAM cross-references
+Applying: riscv: implement Ssqosid extension and srmcfg CSR
+Applying: hw/riscv: define capabilities of CBQRI controllers
+Applying: hw/riscv: implement CBQRI capacity controller
+Applying: hw/riscv: implement CBQRI bandwidth controller
+Applying: hw/riscv: add CBQRI to Kconfig and build if enabled
+Applying: hw/riscv: add CBQRI controllers to virt machine
+Patch failed at 0006 hw/riscv: add CBQRI controllers to virt machine
+error: patch failed: hw/riscv/virt.c:57
+error: hw/riscv/virt.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
