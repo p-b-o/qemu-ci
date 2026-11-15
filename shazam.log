@@ -1,0 +1,23 @@
+Looking up CAOveVYyOPSopzt35PZZ57Yk7rLJ6Q7QQus7xFdNgG5WyssKLHg@mail.gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 1 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] hw/nvram: add the Mac OS 9 "APL,MacOS75" PRAM partition
+    + Link: https://lore.kernel.org/qemu-devel/CAOveVYyOPSopzt35PZZ57Yk7rLJ6Q7QQus7xFdNgG5WyssKLHg@mail.gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/krum-com-ar.20260707.gappssmtp.com (From: federico@krum.com.ar)
+---
+Total patches: 1
+---
+Applying: hw/nvram: add the Mac OS 9 "APL,MacOS75" PRAM partition
+Patch failed at 0001 hw/nvram: add the Mac OS 9 "APL,MacOS75" PRAM partition
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:53
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
