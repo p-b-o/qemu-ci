@@ -1,0 +1,27 @@
+Looking up 20261116161608.1145725-1-eashurov@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 3 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/2] qga: Add guest-get-driver-packages command for Windows
+    + Link: https://lore.kernel.org/qemu-devel/20261116161608.1145725-2-eashurov@redhat.com
+  [32m✓[0m [PATCH v3 2/2] qga: Add guest-get-driver-services command for Windows
+    + Link: https://lore.kernel.org/qemu-devel/20261116161608.1145725-3-eashurov@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 2
+---
+Applying: qga: Add guest-get-driver-packages command for Windows
+Applying: qga: Add guest-get-driver-services command for Windows
+Patch failed at 0002 qga: Add guest-get-driver-services command for Windows
+error: patch failed: qga/meson.build:94
+error: qga/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
