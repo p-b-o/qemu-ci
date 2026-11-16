@@ -1,0 +1,24 @@
+Looking up 20261116114641.1799526-1-peter.maydell@linaro.org
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 1 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] hw/watchdog/wdt_imx2: Fix migration when pretimeout-support not enabled
+    + Link: https://lore.kernel.org/qemu-devel/20261116114641.1799526-1-peter.maydell@linaro.org
+  ---
+  [32m✓[0m Signed: DKIM/linaro.org
+---
+Total patches: 1
+---
+Applying: hw/watchdog/wdt_imx2: Fix migration when pretimeout-support not enabled
+Patch failed at 0001 hw/watchdog/wdt_imx2: Fix migration when pretimeout-support not enabled
+error: patch failed: hw/watchdog/wdt_imx2.c:221
+error: hw/watchdog/wdt_imx2.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
