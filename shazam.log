@@ -1,0 +1,30 @@
+Looking up 20261117105945.2802923-1-armbru@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 4 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 13 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/3] qdev: Convert array properties to QAPI-aware registration
+    + Link: https://lore.kernel.org/qemu-devel/20261117105945.2802923-2-armbru@redhat.com
+  [32m✓[0m [PATCH v3 2/3] qdev: Remove unused DEFINE_PROP_ARRAY parameter _arraytype
+    + Link: https://lore.kernel.org/qemu-devel/20261117105945.2802923-3-armbru@redhat.com
+  [32m✓[0m [PATCH v3 3/3] qapi/qom: Make @qapi-type mandatory in output of qom-list etc.
+    + Link: https://lore.kernel.org/qemu-devel/20261117105945.2802923-4-armbru@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 3
+---
+Applying: qdev: Convert array properties to QAPI-aware registration
+Applying: qdev: Remove unused DEFINE_PROP_ARRAY parameter _arraytype
+Applying: qapi/qom: Make @qapi-type mandatory in output of qom-list etc.
+Patch failed at 0003 qapi/qom: Make @qapi-type mandatory in output of qom-list etc.
+error: patch failed: tests/qtest/qmp-cmd-test.c:379
+error: tests/qtest/qmp-cmd-test.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
