@@ -1,0 +1,23 @@
+Looking up CA+6vzYSxSR-B+a1friO6oDDXXpt2DZ6C1jEKiUFLJPPR2BuntA@mail.gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 2 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH] target/i386/tcg: validate MOV CR0 writes
+    + Link: https://lore.kernel.org/qemu-devel/CA+6vzYSxSR-B+a1friO6oDDXXpt2DZ6C1jEKiUFLJPPR2BuntA@mail.gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 1
+---
+Applying: target/i386/tcg: validate MOV CR0 writes
+Patch failed at 0001 target/i386/tcg: validate MOV CR0 writes
+error: git diff header lacks filename information when removing 1 leading pathname component at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:6
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
