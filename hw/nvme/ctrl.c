@@ -6462,6 +6462,8 @@ static uint16_t nvme_get_feature(NvmeCtrl *n, NvmeRequest *req)
     case NVME_GETFEAT_SELECT_CAP:
         result = nvme_feature_cap[fid];
         goto out;
+    default:
+        return NVME_INVALID_FIELD | NVME_DNR;
     }
 
     switch (fid) {
