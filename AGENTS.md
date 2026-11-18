@@ -108,11 +108,16 @@ solution:
 Background assistance such as review or explanation does not require disclosure.
 Read `docs/devel/llm-usage.rst` before generating code, tests, or documentation
 intended for contribution; committing agent-generated material; or advising on
-disclosure. It is not required for review, explanation, or other background
-assistance that produces no contribution content.
+disclosure or pre-arrangement. It is not required for review, explanation, or
+other background assistance that produces no contribution content.
 
 When agent-generated content is included in a contribution, remind the human
 to determine the appropriate disclosure under `docs/devel/llm-usage.rst`.
+In particular, contributions where you write large parts of the functional
+code may only be submitted if a maintainer has agreed **beforehand** to review
+them.  Tell the human about this as soon as the work looks likely to grow to
+that size, well before the patches are written.
+
 If you commit agent-generated material, include an `AI-used-for:` trailer
 before `Signed-off-by`. Do not omit it by folding the material into a larger
 commit.  The human may later make a different disclosure decision under

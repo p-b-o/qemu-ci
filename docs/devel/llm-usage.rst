@@ -84,26 +84,41 @@ Use of generative AI can be classified in the following four buckets:
   not need disclosure.
 
 - small LLM-assisted bugfixes (as a rule of thumb, below 10 lines of code)
-  are allowed with disclosure.
+  are allowed with disclosure.  Splitting a submission in multiple parts
+  is **not** a valid way to bypass this rule; repeated, frequent posting
+  of such fixes must follow the rule for large contributions.
 
 - use of LLMs to help generating parts of a larger patch---test cases,
   adaptations of existing code, boilerplate code for a new API, a tool to
   help performing mechanical changes, etc.  These are generally allowed;
   disclosure is required for non-trivial, functional code changes.
 
-Large, heavily LLM-assisted contributions where LLMs write large parts
-of functional code are currently not allowed.
+- large, heavily LLM-assisted contributions where LLMs write large parts
+  of functional code.  These are only allowed if *pre-arranged*,
+  *high-quality* and *well-tested*.
 
-LLM-created contributions will be held to a higher standard of testing
-than human-created ones.  Maintainers have freedom to determine what
-constitutes "high quality"; in particular, because LLMs lower the cost
-of patch generation, there are no exceptions for "writing the tests seems
-hard".
+Pre-arrangement means that a maintainer must have communicated ahead of
+time, for example on `IRC or the QEMU mailing list <https://www.qemu.org/contribute/>`__,
+that they are willing to review an LLM-created contribution.  It ensures
+that maintainers have bandwidth for review before a contributor invests
+effort in creating a large change.
+
+.. note::
+    This is not a new concept in QEMU: maintainers have always encouraged
+    early alignment on mailing lists or IRC prior to major architecture
+    or subsystem refactoring.  The policy expands this custom to a
+    requirement for larger LLM-based contributions.
+
+Maintainers have freedom to determine what constitutes "high quality"
+and "well-tested" work.  Because LLMs lower the cost of patch generation,
+LLM-created contributions will be held to a higher standard than
+human-created ones.  There are no exceptions for "writing the tests seems
+hard" or for `yak shaving <https://en.wiktionary.org/wiki/yak_shaving>`__.
 
 Contributors who submit LLM-created contributions are required to
 apply the same judgment that would be applied to other code changes.
-They must invest substantial time reviewing the code and, when
-applicable, curating individual commits.
+They must invest substantial time reviewing the code, understanding
+the design in depth, and curating individual commits.
 
 The QEMU project explicitly forbids using LLMs to do "clean room"
 reimplementation of existing code whose license is not compatible
@@ -186,6 +201,8 @@ This policy was informed by:
 
 - `Recommendations When Using LLM-backed Generative AI Systems for
   FOSS Contributions <https://sfconservancy.org/llm-gen-ai/llm-backed-generative-ai-recommendations.html>`__
+
+- `Rust project LLM Usage Policy <https://forge.rust-lang.org/policies/llm-usage.html>`__
 
 - `GStreamer AGENTS.md file <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/d08375499c279/AGENTS.md>`__
 
