@@ -1,0 +1,94 @@
+Looking up 20261118122357.659634-1-pbonzini@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 27 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH RFC 1/26] target/i386/tcg: add parser for a textual description of the decoder tables
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-2-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 2/26] target/i386/tcg: add semantic checks for the decoder table description
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-3-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 3/26] target/i386/tcg: restrict REX2 to opcodes where REX2 differs, no_rex2 where it is the same
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-4-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 4/26] target/i386/tcg: build a decoding trie from the table description
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-5-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 5/26] target/i386/tcg: add CPUID checks to the trie
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-6-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 6/26] target/i386/tcg: only check the encoding when it matters
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-7-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 7/26] target/i386/tcg: allow alternatives for the encoding and vector length
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-8-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 8/26] target/i386/tcg: add --explain to maketable.py
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-9-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 9/26] target/i386/tcg: generate the decoder program and rows
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-10-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 10/26] target/i386/tcg: add bytecode based opcode decoder
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-11-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 11/26] target/i386/tcg: lower single-outcome nodes to OP_MATCH
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-12-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 12/26] target/i386/tcg: do not reference emitters for instructions that are 64-bit only or privileged
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-13-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 13/26] target/i386/tcg: defer the encoding check for rows with vex_class == 0
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-14-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 14/26] target/i386/tcg: defer (and actually omit) the CODE64 check for EVEX map4
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-15-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 15/26] target/i386/tcg: convert the 0F3A map to decode.def
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-16-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 16/26] target/i386/tcg: convert the 0F38 map to decode.def
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-17-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 17/26] target/i386/tcg: fetch the opcode byte in disas_insn() for REX2 map 0
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-18-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 18/26] target/i386/tcg: convert REX2 map 0 to decode.def
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-19-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 19/26] target/i386/tcg: convert EVEX map 4 to decode.def
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-20-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 20/26] target/i386/tcg: convert the legacy map to decode.def
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-21-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 21/26] target/i386/tcg: convert the 0F map to decode.def
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-22-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 22/26] target/i386/tcg: update decoder docs for new tables
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-23-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 23/26] target/i386/tcg: rename X86_TYPE_0..7
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-24-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 24/26] target/i386/tcg: send opcodes directly to the bytecode interpreter
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-25-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 25/26] target/i386/tcg: remove checks obsoleted by the generated decoder
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-26-pbonzini@redhat.com
+  [32m✓[0m [PATCH RFC 26/26] target/i386/tcg: precompute CPUID features used by the decoder
+    + Link: https://lore.kernel.org/qemu-devel/20261118122357.659634-27-pbonzini@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 26
+---
+Applying: target/i386/tcg: add parser for a textual description of the decoder tables
+Applying: target/i386/tcg: add semantic checks for the decoder table description
+Applying: target/i386/tcg: restrict REX2 to opcodes where REX2 differs, no_rex2 where it is the same
+Applying: target/i386/tcg: build a decoding trie from the table description
+Applying: target/i386/tcg: add CPUID checks to the trie
+Applying: target/i386/tcg: only check the encoding when it matters
+Applying: target/i386/tcg: allow alternatives for the encoding and vector length
+Applying: target/i386/tcg: add --explain to maketable.py
+Applying: target/i386/tcg: generate the decoder program and rows
+Applying: target/i386/tcg: add bytecode based opcode decoder
+Applying: target/i386/tcg: lower single-outcome nodes to OP_MATCH
+Applying: target/i386/tcg: do not reference emitters for instructions that are 64-bit only or privileged
+Applying: target/i386/tcg: defer the encoding check for rows with vex_class == 0
+Applying: target/i386/tcg: defer (and actually omit) the CODE64 check for EVEX map4
+Applying: target/i386/tcg: convert the 0F3A map to decode.def
+Applying: target/i386/tcg: convert the 0F38 map to decode.def
+Patch failed at 0016 target/i386/tcg: convert the 0F38 map to decode.def
+/home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:42: trailing whitespace.
+//     python maketable.py --explain 'map=2 enc=VEX byte=10' decode.def 
+warning: 1 line adds whitespace errors.
+error: patch failed: target/i386/tcg/decode-new.h:253
+error: target/i386/tcg/decode-new.h: patch does not apply
+error: patch failed: target/i386/tcg/decode-new.c.inc:253
+error: target/i386/tcg/decode-new.c.inc: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
