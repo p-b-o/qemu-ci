@@ -192,6 +192,7 @@ subdir('xtensa')
 
 image_targets = {}
 exe_targets = []
+subdir('riscv')
 # Finally, we can create all test executables and test targets
 foreach target, plan: tcg_tests
   target_exe_targets = []
