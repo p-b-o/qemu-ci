@@ -1436,4 +1436,4 @@ GEN_DWS_REG_OP(psll_dws, EXT_NONE, true, tcg_gen_shl_tl)
 GEN_DWS_REG_OP(psrl_dws, EXT_ZERO, true, tcg_gen_shr_tl)
 GEN_DWS_REG_OP(psra_dws, EXT_SIGN, true, tcg_gen_sar_tl)
 
-GEN_DW_PAIR_ARITH(ppaire_dh, REQUIRE_ZBKB(ctx); , EXT_NONE, gen_pack)
+GEN_DW_PAIR_ARITH(ppaire_dh, , EXT_NONE, gen_pack)
