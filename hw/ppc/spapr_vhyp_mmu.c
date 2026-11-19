@@ -266,6 +266,50 @@ static target_ulong h_protect(PowerPCCPU *cpu, SpaprMachineState *spapr,
     return H_SUCCESS;
 }
 
+/* PAPR v10.60 14.5.4.1.4 and 14.5.4.1.5 */
+static target_ulong h_clear_ref_mod(PowerPCCPU *cpu, SpaprMachineState *spapr,
+                                    target_ulong opcode, target_ulong *args)
+{
+    CPUPPCState *env = &cpu->env;
+    target_ulong ptex = args[1];
+    target_ulong bit = opcode == H_CLEAR_MOD ? HPTE64_R_C : HPTE64_R_R;
+    const ppc_hash_pte64_t *hptes;
+    target_ulong v, r;
+
+    if (!ppc_hash64_valid_ptex(cpu, ptex)) {
+        return H_PARAMETER;
+    }
+
+    hptes = ppc_hash64_map_hptes(cpu, ptex, 1);
+    v = ppc_hash64_hpte0(cpu, hptes, 0);
+    r = ppc_hash64_hpte1(cpu, hptes, 0);
+    ppc_hash64_unmap_hptes(cpu, hptes, ptex, 1);
+
+    if ((v & HPTE64_V_VALID) == 0) {
+        return H_NOT_FOUND;
+    }
+
+    args[0] = r;
+    if ((r & bit) == 0) {
+        return H_SUCCESS;
+    }
+
+    if (opcode == H_CLEAR_MOD) {
+        spapr_store_hpte(cpu, ptex,
+                         (v & ~HPTE64_V_VALID) | HPTE64_V_HPTE_DIRTY, 0);
+        ppc_hash64_tlb_flush_hpte(cpu, ptex, v, r);
+        check_tlb_flush(env, true);
+        /* Don't need a memory barrier, due to qemu's global lock */
+        spapr_store_hpte(cpu, ptex, v | HPTE64_V_HPTE_DIRTY, r & ~bit);
+    } else {
+        /* Power ISA 2.07 Book III-S 5.10.1.2, Resetting the Reference Bit */
+        spapr_store_hpte(cpu, ptex, v | HPTE64_V_HPTE_DIRTY, r & ~bit);
+        ppc_hash64_tlb_flush_hpte(cpu, ptex, v, r);
+        check_tlb_flush(env, true);
+    }
+    return H_SUCCESS;
+}
+
 static target_ulong h_read(PowerPCCPU *cpu, SpaprMachineState *spapr,
                            target_ulong opcode, target_ulong *args)
 {
@@ -602,6 +646,8 @@ static void hypercall_register_types(void)
     spapr_register_hypercall(H_REMOVE, h_remove);
     spapr_register_hypercall(H_PROTECT, h_protect);
     spapr_register_hypercall(H_READ, h_read);
+    spapr_register_hypercall(H_CLEAR_MOD, h_clear_ref_mod);
+    spapr_register_hypercall(H_CLEAR_REF, h_clear_ref_mod);
 
     /* hcall-bulk */
     spapr_register_hypercall(H_BULK_REMOVE, h_bulk_remove);
