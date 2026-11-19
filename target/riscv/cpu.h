@@ -70,6 +70,7 @@ typedef struct CPUArchState CPURISCVState;
 #define RVG RV('G')
 #define RVB RV('B')
 #define RVX RV('X')
+#define RVP RV('P')
 
 extern const uint32_t misa_bits[];
 const char *riscv_get_misa_ext_name(uint32_t bit);
@@ -783,6 +784,13 @@ FIELD(EXT_TB_FLAGS, ALTFMT, 32, 1)
 FIELD(EXT_TB_FLAGS, BIG_ENDIAN, 33, 1)
 /* sdext single-step needs a TB flag to build 1-insn TBs */
 FIELD(EXT_TB_FLAGS, SDEXT_STEP, 34, 1)
+FIELD(EXT_TB_FLAGS, P_VXSAT_EXCP, 35, 2)
+
+enum {
+    P_VXSAT_EXCP_NONE,
+    P_VXSAT_EXCP_ILLEGAL,
+    P_VXSAT_EXCP_VIRTUAL,
+};
 
 #ifdef TARGET_RISCV32
 #define riscv_cpu_mxl(env)  ((void)(env), MXL_RV32)
