@@ -1966,6 +1966,16 @@ static void riscv_iommu_process_ddtp(RISCVIOMMUState *s)
     s->ddtp = new_ddtp;
 
     riscv_iommu_reg_set64(s, RISCV_IOMMU_REG_DDTP, new_ddtp);
+
+    /* Apply the new DDTP mode to the accelerated devices */
+    if (s->accel && new_ddtp != old_ddtp) {
+        if (new_mode == RISCV_IOMMU_DDTP_MODE_OFF ||
+            new_mode == RISCV_IOMMU_DDTP_MODE_BARE) {
+            riscv_iommu_accel_attach_ddtp_hwpt(s, NULL);
+        } else {
+            riscv_iommu_accel_install_dc_all(s);
+        }
+    }
 }
 
 /* Command function and opcode field. */
@@ -2894,6 +2904,11 @@ void riscv_iommu_reset(RISCVIOMMUState *s)
     qemu_mutex_lock(&s->iot_lock);
     g_hash_table_remove_all(s->iot_cache);
     qemu_mutex_unlock(&s->iot_lock);
+
+    /* Re-attach every accelerated device based on the reset DDTP mode */
+    if (s->accel) {
+        riscv_iommu_accel_attach_ddtp_hwpt(s, NULL);
+    }
 }
 
 static const Property riscv_iommu_properties[] = {

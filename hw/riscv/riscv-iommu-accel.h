@@ -42,6 +42,7 @@ typedef struct RISCVIOMMUAccelDevice {
 void riscv_iommu_accel_init(RISCVIOMMUState *s);
 bool riscv_iommu_accel_install_dc(RISCVIOMMUState *s, int devid);
 bool riscv_iommu_accel_install_dc_all(RISCVIOMMUState *s);
+bool riscv_iommu_accel_attach_ddtp_hwpt(RISCVIOMMUState *s, Error **errp);
 #else
 static inline void riscv_iommu_accel_init(RISCVIOMMUState *s)
 {
@@ -53,6 +54,11 @@ riscv_iommu_accel_install_dc(RISCVIOMMUState *s, int devid)
 }
 static inline bool
 riscv_iommu_accel_install_dc_all(RISCVIOMMUState *s)
+{
+    return true;
+}
+static inline bool
+riscv_iommu_accel_attach_ddtp_hwpt(RISCVIOMMUState *s, Error **errp)
 {
     return true;
 }

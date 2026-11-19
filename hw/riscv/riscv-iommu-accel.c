@@ -496,6 +496,44 @@ bool riscv_iommu_accel_install_dc_all(RISCVIOMMUState *s)
     return all_ok;
 }
 
+/*
+ * Attach every accelerated device to the pre-allocated abort/bypass proxy
+ * HWPT selected by the current DDTP mode. All the devices must be re-attached
+ * whenever the DDTP mode is (re)applied.
+ */
+bool riscv_iommu_accel_attach_ddtp_hwpt(RISCVIOMMUState *s, Error **errp)
+{
+    RISCVIOMMUAccelState *accel = s->accel_state;
+    RISCVIOMMUAccelDevice *accel_dev;
+    Error *local_err = NULL;
+    bool all_ok = true;
+    uint32_t hwpt_id;
+
+    if (!accel || !accel->viommu) {
+        return true;
+    }
+
+    hwpt_id = riscv_iommu_accel_ddtp_hwpt(s, accel);
+    QLIST_FOREACH(accel_dev, &accel->device_list, next) {
+        if (!host_iommu_device_iommufd_attach_hwpt(accel_dev->idev,
+                                                   IOMMU_NO_PASID, hwpt_id,
+                                                   &local_err)) {
+            error_append_hint(&local_err, "Failed to attach DDTP hwpt %u for "
+                              "idev devid 0x%x", hwpt_id,
+                              accel_dev->idev->devid);
+            error_report_err(local_err);
+            local_err = NULL;
+            all_ok = false;
+        }
+    }
+
+    if (!all_ok) {
+        error_setg(errp, "Failed to attach all DDTP based HWPTs properly");
+    }
+
+    return all_ok;
+}
+
 static const PCIIOMMUOps riscv_iommu_accel_ops = {
     .supports_address_space = riscv_iommu_accel_supports_as,
     .get_address_space = riscv_iommu_accel_find_as,
