@@ -1,0 +1,40 @@
+Looking up 20261119144632.232457-1-guillaume.vincke@ovhcloud.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 8 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/5] block/nbd: Extract request slot access and reconnection
+    + Link: https://lore.kernel.org/qemu-devel/20261119144632.232457-2-guillaume.vincke@ovhcloud.com
+  [32m✓[0m [PATCH 2/5] block: Refresh the connection before block_resize
+    + Link: https://lore.kernel.org/qemu-devel/20261119144632.232457-3-guillaume.vincke@ovhcloud.com
+  [32m✓[0m [PATCH 3/5] block/nbd: Refresh the connection on block_resize
+    + Link: https://lore.kernel.org/qemu-devel/20261119144632.232457-4-guillaume.vincke@ovhcloud.com
+  [32m✓[0m [PATCH 4/5] iotests: Add coverage for NBD resize
+    + Link: https://lore.kernel.org/qemu-devel/20261119144632.232457-5-guillaume.vincke@ovhcloud.com
+  [32m✓[0m [PATCH 5/5] block: Add refresh connection support to raw and luks
+    + Link: https://lore.kernel.org/qemu-devel/20261119144632.232457-6-guillaume.vincke@ovhcloud.com
+  ---
+  [32m✓[0m Signed: DKIM/ovhcloud.com
+---
+Total patches: 5
+---
+ Deps: looking for dependencies matching 4 patch-ids
+Grabbing search results from lore.kernel.org
+ Deps: Applying prerequisite patch: [PATCH v3 2/2] iotests: Add coverage for NBD connect thread start delay
+ Deps: Applying prerequisite patch: [PATCH v2 2/2] iotests: Make nbd-stale-connection test deterministic
+Applying: iotests: Add coverage for NBD connect thread start delay
+Applying: iotests: Make nbd-stale-connection test deterministic
+Applying: block/nbd: Extract request slot access and reconnection
+Applying: block: Refresh the connection before block_resize
+Applying: block/nbd: Refresh the connection on block_resize
+Patch failed at 0005 block/nbd: Refresh the connection on block_resize
+error: patch failed: nbd/client-connection.c:296
+error: nbd/client-connection.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
