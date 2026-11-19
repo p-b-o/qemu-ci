@@ -672,3 +672,60 @@ GEN_SIMD_TRANS(predsum_hs)
 GEN_SIMD_TRANS(predsumu_hs)
 GEN_SIMD_TRANS_64(predsum_ws)
 GEN_SIMD_TRANS_64(predsumu_ws)
+
+/* Packed SIMD - Pack, Unpack, and Merge Operations */
+GEN_SIMD_TRANS(ppaire_b)
+GEN_SIMD_TRANS(ppaireo_b)
+GEN_SIMD_TRANS(ppairoe_b)
+GEN_SIMD_TRANS(ppairo_b)
+GEN_SIMD_TRANS_64(ppaire_h)
+GEN_SIMD_TRANS(ppaireo_h)
+GEN_SIMD_TRANS(ppairoe_h)
+GEN_SIMD_TRANS(ppairo_h)
+GEN_SIMD_TRANS_64(ppaireo_w)
+GEN_SIMD_TRANS_64(ppairoe_w)
+GEN_SIMD_TRANS_64(ppairo_w)
+GEN_SIMD_TRANS_R1(psext_h_b)
+GEN_SIMD_TRANS_R1_64(psext_w_b)
+GEN_SIMD_TRANS_R1_64(psext_w_h)
+#if defined(TARGET_RISCV32)
+static bool trans_rev_32(DisasContext *ctx, arg_rev_32 * a)
+{
+    REQUIRE_32BIT(ctx);
+    GEN_SIMD_TRANS_R1_BODY(rev, false);
+}
+
+GEN_SIMD_TRANS_UNAVAILABLE_64(rev_64)
+#else
+GEN_SIMD_TRANS_UNAVAILABLE_32(rev_32)
+
+static bool trans_rev_64(DisasContext *ctx, arg_rev_64 * a)
+{
+    REQUIRE_64BIT(ctx);
+    GEN_SIMD_TRANS_R1_BODY(rev, false);
+}
+#endif
+GEN_SIMD_TRANS_R1_64(rev16)
+GEN_SIMD_TRANS_64(zip8p)
+GEN_SIMD_TRANS_64(zip8hp)
+GEN_SIMD_TRANS_64(unzip8p)
+GEN_SIMD_TRANS_64(unzip8hp)
+GEN_SIMD_TRANS_64(zip16p)
+GEN_SIMD_TRANS_64(zip16hp)
+GEN_SIMD_TRANS_64(unzip16p)
+GEN_SIMD_TRANS_64(unzip16hp)
+GEN_SIMD_TRANS_ACC(slx)
+GEN_SIMD_TRANS_ACC(srx)
+GEN_SIMD_TRANS_ACC(mvm)
+GEN_SIMD_TRANS_ACC(mvmn)
+GEN_SIMD_TRANS_ACC(merge)
+GEN_SIMD_TRANS_64_VXSAT(pnclipp_b)
+GEN_SIMD_TRANS_64_VXSAT(pnclipup_b)
+GEN_SIMD_TRANS_64_VXSAT(pnclipp_h)
+GEN_SIMD_TRANS_64_VXSAT(pnclipup_h)
+GEN_SIMD_TRANS_64_VXSAT(pnclipp_w)
+GEN_SIMD_TRANS_64_VXSAT(pnclipup_w)
+
+/* Packed SIMD - Count Leading Operations */
+GEN_SIMD_TRANS_R1(cls)
+GEN_SIMD_TRANS_R1_64(clsw)
