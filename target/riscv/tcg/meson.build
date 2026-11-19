@@ -16,7 +16,8 @@ riscv_ss.add(files(
   'vector_helper.c',
   'vector_internals.c',
   'xsf_helper.c',
-  'zce_helper.c'))
+  'zce_helper.c',
+  'psimd_helper.c'))
 
 
 riscv_system_ss.add(files(

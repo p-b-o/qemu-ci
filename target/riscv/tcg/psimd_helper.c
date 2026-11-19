@@ -1,0 +1,2041 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/* RISC-V Packed SIMD Extension Helpers for QEMU. */
+/* Copyright (C) 2026 ISRC ISCAS. */
+
+#include "qemu/osdep.h"
+#include "cpu.h"
+#include "qemu/bitops.h"
+#include "qemu/host-utils.h"
+#include "exec/helper-proto.h"
+#include "fpu/softfloat.h"
+#include "internals.h"
+
+
+/* Helper macros */
+
+/* Element count calculations */
+#define ELEMS_B(target) (sizeof(target) * 8 / 8)    /* byte elements count */
+#define ELEMS_H(target) (sizeof(target) * 8 / 16)
+#define ELEMS_W(target) (sizeof(target) * 8 / 32)   /* word elements count */
+#define ELEMS_D(target) (sizeof(target) * 8 / 64)
+
+/* Element extraction macros - unsigned to avoid sign extension */
+#define EXTRACT8(val, idx)  extract64((val), (idx) * 8, 8)
+#define EXTRACT16(val, idx) extract64((val), (idx) * 16, 16)
+#define EXTRACT32(val, idx) extract64((val), (idx) * 32, 32)
+#define EXTRACT64(val, idx) extract64((val), (idx) * 64, 64)
+
+/* Element insertion macros */
+#define INSERT8(val, res, idx) \
+    ((val) | ((target_ulong)(uint8_t)(res) << ((idx) * 8)))
+#define INSERT16(val, res, idx) \
+    ((val) | ((target_ulong)(uint16_t)(res) << ((idx) * 16)))
+#define INSERT32(val, res, idx) \
+    ((val) | ((target_ulong)(uint32_t)(res) << ((idx) * 32)))
+#define INSERT32_64(val, res, idx) \
+    ((val) | ((uint64_t)(uint32_t)(res) << ((idx) * 32)))
+#define INSERT64(val, res, idx) \
+    ((val) | ((uint64_t)(res) << ((idx) * 64)))
+
+/* Saturation constants */
+static const int8_t   SAT_MAX_B = 127;
+static const int8_t   SAT_MIN_B = -128;
+static const int16_t  SAT_MAX_H = 32767;
+static const int16_t  SAT_MIN_H = -32768;
+static const int32_t  SAT_MAX_W = 2147483647;
+static const int32_t  SAT_MIN_W = -2147483648LL;
+static const uint8_t  USAT_MAX_B = 255;
+static const uint16_t USAT_MAX_H = 65535;
+static const uint32_t USAT_MAX_W = 4294967295U;
+
+/**
+ * Saturation helper functions
+ * Returns saturated value and sets *sat if saturation occurred
+ */
+static inline int8_t signed_saturate_b(int32_t val, int *sat)
+{
+    if (val > SAT_MAX_B) {
+        *sat = 1;
+        return SAT_MAX_B;
+    }
+    if (val < SAT_MIN_B) {
+        *sat = 1;
+        return SAT_MIN_B;
+    }
+    return (int8_t)val;
+}
+
+static inline int16_t signed_saturate_h(int32_t val, int *sat)
+{
+    if (val > SAT_MAX_H) {
+        *sat = 1;
+        return SAT_MAX_H;
+    }
+    if (val < SAT_MIN_H) {
+        *sat = 1;
+        return SAT_MIN_H;
+    }
+    return (int16_t)val;
+}
+
+static inline int32_t signed_saturate_w(int64_t val, int *sat)
+{
+    if (val > SAT_MAX_W) {
+        *sat = 1;
+        return SAT_MAX_W;
+    }
+    if (val < SAT_MIN_W) {
+        *sat = 1;
+        return SAT_MIN_W;
+    }
+    return (int32_t)val;
+}
+
+static inline uint8_t unsigned_saturate_b(uint32_t val, int *sat)
+{
+    if (val > USAT_MAX_B) {
+        *sat = 1;
+        return USAT_MAX_B;
+    }
+    return (uint8_t)val;
+}
+
+static inline uint16_t unsigned_saturate_h(uint32_t val, int *sat)
+{
+    if (val > USAT_MAX_H) {
+        *sat = 1;
+        return USAT_MAX_H;
+    }
+    return (uint16_t)val;
+}
+
+static inline uint32_t unsigned_saturate_w(uint64_t val, int *sat)
+{
+    if (val > USAT_MAX_W) {
+        *sat = 1;
+        return USAT_MAX_W;
+    }
+    return (uint32_t)val;
+}
+
+static inline target_ulong psimd_abdsumu_b(target_ulong rs1,
+                                           target_ulong rs2,
+                                           target_ulong sum)
+{
+    int elems = ELEMS_B(rs1);
+
+    for (int i = 0; i < elems; i++) {
+        uint8_t e1 = EXTRACT8(rs1, i);
+        uint8_t e2 = EXTRACT8(rs2, i);
+        uint8_t diff = (e1 > e2) ? (e1 - e2) : (e2 - e1);
+        sum += diff;
+    }
+
+    return sum;
+}
+
+#define PSIMD_DO_ADD(N, M) ((N) + (M))
+#define PSIMD_DO_SUB(N, M) ((N) - (M))
+#define PSIMD_DO_ABD(N, M) ((N) >= (M) ? (N) - (M) : (M) - (N))
+#define PSIMD_DO_EQ_MASK(N, M) ((N) == (M) ? -1 : 0)
+#define PSIMD_DO_LT_MASK(N, M) ((N) < (M) ? -1 : 0)
+#define PSIMD_DO_MIN(N, M) ((N) < (M) ? (N) : (M))
+#define PSIMD_DO_MAX(N, M) ((N) > (M) ? (N) : (M))
+#define PSIMD_DO_SLL(N, M) ((uint64_t)(N) << (M))
+#define PSIMD_DO_SRL(N, M) ((N) >> (M))
+#define PSIMD_DO_SRA(N, M) ((N) >> (M))
+
+/*
+ * The GEN_PSIMD_* macros below build one helper from a lane operation.
+ * RTYPE is the integer type holding the complete packed operand/result;
+ * ETYPE/STYPE specifies how an input lane is interpreted, and WTYPE/DTYPE
+ * is a wider intermediate type.  These types determine whether extension
+ * and subsequent arithmetic are signed or unsigned.  EXTRACT, INSERT, and
+ * ELEMS describe the lane layout.
+ */
+
+/*
+ * Generate a lane-wise binary-operation helper.  rs1 and rs2 contain the
+ * source lanes; OP combines corresponding lanes.  Used for PADD, PSUB,
+ * PABD, comparison, minimum, and maximum instructions.
+ */
+#define GEN_PSIMD_BINOP(NAME, RTYPE, STYPE, DTYPE, EXTRACT, INSERT,       \
+                        ELEMS, OP)                                        \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        STYPE e1 = (STYPE)EXTRACT(rs1, i);                                \
+        STYPE e2 = (STYPE)EXTRACT(rs2, i);                                \
+        DTYPE res = (DTYPE)OP(e1, e2);                                    \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a packed-by-scalar binary-operation helper.  rs1 contains the
+ * source lanes and rs2 lane 0 is applied to every lane.  Used for PADD.BS,
+ * PADD.HS, and PADD.WS.
+ */
+#define GEN_PSIMD_BINOP_SCALAR(NAME, RTYPE, ETYPE, EXTRACT, INSERT,       \
+                               ELEMS, OP)                                 \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    ETYPE e2 = (ETYPE)EXTRACT(rs2, 0);                                    \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        ETYPE res = OP(e1, e2);                                           \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a packed shift helper.  rs1 contains the lanes and rs2 carries
+ * the immediate or scalar shift amount, masked by SHMASK.  Used for the
+ * PSLL[I], PSRL[I], and PSRA[I] instruction families.
+ */
+#define GEN_PSIMD_SHIFTOP(NAME, RTYPE, STYPE, DTYPE, EXTRACT, INSERT,     \
+                          ELEMS, SHMASK, OP)                              \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    uint8_t shamt = rs2 & (SHMASK);                                       \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        STYPE e1 = (STYPE)EXTRACT(rs1, i);                                \
+        DTYPE res = (DTYPE)OP(e1, shamt);                                 \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a signed saturating immediate left-shift helper.  The rs1 operand
+ * contains the elements to shift, and rs2 carries the decoded unsigned
+ * immediate shift amount.  Each element is left-shifted and saturated to
+ * its signed range; vxsat is set if any element saturates.  This macro is
+ * used for PSSLAI.H, PSSLAI.W, and SSLAI.
+ */
+#define GEN_PSIMD_SAT_SHIFTOP(NAME, RTYPE, ETYPE, WTYPE, EXTRACT, INSERT, \
+                              ELEMS, SHMASK, SAT_FN)                      \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    int sat = 0;                                                          \
+    uint8_t shamt = rs2 & (SHMASK);                                       \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        WTYPE shifted = (WTYPE)e1 * ((WTYPE)1 << shamt);                  \
+        ETYPE res = SAT_FN(shifted, &sat);                                \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a rounded arithmetic-right-shift helper.  rs1 contains signed
+ * lanes and rs2 carries the decoded immediate; zero leaves rs1 unchanged.
+ * Used for PSRARI.H, PSRARI.W, and SRARI.
+ */
+#define GEN_PSIMD_ROUND_SRAI(NAME, RTYPE, ETYPE, WTYPE, EXTRACT, INSERT,  \
+                             ELEMS, SHMASK)                               \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    uint8_t shamt = rs2 & (SHMASK);                                       \
+                                                                          \
+    if (shamt == 0) {                                                     \
+        return rs1;                                                       \
+    }                                                                     \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        WTYPE rounded = (((WTYPE)e1 >> (shamt - 1)) + 1) >> 1;            \
+        rd = INSERT(rd, (ETYPE)rounded, i);                               \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a saturating lane-wise binary-operation helper.  rs1 and rs2
+ * contain corresponding source lanes; SAT_FN clamps OP's widened result and
+ * sets vxsat on saturation.  Used for the signed/unsigned PSADD and signed
+ * PSSUB families, plus SADD, SADDU, and SSUB.
+ */
+#define GEN_PSIMD_SAT_BINOP(NAME, RTYPE, ETYPE, WTYPE, EXTRACT, INSERT,   \
+                            ELEMS, OP, SAT_FN)                            \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        ETYPE e2 = (ETYPE)EXTRACT(rs2, i);                                \
+        WTYPE val = OP((WTYPE)e1, (WTYPE)e2);                             \
+        ETYPE res = SAT_FN(val, &sat);                                    \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an unsigned saturating-subtract helper.  rs1 and rs2 contain
+ * corresponding unsigned lanes; underflow produces zero and sets vxsat.
+ * Used for PSSUBU.B, PSSUBU.H, PSSUBU.W, and SSUBU.
+ */
+#define GEN_PSIMD_SAT_USUB(NAME, RTYPE, ETYPE, EXTRACT, INSERT, ELEMS)    \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        ETYPE e2 = (ETYPE)EXTRACT(rs2, i);                                \
+        ETYPE res = (e1 >= e2) ? (e1 - e2) : 0;                           \
+        if (e1 < e2) {                                                    \
+            sat = 1;                                                      \
+        }                                                                 \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a lane-wise halving add/subtract helper.  rs1 and rs2 contain
+ * corresponding lanes; OP runs in WTYPE before the result is shifted right
+ * by one.  Signed results therefore round toward negative infinity.  Used
+ * for the signed and unsigned PAADD/PASUB families and scalar AADD/AADDU
+ * and ASUB/ASUBU.
+ */
+#define GEN_PSIMD_AVG_BINOP(NAME, RTYPE, ETYPE, WTYPE, EXTRACT, INSERT,   \
+                            ELEMS, OP)                                    \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        WTYPE e1 = (WTYPE)(ETYPE)EXTRACT(rs1, i);                         \
+        WTYPE e2 = (WTYPE)(ETYPE)EXTRACT(rs2, i);                         \
+        ETYPE res = (ETYPE)(OP(e1, e2) >> 1);                             \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a lane-wise shifted-add helper.  rs1 supplies the lanes shifted
+ * left by SHAMT and rs2 supplies the addends.  Used for PSH1ADD.H and
+ * PSH1ADD.W.
+ */
+#define GEN_PSIMD_SHADD(NAME, RTYPE, ETYPE, EXTRACT, INSERT, ELEMS,       \
+                        SHAMT)                                            \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        ETYPE e2 = (ETYPE)EXTRACT(rs2, i);                                \
+        ETYPE res = (e1 << (SHAMT)) + e2;                                 \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a saturating shifted-add helper.  rs1 supplies signed lanes to
+ * shift by SHAMT and rs2 supplies addends; out-of-range results set vxsat.
+ * Used for PSSH1SADD.H, PSSH1SADD.W, and SSH1SADD.
+ */
+#define GEN_PSIMD_SAT_SHADD(NAME, RTYPE, ETYPE, WTYPE, EXTRACT, INSERT,   \
+                            ELEMS, SHAMT, SH_MIN, SH_MAX, SAT_MIN,        \
+                            SAT_MAX, SAT_FN)                              \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        ETYPE e2 = (ETYPE)EXTRACT(rs2, i);                                \
+        WTYPE shifted;                                                    \
+                                                                          \
+        if (e1 > (SH_MAX) || e1 < (SH_MIN)) {                             \
+            shifted = (e1 < 0) ? (SAT_MIN) : (SAT_MAX);                   \
+            sat = 1;                                                      \
+        } else {                                                          \
+            shifted = (WTYPE)e1 * ((WTYPE)1 << (SHAMT));                  \
+        }                                                                 \
+                                                                          \
+        WTYPE sum = shifted + e2;                                         \
+        ETYPE res = SAT_FN(sum, &sat);                                    \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a helper that saturates signed source elements to a signed
+ * immediate-selected width.  rs1 contains the source elements, and imm
+ * specifies the signed range [-2^imm, 2^imm - 1].  Values outside this range
+ * are clamped and set vxsat.  Used for PSATI.H, PSATI.W, and SATI.
+ */
+#define GEN_PSIMD_SATI(NAME, RTYPE, ETYPE, WTYPE, EXTRACT, INSERT,        \
+                       ELEMS, IMMMASK)                                    \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE imm)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    int range = (imm & (IMMMASK)) + 1;                                    \
+    uint64_t sign = UINT64_C(1) << (range - 1);                           \
+    WTYPE max = (WTYPE)(sign - 1);                                        \
+    WTYPE min = (range == 64) ? INT64_MIN : -(WTYPE)sign;                 \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        ETYPE res;                                                        \
+                                                                          \
+        if (e1 > max) {                                                   \
+            res = max;                                                    \
+            sat = 1;                                                      \
+        } else if (e1 < min) {                                            \
+            res = min;                                                    \
+            sat = 1;                                                      \
+        } else {                                                          \
+            res = e1;                                                     \
+        }                                                                 \
+                                                                          \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a helper that saturates signed source elements to an unsigned
+ * immediate-selected width.  rs1 contains the source elements, and imm
+ * specifies the unsigned range [0, 2^imm - 1].  Values outside this range
+ * are clamped and set vxsat.  Used for PUSATI.H, PUSATI.W, and USATI.
+ */
+#define GEN_PSIMD_USATI(NAME, RTYPE, ETYPE, UTYPE, WTYPE, EXTRACT,        \
+                        INSERT, ELEMS, ONE)                               \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE imm)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    WTYPE max = ((WTYPE)(ONE) << imm) - 1;                                \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        ETYPE res;                                                        \
+                                                                          \
+        if (e1 < 0) {                                                     \
+            res = 0;                                                      \
+            sat = 1;                                                      \
+        } else if ((UTYPE)e1 > max) {                                     \
+            res = max;                                                    \
+            sat = 1;                                                      \
+        } else {                                                          \
+            res = e1;                                                     \
+        }                                                                 \
+                                                                          \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a packed saturating signed-absolute-value helper.  rs1 contains
+ * signed source elements; an element equal to MINVAL is clamped to MAXVAL
+ * and sets vxsat.  Used for PSABS.B and PSABS.H.
+ */
+#define GEN_PSIMD_ABS(NAME, RTYPE, ETYPE, EXTRACT, INSERT, ELEMS,         \
+                      MINVAL, MAXVAL)                                     \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1)                         \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        ETYPE res;                                                        \
+                                                                          \
+        if (e1 == (MINVAL)) {                                             \
+            res = (MAXVAL);                                               \
+            sat = 1;                                                      \
+        } else if (e1 < 0) {                                              \
+            res = -e1;                                                    \
+        } else {                                                          \
+            res = e1;                                                     \
+        }                                                                 \
+                                                                          \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a scalar absolute-value helper.  rs1 supplies the signed scalar;
+ * UTYPE performs negation without signed-overflow undefined behavior.  Used
+ * for ABS and ABSW.
+ */
+#define GEN_PSIMD_SCALAR_ABS(NAME, RTYPE, STYPE, UTYPE)                   \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1)                         \
+{                                                                         \
+    STYPE value = (STYPE)rs1;                                             \
+    UTYPE result = (UTYPE)value;                                          \
+                                                                          \
+    if (value < 0) {                                                      \
+        result = (UTYPE)0 - result;                                       \
+    }                                                                     \
+    return (RTYPE)(STYPE)result;                                          \
+}
+
+/*
+ * Generate a signed bidirectional saturating-shift helper.  rs1 contains
+ * signed lanes and the low signed byte of rs2 selects left (nonnegative) or
+ * arithmetic right (negative) shift.  Used for PSSHA.HS, PSSHA.WS, and SSHA.
+ */
+#define GEN_PSIMD_VAR_SSHA(NAME, RTYPE, ETYPE, WTYPE, EXTRACT, INSERT,    \
+                           ELEMS, BITS, SAT_FN)                           \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    int sat = 0;                                                          \
+    int8_t shamt = (int8_t)(rs2 & 0xff);                                  \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        ETYPE res;                                                        \
+                                                                          \
+        if (shamt >= 0) {                                                 \
+            int left = (shamt >= (BITS)) ? (BITS) : shamt;                \
+            WTYPE shifted = (WTYPE)e1 * ((WTYPE)1 << left);               \
+            res = SAT_FN(shifted, &sat);                                  \
+        } else {                                                          \
+            int right = -shamt;                                           \
+            if (right >= (BITS)) {                                        \
+                res = (e1 < 0) ? -1 : 0;                                  \
+            } else {                                                      \
+                res = e1 >> right;                                        \
+            }                                                             \
+        }                                                                 \
+                                                                          \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a signed bidirectional saturating/rounding-shift helper.  rs1
+ * contains signed lanes and the low signed byte of rs2 selects saturating
+ * left or rounded right shift.  Used for PSSHAR.HS, PSSHAR.WS, and SSHAR.
+ */
+#define GEN_PSIMD_VAR_SSHAR(NAME, RTYPE, ETYPE, WTYPE, EXTRACT, INSERT,   \
+                            ELEMS, BITS, SAT_MIN, SAT_MAX, SAT_FN)        \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    int sat = 0;                                                          \
+    int8_t shamt = (int8_t)(rs2 & 0xff);                                  \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        ETYPE res;                                                        \
+                                                                          \
+        if (shamt >= 0) {                                                 \
+            if (shamt >= (BITS)) {                                        \
+                if (e1 == 0) {                                            \
+                    res = 0;                                              \
+                } else if (e1 > 0) {                                      \
+                    res = (SAT_MAX);                                      \
+                    sat = 1;                                              \
+                } else {                                                  \
+                    res = (SAT_MIN);                                      \
+                    sat = 1;                                              \
+                }                                                         \
+            } else {                                                      \
+                WTYPE shifted = (WTYPE)e1 * ((WTYPE)1 << shamt);          \
+                res = SAT_FN(shifted, &sat);                              \
+            }                                                             \
+        } else {                                                          \
+            int right = -shamt;                                           \
+            if (right >= (BITS)) {                                        \
+                res = 0;                                                  \
+            } else {                                                      \
+                WTYPE rounded = (((WTYPE)e1 >> (right - 1)) + 1) >> 1;    \
+                res = (ETYPE)rounded;                                     \
+            }                                                             \
+        }                                                                 \
+                                                                          \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an unsigned bidirectional saturating-shift helper.  rs1 contains
+ * unsigned lanes and the low signed byte of rs2 selects saturating left or
+ * logical right shift.  Used for PSSHL.HS, PSSHL.WS, and SSHL.
+ */
+#define GEN_PSIMD_VAR_USHL(NAME, RTYPE, ETYPE, WTYPE, EXTRACT, INSERT,    \
+                           ELEMS, BITS, SAT_FN)                           \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    int sat = 0;                                                          \
+    int8_t shamt = (int8_t)(rs2 & 0xff);                                  \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        ETYPE res;                                                        \
+                                                                          \
+        if (shamt >= 0) {                                                 \
+            WTYPE shifted = (shamt >= (BITS)) ?                           \
+                            ((WTYPE)e1 << (BITS)) :                       \
+                            ((WTYPE)e1 << shamt);                         \
+            res = SAT_FN(shifted, &sat);                                  \
+        } else {                                                          \
+            int right = -shamt;                                           \
+            if (right >= (BITS)) {                                        \
+                res = 0;                                                  \
+            } else {                                                      \
+                res = e1 >> right;                                        \
+            }                                                             \
+        }                                                                 \
+                                                                          \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an unsigned bidirectional saturating/rounding-shift helper.  rs1
+ * contains unsigned lanes and the low signed byte of rs2 selects saturating
+ * left or rounded logical right shift.  Used for PSSHLR.HS, PSSHLR.WS, and
+ * SSHLR.
+ */
+#define GEN_PSIMD_VAR_USHLR(NAME, RTYPE, ETYPE, WTYPE, EXTRACT, INSERT,   \
+                            ELEMS, BITS, SAT_FN)                          \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    int sat = 0;                                                          \
+    int8_t shamt = (int8_t)(rs2 & 0xff);                                  \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        ETYPE res;                                                        \
+                                                                          \
+        if (shamt >= 0) {                                                 \
+            WTYPE shifted = (shamt >= (BITS)) ?                           \
+                            ((WTYPE)e1 << (BITS)) :                       \
+                            ((WTYPE)e1 << shamt);                         \
+            res = SAT_FN(shifted, &sat);                                  \
+        } else {                                                          \
+            int right = MIN(-shamt, (BITS));                              \
+            WTYPE rounded = ((WTYPE)e1 >> (right - 1)) + 1;               \
+            res = (ETYPE)(rounded >> 1);                                  \
+        }                                                                 \
+                                                                          \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+#define PSIMD_DO_SRA64(A, B)                                             \
+    (((B) >= 64) ? ((A) < 0 ? (int64_t)-1 : 0) : ((A) >> (B)))
+#define PSIMD_DO_RNDSRA64(A, B)                                          \
+    (((B) >= 64) ? 0 :                                                   \
+     (int64_t)((((__int128_t)(A) >> ((B) - 1)) + 1) >> 1))
+
+/*
+ * Generate a signed 64-bit bidirectional-shift helper.  rs1 is the signed
+ * value and the low signed byte of rs2 selects left or RIGHT_OP right shift.
+ * Used for SHA and SHAR.
+ */
+#define GEN_PSIMD_VAR_SRA64(NAME, RIGHT_OP)                               \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint64_t rs1, uint64_t rs2)     \
+{                                                                         \
+    int64_t a = (int64_t)rs1;                                             \
+    int8_t shamt = (int8_t)(rs2 & 0xff);                                  \
+                                                                          \
+    if (shamt >= 0) {                                                     \
+        return (shamt >= 64) ? 0 : (uint64_t)a << shamt;                  \
+    }                                                                     \
+                                                                          \
+    int right = -shamt;                                                   \
+    return (uint64_t)RIGHT_OP(a, right);                                  \
+}
+
+#define PSIMD_DO_SRL64(A, B) (((B) >= 64) ? 0 : ((A) >> (B)))
+#define PSIMD_DO_RNDSRL64(A, B)                                          \
+    (uint64_t)((((__uint128_t)(A) >> (MIN((B), 64) - 1)) + 1) >> 1)
+
+/*
+ * Generate an unsigned 64-bit bidirectional-shift helper.  rs1 is the
+ * unsigned value and the low signed byte of rs2 selects left or RIGHT_OP
+ * right shift.  Used for SHL and SHLR.
+ */
+#define GEN_PSIMD_VAR_SRL64(NAME, RIGHT_OP)                               \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint64_t rs1, uint64_t rs2)     \
+{                                                                         \
+    int8_t shamt = (int8_t)(rs2 & 0xff);                                  \
+                                                                          \
+    if (shamt < 0) {                                                      \
+        return RIGHT_OP(rs1, -shamt);                                     \
+    }                                                                     \
+    return (shamt >= 64) ? 0 : (rs1 << shamt);                            \
+}
+
+/*
+ * Generate a crossed-pair binary-operation helper.  Adjacent rs1 and rs2
+ * lanes are crossed, with OP_LO/OP_HI selecting each result operation.  Used
+ * for PAS.HX, PSA.HX, PAS.WX, and PSA.WX.
+ */
+#define GEN_PSIMD_XPAIR_BINOP(NAME, RTYPE, ETYPE, EXTRACT, INSERT,        \
+                              ELEMS, OP_LO, OP_HI)                        \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i += 2) {                                  \
+        ETYPE s1_lo = (ETYPE)EXTRACT(rs1, i);                             \
+        ETYPE s1_hi = (ETYPE)EXTRACT(rs1, i + 1);                         \
+        ETYPE s2_lo = (ETYPE)EXTRACT(rs2, i);                             \
+        ETYPE s2_hi = (ETYPE)EXTRACT(rs2, i + 1);                         \
+        RTYPE res_lo = OP_LO((RTYPE)s1_lo, (RTYPE)s2_hi);                 \
+        RTYPE res_hi = OP_HI((RTYPE)s1_hi, (RTYPE)s2_lo);                 \
+        rd = INSERT(rd, res_lo, i);                                       \
+        rd = INSERT(rd, res_hi, i + 1);                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a saturating crossed-pair helper.  Adjacent rs1 and rs2 lanes are
+ * crossed and combined by OP_LO/OP_HI; saturation sets vxsat.  Used for
+ * PSAS.HX, PSSA.HX, PSAS.WX, and PSSA.WX.
+ */
+#define GEN_PSIMD_XPAIR_SAT_BINOP(NAME, RTYPE, ETYPE, WTYPE, EXTRACT,     \
+                                  INSERT, ELEMS, OP_LO, OP_HI, SAT_FN)    \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < elems; i += 2) {                                  \
+        ETYPE s1_lo = (ETYPE)EXTRACT(rs1, i);                             \
+        ETYPE s1_hi = (ETYPE)EXTRACT(rs1, i + 1);                         \
+        ETYPE s2_lo = (ETYPE)EXTRACT(rs2, i);                             \
+        ETYPE s2_hi = (ETYPE)EXTRACT(rs2, i + 1);                         \
+        WTYPE val_lo = OP_LO((WTYPE)s1_lo, (WTYPE)s2_hi);                 \
+        WTYPE val_hi = OP_HI((WTYPE)s1_hi, (WTYPE)s2_lo);                 \
+        ETYPE res_lo = SAT_FN(val_lo, &sat);                              \
+        ETYPE res_hi = SAT_FN(val_hi, &sat);                              \
+        rd = INSERT(rd, res_lo, i);                                       \
+        rd = INSERT(rd, res_hi, i + 1);                                   \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a halving crossed-pair helper.  Adjacent signed rs1 and rs2 lanes
+ * are crossed, combined by OP_LO/OP_HI, and arithmetically shifted right by
+ * one, rounding toward negative infinity.  Used for PAAS.HX, PASA.HX,
+ * PAAS.WX, and PASA.WX.
+ */
+#define GEN_PSIMD_XPAIR_AVG_BINOP(NAME, RTYPE, ETYPE, WTYPE, EXTRACT,     \
+                                  INSERT, ELEMS, OP_LO, OP_HI)            \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i += 2) {                                  \
+        ETYPE s1_lo = (ETYPE)EXTRACT(rs1, i);                             \
+        ETYPE s1_hi = (ETYPE)EXTRACT(rs1, i + 1);                         \
+        ETYPE s2_lo = (ETYPE)EXTRACT(rs2, i);                             \
+        ETYPE s2_hi = (ETYPE)EXTRACT(rs2, i + 1);                         \
+        ETYPE res_lo = (ETYPE)(OP_LO((WTYPE)s1_lo, (WTYPE)s2_hi) >> 1);   \
+        ETYPE res_hi = (ETYPE)(OP_HI((WTYPE)s1_hi, (WTYPE)s2_lo) >> 1);   \
+        rd = INSERT(rd, res_lo, i);                                       \
+        rd = INSERT(rd, res_hi, i + 1);                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a packed reduction-sum helper.  rs1 supplies lanes and INIT
+ * supplies the rs2 initial accumulator value.  Used for PREDSUM.BS,
+ * PREDSUM.HS, PREDSUM.WS, and their unsigned variants.
+ */
+#define GEN_PSIMD_REDSUM(NAME, RTYPE, SUMTYPE, ETYPE, EXTRACT, ELEMS,     \
+                         INIT)                                            \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    uint64_t sum = (uint64_t)(INIT);                                      \
+    int elems = ELEMS(rs1);                                               \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        sum += (uint64_t)(SUMTYPE)e1;                                     \
+    }                                                                     \
+                                                                          \
+    return (RTYPE)sum;                                                    \
+}
+
+#define PSIMD_PAIR_LO(V, MASK, SHIFT) ((V) & (MASK))
+#define PSIMD_PAIR_HI(V, MASK, SHIFT) (((V) >> (SHIFT)) & (MASK))
+
+/*
+ * Generate a pair-packing helper.  rs1 and rs2 contain packed source lanes;
+ * MASK and SHIFT select the low or high subfield of each lane.  Used for the
+ * PPAIRE*, PPAIREO*, PPAIROE*, and PPAIRO* byte/halfword instructions.
+ */
+#define GEN_PSIMD_PAIR_PACK(NAME, RTYPE, ETYPE, EXTRACT, INSERT, ELEMS,   \
+                            MASK, SHIFT, HI_SEL, LO_SEL)                  \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = EXTRACT(rs1, i);                                       \
+        ETYPE e2 = EXTRACT(rs2, i);                                       \
+        ETYPE res = (HI_SEL(e2, MASK, SHIFT) << (SHIFT)) |                \
+                    LO_SEL(e1, MASK, SHIFT);                              \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a word-pair packing helper.  RS1_IDX and RS2_IDX select one word
+ * from rs1 and rs2 for the low and high result words.  Used for PPAIREO.W,
+ * PPAIROE.W, and PPAIRO.W.
+ */
+#define GEN_PSIMD_PAIR_WORD(NAME, RS1_IDX, RS2_IDX)                       \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint64_t rs1, uint64_t rs2)     \
+{                                                                         \
+    uint32_t e1 = EXTRACT32(rs1, RS1_IDX);                                \
+    uint32_t e2 = EXTRACT32(rs2, RS2_IDX);                                \
+                                                                          \
+    return ((uint64_t)e2 << 32) | e1;                                     \
+}
+
+/*
+ * Generate a packed sign-extension helper.  rs1 supplies narrow signed
+ * lanes; SCALE selects the low lane of each source group to widen into the
+ * result.  Used for PSEXT.H.B, PSEXT.W.B, and PSEXT.W.H.
+ */
+#define GEN_PSIMD_SIGN_EXTEND(NAME, RTYPE, STYPE, DTYPE, EXTRACT, INSERT, \
+                              ELEMS, SCALE)                               \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1)                         \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        STYPE e1 = (STYPE)EXTRACT(rs1, i * (SCALE));                      \
+        rd = INSERT(rd, (DTYPE)e1, i);                                    \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a 64-bit lane-interleave helper.  rs1 and rs2 supply lanes;
+ * START selects which half of each operand is zipped.  Used for ZIP8P,
+ * ZIP8HP, ZIP16P, and ZIP16HP.
+ */
+#define GEN_PSIMD_ZIP(NAME, ETYPE, EXTRACT, ELEMS, BITS, START)           \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint64_t rs1, uint64_t rs2)     \
+{                                                                         \
+    uint64_t rd = 0;                                                      \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        ETYPE e1 = EXTRACT(rs1, (START) - i);                             \
+        ETYPE e2 = EXTRACT(rs2, (START) - i);                             \
+        rd = (rd << (2 * (BITS))) | ((uint64_t)e2 << (BITS)) | e1;        \
+    }                                                                     \
+                                                                          \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a 64-bit lane-deinterleave helper.  rs1 and rs2 supply packed
+ * lanes and OFFSET selects the even or odd lanes.  Used for UNZIP8P,
+ * UNZIP8HP, UNZIP16P, and UNZIP16HP.
+ */
+#define GEN_PSIMD_UNZIP(NAME, EXTRACT, ELEMS, BITS, OFFSET)               \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint64_t rs1, uint64_t rs2)     \
+{                                                                         \
+    uint64_t rd = 0;                                                      \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        uint64_t e1 = (uint64_t)EXTRACT(rs1, 2 * i + (OFFSET)) <<         \
+                      ((BITS) * i);                                       \
+        uint64_t e2 = (uint64_t)EXTRACT(rs2, 2 * i + (OFFSET)) <<         \
+                      (32 + (BITS) * i);                                  \
+        rd = rd | e2 | e1;                                                \
+    }                                                                     \
+                                                                          \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a bit-select helper.  MASK, TRUE_VAL, and FALSE_VAL name the rd,
+ * rs1, or rs2 operands used as mask and alternatives.  Used for MVM, MVMN,
+ * and MERGE.
+ */
+#define GEN_PSIMD_BIT_SELECT(NAME, MASK, TRUE_VAL, FALSE_VAL)             \
+target_ulong HELPER(NAME)(CPURISCVState *env, target_ulong rs1,           \
+                          target_ulong rs2, target_ulong rd)              \
+{                                                                         \
+    return (~(MASK) & (FALSE_VAL)) | ((MASK) & (TRUE_VAL));               \
+}
+
+/*
+ * Generate a packed narrowing-clip helper.  rs1 supplies the low half and
+ * rs2 the high half of a conceptual 128-bit source.  Each wide lane is
+ * clipped directly to the signed or unsigned narrow range and packed into
+ * the result; saturation sets vxsat.  Used for PNCLIPP.B/H/W and
+ * PNCLIPUP.B/H/W.
+ */
+#define GEN_PSIMD_NCLIP_PACK(NAME, ITYPE, OTYPE, EXTRACT, INSERT, ELEMS,  \
+                             SAT_FN)                                      \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint64_t rs1, uint64_t rs2)     \
+{                                                                         \
+    uint64_t rd = 0;                                                      \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        ITYPE lo = (ITYPE)EXTRACT(rs1, i);                                \
+        ITYPE hi = (ITYPE)EXTRACT(rs2, i);                                \
+        OTYPE res_lo = SAT_FN(lo, &sat);                                  \
+        OTYPE res_hi = SAT_FN(hi, &sat);                                  \
+                                                                          \
+        rd = (uint64_t)INSERT(rd, res_lo, i);                             \
+        rd = (uint64_t)INSERT(rd, res_hi, i + (ELEMS));                   \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a count-leading-sign-bits helper.  rs1 supplies the signed scalar
+ * and CLRSB selects its width; the sign bit is excluded from the result.
+ * Used for CLS and CLSW.
+ */
+#define GEN_PSIMD_CLS(NAME, RTYPE, UTYPE, CLRSB)                          \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1)                         \
+{                                                                         \
+    return CLRSB((UTYPE)rs1);                                             \
+}
+
+#define PSIMD_MUL_S32(A, B)  ((int32_t)(A) * (int32_t)(B))
+#define PSIMD_MUL_SU16(A, B) ((int16_t)(A) * (uint16_t)(B))
+#define PSIMD_MUL_SU32(A, B) ((int32_t)(A) * (uint32_t)(B))
+#define PSIMD_MUL_U32(A, B)  ((uint32_t)(A) * (uint32_t)(B))
+#define PSIMD_MUL_S64(A, B)  ((int64_t)(A) * (int64_t)(B))
+#define PSIMD_MUL_SU64(A, B) ((int64_t)(A) * (uint64_t)(B))
+#define PSIMD_MUL_U64(A, B)  ((uint64_t)(A) * (uint64_t)(B))
+
+/*
+ * Multiplication generators separate the input-lane types (E1TYPE/E2TYPE),
+ * the full product type (PTYPE), and the packed output type (HTYPE/OTYPE).
+ * SCALE maps each output lane to its source group; OFFSET or OFFSET1/2 picks
+ * the member(s) of that group, which covers bottom/top and cross variants.
+ */
+/*
+ * Generate a lane-wise multiply-high helper.  rs1 and rs2 supply factors;
+ * their signedness comes from E1TYPE/E2TYPE, while ROUND selects rounding.
+ * Used for PMULH*, PMULHR*, MULHR, MULHRSU, and MULHRU.
+ */
+#define GEN_PSIMD_MUL_HIGH(NAME, RTYPE, E1TYPE, E2TYPE, PTYPE, HTYPE,     \
+                           EXTRACT, INSERT, ELEMS, SHIFT, ROUND, OP)      \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        E1TYPE e1 = (E1TYPE)EXTRACT(rs1, i);                              \
+        E2TYPE e2 = (E2TYPE)EXTRACT(rs2, i);                              \
+        PTYPE prod = OP(e1, e2) + (ROUND);                                \
+        HTYPE high = (HTYPE)(prod >> (SHIFT));                            \
+        rd = INSERT(rd, high, i);                                         \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a selected-element multiply-high helper.  rs1 supplies wide
+ * factors and OFFSET selects the narrow rs2 factor for each SCALE-sized
+ * group.  Used for PMULH*.B0/B1, MULH*.H0/H1, and PMULH*.H0/H1 forms.
+ */
+#define GEN_PSIMD_MUL_HIGH_SEL(NAME, RTYPE, E1TYPE, E2TYPE, PTYPE,        \
+                               HTYPE, EXTRACT1, EXTRACT2, INSERT, ELEMS,  \
+                               SCALE, OFFSET, SHIFT, OP)                  \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        E1TYPE e1 = (E1TYPE)EXTRACT1(rs1, i);                             \
+        E2TYPE e2 = (E2TYPE)EXTRACT2(rs2, i * (SCALE) + (OFFSET));        \
+        PTYPE prod = OP(e1, e2);                                          \
+        HTYPE high = (HTYPE)(prod >> (SHIFT));                            \
+        rd = INSERT(rd, high, i);                                         \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an indexed widening-multiply helper.  OFFSET1 selects rs1 lanes
+ * and OFFSET2 selects one rs2 lane per SCALE-sized group.  Used for the
+ * PMUL.H.B**, PMUL.W.H**, PMULSU*, and PMULU* families.
+ */
+#define GEN_PSIMD_MUL_ELEM_INDEXED(NAME, RTYPE, E1TYPE, E2TYPE, PTYPE,    \
+                                   OTYPE, EXTRACT, INSERT, ELEMS, SCALE,  \
+                                   OFFSET1, OFFSET2, OP)                  \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        E1TYPE e1 = (E1TYPE)EXTRACT(rs1, i * (SCALE) + (OFFSET1));        \
+        E2TYPE e2 = (E2TYPE)EXTRACT(rs2, i * (SCALE) + (OFFSET2));        \
+        PTYPE mul = OP(e1, e2);                                           \
+        rd = INSERT(rd, (OTYPE)mul, i);                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a selected-element scalar multiply helper.  OFFSET1/2 select one
+ * element from rs1 and rs2 and the full-width product is returned.  Used for
+ * MUL.H**, MUL.W**, MULSU.*, and MULU.* instructions.
+ */
+#define GEN_PSIMD_MUL_ELEM_SCALAR(NAME, RTYPE, E1TYPE, E2TYPE, PTYPE,     \
+                                  EXTRACT, OFFSET1, OFFSET2, OP)          \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    E1TYPE e1 = (E1TYPE)EXTRACT(rs1, OFFSET1);                            \
+    E2TYPE e2 = (E2TYPE)EXTRACT(rs2, OFFSET2);                            \
+    PTYPE mul = OP(e1, e2);                                               \
+                                                                          \
+    return (RTYPE)mul;                                                    \
+}
+
+/*
+ * Generate a lane-wise multiply-high-accumulate helper.  rs1 and rs2 supply
+ * factors and dest supplies accumulator lanes; SHIFT/ROUND select the high
+ * product.  Used for PMHACC*, PMHRACC*, MHACC*, and MHRACC*.
+ */
+#define GEN_PSIMD_MUL_HIGH_ACC(NAME, RTYPE, E1TYPE, E2TYPE, DTYPE, PTYPE, \
+                               HTYPE, OTYPE, EXTRACT, INSERT, ELEMS,      \
+                               SHIFT, ROUND, OP)                          \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2, RTYPE dest)  \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        E1TYPE e1 = (E1TYPE)EXTRACT(rs1, i);                              \
+        E2TYPE e2 = (E2TYPE)EXTRACT(rs2, i);                              \
+        DTYPE d = (DTYPE)EXTRACT(dest, i);                                \
+        PTYPE prod = OP(e1, e2) + (ROUND);                                \
+        HTYPE high = (HTYPE)(prod >> (SHIFT));                            \
+        OTYPE res = (OTYPE)high + (OTYPE)d;                               \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a selected-element multiply-high-accumulate helper.  rs1 and the
+ * OFFSET-selected rs2 lanes supply factors, while dest supplies accumulator
+ * lanes.  Used for PMHACC*.B0/B1, MHACC*.H0/H1, and PMHACC*.H0/H1.
+ */
+#define GEN_PSIMD_MUL_HIGH_ACC_SEL(NAME, RTYPE, E1TYPE, E2TYPE, DTYPE,    \
+                                   PTYPE, HTYPE, OTYPE, EXTRACT1,         \
+                                   EXTRACT2, INSERT, ELEMS, SCALE,        \
+                                   OFFSET, SHIFT, OP)                     \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2, RTYPE dest)  \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        E1TYPE e1 = (E1TYPE)EXTRACT1(rs1, i);                             \
+        E2TYPE e2 = (E2TYPE)EXTRACT2(rs2, i * (SCALE) + (OFFSET));        \
+        DTYPE d = (DTYPE)EXTRACT1(dest, i);                               \
+        PTYPE prod = OP(e1, e2);                                          \
+        HTYPE high = (HTYPE)(prod >> (SHIFT));                            \
+        OTYPE res = (OTYPE)high + (OTYPE)d;                               \
+        rd = INSERT(rd, res, i);                                          \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an indexed multiply-accumulate helper.  OFFSET1/2 select factor
+ * lanes from rs1 and rs2, and dest supplies accumulator lanes.  Used for the
+ * PMACC.W.H**, MACC.H**, and MACC.W** signed/unsigned families.
+ */
+#define GEN_PSIMD_MUL_ACC_INDEXED(NAME, RTYPE, E1TYPE, E2TYPE, DTYPE,     \
+                                  PTYPE, OTYPE, EXTRACT, EXTRACTD,        \
+                                  INSERT, ELEMS, SCALE, OFFSET1,          \
+                                  OFFSET2, OP)                            \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2, RTYPE dest)  \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        E1TYPE e1 = (E1TYPE)EXTRACT(rs1, i * (SCALE) + (OFFSET1));        \
+        E2TYPE e2 = (E2TYPE)EXTRACT(rs2, i * (SCALE) + (OFFSET2));        \
+        DTYPE d = (DTYPE)EXTRACTD(dest, i);                               \
+        PTYPE mul = OP(e1, e2);                                           \
+        rd = INSERT(rd, (OTYPE)d + (OTYPE)mul, i);                        \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a saturating Q-format multiply helper.  rs1 and rs2 contain
+ * signed fractional lanes; SHIFT and ROUND scale the product and saturation
+ * sets vxsat.  Used for PMULQ.H/W, PMULQR.H/W, MULQ, and MULQR.
+ */
+#define GEN_PSIMD_QMUL(NAME, RTYPE, ETYPE, PTYPE, OTYPE, EXTRACT, INSERT, \
+                       ELEMS, SHIFT, ROUND, MINVAL, MAXVAL)               \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i);                                \
+        ETYPE e2 = (ETYPE)EXTRACT(rs2, i);                                \
+        OTYPE result;                                                     \
+                                                                          \
+        if ((e1 == (ETYPE)(MINVAL)) && (e2 == (ETYPE)(MINVAL))) {         \
+            sat = 1;                                                      \
+            result = (OTYPE)(MAXVAL);                                     \
+        } else {                                                          \
+            PTYPE prod = (PTYPE)e1 * (PTYPE)e2 + (ROUND);                 \
+            result = (OTYPE)(prod >> (SHIFT));                            \
+        }                                                                 \
+        rd = INSERT(rd, result, i);                                       \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an indexed Q-format multiply-accumulate helper.  OFFSET1/2 select
+ * rs1/rs2 factors and dest supplies accumulator lanes; ROUND controls product
+ * rounding.  Used for MQACC*, MQRACC*, PMQACC*, and PMQRACC*.
+ */
+#define GEN_PSIMD_QMUL_ACC_INDEXED(NAME, RTYPE, E1TYPE, E2TYPE, DTYPE,    \
+                                   PTYPE, STYPE, OTYPE, EXTRACT,          \
+                                   EXTRACTD, INSERT, ELEMS, SCALE,        \
+                                   OFFSET1, OFFSET2, SHIFT, ROUND, OP)    \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2, RTYPE dest)  \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        E1TYPE e1 = (E1TYPE)EXTRACT(rs1, i * (SCALE) + (OFFSET1));        \
+        E2TYPE e2 = (E2TYPE)EXTRACT(rs2, i * (SCALE) + (OFFSET2));        \
+        DTYPE d = (DTYPE)EXTRACTD(dest, i);                               \
+        PTYPE prod = OP(e1, e2) + (ROUND);                                \
+        STYPE scaled = (STYPE)(((__int128_t)prod) >> (SHIFT));            \
+        rd = INSERT(rd, (OTYPE)d + (OTYPE)scaled, i);                     \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a two-product Q-format helper.  rs1 and rs2 supply paired signed
+ * factors; OP forms each product, which is scaled before the two results are
+ * added without saturation.  Used for PMQ2ADD.H/W and PMQR2ADD.H/W.
+ */
+#define GEN_PSIMD_Q2ADD(NAME, RTYPE, ETYPE, PTYPE, STYPE, OTYPE, EXTRACT, \
+                        INSERT, ELEMS, SCALE, SHIFT, ROUND, OP)           \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE s1_0 = (ETYPE)EXTRACT(rs1, i * (SCALE));                    \
+        ETYPE s1_1 = (ETYPE)EXTRACT(rs1, i * (SCALE) + 1);                \
+        ETYPE s2_0 = (ETYPE)EXTRACT(rs2, i * (SCALE));                    \
+        ETYPE s2_1 = (ETYPE)EXTRACT(rs2, i * (SCALE) + 1);                \
+        PTYPE prod0 = OP(s1_0, s2_0) + (ROUND);                           \
+        PTYPE prod1 = OP(s1_1, s2_1) + (ROUND);                           \
+        STYPE scaled0 = (STYPE)(((__int128_t)prod0) >> (SHIFT));          \
+        STYPE scaled1 = (STYPE)(((__int128_t)prod1) >> (SHIFT));          \
+        rd = INSERT(rd, (OTYPE)(scaled0 + scaled1), i);                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an accumulating two-product Q-format helper.  rs1 and rs2 supply
+ * paired factors, OP forms each product, and dest supplies the accumulator
+ * lanes to which the two scaled products are added.  Used for PMQ2ADDA.H/W
+ * and PMQR2ADDA.H/W.
+ */
+#define GEN_PSIMD_Q2ADDA(NAME, RTYPE, ETYPE, DTYPE, PTYPE, STYPE, OTYPE,  \
+                         EXTRACT, EXTRACTD, INSERT, ELEMS, SCALE,         \
+                         SHIFT, ROUND, OP)                                \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2, RTYPE dest)  \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        ETYPE s1_0 = (ETYPE)EXTRACT(rs1, i * (SCALE));                    \
+        ETYPE s1_1 = (ETYPE)EXTRACT(rs1, i * (SCALE) + 1);                \
+        ETYPE s2_0 = (ETYPE)EXTRACT(rs2, i * (SCALE));                    \
+        ETYPE s2_1 = (ETYPE)EXTRACT(rs2, i * (SCALE) + 1);                \
+        DTYPE d = (DTYPE)EXTRACTD(dest, i);                               \
+        PTYPE prod0 = OP(s1_0, s2_0) + (ROUND);                           \
+        PTYPE prod1 = OP(s1_1, s2_1) + (ROUND);                           \
+        STYPE scaled0 = (STYPE)(((__int128_t)prod0) >> (SHIFT));          \
+        STYPE scaled1 = (STYPE)(((__int128_t)prod1) >> (SHIFT));          \
+        rd = INSERT(rd, (OTYPE)d + (OTYPE)scaled0 + (OTYPE)scaled1, i);   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+#define PSIMD_COMB_ADD(D, A, B) ((D) + (A) + (B))
+#define PSIMD_COMB_SUB(D, A, B) ((D) + (A) - (B))
+
+/*
+ * The 2-way generators form two products per output lane.  The four OFFSET
+ * arguments select the rs1 and rs2 lanes for each product, and COMBINE
+ * chooses whether the second product is added or subtracted (and whether an
+ * accumulator D participates).
+ */
+/*
+ * Generate a two-product helper.  OFFSET10/11 and OFFSET20/21 select factor
+ * lanes from rs1 and rs2; COMBINE adds or subtracts the products.  Used for
+ * PM2ADD*, PM2SUB*, and their signed/unsigned and crossed variants.
+ */
+#define GEN_PSIMD_2WAY_MUL(NAME, RTYPE, E1TYPE, E2TYPE, PTYPE, OTYPE,     \
+                           EXTRACT, INSERT, ELEMS, SCALE, OFFSET10,       \
+                           OFFSET11, OFFSET20, OFFSET21, OP, COMBINE)     \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        E1TYPE s1_0 = (E1TYPE)EXTRACT(rs1, i * (SCALE) + (OFFSET10));     \
+        E1TYPE s1_1 = (E1TYPE)EXTRACT(rs1, i * (SCALE) + (OFFSET11));     \
+        E2TYPE s2_0 = (E2TYPE)EXTRACT(rs2, i * (SCALE) + (OFFSET20));     \
+        E2TYPE s2_1 = (E2TYPE)EXTRACT(rs2, i * (SCALE) + (OFFSET21));     \
+        PTYPE prod0 = OP(s1_0, s2_0);                                     \
+        PTYPE prod1 = OP(s1_1, s2_1);                                     \
+        rd = INSERT(rd, COMBINE((OTYPE)0, (OTYPE)prod0,                   \
+                                (OTYPE)prod1), i);                        \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a saturating two-product helper.  OFFSET10/11 and OFFSET20/21
+ * select halfword factors from rs1 and rs2; each sum is saturated to the
+ * signed 32-bit range and sets vxsat.  Used for PM2SADD.H and PM2SADD.HX.
+ */
+#define GEN_PSIMD_2WAY_SAT_MUL(NAME, OFFSET10, OFFSET11, OFFSET20,        \
+                               OFFSET21)                                  \
+target_ulong HELPER(NAME)(CPURISCVState *env, target_ulong rs1,           \
+                           target_ulong rs2)                              \
+{                                                                         \
+    target_ulong rd = 0;                                                  \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < ELEMS_W(rd); i++) {                               \
+        int16_t s1_0 = (int16_t)EXTRACT16(rs1, i * 2 + (OFFSET10));       \
+        int16_t s1_1 = (int16_t)EXTRACT16(rs1, i * 2 + (OFFSET11));       \
+        int16_t s2_0 = (int16_t)EXTRACT16(rs2, i * 2 + (OFFSET20));       \
+        int16_t s2_1 = (int16_t)EXTRACT16(rs2, i * 2 + (OFFSET21));       \
+        uint32_t result;                                                  \
+                                                                          \
+        if (s1_0 == INT16_MIN && s1_1 == INT16_MIN &&                     \
+            s2_0 == INT16_MIN && s2_1 == INT16_MIN) {                     \
+            result = INT32_MAX;                                           \
+            sat = 1;                                                      \
+        } else {                                                          \
+            int32_t prod0 = (int32_t)s1_0 * s2_0;                         \
+            int32_t prod1 = (int32_t)s1_1 * s2_1;                         \
+            result = (uint32_t)(prod0 + prod1);                           \
+        }                                                                 \
+        rd = INSERT32(rd, result, i);                                     \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an accumulating two-product helper.  rs1 and rs2 supply selected
+ * factors and dest supplies accumulator lanes; COMBINE adds or subtracts.
+ * Used for PM2ADDA*, PM2SUBA*, and signed/unsigned crossed variants.
+ */
+#define GEN_PSIMD_2WAY_MUL_ACC(NAME, RTYPE, E1TYPE, E2TYPE, DTYPE, PTYPE, \
+                               OTYPE, EXTRACT, EXTRACTD, INSERT, ELEMS,   \
+                               SCALE, OFFSET10, OFFSET11, OFFSET20,       \
+                               OFFSET21, OP, COMBINE)                     \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2, RTYPE dest)  \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        E1TYPE s1_0 = (E1TYPE)EXTRACT(rs1, i * (SCALE) + (OFFSET10));     \
+        E1TYPE s1_1 = (E1TYPE)EXTRACT(rs1, i * (SCALE) + (OFFSET11));     \
+        E2TYPE s2_0 = (E2TYPE)EXTRACT(rs2, i * (SCALE) + (OFFSET20));     \
+        E2TYPE s2_1 = (E2TYPE)EXTRACT(rs2, i * (SCALE) + (OFFSET21));     \
+        DTYPE d = (DTYPE)EXTRACTD(dest, i);                               \
+        PTYPE prod0 = OP(s1_0, s2_0);                                     \
+        PTYPE prod1 = OP(s1_1, s2_1);                                     \
+        rd = INSERT(rd, COMBINE((OTYPE)d, (OTYPE)prod0,                   \
+                                (OTYPE)prod1), i);                        \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate a four-product reduction helper.  Each four-lane group in rs1
+ * and rs2 supplies corresponding factors whose products form one result.
+ * Used for PM4ADD.B/H and their signed-unsigned/unsigned variants.
+ */
+#define GEN_PSIMD_4WAY_MUL(NAME, RTYPE, E1TYPE, E2TYPE, PTYPE, OTYPE,     \
+                           EXTRACT, INSERT, ELEMS, SCALE, OP)             \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        PTYPE prod0 = OP((E1TYPE)EXTRACT(rs1, i * (SCALE)),               \
+                         (E2TYPE)EXTRACT(rs2, i * (SCALE)));              \
+        PTYPE prod1 = OP((E1TYPE)EXTRACT(rs1, i * (SCALE) + 1),           \
+                         (E2TYPE)EXTRACT(rs2, i * (SCALE) + 1));          \
+        PTYPE prod2 = OP((E1TYPE)EXTRACT(rs1, i * (SCALE) + 2),           \
+                         (E2TYPE)EXTRACT(rs2, i * (SCALE) + 2));          \
+        PTYPE prod3 = OP((E1TYPE)EXTRACT(rs1, i * (SCALE) + 3),           \
+                         (E2TYPE)EXTRACT(rs2, i * (SCALE) + 3));          \
+        rd = INSERT(rd, (OTYPE)prod0 + (OTYPE)prod1 +                     \
+                        (OTYPE)prod2 + (OTYPE)prod3, i);                  \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an accumulating four-product reduction helper.  rs1 and rs2
+ * supply four factors per result and dest supplies accumulator lanes.  Used
+ * for PM4ADDA.B/H and their signed-unsigned/unsigned variants.
+ */
+#define GEN_PSIMD_4WAY_MUL_ACC(NAME, RTYPE, E1TYPE, E2TYPE, DTYPE, PTYPE, \
+                               OTYPE, EXTRACT, EXTRACTD, INSERT, ELEMS,   \
+                               SCALE, OP)                                 \
+RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2, RTYPE dest)  \
+{                                                                         \
+    RTYPE rd = 0;                                                         \
+    int elems = ELEMS(rd);                                                \
+                                                                          \
+    for (int i = 0; i < elems; i++) {                                     \
+        DTYPE d = (DTYPE)EXTRACTD(dest, i);                               \
+        PTYPE prod0 = OP((E1TYPE)EXTRACT(rs1, i * (SCALE)),               \
+                         (E2TYPE)EXTRACT(rs2, i * (SCALE)));              \
+        PTYPE prod1 = OP((E1TYPE)EXTRACT(rs1, i * (SCALE) + 1),           \
+                         (E2TYPE)EXTRACT(rs2, i * (SCALE) + 1));          \
+        PTYPE prod2 = OP((E1TYPE)EXTRACT(rs1, i * (SCALE) + 2),           \
+                         (E2TYPE)EXTRACT(rs2, i * (SCALE) + 2));          \
+        PTYPE prod3 = OP((E1TYPE)EXTRACT(rs1, i * (SCALE) + 3),           \
+                         (E2TYPE)EXTRACT(rs2, i * (SCALE) + 3));          \
+        rd = INSERT(rd, (OTYPE)d + (OTYPE)prod0 + (OTYPE)prod1 +          \
+                        (OTYPE)prod2 + (OTYPE)prod3, i);                  \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * RV32 widening helpers consume packed 32-bit operands and construct the
+ * 64-bit result explicitly.  IBITS/OBITS are input/output lane strides,
+ * IMASK/OMASK isolate raw lanes, and casts to ETYPE/DTYPE supply the signed
+ * interpretation before arithmetic.
+ */
+/*
+ * Generate an RV32 widening binary-operation helper.  rs1 and rs2 contain
+ * narrow lanes and OP produces packed wide lanes in a 64-bit result.  Used
+ * for PWADD/PWSUB.B/H and scalar WADD/WSUB signed/unsigned forms.
+ */
+#define GEN_PSIMD_WIDEN_BINOP(NAME, ETYPE, WTYPE, OTYPE, ELEMS, IBITS,    \
+                              OBITS, IMASK, OP)                           \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint32_t rs1, uint32_t rs2)     \
+{                                                                         \
+    uint64_t rd = 0;                                                      \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        ETYPE e1 = (ETYPE)((rs1 >> (i * (IBITS))) & (IMASK));             \
+        ETYPE e2 = (ETYPE)((rs2 >> (i * (IBITS))) & (IMASK));             \
+        WTYPE res = OP((WTYPE)0, (WTYPE)e1, (WTYPE)e2);                   \
+        rd |= ((uint64_t)(OTYPE)res) << (i * (OBITS));                    \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an RV32 widening binary-accumulate helper.  rs1 and rs2 contain
+ * narrow lanes and dest supplies packed wide accumulators.  Used for
+ * PWADDA/PWSUBA.B/H and scalar WADDA/WSUBA signed/unsigned forms.
+ */
+#define GEN_PSIMD_WIDEN_BINOP_ACC(NAME, ETYPE, WTYPE, OTYPE, ELEMS,       \
+                                  IBITS, OBITS, IMASK, OMASK, OP)         \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint32_t rs1, uint32_t rs2,     \
+                      uint64_t dest)                                      \
+{                                                                         \
+    uint64_t rd = 0;                                                      \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        ETYPE e1 = (ETYPE)((rs1 >> (i * (IBITS))) & (IMASK));             \
+        ETYPE e2 = (ETYPE)((rs2 >> (i * (IBITS))) & (IMASK));             \
+        WTYPE acc = (WTYPE)((dest >> (i * (OBITS))) & (OMASK));           \
+        OTYPE res = OP((OTYPE)acc, (OTYPE)e1, (OTYPE)e2);                 \
+        rd |= ((uint64_t)(OTYPE)res) << (i * (OBITS));                    \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an RV32 widening-multiply helper.  rs1 and rs2 contain narrow
+ * factors and each full-width product is packed into the 64-bit result.
+ * Used for PWMUL.B/H and scalar WMUL signed/unsigned forms.
+ */
+#define GEN_PSIMD_WIDEN_MUL(NAME, E1TYPE, E2TYPE, PTYPE, OTYPE, ELEMS,    \
+                            EXTRACT, OBITS, OP)                           \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint32_t rs1, uint32_t rs2)     \
+{                                                                         \
+    uint64_t rd = 0;                                                      \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        E1TYPE e1 = (E1TYPE)EXTRACT(rs1, i);                              \
+        E2TYPE e2 = (E2TYPE)EXTRACT(rs2, i);                              \
+        PTYPE prod = OP(e1, e2);                                          \
+        rd |= ((uint64_t)(OTYPE)prod) << (i * (OBITS));                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an RV32 widening multiply-accumulate helper.  rs1 and rs2 supply
+ * narrow factors and dest supplies wide accumulator lanes.  Used for
+ * PWMACC.H and scalar WMACC signed/unsigned forms.
+ */
+#define GEN_PSIMD_WIDEN_MUL_ACC(NAME, E1TYPE, E2TYPE, DTYPE, PTYPE,       \
+                                OTYPE, ELEMS, EXTRACT, EXTRACTD, OBITS,   \
+                                OP)                                       \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint32_t rs1, uint32_t rs2,     \
+                      uint64_t dest)                                      \
+{                                                                         \
+    uint64_t rd = 0;                                                      \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        E1TYPE e1 = (E1TYPE)EXTRACT(rs1, i);                              \
+        E2TYPE e2 = (E2TYPE)EXTRACT(rs2, i);                              \
+        DTYPE d = (DTYPE)EXTRACTD(dest, i);                               \
+        PTYPE prod = OP(e1, e2);                                          \
+        rd |= ((uint64_t)((OTYPE)d + (OTYPE)prod)) << (i * (OBITS));      \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an RV32 widening Q-format MAC helper.  Products of OFFSET-selected
+ * rs1/rs2 lanes are scaled by SHIFT/ROUND and added to wide dest lanes.  Used
+ * for PMQWACC.H, PMQRWACC.H, MQWACC, and MQRWACC.
+ */
+#define GEN_PSIMD_WIDEN_QMUL_ACC(NAME, ETYPE, DTYPE, PTYPE, STYPE,        \
+                                 OTYPE, ELEMS, EXTRACT, EXTRACTD, SCALE,  \
+                                 OFFSET, SHIFT, ROUND, OBITS, OP)         \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint32_t rs1, uint32_t rs2,     \
+                      uint64_t dest)                                      \
+{                                                                         \
+    uint64_t rd = 0;                                                      \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        ETYPE e1 = (ETYPE)EXTRACT(rs1, i * (SCALE) + (OFFSET));           \
+        ETYPE e2 = (ETYPE)EXTRACT(rs2, i * (SCALE) + (OFFSET));           \
+        DTYPE d = (DTYPE)EXTRACTD(dest, i);                               \
+        PTYPE prod = OP(e1, e2) + (ROUND);                                \
+        STYPE scaled = (STYPE)(((__int128_t)prod) >> (SHIFT));            \
+        rd |= ((uint64_t)((OTYPE)d + (OTYPE)scaled))                      \
+              << (i * (OBITS));                                           \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an RV32 two-product doubleword helper.  The OFFSET parameters
+ * select halfword factors from rs1 and rs2 and COMBINE forms the 64-bit
+ * result.  Used for PM2WADD.H/HX and PM2WSUB.H/HX variants.
+ */
+#define GEN_PSIMD_DW_2WAY_MUL(NAME, E1TYPE, E2TYPE, PTYPE, EXTRACT,       \
+                              OFFSET10, OFFSET11, OFFSET20, OFFSET21,     \
+                              OP, COMBINE)                                \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint32_t rs1, uint32_t rs2)     \
+{                                                                         \
+    E1TYPE s1_0 = (E1TYPE)EXTRACT(rs1, OFFSET10);                         \
+    E1TYPE s1_1 = (E1TYPE)EXTRACT(rs1, OFFSET11);                         \
+    E2TYPE s2_0 = (E2TYPE)EXTRACT(rs2, OFFSET20);                         \
+    E2TYPE s2_1 = (E2TYPE)EXTRACT(rs2, OFFSET21);                         \
+    PTYPE prod0 = OP(s1_0, s2_0);                                         \
+    PTYPE prod1 = OP(s1_1, s2_1);                                         \
+                                                                          \
+    return COMBINE(UINT64_C(0), (uint64_t)prod0, (uint64_t)prod1);        \
+}
+
+/*
+ * Generate an accumulating RV32 two-product doubleword helper.  rs1 and rs2
+ * supply selected halfword factors and dest is the 64-bit accumulator.  Used
+ * for PM2WADDA.H/HX and PM2WSUBA.H/HX variants.
+ */
+#define GEN_PSIMD_DW_2WAY_MUL_ACC(NAME, E1TYPE, E2TYPE, DTYPE, PTYPE,     \
+                                  EXTRACT, OFFSET10, OFFSET11, OFFSET20,  \
+                                  OFFSET21, OP, COMBINE)                  \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint32_t rs1, uint32_t rs2,     \
+                      uint64_t dest)                                      \
+{                                                                         \
+    E1TYPE s1_0 = (E1TYPE)EXTRACT(rs1, OFFSET10);                         \
+    E1TYPE s1_1 = (E1TYPE)EXTRACT(rs1, OFFSET11);                         \
+    E2TYPE s2_0 = (E2TYPE)EXTRACT(rs2, OFFSET20);                         \
+    E2TYPE s2_1 = (E2TYPE)EXTRACT(rs2, OFFSET21);                         \
+    DTYPE d = (DTYPE)dest;                                                \
+    PTYPE prod0 = OP(s1_0, s2_0);                                         \
+    PTYPE prod1 = OP(s1_1, s2_1);                                         \
+                                                                          \
+    return COMBINE((uint64_t)d, (uint64_t)prod0, (uint64_t)prod1);        \
+}
+
+/*
+ * Generate an RV32 widening-left-shift helper.  rs1 supplies narrow lanes
+ * and rs2 carries the immediate or scalar shift amount masked by SHMASK.
+ * Used for PWSLL[I].B/H, PWSLA[I].B/H, WSLL[I], and WSLA[I].
+ */
+#define GEN_PSIMD_WIDEN_SHIFT(NAME, ETYPE, WTYPE, OTYPE, ELEMS, IBITS,    \
+                              OBITS, IMASK, SHMASK)                       \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint32_t rs1, uint32_t rs2)     \
+{                                                                         \
+    uint64_t rd = 0;                                                      \
+    uint8_t shamt = rs2 & (SHMASK);                                       \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        ETYPE e1 = (ETYPE)((rs1 >> (i * (IBITS))) & (IMASK));             \
+        WTYPE res = (WTYPE)e1 * ((WTYPE)1 << shamt);                      \
+        rd |= ((uint64_t)(OTYPE)res) << (i * (OBITS));                    \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an RV32 widening-interleave helper.  rs1 and rs2 supply packed
+ * lanes that alternate in the 64-bit result according to STRIDE.  Used for
+ * WZIP8P and WZIP16P.
+ */
+#define GEN_PSIMD_DW_ZIP(NAME, EXTRACT, ELEMS, STRIDE, BITS)              \
+uint64_t HELPER(NAME)(CPURISCVState *env, uint32_t rs1, uint32_t rs2)     \
+{                                                                         \
+    uint64_t rd = 0;                                                      \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        uint64_t e1 = (uint64_t)EXTRACT(rs1, i) << ((STRIDE) * i);        \
+        uint64_t e2 = (uint64_t)EXTRACT(rs2, i)                           \
+                      << ((STRIDE) * i + (BITS));                         \
+        rd |= e2 | e1;                                                    \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an RV32 doubleword reduction-sum helper.  rs1_lo and rs1_hi form
+ * the packed 64-bit source and rs2 supplies the initial accumulator.  Used
+ * for PREDSUM.DBS/DHS and their unsigned variants.
+ */
+#define GEN_PSIMD_DW_REDSUM(NAME, SUMTYPE, INITTYPE, ETYPE, EXTRACT,      \
+                            ELEMS)                                        \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint32_t rs1_lo,                \
+                      uint32_t rs1_hi, uint32_t rs2)                      \
+{                                                                         \
+    SUMTYPE sum = (INITTYPE)rs2;                                          \
+    uint64_t s1 = ((uint64_t)rs1_hi << 32) | rs1_lo;                      \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        sum += (ETYPE)EXTRACT(s1, i);                                     \
+    }                                                                     \
+    return (uint32_t)sum;                                                 \
+}
+
+/*
+ * Generate an RV32 narrowing logical-right-shift helper.  s1 contains wide
+ * source lanes and shamt carries the immediate or scalar shift amount.  Used
+ * for PNSRLI.B/H, PNSRL.BS/HS, NSRLI, and NSRL.
+ */
+#define GEN_PSIMD_NARROW_SRL(NAME, ETYPE, OTYPE, ELEMS, IBITS, OBITS,     \
+                             IMASK, SHMASK)                               \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    uint32_t rd = 0;                                                      \
+    uint8_t shift = shamt & (SHMASK);                                     \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        ETYPE e1 = (ETYPE)((s1 >> (i * (IBITS))) & (IMASK));              \
+        OTYPE result = (OTYPE)(e1 >> shift);                              \
+        rd |= ((uint32_t)result) << (i * (OBITS));                        \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an RV32 narrowing arithmetic-right-shift helper.  s1 contains
+ * signed wide lanes and shamt carries the immediate or scalar shift amount.
+ * Used for PNSRAI.B/H and PNSRA.BS.
+ */
+#define GEN_PSIMD_NARROW_SRA_PACK(NAME, ETYPE, STYPE, OTYPE, ELEMS,       \
+                                  IBITS, OBITS, IMASK, SHMASK)            \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    uint32_t rd = 0;                                                      \
+    uint8_t shift = shamt & (SHMASK);                                     \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        ETYPE e1 = (ETYPE)((s1 >> (i * (IBITS))) & (IMASK));              \
+        STYPE shx = (STYPE)e1 >> shift;                                   \
+        OTYPE result = (OTYPE)shx;                                        \
+        rd |= ((uint32_t)result) << (i * (OBITS));                        \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an RV32 rounded narrowing arithmetic-shift helper.  s1 contains
+ * signed wide lanes and shamt carries the immediate or scalar shift amount.
+ * Used for PNSRARI.B/H and PNSRAR.BS.
+ */
+#define GEN_PSIMD_NARROW_RNDSRA_PACK(NAME, ETYPE, STYPE, OTYPE, ELEMS,    \
+                                     IBITS, OBITS, IMASK, SHMASK, RMASK)  \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    uint32_t rd = 0;                                                      \
+    uint8_t shift = shamt & (SHMASK);                                     \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        ETYPE e1 = (ETYPE)((s1 >> (i * (IBITS))) & (IMASK));              \
+        STYPE e1_s = (STYPE)e1;                                           \
+        uint64_t shx = (((uint64_t)e1_s << 1) >> shift) & (RMASK);        \
+        OTYPE result = (OTYPE)((shx + 1) >> 1);                           \
+        rd |= ((uint32_t)result) << (i * (OBITS));                        \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an RV32 signed narrowing-clip helper.  s1 contains signed wide
+ * lanes and shamt supplies the immediate or scalar right shift; clipping
+ * sets vxsat.  Used for PNCLIPI.B and PNCLIP.BS/HS.
+ */
+#define GEN_PSIMD_NCLIP_SIGNED_PACK(NAME, ETYPE, STYPE, CTYPE, OTYPE,     \
+                                    ELEMS, IBITS, OBITS, IMASK, SHMASK,   \
+                                    MIN, MAX, MIN_RES, MAX_RES)           \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    uint32_t rd = 0;                                                      \
+    uint8_t shift = shamt & (SHMASK);                                     \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        ETYPE e1 = (ETYPE)((s1 >> (i * (IBITS))) & (IMASK));              \
+        CTYPE shx = (CTYPE)((STYPE)e1 >> shift);                          \
+        OTYPE result;                                                     \
+                                                                          \
+        if (shx < (MIN)) {                                                \
+            sat = 1;                                                      \
+            result = (MIN_RES);                                           \
+        } else if (shx > (MAX)) {                                         \
+            sat = 1;                                                      \
+            result = (MAX_RES);                                           \
+        } else {                                                          \
+            result = (OTYPE)shx;                                          \
+        }                                                                 \
+        rd |= ((uint32_t)result) << (i * (OBITS));                        \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an RV32 rounded signed narrowing-clip helper.  s1 contains signed
+ * wide lanes and shamt supplies the immediate or scalar right shift;
+ * clipping sets vxsat.  Used for PNCLIPRI.B and PNCLIPR.BS/HS.
+ */
+#define GEN_PSIMD_NCLIPR_SIGNED_PACK(NAME, ETYPE, STYPE, CTYPE, OTYPE,    \
+                                     ELEMS, IBITS, OBITS, IMASK, SHMASK,  \
+                                     RMASK, MIN, MAX, MIN_RES, MAX_RES)   \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    uint32_t rd = 0;                                                      \
+    uint8_t shift = shamt & (SHMASK);                                     \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        ETYPE e1 = (ETYPE)((s1 >> (i * (IBITS))) & (IMASK));              \
+        STYPE e1_s = (STYPE)e1;                                           \
+        uint64_t shx = (((uint64_t)e1_s << 1) >> shift) & (RMASK);        \
+        CTYPE round_shx = (CTYPE)((shx + 1) >> 1);                        \
+        OTYPE result;                                                     \
+                                                                          \
+        if (round_shx < (MIN)) {                                          \
+            sat = 1;                                                      \
+            result = (MIN_RES);                                           \
+        } else if (round_shx > (MAX)) {                                   \
+            sat = 1;                                                      \
+            result = (MAX_RES);                                           \
+        } else {                                                          \
+            result = (OTYPE)round_shx;                                    \
+        }                                                                 \
+        rd |= ((uint32_t)result) << (i * (OBITS));                        \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an RV32 unsigned narrowing-clip helper.  s1 contains unsigned
+ * wide lanes and shamt supplies the immediate or scalar right shift;
+ * clipping sets vxsat.  Used for PNCLIPIU.B and PNCLIPU.BS/HS.
+ */
+#define GEN_PSIMD_NCLIP_UNSIGNED_PACK(NAME, ETYPE, WTYPE, OTYPE, ELEMS,   \
+                                      IBITS, OBITS, IMASK, SHMASK, MAX)   \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    uint32_t rd = 0;                                                      \
+    uint8_t shift = shamt & (SHMASK);                                     \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        ETYPE e1 = (ETYPE)((s1 >> (i * (IBITS))) & (IMASK));              \
+        WTYPE shx = (WTYPE)e1 >> shift;                                   \
+        OTYPE result;                                                     \
+                                                                          \
+        if (shx > (MAX)) {                                                \
+            sat = 1;                                                      \
+            result = (OTYPE)(MAX);                                        \
+        } else {                                                          \
+            result = (OTYPE)shx;                                          \
+        }                                                                 \
+        rd |= ((uint32_t)result) << (i * (OBITS));                        \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * Generate an RV32 rounded unsigned narrowing-clip helper.  s1 contains
+ * unsigned wide lanes and shamt supplies the immediate or scalar shift;
+ * clipping sets vxsat.  Used for PNCLIPRIU.B and PNCLIPRU.BS/HS.
+ */
+#define GEN_PSIMD_NCLIPR_UNSIGNED_PACK(NAME, ETYPE, WTYPE, OTYPE, ELEMS,  \
+                                       IBITS, OBITS, IMASK, SHMASK, MAX)  \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    uint32_t rd = 0;                                                      \
+    uint8_t shift = shamt & (SHMASK);                                     \
+    int sat = 0;                                                          \
+                                                                          \
+    for (int i = 0; i < (ELEMS); i++) {                                   \
+        ETYPE e1 = (ETYPE)((s1 >> (i * (IBITS))) & (IMASK));              \
+        WTYPE shx = ((WTYPE)e1 << 1) >> shift;                            \
+        WTYPE round_shx = (shx + 1) >> 1;                                 \
+        OTYPE result;                                                     \
+                                                                          \
+        if (round_shx > (MAX)) {                                          \
+            sat = 1;                                                      \
+            result = (OTYPE)(MAX);                                        \
+        } else {                                                          \
+            result = (OTYPE)round_shx;                                    \
+        }                                                                 \
+        rd |= ((uint32_t)result) << (i * (OBITS));                        \
+    }                                                                     \
+                                                                          \
+    if (sat) {                                                            \
+        env->vxsat = 1;                                                   \
+    }                                                                     \
+    return rd;                                                            \
+}
+
+/*
+ * These scalar RV32 forms conceptually shift a sign-extended 96-bit value.
+ * The extra bit in the rounding form preserves the bit below the result
+ * before adding one, so rounding also works for the largest shift count.
+ */
+/*
+ * Generate an RV32 scalar narrowing arithmetic-shift helper.  s1 is treated
+ * as the low 64 bits of a sign-extended 96-bit value and shamt supplies the
+ * shift amount.  Used for NSRAI and NSRA.
+ */
+#define GEN_PSIMD_NARROW_SRA(NAME)                                        \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    __int128_t s1_s96 = (int64_t)s1;                                      \
+                                                                          \
+    return (uint32_t)(s1_s96 >> (shamt & 0x3F)) & 0xFFFFFFFF;             \
+}
+
+/*
+ * Generate an RV32 rounded scalar narrowing-shift helper.  s1 is sign-extended
+ * to 96 bits and shamt supplies the shift amount; a 97th bit preserves
+ * rounding.  Used for NSRARI and NSRAR.
+ */
+#define GEN_PSIMD_NARROW_RNDSRA(NAME)                                     \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    __int128_t s1_s96 = (int64_t)s1;                                      \
+    __uint128_t shx_97bit = ((__uint128_t)s1_s96 << 1);                   \
+    uint64_t shx = (uint64_t)(shx_97bit >> (shamt & 0x3F)) & 0x1FFFFFFFF; \
+                                                                          \
+    return (uint32_t)((shx + 1) >> 1);                                    \
+}
+
+/*
+ * Generate a narrowing-helper alias.  s1 and shamt are forwarded unchanged
+ * to TARGET.  Used where immediate and scalar forms share PNSRA.HS,
+ * PNSRAR.HS, PNCLIP.HS, PNCLIPR.HS, PNCLIPU.HS, or PNCLIPRU.HS semantics.
+ */
+#define GEN_PSIMD_NARROW_ALIAS(NAME, TARGET)                              \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    return HELPER(TARGET)(env, s1, shamt);                                \
+}
+
+typedef struct {
+    __uint128_t low;
+    uint8_t high;
+} PsImdUint129;
+
+/* A 129-bit unsigned temporary retains the rounding bit without overflow. */
+static inline PsImdUint129 psimd_uint129_lshift1(__int128_t val)
+{
+    PsImdUint129 result;
+    __uint128_t uval = (__uint128_t)val;
+
+    result.low = uval << 1;
+    result.high = (uval >> 127) & 0x1;
+    return result;
+}
+
+static inline PsImdUint129 psimd_uint129_rshift(PsImdUint129 val,
+                                                uint32_t shamt)
+{
+    PsImdUint129 result;
+
+    if (shamt == 0) {
+        return val;
+    } else if (shamt >= 129) {
+        result.low = 0;
+        result.high = 0;
+    } else if (shamt == 128) {
+        result.low = val.high;
+        result.high = 0;
+    } else {
+        result.low = (val.low >> shamt) |
+                     ((__uint128_t)val.high << (128 - shamt));
+        result.high = val.high >> shamt;
+    }
+    return result;
+}
+
+/*
+ * Generate an RV32 scalar signed narrowing-clip helper.  s1 is the signed
+ * 64-bit source and shamt supplies the right-shift amount; clipping sets
+ * vxsat.  Used for NCLIPI and NCLIP.
+ */
+#define GEN_PSIMD_NCLIP(NAME)                                             \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    __int128_t s1_s128 = (__int128_t)((int64_t)s1);                       \
+    int64_t shx = (int64_t)(s1_s128 >> (shamt & 0x3F));                   \
+                                                                          \
+    if (shx < -2147483648LL) {                                            \
+        env->vxsat = 1;                                                   \
+        return 0x80000000U;                                               \
+    } else if (shx > 2147483647LL) {                                      \
+        env->vxsat = 1;                                                   \
+        return 0x7FFFFFFFU;                                               \
+    } else {                                                              \
+        return (uint32_t)(shx & 0xFFFFFFFF);                              \
+    }                                                                     \
+}
+
+/*
+ * Generate an RV32 rounded signed narrowing-clip helper.  s1 is the signed
+ * 64-bit source and shamt supplies the right-shift amount; clipping sets
+ * vxsat.  Used for NCLIPRI and NCLIPR.
+ */
+#define GEN_PSIMD_NCLIPR(NAME)                                            \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    __int128_t s1_s128 = (__int128_t)((int64_t)s1);                       \
+    PsImdUint129 shx_129bit = psimd_uint129_lshift1(s1_s128);             \
+    PsImdUint129 shx = psimd_uint129_rshift(shx_129bit, shamt & 0x3F);    \
+    int64_t round_shx = (int64_t)((shx.low + 1) >> 1);                    \
+                                                                          \
+    if (round_shx < -2147483648LL) {                                      \
+        env->vxsat = 1;                                                   \
+        return 0x80000000U;                                               \
+    } else if (round_shx > 2147483647LL) {                                \
+        env->vxsat = 1;                                                   \
+        return 0x7FFFFFFFU;                                               \
+    } else {                                                              \
+        return (uint32_t)round_shx;                                       \
+    }                                                                     \
+}
+
+/*
+ * Generate an RV32 scalar unsigned narrowing-clip helper.  s1 is the
+ * unsigned 64-bit source and shamt supplies the right-shift amount; clipping
+ * sets vxsat.  Used for NCLIPIU and NCLIPU.
+ */
+#define GEN_PSIMD_NCLIPU(NAME)                                            \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    uint64_t shx = s1 >> (shamt & 0x3F);                                  \
+                                                                          \
+    if (shx > 4294967295ULL) {                                            \
+        env->vxsat = 1;                                                   \
+        return 0xFFFFFFFFU;                                               \
+    } else {                                                              \
+        return (uint32_t)(shx & 0xFFFFFFFF);                              \
+    }                                                                     \
+}
+
+/*
+ * Generate an RV32 rounded unsigned narrowing-clip helper.  s1 is the
+ * unsigned 64-bit source and shamt supplies the right-shift amount; clipping
+ * sets vxsat.  Used for NCLIPRIU and NCLIPRU.
+ */
+#define GEN_PSIMD_NCLIPRU(NAME)                                           \
+uint32_t HELPER(NAME)(CPURISCVState *env, uint64_t s1, uint32_t shamt)    \
+{                                                                         \
+    __uint128_t shx_65bit = (__uint128_t)s1 << 1;                         \
+    __uint128_t shx = shx_65bit >> (shamt & 0x3F);                        \
+    uint64_t round_shx = (shx + 1) >> 1;                                  \
+                                                                          \
+    if (round_shx > 4294967295ULL) {                                      \
+        env->vxsat = 1;                                                   \
+        return 0xFFFFFFFFU;                                               \
+    } else {                                                              \
+        return (uint32_t)(round_shx & 0xFFFFFFFF);                        \
+    }                                                                     \
+}
