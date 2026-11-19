@@ -1,0 +1,57 @@
+Looking up 20261119-riscv-pmu-correctness-v5-0-ae9bdc2d2f86@linux.alibaba.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 15 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 84 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v5 1/14] target/riscv: Preserve PMU state across event selector writes
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-1-ae9bdc2d2f86@linux.alibaba.com
+  [31m✗[0m [PATCH v5 2/14] target/riscv: Support multiple counters per PMU event
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-2-ae9bdc2d2f86@linux.alibaba.com
+  [31m✗[0m [PATCH v5 3/14] target/riscv: Use VM-elapsed sources for fixed PMU events
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-3-ae9bdc2d2f86@linux.alibaba.com
+  [31m✗[0m [PATCH v5 4/14] target/riscv: Preserve MINH on delegated config reads
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-4-ae9bdc2d2f86@linux.alibaba.com
+  [31m✗[0m [PATCH v5 5/14] target/riscv: Preserve minstretcfgh on RV32 minstretcfg writes
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-5-ae9bdc2d2f86@linux.alibaba.com
+  [31m✗[0m [PATCH v5 6/14] target/riscv: Fix RV32 accesses to delegated PMU registers
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-6-ae9bdc2d2f86@linux.alibaba.com
+  [31m✗[0m [PATCH v5 7/14] target/riscv: Preserve fixed counters across PMU state changes
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-7-ae9bdc2d2f86@linux.alibaba.com
+  [31m✗[0m [PATCH v5 8/14] target/riscv: Require Sscofpmf for non-fixed event overflow
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-8-ae9bdc2d2f86@linux.alibaba.com
+  [31m✗[0m [PATCH v5 9/14] target/riscv: Rebuild fixed-event PMU overflow deadlines
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-9-ae9bdc2d2f86@linux.alibaba.com
+  [31m✗[0m [PATCH v5 10/14] target/riscv: Apply minstret exception accounting to HPM counters
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-10-ae9bdc2d2f86@linux.alibaba.com
+  [31m✗[0m [PATCH v5 11/14] target/riscv: Process PMU timer expiry on the owner vCPU
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-11-ae9bdc2d2f86@linux.alibaba.com
+  [31m✗[0m [PATCH v5 12/14] target/riscv: Migrate fixed PMU counter state
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-12-ae9bdc2d2f86@linux.alibaba.com
+  [31m✗[0m [PATCH v5 13/14] target/riscv: Clear virtualization mode on reset
+    + Fixes: dc5bd18fa5 ("RISC-V CPU Core Definition") ([32m✓[0m DKIM/qualcomm.com)
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-13-ae9bdc2d2f86@linux.alibaba.com
+  [31m✗[0m [PATCH v5 14/14] target/riscv: Preserve fixed PMU state across reset
+    + Link: https://lore.kernel.org/qemu-devel/20261119-riscv-pmu-correctness-v5-14-ae9bdc2d2f86@linux.alibaba.com
+  ---
+  [31m✗[0m No key: ed25519/lyndra@linux.alibaba.com
+  [32m✓[0m Signed: DKIM/linux.alibaba.com
+---
+Total patches: 14
+---
+Applying: target/riscv: Preserve PMU state across event selector writes
+Applying: target/riscv: Support multiple counters per PMU event
+Applying: target/riscv: Use VM-elapsed sources for fixed PMU events
+Applying: target/riscv: Preserve MINH on delegated config reads
+Applying: target/riscv: Preserve minstretcfgh on RV32 minstretcfg writes
+Applying: target/riscv: Fix RV32 accesses to delegated PMU registers
+Patch failed at 0006 target/riscv: Fix RV32 accesses to delegated PMU registers
+error: patch failed: tests/tcg/riscv64/system/meson.build:74
+error: tests/tcg/riscv64/system/meson.build: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
