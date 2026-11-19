@@ -523,8 +523,13 @@ _start:
         0xffffffff00000001, 1, 0xffffffff00000002
     TEST_PSIMD_RR_VXSAT_STATE 609, psshlr.ws, \
         0x800000037ffffffe, -1, 0x400000023fffffff, 0, 0
+    /* At lane width, round the top bit; beyond it, return zero. */
     TEST_PSIMD_RR_VXSAT_STATE 609, psshlr.ws, \
-        0x800000017fffffff, -33, 0x0000000100000000, 0, 0
+        0x800000017fffffff, -32, 0x0000000100000000, 0, 0
+    TEST_PSIMD_RR_VXSAT_STATE 609, psshlr.ws, \
+        0x800000017fffffff, -33, 0, 0, 0
+    TEST_PSIMD_RR_VXSAT_STATE 609, psshlr.ws, \
+        -1, -128, 0, 1, 1
 
     TEST_PSIMD_RR_SET 610, shl, 0x8000000000000001, -1, \
         0x4000000000000000
@@ -533,7 +538,11 @@ _start:
         0x4000000000000002
     TEST_PSIMD_RR 611, shlr, -1, -1, 0x8000000000000000
     TEST_PSIMD_RR 611, shlr, -1, -64, 1
-    TEST_PSIMD_RR 611, shlr, 0x8000000000000000, -65, 1
+    TEST_PSIMD_RR 611, shlr, 0x8000000000000000, -64, 1
+    TEST_PSIMD_RR 611, shlr, 0x7fffffffffffffff, -64, 0
+    TEST_PSIMD_RR_VXSAT_STATE 611, shlr, \
+        0x8000000000000000, -65, 0, 0, 0
+    TEST_PSIMD_RR_VXSAT_STATE 611, shlr, -1, -128, 0, 1, 1
 
     TEST_PSIMD_SAT_RR_SET 612, pnclipp.b, \
         0x0001ffff007fff80, 0x007efffe00020000, \

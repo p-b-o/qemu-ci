@@ -1137,7 +1137,7 @@ vwabda_vx     111101 . ..... ..... 100 ..... 1010111 @r_vm
 vwabdau_vv    111110 . ..... ..... 000 ..... 1010111 @r_vm
 vwabdau_vx    111110 . ..... ..... 100 ..... 1010111 @r_vm
 
-# *** P Experimental Extension Version v020 ***
+# *** P Experimental Extension Version v0.6 ***
 # Packed SIMD - Arithmetic Operations(Non-Saturating and Saturating)
 padd_b     1000010 ..... ..... 000 ..... 0111011 @r
 padd_h     1000000 ..... ..... 000 ..... 0111011 @r

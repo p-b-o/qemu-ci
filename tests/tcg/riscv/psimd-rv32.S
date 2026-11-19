@@ -1223,8 +1223,15 @@ _start:
         0x80000000, 1, -1, -1, 1, -1
     TEST_PSIMD_RR_VXSAT_STATE 603, sshlr, \
         0x80000003, -1, 0x40000002, 0, 0
+    /* At lane width, round the top bit; beyond it, return zero. */
     TEST_PSIMD_RR_VXSAT_STATE 603, sshlr, \
-        0x80000000, -33, 1, 0, 0
+        0x80000000, -32, 1, 0, 0
+    TEST_PSIMD_RR_VXSAT_STATE 603, sshlr, \
+        0x7fffffff, -32, 0, 0, 0
+    TEST_PSIMD_RR_VXSAT_STATE 603, sshlr, \
+        0x80000000, -33, 0, 0, 0
+    TEST_PSIMD_RR_VXSAT_STATE 603, sshlr, \
+        -1, -128, 0, 1, 1
 
     TEST_PSIMD_PAIR_VAR_SAT_SET 604, psshl.dhs, \
         0x7ffe4000, 0x00020001, 0xfffc8000, 0x00040002, \
@@ -1243,11 +1250,23 @@ _start:
         0xffff0001, 0, 0xffff0002, 0
     TEST_PSIMD_PAIR_SHIFT_RR_VXSAT_STATE 606, psshlr.dhs, \
         0x80030002, 0xffff0001, -1, 0x40020001, 0x80000001, 0, 0
+    TEST_PSIMD_PAIR_SHIFT_RR_VXSAT_STATE 606, psshlr.dhs, \
+        0x80017fff, 0xffff8000, -16, 0x00010000, 0x00010001, 0, 0
+    TEST_PSIMD_PAIR_SHIFT_RR_VXSAT_STATE 606, psshlr.dhs, \
+        0x80017fff, 0xffff8000, -17, 0, 0, 0, 0
+    TEST_PSIMD_PAIR_SHIFT_RR_VXSAT_STATE 606, psshlr.dhs, \
+        -1, -1, -128, 0, 0, 1, 1
     TEST_PSIMD_PAIR_VAR_SAT_SET 607, psshlr.dws, \
         0x40000000, 1, 0x80000000, 2, \
         0x80000000, 0, -1, 0, -1, 0, -1, 0
     TEST_PSIMD_PAIR_SHIFT_RR_VXSAT_STATE 607, psshlr.dws, \
         0x80000003, 2, -1, 0x40000002, 1, 0, 0
+    TEST_PSIMD_PAIR_SHIFT_RR_VXSAT_STATE 607, psshlr.dws, \
+        0x80000000, 0x7fffffff, -32, 1, 0, 0, 0
+    TEST_PSIMD_PAIR_SHIFT_RR_VXSAT_STATE 607, psshlr.dws, \
+        0x80000000, 0x7fffffff, -33, 0, 0, 0, 0
+    TEST_PSIMD_PAIR_SHIFT_RR_VXSAT_STATE 607, psshlr.dws, \
+        -1, -1, -128, 0, 0, 1, 1
     PSIMD_TEST_EXIT 0
     .size _start, .-_start
 

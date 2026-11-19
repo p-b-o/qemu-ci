@@ -697,9 +697,13 @@ RTYPE HELPER(NAME)(CPURISCVState *env, RTYPE rs1, RTYPE rs2)              \
                             ((WTYPE)e1 << shamt);                         \
             res = SAT_FN(shifted, &sat);                                  \
         } else {                                                          \
-            int right = MIN(-shamt, (BITS));                              \
-            WTYPE rounded = ((WTYPE)e1 >> (right - 1)) + 1;               \
-            res = (ETYPE)(rounded >> 1);                                  \
+            int right = -shamt;                                           \
+            if (right > (BITS)) {                                         \
+                res = 0;                                                  \
+            } else {                                                      \
+                WTYPE rounded = ((WTYPE)e1 >> (right - 1)) + 1;           \
+                res = (ETYPE)(rounded >> 1);                              \
+            }                                                             \
         }                                                                 \
                                                                           \
         rd = INSERT(rd, res, i);                                          \
@@ -738,7 +742,7 @@ uint64_t HELPER(NAME)(CPURISCVState *env, uint64_t rs1, uint64_t rs2)     \
 
 #define PSIMD_DO_SRL64(A, B) (((B) >= 64) ? 0 : ((A) >> (B)))
 #define PSIMD_DO_RNDSRL64(A, B)                                          \
-    (uint64_t)((((__uint128_t)(A) >> (MIN((B), 64) - 1)) + 1) >> 1)
+    (uint64_t)((B) > 64 ? 0 : (((__uint128_t)(A) >> ((B) - 1)) + 1) >> 1)
 
 /*
  * Generate an unsigned 64-bit bidirectional-shift helper.  rs1 is the
