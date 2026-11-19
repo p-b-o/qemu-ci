@@ -1,0 +1,39 @@
+Looking up cover.1795081539.git.mst@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 9 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 58 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/8] virtio: Reset free_head on shadow virtqueue start
+    + Link: https://lore.kernel.org/qemu-devel/1d0777c4b64ed0a94e0fce8165d8e080753306fc.1795081539.git.mst@redhat.com
+  [32m✓[0m [PATCH 2/8] hw/i386/amd_iommu: Mask address when calculating large PTE page size
+    + Link: https://lore.kernel.org/qemu-devel/f818dc0165af1ceccf004bc9a50c1d31fad1f87a.1795081539.git.mst@redhat.com
+  [32m✓[0m [PATCH 3/8] backends/vhost-user: fix memory leak when vhost_dev_init() fails
+    + Link: https://lore.kernel.org/qemu-devel/27c730492d3babbd9a1f16626e5729ffecc4f2bd.1795081539.git.mst@redhat.com
+  [32m✓[0m [PATCH 4/8] vhost-user-fs: fix virtqueue array leak on realize failure
+    + Link: https://lore.kernel.org/qemu-devel/8efc85f1650d6db3a95f7aebd97bc40274d1c2ee.1795081539.git.mst@redhat.com
+  [32m✓[0m [PATCH 5/8] intel_iommu: Keep PASID cache consistent with PT fast path
+    + Link: https://lore.kernel.org/qemu-devel/e02728395177647e91799b958ea1824884d6dc0f.1795081539.git.mst@redhat.com
+  [32m✓[0m [PATCH 6/8] libvhost-user: return the backend mapping address for SET_MEM_TABLE
+    + Link: https://lore.kernel.org/qemu-devel/9a90624000367faea6f2809d1f21b9d7d168031c.1795081539.git.mst@redhat.com
+  [32m✓[0m [PATCH 7/8] hw/virtio/virtio-iommu: Fix IOVA address lookup
+    + Link: https://lore.kernel.org/qemu-devel/bc1c13c212b906124ae068f2c822bb3aeb769efe.1795081539.git.mst@redhat.com
+  [32m✓[0m [PATCH 8/8] hw/virtio/virtio-crypto: Drain in-flight operations before unrealizing (CVE-2026-50625)
+    + Link: https://lore.kernel.org/qemu-devel/902c849979ce2be367dc0a643310d6b45b76bcd4.1795081539.git.mst@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 8
+---
+Applying: virtio: Reset free_head on shadow virtqueue start
+Applying: hw/i386/amd_iommu: Mask address when calculating large PTE page size
+Patch failed at 0002 hw/i386/amd_iommu: Mask address when calculating large PTE page size
+error: patch failed: hw/i386/amd_iommu.h:216
+error: hw/i386/amd_iommu.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
