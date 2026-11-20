@@ -11,6 +11,7 @@
 #include "migration/qemu-file-types.h"
 #include "migration/vmstate.h"
 #include "target/arm/gtimer.h"
+#include "qapi/error.h"
 
 static bool vfp_needed(void *opaque)
 {
@@ -421,14 +422,24 @@ static bool m_csselr_needed(void *opaque)
     return !arm_v7m_csselr_razwi(cpu);
 }
 
+static bool csselr_post_load(void *opaque, int version_id, Error **errp)
+{
+    if (!csselr_vmstate_validate(opaque, version_id)) {
+        error_setg(errp, "CSSELR is invalid");
+        return false;
+    }
+
+    return true;
+}
+
 static const VMStateDescription vmstate_m_csselr = {
     .name = "cpu/m/csselr",
     .version_id = 1,
     .minimum_version_id = 1,
     .needed = m_csselr_needed,
+    .post_load_errp = csselr_post_load,
     .fields = (const VMStateField[]) {
         VMSTATE_UINT32_ARRAY(env.v7m.csselr, ARMCPU, M_REG_NUM_BANKS),
-        VMSTATE_VALIDATE("CSSELR is valid", csselr_vmstate_validate),
         VMSTATE_END_OF_LIST()
     }
 };
@@ -596,11 +607,22 @@ static bool pmsav7_rgnr_vmstate_validate(void *opaque, int version_id)
     return cpu->env.pmsav7.rnr[M_REG_NS] < cpu->pmsav7_dregion;
 }
 
+static bool pmsav7_rgnr_post_load(void *opaque, int version_id, Error **errp)
+{
+    if (!pmsav7_rgnr_vmstate_validate(opaque, version_id)) {
+        error_setg(errp, "rgnr is invalid");
+        return false;
+    }
+
+    return true;
+}
+
 static const VMStateDescription vmstate_pmsav7 = {
     .name = "cpu/pmsav7",
     .version_id = 1,
     .minimum_version_id = 1,
     .needed = pmsav7_needed,
+    .post_load_errp = pmsav7_rgnr_post_load,
     .fields = (const VMStateField[]) {
         VMSTATE_VARRAY_UINT32(env.pmsav7.drbar, ARMCPU, pmsav7_dregion, 0,
                               vmstate_info_uint32, uint32_t),
@@ -608,7 +630,6 @@ static const VMStateDescription vmstate_pmsav7 = {
                               vmstate_info_uint32, uint32_t),
         VMSTATE_VARRAY_UINT32(env.pmsav7.dracr, ARMCPU, pmsav7_dregion, 0,
                               vmstate_info_uint32, uint32_t),
-        VMSTATE_VALIDATE("rgnr is valid", pmsav7_rgnr_vmstate_validate),
         VMSTATE_END_OF_LIST()
     }
 };
@@ -711,11 +732,27 @@ static bool m_security_needed(void *opaque)
     return arm_feature(env, ARM_FEATURE_M_SECURITY);
 }
 
+static bool m_security_post_load(void *opaque, int version_id, Error **errp)
+{
+    if (!s_rnr_vmstate_validate(opaque, version_id)) {
+        error_setg(errp, "secure MPU_RNR is invalid");
+        return false;
+    }
+
+    if (!sau_rnr_vmstate_validate(opaque, version_id)) {
+        error_setg(errp, "SAU_RNR is invalid");
+        return false;
+    }
+
+    return true;
+}
+
 static const VMStateDescription vmstate_m_security = {
     .name = "cpu/m-security",
     .version_id = 1,
     .minimum_version_id = 1,
     .needed = m_security_needed,
+    .post_load_errp = m_security_post_load,
     .fields = (const VMStateField[]) {
         VMSTATE_UINT32(env.v7m.secure, ARMCPU),
         VMSTATE_UINT32(env.v7m.other_ss_msp, ARMCPU),
@@ -732,7 +769,6 @@ static const VMStateDescription vmstate_m_security = {
         VMSTATE_VARRAY_UINT32(env.pmsav8.rlar[M_REG_S], ARMCPU, pmsav7_dregion,
                               0, vmstate_info_uint32, uint32_t),
         VMSTATE_UINT32(env.pmsav7.rnr[M_REG_S], ARMCPU),
-        VMSTATE_VALIDATE("secure MPU_RNR is valid", s_rnr_vmstate_validate),
         VMSTATE_UINT32(env.v7m.mpu_ctrl[M_REG_S], ARMCPU),
         VMSTATE_UINT32(env.v7m.ccr[M_REG_S], ARMCPU),
         VMSTATE_UINT32(env.v7m.mmfar[M_REG_S], ARMCPU),
@@ -744,7 +780,6 @@ static const VMStateDescription vmstate_m_security = {
         VMSTATE_VARRAY_UINT32(env.sau.rlar, ARMCPU, sau_sregion, 0,
                               vmstate_info_uint32, uint32_t),
         VMSTATE_UINT32(env.sau.rnr, ARMCPU),
-        VMSTATE_VALIDATE("SAU_RNR is valid", sau_rnr_vmstate_validate),
         VMSTATE_UINT32(env.sau.ctrl, ARMCPU),
         VMSTATE_UINT32(env.v7m.scr[M_REG_S], ARMCPU),
         /* AIRCR is not secure-only, but our implementation is R/O if the
@@ -1405,7 +1440,7 @@ const VMStateDescription vmstate_arm_cpu = {
         &vmstate_m,
         &vmstate_thumb2ee,
         /* pmsav7_rnr must come before pmsav7 so that we have the
-         * region number before we test it in the VMSTATE_VALIDATE
+         * region number before we test it in the post_load_errp()
          * in vmstate_pmsav7.
          */
         &vmstate_pmsav7_rnr,
