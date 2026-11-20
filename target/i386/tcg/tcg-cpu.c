@@ -130,7 +130,14 @@ int x86_mmu_index_pl(CPUX86State *env, unsigned pl)
 static int x86_cpu_mmu_index(CPUState *cs, bool ifetch)
 {
     CPUX86State *env = cpu_env(cs);
-    return x86_mmu_index_pl(env, env->hflags & HF_CPL_MASK);
+    unsigned pl = env->hflags & HF_CPL_MASK;
+
+    if (ifetch) {
+        int mmu_index_32 = (env->hflags & HF_CS64_MASK) ? 0 : 1;
+
+        return (pl == 3 ? MMU_UFETCH64_IDX : MMU_KFETCH64_IDX) + mmu_index_32;
+    }
+    return x86_mmu_index_pl(env, pl);
 }
 
 #ifndef CONFIG_USER_ONLY

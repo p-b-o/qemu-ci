@@ -2838,8 +2838,12 @@ uint64_t cpu_get_tsc(CPUX86State *env);
 #define MMU_USER32_IDX     3
 #define MMU_KNOSMAP64_IDX  4
 #define MMU_KNOSMAP32_IDX  5
-#define MMU_PHYS_IDX       6
-#define MMU_NESTED_IDX     7
+#define MMU_KFETCH64_IDX   6
+#define MMU_KFETCH32_IDX   7
+#define MMU_UFETCH64_IDX   8
+#define MMU_UFETCH32_IDX   9
+#define MMU_PHYS_IDX       10
+#define MMU_NESTED_IDX     11
 
 #ifdef CONFIG_USER_ONLY
 #ifdef TARGET_X86_64
@@ -2856,7 +2860,8 @@ static inline bool is_mmu_index_smap(int mmu_index)
 
 static inline bool is_mmu_index_user(int mmu_index)
 {
-    return (mmu_index & ~1) == MMU_USER64_IDX;
+    return (mmu_index & ~1) == MMU_USER64_IDX ||
+           (mmu_index & ~1) == MMU_UFETCH64_IDX;
 }
 
 static inline bool is_mmu_index_32(int mmu_index)
