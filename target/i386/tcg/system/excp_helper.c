@@ -587,9 +587,17 @@ static bool get_physical_address(CPUX86State *env, vaddr addr,
             in.pg_mode = get_pg_mode(env);
 
             if (in.pg_mode & PG_MODE_LMA) {
-                /* test virtual address sign extension */
                 int shift = in.pg_mode & PG_MODE_LA57 ? 56 : 47;
-                int64_t sext = (int64_t)addr >> shift;
+                int64_t sext;
+
+                /* LAM masks data addresses but not instruction fetches */
+                if (!is_mmu_index_fetch(mmu_idx)) {
+                    addr = x86_lam_mask_addr(env, addr);
+                    in.addr = addr;
+                }
+
+                /* test virtual address sign extension */
+                sext = (int64_t)addr >> shift;
                 if (sext != 0 && sext != -1) {
                     *err = (TranslateFault){
                         .exception_index = EXCP0D_GPF,
