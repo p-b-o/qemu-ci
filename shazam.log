@@ -1,0 +1,27 @@
+Looking up 20261123100920.2966172-1-zhuwei@sangfor.com.cn
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+  Added from v4: 2 patches
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Will use the latest revision: v4
+You can pick other revisions using the -vN flag
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v4 1/1] block/monitor: fix BlockJobInfoList leak in hmp_info_block_jobs()
+    + Reviewed-by: Markus Armbruster <armbru@redhat.com> ([32m✓[0m DKIM/pond.sub.org)
+    + Link: https://lore.kernel.org/qemu-devel/20261123132344.3154080-2-zhuwei@sangfor.com.cn
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 1
+---
+Applying: block/monitor: fix BlockJobInfoList leak in hmp_info_block_jobs()
+Patch failed at 0001 block/monitor: fix BlockJobInfoList leak in hmp_info_block_jobs()
+error: corrupt patch at /home/runner/work/qemu-ci/qemu-ci/.git/rebase-apply/patch:27
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
