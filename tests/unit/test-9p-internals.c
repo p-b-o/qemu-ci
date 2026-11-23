@@ -14,6 +14,7 @@
 #include "qemu/osdep.h"
 #include "qemu/module.h"
 #include "fsdev/file-op-9p.h"
+#include "hw/9pfs/9p.h"
 #include "hw/9pfs/9p-local.h"
 #include "forktest.h"
 #include <stdlib.h>
@@ -54,6 +55,29 @@ static const char *v9p_internals_corrupt_paths[] = {
     "deep_dir/",
     /* empty path (openat(fd, "")) */
     "",
+};
+
+/*
+ * Resembles a V9fsPath - @expect_abort reflects whether that state
+ * is expected to cause an abort
+ */
+typedef struct {
+    const char *data;
+    size_t size;
+    bool expect_abort;
+} V9pInternalsPathPair;
+
+static const V9pInternalsPathPair v9p_internals_path_pairs[] = {
+    { NULL, 0, true },
+    { NULL, 4, true },
+    /* short size: a copy would not be NUL-terminated */
+    { "abc", 2, true },
+    /* long size: captured copy would exceed the string */
+    { "abc", 99, true },
+    /* implausible size: larger than our hard-coded 4 MiB limit */
+    { "abc", 5 * 1024 * 1024, true },
+    /* valid size: this should not abort */
+    { "abc", 4, false },
 };
 
 /* shared test-suite state */
@@ -183,6 +207,53 @@ static void v9p_internals_local_open_nofollow_corrupt_paths(void *data)
     }
 }
 
+/*
+ * Called from within a child process, because the tested
+ * local_path_sanity_check() function aborts if it detected a
+ * corrupted V9fsPath. So we test whether the child process was
+ * aborted as expected (for corrupted paths).
+ */
+static void v9p_internals_check_v9fspath(void *opaque)
+{
+    const V9pInternalsPathPair *p = opaque;
+    V9fsPath pair;
+    V9fsPath dst;
+
+    pair = (V9fsPath) { .data = (char *)p->data, .size = p->size };
+
+    local_path_sanity_check(&pair);
+    if (p->expect_abort) {
+        forktest_exit(FORKTEST_EXIT_SURVIVED);
+    }
+
+    v9fs_path_init(&dst);
+    v9fs_path_copy(&dst, &pair);
+    g_assert_cmpuint(dst.size, ==, p->size);
+    g_assert_nonnull(dst.data);
+    g_assert_cmpint(dst.data[p->size - 1], ==, '\0');
+    v9fs_path_free(&dst);
+    forktest_exit(FORKTEST_EXIT_OK);
+}
+
+static void v9p_internals_local_path_sanity_check(void *data)
+{
+    size_t i;
+
+    for (i = 0; i < ARRAY_SIZE(v9p_internals_path_pairs); i++) {
+        const V9pInternalsPathPair *pair = &v9p_internals_path_pairs[i];
+        g_autofree char *name =
+            g_strdup_printf("path pair (data %s, size %zu)", pair->data,
+                            pair->size);
+
+        forktest_run((ForkTest) {
+            .child_fn = v9p_internals_check_v9fspath,
+            .opaque = (void *)pair,
+            .expect_abort = pair->expect_abort,
+            .name = name,
+        });
+    }
+}
+
 int main(int argc, char **argv)
 {
     g_test_init(&argc, &argv, NULL);
@@ -193,5 +264,7 @@ int main(int argc, char **argv)
     forktest_add("/9p-internals/local_open_nofollow/corrupt-paths",
                  v9p_internals_local_open_nofollow_corrupt_paths,
                  &v9p_internals_env);
+    forktest_add("/9p-internals/local_path_sanity_check",
+                 v9p_internals_local_path_sanity_check, NULL);
     return g_test_run();
 }
