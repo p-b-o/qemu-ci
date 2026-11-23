@@ -54,6 +54,46 @@
 #define BTRFS_SUPER_MAGIC 0x9123683E
 #endif
 
+/* Hardening: check path, abort if corrupted path detected */
+void local_path_sanity_check(const V9fsPath *path)
+{
+    const char *data = path->data;
+    const size_t size = path->size;
+    size_t len;
+
+    if (!data) {
+        error_report("9pfs: FATAL: corrupted state detected: fid path "
+                     "has size %zu but no data", size);
+        abort();
+    }
+    /*
+     * 4 MiB is hard-coded and deliberately not PATH_MAX (usually
+     * 4k). The latter is the max. path size for a Linux syscall,
+     * which we legally surpass as we always walk and openat() paths
+     * element-wise.
+     */
+    if (size > 4 * 1024 * 1024) {
+        error_report("9pfs: FATAL: corrupted state detected: implausibly "
+                     "large fid path size %zu", size);
+        abort();
+    }
+    len = strnlen(data, size);
+    if (len != size - 1) {
+        /* Do not print the path, it is corrupted. */
+        if (len == size) {
+            error_report("9pfs: FATAL: corrupted state detected: fid "
+                         "path size %zu: no terminating NUL within the "
+                         "claimed window, string is at least %zu long",
+                         size, len);
+        } else {
+            error_report("9pfs: FATAL: corrupted state detected: fid "
+                         "path size %zu diverges from its actual "
+                         "string length %zu", size, len);
+        }
+        abort();
+    }
+}
+
 int local_open_nofollow(FsContext *fs_ctx, const char *_path, int flags,
                         mode_t mode)
 {
@@ -246,6 +286,7 @@ static void local_mapped_file_attr(int dirfd, const char *name,
 
 static int local_lstat(FsContext *fs_ctx, V9fsPath *fs_path, struct stat *stbuf)
 {
+    local_path_sanity_check(fs_path);
     int err = -1;
     char *dirpath = g_path_get_dirname(fs_path->data);
     char *name = g_path_get_basename(fs_path->data);
@@ -571,6 +612,7 @@ static int local_closedir(FsContext *ctx, V9fsFidOpenState *fs)
 static int local_open(FsContext *ctx, V9fsPath *fs_path,
                       int flags, V9fsFidOpenState *fs)
 {
+    local_path_sanity_check(fs_path);
     int fd;
 
     fd = local_open_nofollow(ctx, fs_path->data, flags, 0);
@@ -584,6 +626,7 @@ static int local_open(FsContext *ctx, V9fsPath *fs_path,
 static int local_opendir(FsContext *ctx,
                          V9fsPath *fs_path, V9fsFidOpenState *fs)
 {
+    local_path_sanity_check(fs_path);
     int dirfd;
     DIR *stream;
 
@@ -886,6 +929,7 @@ static int local_fstat(FsContext *fs_ctx, int fid_type,
 static int local_open2(FsContext *fs_ctx, V9fsPath *dir_path, const char *name,
                        int flags, FsCred *credp, V9fsFidOpenState *fs)
 {
+    local_path_sanity_check(dir_path);
     int fd = -1;
     int err = -1;
     int dirfd;

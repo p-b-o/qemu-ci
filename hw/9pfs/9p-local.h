@@ -17,6 +17,7 @@ typedef struct {
     int mountfd;
 } LocalData;
 
+void local_path_sanity_check(const V9fsPath *path);
 int local_open_nofollow(FsContext *fs_ctx, const char *path, int flags,
                         mode_t mode);
 int local_opendir_nofollow(FsContext *fs_ctx, const char *path);
