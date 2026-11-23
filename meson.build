@@ -2348,6 +2348,16 @@ have_virtfs = get_option('virtfs') \
     .disable_auto_if(not have_tools and not have_system) \
     .allowed()
 
+if host_os == 'linux'
+  fs_9p_host_util = '9p-util-linux.c'
+elif host_os == 'darwin'
+  fs_9p_host_util = '9p-util-darwin.c'
+elif host_os == 'freebsd'
+  fs_9p_host_util = '9p-util-freebsd.c'
+else
+  fs_9p_host_util = ''
+endif
+
 qga_fsfreeze = false
 qga_fstrim = false
 if host_os == 'linux'
