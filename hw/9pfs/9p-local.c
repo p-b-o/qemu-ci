@@ -58,24 +58,89 @@ typedef struct {
     int mountfd;
 } LocalData;
 
-int local_open_nofollow(FsContext *fs_ctx, const char *path, int flags,
+int local_open_nofollow(FsContext *fs_ctx, const char *_path, int flags,
                         mode_t mode)
 {
     LocalData *data = fs_ctx->private;
     int fd = data->mountfd;
+
+    /*
+     * Hardening: snapshot the FID path to prevent any mutations (by
+     * another thread) during the checks and individual directory
+     * walks below (i.e. preventing TOCTOU issues). This is usually
+     * not expected to happen, as we are holding a read lock on the
+     * path, but the impact of CVE-2026-93834 deserves more robust
+     * handling.
+     */
+    g_autofree char *snap = g_strdup(_path);
+    const char *path = snap;
+
+    if (!*path) {
+        /*
+         * Hardening: check for empty string.
+         *
+         * An empty string means the FID path is corrupted (the
+         * export's root FID path is a single "."), so stop with a
+         * loud failure instead of serving a corrupted state.
+         */
+        error_report("9pfs: FATAL: corrupted state detected: empty FID "
+                     "path");
+        abort();
+    }
 
     while (*path && fd != -1) {
         const char *c;
         int next_fd;
         char *head;
 
-        /* Only relative paths without consecutive slashes */
-        assert(*path != '/');
+        /*
+         * Hardening: check for leading slash.
+         *
+         * An absolute path or an empty path element at this point
+         * means the path is corrupted (the client supplied path was
+         * already translated by local_name_to_path() to a safe host
+         * path before).
+         */
+        if (*path == '/') {
+            /* Do not print this path: it is corrupted. */
+            error_report("9pfs: FATAL: corrupted state detected: FID "
+                         "path contains a leading or empty path "
+                         "component");
+            abort();
+        }
 
         head = g_strdup(path);
         c = qemu_strchrnul(path, '/');
+        /*
+         * Hardening: check for "..".
+         *
+         * Relative ".." path elements were already translated by
+         * local_name_to_path() before, so a ".." element at this
+         * point means a corrupted path.
+         */
+        if (c - path == 2 && head[0] == '.' && head[1] == '.') {
+            /* Do not print this path: it is corrupted. */
+            error_report("9pfs: FATAL: corrupted state detected: FID "
+                         "path contains a '..' component");
+            abort();
+        }
         if (*c) {
             /* Intermediate path element */
+
+            /*
+             * Hardening: check for trailing slash.
+             *
+             * Prevents calling openat() with an empty string (""). It
+             * would not actually be fatal, but this can only happen
+             * with a corrupted path. So abort, just to be sure.
+             */
+            if (c[1] == '\0') {
+                /* Do not print this path: it is corrupted. */
+                error_report("9pfs: FATAL: corrupted state detected: "
+                             "FID path ends with a '/' (empty final "
+                             "component)");
+                abort();
+            }
             head[c - path] = 0;
             path = c + 1;
             next_fd = openat_dir(fd, head);
