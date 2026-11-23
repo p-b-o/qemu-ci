@@ -52,6 +52,28 @@ tests = {
   'test-envlist': [],
 }
 
+if have_virtfs
+  tests += {
+    'test-9p-internals': [files('../../hw/9pfs/9p.c',
+                                '../../hw/9pfs/9p-local.c',
+                                '../../hw/9pfs/9p-xattr.c',
+                                '../../hw/9pfs/9p-xattr-user.c',
+                                '../../hw/9pfs/9p-posix-acl.c',
+                                '../../hw/9pfs/' + fs_9p_host_util,
+                                '../../hw/9pfs/9p-util-generic.c',
+                                '../../hw/9pfs/codir.c',
+                                '../../hw/9pfs/cofile.c',
+                                '../../hw/9pfs/cofs.c',
+                                '../../hw/9pfs/coxattr.c',
+                                '../../hw/9pfs/coth.c',
+                                '../../fsdev/9p-marshal.c',
+                                '../../fsdev/9p-iov-marshal.c',
+                                '../../fsdev/qemu-fsdev.c',
+                                '../../hw/9pfs/9p-synth.c',
+                                '../../fsdev/qemu-fsdev-throttle.c')],
+  }
+endif
+
 if have_system or have_tools
   tests += {
     'test-qmp-event': [testqapi],
