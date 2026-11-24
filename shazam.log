@@ -1,0 +1,33 @@
+Looking up 20261124101655.2269531-1-mdspan.github@gmail.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 16 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH v3 1/5] target/i386: mask the PML5 table address taken from CR3
+    + Link: https://lore.kernel.org/qemu-devel/20261124101655.2269531-2-mdspan.github@gmail.com
+  [32m✓[0m [PATCH v3 2/5] accel/tcg: compare large pages under the flush mask
+    + Link: https://lore.kernel.org/qemu-devel/20261124101655.2269531-3-mdspan.github@gmail.com
+  [32m✓[0m [PATCH v3 3/5] target/i386: add MMU indexes for LAM-masked data accesses
+    + Link: https://lore.kernel.org/qemu-devel/20261124101655.2269531-4-mdspan.github@gmail.com
+  [32m✓[0m [PATCH v3 4/5] target/i386: emulate LAM in TCG
+    + Link: https://lore.kernel.org/qemu-devel/20261124101655.2269531-5-mdspan.github@gmail.com
+  [32m✓[0m [PATCH v3 5/5] tests/tcg/x86_64: add a LAM system test
+    + Link: https://lore.kernel.org/qemu-devel/20261124101655.2269531-6-mdspan.github@gmail.com
+  ---
+  [32m✓[0m Signed: DKIM/gmail.com
+---
+Total patches: 5
+---
+Applying: target/i386: mask the PML5 table address taken from CR3
+Applying: accel/tcg: compare large pages under the flush mask
+Patch failed at 0002 accel/tcg: compare large pages under the flush mask
+error: patch failed: accel/tcg/cputlb.c:691
+error: accel/tcg/cputlb.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
