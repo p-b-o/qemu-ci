@@ -568,6 +568,20 @@ static char *usb_get_dev_path(DeviceState *qdev)
     DeviceState *hcd = qdev->parent_bus->parent;
     char *id = qdev_get_dev_path(hcd);
 
+    /*
+     * A controller on the system bus (MMIO EHCI, xHCI, ...) gets no path from
+     * its parent bus, so the port number alone would be the device's path and
+     * therefore the VMState id of e.g. a usb-tablet ("2/usb-ptr"). A second
+     * controller with a device on the same port then registers the same id,
+     * and vmstate_register_with_alias_id() fails its
+     * assert(!se->compat || se->instance_id == 0).
+     * Qualify the path with the controller's own id when it has one.
+     * Controllers without an id keep the old, unqualified path.
+     */
+    if (!id && hcd->id) {
+        id = g_strdup(hcd->id);
+    }
+
     if (id) {
         char *ret = g_strdup_printf("%s/%s", id, dev->port->path);
         g_free(id);
