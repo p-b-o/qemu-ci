@@ -1,0 +1,52 @@
+Looking up 20261125132015.229955-1-daniel.barboza@oss.qualcomm.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 16 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 4 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/15] target/riscv: do not write SXL < UXL
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-2-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 2/15] target/riscv: avoid amocas.* x0 clobbering
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-3-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 3/15] target/riscv/tcg/csr: filter bits when r/w HVIP(H)
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-4-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 4/15] target/riscv: fix hedeleg writable mask
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-5-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 5/15] target/riscv: clear hgatp bits from write mask
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-6-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 6/15] target/riscv: allow hvip.VSTIP writes when (m|h)envcfg.STCE is set
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-7-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 7/15] target/riscv: allow zicbo insns to run without RVS
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-8-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 8/15] target/riscv: filter out reserved (m|h)envcfg.CBIE value
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-9-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 9/15] target/riscv: sanitize mnstatus.MNPP field
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-10-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 10/15] target/riscv: do not write RVG in misa CSR
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-11-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 11/15] target/riscv: do not clear mstatush after mstatus write
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-12-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 12/15] target/riscv: clear mstatus.MIE if mstatush.MDT is set
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-13-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 13/15] target/riscv/tcg/pmp.c: remove no-op in mseccfg_csr_write()
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-14-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 14/15] target/riscv/tcg: refactor mseccfg_csr_write()
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-15-daniel.barboza@oss.qualcomm.com
+  [32m✓[0m [PATCH 15/15] target/riscv/tcg/csr.c: add mseccfgh CSR
+    + Link: https://lore.kernel.org/qemu-devel/20261125132015.229955-16-daniel.barboza@oss.qualcomm.com
+  ---
+  [32m✓[0m Signed: DKIM/oss.qualcomm.com
+---
+Total patches: 15
+---
+Applying: target/riscv: do not write SXL < UXL
+Patch failed at 0001 target/riscv: do not write SXL < UXL
+error: patch failed: target/riscv/tcg/csr.c:2118
+error: target/riscv/tcg/csr.c: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
