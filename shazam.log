@@ -1,0 +1,63 @@
+Looking up 20261126100139.3557890-1-armbru@redhat.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 18 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [32m✓[0m [PATCH 1/16] util: Move QMP command query-command-line-options back to util/
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-2-armbru@redhat.com
+  [32m✓[0m [PATCH 2/16] util: Wean query-command-line-options off ObjectProperty member @type
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-3-armbru@redhat.com
+  [32m✓[0m [PATCH 3/16] monitor: Fix query-command-line-options for -machine integer parameters
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-4-armbru@redhat.com
+  [32m✓[0m [PATCH 4/16] qom: New ObjectProperty member @qom_type
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-5-armbru@redhat.com
+  [32m✓[0m [PATCH 5/16] qom: Inline object_property_get_type() into its only caller
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-6-armbru@redhat.com
+  [32m✓[0m [PATCH 6/16] qom: Simplify object_resolve_link()
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-7-armbru@redhat.com
+  [32m✓[0m [PATCH 7/16] qom: Wean "is child?" checks off ObjectProperty member @type
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-8-armbru@redhat.com
+  [32m✓[0m [PATCH 8/16] qom: Wean "is link?" checks off ObjectProperty member @type
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-9-armbru@redhat.com
+  [32m✓[0m [PATCH 9/16] qom: Extend ObjectPropertyInfo so clients don't have to parse @type
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-10-armbru@redhat.com
+  [32m✓[0m [PATCH 10/16] qom: Wean HMP commands off ObjectPropertyInfo member @type
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-11-armbru@redhat.com
+  [32m✓[0m [PATCH 11/16] tests: Wean off ObjectPropertyInfo member @type
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-12-armbru@redhat.com
+  [32m✓[0m [PATCH 12/16] python/qemu: Wean off ObjectPropertyInfo member @type
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-13-armbru@redhat.com
+  [32m✓[0m [PATCH 13/16] qom: Extend ObjectPropertyValue so clients don't have to parse @type
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-14-armbru@redhat.com
+  [32m✓[0m [PATCH 14/16] tests: Wean off ObjectPropertyValue member @type
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-15-armbru@redhat.com
+  [32m✓[0m [PATCH 15/16] python/qemu: Wean off ObjectPropertyValue member @type
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-16-armbru@redhat.com
+  [32m✓[0m [PATCH 16/16] qom: Deprecate ObjectPropertyInfo, ObjectPropertyValue member @type
+    + ACKed-by: Peter Krempa <pipo@pipo.sk> ([32m✓[0m DKIM/pipo.sk)
+    + Link: https://lore.kernel.org/qemu-devel/20261126100139.3557890-17-armbru@redhat.com
+  ---
+  [32m✓[0m Signed: DKIM/redhat.com
+---
+Total patches: 16
+---
+Applying: util: Move QMP command query-command-line-options back to util/
+Applying: util: Wean query-command-line-options off ObjectProperty member @type
+Applying: monitor: Fix query-command-line-options for -machine integer parameters
+Applying: qom: New ObjectProperty member @qom_type
+Applying: qom: Inline object_property_get_type() into its only caller
+Applying: qom: Simplify object_resolve_link()
+Applying: qom: Wean "is child?" checks off ObjectProperty member @type
+Applying: qom: Wean "is link?" checks off ObjectProperty member @type
+Applying: qom: Extend ObjectPropertyInfo so clients don't have to parse @type
+Patch failed at 0009 qom: Extend ObjectPropertyInfo so clients don't have to parse @type
+error: patch failed: qapi/qom.json:48
+error: qapi/qom.json: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
