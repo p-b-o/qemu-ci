@@ -1,0 +1,34 @@
+Looking up 20261126-zoned-ufs-v4b-v4-0-f90239d12a55@samsung.com
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 6 messages in the thread
+Looking for additional code-review trailers on lore.kernel.org
+Analyzing 0 code-review messages
+Checking attestation on all messages, may take a moment...
+---
+  [31m✗[0m [PATCH v4 1/5] block: add an accessor for the active zone limit
+    + Link: https://lore.kernel.org/qemu-devel/20261126-zoned-ufs-v4b-v4-1-f90239d12a55@samsung.com
+  [31m✗[0m [PATCH v4 2/5] scsi-disk: Report zone errors with their ZBC sense codes
+    + Link: https://lore.kernel.org/qemu-devel/20261126-zoned-ufs-v4b-v4-2-f90239d12a55@samsung.com
+  [31m✗[0m [PATCH v4 3/5] docs/system: Document zoned UFS logical units
+    + Link: https://lore.kernel.org/qemu-devel/20261126-zoned-ufs-v4b-v4-3-f90239d12a55@samsung.com
+  [31m✗[0m [PATCH v4 4/5] hw/ufs: Support for Zoned UFS
+    + Link: https://lore.kernel.org/qemu-devel/20261126-zoned-ufs-v4b-v4-4-f90239d12a55@samsung.com
+  [31m✗[0m [PATCH v4 5/5] tests/qtest: Add tests for Zoned UFS
+    + Link: https://lore.kernel.org/qemu-devel/20261126-zoned-ufs-v4b-v4-5-f90239d12a55@samsung.com
+  ---
+  [31m✗[0m No key: ed25519/daejun7.park@samsung.com
+---
+Total patches: 5
+---
+Applying: block: add an accessor for the active zone limit
+Patch failed at 0001 block: add an accessor for the active zone limit
+error: patch failed: block/block-backend.c:2371
+error: block/block-backend.c: patch does not apply
+error: patch failed: include/system/block-backend-io.h:125
+error: include/system/block-backend-io.h: patch does not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+hint: When you have resolved this problem, run "git am --continue".
+hint: If you prefer to skip this patch, run "git am --skip" instead.
+hint: To restore the original branch and stop patching, run "git am --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
