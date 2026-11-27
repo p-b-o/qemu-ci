@@ -586,8 +586,12 @@ void ahci_port_check_cmd_sanity(AHCIQState *ahci, AHCICommand *cmd)
     AHCICommandHeader cmdh;
 
     ahci_get_command_header(ahci, cmd->port, cmd->slot, &cmdh);
-    /* Physical Region Descriptor Byte Count is not required to work for NCQ. */
-    if (!cmd->props->ncq) {
+    /*
+     * Physical Region Descriptor Byte Count is not required to work for NCQ.
+     * A command that failed with an error may also have transferred fewer
+     * bytes than requested, so skip the check when an error is expected.
+     */
+    if (!cmd->props->ncq && !cmd->errors) {
         g_assert_cmphex(cmd->xbytes, ==, cmdh.prdbc);
     }
 }
@@ -1347,7 +1351,8 @@ void ahci_command_verify(AHCIQState *ahci, AHCICommand *cmd)
     if (cmd->interrupts & AHCI_PX_IS_DHRS) {
         ahci_port_check_d2h_sanity(ahci, port, slot);
     }
-    if (cmd->props->pio) {
+    /* A command aborted before any data transfer gets no PIO Setup FIS */
+    if (cmd->props->pio && !cmd->errors) {
         ahci_port_check_pio_sanity(ahci, cmd);
     }
 }
