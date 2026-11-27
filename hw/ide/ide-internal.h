@@ -8,6 +8,7 @@
  */
 
 #include "hw/ide/ide-bus.h"
+#include "scsi/utils.h"
 
 /* debug IDE devices */
 #define USE_DMA_CDROM
@@ -213,6 +214,7 @@
  * READ LOG EXT / READ LOG DMA EXT (see ACS-6 9.1 table 222).
  */
 #define IDE_GPL_LOG_DIRECTORY           0x00 /* General Purpose Log Directory */
+#define IDE_GPL_LOG_NCQ_CMD_ERROR       0x10 /* NCQ Command Error log */
 #define IDE_GPL_LOG_NCQ_SEND_RECV       0x13 /* SATA NCQ Send and Receive log */
 #define IDE_GPL_LOG_IDENTIFY_DEVICE     0x30 /* IDENTIFY DEVICE data log */
 
@@ -455,6 +457,13 @@ void ide_bus_exec_cmd(IDEBus *bus, uint32_t val);
  */
 int ide_read_log(IDEState *s, uint8_t log_address, uint16_t page,
                  uint32_t count);
+
+/*
+ * Record the most recent NCQ command failure, with its sense data, so that it
+ * can be reported through the NCQ Command Error log (10h).
+ */
+void ide_ncq_cmd_error(IDEState *s, uint8_t tag, uint64_t lba,
+                       uint16_t count, SCSISense sense);
 
 void ide_transfer_start(IDEState *s, uint8_t *buf, int size,
                         EndTransferFunc *end_transfer_func);

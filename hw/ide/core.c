@@ -204,6 +204,8 @@ static void ide_identify(IDEState *s)
         put_le16(p + 76, (1 << 15) | (1 << 8));
         /* 6=SEND AND RECEIVE QUEUED COMMANDS supported (SATA NCQ log 13h) */
         put_le16(p + 77, (1 << 6));
+        /* SATA features supported: 7=NCQ Autosense (sense in NCQ error log) */
+        put_le16(p + 78, (1 << 7));
     }
 
     put_le16(p + 80, 0xf0); /* ata3 -> ata6 supported */
@@ -593,6 +595,42 @@ static void ide_abort_command_with_sense(IDEState *s, SCSISense sense)
 void ide_abort_command(IDEState *s)
 {
     ide_abort_command_with_sense(s, SENSE_CODE(NO_SENSE));
+}
+
+/*
+ * Record the most recent NCQ command failure so that it can be reported
+ * through the NCQ Command Error log (10h) when the host reads it. Unlike the
+ * Sense Data Reporting feature set, the NCQ Autosense sense data is always
+ * recorded (its presence in the log is gated on NCQ Autosense support).
+ */
+void ide_ncq_cmd_error(IDEState *s, uint8_t tag, uint64_t lba,
+                       uint16_t count, SCSISense sense)
+{
+    s->status = READY_STAT | ERR_STAT;
+    s->error = ABRT_ERR;
+
+    /*
+     * The device processes no other command until the host reads the log or
+     * resets the device (SATA 3.5a DFPDMAQ11, DFPDMAQ13).
+     */
+    s->ncq_err.active = true;
+    s->ncq_err.valid = true;
+    s->ncq_err.tag = tag;
+    /*
+     * The STATUS field in the log advertises SENSE DATA AVAILABLE (ACS-6 6.2.9)
+     * if there is sense data, so that a host supporting NCQ Autosense reads the
+     * sense key / ASC / ASCQ from the log (libata only does so when this bit
+     * is set). NO SENSE means that there is none (ACS-6 6.8.31).
+     */
+    s->ncq_err.status = s->status |
+                        (sense.key != NO_SENSE ? SENSE_DATA_STAT : 0);
+    s->ncq_err.error = s->error;
+    s->ncq_err.device = 1 << 6; /* LBA addressing */
+    s->ncq_err.lba = lba;
+    s->ncq_err.count = count;
+    s->ncq_err.sense_key = sense.key;
+    s->ncq_err.asc = sense.asc;
+    s->ncq_err.ascq = sense.ascq;
 }
 
 static void ide_set_retry(IDEState *s)
@@ -1472,6 +1510,7 @@ static void ide_reset(IDEState *s, IDEResetKind kind)
      * covers COMRESET, which must not change it.
      */
     s->sense_data_avail = false;
+    s->ncq_err.active = false;
 
     s->lba48 = 0;
 
@@ -1883,6 +1922,54 @@ static void ide_fill_identify_device_log(IDEState *s, uint16_t page,
 }
 
 /*
+ * Fill the NCQ Command Error log (Log Address 10h) - ACS-6 9.15, SATA 3.5a
+ * 13.7.4. Page 0 reports the most recent NCQ command failure.
+ */
+static void ide_fill_ncq_cmd_error_log(IDEState *s, uint16_t page,
+                                       uint32_t count)
+{
+    uint32_t p;
+
+    memset(s->io_buffer, 0, count * 512);
+
+    for (p = 0; p < count; p++) {
+        uint8_t *buf = s->io_buffer + p * 512;
+        unsigned int sum = 0;
+        int i;
+
+        if (page + p == 0) {
+            if (s->ncq_err.valid) {
+                /* NQ=0, DEFERRED=0, NCQ TAG field valid (ACS-6 9.15.2). */
+                buf[0] = s->ncq_err.tag & 0x1f;
+                buf[2] = s->ncq_err.status;
+                buf[3] = s->ncq_err.error;
+                buf[4] = s->ncq_err.lba;
+                buf[5] = s->ncq_err.lba >> 8;
+                buf[6] = s->ncq_err.lba >> 16;
+                buf[7] = s->ncq_err.device;
+                buf[8] = s->ncq_err.lba >> 24;
+                buf[9] = s->ncq_err.lba >> 32;
+                buf[10] = s->ncq_err.lba >> 40;
+                buf[12] = s->ncq_err.count;
+                buf[13] = s->ncq_err.count >> 8;
+                buf[14] = s->ncq_err.sense_key;
+                buf[15] = s->ncq_err.asc;
+                buf[16] = s->ncq_err.ascq;
+            } else {
+                /* NQ=1: the NCQ TAG field is not valid (ACS-6 9.15.3). */
+                buf[0] = 1 << 7;
+            }
+        }
+
+        /* Each page ends with a checksum making its bytes sum to zero. */
+        for (i = 0; i < 511; i++) {
+            sum += buf[i];
+        }
+        buf[511] = -sum;
+    }
+}
+
+/*
  * Fill the I/O buffer with the General Purpose Logging data selected by
  * log_address, page and count (the LOG PAGE COUNT, in 512-byte pages) and
  * return the number of bytes to transfer, or a negative value if the command
@@ -1896,6 +1983,12 @@ int ide_read_log(IDEState *s, uint8_t log_address, uint16_t page,
 
     switch (log_address) {
     case IDE_GPL_LOG_DIRECTORY:
+        log_size = 1;
+        break;
+    case IDE_GPL_LOG_NCQ_CMD_ERROR:
+        if (!s->ncq_queues) {
+            return -1;
+        }
         log_size = 1;
         break;
     case IDE_GPL_LOG_NCQ_SEND_RECV:
@@ -1933,6 +2026,7 @@ int ide_read_log(IDEState *s, uint8_t log_address, uint16_t page,
         put_le16((uint16_t *)s->io_buffer + IDE_GPL_LOG_IDENTIFY_DEVICE,
                  IDE_GPL_LOG_IDENTIFY_DEVICE_LEN);
         if (s->ncq_queues) {
+            put_le16((uint16_t *)s->io_buffer + IDE_GPL_LOG_NCQ_CMD_ERROR, 1);
             put_le16((uint16_t *)s->io_buffer + IDE_GPL_LOG_NCQ_SEND_RECV, 1);
         }
         break;
@@ -1945,6 +2039,9 @@ int ide_read_log(IDEState *s, uint8_t log_address, uint16_t page,
          * SUPPORTED, bit 1 = SEQUENTIAL QUEUED READ LOG DMA EXT SUPPORTED.
          */
         stl_le_p(s->io_buffer + 8, (1 << 1) | (1 << 0));
+        break;
+    case IDE_GPL_LOG_NCQ_CMD_ERROR:
+        ide_fill_ncq_cmd_error_log(s, page, count);
         break;
     case IDE_GPL_LOG_IDENTIFY_DEVICE:
         ide_fill_identify_device_log(s, page, count);
@@ -2599,11 +2696,14 @@ static bool ide_cmd_permitted(IDEState *s, uint32_t cmd)
 
 /*
  * Whether the sense data stays available once this command is accepted
- * (ACS-6 4.25): REQUEST SENSE DATA EXT returns it.
+ * (ACS-6 4.25): REQUEST SENSE DATA EXT returns it, and reading the NCQ
+ * Command Error log does not discard it.
  */
 static bool ide_cmd_keeps_sense_data(IDEState *s, uint8_t cmd)
 {
-    return cmd == WIN_REQUEST_SENSE_DATA_EXT;
+    return cmd == WIN_REQUEST_SENSE_DATA_EXT ||
+           ((cmd == WIN_READ_LOG_EXT || cmd == WIN_READ_LOG_DMA_EXT) &&
+            s->sector == IDE_GPL_LOG_NCQ_CMD_ERROR);
 }
 
 void ide_bus_exec_cmd(IDEBus *bus, uint32_t val)
@@ -2625,6 +2725,18 @@ void ide_bus_exec_cmd(IDEBus *bus, uint32_t val)
         if (val != WIN_DEVICE_RESET || s->drive_kind != IDE_CD) {
             return;
         }
+    }
+
+    /*
+     * After an NCQ command failed, any other command is aborted (SATA 3.5a
+     * DFPDMAQ13). The HBA ends that state before issuing a read of the NCQ
+     * Command Error log.
+     */
+    if (s->ncq_err.active) {
+        ide_abort_command(s);
+        ide_cmd_done(s);
+        ide_bus_set_irq(s->bus);
+        return;
     }
 
     if (!ide_cmd_permitted(s, val)) {
@@ -3497,6 +3609,34 @@ static const VMStateDescription vmstate_ide_sense_data = {
     }
 };
 
+static bool ide_ncq_err_needed(void *opaque)
+{
+    IDEState *s = opaque;
+
+    return s->ncq_err.valid;
+}
+
+static const VMStateDescription vmstate_ide_ncq_err = {
+    .name = "ide_drive/ncq_err",
+    .version_id = 1,
+    .minimum_version_id = 1,
+    .needed = ide_ncq_err_needed,
+    .fields = (const VMStateField[]) {
+        VMSTATE_BOOL(ncq_err.valid, IDEState),
+        VMSTATE_BOOL(ncq_err.active, IDEState),
+        VMSTATE_UINT8(ncq_err.tag, IDEState),
+        VMSTATE_UINT8(ncq_err.status, IDEState),
+        VMSTATE_UINT8(ncq_err.error, IDEState),
+        VMSTATE_UINT8(ncq_err.device, IDEState),
+        VMSTATE_UINT8(ncq_err.sense_key, IDEState),
+        VMSTATE_UINT8(ncq_err.asc, IDEState),
+        VMSTATE_UINT8(ncq_err.ascq, IDEState),
+        VMSTATE_UINT16(ncq_err.count, IDEState),
+        VMSTATE_UINT64(ncq_err.lba, IDEState),
+        VMSTATE_END_OF_LIST()
+    }
+};
+
 static const VMStateDescription vmstate_ide_drive_pio_state = {
     .name = "ide_drive/pio_state",
     .version_id = 1,
@@ -3553,6 +3693,7 @@ const VMStateDescription vmstate_ide_drive = {
         &vmstate_ide_tray_state,
         &vmstate_ide_atapi_gesn_state,
         &vmstate_ide_sense_data,
+        &vmstate_ide_ncq_err,
         NULL
     }
 };

@@ -779,9 +779,9 @@ static void ahci_unmap_clb_address(AHCIDevice *ad)
     ad->lst = NULL;
 }
 
-static void ahci_write_fis_sdb(AHCIState *s, NCQTransferState *ncq_tfs)
+static void ahci_write_fis_sdb(AHCIDevice *ad, bool irq)
 {
-    AHCIDevice *ad = ncq_tfs->drive;
+    AHCIState *s = ad->hba;
     AHCIPortRegs *pr = &ad->port_regs;
     IDEState *ide_state;
     SDBFIS *sdb_fis;
@@ -796,7 +796,7 @@ static void ahci_write_fis_sdb(AHCIState *s, NCQTransferState *ncq_tfs)
 
     sdb_fis->type = SATA_FIS_TYPE_SDB;
     /* Interrupt pending & Notification bit */
-    sdb_fis->flags = 0x40; /* Interrupt bit, always 1 for NCQ */
+    sdb_fis->flags = irq ? 0x40 : 0; /* Interrupt bit */
     sdb_fis->status = ide_state->status & 0x77;
     sdb_fis->error = ide_state->error;
     /* update SAct field in SDB_FIS */
@@ -1021,12 +1021,17 @@ out:
     return r;
 }
 
-static void ncq_err(NCQTransferState *ncq_tfs)
+static void ncq_err(NCQTransferState *ncq_tfs, SCSISense sense)
 {
     IDEState *ide_state = &ncq_tfs->drive->port.ifs[0];
 
-    ide_state->error = ABRT_ERR;
-    ide_state->status = READY_STAT | ERR_STAT;
+    /*
+     * Record the failure (status/error registers and the NCQ Command Error
+     * log, 10h) so that the host can retrieve it after being notified of the
+     * error via the Set Device Bits FIS.
+     */
+    ide_ncq_cmd_error(ide_state, ncq_tfs->tag, ncq_tfs->lba,
+                      ncq_tfs->sector_count, sense);
     qemu_sglist_destroy(&ncq_tfs->sglist);
     ncq_tfs->used = 0;
 }
@@ -1040,7 +1045,7 @@ static void ncq_finish(NCQTransferState *ncq_tfs)
         ncq_tfs->drive->finished |= (1 << ncq_tfs->tag);
     }
 
-    ahci_write_fis_sdb(ncq_tfs->drive->hba, ncq_tfs);
+    ahci_write_fis_sdb(ncq_tfs->drive, true);
 
     trace_ncq_finish(ncq_tfs->drive->hba, ncq_tfs->drive->port_no,
                      ncq_tfs->tag);
@@ -1058,6 +1063,17 @@ static void ncq_cb(void *opaque, int ret)
 
     ncq_tfs->aiocb = NULL;
 
+    /*
+     * The device stopped processing NCQ commands when another one failed
+     * (SATA 3.5a DFPDMAQ11): this one neither completes nor fails.
+     */
+    if (ide_state->ncq_err.active) {
+        block_acct_failed(blk_get_stats(ide_state->blk), &ncq_tfs->acct);
+        qemu_sglist_destroy(&ncq_tfs->sglist);
+        ncq_tfs->used = 0;
+        return;
+    }
+
     if (ret < 0) {
         bool is_read = ncq_tfs->cmd == READ_FPDMA_QUEUED;
         BlockErrorAction action = blk_get_error_action(ide_state->blk,
@@ -1066,7 +1082,7 @@ static void ncq_cb(void *opaque, int ret)
             ncq_tfs->halt = true;
             ide_state->bus->error_status = IDE_RETRY_HBA;
         } else if (action == BLOCK_ERROR_ACTION_REPORT) {
-            ncq_err(ncq_tfs);
+            ncq_err(ncq_tfs, SENSE_CODE(NO_SENSE));
         }
         blk_error_action(ide_state->blk, action, is_read, -ret);
     } else {
@@ -1114,7 +1130,7 @@ static void execute_ncq_receive_fpdma_queued(NCQTransferState *ncq_tfs)
                                 ncq_tfs->sector_count);
 
         if (size < 0) {
-            ncq_err(ncq_tfs);
+            ncq_err(ncq_tfs, SENSE_CODE(INVALID_FIELD));
             break;
         }
         dma_buf_read(ide_state->io_buffer, size, NULL, &ncq_tfs->sglist,
@@ -1123,7 +1139,7 @@ static void execute_ncq_receive_fpdma_queued(NCQTransferState *ncq_tfs)
         break;
     }
     default:
-        ncq_err(ncq_tfs);
+        ncq_err(ncq_tfs, SENSE_CODE(INVALID_FIELD));
         break;
     }
 
@@ -1168,7 +1184,7 @@ static void execute_ncq_command(NCQTransferState *ncq_tfs)
     default:
         trace_execute_ncq_command_unsup(ad->hba, port,
                                         ncq_tfs->tag, ncq_tfs->cmd);
-        ncq_err(ncq_tfs);
+        ncq_err(ncq_tfs, SENSE_CODE(INVALID_OPCODE));
         ncq_finish(ncq_tfs);
     }
 }
@@ -1184,6 +1200,18 @@ static void process_ncq_command(AHCIState *s, int port, const uint8_t *cmd_fis,
     size_t size;
 
     g_assert(is_ncq(ncq_fis->command));
+
+    /*
+     * After an NCQ command failed, any other command is aborted (SATA 3.5a
+     * DFPDMAQ12, DFPDMAQ13), until the host reads the NCQ Command Error log.
+     */
+    if (ad->port.ifs[0].ncq_err.active) {
+        ad->port.ifs[0].status = READY_STAT | ERR_STAT;
+        ad->port.ifs[0].error = ABRT_ERR;
+        ahci_write_fis_d2h(ad, false);
+        return;
+    }
+
     if (ncq_tfs->used) {
         /* error - already in use */
         qemu_log_mask(LOG_GUEST_ERROR, "%s: tag %d already used\n",
@@ -1226,8 +1254,15 @@ static void process_ncq_command(AHCIState *s, int port, const uint8_t *cmd_fis,
                    ((uint64_t)ncq_fis->lba1 << 8) |
                    (uint64_t)ncq_fis->lba0;
 
-    /* Accepting an NCQ command makes the sense data unavailable (ACS-6 4.25) */
-    ad->port.ifs[0].sense_data_avail = false;
+    /*
+     * Accepting an NCQ command makes the sense data unavailable, unless it
+     * reads the NCQ Command Error log (ACS-6 4.25).
+     */
+    if (!(ncq_fis->command == RECEIVE_FPDMA_QUEUED &&
+          ncq_tfs->subcmd == RECEIVE_FPDMA_READ_LOG_DMA_EXT &&
+          (ncq_tfs->lba & 0xff) == IDE_GPL_LOG_NCQ_CMD_ERROR)) {
+        ad->port.ifs[0].sense_data_avail = false;
+    }
     ncq_tfs->tag = tag;
 
     /* Sanity-check the NCQ packet */
@@ -1260,7 +1295,12 @@ static void process_ncq_command(AHCIState *s, int port, const uint8_t *cmd_fis,
         error_report("ahci: PRDT length for NCQ command (0x" DMA_ADDR_FMT ") "
                      "is smaller than the requested size (0x%zx)",
                      ncq_tfs->sglist.size, size);
-        ncq_err(ncq_tfs);
+        /*
+         * The HBA detected the overflow, not the device (AHCI 1.3.1 6.1.5):
+         * release the command without recording an NCQ error.
+         */
+        qemu_sglist_destroy(&ncq_tfs->sglist);
+        ncq_tfs->used = 0;
         ahci_trigger_irq(ad->hba, ad, AHCI_PORT_IRQ_BIT_OFS);
         return;
     } else if (ncq_tfs->sglist.size != size) {
@@ -1393,6 +1433,25 @@ static void handle_reg_h2d_fis(AHCIState *s, int port,
      * For non-NCQ commands, PxCI will always be cleared by ahci_cmd_done().
      */
     ad->busy_slot = slot;
+
+    /*
+     * Reading the NCQ Command Error log ends the NCQ error state: the device
+     * discards the queued commands, and reports this with a Set Device Bits
+     * FIS that has ERR cleared and all ACT bits set, but no interrupt (SATA
+     * 3.5a DFPDMAQ14, DFPDMAQ15; IDENTIFY DEVICE word 76 bit 15 is set for
+     * NCQ devices, which allows READ LOG DMA EXT).
+     */
+    if (ide_state->ncq_err.active &&
+        (cmd_fis[2] == WIN_READ_LOG_EXT ||
+         cmd_fis[2] == WIN_READ_LOG_DMA_EXT) &&
+        cmd_fis[4] == IDE_GPL_LOG_NCQ_CMD_ERROR) {
+        ahci_cancel_ncq_requests(ad);
+        ide_state->ncq_err.active = false;
+        ide_state->status = READY_STAT | SEEK_STAT;
+        ide_state->error = 0;
+        ad->finished = 0xffffffff;
+        ahci_write_fis_sdb(ad, false);
+    }
 
     /* We're ready to process the command in FIS byte 2. */
     ide_bus_exec_cmd(&s->dev[port].port, cmd_fis[2]);

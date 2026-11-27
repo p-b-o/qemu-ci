@@ -51,6 +51,22 @@ enum ide_dma_cmd {
     IDE_DMA__COUNT
 };
 
+/* The NCQ Command Error log (10h) and the NCQ error state */
+typedef struct IDENCQError {
+    bool valid;         /* the log holds a failed NCQ command */
+    /* NCQ error: waiting for log 10h or a reset (SATA 3.5a DFPDMAQ13) */
+    bool active;
+    uint8_t tag;
+    uint8_t status;
+    uint8_t error;
+    uint8_t device;
+    uint8_t sense_key;
+    uint8_t asc;
+    uint8_t ascq;
+    uint16_t count;
+    uint64_t lba;
+} IDENCQError;
+
 /* NOTE: IDEState represents in fact one drive */
 struct IDEState {
     IDEBus *bus;
@@ -100,6 +116,7 @@ struct IDEState {
     uint8_t ascq;
     bool sense_data_enabled;
     bool sense_data_avail;
+    IDENCQError ncq_err;
     bool tray_open;
     bool tray_locked;
     uint8_t cdrom_changed;

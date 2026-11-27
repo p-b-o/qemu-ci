@@ -1938,6 +1938,231 @@ static void test_ncq_read_log(void)
     ahci_shutdown(ahci);
 }
 
+/*
+ * A failed NCQ command is reported through the NCQ Command Error log (10h):
+ * the host is notified via the Set Device Bits FIS and then reads the log to
+ * learn which tag failed and why. Here an injected I/O error fails a WRITE
+ * FPDMA QUEUED. The error has no more specific reason, so the log has no
+ * sense data.
+ */
+static void test_ncq_cmd_error(void)
+{
+    AHCIQState *ahci;
+    AHCICommand *cmd;
+    uint16_t dir[256];
+    uint8_t *log;
+    uint64_t ptr;
+    unsigned px;
+    unsigned int sum = 0;
+    int i;
+
+    prepare_blkdebug_script(debug_path, "write_aio");
+    ahci = ahci_boot_and_enable("-drive file=blkdebug:%s:%s,if=none,id=drive0,"
+                                "format=%s,cache=writeback,"
+                                "rerror=report,werror=report "
+                                "-M q35 -device ide-hd,drive=drive0",
+                                debug_path, tmp_path, imgfmt);
+    px = ahci_port_select(ahci);
+    ahci_port_clear(ahci, px);
+
+    /* The NCQ Command Error log (10h) is advertised, one page long. */
+    ahci_io(ahci, px, CMD_READ_LOG_DMA_EXT, dir, 512, 0x00);
+    g_assert_cmphex(le16_to_cpu(dir[0x10]), ==, 1);
+
+    /* An NCQ write of one sector at LBA 8 that fails with an I/O error. */
+    ptr = ahci_alloc(ahci, 512);
+    g_assert(ptr);
+    cmd = ahci_command_create(WRITE_FPDMA_QUEUED);
+    ahci_command_set_buffer(cmd, ptr);
+    ahci_command_set_size(cmd, 512);
+    ahci_command_set_offset(cmd, 8);
+    ahci_command_expect_error(cmd, ATA_ERR_ABRT);
+    ahci_command_commit(ahci, cmd, px);
+    ahci_command_issue(ahci, cmd);
+    ahci_command_verify(ahci, cmd);
+    ahci_command_free(cmd);
+    ahci_free(ahci, ptr);
+
+    /* Read the NCQ Command Error log; page 0 records the failure. */
+    log = g_malloc0(512);
+    ahci_io(ahci, px, CMD_READ_LOG_DMA_EXT, log, 512, 0x10);
+
+    g_assert_cmphex(log[0] & (1 << 7), ==, 0); /* NQ=0: NCQ tag is valid */
+    g_assert_cmphex(log[2], ==, 0x41);         /* STATUS: DRDY | ERR */
+    g_assert_cmphex(log[3], ==, 0x04);         /* ERROR: ABRT */
+    g_assert_cmphex(log[4], ==, 8);            /* LBA (7:0) */
+    g_assert_cmphex(log[12], ==, 1);           /* COUNT (7:0) */
+    /* No sense data: SENSE KEY, ASC and ASCQ are zero. */
+    g_assert_cmphex(log[14], ==, 0x00);
+    g_assert_cmphex(log[15], ==, 0x00);
+    g_assert_cmphex(log[16], ==, 0x00);
+    for (i = 0; i < 512; i++) {
+        sum += log[i];
+    }
+    g_assert_cmphex(sum & 0xff, ==, 0);        /* checksum: bytes sum to zero */
+
+    g_free(log);
+    ahci_shutdown(ahci);
+}
+
+/* The sense key that REQUEST SENSE DATA EXT returns (LBA 19:16) */
+static uint8_t ahci_sense_key(AHCIQState *ahci, unsigned px)
+{
+    return ahci_nodata_cmd(ahci, px, CMD_REQ_SENSE_DATA, 0, 0, 0).lba_lo[2] &
+           0x0f;
+}
+
+/* READ LOG DMA EXT of the NCQ Command Error log (10h) */
+static void ahci_read_ncq_log(AHCIQState *ahci, unsigned px)
+{
+    uint8_t log[512];
+
+    ahci_io(ahci, px, CMD_READ_LOG_DMA_EXT, log, 512, 0x10);
+}
+
+/*
+ * Reading the NCQ Command Error log does not make the sense data unavailable
+ * (ACS-6 4.25), with READ LOG DMA EXT or with RECEIVE FPDMA QUEUED.
+ */
+static void test_sense_data_ncq_log(void)
+{
+    AHCICommand *cmd;
+    uint64_t ptr;
+    unsigned px;
+    AHCIQState *ahci = ahci_boot_with_sense_data(&px);
+
+    ahci_read_ncq_log(ahci, px);
+    g_assert_cmphex(ahci_sense_key(ahci, px), ==, 0x05); /* ILLEGAL REQUEST */
+
+    ahci_nodata_cmd(ahci, px, CMD_SET_FEATURES, 0x47, 0, ATA_ERR_ABRT);
+    ahci_port_restart(ahci, px);
+    ptr = ahci_alloc(ahci, 512);
+    cmd = ahci_command_create(RECEIVE_FPDMA_QUEUED);
+    ahci_command_set_ncq_subcmd(cmd, 0x01);         /* READ LOG DMA EXT */
+    ahci_command_set_buffer(cmd, ptr);
+    ahci_command_set_size(cmd, 512);
+    ahci_command_set_offset(cmd, 0x10);              /* LOG ADDRESS 10h */
+    ahci_command_commit(ahci, cmd, px);
+    ahci_command_issue(ahci, cmd);
+    ahci_command_verify(ahci, cmd);
+    ahci_command_free(cmd);
+    ahci_free(ahci, ptr);
+    g_assert_cmphex(ahci_sense_key(ahci, px), ==, 0x05);
+
+    ahci_shutdown(ahci);
+}
+
+/* Accepting an NCQ command makes the sense data unavailable (ACS-6 4.25). */
+static void test_sense_data_ncq_cmd(void)
+{
+    uint8_t buf[512];
+    unsigned px;
+    AHCIQState *ahci = ahci_boot_with_sense_data(&px);
+
+    ahci_io(ahci, px, READ_FPDMA_QUEUED, buf, 512, 0);
+    g_assert_cmphex(ahci_sense_key(ahci, px), ==, 0);
+
+    ahci_shutdown(ahci);
+}
+
+/* Issue a 512-byte NCQ command that the device is expected to abort */
+static void ahci_ncq_expect_abort(AHCIQState *ahci, unsigned px, uint8_t op,
+                                  uint8_t subcmd, uint64_t lba, uint64_t ptr)
+{
+    AHCICommand *cmd = ahci_command_create(op);
+
+    if (subcmd) {
+        ahci_command_set_ncq_subcmd(cmd, subcmd);
+    }
+    ahci_command_set_buffer(cmd, ptr);
+    ahci_command_set_size(cmd, 512);
+    ahci_command_set_offset(cmd, lba);
+    ahci_command_expect_error(cmd, ATA_ERR_ABRT);
+    ahci_command_commit(ahci, cmd, px);
+    ahci_command_issue(ahci, cmd);
+    ahci_command_verify(ahci, cmd);
+    ahci_command_free(cmd);
+}
+
+/*
+ * After an NCQ command fails, the device processes no other command until the
+ * host reads the NCQ Command Error log or resets the device (SATA 3.5a
+ * DFPDMAQ11, DFPDMAQ13). Reading the log discards the queued commands with a
+ * Set Device Bits FIS that has ERR cleared and ACT set to FFFFFFFFh
+ * (DFPDMAQ15), after which commands are processed again.
+ */
+static void test_ncq_error_state(void)
+{
+    uint8_t buf[512], sdb[8];
+    AHCIQState *ahci;
+    uint64_t ptr;
+    unsigned px;
+
+    prepare_blkdebug_script(debug_path, "write_aio");
+    ahci = ahci_boot_and_enable("-drive file=blkdebug:%s:%s,if=none,id=drive0,"
+                                "format=%s,rerror=report,werror=report "
+                                "-M q35 -device ide-hd,drive=drive0",
+                                debug_path, tmp_path, imgfmt);
+    px = ahci_port_select(ahci);
+    ahci_port_clear(ahci, px);
+    ptr = ahci_alloc(ahci, 512);
+
+    /* A WRITE FPDMA QUEUED that fails with the injected I/O error */
+    ahci_ncq_expect_abort(ahci, px, WRITE_FPDMA_QUEUED, 0, 0, ptr);
+
+    /*
+     * Any other command is aborted: a non-NCQ command, an NCQ command, and
+     * an NCQ read of the NCQ Command Error log itself.
+     */
+    ahci_nodata_cmd(ahci, px, CMD_SET_FEATURES, 0x02, 0, ATA_ERR_ABRT);
+    ahci_ncq_expect_abort(ahci, px, READ_FPDMA_QUEUED, 0, 0, ptr);
+    ahci_ncq_expect_abort(ahci, px, RECEIVE_FPDMA_QUEUED, 0x01, 0x10, ptr);
+
+    /* READ LOG DMA EXT of the log reports the failed command ... */
+    ahci_io(ahci, px, CMD_READ_LOG_DMA_EXT, buf, 512, 0x10);
+    g_assert_cmphex(buf[0] & (1 << 7), ==, 0);       /* NQ=0 */
+    /* ... after discarding the queued commands */
+    qtest_memread(ahci->parent->qts, ahci->port[px].fb + 0x58, sdb,
+                  sizeof(sdb));
+    g_assert_cmphex(sdb[0], ==, 0xa1);               /* Set Device Bits FIS */
+    g_assert_cmphex(sdb[1] & 0x40, ==, 0);           /* Interrupt bit */
+    g_assert_cmphex(sdb[2] & 0x01, ==, 0);           /* STATUS: ERR */
+    g_assert_cmphex(sdb[3], ==, 0);                  /* ERROR */
+    g_assert_cmphex((uint32_t)ldl_le_p(sdb + 4), ==, 0xffffffff); /* ACT */
+
+    /* Commands are processed again */
+    ahci_io(ahci, px, READ_FPDMA_QUEUED, buf, 512, 0);
+    ahci_nodata_cmd(ahci, px, CMD_SET_FEATURES, 0x02, 0, 0);
+
+    ahci_free(ahci, ptr);
+    ahci_shutdown(ahci);
+}
+
+/*
+ * IDENTIFY DEVICE data log page 04h (Current Settings) is supported, and
+ * reports whether the Sense Data Reporting feature set is enabled.
+ */
+static void test_sense_data_current_settings(void)
+{
+    uint8_t page[512];
+    uint64_t settings;
+    unsigned px;
+    AHCIQState *ahci = ahci_boot_with_sense_data(&px);
+
+    ahci_io(ahci, px, CMD_READ_LOG_DMA_EXT, page, 512, 0x30);
+    g_assert_cmphex(page[8], ==, 8);                 /* number of entries */
+    g_assert_cmphex(page[13], ==, 0x04);             /* page 04h listed */
+
+    ahci_io(ahci, px, CMD_READ_LOG_DMA_EXT, page, 512, 0x30 | (0x04 << 8));
+    g_assert_cmphex(page[2], ==, 0x04);              /* PAGE NUMBER */
+    memcpy(&settings, page + 8, sizeof(settings));
+    /* 63=valid, 10=SENSE DATA ENABLED */
+    g_assert_cmphex(le64_to_cpu(settings) & (1ULL << 63), ==, 1ULL << 63);
+    g_assert_cmphex(le64_to_cpu(settings) & (1ULL << 10), ==, 1ULL << 10);
+
+    ahci_shutdown(ahci);
+}
+
 static int prepare_iso(size_t size, unsigned char **buf, char **name)
 {
     g_autofree char *cdrom_path = NULL;
@@ -2842,6 +3067,12 @@ int main(int argc, char **argv)
 
     qtest_add_func("/ahci/io/ncq/simple", test_ncq_simple);
     qtest_add_func("/ahci/io/ncq/read_log", test_ncq_read_log);
+    qtest_add_func("/ahci/io/ncq/error", test_ncq_cmd_error);
+    qtest_add_func("/ahci/io/ncq/error_state", test_ncq_error_state);
+    qtest_add_func("/ahci/io/ncq/sense_data/log", test_sense_data_ncq_log);
+    qtest_add_func("/ahci/io/ncq/sense_data/cmd", test_sense_data_ncq_cmd);
+    qtest_add_func("/ahci/io/sense_data/current_settings",
+                   test_sense_data_current_settings);
     qtest_add_func("/ahci/migrate/ncq/simple", test_migrate_ncq);
     qtest_add_func("/ahci/io/ncq/retry", test_halted_ncq);
     qtest_add_func("/ahci/migrate/ncq/halted", test_migrate_halted_ncq);
