@@ -24,6 +24,7 @@
 #include "hw/pci/msi.h"
 #include "hw/pci/pcie.h"
 #include "hw/pci/pcie_port.h"
+#include "hw/core/resettable.h"
 #include "migration/vmstate.h"
 #include "qemu/module.h"
 
@@ -46,11 +47,11 @@ static void xio3130_upstream_write_config(PCIDevice *d, uint32_t address,
     pcie_aer_write_config(d, address, val, len);
 }
 
-static void xio3130_upstream_reset(DeviceState *qdev)
+static void xio3130_upstream_reset_hold(Object *obj, ResetType type)
 {
-    PCIDevice *d = PCI_DEVICE(qdev);
+    PCIDevice *d = PCI_DEVICE(obj);
 
-    pci_bridge_reset(qdev);
+    pci_bridge_reset(DEVICE(obj));
     pcie_cap_deverr_reset(d);
 }
 
@@ -127,6 +128,7 @@ static void xio3130_upstream_class_init(ObjectClass *klass, const void *data)
 {
     DeviceClass *dc = DEVICE_CLASS(klass);
     PCIDeviceClass *k = PCI_DEVICE_CLASS(klass);
+    ResettableClass *rc = RESETTABLE_CLASS(klass);
 
     k->config_write = xio3130_upstream_write_config;
     k->realize = xio3130_upstream_realize;
@@ -136,7 +138,7 @@ static void xio3130_upstream_class_init(ObjectClass *klass, const void *data)
     k->revision = XIO3130_REVISION;
     set_bit(DEVICE_CATEGORY_BRIDGE, dc->categories);
     dc->desc = "TI X3130 Upstream Port of PCI Express Switch";
-    device_class_set_legacy_reset(dc, xio3130_upstream_reset);
+    rc->phases.hold = xio3130_upstream_reset_hold;
     dc->vmsd = &vmstate_xio3130_upstream;
 }
 
