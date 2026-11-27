@@ -465,6 +465,9 @@ int ide_read_log(IDEState *s, uint8_t log_address, uint16_t page,
 void ide_ncq_cmd_error(IDEState *s, uint8_t tag, uint64_t lba,
                        uint16_t count, SCSISense sense);
 
+/* Whether a command may access nb_sectors sectors from sector */
+bool ide_sect_range_ok(IDEState *s, uint64_t sector, uint64_t nb_sectors);
+
 void ide_transfer_start(IDEState *s, uint8_t *buf, int size,
                         EndTransferFunc *end_transfer_func);
 bool ide_transfer_start_norecurse(IDEState *s, uint8_t *buf, int size,

@@ -429,8 +429,7 @@ static void ide_set_signature(IDEState *s)
     }
 }
 
-static bool ide_sect_range_ok(IDEState *s,
-                              uint64_t sector, uint64_t nb_sectors)
+bool ide_sect_range_ok(IDEState *s, uint64_t sector, uint64_t nb_sectors)
 {
     uint64_t total_sectors;
 

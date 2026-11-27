@@ -2181,6 +2181,57 @@ static void test_sense_data_current_settings(void)
     ahci_shutdown(ahci);
 }
 
+/*
+ * An NCQ command beyond the last logical sector is aborted with ILLEGAL
+ * REQUEST / LOGICAL BLOCK ADDRESS OUT OF RANGE in the NCQ Command Error log,
+ * without reaching the block layer: even with rerror=stop and werror=stop, it
+ * is reported to the guest rather than stopping the VM.
+ */
+static void test_ncq_lba_range(void)
+{
+    const uint64_t lba = mb_to_sectors(test_image_size_mb); /* past the end */
+    const uint8_t cmds[] = { READ_FPDMA_QUEUED, WRITE_FPDMA_QUEUED };
+    AHCIQState *ahci;
+    uint8_t log[512];
+    uint64_t ptr;
+    unsigned px;
+    int i;
+
+    ahci = ahci_boot_and_enable("-drive if=none,id=drive0,file=%s,format=%s,"
+                                "rerror=stop,werror=stop "
+                                "-M q35 -device ide-hd,drive=drive0",
+                                tmp_path, imgfmt);
+    px = ahci_port_select(ahci);
+    ahci_port_clear(ahci, px);
+    ptr = ahci_alloc(ahci, 512);
+    g_assert(ptr);
+
+    for (i = 0; i < ARRAY_SIZE(cmds); i++) {
+        AHCICommand *cmd = ahci_command_create(cmds[i]);
+
+        ahci_command_set_buffer(cmd, ptr);
+        ahci_command_set_size(cmd, 512);
+        ahci_command_set_offset(cmd, lba);
+        ahci_command_expect_error(cmd, ATA_ERR_ABRT);
+        ahci_command_commit(ahci, cmd, px);
+        ahci_command_issue(ahci, cmd);
+        ahci_command_verify(ahci, cmd);
+        ahci_command_free(cmd);
+
+        ahci_io(ahci, px, CMD_READ_LOG_DMA_EXT, log, 512, 0x10);
+        g_assert_cmphex(log[3], ==, 0x04);          /* ERROR: ABRT */
+        g_assert_cmphex(log[4] | log[5] << 8 | log[6] << 16 |
+                        (uint64_t)log[8] << 24 | (uint64_t)log[9] << 32 |
+                        (uint64_t)log[10] << 40, ==, lba);
+        g_assert_cmphex(log[14], ==, 0x05);         /* ILLEGAL REQUEST */
+        g_assert_cmphex(log[15], ==, 0x21);         /* LBA OUT OF RANGE */
+        g_assert_cmphex(log[16], ==, 0x00);
+    }
+
+    ahci_free(ahci, ptr);
+    ahci_shutdown(ahci);
+}
+
 static int prepare_iso(size_t size, unsigned char **buf, char **name)
 {
     g_autofree char *cdrom_path = NULL;
@@ -3105,6 +3156,7 @@ int main(int argc, char **argv)
     qtest_add_func("/ahci/io/ncq/sense_data/cmd", test_sense_data_ncq_cmd);
     qtest_add_func("/ahci/io/sense_data/current_settings",
                    test_sense_data_current_settings);
+    qtest_add_func("/ahci/io/ncq/lba_range", test_ncq_lba_range);
     qtest_add_func("/ahci/migrate/ncq/simple", test_migrate_ncq);
     qtest_add_func("/ahci/io/ncq/retry", test_halted_ncq);
     qtest_add_func("/ahci/migrate/ncq/halted", test_migrate_halted_ncq);

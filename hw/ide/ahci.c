@@ -1219,6 +1219,39 @@ static void process_ncq_command(AHCIState *s, int port, const uint8_t *cmd_fis,
         return;
     }
 
+    ncq_tfs->lba = ((uint64_t)ncq_fis->lba5 << 40) |
+                   ((uint64_t)ncq_fis->lba4 << 32) |
+                   ((uint64_t)ncq_fis->lba3 << 24) |
+                   ((uint64_t)ncq_fis->lba2 << 16) |
+                   ((uint64_t)ncq_fis->lba1 << 8) |
+                   (uint64_t)ncq_fis->lba0;
+    ncq_tfs->sector_count = ((ncq_fis->sector_count_high << 8) |
+                             ncq_fis->sector_count_low);
+    if (!ncq_tfs->sector_count) {
+        ncq_tfs->sector_count = 0x10000;
+    }
+
+    /*
+     * A READ or WRITE FPDMA QUEUED beyond the last logical sector is not
+     * queued: the device aborts it when accepting it (ACS-6 7.24.6, table
+     * 398), and then waits for the host to read the NCQ Command Error log
+     * (SATA 3.5a DFPDMAQ12, DFPDMAQ13). Like the non-queued reads and writes
+     * (see ide_sect_range_ok()), it thus never reaches the block layer, so
+     * the rerror/werror policy does not apply to it.
+     */
+    if ((ncq_fis->command == READ_FPDMA_QUEUED ||
+         ncq_fis->command == WRITE_FPDMA_QUEUED) &&
+        !ide_sect_range_ok(&ad->port.ifs[0], ncq_tfs->lba,
+                           ncq_tfs->sector_count)) {
+        block_acct_invalid(blk_get_stats(ad->port.ifs[0].blk),
+                           ncq_fis->command == READ_FPDMA_QUEUED ?
+                           BLOCK_ACCT_READ : BLOCK_ACCT_WRITE);
+        ide_ncq_cmd_error(&ad->port.ifs[0], tag, ncq_tfs->lba,
+                          ncq_tfs->sector_count, SENSE_CODE(LBA_OUT_OF_RANGE));
+        ahci_write_fis_d2h(ad, true);
+        return;
+    }
+
     /*
      * A NCQ command clears the bit in PxCI after the command has been QUEUED
      * successfully (ERROR not set, BUSY and DRQ cleared). A device reports
@@ -1247,12 +1280,6 @@ static void process_ncq_command(AHCIState *s, int port, const uint8_t *cmd_fis,
     ncq_tfs->cmd = ncq_fis->command;
     /* SUBCOMMAND field is COUNT bits 12:8, i.e. the low 5 bits of "prio" */
     ncq_tfs->subcmd = ncq_fis->prio & 0x1f;
-    ncq_tfs->lba = ((uint64_t)ncq_fis->lba5 << 40) |
-                   ((uint64_t)ncq_fis->lba4 << 32) |
-                   ((uint64_t)ncq_fis->lba3 << 24) |
-                   ((uint64_t)ncq_fis->lba2 << 16) |
-                   ((uint64_t)ncq_fis->lba1 << 8) |
-                   (uint64_t)ncq_fis->lba0;
 
     /*
      * Accepting an NCQ command makes the sense data unavailable, unless it
@@ -1283,11 +1310,6 @@ static void process_ncq_command(AHCIState *s, int port, const uint8_t *cmd_fis,
         trace_process_ncq_command_rarc(s, port, tag);
     }
 
-    ncq_tfs->sector_count = ((ncq_fis->sector_count_high << 8) |
-                             ncq_fis->sector_count_low);
-    if (!ncq_tfs->sector_count) {
-        ncq_tfs->sector_count = 0x10000;
-    }
     size = ncq_tfs->sector_count * BDRV_SECTOR_SIZE;
     ahci_populate_sglist(ad, &ncq_tfs->sglist, ncq_tfs->cmdh, size, 0);
 
