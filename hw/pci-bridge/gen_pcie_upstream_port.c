@@ -21,6 +21,7 @@
 #include "hw/pci/pcie_port.h"
 #include "hw/core/qdev-properties.h"
 #include "hw/core/qdev-properties-system.h"
+#include "hw/core/resettable.h"
 #include "migration/vmstate.h"
 #include "qom/object.h"
 
@@ -65,12 +66,12 @@ static void gen_upstream_write_config(PCIDevice *d, uint32_t address,
     pcie_aer_write_config(d, address, val, len);
 }
 
-static void gen_upstream_reset(DeviceState *qdev)
+static void gen_upstream_reset_hold(Object *obj, ResetType type)
 {
-    PCIDevice *d = PCI_DEVICE(qdev);
+    PCIDevice *d = PCI_DEVICE(obj);
     GenPCIEUpstreamPort *usp = GEN_PCIE_UPSTREAM_PORT(d);
 
-    pci_bridge_reset(qdev);
+    pci_bridge_reset(DEVICE(obj));
     pcie_cap_deverr_reset(d);
     pcie_cap_fill_link_ep_usp(d, usp->width, usp->speed, false);
 }
@@ -145,6 +146,7 @@ static void gen_pcie_upstream_port_class_init(ObjectClass *klass,
 {
     DeviceClass *dc = DEVICE_CLASS(klass);
     PCIDeviceClass *k = PCI_DEVICE_CLASS(klass);
+    ResettableClass *rc = RESETTABLE_CLASS(klass);
 
     k->config_write = gen_upstream_write_config;
     k->realize = gen_upstream_realize;
@@ -153,7 +155,7 @@ static void gen_pcie_upstream_port_class_init(ObjectClass *klass,
     k->device_id = PCI_DEVICE_ID_REDHAT_PCIE_USP;
     set_bit(DEVICE_CATEGORY_BRIDGE, dc->categories);
     dc->desc = "PCI Express Upstream Port";
-    device_class_set_legacy_reset(dc, gen_upstream_reset);
+    rc->phases.hold = gen_upstream_reset_hold;
     dc->vmsd = &vmstate_gen_pcie_upstream_port;
     device_class_set_props(dc, gen_pcie_upstream_port_props);
 }
