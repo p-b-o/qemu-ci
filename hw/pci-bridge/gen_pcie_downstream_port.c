@@ -21,6 +21,7 @@
 #include "hw/pci/pcie_port.h"
 #include "hw/core/qdev-properties.h"
 #include "hw/core/qdev-properties-system.h"
+#include "hw/core/resettable.h"
 #include "migration/vmstate.h"
 #include "qom/object.h"
 
@@ -69,14 +70,14 @@ static void gen_downstream_write_config(PCIDevice *d, uint32_t address,
     pcie_aer_write_config(d, address, val, len);
 }
 
-static void gen_downstream_reset(DeviceState *qdev)
+static void gen_downstream_reset_hold(Object *obj, ResetType type)
 {
-    PCIDevice *d = PCI_DEVICE(qdev);
+    PCIDevice *d = PCI_DEVICE(obj);
 
     pcie_cap_deverr_reset(d);
     pcie_cap_slot_reset(d);
     pcie_cap_arifwd_reset(d);
-    pci_bridge_reset(qdev);
+    pci_bridge_reset(DEVICE(obj));
 }
 
 static void gen_downstream_realize(PCIDevice *d, Error **errp)
@@ -170,6 +171,7 @@ static void gen_pcie_downstream_port_class_init(ObjectClass *klass,
 {
     DeviceClass *dc = DEVICE_CLASS(klass);
     PCIDeviceClass *k = PCI_DEVICE_CLASS(klass);
+    ResettableClass *rc = RESETTABLE_CLASS(klass);
 
     k->config_write = gen_downstream_write_config;
     k->realize = gen_downstream_realize;
@@ -178,7 +180,7 @@ static void gen_pcie_downstream_port_class_init(ObjectClass *klass,
     k->device_id = PCI_DEVICE_ID_REDHAT_PCIE_DSP;
     set_bit(DEVICE_CATEGORY_BRIDGE, dc->categories);
     dc->desc = "PCI Express Downstream Port";
-    device_class_set_legacy_reset(dc, gen_downstream_reset);
+    rc->phases.hold = gen_downstream_reset_hold;
     dc->vmsd = &vmstate_gen_pcie_downstream_port;
     device_class_set_props(dc, gen_pcie_downstream_port_props);
 }
