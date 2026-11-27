@@ -212,6 +212,15 @@
  * READ LOG EXT / READ LOG DMA EXT (see ACS-6 9.1 table 222).
  */
 #define IDE_GPL_LOG_DIRECTORY           0x00 /* General Purpose Log Directory */
+#define IDE_GPL_LOG_IDENTIFY_DEVICE     0x30 /* IDENTIFY DEVICE data log */
+
+/*
+ * Number of 512-byte pages in the IDENTIFY DEVICE data log. Pages 00h (list
+ * of supported pages), 01h (copy of IDENTIFY DEVICE data), 02h (Capacity),
+ * 03h (Supported Capabilities), 04h (Current Settings), 05h (Strings), 06h
+ * (Security) and 08h (Serial ATA) are implemented.
+ */
+#define IDE_GPL_LOG_IDENTIFY_DEVICE_LEN 9
 
 #if (IDE_DMA_BUF_SECTORS < MAX_MULT_SECTORS)
 #error "IDE_DMA_BUF_SECTORS must be bigger or equal to MAX_MULT_SECTORS"

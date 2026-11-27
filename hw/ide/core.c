@@ -1653,6 +1653,192 @@ static bool cmd_write_dma(IDEState *s, uint8_t cmd)
 }
 
 /*
+ * An IDENTIFY DEVICE data bit, and the bit of an IDENTIFY DEVICE data log QWord
+ * that holds a copy of it.
+ */
+typedef struct IDEIdentifyBit {
+    uint8_t word;
+    uint8_t bit;
+    uint8_t qword_bit;
+} IDEIdentifyBit;
+
+/* The Supported Capabilities QWord of page 03h, terminated by a zero word */
+static const IDEIdentifyBit ide_supported_capabilities[] = {
+    { 69, 14, 39 },     /* DRAT SUPPORTED */
+    { 69, 5, 31 },      /* RZAT SUPPORTED */
+    { 82, 14, 29 },     /* NOP SUPPORTED */
+    { 82, 5, 24 },      /* VOLATILE WRITE CACHE SUPPORTED */
+    { 82, 0, 23 },      /* SMART */
+    { 83, 13, 22 },     /* FLUSH CACHE EXT SUPPORTED */
+    { 83, 10, 20 },     /* 48-BIT SUPPORTED */
+    { 84, 6, 12 },      /* WRITE FUA EXT SUPPORTED */
+    { 84, 5, 11 },      /* GPL SUPPORTED */
+    { 84, 1, 8 },       /* SMART SELF-TEST SUPPORTED */
+    { 84, 0, 7 },       /* SMART ERROR LOGGING SUPPORTED */
+    { 119, 6, 5 },      /* SENSE DATA SUPPORTED */
+    { 119, 3, 2 },      /* GPL DMA SUPPORTED */
+    { 0 }
+};
+
+/* The SATA Capabilities QWord of page 08h, terminated by a zero word */
+static const IDEIdentifyBit ide_sata_capabilities[] = {
+    { 76, 1, 0 },       /* SATA GEN1 SIGNALING SPEED SUPPORTED */
+    { 76, 2, 1 },       /* SATA GEN2 SIGNALING SPEED SUPPORTED */
+    { 76, 3, 2 },       /* SATA GEN3 SIGNALING SPEED SUPPORTED */
+    { 76, 8, 7 },       /* NCQ FEATURE SET SUPPORTED */
+    { 76, 9, 8 },       /* RECEIPT OF HOST INITIATED POWER MANAGEMENT ... */
+    { 76, 10, 9 },      /* SATA PHY EVENT COUNTERS LOG SUPPORTED */
+    { 76, 11, 10 },     /* UNLOAD WHILE NCQ COMMANDS ARE OUTSTANDING ... */
+    { 76, 12, 11 },     /* NCQ PRIORITY INFORMATION SUPPORTED */
+    { 76, 13, 12 },     /* HOST AUTOMATIC PARTIAL TO SLUMBER ... */
+    { 76, 14, 13 },     /* DEVICE AUTOMATIC PARTIAL TO SLUMBER ... */
+    { 76, 15, 14 },     /* READ LOG DMA EXT AS EQUIVALENT TO READ LOG EXT ... */
+    { 77, 4, 15 },      /* NCQ STREAMING SUPPORTED */
+    { 77, 5, 16 },      /* NCQ QUEUE MANAGEMENT COMMAND SUPPORTED */
+    { 77, 6, 17 },      /* SEND AND RECEIVE QUEUED COMMANDS SUPPORTED */
+    { 78, 1, 18 },      /* NONZERO BUFFER OFFSETS SUPPORTED */
+    { 78, 2, 19 },      /* DMA SETUP AUTO-ACTIVATION SUPPORTED */
+    { 78, 3, 20 },      /* DEVICE INITIATED POWER MANAGEMENT SUPPORTED */
+    { 78, 4, 21 },      /* IN-ORDER DATA DELIVERY SUPPORTED */
+    { 78, 5, 22 },      /* HARDWARE FEATURE CONTROL SUPPORTED */
+    { 78, 6, 23 },      /* SOFTWARE SETTINGS PRESERVATION SUPPORTED */
+    { 78, 7, 24 },      /* NCQ AUTOSENSE SUPPORTED */
+    { 78, 8, 25 },      /* DEVICE SLEEP SUPPORTED */
+    { 0 }
+};
+
+/* The Current Settings QWord of page 04h, terminated by a zero word */
+static const IDEIdentifyBit ide_current_settings[] = {
+    { 85, 5, 13 },      /* VOLATILE WRITE CACHE ENABLED */
+    { 85, 0, 6 },       /* SMART ENABLED */
+    { 0 }
+};
+
+/* A QWord with bit 63 set, and a copy of the IDENTIFY DEVICE data @bits */
+static uint64_t ide_identify_bits(IDEState *s, const IDEIdentifyBit *bits)
+{
+    uint64_t qword = 1ULL << 63;
+
+    for (; bits->word; bits++) {
+        if (lduw_le_p(s->identify_data + 2 * bits->word) & (1 << bits->bit)) {
+            qword |= 1ULL << bits->qword_bit;
+        }
+    }
+    return qword;
+}
+
+/*
+ * Build the IDENTIFY DEVICE data log (log address 30h, ACS-6 9.11) pages
+ * [page, page + count) into the I/O buffer. Page 00h (List of Supported
+ * pages), page 01h (a copy of the IDENTIFY DEVICE data), page 02h (Capacity),
+ * page 03h (Supported Capabilities), page 04h (Current Settings), page 05h
+ * (Strings), page 06h (Security) and page 08h (Serial ATA) are implemented;
+ * any other page is returned as zeros (ACS-6 9.11.1).
+ */
+static void ide_fill_identify_device_log(IDEState *s, uint16_t page,
+                                         uint16_t count)
+{
+    uint16_t i;
+
+    /* Update the cached IDENTIFY DEVICE data; this clobbers io_buffer. */
+    ide_identify(s);
+    memset(s->io_buffer, 0, count * 512);
+
+    for (i = 0; i < count; i++) {
+        uint8_t *buf = s->io_buffer + i * 512;
+
+        switch (page + i) {
+        case 0x00:
+            /*
+             * List of Supported IDENTIFY DEVICE data log pages (ACS-6 9.11.2)
+             */
+            put_le16((uint16_t *)buf, 0x0001); /* REVISION NUMBER field */
+            buf[8] = 8;                        /* number of entries */
+            buf[9] = 0x00;                     /* page 00h is supported */
+            buf[10] = 0x01;                    /* page 01h is supported */
+            buf[11] = 0x02;                    /* page 02h is supported */
+            buf[12] = 0x03;                    /* page 03h is supported */
+            buf[13] = 0x04;                    /* page 04h is supported */
+            buf[14] = 0x05;                    /* page 05h is supported */
+            buf[15] = 0x06;                    /* page 06h is supported */
+            buf[16] = 0x08;                    /* page 08h is supported */
+            break;
+        case 0x01:
+            /* Copy of IDENTIFY DEVICE data, words 0..255 (ACS-6 9.11.3) */
+            memcpy(buf, s->identify_data, sizeof(s->identify_data));
+            break;
+        case 0x02:
+            /* Capacity (ACS-6 9.11.4) */
+            /* header QWord: 63=set to one, PAGE NUMBER=02h, REVISION=0001h */
+            stq_le_p(buf, (1ULL << 63) | (0x02ULL << 16) | 0x0001);
+            /*
+             * Device Capacity QWord: 63=set to one, 47:0=ACCESSIBLE CAPACITY
+             * (one greater than the maximum user-accessible LBA)
+             */
+            stq_le_p(buf + 8, (1ULL << 63) |
+                     ((uint64_t)s->nb_sectors & 0xffffffffffffULL));
+            break;
+        case 0x03:
+            /* Supported Capabilities (ACS-6 9.11.5) */
+            /* header QWord: 63=set to one, PAGE NUMBER=03h, REVISION=0001h */
+            stq_le_p(buf, (1ULL << 63) | (0x03ULL << 16) | 0x0001);
+            /* capabilities QWord: 63=valid, the rest copies IDENTIFY data */
+            stq_le_p(buf + 8, ide_identify_bits(s, ide_supported_capabilities));
+            break;
+        case 0x04:
+            /* Current Settings (ACS-6 9.11.6) */
+            /* header QWord: 63=set to one, PAGE NUMBER=04h, REVISION=0001h */
+            stq_le_p(buf, (1ULL << 63) | (0x04ULL << 16) | 0x0001);
+            /* Current Settings: 63=set to one, rest copies IDENTIFY data */
+            stq_le_p(buf + 8, ide_identify_bits(s, ide_current_settings));
+            break;
+        case 0x05:
+            /* Strings */
+            /* header QWord: 63=set to one, PAGE NUMBER=05h, REVISION=0001h */
+            stq_le_p(buf, (1ULL << 63) | (0x05ULL << 16) | 0x0001);
+            /*
+             * SERIAL NUMBER, FIRMWARE REVISION, MODEL NUMBER and ADDITIONAL
+             * PRODUCT IDENTIFIER: copies of IDENTIFY DEVICE data words 10..19,
+             * 23..26, 27..46 and 170..173
+             */
+            memcpy(buf + 8, s->identify_data + 2 * 10, 20);
+            memcpy(buf + 32, s->identify_data + 2 * 23, 8);
+            memcpy(buf + 48, s->identify_data + 2 * 27, 40);
+            memcpy(buf + 96, s->identify_data + 2 * 170, 8);
+            break;
+        case 0x06:
+            /* Security: the Security feature set is not supported */
+            /* header QWord: 63=set to one, PAGE NUMBER=06h, REVISION=0001h */
+            stq_le_p(buf, (1ULL << 63) | (0x06ULL << 16) | 0x0001);
+            /*
+             * Master Password Identifier, Security Status, the times required
+             * for an Enhanced and a Normal Erase, Trusted Computing feature
+             * set and Security Capabilities: valid, with nothing supported
+             */
+            stq_le_p(buf + 8, 1ULL << 63);
+            stq_le_p(buf + 16, 1ULL << 63);
+            stq_le_p(buf + 24, 1ULL << 63);
+            stq_le_p(buf + 32, 1ULL << 63);
+            stq_le_p(buf + 40, 1ULL << 63);
+            stq_le_p(buf + 48, 1ULL << 63);
+            break;
+        case 0x08:
+            /* Serial ATA */
+            /* header QWord: 63=set to one, PAGE NUMBER=08h, REVISION=0001h */
+            stq_le_p(buf, (1ULL << 63) | (0x08ULL << 16) | 0x0001);
+            /* SATA Capabilities: 63=set to one, rest copies IDENTIFY data */
+            stq_le_p(buf + 8, ide_identify_bits(s, ide_sata_capabilities));
+            /* Current SATA Settings: 63=set to one, nothing enabled */
+            stq_le_p(buf + 16, 1ULL << 63);
+            break;
+        default:
+            /* Unsupported page: returned as all zeros. */
+            break;
+        }
+    }
+}
+
+/*
  * Fill the I/O buffer with the General Purpose Logging data requested by a
  * READ LOG EXT / READ LOG DMA EXT command and return the number of bytes to
  * transfer, or a negative value if the command must be aborted (ACS-6 7.25).
@@ -1667,6 +1853,9 @@ static int ide_read_log(IDEState *s)
     switch (log_address) {
     case IDE_GPL_LOG_DIRECTORY:
         log_size = 1;
+        break;
+    case IDE_GPL_LOG_IDENTIFY_DEVICE:
+        log_size = IDE_GPL_LOG_IDENTIFY_DEVICE_LEN;
         break;
     default:
         /* Log (or its associated feature set) not supported (ACS-6 7.25.5). */
@@ -1689,6 +1878,12 @@ static int ide_read_log(IDEState *s)
         memset(s->io_buffer, 0, count * 512);
         /* word 0: General Purpose Logging Version */
         put_le16((uint16_t *)s->io_buffer, 0x0001);
+        /* word N: number of log pages at log address N */
+        put_le16((uint16_t *)s->io_buffer + IDE_GPL_LOG_IDENTIFY_DEVICE,
+                 IDE_GPL_LOG_IDENTIFY_DEVICE_LEN);
+        break;
+    case IDE_GPL_LOG_IDENTIFY_DEVICE:
+        ide_fill_identify_device_log(s, page, count);
         break;
     }
 

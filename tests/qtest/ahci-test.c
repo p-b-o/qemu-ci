@@ -1064,6 +1064,9 @@ static void ahci_test_read_log(AHCIQState *ahci, uint8_t read_log_cmd)
 {
     uint16_t id[256];
     uint16_t dir[256];
+    uint16_t page[256];
+    uint8_t *page8 = (uint8_t *)page;
+    uint64_t nb, cap;
     unsigned px;
 
     px = ahci_port_select(ahci);
@@ -1084,14 +1087,81 @@ static void ahci_test_read_log(AHCIQState *ahci, uint8_t read_log_cmd)
     ahci_io(ahci, px, read_log_cmd, &dir, 512, 0x00);
     /* word 0: General Purpose Logging Version */
     g_assert_cmphex(le16_to_cpu(dir[0]), ==, 0x0001);
+    /* word 30h: number of pages in the IDENTIFY DEVICE data log */
+    g_assert_cmphex(le16_to_cpu(dir[0x30]), ==, 9);
+
+    /* IDENTIFY DEVICE data log (log address 30h), page 0: list of pages. */
+    ahci_io(ahci, px, read_log_cmd, &page, 512, 0x30);
+    g_assert_cmphex(le16_to_cpu(page[0]), ==, 0x0001); /* REVISION NUMBER */
+    g_assert_cmpint(page8[8], ==, 8);                  /* number of entries */
+    g_assert_cmpint(page8[9], ==, 0x00);               /* page 00h supported */
+    g_assert_cmpint(page8[10], ==, 0x01);              /* page 01h supported */
+    g_assert_cmpint(page8[11], ==, 0x02);              /* page 02h supported */
+    g_assert_cmpint(page8[12], ==, 0x03);              /* page 03h supported */
+    g_assert_cmpint(page8[13], ==, 0x04);              /* page 04h supported */
+    g_assert_cmpint(page8[14], ==, 0x05);              /* page 05h supported */
+    g_assert_cmpint(page8[15], ==, 0x06);              /* page 06h supported */
+    g_assert_cmpint(page8[16], ==, 0x08);              /* page 08h supported */
+
+    /* IDENTIFY DEVICE data log page 1: a copy of the IDENTIFY data. */
+    ahci_io(ahci, px, read_log_cmd, &page, 512, 0x30 | (1 << 8));
+    g_assert_cmphex(memcmp(page, id, 512), ==, 0);
+
+    /* IDENTIFY DEVICE data log page 2 (page number 2): Capacity. */
+    ahci_io(ahci, px, read_log_cmd, &page, 512, 0x30 | (2 << 8));
+    g_assert_cmphex(le16_to_cpu(page[0]), ==, 0x0001);   /* REVISION NUMBER */
+    g_assert_cmpint(page8[2], ==, 0x02);                 /* PAGE NUMBER */
+    g_assert_cmpint(page8[7] & (1 << 7), ==, (1 << 7));  /* header bit 63 */
+    g_assert_cmpint(page8[15] & (1 << 7), ==, (1 << 7)); /* capacity valid */
+    /* ACCESSIBLE CAPACITY (bits 47:0) must match IDENTIFY words 100..103 */
+    nb = (uint64_t)le16_to_cpu(id[100]) |
+         ((uint64_t)le16_to_cpu(id[101]) << 16) |
+         ((uint64_t)le16_to_cpu(id[102]) << 32) |
+         ((uint64_t)le16_to_cpu(id[103]) << 48);
+    cap = (uint64_t)page8[8] | ((uint64_t)page8[9] << 8) |
+          ((uint64_t)page8[10] << 16) | ((uint64_t)page8[11] << 24) |
+          ((uint64_t)page8[12] << 32) | ((uint64_t)page8[13] << 40);
+    g_assert_cmpuint(cap, ==, nb);
+
+    /* IDENTIFY DEVICE data log page 3: Supported Capabilities. */
+    ahci_io(ahci, px, read_log_cmd, &page, 512, 0x30 | (3 << 8));
+    g_assert_cmphex(le16_to_cpu(page[0]), ==, 0x0001);   /* REVISION NUMBER */
+    g_assert_cmpint(page8[2], ==, 0x03);                 /* PAGE NUMBER */
+    g_assert_cmpint(page8[7] & (1 << 7), ==, (1 << 7));  /* header bit 63 */
+    g_assert_cmpint(page8[8] & (1 << 2), ==, (1 << 2));  /* GPL DMA supported */
+    g_assert_cmpint(page8[9] & (1 << 3), ==, (1 << 3));  /* GPL (bit 11) */
+    g_assert_cmpint(page8[10] & (1 << 4), ==, (1 << 4)); /* 48-BIT (bit 20) */
+
+    /* IDENTIFY DEVICE data log page 5: Strings, as in the IDENTIFY data. */
+    ahci_io(ahci, px, read_log_cmd, &page, 512, 0x30 | (5 << 8));
+    g_assert_cmpint(page8[2], ==, 0x05);                 /* PAGE NUMBER */
+    g_assert_cmphex(memcmp(page8 + 8, &id[10], 20), ==, 0);  /* SERIAL */
+    g_assert_cmphex(memcmp(page8 + 48, &id[27], 40), ==, 0); /* MODEL */
+
+    /* IDENTIFY DEVICE data log page 8: Serial ATA. */
+    ahci_io(ahci, px, read_log_cmd, &page, 512, 0x30 | (8 << 8));
+    g_assert_cmpint(page8[2], ==, 0x08);                 /* PAGE NUMBER */
+    g_assert_cmpint(page8[8] & (1 << 7), ==, (1 << 7));  /* NCQ supported */
 }
 
 static void test_read_log_dma(void)
 {
     AHCIQState *ahci;
+    uint16_t id[256];
+    uint16_t idlog[512]; /* two consecutive 512-byte log pages */
+    unsigned px;
 
     ahci = ahci_boot_and_enable(NULL);
     ahci_test_read_log(ahci, CMD_READ_LOG_DMA_EXT);
+
+    /* Also exercise a multi-page DMA transfer: both pages of log 30h. */
+    px = ahci_port_select(ahci);
+    ahci_port_clear(ahci, px);
+    ahci_io(ahci, px, CMD_IDENTIFY, &id, 512, 0);
+    ahci_io(ahci, px, CMD_READ_LOG_DMA_EXT, &idlog, 1024, 0x30);
+    g_assert_cmphex(le16_to_cpu(idlog[0]), ==, 0x0001);   /* page 0 header */
+    g_assert_cmphex(memcmp(&idlog[256], id, 512), ==, 0); /* page 1: IDENTIFY */
+
     ahci_shutdown(ahci);
 }
 
