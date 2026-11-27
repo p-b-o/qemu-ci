@@ -1127,6 +1127,7 @@ static void execute_ncq_command(NCQTransferState *ncq_tfs)
         trace_execute_ncq_command_unsup(ad->hba, port,
                                         ncq_tfs->tag, ncq_tfs->cmd);
         ncq_err(ncq_tfs);
+        ncq_finish(ncq_tfs);
     }
 }
 
