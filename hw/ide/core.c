@@ -68,7 +68,8 @@ const char *IDE_DMA_CMD_lookup[IDE_DMA__COUNT] = {
     [IDE_DMA_READ] = "DMA READ",
     [IDE_DMA_WRITE] = "DMA WRITE",
     [IDE_DMA_TRIM] = "DMA TRIM",
-    [IDE_DMA_ATAPI] = "DMA ATAPI"
+    [IDE_DMA_ATAPI] = "DMA ATAPI",
+    [IDE_DMA_READ_LOG] = "DMA READ LOG"
 };
 
 static const char *IDE_DMA_CMD_str(enum ide_dma_cmd enval)
@@ -150,6 +151,7 @@ static void ide_identify(IDEState *s)
 {
     uint16_t *p;
     IDEDevice *dev = s->unit ? s->bus->slave : s->bus->master;
+    uint16_t gpl = s->ncq_queues ? 1 << 5 : 0;
 
     p = (uint16_t *)s->identify_data;
     if (s->identify_set) {
@@ -196,8 +198,8 @@ static void ide_identify(IDEState *s)
 
     if (s->ncq_queues) {
         put_le16(p + 75, s->ncq_queues - 1);
-        /* NCQ supported */
-        put_le16(p + 76, (1 << 8));
+        /* 15=READ LOG DMA EXT equivalent to READ LOG EXT, 8=NCQ supported */
+        put_le16(p + 76, (1 << 15) | (1 << 8));
     }
 
     put_le16(p + 80, 0xf0); /* ata3 -> ata6 supported */
@@ -206,20 +208,21 @@ static void ide_identify(IDEState *s)
     put_le16(p + 82, (1 << 14) | (1 << 5) | 1);
     /* 13=flush_cache_ext,12=flush_cache,10=lba48 */
     put_le16(p + 83, (1 << 14) | (1 << 13) | (1 <<12) | (1 << 10));
-    /* 14=set to 1, 8=has WWN, 1=SMART self test, 0=SMART error logging */
+    /* 14=set to 1, 8=has WWN, 5=GPL, 1=SMART self test, 0=SMART error log */
     if (s->wwn) {
-        put_le16(p + 84, (1 << 14) | (1 << 8) | 0);
+        put_le16(p + 84, (1 << 14) | (1 << 8) | gpl | 0);
     } else {
-        put_le16(p + 84, (1 << 14) | 0);
+        put_le16(p + 84, (1 << 14) | gpl | 0);
     }
     put_le16(p + 85, ide_identify_word85(s));
-    /* 13=flush_cache_ext,12=flush_cache,10=lba48 */
-    put_le16(p + 86, (1 << 13) | (1 <<12) | (1 << 10));
-    /* 14=set to 1, 8=has WWN, 1=SMART self test, 0=SMART error logging */
+    /* 15=words 119-120 valid,13=flush_cache_ext,12=flush_cache,10=lba48 */
+    put_le16(p + 86, (s->ncq_queues ? 1 << 15 : 0) |
+             (1 << 13) | (1 << 12) | (1 << 10));
+    /* 14=set to 1, 8=has WWN, 5=GPL, 1=SMART self test, 0=SMART error log */
     if (s->wwn) {
-        put_le16(p + 87, (1 << 14) | (1 << 8) | 0);
+        put_le16(p + 87, (1 << 14) | (1 << 8) | gpl | 0);
     } else {
-        put_le16(p + 87, (1 << 14) | 0);
+        put_le16(p + 87, (1 << 14) | gpl | 0);
     }
     put_le16(p + 88, 0x3f | (1 << 13)); /* udma5 set and supported */
     put_le16(p + 93, 1 | (1 << 14) | 0x2000);
@@ -236,6 +239,15 @@ static void ide_identify(IDEState *s)
         put_le16(p + 109, s->wwn >> 32);
         put_le16(p + 110, s->wwn >> 16);
         put_le16(p + 111, s->wwn);
+    }
+    if (s->ncq_queues) {
+        /*
+         * 14=set to 1,
+         * 3=READ LOG DMA EXT/WRITE LOG DMA EXT (GPL DMA) supported
+         */
+        put_le16(p + 119, (1 << 14) | (1 << 3));
+        /* 14=set to 1, 3=GPL DMA enabled */
+        put_le16(p + 120, (1 << 14) | (1 << 3));
     }
     if (dev && dev->conf.discard_granularity) {
         put_le16(p + 169, 1); /* TRIM support */
@@ -1034,6 +1046,20 @@ void ide_start_dma(IDEState *s, BlockCompletionFunc *cb)
     }
 }
 
+static void ide_buffer_dma_cb(void *opaque, int ret)
+{
+    IDEState *s = opaque;
+
+    /*
+     * The data was generated synchronously into the I/O buffer before the
+     * transfer was started, so there is never a block I/O error to handle.
+     */
+    s->bus->dma->ops->rw_buf(s->bus->dma, 1);
+    s->status = READY_STAT | SEEK_STAT;
+    ide_bus_set_irq(s->bus);
+    ide_set_inactive(s, false);
+}
+
 static void ide_sector_write(IDEState *s);
 
 static void ide_sector_write_timer_cb(void *opaque)
@@ -1626,6 +1652,86 @@ static bool cmd_write_dma(IDEState *s, uint8_t cmd)
     return false;
 }
 
+/*
+ * Fill the I/O buffer with the General Purpose Logging data requested by a
+ * READ LOG EXT / READ LOG DMA EXT command and return the number of bytes to
+ * transfer, or a negative value if the command must be aborted (ACS-6 7.25).
+ */
+static int ide_read_log(IDEState *s)
+{
+    uint8_t log_address = s->sector;
+    uint16_t page = s->lcyl | ((uint16_t)s->hob_lcyl << 8);
+    uint32_t count = s->nsector; /* LOG PAGE COUNT, in 512-byte pages */
+    uint16_t log_size;
+
+    switch (log_address) {
+    case IDE_GPL_LOG_DIRECTORY:
+        log_size = 1;
+        break;
+    default:
+        /* Log (or its associated feature set) not supported (ACS-6 7.25.5). */
+        return -1;
+    }
+
+    /*
+     * A LOG PAGE COUNT of zero is invalid, and the requested pages must lie
+     * within the log as reported by the General Purpose Log Directory
+     * (ACS-6 7.25.5). The callers turn a zero COUNT into 65536, which the
+     * range check rejects; checking for zero guards a caller that does not.
+     */
+    if (count == 0 || page >= log_size || count > log_size - page) {
+        return -1;
+    }
+
+    switch (log_address) {
+    case IDE_GPL_LOG_DIRECTORY:
+        /* General Purpose Log Directory (ACS-6 9.2) */
+        memset(s->io_buffer, 0, count * 512);
+        /* word 0: General Purpose Logging Version */
+        put_le16((uint16_t *)s->io_buffer, 0x0001);
+        break;
+    }
+
+    return count * 512;
+}
+
+/* READ LOG EXT (PIO) and READ LOG DMA EXT, both 48-bit GPL commands */
+static bool cmd_read_log(IDEState *s, uint8_t cmd)
+{
+    bool dma = (cmd == WIN_READ_LOG_DMA_EXT);
+    int size;
+
+    if (!s->blk) {
+        ide_abort_command(s);
+        return true;
+    }
+
+    /* These commands are always 48-bit; COUNT holds the LOG PAGE COUNT. */
+    ide_cmd_lba48_transform(s, 1);
+
+    trace_ide_read_log(s, s->sector, s->lcyl | ((uint16_t)s->hob_lcyl << 8),
+                       s->nsector, dma ? "dma" : "pio");
+
+    size = ide_read_log(s);
+    if (size < 0) {
+        ide_abort_command(s);
+        return true;
+    }
+
+    if (dma) {
+        s->dma_cmd = IDE_DMA_READ_LOG;
+        s->io_buffer_index = 0;
+        s->io_buffer_size = size;
+        ide_start_dma(s, ide_buffer_dma_cb);
+        return false;
+    }
+
+    s->status = READY_STAT | SEEK_STAT;
+    ide_transfer_start(s, s->io_buffer, size, ide_transfer_stop);
+    ide_bus_set_irq(s->bus);
+    return false;
+}
+
 static bool cmd_flush_cache(IDEState *s, uint8_t cmd)
 {
     ide_flush_cache(s);
@@ -2107,6 +2213,7 @@ abort_cmd:
 
 /* Set the Disk Seek Completed status bit during completion */
 #define SET_DSC (1u << 8)
+#define AHCI_ONLY (1u << 9)
 
 /* See ACS-2 T13/2015-D Table B.2 Command codes */
 static const struct {
@@ -2125,6 +2232,8 @@ static const struct {
     [WIN_READDMA_EXT]             = { cmd_read_dma, HD_CFA_OK },
     [WIN_READ_NATIVE_MAX_EXT]     = { cmd_read_native_max, HD_CFA_OK | SET_DSC },
     [WIN_MULTREAD_EXT]            = { cmd_read_multiple, HD_CFA_OK },
+    [WIN_READ_LOG_EXT]            = { cmd_read_log, HD_OK | AHCI_ONLY },
+    [WIN_READ_LOG_DMA_EXT]        = { cmd_read_log, HD_OK | AHCI_ONLY },
     [WIN_WRITE]                   = { cmd_write_pio, HD_CFA_OK },
     [WIN_WRITE_ONCE]              = { cmd_write_pio, HD_CFA_OK },
     [WIN_WRITE_EXT]               = { cmd_write_pio, HD_CFA_OK },
@@ -2176,7 +2285,8 @@ static const struct {
 static bool ide_cmd_permitted(IDEState *s, uint32_t cmd)
 {
     return cmd < ARRAY_SIZE(ide_cmd_table)
-        && (ide_cmd_table[cmd].flags & (1u << s->drive_kind));
+        && (ide_cmd_table[cmd].flags & (1u << s->drive_kind))
+        && (s->ncq_queues || !(ide_cmd_table[cmd].flags & AHCI_ONLY));
 }
 
 void ide_bus_exec_cmd(IDEBus *bus, uint32_t val)

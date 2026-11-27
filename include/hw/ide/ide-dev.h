@@ -47,6 +47,7 @@ enum ide_dma_cmd {
     IDE_DMA_WRITE,
     IDE_DMA_TRIM,
     IDE_DMA_ATAPI,
+    IDE_DMA_READ_LOG,
     IDE_DMA__COUNT
 };
 

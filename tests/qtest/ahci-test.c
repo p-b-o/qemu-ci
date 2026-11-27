@@ -1055,6 +1055,55 @@ static void test_specify(void)
     ahci_shutdown(ahci);
 }
 
+/*
+ * Exercise the General Purpose Logging feature set via READ LOG EXT (PIO) or
+ * READ LOG DMA EXT. Reads are performed one log page at a time so the same
+ * helper can drive both the PIO and DMA variants.
+ */
+static void ahci_test_read_log(AHCIQState *ahci, uint8_t read_log_cmd)
+{
+    uint16_t id[256];
+    uint16_t dir[256];
+    unsigned px;
+
+    px = ahci_port_select(ahci);
+    ahci_port_clear(ahci, px);
+
+    /*
+     * The device must advertise the GPL feature set (IDENTIFY word 84/87) and
+     * READ LOG DMA EXT support (word 86 bit 15 makes word 119 valid; word 119
+     * bit 3 = GPL DMA supported).
+     */
+    ahci_io(ahci, px, CMD_IDENTIFY, &id, 512, 0);
+    g_assert_cmphex(le16_to_cpu(id[84]) & (1 << 5), ==, (1 << 5));
+    g_assert_cmphex(le16_to_cpu(id[87]) & (1 << 5), ==, (1 << 5));
+    g_assert_cmphex(le16_to_cpu(id[86]) & (1 << 15), ==, (1 << 15));
+    g_assert_cmphex(le16_to_cpu(id[119]) & (1 << 3), ==, (1 << 3));
+
+    /* General Purpose Log Directory (log address 00h, page 0). */
+    ahci_io(ahci, px, read_log_cmd, &dir, 512, 0x00);
+    /* word 0: General Purpose Logging Version */
+    g_assert_cmphex(le16_to_cpu(dir[0]), ==, 0x0001);
+}
+
+static void test_read_log_dma(void)
+{
+    AHCIQState *ahci;
+
+    ahci = ahci_boot_and_enable(NULL);
+    ahci_test_read_log(ahci, CMD_READ_LOG_DMA_EXT);
+    ahci_shutdown(ahci);
+}
+
+static void test_read_log_pio(void)
+{
+    AHCIQState *ahci;
+
+    ahci = ahci_boot_and_enable(NULL);
+    ahci_test_read_log(ahci, CMD_READ_LOG_EXT);
+    ahci_shutdown(ahci);
+}
+
 /**
  * Fragmented DMA test: Perform a standard 4K DMA read/write
  * test, but make sure the physical regions are fragmented to
@@ -2545,6 +2594,8 @@ int main(int argc, char **argv)
     qtest_add_func("/ahci/hba_spec",   test_hba_spec);
     qtest_add_func("/ahci/hba_enable", test_hba_enable);
     qtest_add_func("/ahci/identify",   test_identify);
+    qtest_add_func("/ahci/io/dma/read_log", test_read_log_dma);
+    qtest_add_func("/ahci/io/pio/read_log", test_read_log_pio);
 
     for (i = MODE_BEGIN; i < NUM_MODES; i++) {
         for (j = ADDR_MODE_BEGIN; j < NUM_ADDR_MODES; j++) {

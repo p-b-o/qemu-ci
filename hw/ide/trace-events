@@ -17,6 +17,7 @@ ide_cancel_dma_sync_buffered(void *fn, void *req) "invoking cb %p of buffered re
 ide_cancel_dma_sync_remaining(void) "draining all remaining requests"
 ide_sector_read(int64_t sector_num, int nsectors) "sector=%"PRId64" nsectors=%d"
 ide_sector_write(int64_t sector_num, int nsectors) "sector=%"PRId64" nsectors=%d"
+ide_read_log(void *s, uint8_t log, uint16_t page, uint32_t count, const char *kind) "IDEState %p; log=0x%02x page=%u count=%u %s"
 ide_reset(void *s) "IDEstate %p"
 ide_bus_reset_aio(void) "aio_cancel"
 ide_dma_cb(void *s, int64_t sector_num, int n, const char *dma) "IDEState %p; sector_num=%"PRId64" n=%d cmd=%s"

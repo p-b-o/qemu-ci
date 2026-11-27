@@ -280,6 +280,8 @@ enum {
     CMD_FLUSH_CACHE    = 0xE7,
     CMD_INIT_DP        = 0x91, /* INITIALIZE DEVICE PARAMETERS */
     CMD_IDENTIFY       = 0xEC,
+    CMD_READ_LOG_EXT     = 0x2F,
+    CMD_READ_LOG_DMA_EXT = 0x47,
     CMD_PACKET         = 0xA0,
     CMD_PACKET_ID      = 0xA1,
     /* NCQ */
