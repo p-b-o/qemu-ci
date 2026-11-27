@@ -165,6 +165,9 @@ enum AHCIPortIRQ {
 #define DEF_PORT_IRQ              (PORT_IRQ_ERROR | PORT_IRQ_SG_DONE |     \
                                    PORT_IRQ_SDB_FIS | PORT_IRQ_DMAS_FIS |  \
                                    PORT_IRQ_PIOS_FIS | PORT_IRQ_D2H_REG_FIS)
+/* The fatal errors, after which the HBA stops (AHCI 1.3.1 6.2.2) */
+#define PORT_IRQ_FATAL            (PORT_IRQ_TF_ERR | PORT_IRQ_HBUS_ERR |   \
+                                   PORT_IRQ_HBUS_DATA_ERR | PORT_IRQ_IF_ERR)
 
 /* PORT_CMD bits */
 #define PORT_CMD_ATAPI            (1 << 24) /* Device is ATAPI */
@@ -318,6 +321,7 @@ struct AHCIDevice {
     bool done_first_drq;
     int32_t busy_slot;
     bool init_d2h_sent;
+    bool halted; /* fatal error (PxIS.TFES), until PxCMD.ST is cleared */
     AHCICmdHdr *cur_cmd;
     NCQTransferState ncq_tfs[AHCI_MAX_CMDS];
     MemReentrancyGuard mem_reentrancy_guard;

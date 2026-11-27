@@ -208,6 +208,13 @@ static void ahci_trigger_irq(AHCIState *s, AHCIDevice *d,
                            irqstat & d->port_regs.irq_mask);
 
     d->port_regs.irq_stat = irqstat;
+    /*
+     * A fatal error halts the port until PxCMD.ST is cleared
+     * (AHCI 1.3.1 6.2.2).
+     */
+    if (irq & PORT_IRQ_FATAL) {
+        d->halted = true;
+    }
     ahci_check_irq(s);
 }
 
@@ -301,6 +308,7 @@ static void ahci_port_write(AHCIState *s, int port, int offset, uint32_t val)
         if ((pr->cmd & PORT_CMD_START) && !(val & PORT_CMD_START)) {
             pr->scr_act = 0;
             pr->cmd_issue = 0;
+            s->dev[port].halted = false;
         }
 
         /* Block any Read-only fields from being set;
@@ -565,7 +573,13 @@ static void check_cmd(AHCIState *s, int port)
     uint8_t slot;
 
     if ((pr->cmd & PORT_CMD_START) && pr->cmd_issue) {
-        for (slot = 0; (slot < 32) && pr->cmd_issue; slot++) {
+        /*
+         * After a fatal error the HBA processes no commands until software
+         * clears PxCMD.ST (AHCI 1.3.1 6.2.2). A command can fail before
+         * handle_cmd() returns, so check before each slot.
+         */
+        for (slot = 0; (slot < 32) && pr->cmd_issue && !s->dev[port].halted;
+             slot++) {
             if (pr->cmd_issue & (1U << slot)) {
                 handle_cmd(s, port, slot);
             }
@@ -664,6 +678,7 @@ static void ahci_reset_port(AHCIState *s, int port, IDEResetKind kind)
     pr->cmd_issue = 0;
     d->busy_slot = -1;
     d->init_d2h_sent = false;
+    d->halted = false;
 
     ide_state = &s->dev[port].port.ifs[0];
     if (!ide_state->blk) {
@@ -1738,6 +1753,24 @@ static const VMStateDescription vmstate_ncq_tfs = {
     },
 };
 
+static bool ahci_device_halted_needed(void *opaque)
+{
+    AHCIDevice *ad = opaque;
+
+    return ad->halted;
+}
+
+static const VMStateDescription vmstate_ahci_device_halted = {
+    .name = "ahci port/halted",
+    .version_id = 1,
+    .minimum_version_id = 1,
+    .needed = ahci_device_halted_needed,
+    .fields = (const VMStateField[]) {
+        VMSTATE_BOOL(halted, AHCIDevice),
+        VMSTATE_END_OF_LIST()
+    },
+};
+
 static const VMStateDescription vmstate_ahci_device = {
     .name = "ahci port",
     .version_id = 1,
@@ -1766,6 +1799,10 @@ static const VMStateDescription vmstate_ahci_device = {
         VMSTATE_STRUCT_ARRAY(ncq_tfs, AHCIDevice, AHCI_MAX_CMDS,
                              1, vmstate_ncq_tfs, NCQTransferState),
         VMSTATE_END_OF_LIST()
+    },
+    .subsections = (const VMStateDescription * const []) {
+        &vmstate_ahci_device_halted,
+        NULL
     },
 };
 
