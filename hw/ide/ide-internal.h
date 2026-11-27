@@ -26,6 +26,7 @@
 /* Bits of HD_STATUS */
 #define ERR_STAT                0x01
 #define INDEX_STAT              0x02
+#define SENSE_DATA_STAT         0x02    /* SENSE DATA AVAILABLE (ACS-6 6.2.9) */
 #define ECC_STAT                0x04    /* Corrected error */
 #define DRQ_STAT                0x08
 #define SEEK_STAT               0x10
@@ -65,7 +66,7 @@
 /* reserved                             0x07 */
 #define WIN_DEVICE_RESET                0x08
 /* reserved                             0x09..0x0a */
-/* REQUEST SENSE DATA EXT               0x0B */
+#define WIN_REQUEST_SENSE_DATA_EXT      0x0B /* 48-Bit */
 /* reserved                             0x0C..0x0F */
 #define WIN_RECAL                       0x10 /* obsolete since ATA4 */
 /* obsolete since ATA3, retired in ATA4 0x11..0x1F */

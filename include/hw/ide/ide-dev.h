@@ -96,6 +96,10 @@ struct IDEState {
     struct unreported_events events;
     uint8_t sense_key;
     uint8_t asc;
+    /* Sense Data Reporting feature set (ATA HD) */
+    uint8_t ascq;
+    bool sense_data_enabled;
+    bool sense_data_avail;
     bool tray_open;
     bool tray_locked;
     uint8_t cdrom_changed;

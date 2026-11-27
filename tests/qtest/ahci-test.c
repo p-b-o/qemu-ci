@@ -1174,6 +1174,63 @@ static void test_read_log_pio(void)
     ahci_shutdown(ahci);
 }
 
+/* Restart command list processing after a task file error (AHCI 6.2.2) */
+static void ahci_port_restart(AHCIQState *ahci, unsigned px)
+{
+    ahci_px_clr(ahci, px, AHCI_PX_CMD, AHCI_PX_CMD_ST);
+    ahci_port_clear(ahci, px);
+    ahci_px_set(ahci, px, AHCI_PX_CMD, AHCI_PX_CMD_ST);
+}
+
+/* Issue a non-data command; return the D2H Register FIS it completes with */
+static RegD2HFIS ahci_nodata_cmd(AHCIQState *ahci, unsigned px, uint8_t op,
+                                 uint16_t feature, uint16_t count, uint8_t err)
+{
+    AHCICommand *cmd = ahci_command_create(op);
+    RegD2HFIS d2h;
+
+    ahci_command_set_feature(cmd, feature);
+    ahci_command_set_count(cmd, count);
+    if (err) {
+        ahci_command_expect_error(cmd, err);
+    }
+    ahci_command_commit(ahci, cmd, px);
+    ahci_command_issue(ahci, cmd);
+    ahci_command_verify(ahci, cmd);
+    ahci_command_free(cmd);
+    qtest_memread(ahci->parent->qts, ahci->port[px].fb + 0x40, &d2h,
+                  sizeof(d2h));
+    return d2h;
+}
+
+/*
+ * Boot with the Sense Data Reporting feature set enabled, and make sense data
+ * available: SET FEATURES with an unsupported subcommand is aborted, which
+ * records ILLEGAL REQUEST / INVALID FIELD IN CDB.
+ */
+static AHCIQState *ahci_boot_with_sense_data(unsigned *px)
+{
+    AHCIQState *ahci;
+
+    ahci = ahci_boot_and_enable("-drive if=none,id=drive0,file=%s,format=%s "
+                                "-M q35 -device ide-hd,drive=drive0",
+                                tmp_path, imgfmt);
+    *px = ahci_port_select(ahci);
+    ahci_port_clear(ahci, *px);
+    ahci_nodata_cmd(ahci, *px, CMD_SET_FEATURES, 0xc3, 1, 0);
+    ahci_nodata_cmd(ahci, *px, CMD_SET_FEATURES, 0x47, 0, ATA_ERR_ABRT);
+    ahci_port_restart(ahci, *px);
+    return ahci;
+}
+
+/* REQUEST SENSE DATA EXT: the sense key, ASC and ASCQ as KKAAQQh */
+static uint32_t ahci_sense(AHCIQState *ahci, unsigned px)
+{
+    RegD2HFIS fis = ahci_nodata_cmd(ahci, px, CMD_REQ_SENSE_DATA, 0, 0, 0);
+
+    return (fis.lba_lo[2] & 0x0f) << 16 | fis.lba_lo[1] << 8 | fis.lba_lo[0];
+}
+
 /**
  * Fragmented DMA test: Perform a standard 4K DMA read/write
  * test, but make sure the physical regions are fragmented to
@@ -2651,6 +2708,16 @@ static void create_ahci_io_test(enum IOMode type, enum AddrMode addr,
 
 /******************************************************************************/
 
+static void test_sense_data_set_features(void)
+{
+    unsigned px;
+    AHCIQState *ahci = ahci_boot_with_sense_data(&px);
+
+    ahci_nodata_cmd(ahci, px, CMD_SET_FEATURES, 0x47, 0, ATA_ERR_ABRT);
+    g_assert_cmphex(ahci_sense(ahci, px), ==, 0x052400);
+    ahci_shutdown(ahci);
+}
+
 int main(int argc, char **argv)
 {
     const char *arch, *base;
@@ -2742,6 +2809,8 @@ int main(int argc, char **argv)
     qtest_add_func("/ahci/identify",   test_identify);
     qtest_add_func("/ahci/io/dma/read_log", test_read_log_dma);
     qtest_add_func("/ahci/io/pio/read_log", test_read_log_pio);
+    qtest_add_func("/ahci/io/sense_data/set_features",
+                   test_sense_data_set_features);
 
     for (i = MODE_BEGIN; i < NUM_MODES; i++) {
         for (j = ADDR_MODE_BEGIN; j < NUM_ADDR_MODES; j++) {

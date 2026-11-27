@@ -71,6 +71,8 @@ AHCICommandProp ahci_command_properties[] = {
                                  .lba48 = true, .read = true },
     { .cmd = CMD_READ_LOG_DMA_EXT, .data = true, .dma = true,
                                  .lba48 = true, .read = true },
+    { .cmd = CMD_SET_FEATURES,   .data = false },
+    { .cmd = CMD_REQ_SENSE_DATA, .lba48 = true },
     { .cmd = READ_FPDMA_QUEUED,  .data = true,  .dma = true,
                                  .lba48 = true, .read = true, .ncq = true },
     { .cmd = WRITE_FPDMA_QUEUED, .data = true,  .dma = true,
@@ -1217,6 +1219,14 @@ void ahci_command_set_ncq_subcmd(AHCICommand *cmd, uint8_t subcmd)
 
     g_assert(cmd->props->ncq);
     nfis->prio = (nfis->prio & ~0x1f) | (subcmd & 0x1f);
+}
+
+/* Set the 16-bit FEATURE field of a (non-NCQ) command. */
+void ahci_command_set_feature(AHCICommand *cmd, uint16_t feature)
+{
+    g_assert(!cmd->props->ncq);
+    cmd->fis.feature_low = feature & 0xff;
+    cmd->fis.feature_high = (feature >> 8) & 0xff;
 }
 
 void ahci_command_expect_error(AHCICommand *cmd, uint8_t err)

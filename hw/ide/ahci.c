@@ -1225,6 +1225,9 @@ static void process_ncq_command(AHCIState *s, int port, const uint8_t *cmd_fis,
                    ((uint64_t)ncq_fis->lba2 << 16) |
                    ((uint64_t)ncq_fis->lba1 << 8) |
                    (uint64_t)ncq_fis->lba0;
+
+    /* Accepting an NCQ command makes the sense data unavailable (ACS-6 4.25) */
+    ad->port.ifs[0].sense_data_avail = false;
     ncq_tfs->tag = tag;
 
     /* Sanity-check the NCQ packet */
