@@ -1150,13 +1150,16 @@ static void process_ncq_command(AHCIState *s, int port, const uint8_t *cmd_fis,
 
     /*
      * A NCQ command clears the bit in PxCI after the command has been QUEUED
-     * successfully (ERROR not set, BUSY and DRQ cleared).
-     *
-     * For NCQ commands, PxCI will always be cleared here.
+     * successfully (ERROR not set, BUSY and DRQ cleared). A device reports
+     * this status for every command that it queues (SATA 3.5a DFPDMAQ2,
+     * ACS-6 table 369), whatever the status of the previous command was, so
+     * PxCI will always be cleared here.
      *
      * (Once the NCQ command is COMPLETED, the device will send a SDB FIS with
      * the interrupt bit set, which will clear PxSACT and raise an interrupt.)
      */
+    ad->port.ifs[0].status = READY_STAT | SEEK_STAT;
+    ad->port.ifs[0].error = 0;
     ahci_clear_cmd_issue(ad, slot);
 
     /*
