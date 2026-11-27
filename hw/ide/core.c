@@ -138,6 +138,14 @@ static void ide_identify_size(IDEState *s)
     put_le16(p + 103, s->nb_sectors >> 48);
 }
 
+/* IDENTIFY DEVICE word 85: the commands and feature sets that are enabled */
+static uint16_t ide_identify_word85(IDEState *s)
+{
+    /* 14 = NOP supported, 5=WCACHE enabled, 0=SMART feature set enabled */
+    return (1 << 14) | (blk_enable_write_cache(s->blk) ? 1 << 5 : 0) |
+           (s->smart_enabled ? 1 : 0);
+}
+
 static void ide_identify(IDEState *s)
 {
     uint16_t *p;
@@ -204,12 +212,7 @@ static void ide_identify(IDEState *s)
     } else {
         put_le16(p + 84, (1 << 14) | 0);
     }
-    /* 14 = NOP supported, 5=WCACHE enabled, 0=SMART feature set enabled */
-    if (blk_enable_write_cache(s->blk)) {
-        put_le16(p + 85, (1 << 14) | (1 << 5) | 1);
-    } else {
-        put_le16(p + 85, (1 << 14) | 1);
-    }
+    put_le16(p + 85, ide_identify_word85(s));
     /* 13=flush_cache_ext,12=flush_cache,10=lba48 */
     put_le16(p + 86, (1 << 13) | (1 <<12) | (1 << 10));
     /* 14=set to 1, 8=has WWN, 1=SMART self test, 0=SMART error logging */
@@ -1714,12 +1717,12 @@ static bool cmd_set_features(IDEState *s, uint8_t cmd)
     case 0x02: /* write cache enable */
         blk_set_enable_write_cache(s->blk, true);
         identify_data = (uint16_t *)s->identify_data;
-        put_le16(identify_data + 85, (1 << 14) | (1 << 5) | 1);
+        put_le16(identify_data + 85, ide_identify_word85(s));
         return true;
     case 0x82: /* write cache disable */
         blk_set_enable_write_cache(s->blk, false);
         identify_data = (uint16_t *)s->identify_data;
-        put_le16(identify_data + 85, (1 << 14) | 1);
+        put_le16(identify_data + 85, ide_identify_word85(s));
         ide_flush_cache(s);
         return false;
     case 0xcc: /* reverting to power-on defaults enable */
@@ -1942,11 +1945,9 @@ static bool cmd_smart(IDEState *s, uint8_t cmd)
 
     switch (s->feature) {
     case SMART_DISABLE:
-        s->smart_enabled = 0;
-        return true;
-
     case SMART_ENABLE:
-        s->smart_enabled = 1;
+        s->smart_enabled = s->feature == SMART_ENABLE;
+        put_le16((uint16_t *)s->identify_data + 85, ide_identify_word85(s));
         return true;
 
     case SMART_ATTR_AUTOSAVE:
@@ -2901,6 +2902,7 @@ static int ide_drive_post_load(void *opaque, int version_id)
 
     if (s->blk && s->identify_set) {
         blk_set_enable_write_cache(s->blk, !!(s->identify_data[85] & (1 << 5)));
+        s->smart_enabled = s->identify_data[85] & 1;
     }
     return 0;
 }
