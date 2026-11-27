@@ -757,8 +757,9 @@ void ide_set_sector(IDEState *s, int64_t sector_num)
     }
 }
 
-static void ide_rw_error(IDEState *s) {
-    ide_abort_command(s);
+static void ide_rw_error(IDEState *s, SCSISense sense)
+{
+    ide_abort_command_with_sense(s, sense);
     ide_bus_set_irq(s->bus);
 }
 
@@ -913,7 +914,7 @@ static void ide_sector_read(IDEState *s)
     trace_ide_sector_read(sector_num, n);
 
     if (!ide_sect_range_ok(s, sector_num, n)) {
-        ide_rw_error(s);
+        ide_rw_error(s, SENSE_CODE(LBA_OUT_OF_RANGE));
         block_acct_invalid(blk_get_stats(s->blk), BLOCK_ACCT_READ);
         return;
     }
@@ -945,12 +946,17 @@ void ide_set_inactive(IDEState *s, bool more)
     ide_cmd_done(s);
 }
 
-void ide_dma_error(IDEState *s)
+static void ide_dma_error_with_sense(IDEState *s, SCSISense sense)
 {
     ide_dma_buf_commit(s, 0);
-    ide_abort_command(s);
+    ide_abort_command_with_sense(s, sense);
     ide_set_inactive(s, false);
     ide_bus_set_irq(s->bus);
+}
+
+void ide_dma_error(IDEState *s)
+{
+    ide_dma_error_with_sense(s, SENSE_CODE(NO_SENSE));
 }
 
 int ide_handle_rw_error(IDEState *s, int error, int op)
@@ -968,7 +974,7 @@ int ide_handle_rw_error(IDEState *s, int error, int op)
         } else if (IS_IDE_RETRY_ATAPI(op)) {
             ide_atapi_io_error(s, -error);
         } else {
-            ide_rw_error(s);
+            ide_rw_error(s, SENSE_CODE(NO_SENSE));
         }
     }
     blk_error_action(s->blk, action, is_read, error);
@@ -1056,7 +1062,7 @@ static void ide_dma_cb(void *opaque, int ret)
 
     if ((s->dma_cmd == IDE_DMA_READ || s->dma_cmd == IDE_DMA_WRITE) &&
         !ide_sect_range_ok(s, sector_num, n)) {
-        ide_dma_error(s);
+        ide_dma_error_with_sense(s, SENSE_CODE(LBA_OUT_OF_RANGE));
         block_acct_failed(blk_get_stats(s->blk), &s->acct);
         return;
     }
@@ -1206,7 +1212,7 @@ static void ide_sector_write(IDEState *s)
     trace_ide_sector_write(sector_num, n);
 
     if (!ide_sect_range_ok(s, sector_num, n)) {
-        ide_rw_error(s);
+        ide_rw_error(s, SENSE_CODE(LBA_OUT_OF_RANGE));
         block_acct_invalid(blk_get_stats(s->blk), BLOCK_ACCT_WRITE);
         return;
     }

@@ -1231,6 +1231,24 @@ static uint32_t ahci_sense(AHCIQState *ahci, unsigned px)
     return (fis.lba_lo[2] & 0x0f) << 16 | fis.lba_lo[1] << 8 | fis.lba_lo[0];
 }
 
+/* Issue a 512-byte data-in command at @lba that is expected to be aborted */
+static void ahci_read_expect_abort(AHCIQState *ahci, unsigned px, uint8_t op,
+                                   uint64_t lba)
+{
+    uint64_t ptr = ahci_alloc(ahci, 512);
+    AHCICommand *cmd = ahci_command_create(op);
+
+    ahci_command_set_buffer(cmd, ptr);
+    ahci_command_set_size(cmd, 512);
+    ahci_command_set_offset(cmd, lba);
+    ahci_command_expect_error(cmd, ATA_ERR_ABRT);
+    ahci_command_commit(ahci, cmd, px);
+    ahci_command_issue(ahci, cmd);
+    ahci_command_verify(ahci, cmd);
+    ahci_command_free(cmd);
+    ahci_free(ahci, ptr);
+}
+
 /**
  * Fragmented DMA test: Perform a standard 4K DMA read/write
  * test, but make sure the physical regions are fragmented to
@@ -2943,6 +2961,19 @@ static void test_sense_data_set_features(void)
     ahci_shutdown(ahci);
 }
 
+static void test_sense_data_lba_range(void)
+{
+    const uint64_t lba = (uint64_t)test_image_size_mb * 1024 * 1024 / 512;
+    unsigned px;
+    AHCIQState *ahci = ahci_boot_with_sense_data(&px);
+
+    ahci_read_expect_abort(ahci, px, CMD_READ_PIO_EXT, lba);
+    g_assert_cmphex(ahci_sense(ahci, px), ==, 0x052100);
+    ahci_read_expect_abort(ahci, px, CMD_READ_DMA_EXT, lba);
+    g_assert_cmphex(ahci_sense(ahci, px), ==, 0x052100);
+    ahci_shutdown(ahci);
+}
+
 int main(int argc, char **argv)
 {
     const char *arch, *base;
@@ -3036,6 +3067,7 @@ int main(int argc, char **argv)
     qtest_add_func("/ahci/io/pio/read_log", test_read_log_pio);
     qtest_add_func("/ahci/io/sense_data/set_features",
                    test_sense_data_set_features);
+    qtest_add_func("/ahci/io/sense_data/lba_range", test_sense_data_lba_range);
 
     for (i = MODE_BEGIN; i < NUM_MODES; i++) {
         for (j = ADDR_MODE_BEGIN; j < NUM_ADDR_MODES; j++) {
