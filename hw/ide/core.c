@@ -208,8 +208,13 @@ static void ide_identify(IDEState *s)
         put_le16(p + 78, (1 << 7));
     }
 
-    put_le16(p + 80, 0xf0); /* ata3 -> ata6 supported */
-    put_le16(p + 81, 0x16); /* conforms to ata5 */
+    if (s->ncq_queues) {
+        put_le16(p + 80, 0x3ff0); /* ATA/ATAPI-4 -> ACS-6 supported */
+        put_le16(p + 81, 0x70); /* conforms to ACS-6 version 11 */
+    } else {
+        put_le16(p + 80, 0xf0); /* ATA/ATAPI-4 -> ATA/ATAPI-7 supported */
+        put_le16(p + 81, 0x16); /* conforms to ata5 */
+    }
     /* 14=NOP supported, 5=WCACHE supported, 0=SMART supported */
     put_le16(p + 82, (1 << 14) | (1 << 5) | 1);
     /* 13=flush_cache_ext,12=flush_cache,10=lba48 */

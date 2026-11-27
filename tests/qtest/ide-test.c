@@ -749,6 +749,8 @@ static void test_identify(void)
     assert_bit_clear(buf[84], 0x20);
     assert_bit_clear(buf[86], 0x8000);
     g_assert_cmphex(buf[119], ==, 0);
+    g_assert_cmphex(buf[80], ==, 0xf0);
+    g_assert_cmphex(buf[81], ==, 0x16);
 
     ide_test_quit(qts);
     free_pci_device(dev);

@@ -851,6 +851,8 @@ static void ahci_test_identify(AHCIQState *ahci)
 
     sect_size = le16_to_cpu(*((uint16_t *)(&buff[5])));
     g_assert_cmphex(sect_size, ==, AHCI_SECTOR_SIZE);
+    g_assert_cmphex(le16_to_cpu(buff[80]), ==, 0x3ff0);
+    g_assert_cmphex(le16_to_cpu(buff[81]), ==, 0x70);
 }
 
 static void ahci_test_io_rw_simple(AHCIQState *ahci, unsigned bufsize,
