@@ -212,6 +212,7 @@
  * READ LOG EXT / READ LOG DMA EXT (see ACS-6 9.1 table 222).
  */
 #define IDE_GPL_LOG_DIRECTORY           0x00 /* General Purpose Log Directory */
+#define IDE_GPL_LOG_NCQ_SEND_RECV       0x13 /* SATA NCQ Send and Receive log */
 #define IDE_GPL_LOG_IDENTIFY_DEVICE     0x30 /* IDENTIFY DEVICE data log */
 
 /*
@@ -444,6 +445,15 @@ void ide_bus_set_irq(IDEBus *bus);
 void ide_bus_register_restart_cb(IDEBus *bus);
 
 void ide_bus_exec_cmd(IDEBus *bus, uint32_t val);
+
+/*
+ * Fill the IDEState I/O buffer with a General Purpose Logging log page.
+ * Returns the number of bytes generated, or a negative value if the request
+ * is invalid. Shared between the READ LOG (DMA) EXT commands and the
+ * RECEIVE FPDMA QUEUED NCQ encapsulation.
+ */
+int ide_read_log(IDEState *s, uint8_t log_address, uint16_t page,
+                 uint32_t count);
 
 void ide_transfer_start(IDEState *s, uint8_t *buf, int size,
                         EndTransferFunc *end_transfer_func);

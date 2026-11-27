@@ -1805,6 +1805,82 @@ static void test_ncq_simple(void)
     ahci_shutdown(ahci);
 }
 
+/*
+ * Read one 512-byte General Purpose Logging log page into @buffer using
+ * RECEIVE FPDMA QUEUED subcommand 01h (the NCQ encapsulation of
+ * READ LOG DMA EXT).
+ */
+static void ahci_ncq_read_log(AHCIQState *ahci, uint8_t port, uint8_t log,
+                              uint16_t page, void *buffer)
+{
+    AHCICommand *cmd;
+    uint64_t ptr;
+    uint64_t lba = log | ((uint64_t)(page & 0xff) << 8) |
+                   ((uint64_t)(page >> 8) << 32);
+
+    ptr = ahci_alloc(ahci, 512);
+    g_assert(ptr);
+    qtest_memset(ahci->parent->qts, ptr, 0x00, 512);
+
+    cmd = ahci_command_create(RECEIVE_FPDMA_QUEUED);
+    ahci_command_set_buffer(cmd, ptr);
+    ahci_command_set_size(cmd, 512);
+    ahci_command_set_offset(cmd, lba);
+    ahci_command_set_ncq_subcmd(cmd, NCQ_RECEIVE_READ_LOG_DMA_EXT);
+    ahci_command_commit(ahci, cmd, port);
+    ahci_command_issue(ahci, cmd);
+    ahci_command_verify(ahci, cmd);
+    ahci_command_free(cmd);
+
+    qtest_bufread(ahci->parent->qts, ptr, buffer, 512);
+    ahci_free(ahci, ptr);
+}
+
+static void test_ncq_read_log(void)
+{
+    AHCIQState *ahci;
+    uint16_t id[256];
+    uint16_t dir[256];
+    uint16_t page[256];
+    uint8_t *page8 = (uint8_t *)page;
+    unsigned px;
+
+    ahci = ahci_boot_and_enable(NULL);
+    px = ahci_port_select(ahci);
+    ahci_port_clear(ahci, px);
+
+    /* Fetch IDENTIFY DEVICE data (PIO) to compare against the log copy. */
+    ahci_io(ahci, px, CMD_IDENTIFY, &id, 512, 0);
+    /* word 77 bit 6: SEND AND RECEIVE QUEUED COMMANDS supported */
+    g_assert_cmphex(le16_to_cpu(id[77]) & (1 << 6), ==, (1 << 6));
+
+    /* General Purpose Log Directory (log 00h) over NCQ. */
+    ahci_ncq_read_log(ahci, px, 0x00, 0, dir);
+    g_assert_cmphex(le16_to_cpu(dir[0]), ==, 0x0001); /* GPL version */
+    g_assert_cmphex(le16_to_cpu(dir[0x13]), ==, 1);   /* NCQ Send/Recv log */
+    g_assert_cmphex(le16_to_cpu(dir[0x30]), ==, 9);   /* IDENTIFY log size */
+
+    /* SATA NCQ Send and Receive log (log 13h). */
+    ahci_ncq_read_log(ahci, px, 0x13, 0, page);
+    /*
+     * "Supports Read Log" DWord (offset 8): bit 0 QUEUED READ LOG DMA EXT and
+     * bit 1 SEQUENTIAL QUEUED READ LOG DMA EXT (subcommand 01h).
+     */
+    g_assert_cmpuint(page8[8] | (page8[9] << 8) | (page8[10] << 16) |
+                     ((uint32_t)page8[11] << 24), ==, 0x3);
+
+    /* IDENTIFY DEVICE data log (log 30h) page 0: list of supported pages. */
+    ahci_ncq_read_log(ahci, px, 0x30, 0, page);
+    g_assert_cmphex(le16_to_cpu(page[0]), ==, 0x0001); /* REVISION NUMBER */
+    g_assert_cmpint(page8[8], ==, 8);                  /* number of entries */
+
+    /* IDENTIFY DEVICE data log (log 30h) page 1: copy of IDENTIFY data. */
+    ahci_ncq_read_log(ahci, px, 0x30, 1, page);
+    g_assert_cmphex(memcmp(page, id, 512), ==, 0);
+
+    ahci_shutdown(ahci);
+}
+
 static int prepare_iso(size_t size, unsigned char **buf, char **name)
 {
     g_autofree char *cdrom_path = NULL;
@@ -2696,6 +2772,7 @@ int main(int argc, char **argv)
     qtest_add_func("/ahci/reset/pending_callback", test_reset_pending_callback);
 
     qtest_add_func("/ahci/io/ncq/simple", test_ncq_simple);
+    qtest_add_func("/ahci/io/ncq/read_log", test_ncq_read_log);
     qtest_add_func("/ahci/migrate/ncq/simple", test_migrate_ncq);
     qtest_add_func("/ahci/io/ncq/retry", test_halted_ncq);
     qtest_add_func("/ahci/migrate/ncq/halted", test_migrate_halted_ncq);

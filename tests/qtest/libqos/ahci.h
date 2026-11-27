@@ -285,8 +285,14 @@ enum {
     CMD_PACKET         = 0xA0,
     CMD_PACKET_ID      = 0xA1,
     /* NCQ */
-    READ_FPDMA_QUEUED  = 0x60,
-    WRITE_FPDMA_QUEUED = 0x61,
+    READ_FPDMA_QUEUED    = 0x60,
+    WRITE_FPDMA_QUEUED   = 0x61,
+    RECEIVE_FPDMA_QUEUED = 0x65,
+};
+
+/* RECEIVE FPDMA QUEUED subcommands */
+enum {
+    NCQ_RECEIVE_READ_LOG_DMA_EXT = 0x01,
 };
 
 /* ATAPI Commands */
@@ -647,6 +653,7 @@ void ahci_command_set_prd_size(AHCICommand *cmd, unsigned prd_size);
 void ahci_command_set_sizes(AHCICommand *cmd, uint64_t xbytes,
                             unsigned prd_size);
 void ahci_command_set_count(AHCICommand *cmd, uint16_t count);
+void ahci_command_set_ncq_subcmd(AHCICommand *cmd, uint8_t subcmd);
 void ahci_command_expect_error(AHCICommand *cmd, uint8_t err);
 void ahci_command_set_acmd(AHCICommand *cmd, void *acmd);
 void ahci_command_enable_atapi_dma(AHCICommand *cmd);

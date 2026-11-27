@@ -246,6 +246,9 @@ enum AHCIPortIRQ {
 #define RECEIVE_FPDMA_QUEUED               0x65
 #define SEND_FPDMA_QUEUED                  0x64
 
+/* RECEIVE FPDMA QUEUED subcommands (ACS-6 table 95) */
+#define RECEIVE_FPDMA_READ_LOG_DMA_EXT     0x01
+
 #define NCQ_FIS_FUA_MASK                   0x80
 #define NCQ_FIS_RARC_MASK                  0x01
 
@@ -302,6 +305,7 @@ typedef struct NCQTransferState {
     uint64_t lba;
     uint8_t tag;
     uint8_t cmd;
+    uint8_t subcmd; /* SUBCOMMAND field, for RECEIVE/SEND FPDMA QUEUED */
     uint8_t slot;
     bool used;
     bool halt;

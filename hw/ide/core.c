@@ -200,6 +200,8 @@ static void ide_identify(IDEState *s)
         put_le16(p + 75, s->ncq_queues - 1);
         /* 15=READ LOG DMA EXT equivalent to READ LOG EXT, 8=NCQ supported */
         put_le16(p + 76, (1 << 15) | (1 << 8));
+        /* 6=SEND AND RECEIVE QUEUED COMMANDS supported (SATA NCQ log 13h) */
+        put_le16(p + 77, (1 << 6));
     }
 
     put_le16(p + 80, 0xf0); /* ata3 -> ata6 supported */
@@ -1839,19 +1841,26 @@ static void ide_fill_identify_device_log(IDEState *s, uint16_t page,
 }
 
 /*
- * Fill the I/O buffer with the General Purpose Logging data requested by a
- * READ LOG EXT / READ LOG DMA EXT command and return the number of bytes to
- * transfer, or a negative value if the command must be aborted (ACS-6 7.25).
+ * Fill the I/O buffer with the General Purpose Logging data selected by
+ * log_address, page and count (the LOG PAGE COUNT, in 512-byte pages) and
+ * return the number of bytes to transfer, or a negative value if the command
+ * must be aborted (ACS-6 7.25). Shared by the READ LOG EXT / READ LOG DMA EXT
+ * commands and by the RECEIVE FPDMA QUEUED NCQ encapsulation (ACS-6 7.26.6).
  */
-static int ide_read_log(IDEState *s)
+int ide_read_log(IDEState *s, uint8_t log_address, uint16_t page,
+                 uint32_t count)
 {
-    uint8_t log_address = s->sector;
-    uint16_t page = s->lcyl | ((uint16_t)s->hob_lcyl << 8);
-    uint32_t count = s->nsector; /* LOG PAGE COUNT, in 512-byte pages */
     uint16_t log_size;
 
     switch (log_address) {
     case IDE_GPL_LOG_DIRECTORY:
+        log_size = 1;
+        break;
+    case IDE_GPL_LOG_NCQ_SEND_RECV:
+        /* Only meaningful for devices that support the NCQ feature set. */
+        if (!s->ncq_queues) {
+            return -1;
+        }
         log_size = 1;
         break;
     case IDE_GPL_LOG_IDENTIFY_DEVICE:
@@ -1881,6 +1890,19 @@ static int ide_read_log(IDEState *s)
         /* word N: number of log pages at log address N */
         put_le16((uint16_t *)s->io_buffer + IDE_GPL_LOG_IDENTIFY_DEVICE,
                  IDE_GPL_LOG_IDENTIFY_DEVICE_LEN);
+        if (s->ncq_queues) {
+            put_le16((uint16_t *)s->io_buffer + IDE_GPL_LOG_NCQ_SEND_RECV, 1);
+        }
+        break;
+    case IDE_GPL_LOG_NCQ_SEND_RECV:
+        /* SATA NCQ Send and Receive log (ACS-6 9.19) */
+        memset(s->io_buffer, 0, count * 512);
+        /*
+         * "Supports Read Log" DWord (offset 8): advertise READ LOG DMA EXT as
+         * RECEIVE FPDMA QUEUED subcommand 01h. Bit 0 = QUEUED READ LOG DMA EXT
+         * SUPPORTED, bit 1 = SEQUENTIAL QUEUED READ LOG DMA EXT SUPPORTED.
+         */
+        stl_le_p(s->io_buffer + 8, (1 << 1) | (1 << 0));
         break;
     case IDE_GPL_LOG_IDENTIFY_DEVICE:
         ide_fill_identify_device_log(s, page, count);
@@ -1907,7 +1929,8 @@ static bool cmd_read_log(IDEState *s, uint8_t cmd)
     trace_ide_read_log(s, s->sector, s->lcyl | ((uint16_t)s->hob_lcyl << 8),
                        s->nsector, dma ? "dma" : "pio");
 
-    size = ide_read_log(s);
+    size = ide_read_log(s, s->sector, s->lcyl | ((uint16_t)s->hob_lcyl << 8),
+                        s->nsector);
     if (size < 0) {
         ide_abort_command(s);
         return true;

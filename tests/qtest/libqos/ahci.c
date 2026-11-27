@@ -75,6 +75,8 @@ AHCICommandProp ahci_command_properties[] = {
                                  .lba48 = true, .read = true, .ncq = true },
     { .cmd = WRITE_FPDMA_QUEUED, .data = true,  .dma = true,
                                  .lba48 = true, .write = true, .ncq = true },
+    { .cmd = RECEIVE_FPDMA_QUEUED, .data = true, .dma = true,
+                                 .lba48 = true, .read = true, .ncq = true },
     { .cmd = CMD_READ_MAX,       .lba28 = true },
     { .cmd = CMD_READ_MAX_EXT,   .lba48 = true },
     { .cmd = CMD_FLUSH_CACHE,    .data = false },
@@ -1202,6 +1204,19 @@ void ahci_command_set_count(AHCICommand *cmd, uint16_t count)
 {
     g_assert(!cmd->props->data);
     cmd->fis.count = count;
+}
+
+/*
+ * Set the SUBCOMMAND field (COUNT bits 12:8) of an NCQ command, e.g. the
+ * RECEIVE FPDMA QUEUED subcommand. It occupies the low 5 bits of the "prio"
+ * (COUNT 15:8) byte.
+ */
+void ahci_command_set_ncq_subcmd(AHCICommand *cmd, uint8_t subcmd)
+{
+    NCQFIS *nfis = (NCQFIS *)&(cmd->fis);
+
+    g_assert(cmd->props->ncq);
+    nfis->prio = (nfis->prio & ~0x1f) | (subcmd & 0x1f);
 }
 
 void ahci_command_expect_error(AHCICommand *cmd, uint8_t err)

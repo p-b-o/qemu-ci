@@ -1093,6 +1093,43 @@ static int is_ncq(uint8_t ata_cmd)
     }
 }
 
+/*
+ * RECEIVE FPDMA QUEUED (ACS-6 7.33) transfers device-generated data to the
+ * host. Only subcommand 01h (the NCQ encapsulation of READ LOG DMA EXT, see
+ * ACS-6 7.26.6) is supported. The log data is generated synchronously into
+ * the I/O buffer and copied into the command's scatter/gather list, so there
+ * is no block backend I/O involved.
+ */
+static void execute_ncq_receive_fpdma_queued(NCQTransferState *ncq_tfs)
+{
+    IDEState *ide_state = &ncq_tfs->drive->port.ifs[0];
+
+    switch (ncq_tfs->subcmd) {
+    case RECEIVE_FPDMA_READ_LOG_DMA_EXT: {
+        /* Encapsulated READ LOG DMA EXT inputs (ACS-6 table 87). */
+        uint8_t log_address = ncq_tfs->lba & 0xff;
+        uint16_t page = ((ncq_tfs->lba >> 8) & 0xff) |
+                        (((ncq_tfs->lba >> 32) & 0xff) << 8);
+        int size = ide_read_log(ide_state, log_address, page,
+                                ncq_tfs->sector_count);
+
+        if (size < 0) {
+            ncq_err(ncq_tfs);
+            break;
+        }
+        dma_buf_read(ide_state->io_buffer, size, NULL, &ncq_tfs->sglist,
+                     MEMTXATTRS_UNSPECIFIED);
+        ide_state->status = READY_STAT | SEEK_STAT;
+        break;
+    }
+    default:
+        ncq_err(ncq_tfs);
+        break;
+    }
+
+    ncq_finish(ncq_tfs);
+}
+
 static void execute_ncq_command(NCQTransferState *ncq_tfs)
 {
     AHCIDevice *ad = ncq_tfs->drive;
@@ -1122,6 +1159,11 @@ static void execute_ncq_command(NCQTransferState *ncq_tfs)
                                        ncq_tfs->lba << BDRV_SECTOR_BITS,
                                        BDRV_SECTOR_SIZE,
                                        ncq_cb, ncq_tfs);
+        break;
+    case RECEIVE_FPDMA_QUEUED:
+        trace_execute_ncq_command_receive(ad->hba, port, ncq_tfs->tag,
+                                          ncq_tfs->subcmd);
+        execute_ncq_receive_fpdma_queued(ncq_tfs);
         break;
     default:
         trace_execute_ncq_command_unsup(ad->hba, port,
@@ -1175,6 +1217,8 @@ static void process_ncq_command(AHCIState *s, int port, const uint8_t *cmd_fis,
     ncq_tfs->slot = slot;
     ncq_tfs->cmdh = &((AHCICmdHdr *)ad->lst)[slot];
     ncq_tfs->cmd = ncq_fis->command;
+    /* SUBCOMMAND field is COUNT bits 12:8, i.e. the low 5 bits of "prio" */
+    ncq_tfs->subcmd = ncq_fis->prio & 0x1f;
     ncq_tfs->lba = ((uint64_t)ncq_fis->lba5 << 40) |
                    ((uint64_t)ncq_fis->lba4 << 32) |
                    ((uint64_t)ncq_fis->lba3 << 24) |
