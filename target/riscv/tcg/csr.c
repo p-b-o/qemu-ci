@@ -2918,14 +2918,15 @@ static int rmw_xireg_csrind(CPURISCVState *env, int csrno,
                               uint16_t isel, target_ulong *val,
                               target_ulong new_val, target_ulong wr_mask)
 {
-    bool virt = csrno == CSR_VSIREG ? true : false;
+    bool virt = CSR_VSIREG <= csrno && csrno <= CSR_VSIREG6 &&
+                csrno != CSR_VSIREG4 - 1;
     int ret = -EINVAL;
 
     if (xiselect_cd_range(isel)) {
         ret = rmw_xireg_cd(env, csrno, isel, val, new_val, wr_mask);
     } else if (xiselect_ctr_range(csrno, isel)) {
         ret = rmw_xireg_ctr(env, csrno, isel, val, new_val, wr_mask);
-    } else {
+    } else if (!xiselect_aia_range(isel)) {
         /*
          * As per the specification, access to unimplented region is undefined
          * but recommendation is to raise illegal instruction exception.
