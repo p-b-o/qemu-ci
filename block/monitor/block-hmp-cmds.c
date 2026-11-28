@@ -760,7 +760,7 @@ void hmp_info_blockstats(MonitorHMP *hmp, const QDict *qdict)
 
 void hmp_info_block_jobs(MonitorHMP *hmp, const QDict *qdict)
 {
-    BlockJobInfoList *list;
+    BlockJobInfoList *list, *info;
 
     list = qmp_query_block_jobs(&error_abort);
 
@@ -769,26 +769,25 @@ void hmp_info_block_jobs(MonitorHMP *hmp, const QDict *qdict)
         return;
     }
 
-    while (list) {
-        if (list->value->type == JOB_TYPE_STREAM) {
+    for (info = list; info; info = info->next) {
+        if (info->value->type == JOB_TYPE_STREAM) {
             monitor_hmp_printf(hmp, "Streaming device %s: Completed %" PRId64
                                " of %" PRId64 " bytes, speed limit %" PRId64
                                " bytes/s\n",
-                               list->value->device,
-                               list->value->offset,
-                               list->value->len,
-                               list->value->speed);
+                               info->value->device,
+                               info->value->offset,
+                               info->value->len,
+                               info->value->speed);
         } else {
             monitor_hmp_printf(hmp, "Type %s, device %s: Completed %" PRId64
                                " of %" PRId64 " bytes, speed limit %" PRId64
                                " bytes/s\n",
-                               JobType_str(list->value->type),
-                               list->value->device,
-                               list->value->offset,
-                               list->value->len,
-                               list->value->speed);
+                               JobType_str(info->value->type),
+                               info->value->device,
+                               info->value->offset,
+                               info->value->len,
+                               info->value->speed);
         }
-        list = list->next;
     }
 
     qapi_free_BlockJobInfoList(list);
